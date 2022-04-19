@@ -7,12 +7,12 @@ module RedAmber
   class DataFrame
     def initialize(*args)
       @table = Arrow::Table.new(*args)
-      @vectors = _collect_vectors
+      @vectors = collect_vectors
     end
 
     def self.load(path, options = {})
       @table = Arrow::Table.load(path, options)
-      @vectors = _collect_vectors
+      @vectors = collect_vectors
     end
 
     attr_reader :table, :vectors
@@ -64,9 +64,25 @@ module RedAmber
       end
     end
 
+    def to_a
+      to_h.to_a
+    end
+
+    def raw_records
+      # outputs array of raws without header
+      @table.raw_records
+    end
+
+    def to_rover
+      require 'rover-df'
+      Rover::DataFrame.new(to_h)
+    end
+
+    # def to_parquet
+
     private # =========
 
-    def _collect_vectors
+    def collect_vectors
       @table.columns.map do |column|
         RedAmber::Vector.new(column.data)
       end

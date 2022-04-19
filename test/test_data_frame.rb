@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class RedAmberTest < Test::Unit::TestCase
+class DataFrameTest < Test::Unit::TestCase
   def setup
     @hash = { 'name' => %w[Yasuko Rui Hinata], 'age' => [68, 49, 28] }
     @hash_sym = @hash.each_with_object({}) do |kv, h|

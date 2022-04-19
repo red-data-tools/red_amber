@@ -5,5 +5,14 @@ AllCops:
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
 Layout/LineLength:
   Max: 100
+
+Metrics/MethodLength:
+  Max: 10
