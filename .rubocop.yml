@@ -1,13 +1,9 @@
 AllCops:
   TargetRubyVersion: 2.7
+  NewCops: enable
 
-Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
-Style/StringLiteralsInInterpolation:
-  Enabled: true
-  EnforcedStyle: double_quotes
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
 
 Layout/LineLength:
-  Max: 120
+  Max: 100

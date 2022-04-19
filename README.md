@@ -5,6 +5,14 @@ Simple dataframe library for Ruby
 - Powered by Red Arrow
 - Rover-df like API
 
+## Requirements
+
+```ruby
+gem 'red-arrow', '~> 7.0.0'
+gem 'red-parquet' , '~> 7.0.0' # if you use IO from/to parquet
+gem 'rover-df', '~> 0.3.0' # if you use IO from/to Rover::DataFrame
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -21,31 +29,44 @@ Or install it yourself as:
 
     $ gem install red_amber
 
-## Usage
+## `RedAmber::DatFrame`
 
 ### Constructors
 - new from a Hash
+  - `RedAmber::DataFrame.new(hash)`
+
 - new from an Array
 - new from a Rover::DataFrame
 - load from a file (csv, parquet, etc.)
 
 ### Properties
-- shape
-- size, nrows
-- ncols
-- keys, column_names
+- `shape`
+  Show shape in an Array[n_rows, n_cols]
+- `n_rows`, `nrow`, `size`, `length`
+  Show num of rows (data size)
+- `n_columns`, `ncols`
+  Show num of columns (num of vectors)
+- column_names, keys
+  Return num of keys by an Array
 - types
+  Return types of columns by an Array
 - inspect
 - to_s
-- lookup
-- summary, describe
+- lookup (not impremented)
+- summary, describe (not impremented)
 
-### Selecting
+### Output
+- to_h
+- to_a
+- to_rover
+- to_parquet (not impremented)
+
+### Selecting (not impremented)
 - Selecting columns: [key], [keys], [keys[index]]]
 - Selecting rows: head, tail, first(n), last(n)
 - Selecting rows: [index], [range], [array]
 
-### Updating
+### Updating (not impremented)
 - Add a new column
 - Update a single element
 - Update multiple elements
@@ -57,28 +78,28 @@ Or install it yourself as:
 - Sort rows
 - Clear data
 
-### Combining DataFrames
+### Treat na data (not impremented)
+- Drop na (NaN, nil)
+- Replace na with value
+- Interpolate na with convolution array
+
+### Combining DataFrames (not impremented)
 - Add rows
 - Add columns
 - Inner join
 - Left join
 
-### Encoding
+### Encoding (not impremented)
 - One-hot encoding
 
-### Iteration
+### Iteration (not impremented)
 
-### Filtering
+### Filtering (not impremented)
 
-### Output
-- to_a
-- to_h
-- to_numo
-- to_rover
-- to_parquet
 
-## `Amber::Vector`
+## `RedAmber::Vector`
 ### Constructor
+- Created as columns in a ::DataFrame
 - new from an Array
 
 ### Operations
