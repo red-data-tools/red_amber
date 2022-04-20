@@ -29,36 +29,49 @@ Or install it yourself as:
 
     $ gem install red_amber
 
-## `RedAmber::DatFrame`
+## `RedAmber::DataFrame`
 
 ### Constructors
 - new from a Hash
   - `RedAmber::DataFrame.new(hash)`
-
 - new from an Array
 - new from a Rover::DataFrame
 - load from a file (csv, parquet, etc.)
 
 ### Properties
 - `shape`
+- 
   Show shape in an Array[n_rows, n_cols]
+- 
 - `n_rows`, `nrow`, `size`, `length`
+  
   Show num of rows (data size)
+- 
 - `n_columns`, `ncols`
+  
   Show num of columns (num of vectors)
+- 
 - column_names, keys
+  
   Return num of keys by an Array
+- 
 - types
+  
   Return types of columns by an Array
+- 
 - inspect
+
 - to_s
+
 - lookup (not impremented)
+
 - summary, describe (not impremented)
 
 ### Output
 - to_h
 - to_a
 - to_rover
+- to_csv (not impremented)
 - to_parquet (not impremented)
 
 ### Selecting (not impremented)
@@ -99,7 +112,7 @@ Or install it yourself as:
 
 ## `RedAmber::Vector`
 ### Constructor
-- Created as columns in a ::DataFrame
+- Create from columns in a DataFrame
 - new from an Array
 
 ### Operations
@@ -124,14 +137,7 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/heronshoes/red_amber. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/heronshoes/red_amber/blob/master/CODE_OF_CONDUCT.md).
-
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
 
-## Code of Conduct
-
-Everyone interacting in the RedAmber project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/heronshoes/red_amber/blob/master/CODE_OF_CONDUCT.md).

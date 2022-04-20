@@ -3,12 +3,22 @@
 require 'test_helper'
 
 class VectorTest < Test::Unit::TestCase
-  def setup
-    @array = Arrow::UInt32Array.new([0, 1, nil, 4])
-    @vector = RedAmber::Vector.new(array)
-  end
+  @expected = [0, 1, nil, 4]
 
-  def test_new
-    assert_equal @array, @vector.data
+  data do
+    data = {}
+    data < {
+      'Arrow::Array' => Arrow::UInt32Array.new(@expected),
+      'array' => @expected,
+      'vector' => RedAmber::Vector.new(@expected),
+    }
+    chunks = [Arrow::UInt32Array.new([0, 1]),
+              Arrow::UInt32Array.new([nil, 4])]
+    data['chunked array'] = Arrow::ChunkedArray.new(chunks)
+    data
+  end
+  test 'initialize' do
+    actual = RedAmber::Vector.new(data).to_a
+    assert_equal @expected, actual
   end
 end

@@ -10,11 +10,10 @@ module RedAmber
       @vectors = collect_vectors
     end
 
-    def self.load(path, options = {})
+    def self.load(path, options: {})
       @table = Arrow::Table.load(path, options)
       @vectors = collect_vectors
     end
-
     attr_reader :table, :vectors
 
     # Properties ===
@@ -69,7 +68,7 @@ module RedAmber
     end
 
     def raw_records
-      # outputs array of raws without header
+      # output an array of raws without header
       @table.raw_records
     end
 
@@ -80,7 +79,7 @@ module RedAmber
 
     # def to_parquet
 
-    private # =========
+    private # =====
 
     def collect_vectors
       @table.columns.map do |column|

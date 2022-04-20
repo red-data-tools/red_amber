@@ -15,4 +15,4 @@ Layout/LineLength:
   Max: 100
 
 Metrics/MethodLength:
-  Max: 10
+  Max: 16
