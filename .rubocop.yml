@@ -1,18 +1,35 @@
+# We will use cops to detect bugs in an early stage
+# Feel free to use .rubocop_todo.yml
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-performance
+  - rubocop-rubycw
+  - rubocop-rake
+
 AllCops:
+  # drop support for < 2.7
   TargetRubyVersion: 2.7
+  # accept new cops if any
   NewCops: enable
 
+# alias is hard to see separately 
 Style/Alias:
   EnforcedStyle: prefer_alias_method
 
+# For consistency and portability
 Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
 
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 
+# Should not set for Style/TrailingCommaInArguments
+
+# To let you know the possibility of refactoring
 Layout/LineLength:
   Max: 100
 
+# To let you know the possibility of refactoring
 Metrics/MethodLength:
   Max: 16

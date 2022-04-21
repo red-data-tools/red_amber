@@ -53,7 +53,12 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.17.0)
       parser (>= 3.1.1.0)
+    rubocop-performance (1.13.3)
+      rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
     rubocop-rake (0.6.0)
+      rubocop (~> 1.0)
+    rubocop-rubycw (0.1.6)
       rubocop (~> 1.0)
     ruby-progressbar (1.11.0)
     test-unit (3.5.3)
@@ -62,13 +67,16 @@ GEM
 
 PLATFORMS
   x86_64-darwin-20
+  x86_64-linux
 
 DEPENDENCIES
   rake (~> 13.0)
   red_amber!
   rubocop (~> 1.21)
-  rubocop-rake (~> 0.6.0)
+  rubocop-performance
+  rubocop-rake
+  rubocop-rubycw
   test-unit (~> 3.0)
 
 BUNDLED WITH
-   2.3.8
+   2.3.7
