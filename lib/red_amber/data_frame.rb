@@ -6,7 +6,11 @@ module RedAmber
   #   @table   : holds Arrow::Table object
   class DataFrame
     def initialize(*args)
-      @table = Arrow::Table.new(*args)
+      if args[0].is_a?(Arrow::Table)
+        @table = table
+      else
+        @table = Arrow::Table.new(*args)
+      end
       @vectors = collect_vectors
     end
 
@@ -79,12 +83,57 @@ module RedAmber
 
     # def to_parquet
 
+    # Selecting ===
+
+    # [symbol] or [string]: select columns
+    # [array of index], [range]: select rows
+    def [](*args)
+      case args
+      when Array
+        # expand Range like [1..3, 4] to [1, 2, 3, 4]
+        expanded =
+          args.each_with_object([]) do |e, a|
+            e.is_a?(Range) ? a.concat(e.to_a) : a.append(e)
+          end
+          return select_rows(expanded) if integers?(expanded)
+          return select_columns(expanded.map(&:to_sym)) if sym_or_str?(expanded)
+
+        raise ArgumentError, "Invalid argument #{args}"
+      when Range
+        select_rows(args.to_a)
+      else
+        raise ArgumentError, "Invalid argument #{args}"
+      end
+    end
+
     private # =====
 
     def collect_vectors
       @table.columns.map do |column|
         RedAmber::Vector.new(column.data)
       end
+    end
+
+    def select_columns(keys)
+      RedAmber::DataFrame.new(@table[keys])
+    end
+
+    def select_rows(indeces)
+      n = size
+      unless indeces.min >= -n && indeces.max < n
+        raise ArgumentError, "Invalid index range #{indeces}"
+      end
+
+      a = indeces.map { |i| @table.slice(i).to_a }
+      RedAmber::DataFrame.new(@table.schema, a)
+    end
+
+    def integers?(enum)
+      enum.all?(Integer)
+    end
+
+    def sym_or_str?(enum)
+      enum.all? { |e| e.is_a?(Symbol) || e.is_a?(String) }
     end
   end
 end

@@ -30,6 +30,16 @@ Style/TrailingCommaInHashLiteral:
 Layout/LineLength:
   Max: 100
 
-# To let you know the possibility of refactoring
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/BlockLength:
+  Max: 26
+  Exclude:
+    - 'test/**/*'
+
+Metrics/CyclomaticComplexity:
+  Max: 10
+
 Metrics/MethodLength:
-  Max: 16
+  Max: 18

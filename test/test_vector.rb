@@ -19,6 +19,7 @@ class VectorTest < Test::Unit::TestCase
       [array, Arrow::ChunkedArray.new(chunks)]
     h
   end
+
   test 'initialize' do
     expect, actual = data
     actual = RedAmber::Vector.new(actual).to_a
