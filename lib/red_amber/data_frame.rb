@@ -2,23 +2,35 @@
 
 module RedAmber
   # data frame class
-  #   @vectors : an Array of columnar data (Vector)
   #   @table   : holds Arrow::Table object
   class DataFrame
     def initialize(*args)
-      if args[0].is_a?(Arrow::Table)
-        @table = table
-      else
+      @table = nil
+      # ok: DataFrame.new, DataFrame.new([]), DataFrame.new(nil)
+      #   returns empty DataFrame
+      # bug?: [Arrow::Table] == [nil] shows ArgumentError
+      return if args.empty? || args == [[]] || [nil] == args
+
+      if args.size > 1
         @table = Arrow::Table.new(*args)
+      else
+        arg = args[0]
+        @table =
+          case arg
+          when Arrow::Table        then arg
+          when RedAmber::DataFrame then arg.table
+          when Hash                then Arrow::Table.new(*args)
+          else
+            raise ArgumentError, "invalid arguments: #{args}"
+          end
       end
-      @vectors = collect_vectors
     end
 
     def self.load(path, options: {})
       @table = Arrow::Table.load(path, options)
-      @vectors = collect_vectors
     end
-    attr_reader :table, :vectors
+
+    attr_reader :table
 
     # Properties ===
     def n_rows
@@ -48,6 +60,12 @@ module RedAmber
       @table.columns.map { |column| column.data_type.to_s.to_sym }
     end
 
+    def vectors
+      @table.columns.map do |column|
+        RedAmber::Vector.new(column.data)
+      end
+    end
+
     def to_s
       @table.to_s
     end
@@ -72,7 +90,7 @@ module RedAmber
     end
 
     def raw_records
-      # output an array of raws without header
+      # output an array of rows without header
       @table.raw_records
     end
 
@@ -85,8 +103,8 @@ module RedAmber
 
     # Selecting ===
 
-    # [symbol] or [string]: select columns
-    # [array of index], [range]: select rows
+    # select columns: [symbol] or [string]
+    # select rows: [array of index], [range]
     def [](*args)
       case args
       when Array
@@ -95,33 +113,26 @@ module RedAmber
           args.each_with_object([]) do |e, a|
             e.is_a?(Range) ? a.concat(e.to_a) : a.append(e)
           end
-          return select_rows(expanded) if integers?(expanded)
-          return select_columns(expanded.map(&:to_sym)) if sym_or_str?(expanded)
+        return select_rows(expanded) if integers?(expanded)
+        return select_columns(expanded.map(&:to_sym)) if sym_or_str?(expanded)
 
-        raise ArgumentError, "Invalid argument #{args}"
+        raise ArgumentError, "invalid argument #{args}"
       when Range
         select_rows(args.to_a)
       else
-        raise ArgumentError, "Invalid argument #{args}"
+        raise ArgumentError, "invalid argument #{args}"
       end
     end
 
     private # =====
-
-    def collect_vectors
-      @table.columns.map do |column|
-        RedAmber::Vector.new(column.data)
-      end
-    end
 
     def select_columns(keys)
       RedAmber::DataFrame.new(@table[keys])
     end
 
     def select_rows(indeces)
-      n = size
-      unless indeces.min >= -n && indeces.max < n
-        raise ArgumentError, "Invalid index range #{indeces}"
+      if indeces.max >= size && indeces.min < -size
+        raise ArgumentError, "invalid index range: #{indeces}"
       end
 
       a = indeces.map { |i| @table.slice(i).to_a }

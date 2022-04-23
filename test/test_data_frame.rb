@@ -3,40 +3,69 @@
 require 'test_helper'
 
 class DataFrameTest < Test::Unit::TestCase
-  sub_test_case 'Constructor and property' do
-    data(keep: true) do
-      data_set = {}
-
-      hash = { 'name' => %w[Yasuko Rui Hinata], 'age' => [68, 49, 28] }
-      dataframe = RedAmber::DataFrame.new(hash)
-      types = %i[string uint8]
-      data_set['name/age'] = [hash, dataframe, types]
-
-      data_set
+  sub_test_case 'Constructor' do
+    test 'new empty DataFrame' do
+      assert_nil RedAmber::DataFrame.new.table
+      assert_nil RedAmber::DataFrame.new([]).table
+      assert_nil RedAmber::DataFrame.new(nil).table
     end
 
-    test 'new_hash' do
-      hash, df, = data
-      assert_equal(Arrow::Table.new(hash), df.table)
+    hash = { x: [1, 2, 3] }
+    df = RedAmber::DataFrame.new(hash)
+    data('hash 1 colum', [hash, df], keep: true)
+
+    hash = { x: [1, 2, 3], 'y' => %w[A B C] }
+    df = RedAmber::DataFrame.new(hash)
+    data('hash 2 colums', [hash, df], keep: true)
+
+    test 'new from a Hash' do
+      hash, df = data
+      assert_equal Arrow::Table.new(hash), df.table
     end
 
+    test 'new from a RedAmber::DataFrame' do
+      _, df = data
+      assert_equal df.table, RedAmber::DataFrame.new(df).table
+    end
+
+    test 'new from a Arrow::Table' do
+      hash, = data
+      table = Arrow::Table.new(hash)
+      df = RedAmber::DataFrame.new(table)
+      assert_equal table, df.table
+    end
+
+    test 'new from an Array' do
+      # assert_equal
+    end
+
+    test 'new from a Rover::DataFrame' do
+      # aeert_equal
+    end
+  end
+
+  sub_test_case 'Properties' do
+    hash = { x: [1, 2, 3], y: %w[A B C] }
+    data('hash data',
+         [hash, RedAmber::DataFrame.new(hash), %i[uint8 string]],
+         keep: true)
     test 'n_rows' do
       hash, df, = data
-      assert_equal(hash.first.last.size, df.n_rows)
-      assert_equal(hash.first.last.size, df.nrow)
-      assert_equal(hash.first.last.size, df.length)
+      assert_equal hash.first.last.size, df.n_rows
+      assert_equal hash.first.last.size, df.nrow
+      assert_equal hash.first.last.size, df.length
     end
 
     test 'n_columns' do
       hash, df, = data
-      assert_equal(hash.keys.size, df.n_columns)
-      assert_equal(hash.keys.size, df.ncol)
-      assert_equal(hash.keys.size, df.width)
+      assert_equal hash.keys.size, df.n_columns
+      assert_equal hash.keys.size, df.ncol
+      assert_equal hash.keys.size, df.width
     end
 
     test 'shape' do
       hash, df, = data
-      assert_equal([hash.first.last.size, hash.keys.size], df.shape)
+      assert_equal [hash.first.last.size, hash.keys.size], df.shape
     end
 
     test 'to_h' do
@@ -45,7 +74,7 @@ class DataFrameTest < Test::Unit::TestCase
         k, v = kv
         h[k.to_sym] = v
       end
-      assert_equal(hash_sym, df.to_h)
+      assert_equal hash_sym, df.to_h
     end
 
     test 'column_names' do
@@ -54,23 +83,24 @@ class DataFrameTest < Test::Unit::TestCase
         k, v = kv
         h[k.to_sym] = v
       end
-      assert_equal(hash_sym.keys, df.column_names)
-      assert_equal(hash_sym.keys, df.keys)
+      assert_equal hash_sym.keys, df.column_names
+      assert_equal hash_sym.keys, df.keys
     end
 
     test 'types' do
       _, df, types = data
-      assert_equal(types, df.types)
+      assert_equal types, df.types
     end
   end
 
   sub_test_case 'Selecting' do
-    def setup
-      @df = RedAmber::DataFrame.new(x: [1, 2, 3], y: %w[A B C])
-    end
+    df = RedAmber::DataFrame.new(x: [1, 2, 3], y: %w[A B C])
 
-    test 'column_symbol' do
-      assert_equal(RedAmber::DataFrame.new(x: [1, 2, 3]), @df[:x])
+    test 'Select columns' do
+      assert_equal Hash(x: [1, 2, 3]), df[:x].to_h
+      assert_equal Hash(y: %w[A B C]), df['y'].to_h
+      assert_equal Hash(y: %w[A B C], x: [1, 2, 3]), df[:y, :x].to_h
+      assert_equal Hash(x: [1, 2, 3]), df[:x, :x].to_h
     end
   end
 end
