@@ -102,5 +102,19 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal Hash(y: %w[A B C], x: [1, 2, 3]), df[:y, :x].to_h
       assert_equal Hash(x: [1, 2, 3]), df[:x, :x].to_h
     end
+
+    test 'Select rows' do
+      assert_equal Hash(x: [2], y: ['B']), df[1].to_h
+      assert_equal Hash(x: [2, 1, 3], y: %w[B A C]), df[1, 0, 2].to_h
+      assert_equal Hash(x: [2, 3], y: %w[B C]), df[1..2].to_h
+      assert_equal Hash(x: [3, 2], y: %w[C B]), df[-1, -2].to_h
+      assert_equal Hash(x: [2, 3, 1], y: %w[B C A]), df[1..2, 0].to_h
+      assert_equal Hash(x: [2, 2, 2], y: %w[B B B]), df[1, 1, 1].to_h
+      assert_equal Hash(x: [3]), df[:x][2].to_h
+    end
+
+    test 'Select empty' do
+      # assert_raise(ArgumentError) { df[] }
+    end
   end
 end
