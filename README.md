@@ -3,19 +3,19 @@
 Simple dataframe library for Ruby
 
 - Powered by Red Arrow
-- Rover-df like API
+- Rover-df like simple API
 
 ## Requirements
 
 ```ruby
-gem 'red-arrow', '~> 7.0.0'
-gem 'red-parquet' , '~> 7.0.0' # if you use IO from/to parquet
-gem 'rover-df', '~> 0.3.0' # if you use IO from/to Rover::DataFrame
+gem 'red-arrow',   '~> 7.0.0'
+gem 'red-parquet', '~> 7.0.0' # if you use IO from/to parquet
+gem 'rover-df',    '~> 0.3.0' # if you use IO from/to Rover::DataFrame
 ```
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add this line to your Gemfile:
 
 ```ruby
 gem 'red_amber'
@@ -40,25 +40,25 @@ Or install it yourself as:
 
 ### Properties
 - `shape`
-- 
+ 
   Show shape in an Array[n_rows, n_cols]
-- 
+ 
 - `n_rows`, `nrow`, `size`, `length`
   
   Show num of rows (data size)
-- 
+ 
 - `n_columns`, `ncols`
   
   Show num of columns (num of vectors)
-- 
+ 
 - column_names, keys
   
   Return num of keys by an Array
-- 
+ 
 - types
   
   Return types of columns by an Array
-- 
+ 
 - inspect
 
 - to_s
@@ -70,7 +70,7 @@ Or install it yourself as:
 ### Output
 - to_h
 - to_a
-- to_rover
+- to_rover (not impremented)
 - to_csv (not impremented)
 - to_parquet (not impremented)
 
@@ -116,19 +116,19 @@ Or install it yourself as:
 - new from an Array
 
 ### Operations
-#### Unary
+#### Unary (not impremented)
 - !, -@
 
-#### Binary
+#### Binary (not impremented)
 - +, - , *, /, %, **
 - ==, !=, >, >=, <, <=, eq, ne, gt, ge, lt, le
 
-#### Functions
+#### Functions (not impremented)
 - abs, sum, prod, sort, sort_index
 - min, max, minmax, mean, stddev, var, median, quantile
 - argmin, argmax
 
-### Updating
+### Updating (not impremented)
 
 
 ## Development
@@ -140,4 +140,3 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
