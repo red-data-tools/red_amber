@@ -32,84 +32,110 @@ Or install it yourself as:
 ## `RedAmber::DataFrame`
 
 ### Constructors
-- new from a Hash
+
+- [x] new from a Hash
   - `RedAmber::DataFrame.new(hash)`
-- new from an Array
-- new from a Rover::DataFrame
-- load from a file (csv, parquet, etc.)
+
+- [x] new from an Array
+
+- [ ] new from a Rover::DataFrame
+
+- [ ] load from a file (csv, parquet, etc.)
 
 ### Properties
-- `shape`
+- [x] `shape`
  
   Show shape in an Array[n_rows, n_cols]
  
-- `n_rows`, `nrow`, `size`, `length`
+- [x] `n_rows`, `nrow`, `size`, `length`
   
   Show num of rows (data size)
  
-- `n_columns`, `ncols`
+- [x] `n_columns`, `ncols`
   
   Show num of columns (num of vectors)
  
-- column_names, keys
+- [x] column_names, keys
   
   Return num of keys by an Array
  
-- types
+- [x] types
   
   Return types of columns by an Array
  
-- inspect
+- [x] inspect
 
-- to_s
+- [x] to_s
 
-- lookup (not impremented)
+- [ ] abstract
 
-- summary, describe (not impremented)
+- [ ] summary, describe
 
 ### Output
-- to_h
-- to_a
-- to_rover (not impremented)
-- to_csv (not impremented)
-- to_parquet (not impremented)
+- [x] to_h
+  
+- [x] to_a
 
-### Selecting (not impremented)
-- Selecting columns
+- [ ] to_rover
+
+- [ ] to_csv
+
+- [ ] to_parquet
+
+### Selecting
+- [x] Selecting columns
 
   [key], [keys], [keys[index]]]
 
-- Selecting rows
+- [x] Selecting rows
 
-  head(n=5), tail(n=5), first(n=1), last(n=1)
+  `head(n=5)`, `tail(n=5)`, `first(n=1)`, `last(n=1)`
 
-- Selecting rows: [index], [range], [array]
+- [x] Selecting rows: [index], [range], [array]
 
-### Updating (not impremented)
-- Add a new column
-- Update a single element
-- Update multiple elements
-- Update all elements
-- Update elements matching a condition
-- Clamp
-- Delete columns
-- Rename a column
-- Sort rows
-- Clear data
+### Updating
 
-### Treat na data (not impremented)
-- Drop na (NaN, nil)
-- Replace na with value
-- Interpolate na with convolution array
+- [ ] Add a new column
 
-### Combining DataFrames (not impremented)
-- Add rows
-- Add columns
-- Inner join
-- Left join
+- [ ] Update a single element
 
-### Encoding (not impremented)
-- One-hot encoding
+- [ ] Update multiple elements
+
+- [ ] Update all elements
+
+- [ ] Update elements matching a condition
+
+- [ ] Clamp
+
+- [ ] Delete columns
+
+- [ ] Rename a column
+
+- [ ] Sort rows
+
+- [ ] Clear data
+
+### Treat na data
+
+- [ ] Drop na (NaN, nil)
+
+- [ ] Replace na with value
+
+- [ ] Interpolate na with convolution array
+
+### Combining DataFrames
+
+- [ ] Add rows
+
+- [ ] Add columns
+
+- [ ] Inner join
+
+- [ ] Left join
+
+### Encoding
+
+- [ ] One-hot encoding
 
 ### Iteration (not impremented)
 
@@ -118,21 +144,23 @@ Or install it yourself as:
 
 ## `RedAmber::Vector`
 ### Constructor
-- Create from columns in a DataFrame
-- new from an Array
+
+- [x] Create from columns in a DataFrame
+
+- [x] new from an Array
 
 ### Operations
-#### Unary (not impremented)
-- !, -@
+#### Unary
+- [ ] !, -@
 
-#### Binary (not impremented)
-- +, - , *, /, %, **
-- ==, !=, >, >=, <, <=, eq, ne, gt, ge, lt, le
+#### Binary
+- [ ] +, - , *, /, %, **
+- [ ] ==, !=, >, >=, <, <=, eq, ne, gt, ge, lt, le
 
-#### Functions (not impremented)
-- abs, sum, prod, sort, sort_index
-- min, max, minmax, mean, stddev, var, median, quantile
-- argmin, argmax
+#### Functions
+- [ ] abs, sum, prod, sort, sort_index
+- [ ] min, max, minmax, mean, stddev, var, median, quantile
+- [ ] argmin, argmax
 
 ### Updating (not impremented)
 
