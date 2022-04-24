@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 module RedAmber
+  class DataFrameArgumentError < ArgumentError; end
+  class DataFrameTypeError < TypeError; end
+
   # data frame class
   #   @table   : holds Arrow::Table object
   class DataFrame
@@ -8,7 +11,9 @@ module RedAmber
       @table = nil
       # ok: DataFrame.new, DataFrame.new([]), DataFrame.new(nil)
       #   returns empty DataFrame
-      # bug?: [Arrow::Table] == [nil] shows ArgumentError
+      # bug in gobject-introspection: ruby-gnome/ruby-gnome#1472
+      #  [Arrow::Table] == [nil] shows ArgumentError
+      #  temporary use yoda style to workaround
       return if args.empty? || args == [[]] || [nil] == args
 
       if args.size > 1
@@ -21,7 +26,7 @@ module RedAmber
           when RedAmber::DataFrame then arg.table
           when Hash                then Arrow::Table.new(*args)
           else
-            raise ArgumentError, "invalid arguments: #{args}"
+            raise DataFrameTypeError, "invalid argument: #{args}"
           end
       end
     end
@@ -106,22 +111,17 @@ module RedAmber
     # select columns: [symbol] or [string]
     # select rows: [array of index], [range]
     def [](*args)
-      case args
-      when Array
-        # expand Range like [1..3, 4] to [1, 2, 3, 4]
-        expanded =
-          args.each_with_object([]) do |e, a|
-            e.is_a?(Range) ? a.concat(e.to_a) : a.append(e)
-          end
-        return select_rows(expanded) if integers?(expanded)
-        return select_columns(expanded.map(&:to_sym)) if sym_or_str?(expanded)
+      raise DataFrameArgumentError, "Empty argument" if args.empty?
+      # expand Range like [1..3, 4] to [1, 2, 3, 4]
+      expanded =
+        args.each_with_object([]) do |e, a|
+          e.is_a?(Range) ? a.concat(e.to_a) : a.append(e)
+        end
 
-        raise ArgumentError, "invalid argument #{args}"
-      when Range
-        select_rows(args.to_a)
-      else
-        raise ArgumentError, "invalid argument #{args}"
-      end
+      return select_rows(expanded) if integers?(expanded)
+      return select_columns(expanded.map(&:to_sym)) if sym_or_str?(expanded)
+
+      raise DataFrameArgumentError, "invalid argument #{args}"
     end
 
     private # =====
@@ -131,8 +131,8 @@ module RedAmber
     end
 
     def select_rows(indeces)
-      if indeces.max >= size && indeces.min < -size
-        raise ArgumentError, "invalid index range: #{indeces}"
+      if indeces.max >= size || indeces.min < -size
+        raise DataFrameArgumentError, "invalid index range: #{indeces}"
       end
 
       a = indeces.map { |i| @table.slice(i).to_a }

@@ -42,6 +42,11 @@ class DataFrameTest < Test::Unit::TestCase
     test 'new from a Rover::DataFrame' do
       # aeert_equal
     end
+
+    test 'Select rows by invalid type' do
+      int32_array = Arrow::Int32Array.new([1, 2])
+      assert_raise(RedAmber::DataFrameTypeError) { RedAmber::DataFrame.new(int32_array) }
+    end
   end
 
   sub_test_case 'Properties' do
@@ -113,8 +118,21 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal Hash(x: [3]), df[:x][2].to_h
     end
 
+    test 'Select rows over range' do
+      assert_raise(RedAmber::DataFrameArgumentError) { df[3] }
+      assert_raise(RedAmber::DataFrameArgumentError) { df[-4] }
+    end
+
+    test 'Select rows by invalid index' do
+      assert_raise(RedAmber::DataFrameArgumentError) { df[0.5] }
+    end
+
+    test 'Select rows by invalid type' do
+      assert_raise(RedAmber::DataFrameArgumentError) { df[Arrow::Int32Array.new([1, 2])] }
+    end
+
     test 'Select empty' do
-      # assert_raise(ArgumentError) { df[] }
+      assert_raise(RedAmber::DataFrameArgumentError) { df[] }
     end
   end
 end
