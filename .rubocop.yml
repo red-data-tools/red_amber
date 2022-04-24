@@ -1,5 +1,5 @@
 # We will use cops to detect bugs in an early stage
-# Feel free to use .rubocop_todo.yml
+# Feel free to use .rubocop_todo.yml by --auto-gen-config
 inherit_from: .rubocop_todo.yml
 
 require:
@@ -27,22 +27,32 @@ Style/TrailingCommaInHashLiteral:
 # Should not set for Style/TrailingCommaInArguments
 
 # To let you know the possibility of refactoring
+# Max: 120
 Layout/LineLength:
   Max: 100
 
+# <= 17 satisfactory
+# 18..30 unsatisfactory
+# > 30 dangerous
 Metrics/AbcSize:
   Max: 20
 
+# Max: 25
 Metrics/BlockLength:
   Max: 26
   Exclude:
     - 'test/**/*'
 
+# Max: 100
 Metrics/ClassLength:
-   Max: 105
+   Max: 120
+   Exclude:
+    - 'test/**/*'
 
+# Max: 7
 Metrics/CyclomaticComplexity:
   Max: 10
 
+# Max: 10
 Metrics/MethodLength:
   Max: 18

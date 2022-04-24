@@ -134,5 +134,21 @@ class DataFrameTest < Test::Unit::TestCase
     test 'Select empty' do
       assert_raise(RedAmber::DataFrameArgumentError) { df[] }
     end
+
+    test 'head/first' do
+      assert_equal Hash(x: [1, 2, 3], y: %w[A B C]), df.head.to_h
+      assert_equal Hash(x: [1, 2, 3], y: %w[A B C]), df.head(4).to_h
+      assert_equal Hash(x: [1, 2], y: %w[A B]), df.head(2).to_h
+      assert_equal Hash(x: [1], y: ['A']), df.first.to_h
+      assert_raise(RedAmber::DataFrameArgumentError) { df.head(-1) }
+    end
+
+    test 'tail/last' do
+      assert_equal Hash(x: [1, 2, 3], y: %w[A B C]), df.tail.to_h
+      assert_equal Hash(x: [1, 2, 3], y: %w[A B C]), df.tail(4).to_h
+      assert_equal Hash(x: [2, 3], y: %w[B C]), df.tail(2).to_h
+      assert_equal Hash(x: [3], y: ['C']), df.last.to_h
+      assert_raise(RedAmber::DataFrameArgumentError) { df.tail(-1) }
+    end
   end
 end

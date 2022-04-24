@@ -13,7 +13,7 @@ module RedAmber
       #   returns empty DataFrame
       # bug in gobject-introspection: ruby-gnome/ruby-gnome#1472
       #  [Arrow::Table] == [nil] shows ArgumentError
-      #  temporary use yoda style to workaround
+      #  temporary use yoda condition to workaround
       return if args.empty? || args == [[]] || [nil] == args
 
       if args.size > 1
@@ -111,7 +111,8 @@ module RedAmber
     # select columns: [symbol] or [string]
     # select rows: [array of index], [range]
     def [](*args)
-      raise DataFrameArgumentError, "Empty argument" if args.empty?
+      raise DataFrameArgumentError, 'Empty argument' if args.empty?
+
       # expand Range like [1..3, 4] to [1, 2, 3, 4]
       expanded =
         args.each_with_object([]) do |e, a|
@@ -124,6 +125,26 @@ module RedAmber
       raise DataFrameArgumentError, "invalid argument #{args}"
     end
 
+    def head(n_rows = 5)
+      raise DataFrameArgumentError, "index is out of range #{n_rows}" if n_rows.negative?
+
+      self[0...[n_rows, size].min]
+    end
+
+    def tail(n_rows = 5)
+      raise DataFrameArgumentError, "index is out of range #{n_rows}" if n_rows.negative?
+
+      self[-[n_rows, size].min..-1]
+    end
+
+    def first(n_rows = 1)
+      head(n_rows)
+    end
+
+    def last(n_rows = 1)
+      tail(n_rows)
+    end
+
     private # =====
 
     def select_columns(keys)
@@ -131,12 +152,16 @@ module RedAmber
     end
 
     def select_rows(indeces)
-      if indeces.max >= size || indeces.min < -size
-        raise DataFrameArgumentError, "invalid index range: #{indeces}"
+      if out_of_range?(indeces)
+        raise DataFrameArgumentError, "invalid index: #{indeces} for [0..#{size - 1}]"
       end
 
       a = indeces.map { |i| @table.slice(i).to_a }
       RedAmber::DataFrame.new(@table.schema, a)
+    end
+
+    def out_of_range?(indeces)
+      indeces.max >= size || indeces.min < -size
     end
 
     def integers?(enum)

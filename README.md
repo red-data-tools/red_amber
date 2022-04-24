@@ -75,8 +75,14 @@ Or install it yourself as:
 - to_parquet (not impremented)
 
 ### Selecting (not impremented)
-- Selecting columns: [key], [keys], [keys[index]]]
-- Selecting rows: head, tail, first(n), last(n)
+- Selecting columns
+
+  [key], [keys], [keys[index]]]
+
+- Selecting rows
+
+  head(n=5), tail(n=5), first(n=1), last(n=1)
+
 - Selecting rows: [index], [range], [array]
 
 ### Updating (not impremented)
