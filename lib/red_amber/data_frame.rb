@@ -68,8 +68,11 @@ module RedAmber
     alias_method :keys, :column_names
     alias_method :header, :column_names
 
-    def types
-      @table.columns.map { |column| column.data_type.to_s.to_sym }
+    def types(class_name: false)
+      @table.columns.map do |column|
+        r = column.data_type
+        class_name ? r.class : r.to_s.to_sym
+      end
     end
 
     def vectors

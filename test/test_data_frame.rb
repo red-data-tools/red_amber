@@ -107,6 +107,12 @@ class DataFrameTest < Test::Unit::TestCase
       _, df, types = data
       assert_equal types, df.types
     end
+
+    test 'types class' do
+      _, df, types = data
+      types = [Arrow::UInt8DataType, Arrow::StringDataType] if types == %i[uint8 string]
+      assert_equal types, df.types(class_name: true)
+    end
   end
 
   sub_test_case 'Selecting' do
