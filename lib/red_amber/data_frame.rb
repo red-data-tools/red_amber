@@ -8,9 +8,11 @@ module RedAmber
   #   @table   : holds Arrow::Table object
   class DataFrame
     def initialize(*args)
-      @table = nil
-      # ok: DataFrame.new, DataFrame.new([]), DataFrame.new(nil)
+      # accepts: DataFrame.new, DataFrame.new([]), DataFrame.new(nil)
       #   returns empty DataFrame
+      #
+      # TODO: is there a better way to create empty Table ?
+      @table = Arrow::Table.new(x: []).remove_column(:x)
       # bug in gobject-introspection: ruby-gnome/ruby-gnome#1472
       #  [Arrow::Table] == [nil] shows ArgumentError
       #  temporary use yoda condition to workaround
@@ -50,6 +52,10 @@ module RedAmber
     end
     alias_method :ncol, :n_columns
     alias_method :width, :n_columns
+
+    def empty?
+      @table.columns.empty?
+    end
 
     def shape
       [n_rows, n_columns]
@@ -111,6 +117,7 @@ module RedAmber
     # select columns: [symbol] or [string]
     # select rows: [array of index], [range]
     def [](*args)
+      raise DataFrameArgumentError, 'Empty dataframe' if empty?
       raise DataFrameArgumentError, 'Empty argument' if args.empty?
 
       # expand Range like [1..3, 4] to [1, 2, 3, 4]

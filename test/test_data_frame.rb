@@ -5,9 +5,9 @@ require 'test_helper'
 class DataFrameTest < Test::Unit::TestCase
   sub_test_case 'Constructor' do
     test 'new empty DataFrame' do
-      assert_nil RedAmber::DataFrame.new.table
-      assert_nil RedAmber::DataFrame.new([]).table
-      assert_nil RedAmber::DataFrame.new(nil).table
+      assert_equal [], RedAmber::DataFrame.new.table.columns
+      assert_equal [], RedAmber::DataFrame.new([]).table.columns
+      assert_equal [], RedAmber::DataFrame.new(nil).table.columns
     end
 
     hash = { x: [1, 2, 3] }
@@ -54,11 +54,16 @@ class DataFrameTest < Test::Unit::TestCase
     data('hash data',
          [hash, RedAmber::DataFrame.new(hash), %i[uint8 string]],
          keep: true)
+    data('empty data',
+         [{}, RedAmber::DataFrame.new, []],
+         keep: true)
+
     test 'n_rows' do
       hash, df, = data
-      assert_equal hash.first.last.size, df.n_rows
-      assert_equal hash.first.last.size, df.nrow
-      assert_equal hash.first.last.size, df.length
+      size = hash.empty? ? 0 : hash.values.first.size
+      assert_equal size, df.n_rows
+      assert_equal size, df.nrow
+      assert_equal size, df.length
     end
 
     test 'n_columns' do
@@ -68,9 +73,15 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal hash.keys.size, df.width
     end
 
+    test 'empty?' do
+      hash, df = data
+      assert_equal hash.empty?, df.empty?
+    end
+
     test 'shape' do
       hash, df, = data
-      assert_equal [hash.first.last.size, hash.keys.size], df.shape
+      expected = hash.empty? ? [0, 0] : [hash.values.first.size, hash.keys.size]
+      assert_equal expected, df.shape
     end
 
     test 'to_h' do
@@ -133,6 +144,10 @@ class DataFrameTest < Test::Unit::TestCase
 
     test 'Select empty' do
       assert_raise(RedAmber::DataFrameArgumentError) { df[] }
+    end
+
+    test 'Select for empty dataframe' do
+      assert_raise(RedAmber::DataFrameArgumentError) { RedAmber::DataFrame.new[0] }
     end
 
     test 'head/first' do

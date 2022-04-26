@@ -58,6 +58,8 @@ Or install it yourself as:
 - [x] column_names, keys
   
   Return num of keys by an Array
+
+- [x] empty?
  
 - [x] types
   
