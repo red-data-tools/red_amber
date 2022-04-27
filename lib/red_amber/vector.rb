@@ -47,6 +47,10 @@ module RedAmber
 
     # def each(); end
 
+    def tally
+      values.tally
+    end
+
     def n_nulls
       @data.n_nulls
     end

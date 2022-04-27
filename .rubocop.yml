@@ -35,24 +35,37 @@ Layout/LineLength:
 # 18..30 unsatisfactory
 # > 30 dangerous
 Metrics/AbcSize:
-  Max: 20
+  Max: 17
+  Exclude:
+    - 'lib/red_amber/data_frame_output.rb' # Max: 106
 
 # Max: 25
 Metrics/BlockLength:
-  Max: 26
+  Max: 25
   Exclude:
     - 'test/**/*'
+    - '*.gemspec'
 
 # Max: 100
 Metrics/ClassLength:
-   Max: 120
-   Exclude:
+  Max: 100
+  Exclude:
     - 'test/**/*'
 
 # Max: 7
 Metrics/CyclomaticComplexity:
   Max: 10
+  Exclude:
+    - 'lib/red_amber/data_frame_output.rb' # Max: 22
 
 # Max: 10
 Metrics/MethodLength:
   Max: 18
+  Exclude:
+    - 'lib/red_amber/data_frame_output.rb' # Max: 58
+
+# Max: 8
+Metrics/PerceivedComplexity:
+  Max: 8
+  Exclude:
+    - 'lib/red_amber/data_frame_output.rb' # Max: 24

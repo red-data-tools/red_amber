@@ -33,14 +33,14 @@ Or install it yourself as:
 
 ### Constructors
 
-- [x] new from a Hash
+- [x] `new` from a Hash
   - `RedAmber::DataFrame.new(hash)`
 
-- [x] new from an Array
+- [x] `new` from an Array
 
-- [ ] new from a Rover::DataFrame
+- [ ] `new` from a Rover::DataFrame
 
-- [ ] load from a file (csv, parquet, etc.)
+- [ ] `load` from a file (csv, parquet, etc.)
 
 ### Properties
 - [x] `shape`
@@ -51,32 +51,45 @@ Or install it yourself as:
   
   Show num of rows (data size)
  
-- [x] `n_columns`, `ncols`
+- [x] `n_columns`, `ncol`, `width`
   
-  Show num of columns (num of vectors)
+  Show num of columns (num of vectors).
  
-- [x] column_names, keys
+- [x] `column_names`, `keys`
   
   Return num of keys by an Array
 
-- [x] empty?
+- [x] `vectors`
+
+  Return an Array of Vector.
+
+- [x] `empty?`
  
-- [x] types
+- [x] `types(class_name: false)`
   
-  Return types of columns by an Array
+  Return types of columns by an Array.
+  If `class_name: true` return Array of DataType.
  
-- [x] inspect
+- [x] `inspect(tally_level: 5, max_element: 5)`
 
-- [x] to_s
+  Show information about DataFrame.
 
-- [ ] abstract
+  - tally_level: max level to use tally mode
+  - max_element: max num of element to show values in each row
+
+- [x] `to_s`
 
 - [ ] summary, describe
 
 ### Output
-- [x] to_h
+
+- [x] `to_h`
   
-- [x] to_a
+- [x] `to_a`
+
+- [x] `raw_records`
+
+  Return an array of rows without header
 
 - [ ] to_rover
 
@@ -85,7 +98,7 @@ Or install it yourself as:
 - [ ] to_parquet
 
 ### Selecting
-- [x] Selecting columns
+- [x] Selecting columns by `[]`
 
   [key], [keys], [keys[index]]]
 
@@ -93,7 +106,11 @@ Or install it yourself as:
 
   `head(n=5)`, `tail(n=5)`, `first(n=1)`, `last(n=1)`
 
-- [x] Selecting rows: [index], [range], [array]
+- [x] Selecting rows by `[]`
+
+  [index], [range], [array]
+
+- [ ] slice
 
 ### Updating
 
@@ -150,6 +167,18 @@ Or install it yourself as:
 - [x] Create from columns in a DataFrame
 
 - [x] new from an Array
+
+### Properties
+
+- [x] to_s
+
+- [x] values, to_a, entries
+
+- [x] size, length, n_rows, nrow
+
+- [x] n_nulls
+
+- [x] tally
 
 ### Operations
 #### Unary
