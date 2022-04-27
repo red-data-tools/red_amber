@@ -3,26 +3,34 @@
 require 'test_helper'
 
 class VectorTest < Test::Unit::TestCase
-  data do
-    array = [0, 1, nil, 4]
+  data(keep: true) do
+    a = [0, 1, nil, 4]
     h = {
-      'array' =>
-        [array, array],
-      'Arrow::Array' =>
-        [array, Arrow::UInt32Array.new(array)],
-      'vector' =>
-        [array, RedAmber::Vector.new(array)],
+      'array' => [a, :uint8, a],
+      'Arrow::Array' => [a, :uint8, Arrow::UInt8Array.new(a)],
+      'vector' => [a, :uint8, RedAmber::Vector.new(a)],
     }
-    chunks = [Arrow::UInt32Array.new(array[0..1]),
-              Arrow::UInt32Array.new(array[2..3])]
-    h['chunked array'] =
-      [array, Arrow::ChunkedArray.new(chunks)]
+    chunks = [Arrow::UInt32Array.new(a[0..1]),
+              Arrow::UInt32Array.new(a[2..3])]
+    h['chunked array'] = [a, :uint32, Arrow::ChunkedArray.new(chunks)]
     h
   end
 
   test 'initialize' do
-    expect, actual = data
-    actual = RedAmber::Vector.new(actual).to_a
+    expect, _, array = data
+    actual = RedAmber::Vector.new(array).to_a
     assert_equal expect, actual
+  end
+
+  test 'size' do
+    expect, _, array = data
+    actual = RedAmber::Vector.new(array)
+    assert_equal expect.size, actual.size
+  end
+
+  test 'type' do
+    _, type, array = data
+    actual = RedAmber::Vector.new(array)
+    assert_equal type, actual.type
   end
 end

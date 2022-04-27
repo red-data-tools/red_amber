@@ -176,9 +176,19 @@ Or install it yourself as:
 
 - [x] size, length, n_rows, nrow
 
-- [x] n_nulls
+- [x] type
+
+- [ ] each
+
+- [ ] chunked?
+
+- [ ] n_chunks
+
+- [ ] each_chunk
 
 - [x] tally
+
+- [ ] n_nulls
 
 ### Operations
 #### Unary

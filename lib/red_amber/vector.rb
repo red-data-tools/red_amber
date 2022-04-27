@@ -8,7 +8,6 @@ module RedAmber
     include VectorFunctions
 
     # chunked_array may come from column.data
-    # Arrow::ChunkedArray, Arrow::Array, Array or ::Vector
     def initialize(array)
       case array
       when Vector
@@ -39,13 +38,28 @@ module RedAmber
     alias_method :entries, :values
 
     def size
-      @data.size
+      # only defined :length in Arrow?
+      @data.length
     end
     alias_method :length, :size
     alias_method :n_rows, :size
     alias_method :nrow, :size
 
-    # def each(); end
+    def type
+      @data.value_type.nick.to_sym
+    end
+
+    # def each() end
+
+    def chunked?
+      @data.is_a? Arrow::ChunkedArray
+    end
+
+    def n_chunks
+      chunked? ? @data.n_chunks : 0
+    end
+
+    # def each_chunk() end
 
     def tally
       values.tally
