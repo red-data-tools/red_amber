@@ -69,6 +69,8 @@ Or install it yourself as:
   
   Return types of columns by an Array.
   If `class_name: true` return Array of DataType.
+
+- [x] `==`
  
 - [x] `inspect(tally_level: 5, max_element: 5)`
 

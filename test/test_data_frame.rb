@@ -12,7 +12,7 @@ class DataFrameTest < Test::Unit::TestCase
 
     hash = { x: [1, 2, 3] }
     df = RedAmber::DataFrame.new(hash)
-    data('hash 1 colum', [hash, df], keep: true)
+    data('hash 1 column', [hash, df], keep: true)
 
     hash = { x: [1, 2, 3], 'y' => %w[A B C] }
     df = RedAmber::DataFrame.new(hash)

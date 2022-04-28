@@ -80,5 +80,9 @@ module RedAmber
         Vector.new(column.data)
       end
     end
+
+    def ==(other)
+      other.is_a?(DataFrame) && @table == other.table
+    end
   end
 end
