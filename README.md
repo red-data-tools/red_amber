@@ -34,9 +34,10 @@ Or install it yourself as:
 ### Constructors and saving
 
 - [x] `new` from a Hash
-  - `RedAmber::DataFrame.new(hash)`
+  - `RedAmber::DataFrame.new(x: [1, 2, 3])`
 
 - [x] `new` from an Array
+  - `RedAmber::DataFrame.new({:x=>:uint8}, [[1], [2], [3]])`
 
 - [ ] `new` from a Rover::DataFrame
 
@@ -62,12 +63,6 @@ Or install it yourself as:
 
 ### Properties
 
-- [x] `==`
- 
-- [x] `shape`
- 
-  Show shape in an Array[n_rows, n_cols]
- 
 - [x] `n_rows`, `nrow`, `size`, `length`
   
   Show num of rows (data size)
@@ -76,20 +71,46 @@ Or install it yourself as:
   
   Show num of columns (num of vectors).
  
+- [x] `shape`
+ 
+  Show shape in an Array[n_rows, n_cols]
+ 
 - [x] `column_names`, `keys`
   
   Return num of keys by an Array
+
+- [x] `types(class_name: false)`
+  
+  Return types of columns by an Array.
+  If `class_name: true` return Array of DataType.
 
 - [x] `vectors`
 
   Return an Array of Vector.
 
-- [x] `empty?`
+- [x] `to_h`
+
+  Column-oriented data output in a Hash.
+
+- [x] `to_a`, `raw_records`
+
+  Return an array of row-oriented data without header. If you need column-oriented array, use `.to_h.to_a`
+
+- [x] `schema`
+
+  Hash of column name and data type.
+
+- [x] `==`
  
-- [x] `types(class_name: false)`
-  
-  Return types of columns by an Array.
-  If `class_name: true` return Array of DataType.
+- [x] `empty?`
+
+### Output
+
+- [x] `to_s`
+
+- [ ] summary, describe
+
+- [ ] `to_rover`
 
 - [x] `inspect(tally_level: 5, max_element: 5)`
 
@@ -98,21 +119,6 @@ Or install it yourself as:
   - tally_level: max level to use tally mode
   - max_element: max num of element to show values in each row
 
-- [x] `to_s`
-
-- [ ] summary, describe
-
-### Output
-
-- [x] `to_h`
-  
-- [x] `to_a`
-
-- [x] `raw_records`
-
-  Return an array of rows without header
-
-- [ ] `to_rover`
 ### Selecting
 - [x] Selecting columns by `[]`
 

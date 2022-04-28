@@ -105,4 +105,22 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal types, df.types(class_name: true)
     end
   end
+
+  sub_test_case 'column oriented I/O' do
+    data = [
+      'string and integer',
+      [
+        { name: %w[Yasuko Rui Hinata], age: [68, 49, 28] },
+        { name: :string, age: :uint8 },
+        [['Yasuko', 68], ['Rui', 49], ['Hinata', 28]],
+      ],
+    ]
+    data = ['empty', [{}, {}, []]]
+    test 'hash I/O' do |hash, schema, array|
+      assert_equal DataFrame.new(hash), DataFrame.new(schema, array)
+      assert_equal hash, DataFrame.new(hash).to_h
+      assert_equal schema, DataFrame.new(hash).schema
+      assert_equal array, DataFrame.new(hash).to_a
+    end
+  end
 end

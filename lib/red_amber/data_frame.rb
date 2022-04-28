@@ -44,14 +44,6 @@ module RedAmber
       @table.save(output, options)
     end
 
-    def ==(other)
-      other.is_a?(DataFrame) && @table == other.table
-    end
-
-    def empty?
-      @table.columns.empty?
-    end
-
     # Properties ===
     def n_rows
       @table.n_rows
@@ -87,6 +79,31 @@ module RedAmber
       @table.columns.map do |column|
         Vector.new(column.data)
       end
+    end
+
+    def to_h
+      @table.columns.each_with_object({}) do |column, result|
+        result[column.name.to_sym] = column.entries
+      end
+    end
+
+    def to_a
+      # output an array of row-oriented data without header
+      # if you need column-oriented array, use `.to_h.to_a`
+      @table.raw_records
+    end
+    alias_method :raw_records, :to_a
+
+    def schema
+      keys.zip(types).to_h
+    end
+
+    def ==(other)
+      other.is_a?(DataFrame) && @table == other.table
+    end
+
+    def empty?
+      @table.columns.empty?
     end
   end
 end

@@ -13,6 +13,8 @@ AllCops:
   # accept new cops if any
   NewCops: enable
 
+# ===
+
 # alias is hard to see separately 
 Style/Alias:
   EnforcedStyle: prefer_alias_method
@@ -20,13 +22,22 @@ Style/Alias:
 # For consistency and portability
 Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
-
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
-
 # Should not set for Style/TrailingCommaInArguments
 
-# To let you know the possibility of refactoring
+# ===
+
+# To let you know the possibility of refactoring ===
+#
+# avoid unused variable asignment
+Rubycw/Rubycw:
+  Exclude:
+    - 'test/**/*'
+Lint/UselessAssignment:
+  Exclude:
+    - 'test/**/*'
+
 # Max: 120
 Layout/LineLength:
   Max: 100
