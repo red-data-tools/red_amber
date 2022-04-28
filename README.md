@@ -31,7 +31,7 @@ Or install it yourself as:
 
 ## `RedAmber::DataFrame`
 
-### Constructors
+### Constructors and saving
 
 - [x] `new` from a Hash
   - `RedAmber::DataFrame.new(hash)`
@@ -40,9 +40,30 @@ Or install it yourself as:
 
 - [ ] `new` from a Rover::DataFrame
 
-- [ ] `load` from a file (csv, parquet, etc.)
+- [ ] `load` (class method)
+
+     - [x] from a [`.arrow`, `:arrows`, `.csv`, `.csv.gz`, `.tsv`] file
+
+     - [x] from a string buffer
+
+     - [x] from a URI
+
+     - [ ] from a parquet file
+
+- [ ] `save` (instance method)
+
+     - [x] to a [`.arrow`, `:arrows`, `.csv`, `.csv.gz`, `.tsv`] file
+
+     - [x] to a string buffer
+
+     - [x] to a URI
+
+     - [ ] to a parquet file
 
 ### Properties
+
+- [x] `==`
+ 
 - [x] `shape`
  
   Show shape in an Array[n_rows, n_cols]
@@ -70,8 +91,6 @@ Or install it yourself as:
   Return types of columns by an Array.
   If `class_name: true` return Array of DataType.
 
-- [x] `==`
- 
 - [x] `inspect(tally_level: 5, max_element: 5)`
 
   Show information about DataFrame.
@@ -93,12 +112,7 @@ Or install it yourself as:
 
   Return an array of rows without header
 
-- [ ] to_rover
-
-- [ ] to_csv
-
-- [ ] to_parquet
-
+- [ ] `to_rover`
 ### Selecting
 - [x] Selecting columns by `[]`
 
@@ -210,10 +224,13 @@ Or install it yourself as:
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test-unit` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
+ ```
+git clone https://github.com/heronshoes/red_amber.git
+cd red_amber
+bundle install
+bundle exec rake test
+ ```
+ 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).

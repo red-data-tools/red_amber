@@ -42,6 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop-rake'
   spec.add_development_dependency 'rubocop-rubycw'
   spec.add_development_dependency 'test-unit', '~> 3.0'
+  spec.add_development_dependency 'webrick'
 
   spec.metadata['rubygems_mfa_required'] = 'true'
 

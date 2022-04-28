@@ -34,11 +34,23 @@ module RedAmber
       end
     end
 
-    def self.load(path, options: {})
-      @table = Arrow::Table.load(path, options)
+    def self.load(path, options = {})
+      DataFrame.new(Arrow::Table.load(path, options))
     end
 
     attr_reader :table
+
+    def save(output, options = {})
+      @table.save(output, options)
+    end
+
+    def ==(other)
+      other.is_a?(DataFrame) && @table == other.table
+    end
+
+    def empty?
+      @table.columns.empty?
+    end
 
     # Properties ===
     def n_rows
@@ -53,10 +65,6 @@ module RedAmber
     end
     alias_method :ncol, :n_columns
     alias_method :width, :n_columns
-
-    def empty?
-      @table.columns.empty?
-    end
 
     def shape
       [n_rows, n_columns]
@@ -79,10 +87,6 @@ module RedAmber
       @table.columns.map do |column|
         Vector.new(column.data)
       end
-    end
-
-    def ==(other)
-      other.is_a?(DataFrame) && @table == other.table
     end
   end
 end
