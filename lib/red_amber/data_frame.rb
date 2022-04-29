@@ -11,9 +11,7 @@ module RedAmber
     def initialize(*args)
       # accepts: DataFrame.new, DataFrame.new([]), DataFrame.new(nil)
       #   returns empty DataFrame
-      #
-      # TODO: is there a better way to create empty Table ?
-      @table = Arrow::Table.new(x: []).remove_column(:x)
+      @table = Arrow::Table.new({}, [])
       # bug in gobject-introspection: ruby-gnome/ruby-gnome#1472
       #  [Arrow::Table] == [nil] shows ArgumentError
       #  temporary use yoda condition to workaround
