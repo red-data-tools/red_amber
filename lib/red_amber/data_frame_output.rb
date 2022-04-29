@@ -7,13 +7,6 @@ module RedAmber
       @table.to_s
     end
 
-    def to_rover
-      require 'rover-df'
-      Rover::DataFrame.new(to_h)
-    end
-
-    # def to_parquet() end
-
     # def describe() end
 
     # def summary() end

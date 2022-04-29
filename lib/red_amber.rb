@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'arrow'
+require 'rover-df'
 
 require_relative 'red_amber/data_frame_output'
 require_relative 'red_amber/data_frame_selectable'

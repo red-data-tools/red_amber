@@ -26,8 +26,9 @@ module RedAmber
         @table =
           case arg
           when Arrow::Table then arg
-          when DataFrame    then arg.table
           when Hash         then Arrow::Table.new(*args)
+          when DataFrame    then arg.table
+          when Rover::DataFrame then Arrow::Table.new(arg.to_h)
           else
             raise DataFrameTypeError, "invalid argument: #{args}"
           end
@@ -105,5 +106,11 @@ module RedAmber
     def empty?
       @table.columns.empty?
     end
+
+    def to_rover
+      Rover::DataFrame.new(to_h)
+    end
+
+    # def to_parquet() end
   end
 end

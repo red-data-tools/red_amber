@@ -1,9 +1,9 @@
 # RedAmber
 
-Simple dataframe library for Ruby
+Simple dataframe library for Ruby (experimental)
 
-- Powered by Red Arrow
-- Rover-df like simple API
+- Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby)
+- [Rover-df](https://github.com/ankane/rover) like simple API
 
 ## Requirements
 
@@ -33,17 +33,21 @@ Or install it yourself as:
 
 ### Constructors and saving
 
-- [x] `new` from a Hash
+- [x] `new` from a columnar Hash
   - `RedAmber::DataFrame.new(x: [1, 2, 3])`
 
-- [x] `new` from an Array
+- [x] `new` from a schema (by Hash) and rows (by Array)
   - `RedAmber::DataFrame.new({:x=>:uint8}, [[1], [2], [3]])`
 
-- [ ] `new` from a Rover::DataFrame
+- [x] `new` from an Arrow::Table
+  - `RedAmber::DataFrame.new(Arrow::Table.new(x: [1, 2, 3]))`
+
+- [x] `new` from a Rover::DataFrame
+  - `RedAmber::DataFrame.new(Rover::DataFrame.new(x: [1, 2, 3]))`
 
 - [ ] `load` (class method)
 
-     - [x] from a [`.arrow`, `:arrows`, `.csv`, `.csv.gz`, `.tsv`] file
+     - [x] from a [`.arrow`, `.arrows`, `.csv`, `.csv.gz`, `.tsv`] file
 
      - [x] from a string buffer
 
@@ -53,7 +57,7 @@ Or install it yourself as:
 
 - [ ] `save` (instance method)
 
-     - [x] to a [`.arrow`, `:arrows`, `.csv`, `.csv.gz`, `.tsv`] file
+     - [x] to a [`.arrow`, `.arrows`, `.csv`, `.csv.gz`, `.tsv`] file
 
      - [x] to a string buffer
 
@@ -82,7 +86,7 @@ Or install it yourself as:
 - [x] `types(class_name: false)`
   
   Return types of columns by an Array.
-  If `class_name: true` return Array of DataType.
+  If `class_name: true` return Array of Arrow::DataType.
 
 - [x] `vectors`
 
@@ -98,7 +102,7 @@ Or install it yourself as:
 
 - [x] `schema`
 
-  Hash of column name and data type.
+  Returns Hash of column name and data type.
 
 - [x] `==`
  
@@ -110,7 +114,9 @@ Or install it yourself as:
 
 - [ ] summary, describe
 
-- [ ] `to_rover`
+- [x] `to_rover`
+
+  Returns `Rover::DataFrame`.
 
 - [x] `inspect(tally_level: 5, max_element: 5)`
 

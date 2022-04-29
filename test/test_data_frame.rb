@@ -18,19 +18,16 @@ class DataFrameTest < Test::Unit::TestCase
     df = RedAmber::DataFrame.new(hash)
     data('hash 2 colums', [hash, df], keep: true)
 
-    test 'new from a Hash' do
-      hash, df = data
-      assert_equal Arrow::Table.new(hash), df.table
+    test 'new from a Hash' do |(h, d)|
+      assert_equal Arrow::Table.new(h), d.table
     end
 
-    test 'new from a RedAmber::DataFrame' do
-      _, df = data
-      assert_equal df.table, RedAmber::DataFrame.new(df).table
+    test 'new from a RedAmber::DataFrame' do |(_, d)|
+      assert_equal d.table, RedAmber::DataFrame.new(d).table
     end
 
-    test 'new from a Arrow::Table' do
-      hash, = data
-      table = Arrow::Table.new(hash)
+    test 'new from a Arrow::Table' do |(h, _)|
+      table = Arrow::Table.new(h)
       df = RedAmber::DataFrame.new(table)
       assert_equal table, df.table
     end
@@ -39,8 +36,9 @@ class DataFrameTest < Test::Unit::TestCase
       # assert_equal
     end
 
-    test 'new from a Rover::DataFrame' do
-      # aeert_equal
+    test 'new from a Rover::DataFrame' do |(h, d)|
+      rover = Rover::DataFrame.new(h)
+      assert_equal d, RedAmber::DataFrame.new(rover)
     end
 
     test 'Select rows by invalid type' do
@@ -106,7 +104,7 @@ class DataFrameTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case 'column oriented I/O' do
+  sub_test_case '.new and .to_ I/O' do
     data = [
       'string and integer',
       [
@@ -116,11 +114,19 @@ class DataFrameTest < Test::Unit::TestCase
       ],
     ]
     data = ['empty', [{}, {}, []]]
+
     test 'hash I/O' do |hash, schema, array|
       assert_equal DataFrame.new(hash), DataFrame.new(schema, array)
       assert_equal hash, DataFrame.new(hash).to_h
       assert_equal schema, DataFrame.new(hash).schema
       assert_equal array, DataFrame.new(hash).to_a
+    end
+
+    test 'rover I/O' do |hash,|
+      redamber = DataFrame.new(hash)
+      rover = Rover::DataFrame.new(hash)
+      assert_equal redamber, DataFrame.new(rover)
+      assert_equal rover, redamber.to_rover
     end
   end
 end
