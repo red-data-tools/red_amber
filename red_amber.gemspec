@@ -36,13 +36,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'red-parquet', '~> 7.0.0'
   spec.add_dependency 'rover-df', '~> 0.3.0'
 
-  spec.add_development_dependency 'rake', '~> 13.0'
-  spec.add_development_dependency 'rubocop', '~> 1.21'
-  spec.add_development_dependency 'rubocop-performance'
-  spec.add_development_dependency 'rubocop-rake'
-  spec.add_development_dependency 'rubocop-rubycw'
-  spec.add_development_dependency 'test-unit', '~> 3.0'
-  spec.add_development_dependency 'webrick'
+  # Development dependency has gone to the Gemfile (rubygems/bundler#7237)
 
   spec.metadata['rubygems_mfa_required'] = 'true'
 
