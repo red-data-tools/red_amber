@@ -2,7 +2,7 @@
 
 Simple dataframe library for Ruby (experimental)
 
-- Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby)
+- Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow)
 - [Rover-df](https://github.com/ankane/rover) like simple API
 
 ## Requirements
@@ -48,10 +48,12 @@ Or install it yourself as:
 - [ ] `load` (class method)
 
      - [x] from a [`.arrow`, `.arrows`, `.csv`, `.csv.gz`, `.tsv`] file
+       - `RedAmber::DataFrame.load("test/entity/with_header.csv")`
 
      - [x] from a string buffer
 
      - [x] from a URI
+       - `RedAmber::DataFrame.load(URI("https://github.com/heronshoes/red_amber/blob/master/test/entity/with_header.csv"))`
 
      - [ ] from a parquet file
 
@@ -67,42 +69,46 @@ Or install it yourself as:
 
 ### Properties
 
+- [x] `table`
+
+  Reader of Arrow::Table object inside.
+
 - [x] `n_rows`, `nrow`, `size`, `length`
   
-  Show num of rows (data size)
+  Returns num of rows (data size).
  
 - [x] `n_columns`, `ncol`, `width`
   
-  Show num of columns (num of vectors).
+  Returns num of columns (num of vectors).
  
 - [x] `shape`
  
-  Show shape in an Array[n_rows, n_cols]
+  Returns shape in an Array[n_rows, n_cols].
  
 - [x] `column_names`, `keys`
   
-  Return num of keys by an Array
+  Returns num of column names by an Array.
 
 - [x] `types(class_name: false)`
   
-  Return types of columns by an Array.
-  If `class_name: true` return Array of Arrow::DataType.
+  Returns types of columns by an Array.
+  If `class_name: true` returns an Array of `Arrow::DataType`.
 
 - [x] `vectors`
 
-  Return an Array of Vector.
+  Returns an Array of Vectors.
 
 - [x] `to_h`
 
-  Column-oriented data output in a Hash.
+  Returns column-oriented data in a Hash.
 
 - [x] `to_a`, `raw_records`
 
-  Return an array of row-oriented data without header. If you need column-oriented array, use `.to_h.to_a`
+  Returns an array of row-oriented data without header. If you need a column-oriented full array, use `.to_h.to_a`
 
 - [x] `schema`
 
-  Returns Hash of column name and data type.
+  Returns column name and data type in a Hash.
 
 - [x] `==`
  
@@ -116,27 +122,28 @@ Or install it yourself as:
 
 - [x] `to_rover`
 
-  Returns `Rover::DataFrame`.
+  Returns a `Rover::DataFrame`.
 
 - [x] `inspect(tally_level: 5, max_element: 5)`
 
-  Show information about DataFrame.
+  Shows some information about self.
 
   - tally_level: max level to use tally mode
   - max_element: max num of element to show values in each row
 
 ### Selecting
+
 - [x] Selecting columns by `[]`
 
-  [key], [keys], [keys[index]]]
-
-- [x] Selecting rows
-
-  `head(n=5)`, `tail(n=5)`, `first(n=1)`, `last(n=1)`
+  `[key]`, `[keys]`, `[keys[index]]`
 
 - [x] Selecting rows by `[]`
 
-  [index], [range], [array]
+  `[index]`, `[range]`, `[array]`
+
+- [x] Selecting rows from top or bottom
+
+  `head(n=5)`, `tail(n=5)`, `first(n=1)`, `last(n=1)`
 
 - [ ] slice
 
@@ -198,25 +205,25 @@ Or install it yourself as:
 
 ### Properties
 
-- [x] to_s
+- [x] `to_s`
 
-- [x] values, to_a, entries
+- [x] `values`, `to_a`, `entries`
 
-- [x] size, length, n_rows, nrow
+- [x] `size`, `length`, `n_rows`, `nrow`
 
-- [x] type
+- [x] `type`
 
-- [ ] each
+- [ ] `each`
 
-- [ ] chunked?
+- [ ] `chunked?`
 
-- [ ] n_chunks
+- [ ] `n_chunks`
 
-- [ ] each_chunk
+- [ ] `each_chunk`
 
-- [x] tally
+- [x] `tally`
 
-- [ ] n_nulls
+- [ ] `n_nulls`
 
 ### Operations
 #### Unary
@@ -236,13 +243,13 @@ Or install it yourself as:
 
 ## Development
 
- ```
+```
 git clone https://github.com/heronshoes/red_amber.git
 cd red_amber
 bundle install
 bundle exec rake test
- ```
- 
+```
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
