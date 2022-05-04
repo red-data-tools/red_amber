@@ -28,7 +28,7 @@ module RedAmber
     end
 
     def inspect
-      format "#<#{self.class}:0x%016x>\n#{self}", object_id
+      format "#<#{self.class}(:#{type}, size=#{size}):0x%016x>\n#{self}", object_id
     end
 
     def values

@@ -3,70 +3,83 @@
 module RedAmber
   # mix-ins for class Vector
   module VectorFunctions
-    # Functions
-    # Available functions are shown by `Arrow::Function.all.map(&:name)``
-    # vector.func() => Scalar
+    # Available functions in Arrow are shown by `Arrow::Function.all.map(&:name)`
+    # reference: https://arrow.apache.org/docs/cpp/compute.html
 
-    # vector.func(other) => Scarar
-
-    # vector.func() => Vector
-
-    # vector.func() => Vector, with operator defined
-    unary_methods_op = {
-      '-@' => :negate_checked,
-      'abs' => :abs_checked,
-      'acos' => :acos_checked,
-      'asin' => :asin_checked,
-      'atan' => :atan,
-      'cos' => :cos_checked,
-      'ln' => :ln_checked,
-      'log10' => :log10_checked,
-      'log2' => :log2_checked,
-      'sign' => :sign,
-      'sin' => :sin_checked,
-      'tan' => :tan_checked,
-      # bit_wise_not, ceil, floor, invert, log1p(checked), round, round_to_multiple, trunc
-    }
-    unary_methods_op.each do |operator, function|
-      define_method(operator) do
-        exec_func_binary(function)
+    # Unary aggregations: vector.func => Scalar
+    unary_aggregations =
+      %i[all any approximate_median count count_distinct max mean min \
+         product stddev sum variance]
+    unary_aggregations.each do |function|
+      define_method(function) do
+        exec_func(function, other: nil, options: { aggregate: true })
       end
     end
 
+    alias_method :count_uniq, :count_distinct
+
+    # option(s) required
+    # index
+
+    # Returns other than value
+    # min_max
+    # mode
+    # quantile
+    # tdigest
+
+    # unary element-wise: vector.func => Vector
+    unary_element_wise =
+      %i[abs atan ceil cos floor sign sin tan]
+    unary_element_wise.each do |function|
+      define_method(function) do
+        exec_func(function, other: nil, options: {})
+      end
+    end
+
+    # unary element-wise: vector.func => Vector, with operator defined
+    define_method(:-@) { exec_func(:negate) }
+    define_method(:negate) { exec_func(:negate) }
+
+    # %i[acos asin ln log10 log1p log2 ] # NaN support needed
+    # %i[abs_checked acos_checked asin_checked cos_checked ln_checked \
+    #    log10_checked log1p_checked log2_checked sin_checked tan_checked]
+    # bit_wise_not, invert, round, round_to_multiple, trunc
+
     # vector.func(other) => Vector, with operator defined
     binary_methods_op = {
-      '+' => :add_checked,
-      '-' => :subtract_checked,
-      '*' => :multiply_checked,
-      '/' => :divide,
-      # '%' => :mod,
-      '**' => :power,
-      '&' => :bit_wise_and,
-      '|' => :bit_wise_or,
-      '^' => :bit_wise_xor,
-      '==' => :equal,
-      '>' => :greater,
-      '>=' => :greater_equal,
-      '<' => :less,
-      '<=' => :less_equal,
+      add: '+', # :add_checked,
+      subtract: '-', # subtract_checked
+      multiply: '*', # multiply_checked
+      divide: '/', # divide_checked
+      power: '**',
+      bit_wise_and: '&',
+      bit_wise_or: '|',
+      bit_wise_xor: '^',
+      equal: '==',
+      greater: '>',
+      greater_equal: '>=',
+      less: '<',
+      less_equal: '<=',
+
+      # mod: # '%',
       # 'xor' => :xor,
       # atan2, logb(checked),
       # shift_left(checked), shift_right(checked)
     }
-    binary_methods_op.each do |operator, function|
+    binary_methods_op.each do |function, operator|
       define_method(operator) do |other|
-        exec_func_binary(function, other)
+        exec_func(function, other: other)
       end
     end
 
     # array functions
-    # all, any, approximate_median, array_filter, array_sort_indices, array_take
-    # count, count_distinct, dictionary_encode, hash_all, hash_any, hash_approximate_median,
+    # array_filter, array_sort_indices, array_take
+    # dictionary_encode, hash_all, hash_any, hash_approximate_median,
     # hash_count, hash_count_distinct, hash_distinct, hash_max, hash_mean, hash_min,
     # hash_min_max, hash_product, hash_stddev, hash_sum, hash_tdigest, hash_variance,
-    # index, max, mean, min, min_max, mode, partition_nth_indices,
-    # product, quantile, quarter, quarters_between, stddev, sum, tdigest, unique,
-    # value_counts, variance
+    # partition_nth_indices,
+    # quarter, quarters_between, unique,
+    # value_counts
 
     # strings
     # ascii_capitalize, ascii_center, ascii_is_alnum, ascii_is_alpha, ascii_is_decimal,
@@ -112,20 +125,20 @@ module RedAmber
 
     private # =======
 
-    def exec_func_binary(function, other = nil)
+    def exec_func(function, other: nil, options: {})
       func = Arrow::Function.find(function)
-      array =
+      output =
         case other
         when nil
-          func.execute([data]).value
+          func.execute([data])
         when Vector
-          func.execute([data, other.data]).value
+          func.execute([data, other.data])
         when Arrow::ChunkedArray, Arrow::Int8Scalar
-          func.execute([data, other]).value
+          func.execute([data, other])
         else
           raise ArgumentError
         end
-      Vector.new(array)
+      options[:aggregate] ? output.value : Vector.new(output.value)
     end
   end
 end

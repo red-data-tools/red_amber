@@ -225,16 +225,60 @@ Or install it yourself as:
 
 - [ ] `n_nulls`
 
-### Operations
-#### Unary
-- [ ] !, -@
+### Functions
+#### Unary aggregations: vector.func => Scalar
+
+| Method                          |Boolean           |Numeric           |String            |Remarks|
+| ------------------------------- | ---------------- | ---------------- | ---------------- | ----- |
+|:ballot_box_with_check:`all`     |:heavy_check_mark:|                  |                  |       |
+|:ballot_box_with_check:`any`     |:heavy_check_mark:|                  |                  |       |
+|:ballot_box_with_check:`approximate_median`|        |:heavy_check_mark:|                  |       |
+|:ballot_box_with_check:`count`   |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|       |
+|:ballot_box_with_check:`count_distinct`|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:| |
+|:ballot_box_with_check:`count_uniq`    |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|an alias of `count_distinct`|
+|:white_large_square:   `index`   |                  |                  |                  |       |
+|:ballot_box_with_check:`max`     |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|       |
+|:ballot_box_with_check:`mean`    |:heavy_check_mark:|:heavy_check_mark:|                  |       |
+|:ballot_box_with_check:`min`     |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|       |
+|:white_large_square:   `min_max` |                  |                  |                  |       |
+|:white_large_square:   `mode`    |                  |                  |                  |       |
+|:ballot_box_with_check:`product` |:heavy_check_mark:|:heavy_check_mark:|                  |       |
+|:white_large_square:   `quantile`|                  |                  |                  |       |
+|:ballot_box_with_check:`stddev`  |                  |:heavy_check_mark:|                  |       |
+|:ballot_box_with_check:`sum`     |:heavy_check_mark:|:heavy_check_mark:|                  |       |
+|:white_large_square:   `tdigest` |                  |                  |                  |       |
+|:ballot_box_with_check:`variance`|                  |:heavy_check_mark:|                  |       |
+
+#### Unary element-wise: vector.func => Vector
+
+| Method                          |Boolean           |Numeric           |String            |Remarks|
+| ------------------------------- | ---------------- | ---------------- | ---------------- | ----- |
+|:ballot_box_with_check:`-@`      |                  |:heavy_check_mark:|                  |as `-vector` |
+|:ballot_box_with_check:`negate`  |                  |:heavy_check_mark:|                  |        |
+|:ballot_box_with_check:`abs`     |                  |:heavy_check_mark:|                  |        |
+|:white_large_square:   `acos`    |                  |:white_large_square:|                |        |
+|:white_large_square:   `asin`    |                  |:white_large_square:|                |        |
+|:ballot_box_with_check:`atan`    |                  |:heavy_check_mark:|                  |        |
+|:ballot_box_with_check:`ceil`    |                  |:heavy_check_mark:|                  |        |
+|:ballot_box_with_check:`cos`     |                  |:heavy_check_mark:|                  |        |
+|:ballot_box_with_check:`floor`   |                  |:heavy_check_mark:|                  |        |
+|:white_large_square:   `ln`      |                  |:white_large_square:|                |        |
+|:white_large_square:   `log10`   |                  |:white_large_square:|                |        |
+|:white_large_square:   `log1p`   |                  |:white_large_square:|                |        |
+|:white_large_square:   `log2`    |                  |:white_large_square:|                |        |
+|:ballot_box_with_check:`sign`    |                  |:heavy_check_mark:|                  |        |
+|:ballot_box_with_check:`sin`     |                  |:heavy_check_mark:|                  |        |
+|:ballot_box_with_check:`tan`     |                  |:heavy_check_mark:|                  |        |
+
+#####
+- [ ] bit_wise_not, invert, round, round_to_multiple, trunc
 
 #### Binary
 - [ ] +, - , *, /, %, **
 - [ ] ==, !=, >, >=, <, <=, eq, ne, gt, ge, lt, le
 
 #### Functions
-- [ ] abs, sum, prod, sort, sort_index
+- [ ] sort, sort_index
 - [ ] min, max, minmax, mean, stddev, var, median, quantile
 - [ ] argmin, argmax
 
