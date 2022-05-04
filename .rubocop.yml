@@ -41,6 +41,8 @@ Lint/UselessAssignment:
 # Max: 120
 Layout/LineLength:
   Max: 100
+  Exclude:
+    - 'test/**/*'
 
 # <= 17 satisfactory
 # 18..30 unsatisfactory
@@ -48,7 +50,7 @@ Layout/LineLength:
 Metrics/AbcSize:
   Max: 17
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 106
+    - 'lib/red_amber/data_frame_output.rb' # Max: 78
 
 # Max: 25
 Metrics/BlockLength:
@@ -65,18 +67,18 @@ Metrics/ClassLength:
 
 # Max: 7
 Metrics/CyclomaticComplexity:
-  Max: 10
+  Max: 9
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 22
+    - 'lib/red_amber/data_frame_output.rb' # Max: 11
 
 # Max: 10
 Metrics/MethodLength:
   Max: 18
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 58
+    - 'lib/red_amber/data_frame_output.rb' # Max: 35
 
 # Max: 8
 Metrics/PerceivedComplexity:
   Max: 8
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 24
+    - 'lib/red_amber/data_frame_output.rb' # Max: 12
