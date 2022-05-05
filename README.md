@@ -228,59 +228,94 @@ Or install it yourself as:
 ### Functions
 #### Unary aggregations: vector.func => Scalar
 
-| Method                          |Boolean           |Numeric           |String            |Remarks|
-| ------------------------------- | ---------------- | ---------------- | ---------------- | ----- |
-|:ballot_box_with_check:`all`     |:heavy_check_mark:|                  |                  |       |
-|:ballot_box_with_check:`any`     |:heavy_check_mark:|                  |                  |       |
-|:ballot_box_with_check:`approximate_median`|        |:heavy_check_mark:|                  |       |
-|:ballot_box_with_check:`count`   |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|       |
-|:ballot_box_with_check:`count_distinct`|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:| |
-|:ballot_box_with_check:`count_uniq`    |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|an alias of `count_distinct`|
-|:white_large_square:   `index`   |                  |                  |                  |       |
-|:ballot_box_with_check:`max`     |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|       |
-|:ballot_box_with_check:`mean`    |:heavy_check_mark:|:heavy_check_mark:|                  |       |
-|:ballot_box_with_check:`min`     |:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|       |
-|:white_large_square:   `min_max` |                  |                  |                  |       |
-|:white_large_square:   `mode`    |                  |                  |                  |       |
-|:ballot_box_with_check:`product` |:heavy_check_mark:|:heavy_check_mark:|                  |       |
-|:white_large_square:   `quantile`|                  |                  |                  |       |
-|:ballot_box_with_check:`stddev`  |                  |:heavy_check_mark:|                  |       |
-|:ballot_box_with_check:`sum`     |:heavy_check_mark:|:heavy_check_mark:|                  |       |
-|:white_large_square:   `tdigest` |                  |                  |                  |       |
-|:ballot_box_with_check:`variance`|                  |:heavy_check_mark:|                  |       |
+| Method    |Boolean|Numeric|String|Remarks|
+| ------------ | --- | --- | --- | ----- |
+|[x] `all`     | [x] |     |     |       |
+|[x] `any`     | [x] |     |     |       |
+|[x] `approximate_median`| | [x] |     |     |
+|[x] `count`         | [x] | [x] | [x] |     |
+|[x] `count_distinct`| [x] | [x] | [x] |     |
+|[x] `count_uniq`    | [x] | [x] | [x] |an alias of `count_distinct`|
+|[ ] `index`   |     |     |     |       |
+|[x] `max`     | [x] | [x] | [x] |       |
+|[x] `mean`    | [x] | [x] |     |       |
+|[x] `min`     | [x] | [x] | [x] |       |
+|[ ] `min_max` |     |     |     |       |
+|[ ] `mode`    |     |     |     |       |
+|[x] `product` | [x] | [x] |     |       |
+|[ ] `quantile`|     |     |     |       |
+|[x] `stddev`  |     | [x] |     |       |
+|[x] `sum`     | [x] | [x] |     |       |
+|[ ] `tdigest` |     |     |     |       |
+|[x] `variance`|     | [x] |     |       |
 
 #### Unary element-wise: vector.func => Vector
 
-| Method                          |Boolean           |Numeric           |String            |Remarks|
-| ------------------------------- | ---------------- | ---------------- | ---------------- | ----- |
-|:ballot_box_with_check:`-@`      |                  |:heavy_check_mark:|                  |as `-vector` |
-|:ballot_box_with_check:`negate`  |                  |:heavy_check_mark:|                  |        |
-|:ballot_box_with_check:`abs`     |                  |:heavy_check_mark:|                  |        |
-|:white_large_square:   `acos`    |                  |:white_large_square:|                |        |
-|:white_large_square:   `asin`    |                  |:white_large_square:|                |        |
-|:ballot_box_with_check:`atan`    |                  |:heavy_check_mark:|                  |        |
-|:ballot_box_with_check:`ceil`    |                  |:heavy_check_mark:|                  |        |
-|:ballot_box_with_check:`cos`     |                  |:heavy_check_mark:|                  |        |
-|:ballot_box_with_check:`floor`   |                  |:heavy_check_mark:|                  |        |
-|:white_large_square:   `ln`      |                  |:white_large_square:|                |        |
-|:white_large_square:   `log10`   |                  |:white_large_square:|                |        |
-|:white_large_square:   `log1p`   |                  |:white_large_square:|                |        |
-|:white_large_square:   `log2`    |                  |:white_large_square:|                |        |
-|:ballot_box_with_check:`sign`    |                  |:heavy_check_mark:|                  |        |
-|:ballot_box_with_check:`sin`     |                  |:heavy_check_mark:|                  |        |
-|:ballot_box_with_check:`tan`     |                  |:heavy_check_mark:|                  |        |
+| Method    |Boolean|Numeric|String|Remarks|
+| ------------ | --- | --- | --- | ----- |
+|[x] `-@`      |     | [x] |     |as `-vector`|
+|[x] `negate`  |     | [x] |     |`-@`   |
+|[x] `abs`     |     | [x] |     |       |
+|[ ] `acos`    |     | [ ] |     |       |
+|[ ] `asin`    |     | [ ] |     |       |
+|[x] `atan`    |     | [x] |     |       |
+|[ ] `ceil`    |     | [x] |     |       |
+|[x] `cos`     |     | [x] |     |       |
+|[ ] `floor`   |     | [x] |     |       |
+|[ ] `ln`      |     | [ ] |     |       |
+|[ ] `log10`   |     | [ ] |     |       |
+|[ ] `log1p`   |     | [ ] |     |       |
+|[ ] `log2`    |     | [ ] |     |       |
+|[x] `sign`    |     | [x] |     |       |
+|[x] `sin`     |     | [x] |     |       |
+|[x] `tan`     |     | [x] |     |       |
+|[ ] `trunc`   |     | [x] |     |       |
+
+#### Binary element-wise: vector.func(vector) => Vector
+
+| Method          |Boolean|Numeric|String|Remarks|
+| ------------------ | --- | --- | --- | ----- |
+|[x] `add`           |     | [x] |     | `+`   |
+|[x] `atan2`         |     | [x] |     |       |
+|[x] `and`           | [x] |     |     |       |
+|[x] `and_kleene`    | [x] |     |     |       |
+|[x] `and_not`       | [x] |     |     |       |
+|[x] `and_not_kleene`| [x] |     |     |       |
+|[x] `bit_wise_and`  |     |([x])|     |`&`, integer only|
+|[ ] `bit_wise_not`  |     |([x])|     |`!`, integer only|
+|[x] `bit_wise_or`   |     |([x])|     |`|`, integer only|
+|[x] `bit_wise_xor`  |     |([x])|     |`^`, integer only|
+|[x] `divide`        |     | [x] |     | `/`   |
+|[x] `equal`         | [x] | [x] | [x] |`==`, alias `eq`|
+|[x] `greater`       | [x] | [x] | [x] |`>`, alias `gt`|
+|[x] `greater_equal` | [x] | [x] | [x] |`>=`, alias `ge`|
+|[x] `less`          | [x] | [x] | [x] |`<`, alias `lt`|
+|[x] `less_equal`    | [x] | [x] | [x] |`<=`, alias `le`|
+|[ ] `logb`          |     | [ ] |     |       |
+|[ ] `mod`           |     | [ ] |     |       |
+|[x] `multiply`      |     | [x] |     | `*`   |
+|[x] `not_equal`     | [x] | [x] | [x] |`!=`, alias `ne`|
+|[x] `or`            | [x] |     |     |       |
+|[x] `or_kleene`     | [x] |     |     |       |
+|[x] `power`         |     | [x] |     | `**`  |
+|[x] `subtract`      |     | [x] |     | `-`   |
+|[x] `shift_left`    |     |([x])|     |`<<`, integer only|
+|[x] `shift_right`   |     |([x])|     |`>>`, integer only|
+|[x] `xor`           | [x] |     |     |       |
 
 #####
-- [ ] bit_wise_not, invert, round, round_to_multiple, trunc
-
-#### Binary
-- [ ] +, - , *, /, %, **
-- [ ] ==, !=, >, >=, <, <=, eq, ne, gt, ge, lt, le
+- [ ] invert, round, round_to_multiple
 
 #### Functions
 - [ ] sort, sort_index
-- [ ] min, max, minmax, mean, stddev, var, median, quantile
+- [ ] minmax, var, median, quantile
 - [ ] argmin, argmax
+- [ ] (array functions)
+- [ ] (strings functions)
+- [ ] (temporal functions)
+- [ ] (conditional functions)
+- [ ] (index functions)
+- [ ] (other functions)
 
 ### Updating (not impremented)
 

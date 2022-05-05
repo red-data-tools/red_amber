@@ -38,6 +38,11 @@ Lint/UselessAssignment:
   Exclude:
     - 'test/**/*'
 
+# Disabled to define Vector operators
+Lint/BinaryOperatorWithIdenticalOperands:
+  Exclude:
+    - 'test/test_vector_function.rb'
+
 # Max: 120
 Layout/LineLength:
   Max: 100
