@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class VectorFunctionTest < Test::Unit::TestCase
+  include Helper
   include RedAmber
 
   sub_test_case('unary aggregations') do
@@ -129,8 +130,8 @@ class VectorFunctionTest < Test::Unit::TestCase
 
     test '#atan' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.atan }
-      assert_equal [0.7853981633974483, 1.1071487177940906, 1.2490457723982544], @integer.atan.to_a
-      assert_equal [0.7853981633974483, -1.1071487177940906, 1.2490457723982544], @double.atan.to_a
+      assert_equal_array_in_delta [0.7853981633974483, 1.1071487177940906, 1.2490457723982544], @integer.atan, delta = 1e-15
+      assert_equal_array_in_delta [0.7853981633974483, -1.1071487177940906, 1.2490457723982544], @double.atan, delta = 1e-15
       assert_raise(Arrow::Error::NotImplemented) { @string.atan }
     end
 
@@ -171,8 +172,8 @@ class VectorFunctionTest < Test::Unit::TestCase
 
     test '#tan' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.tan }
-      assert_equal [1.557407724654902, -2.185039863261519, -0.1425465430742778], @integer.tan.to_a
-      assert_equal [1.557407724654902, 2.185039863261519, -0.1425465430742778], @double.tan.to_a.map {|x| x.round(16)}
+      assert_equal_array_in_delta [1.557407724654902, -2.185039863261519, -0.1425465430742778], @integer.tan, delta = 1e-15
+      assert_equal_array_in_delta [1.557407724654902, 2.185039863261519, -0.1425465430742778], @double.tan, delta = 1e-15
       assert_raise(Arrow::Error::NotImplemented) { @string.tan }
     end
   end
