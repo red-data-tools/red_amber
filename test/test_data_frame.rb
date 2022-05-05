@@ -105,27 +105,31 @@ class DataFrameTest < Test::Unit::TestCase
   end
 
   sub_test_case '.new and .to_ I/O' do
-    data = [
+    # data in Array(hash, schema, array)
+    data(
       'string and integer',
       [
         { name: %w[Yasuko Rui Hinata], age: [68, 49, 28] },
         { name: :string, age: :uint8 },
         [['Yasuko', 68], ['Rui', 49], ['Hinata', 28]],
-      ],
-    ]
-    data = ['empty', [{}, {}, []]]
+      ], keep: true
+    )
+    data('empty', [{}, {}, []], keep: true)
 
-    test 'hash I/O' do |hash, schema, array|
-      assert_equal DataFrame.new(hash), DataFrame.new(schema, array)
-      assert_equal hash, DataFrame.new(hash).to_h
-      assert_equal schema, DataFrame.new(hash).schema
-      assert_equal array, DataFrame.new(hash).to_a
+    test 'hash I/O' do
+      hash, schema, array = data
+      assert_equal RedAmber::DataFrame.new(hash), RedAmber::DataFrame.new(schema, array)
+      assert_equal hash, RedAmber::DataFrame.new(hash).to_h
+      assert_equal schema, RedAmber::DataFrame.new(hash).schema
+      assert_equal array, RedAmber::DataFrame.new(hash).to_a
     end
 
-    test 'rover I/O' do |hash,|
-      redamber = DataFrame.new(hash)
+    test 'rover I/O' do
+      # Rover::DataFrame doesn't support empty dataframe
+      hash = { name: %w[Yasuko Rui Hinata], age: [68, 49, 28] }
+      redamber = RedAmber::DataFrame.new(hash)
       rover = Rover::DataFrame.new(hash)
-      assert_equal redamber, DataFrame.new(rover)
+      assert_equal redamber, RedAmber::DataFrame.new(rover)
       assert_equal rover, redamber.to_rover
     end
   end

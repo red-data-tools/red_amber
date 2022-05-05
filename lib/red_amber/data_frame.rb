@@ -24,9 +24,11 @@ module RedAmber
         @table =
           case arg
           when Arrow::Table then arg
-          when Hash         then Arrow::Table.new(*args)
-          when DataFrame    then arg.table
+          when DataFrame then arg.table
           when Rover::DataFrame then Arrow::Table.new(arg.to_h)
+          when Hash
+            args << [] if arg.empty? # create empty df from DataFrame.new({})
+            Arrow::Table.new(*args)
           else
             raise DataFrameTypeError, "invalid argument: #{args}"
           end
