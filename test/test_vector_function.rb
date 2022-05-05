@@ -15,14 +15,14 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
 
     test '#all' do
-      assert_equal true, @boolean.all.value
+      assert_true @boolean.all.value
       assert_raise(Arrow::Error::NotImplemented) { @integer.all }
       assert_raise(Arrow::Error::NotImplemented) { @double.all }
       assert_raise(Arrow::Error::NotImplemented) { @string.all }
     end
 
     test '#any' do
-      assert_equal true, @boolean.any.value
+      assert_true @boolean.any.value
       assert_raise(Arrow::Error::NotImplemented) { @integer.any }
       assert_raise(Arrow::Error::NotImplemented) { @double.any }
       assert_raise(Arrow::Error::NotImplemented) { @string.any }
@@ -109,22 +109,22 @@ class VectorFunctionTest < Test::Unit::TestCase
 
     test '#-@' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.-@ }
-      assert_equal [255, 254, 253], @integer.-@.to_a
-      assert_equal [-1.0, 2.0, -3.0], @double.-@.to_a
+      assert_equal_array [255, 254, 253], -@integer
+      assert_equal_array [-1.0, 2.0, -3.0], -@double
       assert_raise(Arrow::Error::NotImplemented) { @string.-@ }
     end
 
     test '#negate' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.negate }
-      assert_equal [255, 254, 253], @integer.negate.to_a
-      assert_equal [-1.0, 2.0, -3.0], @double.negate.to_a
+      assert_equal_array [255, 254, 253], @integer.negate
+      assert_equal_array [-1.0, 2.0, -3.0], @double.negate
       assert_raise(Arrow::Error::NotImplemented) { @string.negate }
     end
 
     test '#abs' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.abs }
-      assert_equal [1, 2, 3], @integer.abs.to_a
-      assert_equal [1.0, 2.0, 3.0], @double.abs.to_a
+      assert_equal_array [1, 2, 3], @integer.abs
+      assert_equal_array [1.0, 2.0, 3.0], @double.abs
       assert_raise(Arrow::Error::NotImplemented) { @string.abs }
     end
 
@@ -137,36 +137,36 @@ class VectorFunctionTest < Test::Unit::TestCase
 
     test '#ceil' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.ceil }
-      assert_equal [1.0, 2.0, 3.0], @integer.ceil.to_a
-      assert_equal [1.0, -2.0, 3.0], @double.ceil.to_a
+      assert_equal_array [1.0, 2.0, 3.0], @integer.ceil
+      assert_equal_array [1.0, -2.0, 3.0], @double.ceil
       assert_raise(Arrow::Error::NotImplemented) { @string.ceil }
     end
 
     test '#cos' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.cos }
-      assert_equal [0.5403023058681398, -0.4161468365471424, -0.9899924966004454], @integer.cos.to_a
-      assert_equal [0.5403023058681398, -0.4161468365471424, -0.9899924966004454], @double.cos.to_a
+      assert_equal_array [0.5403023058681398, -0.4161468365471424, -0.9899924966004454], @integer.cos
+      assert_equal_array [0.5403023058681398, -0.4161468365471424, -0.9899924966004454], @double.cos
       assert_raise(Arrow::Error::NotImplemented) { @string.cos }
     end
 
     test '#floor' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.floor }
-      assert_equal [1.0, 2.0, 3.0], @integer.floor.to_a
-      assert_equal [1.0, -2.0, 3.0], @double.floor.to_a
+      assert_equal_array [1.0, 2.0, 3.0], @integer.floor
+      assert_equal_array [1.0, -2.0, 3.0], @double.floor
       assert_raise(Arrow::Error::NotImplemented) { @string.floor }
     end
 
     test '#sign' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.sign }
-      assert_equal [1, 1, 1], @integer.sign.to_a
-      assert_equal [1.0, -1.0, 1.0], @double.sign.to_a
+      assert_equal_array [1, 1, 1], @integer.sign
+      assert_equal_array [1.0, -1.0, 1.0], @double.sign
       assert_raise(Arrow::Error::NotImplemented) { @string.sign }
     end
 
     test '#sin' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.sin }
-      assert_equal [0.8414709848078965, 0.9092974268256817, 0.1411200080598672], @integer.sin.to_a
-      assert_equal [0.8414709848078965, -0.9092974268256817, 0.1411200080598672], @double.sin.to_a
+      assert_equal_array [0.8414709848078965, 0.9092974268256817, 0.1411200080598672], @integer.sin
+      assert_equal_array [0.8414709848078965, -0.9092974268256817, 0.1411200080598672], @double.sin
       assert_raise(Arrow::Error::NotImplemented) { @string.sin }
     end
 
