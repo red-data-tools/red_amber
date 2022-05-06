@@ -9,13 +9,13 @@ module RedAmber
     include DataFrameOutput
 
     def initialize(*args)
-      # accepts: DataFrame.new, DataFrame.new([]), DataFrame.new(nil)
+      # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
       #   returns empty DataFrame
       @table = Arrow::Table.new({}, [])
       # bug in gobject-introspection: ruby-gnome/ruby-gnome#1472
       #  [Arrow::Table] == [nil] shows ArgumentError
       #  temporary use yoda condition to workaround
-      return if args.empty? || args == [[]] || [nil] == args
+      return if args.empty? || args == [[]] || args == [{}] || [nil] == args
 
       if args.size > 1
         @table = Arrow::Table.new(*args)
@@ -26,11 +26,9 @@ module RedAmber
           when Arrow::Table then arg
           when DataFrame then arg.table
           when Rover::DataFrame then Arrow::Table.new(arg.to_h)
-          when Hash
-            args << [] if arg.empty? # create empty df from DataFrame.new({})
-            Arrow::Table.new(*args)
+          when Hash then Arrow::Table.new(arg)
           else
-            raise DataFrameTypeError, "invalid argument: #{args}"
+            raise DataFrameTypeError, "invalid argument: #{arg}"
           end
       end
     end
