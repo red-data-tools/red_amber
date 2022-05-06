@@ -2,7 +2,7 @@
 
 - Add support for Arrow 8.0.0
 - `DataFrame`
-  - Introduce updating
+  - Introduce updating capabilities
   - Introduce NA support
   - Add slice method
 - `Vector`
@@ -11,7 +11,7 @@
 
 ## [0.1.1] - 2022-05-06 (experimental)
 
-- Release on rubygem.org
+- Release on rubygems.org
 - Introduce class `DataFrame`
   -  New from Hash, schema/rows, `Arrow::Table`, `Rover::DataFrame`
   -  Load from file, string, URI
