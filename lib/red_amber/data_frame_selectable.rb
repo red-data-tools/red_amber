@@ -44,7 +44,11 @@ module RedAmber
     private # =====
 
     def select_columns(keys)
-      DataFrame.new(@table[keys])
+      if keys.one?
+        Vector.new(@table[*keys].data)
+      else
+        DataFrame.new(@table[keys])
+      end
     end
 
     def select_rows(indeces)

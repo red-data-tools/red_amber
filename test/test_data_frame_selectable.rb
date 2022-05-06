@@ -7,8 +7,8 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     df = RedAmber::DataFrame.new(x: [1, 2, 3], y: %w[A B C])
 
     test 'Select columns' do
-      assert_equal Hash(x: [1, 2, 3]), df[:x].to_h
-      assert_equal Hash(y: %w[A B C]), df['y'].to_h
+      assert_equal [1, 2, 3], df[:x].to_a
+      assert_equal %w[A B C], df['y'].to_a
       assert_equal Hash(y: %w[A B C], x: [1, 2, 3]), df[:y, :x].to_h
       assert_equal Hash(x: [1, 2, 3]), df[:x, :x].to_h
     end
@@ -20,7 +20,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal Hash(x: [3, 2], y: %w[C B]), df[-1, -2].to_h
       assert_equal Hash(x: [2, 3, 1], y: %w[B C A]), df[1..2, 0].to_h
       assert_equal Hash(x: [2, 2, 2], y: %w[B B B]), df[1, 1, 1].to_h
-      assert_equal Hash(x: [3]), df[:x][2].to_h
+      assert_equal 3, df[:x].to_a[2]
     end
 
     test 'Select rows over range' do
