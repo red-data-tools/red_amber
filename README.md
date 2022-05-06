@@ -1,9 +1,9 @@
 # RedAmber
 
-Simple dataframe library for Ruby (experimental)
+A simple dataframe library for Ruby (experimental)
 
 - Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow)
-- [Rover-df](https://github.com/ankane/rover) like simple API
+- Simple API similar to [Rover-df](https://github.com/ankane/rover)
 
 ## Requirements
 
@@ -199,9 +199,9 @@ Or install it yourself as:
 ## `RedAmber::Vector`
 ### Constructor
 
-- [x] Create from columns in a DataFrame
+- [x] Create from a column in a DataFrame
 
-- [x] new from an Array
+- [x] New from an Array
 
 ### Properties
 
@@ -303,10 +303,8 @@ Or install it yourself as:
 |[x] `shift_right`   |     |([x])|     |`>>`, integer only|
 |[x] `xor`           | [x] |     |     |       |
 
-#####
+##### (Not impremented)
 - [ ] invert, round, round_to_multiple
-
-#### Functions
 - [ ] sort, sort_index
 - [ ] minmax, var, median, quantile
 - [ ] argmin, argmax
@@ -317,7 +315,11 @@ Or install it yourself as:
 - [ ] (index functions)
 - [ ] (other functions)
 
+### Coerce (not impremented)
+
 ### Updating (not impremented)
+
+### DSL in a block for faster calculation ?
 
 
 ## Development
