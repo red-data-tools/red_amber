@@ -97,10 +97,10 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal types, df.types
     end
 
-    test 'types class' do
+    test 'data_types' do
       _, df, types = data
       types = [Arrow::UInt8DataType, Arrow::StringDataType] if types == %i[uint8 string]
-      assert_equal types, df.types(class_name: true)
+      assert_equal types, df.data_types
     end
   end
 

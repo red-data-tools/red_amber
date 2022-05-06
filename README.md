@@ -89,10 +89,13 @@ Or install it yourself as:
   
   Returns num of column names by an Array.
 
-- [x] `types(class_name: false)`
+- [x] `types`
   
-  Returns types of columns by an Array.
-  If `class_name: true` returns an Array of `Arrow::DataType`.
+  Returns types of columns by an Array of Symbols.
+
+- [x] `data_types`
+
+  Returns types of columns by an Array of `Arrow::DataType`.
 
 - [x] `vectors`
 
@@ -212,6 +215,8 @@ Or install it yourself as:
 - [x] `size`, `length`, `n_rows`, `nrow`
 
 - [x] `type`
+
+- [x] `data_type`
 
 - [ ] `each`
 

@@ -35,7 +35,7 @@ module RedAmber
         "#{self.class} : #{nrow} observation#{r}(row#{r}) of #{ncol} variable#{c}(column#{c})"
 
       # 2nd row: show var counts by type
-      type_groups = types(class_name: true).map { |t| type_group(t) }
+      type_groups = data_types.map { |t| type_group(t) }
 
       stringio.puts "Variable#{pl(ncol)} : #{var_type_count(type_groups).join(', ')}"
 

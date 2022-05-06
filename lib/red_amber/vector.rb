@@ -49,6 +49,10 @@ module RedAmber
       @data.value_type.nick.to_sym
     end
 
+    def data_type
+      @data.value_type
+    end
+
     # def each() end
 
     def chunked?

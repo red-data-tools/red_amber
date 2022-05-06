@@ -33,4 +33,10 @@ class VectorTest < Test::Unit::TestCase
     actual = RedAmber::Vector.new(array)
     assert_equal type, actual.type
   end
+
+  test 'data_type' do
+    _, type, array = data
+    actual = RedAmber::Vector.new(array)
+    assert_equal Arrow::Type.find(type), actual.data_type
+  end
 end
