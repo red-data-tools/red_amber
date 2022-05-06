@@ -157,12 +157,14 @@ module RedAmber
         case other
         when nil
           func.execute([data])
+        when Arrow::Array, Arrow::ChunkedArray, Arrow::Scalar, Numeric
+          func.execute([data, other])
         when Vector
           func.execute([data, other.data])
-        when Arrow::ChunkedArray, Arrow::Int8Scalar
-          func.execute([data, other])
+        when Rover::Vector
+          func.execute([data, other.to_a])
         else
-          raise ArgumentError
+          raise ArgumentError, "operand is not supported: #{other.class}"
         end
       options[:aggregate] ? output.value : Vector.new(output.value)
     end
