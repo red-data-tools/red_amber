@@ -164,7 +164,7 @@ module RedAmber
         when Rover::Vector
           func.execute([data, other.to_a])
         else
-          raise ArgumentError, "operand is not supported: #{other.class}"
+          raise ArgumentError, "Operand is not supported: #{other.class}"
         end
       options[:aggregate] ? output.value : Vector.new(output.value)
     end

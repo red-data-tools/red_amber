@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # mix-ins for the class DataFrame
+  # mix-in for the class DataFrame
   module DataFrameSelectable
     # select columns: [symbol] or [string]
     # select rows: [array of index], [range]
@@ -18,17 +18,17 @@ module RedAmber
       return select_rows(expanded) if integers?(expanded)
       return select_columns(expanded.map(&:to_sym)) if sym_or_str?(expanded)
 
-      raise DataFrameArgumentError, "invalid argument #{args}"
+      raise DataFrameArgumentError, "Invalid argument #{args}"
     end
 
     def head(n_rows = 5)
-      raise DataFrameArgumentError, "index is out of range #{n_rows}" if n_rows.negative?
+      raise DataFrameArgumentError, "Index is out of range #{n_rows}" if n_rows.negative?
 
       self[0...[n_rows, size].min]
     end
 
     def tail(n_rows = 5)
-      raise DataFrameArgumentError, "index is out of range #{n_rows}" if n_rows.negative?
+      raise DataFrameArgumentError, "Index is out of range #{n_rows}" if n_rows.negative?
 
       self[-[n_rows, size].min..-1]
     end
@@ -53,7 +53,7 @@ module RedAmber
 
     def select_rows(indeces)
       if out_of_range?(indeces)
-        raise DataFrameArgumentError, "invalid index: #{indeces} for [0..#{size - 1}]"
+        raise DataFrameArgumentError, "Invalid index: #{indeces} for [0..#{size - 1}]"
       end
 
       a = indeces.map { |i| @table.slice(i).to_a }
