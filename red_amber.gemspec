@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ['63298319+heronshoes@users.noreply.github.com']
 
   spec.summary = 'Simple data frames for Ruby'
-  spec.description = 'Powered by Red Arrow and simple API similar to Rover-df'
+  spec.description = 'RedAmber is a simple dataframe library powered by Red Arrow with simple API similar to Rover-df'
   spec.homepage = 'https://github.com/heronshoes/red_amber'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 2.7'
