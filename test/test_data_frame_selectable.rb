@@ -13,19 +13,36 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal Hash(x: [1, 2, 3]), df[:x, :x].to_h
     end
 
-    test 'Select rows' do
+    test 'Select rows by indeces' do
       assert_equal Hash(x: [2], y: ['B']), df[1].to_h
       assert_equal Hash(x: [2, 1, 3], y: %w[B A C]), df[1, 0, 2].to_h
-      assert_equal Hash(x: [2, 3], y: %w[B C]), df[1..2].to_h
       assert_equal Hash(x: [3, 2], y: %w[C B]), df[-1, -2].to_h
-      assert_equal Hash(x: [2, 3, 1], y: %w[B C A]), df[1..2, 0].to_h
       assert_equal Hash(x: [2, 2, 2], y: %w[B B B]), df[1, 1, 1].to_h
       assert_equal 3, df[:x].to_a[2]
+    end
+
+    test 'Select rows by Range' do
+      assert_equal Hash(x: [2, 3], y: %w[B C]), df[1..2].to_h
+      assert_equal Hash(x: [2, 3], y: %w[B C]), df[1...3].to_h
+      assert_equal Hash(x: [2, 3], y: %w[B C]), df[-2..-1].to_h
+      assert_equal Hash(x: [2, 3], y: %w[B C]), df[-2..].to_h
+      assert_equal Hash(x: [1, 2], y: %w[A B]), df[..1].to_h
+      assert_equal Hash(x: [1, 2], y: %w[A B]), df[nil...-1].to_h
+      assert_equal Hash(x: [1, 2, 3], y: %w[A B C]), df[nil..].to_h
+    end
+
+    test 'Select rows by Array with Range' do
+      assert_equal Hash(x: [2, 3, 1], y: %w[B C A]), df[1..2, 0].to_h
+      assert_equal Hash(x: [2, 3, 1], y: %w[B C A]), df[-2..-1, 0].to_h
+      assert_equal Hash(x: [2, 3, 1], y: %w[B C A]), df[1..-1, 0..0].to_h
     end
 
     test 'Select rows over range' do
       assert_raise(RedAmber::DataFrameArgumentError) { df[3] }
       assert_raise(RedAmber::DataFrameArgumentError) { df[-4] }
+      assert_raise(RedAmber::DataFrameArgumentError) { df[2..3, 0] }
+      assert_raise(RedAmber::DataFrameArgumentError) { df[3..4, 0] }
+      assert_raise(RedAmber::DataFrameArgumentError) { df[-4..-1] }
     end
 
     test 'Select rows by invalid index' do

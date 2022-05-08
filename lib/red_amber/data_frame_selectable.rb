@@ -12,7 +12,7 @@ module RedAmber
       # expand Range like [1..3, 4] to [1, 2, 3, 4]
       expanded =
         args.each_with_object([]) do |e, a|
-          e.is_a?(Range) ? a.concat(e.to_a) : a.append(e)
+          e.is_a?(Range) ? a.concat(normalized_array(e)) : a.append(e)
         end
 
       return select_rows(expanded) if integers?(expanded)
@@ -30,7 +30,7 @@ module RedAmber
     def tail(n_rows = 5)
       raise DataFrameArgumentError, "Index is out of range #{n_rows}" if n_rows.negative?
 
-      self[-[n_rows, size].min..-1]
+      self[-[n_rows, size].min..]
     end
 
     def first(n_rows = 1)
@@ -53,11 +53,26 @@ module RedAmber
 
     def select_rows(indeces)
       if out_of_range?(indeces)
-        raise DataFrameArgumentError, "Invalid index: #{indeces} for [0..#{size - 1}]"
+        raise DataFrameArgumentError, "Invalid index: #{indeces} for 0..#{size - 1}"
       end
 
       a = indeces.map { |i| @table.slice(i).to_a }
       DataFrame.new(@table.schema, a)
+    end
+
+    def normalized_array(range)
+      both_end = [range.begin, range.end]
+      both_end[1] -= 1 if range.exclude_end?
+
+      if both_end.any?(Integer) || both_end.all?(&:nil?)
+        if both_end.any? { |e| e&.>=(size) || e&.<(-size) }
+          raise DataFrameArgumentError, "Index out of range: #{range} for 0..#{size - 1}"
+        end
+
+        (0...size).to_a[range]
+      else
+        keys[range]
+      end
     end
 
     def out_of_range?(indeces)

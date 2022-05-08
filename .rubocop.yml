@@ -53,7 +53,7 @@ Layout/LineLength:
 # 18..30 unsatisfactory
 # > 30 dangerous
 Metrics/AbcSize:
-  Max: 19
+  Max: 21
   Exclude:
     - 'lib/red_amber/data_frame_output.rb' # Max: 78
 
@@ -84,6 +84,11 @@ Metrics/MethodLength:
 
 # Max: 8
 Metrics/PerceivedComplexity:
-  Max: 9
+  Max: 10
   Exclude:
     - 'lib/red_amber/data_frame_output.rb' # Max: 12
+
+# Necessary to test when range.end == -1
+Style/SlicingWithRange:
+  Exclude:
+    - 'test/test_data_frame_selectable.rb'

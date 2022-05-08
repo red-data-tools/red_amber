@@ -136,15 +136,20 @@ Or install it yourself as:
 
 ### Selecting
 
-- [x] Selecting columns by `[]`
+- [x] Select columns by `[]` as `[key]`, `[keys]`, `[keys[index]]`
+  - Key in a Symbol: `df[:symbol]`
+  - Key in a String: `df["string"]`
+  - Keys in an Array: `df[:symbol1`, `"string"`, `:symbol2`
+  - Keys in indeces: `df[df.keys[0]`, `df[df.keys[1,2]]`, `df[df.keys[1..]]`
 
-  `[key]`, `[keys]`, `[keys[index]]`
 
-- [x] Selecting rows by `[]`
+- [x] Select rows by `[]` as `[index]`, `[range]`, `[array]`
+  - Select a row by index: `df[0]`
+  - Select rows by indeces in a Range: `df[1..2]`
+  - Select rows by indeces in an Array: `df[1, 2]`
+  - Mixed case: `df[2, 0..]`
 
-  `[index]`, `[range]`, `[array]`
-
-- [x] Selecting rows from top or bottom
+- [x] Select rows from top or bottom
 
   `head(n=5)`, `tail(n=5)`, `first(n=1)`, `last(n=1)`
 
@@ -329,7 +334,7 @@ Or install it yourself as:
 
 ## Development
 
-```
+```shell
 git clone https://github.com/heronshoes/red_amber.git
 cd red_amber
 bundle install
