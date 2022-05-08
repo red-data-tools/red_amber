@@ -1,6 +1,5 @@
-## [0.1.2] - Unreleased
+## [0.1.3] - Unreleased
 
-- Add support for Arrow 8.0.0
 - `DataFrame`
   - Introduce updating capabilities
   - Introduce NA support
@@ -8,6 +7,19 @@
 - `Vector`
   - Add NaN support for functions
   - More functions
+
+## [0.1.2] - 2022-05-08 (experimental)
+
+- Bug fixes:
+  - `DataFrame`
+    - Fix bug in `#[]` with end-less Range
+- New features and improvements
+  - Add support for Arrow 8.0.0
+  - `DataFrame`
+    - `types` and `data_types`
+    - Range is usable to specify columns in `#[]`
+  - `Vector`
+    - `type` and `data_type`
 
 ## [0.1.1] - 2022-05-06 (experimental)
 
