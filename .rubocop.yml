@@ -45,7 +45,7 @@ Lint/BinaryOperatorWithIdenticalOperands:
 
 # Max: 120
 Layout/LineLength:
-  Max: 100
+  Max: 118
   Exclude:
     - 'test/**/*'
 

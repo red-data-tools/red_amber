@@ -52,9 +52,7 @@ module RedAmber
     end
 
     def select_rows(indeces)
-      if out_of_range?(indeces)
-        raise DataFrameArgumentError, "Invalid index: #{indeces} for 0..#{size - 1}"
-      end
+      out_of_range?(indeces) && raise(DataFrameArgumentError, "Invalid index: #{indeces} for 0..#{size - 1}")
 
       a = indeces.map { |i| @table.slice(i).to_a }
       DataFrame.new(@table.schema, a)
