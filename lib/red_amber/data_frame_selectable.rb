@@ -62,7 +62,7 @@ module RedAmber
 
     def normalized_array(range)
       both_end = [range.begin, range.end]
-      both_end[1] -= 1 if range.exclude_end?
+      both_end[1] -= 1 if range.exclude_end? && range.end.is_a?(Integer)
 
       if both_end.any?(Integer) || both_end.all?(&:nil?)
         if both_end.any? { |e| e&.>=(size) || e&.<(-size) }
@@ -71,7 +71,7 @@ module RedAmber
 
         (0...size).to_a[range]
       else
-        keys[range]
+        range.to_a
       end
     end
 

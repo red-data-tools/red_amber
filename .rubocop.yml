@@ -53,7 +53,7 @@ Layout/LineLength:
 # 18..30 unsatisfactory
 # > 30 dangerous
 Metrics/AbcSize:
-  Max: 21
+  Max: 23
   Exclude:
     - 'lib/red_amber/data_frame_output.rb' # Max: 78
 
@@ -84,7 +84,7 @@ Metrics/MethodLength:
 
 # Max: 8
 Metrics/PerceivedComplexity:
-  Max: 10
+  Max: 11
   Exclude:
     - 'lib/red_amber/data_frame_output.rb' # Max: 12
 

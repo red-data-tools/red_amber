@@ -131,6 +131,18 @@ Or install it yourself as:
 
   Shows some information about self.
 
+```ruby
+hash = {a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3]}
+RedAmber::DataFrame.new(hash)
+# =>
+RedAmber::DataFrame : 3 observations(rows) of 3 variables(columns)
+Variables : 2 numeric, 1 string
+# key type   level data_preview
+1 :a  uint8      3 [1, 2, 3]
+2 :b  string     3 [A, B, C]
+3 :c  double     3 [1.0, 2.0, 3.0]
+```
+
   - tally_level: max level to use tally mode
   - max_element: max num of element to show values in each row
 
@@ -141,7 +153,20 @@ Or install it yourself as:
   - Key in a String: `df["string"]`
   - Keys in an Array: `df[:symbol1`, `"string"`, `:symbol2`
   - Keys in indeces: `df[df.keys[0]`, `df[df.keys[1,2]]`, `df[df.keys[1..]]`
-
+  - Keys in a Range:
+    A end-less Range can be used to represent keys.
+```ruby
+hash = {a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3]}
+df = RedAmber::DataFrame.new(hash)
+df[:b..:c, "a"]
+# =>
+RedAmber::DataFrame : 3 observations(rows) of 3 variables(columns)
+Variables : 2 numeric, 1 string
+# key type   level data_preview
+1 :b  string     3 [A, B, C]
+2 :c  double     3 [1.0, 2.0, 3.0]
+3 :a  uint8      3 [1, 2, 3]
+```
 
 - [x] Select rows by `[]` as `[index]`, `[range]`, `[array]`
   - Select a row by index: `df[0]`
