@@ -6,10 +6,10 @@ Gem::Specification.new do |spec|
   spec.name = 'red_amber'
   spec.version = RedAmber::VERSION
   spec.authors = ['Hirokazu SUZUKI (heronshoes)']
-  spec.email = ['63298319+heronshoes@users.noreply.github.com']
+  spec.email = ['heronshoes877@gmail.com']
 
-  spec.summary = 'Simple data frames for Ruby'
-  spec.description = 'RedAmber is a simple dataframe library powered by Red Arrow with simple API similar to Rover-df'
+  spec.summary = 'Simple dataframe library for Ruby'
+  spec.description = 'RedAmber is a simple dataframe library powered by Red Arrow with simple API similar to Rover-df.'
   spec.homepage = 'https://github.com/heronshoes/red_amber'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 2.7'
@@ -30,8 +30,8 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_dependency 'red-arrow', '~> 7.0.0'
-  spec.add_dependency 'red-parquet', '~> 7.0.0'
+  spec.add_dependency 'red-arrow', '>= 7.0.0'
+  spec.add_dependency 'red-parquet', '>= 7.0.0'
   spec.add_dependency 'rover-df', '~> 0.3.0'
 
   # Development dependency has gone to the Gemfile (rubygems/bundler#7237)
