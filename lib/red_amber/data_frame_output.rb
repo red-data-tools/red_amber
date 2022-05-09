@@ -109,6 +109,7 @@ module RedAmber
 
     def reduced_vector_presentation(vector, nrow, max_element)
       a = vector.to_a.take(max_element)
+      a.map! { |e| e.nil? ? 'nil' : e }
       a << '...' if nrow > max_element
       "[#{a.join(', ')}]"
     end

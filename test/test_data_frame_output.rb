@@ -55,7 +55,7 @@ class DataFrameOutputTest < Test::Unit::TestCase
         # key      type   level data_preview
         1 :integer uint8      6 [1, 2, 3, 4, 5, ...]
         2 :string  string     5 [A, A, B, C, D, ...]
-        3 :boolean bool       3 [true, false, , true, false, ...]
+        3 :boolean bool       3 [true, false, nil, true, false, ...]
       OUTPUT
       assert_equal str, @df.inspect(tally_level: 2)
     end
@@ -79,7 +79,7 @@ class DataFrameOutputTest < Test::Unit::TestCase
         # key      type   level data_preview
         1 :integer uint8      6 [1, 2, 3, 4, 5, 6]
         2 :string  string     5 [A, A, B, C, D, E]
-        3 :boolean bool       3 [true, false, , true, false, ]
+        3 :boolean bool       3 [true, false, nil, true, false, nil]
       OUTPUT
       assert_equal str, @df.inspect(tally_level: 2, max_element: 6)
     end
