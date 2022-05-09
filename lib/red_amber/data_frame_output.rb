@@ -35,19 +35,14 @@ module RedAmber
         "#{self.class} : #{nrow} observation#{r}(row#{r}) of #{ncol} variable#{c}(column#{c})"
 
       # 2nd row: show var counts by type
-      type_groups = data_types.map { |t| type_group(t) }
-
+      type_groups = @table.columns.map { |column| type_group(column.data_type) }
       stringio.puts "Variable#{pl(ncol)} : #{var_type_count(type_groups).join(', ')}"
 
       # 3rd row: print header of rows
       levels = vectors.map { |v| v.to_a.uniq.size }
-      row_headers = { idx: '#', key: 'key', type: 'type', levels: 'level', data: 'data_preview' }
-      # find longest word to adjust column width
-      w_idx = ncol.to_s.size
-      w_key = (keys.map { |key| key.size + 1 } << row_headers[:key].size).max
-      w_type = (types.map(&:size) << row_headers[:type].size).max
-      w_row = (levels.map { |l| l.to_s.size } << row_headers[:levels].size).max
-      stringio.printf("%-#{w_idx}s %-#{w_key}s %-#{w_type}s %-#{w_row}s %s\n", *row_headers.values)
+      headers = { idx: '#', key: 'key', type: 'type', levels: 'level', data: 'data_preview' }
+      header_string = header_string(levels, headers)
+      stringio.printf(header_string, *headers.values)
 
       # (4) show details for each column (vector)
       vectors.each.with_index(1) do |vector, i|
@@ -56,8 +51,7 @@ module RedAmber
         type_group = type_groups[i - 1]
         data_tally = vector.tally
 
-        str = format("%#{w_row}d ", data_tally.size)
-        str <<
+        str =
           case type_group
           when :numeric, :string, :boolean
             if data_tally.size <= tally_level && data_tally.size != nrow
@@ -71,7 +65,7 @@ module RedAmber
             reduced_vector_presentation(vector, nrow, max_element)
           end
 
-        stringio.printf("%#{w_idx}d %-#{w_key}s %-#{w_type}s %s\n", i, ":#{key}", type, str)
+        stringio.printf(header_string, i, ":#{key}", type, data_tally.size, str)
       end
 
       stringio.string
@@ -83,15 +77,21 @@ module RedAmber
       num > 1 ? 's' : ''
     end
 
-    def type_group(type)
-      if Arrow::NumericDataType >= type
-        :numeric
-      elsif Arrow::StringDataType >= type
-        :string
-      elsif Arrow::BooleanDataType >= type
-        :boolean
-      elsif Arrow::TemporalDataType >= type
-        :temporal
+    def header_string(levels, headers)
+      # find longest word to adjust column width
+      w_idx = ncol.to_s.size
+      w_key = [keys.map(&:size).max + 1, headers[:key].size].max
+      w_type = [types.map(&:size).max, headers[:type].size].max
+      w_row = [levels.map { |l| l.to_s.size }.max, headers[:levels].size].max
+      "%-#{w_idx}s %-#{w_key}s %-#{w_type}s %#{w_row}s %s\n"
+    end
+
+    def type_group(data_type)
+      case data_type
+      when Arrow::NumericDataType then :numeric
+      when Arrow::StringDataType then :string
+      when Arrow::BooleanDataType then :boolean
+      when Arrow::TemporalDataType then :temporal
       else
         :other
       end

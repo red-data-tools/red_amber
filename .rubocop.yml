@@ -55,14 +55,13 @@ Layout/LineLength:
 Metrics/AbcSize:
   Max: 23
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 78
+    - 'lib/red_amber/data_frame_output.rb' # Max: 54
 
 # Max: 25
 Metrics/BlockLength:
   Max: 25
   Exclude:
     - 'test/**/*'
-    - '*.gemspec'
 
 # Max: 100
 Metrics/ClassLength:
@@ -73,20 +72,16 @@ Metrics/ClassLength:
 # Max: 7
 Metrics/CyclomaticComplexity:
   Max: 10
-  Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 11
 
 # Max: 10
 Metrics/MethodLength:
   Max: 18
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 35
+    - 'lib/red_amber/data_frame_output.rb' # Max: 31
 
 # Max: 8
 Metrics/PerceivedComplexity:
   Max: 11
-  Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 12
 
 # Necessary to test when range.end == -1
 Style/SlicingWithRange:
