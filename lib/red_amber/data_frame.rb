@@ -67,6 +67,17 @@ module RedAmber
     alias_method :keys, :column_names
     alias_method :header, :column_names
 
+    def key?(key)
+      column_names.include?(key.to_sym)
+    end
+    alias_method :has_key?, :key?
+
+    def key_index(key)
+      column_names.find_index(key.to_sym)
+    end
+    alias_method :find_index, :key_index
+    alias_method :index, :key_index
+
     def types
       @table.columns.map do |column|
         column.data_type.to_s.to_sym

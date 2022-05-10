@@ -92,6 +92,18 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal hash_sym.keys, df.keys
     end
 
+    test 'key?' do
+      hash, df, = data
+      assert_equal hash.key?(:x), df.key?(:x)
+      assert_false df.key?(:z)
+    end
+
+    test 'key_index' do
+      hash, df, = data
+      assert_equal hash.keys.index(:x), df.key_index(:x)
+      assert_nil df.key_index(:z)
+    end
+
     test 'types' do
       _, df, types = data
       assert_equal types, df.types
