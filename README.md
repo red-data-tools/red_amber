@@ -129,7 +129,7 @@ Or install it yourself as:
 
 - [x] `inspect(tally_level: 5, max_element: 5)`
 
-  Shows some information about self.
+  Shows some information about self in a transposed style.
 
 ```ruby
 hash = {a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3]}
@@ -265,78 +265,78 @@ Variables : 2 numeric, 1 string
 
 | Method    |Boolean|Numeric|String|Remarks|
 | ------------ | --- | --- | --- | ----- |
-|[x] `all`     | [x] |     |     |       |
-|[x] `any`     | [x] |     |     |       |
-|[x] `approximate_median`| | [x] |     |     |
-|[x] `count`         | [x] | [x] | [x] |     |
-|[x] `count_distinct`| [x] | [x] | [x] |     |
-|[x] `count_uniq`    | [x] | [x] | [x] |an alias of `count_distinct`|
+| ✓ `all`     |  ✓  |     |     |       |
+| ✓ `any`     |  ✓  |     |     |       |
+| ✓ `approximate_median`| |  ✓  |     |     |
+| ✓ `count`         |  ✓  |  ✓  |  ✓  |     |
+| ✓ `count_distinct`|  ✓  |  ✓  |  ✓  |     |
+| ✓ `count_uniq`    |  ✓  |  ✓  |  ✓  |an alias of `count_distinct`|
 |[ ] `index`   |     |     |     |       |
-|[x] `max`     | [x] | [x] | [x] |       |
-|[x] `mean`    | [x] | [x] |     |       |
-|[x] `min`     | [x] | [x] | [x] |       |
+| ✓ `max`     |  ✓  |  ✓  |  ✓  |       |
+| ✓ `mean`    |  ✓  |  ✓  |     |       |
+| ✓ `min`     |  ✓  |  ✓  |  ✓  |       |
 |[ ] `min_max` |     |     |     |       |
 |[ ] `mode`    |     |     |     |       |
-|[x] `product` | [x] | [x] |     |       |
+| ✓ `product` |  ✓  |  ✓  |     |       |
 |[ ] `quantile`|     |     |     |       |
-|[x] `stddev`  |     | [x] |     |       |
-|[x] `sum`     | [x] | [x] |     |       |
+| ✓ `stddev`  |     |  ✓  |     |       |
+| ✓ `sum`     |  ✓  |  ✓  |     |       |
 |[ ] `tdigest` |     |     |     |       |
-|[x] `variance`|     | [x] |     |       |
+| ✓ `variance`|     |  ✓  |     |       |
 
 #### Unary element-wise: vector.func => Vector
 
 | Method    |Boolean|Numeric|String|Remarks|
 | ------------ | --- | --- | --- | ----- |
-|[x] `-@`      |     | [x] |     |as `-vector`|
-|[x] `negate`  |     | [x] |     |`-@`   |
-|[x] `abs`     |     | [x] |     |       |
+| ✓ `-@`      |     |  ✓  |     |as `-vector`|
+| ✓ `negate`  |     |  ✓  |     |`-@`   |
+| ✓ `abs`     |     |  ✓  |     |       |
 |[ ] `acos`    |     | [ ] |     |       |
 |[ ] `asin`    |     | [ ] |     |       |
-|[x] `atan`    |     | [x] |     |       |
-|[ ] `ceil`    |     | [x] |     |       |
-|[x] `cos`     |     | [x] |     |       |
-|[ ] `floor`   |     | [x] |     |       |
+| ✓ `atan`    |     |  ✓  |     |       |
+|[ ] `ceil`    |     |  ✓  |     |       |
+| ✓ `cos`     |     |  ✓  |     |       |
+|[ ] `floor`   |     |  ✓  |     |       |
 |[ ] `ln`      |     | [ ] |     |       |
 |[ ] `log10`   |     | [ ] |     |       |
 |[ ] `log1p`   |     | [ ] |     |       |
 |[ ] `log2`    |     | [ ] |     |       |
-|[x] `sign`    |     | [x] |     |       |
-|[x] `sin`     |     | [x] |     |       |
-|[x] `tan`     |     | [x] |     |       |
-|[ ] `trunc`   |     | [x] |     |       |
+| ✓ `sign`    |     |  ✓  |     |       |
+| ✓ `sin`     |     |  ✓  |     |       |
+| ✓ `tan`     |     |  ✓  |     |       |
+|[ ] `trunc`   |     |  ✓  |     |       |
 
 #### Binary element-wise: vector.func(vector) => Vector
 
 | Method          |Boolean|Numeric|String|Remarks|
 | ------------------ | --- | --- | --- | ----- |
-|[x] `add`           |     | [x] |     | `+`   |
-|[x] `atan2`         |     | [x] |     |       |
-|[x] `and`           | [x] |     |     |       |
-|[x] `and_kleene`    | [x] |     |     |       |
-|[x] `and_not`       | [x] |     |     |       |
-|[x] `and_not_kleene`| [x] |     |     |       |
-|[x] `bit_wise_and`  |     |([x])|     |`&`, integer only|
-|[ ] `bit_wise_not`  |     |([x])|     |`!`, integer only|
-|[x] `bit_wise_or`   |     |([x])|     |`|`, integer only|
-|[x] `bit_wise_xor`  |     |([x])|     |`^`, integer only|
-|[x] `divide`        |     | [x] |     | `/`   |
-|[x] `equal`         | [x] | [x] | [x] |`==`, alias `eq`|
-|[x] `greater`       | [x] | [x] | [x] |`>`, alias `gt`|
-|[x] `greater_equal` | [x] | [x] | [x] |`>=`, alias `ge`|
-|[x] `less`          | [x] | [x] | [x] |`<`, alias `lt`|
-|[x] `less_equal`    | [x] | [x] | [x] |`<=`, alias `le`|
+| ✓ `add`           |     |  ✓  |     | `+`   |
+| ✓ `atan2`         |     |  ✓  |     |       |
+| ✓ `and`           |  ✓  |     |     |       |
+| ✓ `and_kleene`    |  ✓  |     |     |       |
+| ✓ `and_not`       |  ✓  |     |     |       |
+| ✓ `and_not_kleene`|  ✓  |     |     |       |
+| ✓ `bit_wise_and`  |     | (✓) |     |`&`, integer only|
+|[ ] `bit_wise_not`  |     | (✓) |     |`!`, integer only|
+| ✓ `bit_wise_or`   |     | (✓) |     |`|`, integer only|
+| ✓ `bit_wise_xor`  |     | (✓) |     |`^`, integer only|
+| ✓ `divide`        |     |  ✓  |     | `/`   |
+| ✓ `equal`         |  ✓  |  ✓  |  ✓  |`==`, alias `eq`|
+| ✓ `greater`       |  ✓  |  ✓  |  ✓  |`>`, alias `gt`|
+| ✓ `greater_equal` |  ✓  |  ✓  |  ✓  |`>=`, alias `ge`|
+| ✓ `less`          |  ✓  |  ✓  |  ✓  |`<`, alias `lt`|
+| ✓ `less_equal`    |  ✓  |  ✓  |  ✓  |`<=`, alias `le`|
 |[ ] `logb`          |     | [ ] |     |       |
 |[ ] `mod`           |     | [ ] |     |       |
-|[x] `multiply`      |     | [x] |     | `*`   |
-|[x] `not_equal`     | [x] | [x] | [x] |`!=`, alias `ne`|
-|[x] `or`            | [x] |     |     |       |
-|[x] `or_kleene`     | [x] |     |     |       |
-|[x] `power`         |     | [x] |     | `**`  |
-|[x] `subtract`      |     | [x] |     | `-`   |
-|[x] `shift_left`    |     |([x])|     |`<<`, integer only|
-|[x] `shift_right`   |     |([x])|     |`>>`, integer only|
-|[x] `xor`           | [x] |     |     |       |
+| ✓ `multiply`      |     |  ✓  |     | `*`   |
+| ✓ `not_equal`     |  ✓  |  ✓  |  ✓  |`!=`, alias `ne`|
+| ✓ `or`            |  ✓  |     |     |       |
+| ✓ `or_kleene`     |  ✓  |     |     |       |
+| ✓ `power`         |     |  ✓  |     | `**`  |
+| ✓ `subtract`      |     |  ✓  |     | `-`   |
+| ✓ `shift_left`    |     | (✓) |     |`<<`, integer only|
+| ✓ `shift_right`   |     | (✓) |     |`>>`, integer only|
+| ✓ `xor`           |  ✓  |     |     |       |
 
 ##### (Not impremented)
 - [ ] invert, round, round_to_multiple
