@@ -128,6 +128,27 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.negate }
     end
 
+    test '#!' do
+      assert_equal_array [false, false, nil], !@boolean
+      assert_raise(Arrow::Error::NotImplemented) { @integer.! }
+      assert_raise(Arrow::Error::NotImplemented) { @double.! }
+      assert_raise(Arrow::Error::NotImplemented) { @string.! }
+    end
+
+    test '#invert' do
+      assert_equal_array [false, false, nil], @boolean.invert
+      assert_raise(Arrow::Error::NotImplemented) { @integer.invert }
+      assert_raise(Arrow::Error::NotImplemented) { @double.invert }
+      assert_raise(Arrow::Error::NotImplemented) { @string.invert }
+    end
+
+    test '#not' do
+      assert_equal_array [false, false, nil], @boolean.not
+      assert_raise(Arrow::Error::NotImplemented) { @integer.not }
+      assert_raise(Arrow::Error::NotImplemented) { @double.not }
+      assert_raise(Arrow::Error::NotImplemented) { @string.not }
+    end
+
     test '#abs' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.abs }
       assert_equal_array [1, 2, 3], @integer.abs
@@ -140,6 +161,13 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array_in_delta [0.7853981633974483, 1.1071487177940906, 1.2490457723982544], @integer.atan, delta = 1e-15
       assert_equal_array_in_delta [0.7853981633974483, -1.1071487177940906, 1.2490457723982544], @double.atan, delta = 1e-15
       assert_raise(Arrow::Error::NotImplemented) { @string.atan }
+    end
+
+    test '#bit_wise_not' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.bit_wise_not }
+      assert_equal_array [254, 253, 252], @integer.bit_wise_not
+      assert_raise(Arrow::Error::NotImplemented) { @double.bit_wise_not }
+      assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_not }
     end
 
     test '#ceil' do
@@ -207,20 +235,6 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.atan2(@string) }
     end
 
-    test '#and(vector)' do
-      assert_equal_array [true, true, nil], @boolean.and(@boolean)
-      assert_raise(Arrow::Error::NotImplemented) { @integer.and(@integer) }
-      assert_raise(Arrow::Error::NotImplemented) { @double.and(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.and(@string) }
-    end
-
-    test '#and_kleene(vector)' do
-      assert_equal_array [true, true, nil], @boolean.and_kleene(@boolean)
-      assert_raise(Arrow::Error::NotImplemented) { @integer.and_kleene(@integer) }
-      assert_raise(Arrow::Error::NotImplemented) { @double.and_kleene(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.and_kleene(@string) }
-    end
-
     test '#and_not(vector)' do
       assert_equal_array [false, false, nil], @boolean.and_not(@boolean)
       assert_raise(Arrow::Error::NotImplemented) { @integer.and_not(@integer) }
@@ -235,25 +249,83 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.and_not_kleene(@string) }
     end
 
-    test '#or(vector)' do
-      assert_equal_array [true, true, nil], @boolean.or(@boolean)
-      assert_raise(Arrow::Error::NotImplemented) { @integer.or(@integer) }
-      assert_raise(Arrow::Error::NotImplemented) { @double.or(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.or(@string) }
+    test '#bit_wise_and(vector)' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.bit_wise_and(@boolean) }
+      assert_equal_array [1, 2, 3], @integer.bit_wise_and(@integer)
+      assert_raise(Arrow::Error::NotImplemented) { @double.bit_wise_and(@double) }
+      assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_and(@string) }
+    end
+
+    test '#bit_wise_or(vector)' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.bit_wise_or(@boolean) }
+      assert_equal_array [1, 2, 3], @integer.bit_wise_or(@integer)
+      assert_raise(Arrow::Error::NotImplemented) { @double.bit_wise_or(@double) }
+      assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_or(@string) }
+    end
+
+    test '#bit_wise_xor(vector)' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.bit_wise_xor(@boolean) }
+      assert_equal_array [0, 0, 0], @integer.bit_wise_xor(@integer)
+      assert_raise(Arrow::Error::NotImplemented) { @double.bit_wise_xor(@double) }
+      assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_xor(@string) }
+    end
+  end
+
+  sub_test_case('binary element-wise with operator') do
+    setup do
+      @bool_self = Vector.new([true, true, true, false, false, false, nil, nil, nil])
+      @bool_other = Vector.new([true, false, nil, true, false, nil, true, false, nil])
+      @integer = Vector.new([1, 2, 3])
+      @double = Vector.new([1.0, -2, 3])
+      @string = Vector.new(%w[A B A])
+    end
+
+    test '#&(vector)' do
+      assert_equal_array([true, false, nil, false, false, false, nil, false, nil],
+                         @bool_self & @bool_other)
+      assert_raise(Arrow::Error::NotImplemented) { @integer & @integer }
+      assert_raise(Arrow::Error::NotImplemented) { @double & @double }
+      assert_raise(Arrow::Error::NotImplemented) { @string & @string }
+    end
+
+    test '#and_kleene(vector)' do
+      assert_equal_array [true, false, nil, false, false, false, nil, false, nil],
+                         @bool_self.and_kleene(@bool_other)
+      assert_raise(Arrow::Error::NotImplemented) { @integer.and_kleene(@integer) }
+      assert_raise(Arrow::Error::NotImplemented) { @double.and_kleene(@double) }
+      assert_raise(Arrow::Error::NotImplemented) { @string.and_kleene(@string) }
+    end
+
+    test '#and_org(vector)' do
+      assert_equal_array [true, false, nil, false, false, nil, nil, nil, nil],
+                         @bool_self.and_org(@bool_other)
+      assert_raise(Arrow::Error::NotImplemented) { @integer.and_org(@integer) }
+      assert_raise(Arrow::Error::NotImplemented) { @double.and_org(@double) }
+      assert_raise(Arrow::Error::NotImplemented) { @string.and_org(@string) }
+    end
+
+    test '#|(vector)' do
+      assert_equal_array([true, true, true, true, false, nil, true, nil, nil],
+                         @bool_self | @bool_other)
+      assert_raise(Arrow::Error::NotImplemented) { @integer | @integer }
+      assert_raise(Arrow::Error::NotImplemented) { @double | @double }
+      assert_raise(Arrow::Error::NotImplemented) { @string | @string }
     end
 
     test '#or_kleene(vector)' do
-      assert_equal_array [true, true, nil], @boolean.or_kleene(@boolean)
+      assert_equal_array [true, true, true, true, false, nil, true, nil, nil],
+                         @bool_self.or_kleene(@bool_other)
       assert_raise(Arrow::Error::NotImplemented) { @integer.or_kleene(@integer) }
       assert_raise(Arrow::Error::NotImplemented) { @double.or_kleene(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.or_kleene(@string) }
     end
 
-    test '#xor(vector)' do
-      assert_equal_array [false, false, nil], @boolean.xor(@boolean)
-      assert_raise(Arrow::Error::NotImplemented) { @integer.xor(@integer) }
-      assert_raise(Arrow::Error::NotImplemented) { @double.xor(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.xor(@string) }
+    test '#or_org(vector)' do
+      assert_equal_array [true, true, nil, true, false, nil, nil, nil, nil],
+                         @bool_self.or_org(@bool_other)
+      assert_raise(Arrow::Error::NotImplemented) { @integer.or_org(@integer) }
+      assert_raise(Arrow::Error::NotImplemented) { @double.or_org(@double) }
+      assert_raise(Arrow::Error::NotImplemented) { @string.or_org(@string) }
     end
   end
 
@@ -335,48 +407,6 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.-(@string) }
     end
 
-    test '#bit_wise_and(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.bit_wise_and(@boolean) }
-      assert_equal_array [1, 2, 3], @integer.bit_wise_and(@integer)
-      assert_raise(Arrow::Error::NotImplemented) { @double.bit_wise_and(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_and(@string) }
-    end
-
-    test '#&(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.&(@boolean) }
-      assert_equal_array [1, 2, 3], @integer.&(@integer)
-      assert_raise(Arrow::Error::NotImplemented) { @double.&(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.&(@string) }
-    end
-
-    test '#bit_wise_or(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.bit_wise_or(@boolean) }
-      assert_equal_array [1, 2, 3], @integer.bit_wise_or(@integer)
-      assert_raise(Arrow::Error::NotImplemented) { @double.bit_wise_or(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_or(@string) }
-    end
-
-    test '#|(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.|(@boolean) }
-      assert_equal_array [1, 2, 3], @integer.|(@integer)
-      assert_raise(Arrow::Error::NotImplemented) { @double.|(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.|(@string) }
-    end
-
-    test '#bit_wise_xor(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.bit_wise_xor(@boolean) }
-      assert_equal_array [0, 0, 0], @integer.bit_wise_xor(@integer)
-      assert_raise(Arrow::Error::NotImplemented) { @double.bit_wise_xor(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_xor(@string) }
-    end
-
-    test '#^(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.^(@boolean) }
-      assert_equal_array [0, 0, 0], @integer.^(@integer)
-      assert_raise(Arrow::Error::NotImplemented) { @double.^(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.^(@string) }
-    end
-
     test '#shift_left(vector)' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.shift_left(@boolean) }
       assert_equal_array [2, 8, 24], @integer.shift_left(@integer)
@@ -403,6 +433,20 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [0, 0, 0], @integer.>>(@integer)
       assert_raise(Arrow::Error::NotImplemented) { @double.>>(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.>>(@string) }
+    end
+
+    test '#xor(vector)' do
+      assert_equal_array [false, false, nil], @boolean.xor(@boolean)
+      assert_raise(Arrow::Error::NotImplemented) { @integer.xor(@integer) }
+      assert_raise(Arrow::Error::NotImplemented) { @double.xor(@double) }
+      assert_raise(Arrow::Error::NotImplemented) { @string.xor(@string) }
+    end
+
+    test '#^(vector)' do
+      assert_equal_array [false, false, nil], @boolean.xor(@boolean)
+      assert_raise(Arrow::Error::NotImplemented) { @integer.xor(@integer) }
+      assert_raise(Arrow::Error::NotImplemented) { @double.xor(@double) }
+      assert_raise(Arrow::Error::NotImplemented) { @string.xor(@string) }
     end
 
     test '#equal(vector)' do

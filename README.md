@@ -294,9 +294,11 @@ Variables : 2 numeric, 1 string
 |[ ] `acos`    |     | [ ] |     |       |
 |[ ] `asin`    |     | [ ] |     |       |
 | ✓ `atan`    |     |  ✓  |     |       |
+| ✓ `bit_wise_not`  |     | (✓) |     |integer only|
 |[ ] `ceil`    |     |  ✓  |     |       |
 | ✓ `cos`     |     |  ✓  |     |       |
 |[ ] `floor`   |     |  ✓  |     |       |
+| ✓ `invert`  |  ✓  |     |     |`!`, alias `not`|
 |[ ] `ln`      |     | [ ] |     |       |
 |[ ] `log10`   |     | [ ] |     |       |
 |[ ] `log1p`   |     | [ ] |     |       |
@@ -312,14 +314,13 @@ Variables : 2 numeric, 1 string
 | ------------------ | --- | --- | --- | ----- |
 | ✓ `add`           |     |  ✓  |     | `+`   |
 | ✓ `atan2`         |     |  ✓  |     |       |
-| ✓ `and`           |  ✓  |     |     |       |
-| ✓ `and_kleene`    |  ✓  |     |     |       |
+| ✓ `and_kleene`    |  ✓  |     |     | `&`   |
+| ✓ `and_org   `    |  ✓  |     |     |`and` in Red Arrow|
 | ✓ `and_not`       |  ✓  |     |     |       |
 | ✓ `and_not_kleene`|  ✓  |     |     |       |
-| ✓ `bit_wise_and`  |     | (✓) |     |`&`, integer only|
-|[ ] `bit_wise_not`  |     | (✓) |     |`!`, integer only|
-| ✓ `bit_wise_or`   |     | (✓) |     |`|`, integer only|
-| ✓ `bit_wise_xor`  |     | (✓) |     |`^`, integer only|
+|[ ] `bit_wise_and`  |     | (✓) |     |integer only|
+|[ ] `bit_wise_or`   |     | (✓) |     |integer only|
+|[ ] `bit_wise_xor`  |     | (✓) |     |integer only|
 | ✓ `divide`        |     |  ✓  |     | `/`   |
 | ✓ `equal`         |  ✓  |  ✓  |  ✓  |`==`, alias `eq`|
 | ✓ `greater`       |  ✓  |  ✓  |  ✓  |`>`, alias `gt`|
@@ -327,19 +328,19 @@ Variables : 2 numeric, 1 string
 | ✓ `less`          |  ✓  |  ✓  |  ✓  |`<`, alias `lt`|
 | ✓ `less_equal`    |  ✓  |  ✓  |  ✓  |`<=`, alias `le`|
 |[ ] `logb`          |     | [ ] |     |       |
-|[ ] `mod`           |     | [ ] |     |       |
+|[ ] `mod`           |     | [ ] |     | `%`   |
 | ✓ `multiply`      |     |  ✓  |     | `*`   |
 | ✓ `not_equal`     |  ✓  |  ✓  |  ✓  |`!=`, alias `ne`|
-| ✓ `or`            |  ✓  |     |     |       |
-| ✓ `or_kleene`     |  ✓  |     |     |       |
+| ✓ `or_kleene`     |  ✓  |     |     | `\|`   |
+| ✓ `or_org`        |  ✓  |     |     |`or` in Red Arrow|
 | ✓ `power`         |     |  ✓  |     | `**`  |
 | ✓ `subtract`      |     |  ✓  |     | `-`   |
 | ✓ `shift_left`    |     | (✓) |     |`<<`, integer only|
 | ✓ `shift_right`   |     | (✓) |     |`>>`, integer only|
-| ✓ `xor`           |  ✓  |     |     |       |
+| ✓ `xor`           |  ✓  |     |     | `^`   |
 
 ##### (Not impremented)
-- [ ] invert, round, round_to_multiple
+- [ ] round, round_to_multiple
 - [ ] sort, sort_index
 - [ ] minmax, var, median, quantile
 - [ ] argmin, argmax

@@ -1,69 +1,87 @@
 # frozen_string_literal: true
 
+# Available functions in Arrow are shown by `Arrow::Function.all.map(&:name)`
+# reference: https://arrow.apache.org/docs/cpp/compute.html
+
+# Not implemented in Red Arrow 8.0.0
+# divmod,  # '%',
+# true_unless_null
+
 module RedAmber
   # mix-ins for class Vector
   module VectorFunctions
-    # Available functions in Arrow are shown by `Arrow::Function.all.map(&:name)`
-    # reference: https://arrow.apache.org/docs/cpp/compute.html
-
-    # [Unary aggregations]: vector.func => Scalar
+    # [Unary aggregations]: vector.func => scalar
     unary_aggregations =
-      %i[all any approximate_median count count_distinct max mean min \
-         product stddev sum variance]
+      %i[all any approximate_median count count_distinct max mean min product stddev sum variance]
     unary_aggregations.each do |function|
       define_method(function) { exec_func(function, other: nil, options: { aggregate: true }) }
     end
     alias_method :count_uniq, :count_distinct
 
     # option(s) required
-    # index
+    # - index
 
     # Returns other than value
-    # min_max
-    # mode
-    # quantile
-    # tdigest
+    # - min_max
+    # - mode
+    # - quantile
+    # - tdigest
 
-    # [Unary element-wise]: vector.func => Vector
-    unary_element_wise = %i[abs atan ceil cos floor sign sin tan trunc]
+    # [Unary element-wise]: vector.func => vector
+    unary_element_wise = %i[abs atan bit_wise_not ceil cos floor sign sin tan trunc]
     unary_element_wise.each do |function|
       define_method(function) { exec_func(function, other: nil, options: {}) }
     end
 
-    # [Unary element-wise with operator]: vector.func => Vector
+    # [Unary element-wise with operator]: vector.func => vector, op vector
     unary_element_wise_op = {
+      invert: '!',
       negate: '-@',
     }
     unary_element_wise_op.each do |function, operator|
       define_method(function) { exec_func(function, other: nil, options: {}) }
       define_method(operator) { exec_func(function, other: nil, options: {}) }
     end
+    alias_method :not, :invert
 
-    # bit_wise_not => '!', invert, round, round_to_multiple
+    # option(s) required
+    # - round, round_to_multiple
 
     # NaN support needed
-    # %i[acos asin ln log10 log1p log2]
+    # - acos asin ln log10 log1p log2
 
-    # With numerical range check
-    # %i[abs_checked acos_checked asin_checked cos_checked ln_checked \
-    #    log10_checked log1p_checked log2_checked sin_checked tan_checked]
+    # Functions with numerical range check
+    # - abs_checked acos_checked asin_checked cos_checked ln_checked
+    #   log10_checked log1p_checked log2_checked sin_checked tan_checked
 
-    # [Binary element-wise]: vector.func(other) => Vector
-    binary_element_wise = %i[atan2 and and_kleene and_not and_not_kleene or or_kleene xor]
+    # [Binary element-wise]: vector.func(other) => vector
+    binary_element_wise =
+      %i[atan2 and_not and_not_kleene bit_wise_and bit_wise_or bit_wise_xor]
     binary_element_wise.each do |function|
-      define_method(function) do |other|
-        exec_func(function, other: other, options: {})
-      end
+      define_method(function) { |other| exec_func(function, other: other, options: {}) }
+    end
+
+    # [Logical binary element-wise]: vector.func(other) => vector
+    logical_binary_element_wise = {
+      '&': :and_kleene,
+      and_kleene: :and_kleene,
+      and_org: :and,
+      '|': :or_kleene,
+      or_kleene: :or_kleene,
+      or_org: :or,
+    }
+    logical_binary_element_wise.each do |method, function|
+      define_method(method) { |other| exec_func(function, other: other, options: {}) }
     end
 
     # NaN support needed
-    # logb
+    # - logb
 
-    # With numerical range check
-    # %i[add_checked divide_checked logb_checked multiply_checked power_checked subtract_checked \
-    #    shift_left_checked shift_right_checked]
+    # Functions with numerical range check
+    # - add_checked divide_checked logb_checked multiply_checked power_checked subtract_checked
+    #   shift_left_checked shift_right_checked
 
-    # [Binary element-wise with operator]: vector.func(other) => Vector
+    # [Binary element-wise with operator]: vector.func(other) => vector
     binary_element_wise_op = {
       add: '+',
       divide: '/',
@@ -71,9 +89,7 @@ module RedAmber
       power: '**',
       subtract: '-',
 
-      bit_wise_and: '&',
-      bit_wise_or: '|',
-      bit_wise_xor: '^',
+      xor: '^',
       shift_left: '<<',
       shift_right: '>>',
 
@@ -85,12 +101,8 @@ module RedAmber
       not_equal: '!=',
     }
     binary_element_wise_op.each do |function, operator|
-      define_method(function) do |other|
-        exec_func(function, other: other, options: {})
-      end
-      define_method(operator) do |other|
-        exec_func(function, other: other, options: {})
-      end
+      define_method(function) { |other| exec_func(function, other: other, options: {}) }
+      define_method(operator) { |other| exec_func(function, other: other, options: {}) }
     end
     alias_method :eq, :equal
     alias_method :ge, :greater_equal
@@ -98,8 +110,6 @@ module RedAmber
     alias_method :le, :less_equal
     alias_method :lt, :less
     alias_method :ne, :not_equal
-
-    # mod: '%',
 
     # (array functions)
     # array_filter, array_sort_indices, array_take
