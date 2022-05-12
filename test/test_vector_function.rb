@@ -7,7 +7,7 @@ class VectorFunctionTest < Test::Unit::TestCase
   include RedAmber
 
   sub_test_case('unary aggregations') do
-    def setup
+    setup do
       @boolean = Vector.new([true, true, nil])
       @integer = Vector.new([1, 2, 3])
       @double = Vector.new([1.0, -2, 3])
@@ -107,7 +107,7 @@ class VectorFunctionTest < Test::Unit::TestCase
   end
 
   sub_test_case('unary element-wise') do
-    def setup
+    setup do
       @boolean = Vector.new([true, true, nil])
       @integer = Vector.new([1, 2, 3])
       @double = Vector.new([1.0, -2, 3])
@@ -221,7 +221,7 @@ class VectorFunctionTest < Test::Unit::TestCase
   end
 
   sub_test_case('binary element-wise') do
-    def setup
+    setup do
       @boolean = Vector.new([true, true, nil])
       @integer = Vector.new([1, 2, 3])
       @double = Vector.new([1.0, -2, 3])
@@ -329,8 +329,59 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case('binary element-wise categorizations') do
+    setup do
+      @boolean = Vector.new([true, false, true, false, nil])
+      @integer = Vector.new([0, 1, -2, 3, nil])
+      @double = Vector.new([Math::PI, Float::INFINITY, -Float::INFINITY, Float::NAN, nil])
+      @string = Vector.new(['A', 'B', ' ', '', nil])
+    end
+
+    test '#is_finite' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.is_finite }
+      assert_equal_array [true, true, true, true, nil], @integer.is_finite
+      assert_equal_array [true, false, false, false, nil], @double.is_finite
+      assert_raise(Arrow::Error::NotImplemented) { @string.is_finite }
+    end
+
+    test '#is_inf' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.is_inf }
+      assert_equal_array [false, false, false, false, nil], @integer.is_inf
+      assert_equal_array [false, true, true, false, nil], @double.is_inf
+      assert_raise(Arrow::Error::NotImplemented) { @string.is_inf }
+    end
+
+    test '#is_na' do
+      assert_equal_array [false, false, false, false, true], @boolean.is_na
+      assert_equal_array [false, false, false, false, true], @integer.is_na
+      assert_equal_array [false, false, false, true, true], @double.is_na
+      assert_equal_array [false, false, false, false, true], @string.is_na
+    end
+
+    test '#is_nan' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.is_nan }
+      assert_equal_array [false, false, false, false, nil], @integer.is_nan
+      assert_equal_array [false, false, false, true, nil], @double.is_nan
+      assert_raise(Arrow::Error::NotImplemented) { @string.is_nan }
+    end
+
+    test '#is_nil' do
+      assert_equal_array [false, false, false, false, true], @boolean.is_nil
+      assert_equal_array [false, false, false, false, true], @integer.is_nil
+      assert_equal_array [false, false, false, false, true], @double.is_nil
+      assert_equal_array [false, false, false, false, true], @string.is_nil
+    end
+
+    test '#is_valid' do
+      assert_equal_array [true, true, true, true, false], @boolean.is_valid
+      assert_equal_array [true, true, true, true, false], @integer.is_valid
+      assert_equal_array [true, true, true, true, false], @double.is_valid
+      assert_equal_array [true, true, true, true, false], @string.is_valid
+    end
+  end
+
   sub_test_case('binary element-wise with operator') do
-    def setup
+    setup do
       @boolean = Vector.new([true, true, nil])
       @integer = Vector.new([1, 2, 3])
       @double = Vector.new([1.0, -2, 3])

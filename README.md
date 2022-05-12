@@ -325,6 +325,12 @@ Variables : 2 numeric, 1 string
 | ✓ `equal`         |  ✓  |  ✓  |  ✓  |`==`, alias `eq`|
 | ✓ `greater`       |  ✓  |  ✓  |  ✓  |`>`, alias `gt`|
 | ✓ `greater_equal` |  ✓  |  ✓  |  ✓  |`>=`, alias `ge`|
+| ✓ `is_finite`     |     |  ✓  |     |      |
+| ✓ `is_inf`        |     |  ✓  |     |      |
+| ✓ `is_na`         |  ✓  |  ✓  |  ✓  |      |
+| ✓ `is_nan`        |     |  ✓  |     |      |
+| ✓ `is_nil`        |  ✓  |  ✓  |  ✓  |      |
+| ✓ `is_valid`      |  ✓  |  ✓  |  ✓  |      |
 | ✓ `less`          |  ✓  |  ✓  |  ✓  |`<`, alias `lt`|
 | ✓ `less_equal`    |  ✓  |  ✓  |  ✓  |`<=`, alias `le`|
 |[ ] `logb`          |     | [ ] |     |       |

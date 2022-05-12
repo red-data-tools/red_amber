@@ -49,6 +49,18 @@ module RedAmber
       @data.value_type.nick.to_sym
     end
 
+    def boolean?
+      type == :boolean
+    end
+
+    def numeric?
+      %i[int8 uint8 int16 uint16 int32 uint32 int64 uint64 float double].member? type
+    end
+
+    def string?
+      type == :string
+    end
+
     def data_type
       @data.value_type
     end

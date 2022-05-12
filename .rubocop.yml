@@ -83,6 +83,11 @@ Metrics/MethodLength:
 Metrics/PerceivedComplexity:
   Max: 11
 
+# Necessary to define is_na
+Naming/PredicateName:
+  Exclude:
+    - 'lib/red_amber/vector_functions.rb'
+
 # Necessary to test when range.end == -1
 Style/SlicingWithRange:
   Exclude:
