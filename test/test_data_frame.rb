@@ -32,8 +32,11 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal table, df.table
     end
 
-    test 'new from an Array' do
-      # assert_equal
+    test 'new from schema and Array' do
+      expected = RedAmber::DataFrame.new(x: [1, 2, 3])
+      schema = { x: :uint8 }
+      array = [[1], [2], [3]]
+      assert_equal expected, RedAmber::DataFrame.new(schema, array)
     end
 
     test 'new from a Rover::DataFrame' do |(h, d)|
