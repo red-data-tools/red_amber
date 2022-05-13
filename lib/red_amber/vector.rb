@@ -27,8 +27,20 @@ module RedAmber
       @data.to_a.inspect
     end
 
-    def inspect
-      format "#<#{self.class}(:#{type}, size=#{size}):0x%016x>\n#{self}", object_id
+    def inspect(limit: 80)
+      sio = StringIO.new << '['
+      to_a.each_with_object(sio).with_index do |(e, s), i|
+        next_str = "#{s.size > 1 ? ', ' : ''}#{e.inspect}"
+        if (s.size + next_str.size) < limit
+          s << next_str
+        else
+          s << ', ... ' if i < size
+          break
+        end
+      end
+      sio << ']'
+
+      format "#<#{self.class}(:#{type}, size=#{size}):0x%016x>\n%s\n", object_id, sio.string
     end
 
     def values
