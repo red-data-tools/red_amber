@@ -84,5 +84,10 @@ module RedAmber
     def n_nulls
       @data.n_nulls
     end
+    alias_method :n_nils, :n_nulls
+
+    def n_nans
+      numeric? ? is_nan.to_a.count(true) : 0
+    end
   end
 end

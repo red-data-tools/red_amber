@@ -29,14 +29,13 @@ module RedAmber
       stringio = StringIO.new # output string buffer
 
       # 1st row: show shape of the dataframe
-      r = pl(nrow)
-      c = pl(ncol)
+      vs = "Vector#{pl(ncol)}"
       stringio.puts \
-        "#{self.class} : #{nrow} observation#{r}(row#{r}) of #{ncol} variable#{c}(column#{c})"
+        "#{self.class} : #{nrow} x #{ncol} #{vs}"
 
       # 2nd row: show var counts by type
       type_groups = @table.columns.map { |column| type_group(column.data_type) }
-      stringio.puts "Variable#{pl(ncol)} : #{var_type_count(type_groups).join(', ')}"
+      stringio.puts "#{vs} : #{var_type_count(type_groups).join(', ')}"
 
       # 3rd row: print header of rows
       levels = vectors.map { |v| v.to_a.uniq.size }
@@ -51,23 +50,18 @@ module RedAmber
         type_group = type_groups[i - 1]
         data_tally = vector.tally
 
-        str =
-          case type_group
-          when :numeric, :string, :boolean
-            if data_tally.size <= tally_level && data_tally.size != nrow
-              data_tally.to_s
+        a = case type_group
+            when :numeric, :string, :boolean
+              if data_tally.size <= tally_level && data_tally.size != nrow
+                [data_tally.to_s]
+              else
+                [shorthand(vector, nrow, max_element)].concat na_string(vector)
+              end
             else
-              reduced_vector_presentation(vector, nrow, max_element)
+              shorthand(vector, nrow, max_element)
             end
-            #  c = vector.is_na.tally[1]   # release when `#is_na` impremented
-            #  str << " #{c} NaN#{pl(c)}" if c&.>(0)  # safely call c>0
-          else
-            reduced_vector_presentation(vector, nrow, max_element)
-          end
-
-        stringio.printf(header_string, i, ":#{key}", type, data_tally.size, str)
+        stringio.printf header_string, i, ":#{key}", type, data_tally.size, a.join(', ')
       end
-
       stringio.string
     end
 
@@ -107,11 +101,22 @@ module RedAmber
       a
     end
 
-    def reduced_vector_presentation(vector, nrow, max_element)
+    def shorthand(vector, nrow, max_element)
       a = vector.to_a.take(max_element)
       a.map! { |e| e.nil? ? 'nil' : e }
-      a << '...' if nrow > max_element
+      a << '... ' if nrow > max_element
       "[#{a.join(', ')}]"
+    end
+
+    def na_string(vector)
+      n_nan = vector.n_nans
+      n_nil = vector.n_nils
+      a = []
+      return a if (n_nan + n_nil).zero?
+
+      a << "#{n_nan} NaN#{pl(n_nan)}" unless n_nan.zero?
+      a << "#{n_nil} nil#{pl(n_nil)}" unless n_nil.zero?
+      a
     end
   end
 end

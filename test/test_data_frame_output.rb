@@ -29,7 +29,7 @@ class DataFrameOutputTest < Test::Unit::TestCase
       assert_equal str, df.inspect
     end
 
-    def setup
+    setup do
       hash = { integer: [1, 2, 3, 4, 5, 6],
                string: %w[A A B C D E],
                boolean: [true, false, nil, true, false, nil] }
@@ -38,10 +38,10 @@ class DataFrameOutputTest < Test::Unit::TestCase
 
     test 'default' do
       str = <<~OUTPUT
-        RedAmber::DataFrame : 6 observations(rows) of 3 variables(columns)
-        Variables : 1 numeric, 1 string, 1 boolean
+        RedAmber::DataFrame : 6 x 3 Vectors
+        Vectors : 1 numeric, 1 string, 1 boolean
         # key      type   level data_preview
-        1 :integer uint8      6 [1, 2, 3, 4, 5, ...]
+        1 :integer uint8      6 [1, 2, 3, 4, 5, ... ]
         2 :string  string     5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
         3 :boolean bool       3 {true=>2, false=>2, nil=>2}
       OUTPUT
@@ -50,20 +50,20 @@ class DataFrameOutputTest < Test::Unit::TestCase
 
     test 'tally_level' do
       str = <<~OUTPUT
-        RedAmber::DataFrame : 6 observations(rows) of 3 variables(columns)
-        Variables : 1 numeric, 1 string, 1 boolean
+        RedAmber::DataFrame : 6 x 3 Vectors
+        Vectors : 1 numeric, 1 string, 1 boolean
         # key      type   level data_preview
-        1 :integer uint8      6 [1, 2, 3, 4, 5, ...]
-        2 :string  string     5 [A, A, B, C, D, ...]
-        3 :boolean bool       3 [true, false, nil, true, false, ...]
+        1 :integer uint8      6 [1, 2, 3, 4, 5, ... ]
+        2 :string  string     5 [A, A, B, C, D, ... ]
+        3 :boolean bool       3 [true, false, nil, true, false, ... ], 2 nils
       OUTPUT
       assert_equal str, @df.inspect(tally_level: 2)
     end
 
     test 'max_element' do
       str = <<~OUTPUT
-        RedAmber::DataFrame : 6 observations(rows) of 3 variables(columns)
-        Variables : 1 numeric, 1 string, 1 boolean
+        RedAmber::DataFrame : 6 x 3 Vectors
+        Vectors : 1 numeric, 1 string, 1 boolean
         # key      type   level data_preview
         1 :integer uint8      6 [1, 2, 3, 4, 5, 6]
         2 :string  string     5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
@@ -74,12 +74,12 @@ class DataFrameOutputTest < Test::Unit::TestCase
 
     test 'tally_level and max_element' do
       str = <<~OUTPUT
-        RedAmber::DataFrame : 6 observations(rows) of 3 variables(columns)
-        Variables : 1 numeric, 1 string, 1 boolean
+        RedAmber::DataFrame : 6 x 3 Vectors
+        Vectors : 1 numeric, 1 string, 1 boolean
         # key      type   level data_preview
         1 :integer uint8      6 [1, 2, 3, 4, 5, 6]
         2 :string  string     5 [A, A, B, C, D, E]
-        3 :boolean bool       3 [true, false, nil, true, false, nil]
+        3 :boolean bool       3 [true, false, nil, true, false, nil], 2 nils
       OUTPUT
       assert_equal str, @df.inspect(tally_level: 2, max_element: 6)
     end

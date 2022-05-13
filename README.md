@@ -132,15 +132,23 @@ Or install it yourself as:
   Shows some information about self in a transposed style.
 
 ```ruby
-hash = {a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3]}
-RedAmber::DataFrame.new(hash)
+require 'red_amber'
+require 'datasets-arrow'
+
+penguins = Datasets::Penguins.new.to_arrow
+RedAmber::DataFrame.new(penguins)
 # =>
-RedAmber::DataFrame : 3 observations(rows) of 3 variables(columns)
-Variables : 2 numeric, 1 string
-# key type   level data_preview
-1 :a  uint8      3 [1, 2, 3]
-2 :b  string     3 [A, B, C]
-3 :c  double     3 [1.0, 2.0, 3.0]
+RedAmber::DataFrame : 344 x 8 Vectors
+Vectors : 5 numeric, 3 strings
+# key                type   level data_preview
+1 :species           string     3 {"Adelie"=>152, "Chinstrap"=>68, "Gentoo"=>124}
+2 :island            string     3 {"Torgersen"=>52, "Biscoe"=>168, "Dream"=>124}
+3 :bill_length_mm    double   165 [39.1, 39.5, 40.3, nil, 36.7, ... ], 2 nils
+4 :bill_depth_mm     double    81 [18.7, 17.4, 18.0, nil, 19.3, ... ], 2 nils
+5 :flipper_length_mm uint8     56 [181, 186, 195, nil, 193, ... ], 2 nils
+6 :body_mass_g       uint16    95 [3750, 3800, 3250, nil, 3450, ... ], 2 nils
+7 :sex               string     3 {"male"=>168, "female"=>165, nil=>11}
+8 :year              uint16     3 {2007=>110, 2008=>114, 2009=>120}
 ```
 
   - tally_level: max level to use tally mode
@@ -151,7 +159,7 @@ Variables : 2 numeric, 1 string
 - [x] Select columns by `[]` as `[key]`, `[keys]`, `[keys[index]]`
   - Key in a Symbol: `df[:symbol]`
   - Key in a String: `df["string"]`
-  - Keys in an Array: `df[:symbol1`, `"string"`, `:symbol2`
+  - Keys in an Array: `df[:symbol1, "string", :symbol2]`
   - Keys in indeces: `df[df.keys[0]`, `df[df.keys[1,2]]`, `df[df.keys[1..]]`
   - Keys in a Range:
     A end-less Range can be used to represent keys.
@@ -160,8 +168,8 @@ hash = {a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3]}
 df = RedAmber::DataFrame.new(hash)
 df[:b..:c, "a"]
 # =>
-RedAmber::DataFrame : 3 observations(rows) of 3 variables(columns)
-Variables : 2 numeric, 1 string
+RedAmber::DataFrame : 3 x 3 Vectors
+Vectors : 2 numeric, 1 string
 # key type   level data_preview
 1 :b  string     3 [A, B, C]
 2 :c  double     3 [1.0, 2.0, 3.0]
@@ -258,7 +266,13 @@ Variables : 2 numeric, 1 string
 
 - [x] `tally`
 
-- [ ] `n_nulls`
+- [x] `n_nils`, `n_nans`
+
+  - `n_nulls` is an alias of `n_nils`
+
+- [x] `inspect(limit: 80)`
+
+  - `limit` sets size limit to display long array.
 
 ### Functions
 #### Unary aggregations: vector.func => Scalar
@@ -269,8 +283,7 @@ Variables : 2 numeric, 1 string
 | ✓ `any`     |  ✓  |     |     |       |
 | ✓ `approximate_median`| |  ✓  |     |     |
 | ✓ `count`         |  ✓  |  ✓  |  ✓  |     |
-| ✓ `count_distinct`|  ✓  |  ✓  |  ✓  |     |
-| ✓ `count_uniq`    |  ✓  |  ✓  |  ✓  |an alias of `count_distinct`|
+| ✓ `count_distinct`|  ✓  |  ✓  |  ✓  |alias `count_uniq`|
 |[ ] `index`   |     |     |     |       |
 | ✓ `max`     |  ✓  |  ✓  |  ✓  |       |
 | ✓ `mean`    |  ✓  |  ✓  |     |       |
@@ -318,9 +331,9 @@ Variables : 2 numeric, 1 string
 | ✓ `and_org   `    |  ✓  |     |     |`and` in Red Arrow|
 | ✓ `and_not`       |  ✓  |     |     |       |
 | ✓ `and_not_kleene`|  ✓  |     |     |       |
-|[ ] `bit_wise_and`  |     | (✓) |     |integer only|
-|[ ] `bit_wise_or`   |     | (✓) |     |integer only|
-|[ ] `bit_wise_xor`  |     | (✓) |     |integer only|
+| ✓ `bit_wise_and`  |     | (✓) |     |integer only|
+| ✓ `bit_wise_or`   |     | (✓) |     |integer only|
+| ✓ `bit_wise_xor`  |     | (✓) |     |integer only|
 | ✓ `divide`        |     |  ✓  |     | `/`   |
 | ✓ `equal`         |  ✓  |  ✓  |  ✓  |`==`, alias `eq`|
 | ✓ `greater`       |  ✓  |  ✓  |  ✓  |`>`, alias `gt`|
