@@ -171,7 +171,7 @@ df[:b..:c, "a"]
 RedAmber::DataFrame : 3 x 3 Vectors
 Vectors : 2 numeric, 1 string
 # key type   level data_preview
-1 :b  string     3 [A, B, C]
+1 :b  string     3 ["A", "B", "C"]
 2 :c  double     3 [1.0, 2.0, 3.0]
 3 :a  uint8      3 [1, 2, 3]
 ```
