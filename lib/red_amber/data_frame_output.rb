@@ -27,27 +27,30 @@ module RedAmber
 
       stringio = StringIO.new # output string buffer
 
+      tallys = vectors.map(&:tally)
+      levels = tallys.map(&:size)
+      type_groups = @table.columns.map { |column| type_group(column.data_type) }
+      quoted_keys = keys.map(&:inspect)
+      headers = { idx: '#', key: 'key', type: 'type', levels: 'level', data: 'data_preview' }
+      header_format = make_header_format(levels, headers, quoted_keys)
+
       # 1st row: show shape of the dataframe
       vs = "Vector#{pl(ncol)}"
       stringio.puts \
         "#{self.class} : #{nrow} x #{ncol} #{vs}"
 
       # 2nd row: show var counts by type
-      type_groups = @table.columns.map { |column| type_group(column.data_type) }
       stringio.puts "#{vs} : #{var_type_count(type_groups).join(', ')}"
 
       # 3rd row: print header of rows
-      levels = vectors.map { |v| v.to_a.uniq.size }
-      headers = { idx: '#', key: 'key', type: 'type', levels: 'level', data: 'data_preview' }
-      header_string = header_string(levels, headers)
-      stringio.printf(header_string, *headers.values)
+      stringio.printf header_format, *headers.values
 
-      # (4) show details for each column (vector)
+      # 4th row ~: show details for each column (vector)
       vectors.each.with_index do |vector, i|
-        key = keys[i].inspect
+        key = quoted_keys[i]
         type = types[i]
         type_group = type_groups[i]
-        data_tally = vector.tally
+        data_tally = tallys[i]
 
         a = case type_group
             when :numeric, :string, :boolean
@@ -59,7 +62,7 @@ module RedAmber
             else
               shorthand(vector, nrow, max_element)
             end
-        stringio.printf header_string, i + 1, key, type, data_tally.size, a.join(', ')
+        stringio.printf header_format, i + 1, key, type, data_tally.size, a.join(', ')
       end
       stringio.string
     end
@@ -70,10 +73,10 @@ module RedAmber
       num > 1 ? 's' : ''
     end
 
-    def header_string(levels, headers)
+    def make_header_format(levels, headers, quoted_keys)
       # find longest word to adjust column width
       w_idx = ncol.to_s.size
-      w_key = [keys.map { |k| k.inspect.size }.max, headers[:key].size].max
+      w_key = [quoted_keys.map(&:size).max, headers[:key].size].max
       w_type = [types.map(&:size).max, headers[:type].size].max
       w_row = [levels.map { |l| l.to_s.size }.max, headers[:levels].size].max
       "%-#{w_idx}s %-#{w_key}s %-#{w_type}s %#{w_row}s %s\n"

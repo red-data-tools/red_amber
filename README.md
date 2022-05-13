@@ -274,10 +274,6 @@ Vectors : 2 numeric, 1 string
 
   - `limit` sets size limit to display long array.
 
-- [ ] `inspect(limit: 80)`
-
-  - `limit` sets size limit to display long array.
-
 ### Functions
 #### Unary aggregations: vector.func => Scalar
 
