@@ -55,7 +55,7 @@ Layout/LineLength:
 Metrics/AbcSize:
   Max: 23
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 53
+    - 'lib/red_amber/data_frame_output.rb' # Max: 52
 
 # Max: 25
 Metrics/BlockLength:

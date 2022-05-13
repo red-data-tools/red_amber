@@ -83,5 +83,24 @@ class DataFrameOutputTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, @df.inspect(tally_level: 2, max_element: 6)
     end
+
+    test 'empty key and key with blank' do
+      df = RedAmber::DataFrame.new(
+        {
+          '': [1, 2],
+          '  ': [3, 4],
+          'a b': [5, 6],
+        }
+      )
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 2 x 3 Vectors
+        Vectors : 3 numeric
+        # key    type  level data_preview
+        1 :""    uint8     2 [1, 2]
+        2 :"  "  uint8     2 [3, 4]
+        3 :"a b" uint8     2 [5, 6]
+      OUTPUT
+      assert_equal str, df.inspect
+    end
   end
 end

@@ -19,10 +19,9 @@ module RedAmber
 
     # - tally_level: max level to use tally mode
     # - max_element: max element to show values in each row
-    # TODO: Is it better to change name other than `inspect` ?
-    # TODO: Add na count capability
-    # TODO: Fall back to inspect_raw when treating large dataset
-    # TODO: Refactor code to smaller methods
+    # - TODO: Is it better to change name other than `inspect` ?
+    # - TODO: Fall back to inspect_raw when treating large dataset
+    # - TODO: Refactor code to smaller methods
     def inspect(tally_level: 5, max_element: 5)
       return '#<RedAmber::DataFrame (empty)>' if empty?
 
@@ -44,10 +43,10 @@ module RedAmber
       stringio.printf(header_string, *headers.values)
 
       # (4) show details for each column (vector)
-      vectors.each.with_index(1) do |vector, i|
-        key = keys[i - 1]
-        type = types[i - 1]
-        type_group = type_groups[i - 1]
+      vectors.each.with_index do |vector, i|
+        key = keys[i].inspect
+        type = types[i]
+        type_group = type_groups[i]
         data_tally = vector.tally
 
         a = case type_group
@@ -60,7 +59,7 @@ module RedAmber
             else
               shorthand(vector, nrow, max_element)
             end
-        stringio.printf header_string, i, ":#{key}", type, data_tally.size, a.join(', ')
+        stringio.printf header_string, i + 1, key, type, data_tally.size, a.join(', ')
       end
       stringio.string
     end
@@ -74,7 +73,7 @@ module RedAmber
     def header_string(levels, headers)
       # find longest word to adjust column width
       w_idx = ncol.to_s.size
-      w_key = [keys.map(&:size).max + 1, headers[:key].size].max
+      w_key = [keys.map { |k| k.inspect.size }.max, headers[:key].size].max
       w_type = [types.map(&:size).max, headers[:type].size].max
       w_row = [levels.map { |l| l.to_s.size }.max, headers[:levels].size].max
       "%-#{w_idx}s %-#{w_key}s %-#{w_type}s %#{w_row}s %s\n"
