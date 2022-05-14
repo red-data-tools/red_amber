@@ -9,20 +9,29 @@ class VectorFunctionTest < Test::Unit::TestCase
   sub_test_case('unary aggregations') do
     setup do
       @boolean = Vector.new([true, true, nil])
+      @boolean2 = Vector.new([true, false, nil])
+      @boolean3 = Vector.new(Arrow::BooleanArray.new([nil, nil]))
       @integer = Vector.new([1, 2, 3])
+      @integer2 = Vector.new([1, 2, nil])
       @double = Vector.new([1.0, -2, 3])
+      @double2 = Vector.new([1, 0 / 0.0, -1 / 0.0, 1 / 0.0, nil, ''])
       @string = Vector.new(%w[A B A])
+      @string2 = Vector.new(['A', 'B', nil])
     end
 
     test '#all' do
       assert_true @boolean.all
+      assert_false @boolean.all(opts: { skip_nulls: false })
+      assert_false @boolean3.all
       assert_raise(Arrow::Error::NotImplemented) { @integer.all }
       assert_raise(Arrow::Error::NotImplemented) { @double.all }
       assert_raise(Arrow::Error::NotImplemented) { @string.all }
     end
 
     test '#any' do
-      assert_true @boolean.any
+      assert_true @boolean2.any
+      assert_true @boolean2.any(opts: { skip_nulls: false })
+      assert_false @boolean3.any
       assert_raise(Arrow::Error::NotImplemented) { @integer.any }
       assert_raise(Arrow::Error::NotImplemented) { @double.any }
       assert_raise(Arrow::Error::NotImplemented) { @string.any }
@@ -31,56 +40,94 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#approximate_median' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.approximate_median }
       assert_equal 2, @integer.approximate_median
+      assert_equal 1, @integer2.approximate_median
+      assert_equal 0.0, @integer2.approximate_median(opts: { skip_nulls: false })
       assert_equal 1, @double.approximate_median
+      assert_equal 0.5, @double2.approximate_median
+      assert_equal 0.0, @double2.approximate_median(opts: { skip_nulls: false })
       assert_raise(Arrow::Error::NotImplemented) { @string.approximate_median }
     end
 
     test '#count' do
       assert_equal 2, @boolean.count
+      assert_equal 2, @boolean.count(opts: { mode: :only_valid })
+      assert_equal 1, @boolean.count(opts: { mode: :only_null })
+      assert_equal 3, @boolean.count(opts: { mode: :all })
       assert_equal 3, @integer.count
+      assert_equal 2, @integer2.count(opts: { mode: :only_valid })
+      assert_equal 1, @integer2.count(opts: { mode: :only_null })
+      assert_equal 3, @integer2.count(opts: { mode: :all })
       assert_equal 3, @double.count
+      assert_equal 5, @double2.count(opts: { mode: :only_valid })
+      assert_equal 1, @double2.count(opts: { mode: :only_null })
+      assert_equal 6, @double2.count(opts: { mode: :all })
       assert_equal 3, @string.count
-    end
-
-    test '#count_distinct' do
-      assert_equal 1, @boolean.count_distinct
-      assert_equal 3, @integer.count_distinct
-      assert_equal 3, @double.count_distinct
-      assert_equal 2, @string.count_distinct
+      assert_equal 2, @string2.count(opts: { mode: :only_valid })
+      assert_equal 1, @string2.count(opts: { mode: :only_null })
+      assert_equal 3, @string2.count(opts: { mode: :all })
     end
 
     test '#count_uniq' do
       assert_equal 1, @boolean.count_uniq
+      assert_equal 1, @boolean.count_uniq(opts: { mode: :only_valid })
+      assert_equal 1, @boolean.count_uniq(opts: { mode: :only_null })
+      assert_equal 2, @boolean.count_uniq(opts: { mode: :all })
       assert_equal 3, @integer.count_uniq
+      assert_equal 2, @integer2.count_uniq(opts: { mode: :only_valid })
+      assert_equal 1, @integer2.count_uniq(opts: { mode: :only_null })
+      assert_equal 3, @integer2.count_uniq(opts: { mode: :all })
       assert_equal 3, @double.count_uniq
+      assert_equal 5, @double2.count_uniq(opts: { mode: :only_valid })
+      assert_equal 1, @double2.count_uniq(opts: { mode: :only_null })
+      assert_equal 6, @double2.count_uniq(opts: { mode: :all })
       assert_equal 2, @string.count_uniq
+      assert_equal 2, @string2.count_uniq(opts: { mode: :only_valid })
+      assert_equal 1, @string2.count_uniq(opts: { mode: :only_null })
+      assert_equal 3, @string2.count_uniq(opts: { mode: :all })
     end
 
     test '#max' do
       assert_equal true, @boolean.max
+      assert_equal false, @boolean.max(opts: { skip_nulls: false })
       assert_equal 3, @integer.max
+      assert_equal 0, @integer2.max(opts: { skip_nulls: false })
       assert_equal 3, @double.max
+      assert_equal Float::INFINITY, @double2.max
+      assert_equal 0.0, @double2.max(opts: { skip_nulls: false })
       assert_equal 'B', @string.max
+      assert_equal 'null', @string2.max(opts: { skip_nulls: false })
     end
 
     test '#mean' do
       assert_equal 1, @boolean.mean
+      assert_equal 0.0, @boolean.mean(opts: { skip_nulls: false })
       assert_equal 2, @integer.mean
+      assert_equal 0, @integer2.mean(opts: { skip_nulls: false })
       assert_equal 0.6666666666666666, @double.mean
+      assert_true @double2.mean.nan?
+      assert_equal 0.0, @double2.mean(opts: { skip_nulls: false })
       assert_raise(Arrow::Error::NotImplemented) { @string.mean }
     end
 
     test '#min' do
       assert_equal true, @boolean.min
+      assert_equal false, @boolean.min(opts: { skip_nulls: false })
       assert_equal 1, @integer.min
+      assert_equal 0, @integer2.min(opts: { skip_nulls: false })
       assert_equal(-2, @double.min)
+      assert_equal(-Float::INFINITY, @double2.min)
+      assert_equal 0.0, @double2.min(opts: { skip_nulls: false })
       assert_equal 'A', @string.min
+      assert_equal 'null', @string2.min(opts: { skip_nulls: false })
     end
 
     test '#product' do
       assert_equal 1, @boolean.product
+      assert_equal 0, @boolean.product(opts: { skip_nulls: false })
       assert_equal 6, @integer.product
+      assert_equal 0, @integer2.product(opts: { skip_nulls: false })
       assert_equal(-6, @double.product)
+      assert_equal 0.0, @double2.product(opts: { skip_nulls: false })
       assert_raise(Arrow::Error::NotImplemented) { @string.product }
     end
 
@@ -93,8 +140,13 @@ class VectorFunctionTest < Test::Unit::TestCase
 
     test '#sum' do
       assert_equal 2, @boolean.sum
+      assert_equal 0, @boolean.sum(opts: { skip_nulls: false })
       assert_equal 6, @integer.sum
+      assert_equal 3, @integer2.sum
+      assert_equal 0, @integer2.sum(opts: { skip_nulls: false })
       assert_equal 2, @double.sum
+      assert_true @double2.sum.nan?
+      assert_equal 0.0, @double2.sum(opts: { skip_nulls: false })
       assert_raise(Arrow::Error::NotImplemented) { @string.sum }
     end
 

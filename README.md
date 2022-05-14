@@ -280,23 +280,48 @@ Vectors : 2 numeric, 1 string
 
 | Method    |Boolean|Numeric|String|Options|Remarks|
 | ----------- | --- | --- | --- | --- | --- |
-|[ ]`all`     |  ✓  |     |     |[ ] ScalarAggregate|     |
-|[ ]`any`     |  ✓  |     |     |[ ] ScalarAggregate|     |
-|[ ]`approximate_median`|  |✓|  |[ ] ScalarAggregate|     |
-|[ ]`count`   |  ✓  |  ✓  |  ✓  |[ ] Count  |     |
-|[ ]`count_distinct`| ✓ | ✓ | ✓ |[ ] Count  |alias `count_uniq`|
-|[ ]`index`   |     |     |     |[ ] Index  |     |
-|[ ]`max`     |  ✓  |  ✓  |  ✓  |[ ] ScalarAggregate|     |
-|[ ]`mean`    |  ✓  |  ✓  |     |[ ] ScalarAggregate|     |
-|[ ]`min`     |  ✓  |  ✓  |  ✓  |[ ] ScalarAggregate|     |
-|[ ]`min_max` |     |     |     |[ ] ScalarAggregate|     |
-|[ ]`mode`    |     |     |     |[ ] Mode    |     |
-|[ ]`product` |  ✓  |  ✓  |     |[ ] ScalarAggregate|     |
-|[ ]`quantile`|     |     |     |[ ] Quantile|     |
+| ✓ `all`     |  ✓  |     |     | ✓ ScalarAggregate|     |
+| ✓ `any`     |  ✓  |     |     | ✓ ScalarAggregate|     |
+| ✓ `approximate_median`|  |✓|  | ✓ ScalarAggregate| alias `median`|
+| ✓ `count`   |  ✓  |  ✓  |  ✓  | ✓  Count  |     |
+| ✓ `count_distinct`| ✓ | ✓ | ✓ | ✓  Count  |alias `count_uniq`|
+|[ ]`index`   | [ ] | [ ] | [ ] |[ ] Index  |     |
+| ✓ `max`     |  ✓  |  ✓  |  ✓  | ✓ ScalarAggregate|     |
+| ✓ `mean`    |  ✓  |  ✓  |     | ✓ ScalarAggregate|     |
+| ✓ `min`     |  ✓  |  ✓  |  ✓  | ✓ ScalarAggregate|     |
+|[ ]`min_max` | [ ] | [ ] | [ ] |[ ] ScalarAggregate|     |
+|[ ]`mode`    |     | [ ] |     |[ ] Mode    |     |
+| ✓ `product` |  ✓  |  ✓  |     | ✓ ScalarAggregate|     |
+|[ ]`quantile`|     | [ ] |     |[ ] Quantile|     |
 |[ ]`stddev`  |     |  ✓  |     |[ ] Variance|     |
-|[ ]`sum`     |  ✓  |  ✓  |     |[ ] ScalarAggregate|     |
-|[ ]`tdigest` |     |     |     |[ ] TDigest |     |
+| ✓ `sum`     |  ✓  |  ✓  |     | ✓ ScalarAggregate|     |
+|[ ]`tdigest` |     | [ ] |     |[ ] TDigest |     |
 |[ ]`variance`|     |  ✓  |     |[ ] Variance|     |
+
+
+Options can be used as follows.
+See [document of c++ function](https://arrow.apache.org/docs/cpp/compute.html) for detail.
+
+```ruby
+double = RedAmber::Vector.new([1, 0/0.0, -1/0.0, 1/0.0, nil, ""])
+#=>
+#<RedAmber::Vector(:double, size=6):0x000000000000f910>
+[1.0, NaN, -Infinity, Infinity, nil, 0.0]
+
+double.count #=> 5
+double.count(opts: {mode: :only_valid}) #=> 5, default
+double.count(opts: {mode: :only_null}) #=> 1
+double.count(opts: {mode: :all}) #=> 6
+
+boolean = RedAmber::Vector.new([true, true, nil])
+#=>
+#<RedAmber::Vector(:boolean, size=3):0x000000000000f924>
+[true, true, nil]
+
+boolean.all #=> true
+boolean.all(opts: {skip_nulls: true}) #=> true
+boolean.all(opts: {skip_nulls: false}) #=> false
+```
 
 #### Unary element-wise: vector.func => vector
 

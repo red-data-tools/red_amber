@@ -19,6 +19,7 @@ module RedAmber
         take_out_scalar(output)
       end
     end
+    alias_method :median, :approximate_median
     alias_method :count_uniq, :count_distinct
 
     # option(s) required
