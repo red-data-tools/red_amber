@@ -14,7 +14,7 @@ module RedAmber
     unary_aggregations =
       %i[all any approximate_median count count_distinct max mean min product stddev sum variance]
     unary_aggregations.each do |function|
-      define_method(function) { exec_func(function, other: nil, options: { aggregate: true }) }
+      define_method(function) { |opts: nil| exec_func(function, options: opts, aggregate: true) }
     end
     alias_method :count_uniq, :count_distinct
 
@@ -31,7 +31,7 @@ module RedAmber
     unary_element_wise =
       %i[abs atan bit_wise_not ceil cos floor is_finite is_inf is_nan is_null is_valid sign sin tan trunc]
     unary_element_wise.each do |function|
-      define_method(function) { exec_func(function, other: nil, options: {}) }
+      define_method(function) { |opts: nil| exec_func(function, options: opts) }
     end
     alias_method :is_nil, :is_null
 
@@ -49,8 +49,8 @@ module RedAmber
       negate: '-@',
     }
     unary_element_wise_op.each do |function, operator|
-      define_method(function) { exec_func(function, other: nil, options: {}) }
-      define_method(operator) { exec_func(function, other: nil, options: {}) }
+      define_method(function) { |opts: nil| exec_func(function, options: opts) }
+      define_method(operator) { |opts: nil| exec_func(function, options: opts) }
     end
     alias_method :not, :invert
 
@@ -68,7 +68,7 @@ module RedAmber
     binary_element_wise =
       %i[atan2 and_not and_not_kleene bit_wise_and bit_wise_or bit_wise_xor]
     binary_element_wise.each do |function|
-      define_method(function) { |other| exec_func(function, other: other, options: {}) }
+      define_method(function) { |other, opts: nil| exec_func(function, other: other, options: opts) }
     end
 
     # [Logical binary element-wise]: vector.func(other) => vector
@@ -81,7 +81,7 @@ module RedAmber
       or_org: :or,
     }
     logical_binary_element_wise.each do |method, function|
-      define_method(method) { |other| exec_func(function, other: other, options: {}) }
+      define_method(method) { |other, opts: nil| exec_func(function, other: other, options: opts) }
     end
 
     # NaN support needed
@@ -111,8 +111,8 @@ module RedAmber
       not_equal: '!=',
     }
     binary_element_wise_op.each do |function, operator|
-      define_method(function) { |other| exec_func(function, other: other, options: {}) }
-      define_method(operator) { |other| exec_func(function, other: other, options: {}) }
+      define_method(function) { |other, opts: nil| exec_func(function, other: other, options: opts) }
+      define_method(operator) { |other, opts: nil| exec_func(function, other: other, options: opts) }
     end
     alias_method :eq, :equal
     alias_method :ge, :greater_equal
@@ -171,22 +171,22 @@ module RedAmber
 
     private # =======
 
-    def exec_func(function, other: nil, options: {})
+    def exec_func(function, other: nil, options: nil, aggregate: false)
       func = Arrow::Function.find(function)
       output =
         case other
         when nil
-          func.execute([data])
+          func.execute([data], options)
         when Arrow::Array, Arrow::ChunkedArray, Arrow::Scalar, Numeric
-          func.execute([data, other])
+          func.execute([data, other], options)
         when Vector
-          func.execute([data, other.data])
+          func.execute([data, other.data], options)
         when Rover::Vector
-          func.execute([data, other.to_a])
+          func.execute([data, other.to_a], options)
         else
           raise ArgumentError, "Operand is not supported: #{other.class}"
         end
-      options[:aggregate] ? output.value : Vector.new(output.value)
+      aggregate ? output.value : Vector.new(output.value)
     end
   end
 end

@@ -163,6 +163,7 @@ Vectors : 5 numeric, 3 strings
   - Keys in indeces: `df[df.keys[0]`, `df[df.keys[1,2]]`, `df[df.keys[1..]]`
   - Keys in a Range:
     A end-less Range can be used to represent keys.
+
 ```ruby
 hash = {a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3]}
 df = RedAmber::DataFrame.new(hash)
@@ -275,93 +276,93 @@ Vectors : 2 numeric, 1 string
   - `limit` sets size limit to display long array.
 
 ### Functions
-#### Unary aggregations: vector.func => Scalar
+#### Unary aggregations: vector.func => scalar
 
-| Method    |Boolean|Numeric|String|Remarks|
-| ------------ | --- | --- | --- | ----- |
-| ✓ `all`     |  ✓  |     |     |       |
-| ✓ `any`     |  ✓  |     |     |       |
-| ✓ `approximate_median`| |  ✓  |     |     |
-| ✓ `count`         |  ✓  |  ✓  |  ✓  |     |
-| ✓ `count_distinct`|  ✓  |  ✓  |  ✓  |alias `count_uniq`|
-|[ ] `index`   |     |     |     |       |
-| ✓ `max`     |  ✓  |  ✓  |  ✓  |       |
-| ✓ `mean`    |  ✓  |  ✓  |     |       |
-| ✓ `min`     |  ✓  |  ✓  |  ✓  |       |
-|[ ] `min_max` |     |     |     |       |
-|[ ] `mode`    |     |     |     |       |
-| ✓ `product` |  ✓  |  ✓  |     |       |
-|[ ] `quantile`|     |     |     |       |
-| ✓ `stddev`  |     |  ✓  |     |       |
-| ✓ `sum`     |  ✓  |  ✓  |     |       |
-|[ ] `tdigest` |     |     |     |       |
-| ✓ `variance`|     |  ✓  |     |       |
+| Method    |Boolean|Numeric|String|Options|Remarks|
+| ----------- | --- | --- | --- | --- | --- |
+|[ ]`all`     |  ✓  |     |     |[ ] ScalarAggregate|     |
+|[ ]`any`     |  ✓  |     |     |[ ] ScalarAggregate|     |
+|[ ]`approximate_median`|  |✓|  |[ ] ScalarAggregate|     |
+|[ ]`count`   |  ✓  |  ✓  |  ✓  |[ ] Count  |     |
+|[ ]`count_distinct`| ✓ | ✓ | ✓ |[ ] Count  |alias `count_uniq`|
+|[ ]`index`   |     |     |     |[ ] Index  |     |
+|[ ]`max`     |  ✓  |  ✓  |  ✓  |[ ] ScalarAggregate|     |
+|[ ]`mean`    |  ✓  |  ✓  |     |[ ] ScalarAggregate|     |
+|[ ]`min`     |  ✓  |  ✓  |  ✓  |[ ] ScalarAggregate|     |
+|[ ]`min_max` |     |     |     |[ ] ScalarAggregate|     |
+|[ ]`mode`    |     |     |     |[ ] Mode    |     |
+|[ ]`product` |  ✓  |  ✓  |     |[ ] ScalarAggregate|     |
+|[ ]`quantile`|     |     |     |[ ] Quantile|     |
+|[ ]`stddev`  |     |  ✓  |     |[ ] Variance|     |
+|[ ]`sum`     |  ✓  |  ✓  |     |[ ] ScalarAggregate|     |
+|[ ]`tdigest` |     |     |     |[ ] TDigest |     |
+|[ ]`variance`|     |  ✓  |     |[ ] Variance|     |
 
-#### Unary element-wise: vector.func => Vector
+#### Unary element-wise: vector.func => vector
 
-| Method    |Boolean|Numeric|String|Remarks|
-| ------------ | --- | --- | --- | ----- |
-| ✓ `-@`      |     |  ✓  |     |as `-vector`|
-| ✓ `negate`  |     |  ✓  |     |`-@`   |
-| ✓ `abs`     |     |  ✓  |     |       |
-|[ ] `acos`    |     | [ ] |     |       |
-|[ ] `asin`    |     | [ ] |     |       |
-| ✓ `atan`    |     |  ✓  |     |       |
-| ✓ `bit_wise_not`  |     | (✓) |     |integer only|
-|[ ] `ceil`    |     |  ✓  |     |       |
-| ✓ `cos`     |     |  ✓  |     |       |
-|[ ] `floor`   |     |  ✓  |     |       |
-| ✓ `invert`  |  ✓  |     |     |`!`, alias `not`|
-|[ ] `ln`      |     | [ ] |     |       |
-|[ ] `log10`   |     | [ ] |     |       |
-|[ ] `log1p`   |     | [ ] |     |       |
-|[ ] `log2`    |     | [ ] |     |       |
-| ✓ `sign`    |     |  ✓  |     |       |
-| ✓ `sin`     |     |  ✓  |     |       |
-| ✓ `tan`     |     |  ✓  |     |       |
-|[ ] `trunc`   |     |  ✓  |     |       |
+| Method    |Boolean|Numeric|String|Options|Remarks|
+| ------------ | --- | --- | --- | --- | ----- |
+| ✓ `-@`       |     |  ✓  |     |     |as `-vector`|
+| ✓ `negate`   |     |  ✓  |     |     |`-@`   |
+| ✓ `abs`      |     |  ✓  |     |     |       |
+|[ ]`acos`     |     | [ ] |     |     |       |
+|[ ]`asin`     |     | [ ] |     |     |       |
+| ✓ `atan`     |     |  ✓  |     |     |       |
+| ✓ `bit_wise_not`|  | (✓) |     |     |integer only|
+|[ ]`ceil`     |     |  ✓  |     |     |       |
+| ✓ `cos`      |     |  ✓  |     |     |       |
+|[ ]`floor`    |     |  ✓  |     |     |       |
+| ✓ `invert`   |  ✓  |     |     |     |`!`, alias `not`|
+|[ ]`ln`       |     | [ ] |     |     |       |
+|[ ]`log10`    |     | [ ] |     |     |       |
+|[ ]`log1p`    |     | [ ] |     |     |       |
+|[ ]`log2`     |     | [ ] |     |     |       |
+|[ ]`round`    |     |     |     |[ ] Round|       |
+|[ ]`round_to_multiple`| | [ ] | |[ ] RoundToMultiple|       |
+| ✓ `sign`     |     |  ✓  |     |     |       |
+| ✓ `sin`      |     |  ✓  |     |     |       |
+| ✓ `tan`      |     |  ✓  |     |     |       |
+|[ ]`trunc`    |     |  ✓  |     |     |       |
 
-#### Binary element-wise: vector.func(vector) => Vector
+#### Binary element-wise: vector.func(vector) => vector
 
-| Method          |Boolean|Numeric|String|Remarks|
-| ------------------ | --- | --- | --- | ----- |
-| ✓ `add`           |     |  ✓  |     | `+`   |
-| ✓ `atan2`         |     |  ✓  |     |       |
-| ✓ `and_kleene`    |  ✓  |     |     | `&`   |
-| ✓ `and_org   `    |  ✓  |     |     |`and` in Red Arrow|
-| ✓ `and_not`       |  ✓  |     |     |       |
-| ✓ `and_not_kleene`|  ✓  |     |     |       |
-| ✓ `bit_wise_and`  |     | (✓) |     |integer only|
-| ✓ `bit_wise_or`   |     | (✓) |     |integer only|
-| ✓ `bit_wise_xor`  |     | (✓) |     |integer only|
-| ✓ `divide`        |     |  ✓  |     | `/`   |
-| ✓ `equal`         |  ✓  |  ✓  |  ✓  |`==`, alias `eq`|
-| ✓ `greater`       |  ✓  |  ✓  |  ✓  |`>`, alias `gt`|
-| ✓ `greater_equal` |  ✓  |  ✓  |  ✓  |`>=`, alias `ge`|
-| ✓ `is_finite`     |     |  ✓  |     |      |
-| ✓ `is_inf`        |     |  ✓  |     |      |
-| ✓ `is_na`         |  ✓  |  ✓  |  ✓  |      |
-| ✓ `is_nan`        |     |  ✓  |     |      |
-| ✓ `is_nil`        |  ✓  |  ✓  |  ✓  |      |
-| ✓ `is_valid`      |  ✓  |  ✓  |  ✓  |      |
-| ✓ `less`          |  ✓  |  ✓  |  ✓  |`<`, alias `lt`|
-| ✓ `less_equal`    |  ✓  |  ✓  |  ✓  |`<=`, alias `le`|
-|[ ] `logb`          |     | [ ] |     |       |
-|[ ] `mod`           |     | [ ] |     | `%`   |
-| ✓ `multiply`      |     |  ✓  |     | `*`   |
-| ✓ `not_equal`     |  ✓  |  ✓  |  ✓  |`!=`, alias `ne`|
-| ✓ `or_kleene`     |  ✓  |     |     | `\|`   |
-| ✓ `or_org`        |  ✓  |     |     |`or` in Red Arrow|
-| ✓ `power`         |     |  ✓  |     | `**`  |
-| ✓ `subtract`      |     |  ✓  |     | `-`   |
-| ✓ `shift_left`    |     | (✓) |     |`<<`, integer only|
-| ✓ `shift_right`   |     | (✓) |     |`>>`, integer only|
-| ✓ `xor`           |  ✓  |     |     | `^`   |
+| Method       |Boolean|Numeric|String|Options|Remarks|
+| ----------------- | --- | --- | --- | --- | ----- |
+| ✓ `add`           |     |  ✓  |     |     | `+`   |
+| ✓ `atan2`         |     |  ✓  |     |     |       |
+| ✓ `and_kleene`    |  ✓  |     |     |     | `&`   |
+| ✓ `and_org   `    |  ✓  |     |     |     |`and` in Red Arrow|
+| ✓ `and_not`       |  ✓  |     |     |     |       |
+| ✓ `and_not_kleene`|  ✓  |     |     |     |       |
+| ✓ `bit_wise_and`  |     | (✓) |     |     |integer only|
+| ✓ `bit_wise_or`   |     | (✓) |     |     |integer only|
+| ✓ `bit_wise_xor`  |     | (✓) |     |     |integer only|
+| ✓ `divide`        |     |  ✓  |     |     | `/`   |
+| ✓ `equal`         |  ✓  |  ✓  |  ✓  |     |`==`, alias `eq`|
+| ✓ `greater`       |  ✓  |  ✓  |  ✓  |     |`>`, alias `gt`|
+| ✓ `greater_equal` |  ✓  |  ✓  |  ✓  |     |`>=`, alias `ge`|
+| ✓ `is_finite`     |     |  ✓  |     |     |       |
+| ✓ `is_inf`        |     |  ✓  |     |     |       |
+| ✓ `is_na`         |  ✓  |  ✓  |  ✓  |     |       |
+| ✓ `is_nan`        |     |  ✓  |     |     |       |
+|[ ]`is_nil`        |  ✓  |  ✓  |  ✓  |[ ] Null|alias `is_null`|
+| ✓ `is_valid`      |  ✓  |  ✓  |  ✓  |     |       |
+| ✓ `less`          |  ✓  |  ✓  |  ✓  |     |`<`, alias `lt`|
+| ✓ `less_equal`    |  ✓  |  ✓  |  ✓  |     |`<=`, alias `le`|
+|[ ]`logb`          |     | [ ] |     |     |       |
+|[ ]`mod`           |     | [ ] |     |     | `%`   |
+| ✓ `multiply`      |     |  ✓  |     |     | `*`   |
+| ✓ `not_equal`     |  ✓  |  ✓  |  ✓  |     |`!=`, alias `ne`|
+| ✓ `or_kleene`     |  ✓  |     |     |     | `\|`  |
+| ✓ `or_org`        |  ✓  |     |     |     |`or` in Red Arrow|
+| ✓ `power`         |     |  ✓  |     |     | `**`  |
+| ✓ `subtract`      |     |  ✓  |     |     | `-`   |
+| ✓ `shift_left`    |     | (✓) |     |     |`<<`, integer only|
+| ✓ `shift_right`   |     | (✓) |     |     |`>>`, integer only|
+| ✓ `xor`           |  ✓  |     |     |     | `^`   |
 
 ##### (Not impremented)
-- [ ] round, round_to_multiple
 - [ ] sort, sort_index
-- [ ] minmax, var, median, quantile
 - [ ] argmin, argmax
 - [ ] (array functions)
 - [ ] (strings functions)
