@@ -15,14 +15,14 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
 
     test '#all' do
-      assert_true @boolean.all.value
+      assert_true @boolean.all
       assert_raise(Arrow::Error::NotImplemented) { @integer.all }
       assert_raise(Arrow::Error::NotImplemented) { @double.all }
       assert_raise(Arrow::Error::NotImplemented) { @string.all }
     end
 
     test '#any' do
-      assert_true @boolean.any.value
+      assert_true @boolean.any
       assert_raise(Arrow::Error::NotImplemented) { @integer.any }
       assert_raise(Arrow::Error::NotImplemented) { @double.any }
       assert_raise(Arrow::Error::NotImplemented) { @string.any }
@@ -30,78 +30,78 @@ class VectorFunctionTest < Test::Unit::TestCase
 
     test '#approximate_median' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.approximate_median }
-      assert_equal 2, @integer.approximate_median.value
-      assert_equal 1, @double.approximate_median.value
+      assert_equal 2, @integer.approximate_median
+      assert_equal 1, @double.approximate_median
       assert_raise(Arrow::Error::NotImplemented) { @string.approximate_median }
     end
 
     test '#count' do
-      assert_equal 2, @boolean.count.value
-      assert_equal 3, @integer.count.value
-      assert_equal 3, @double.count.value
-      assert_equal 3, @string.count.value
+      assert_equal 2, @boolean.count
+      assert_equal 3, @integer.count
+      assert_equal 3, @double.count
+      assert_equal 3, @string.count
     end
 
     test '#count_distinct' do
-      assert_equal 1, @boolean.count_distinct.value
-      assert_equal 3, @integer.count_distinct.value
-      assert_equal 3, @double.count_distinct.value
-      assert_equal 2, @string.count_distinct.value
+      assert_equal 1, @boolean.count_distinct
+      assert_equal 3, @integer.count_distinct
+      assert_equal 3, @double.count_distinct
+      assert_equal 2, @string.count_distinct
     end
 
     test '#count_uniq' do
-      assert_equal 1, @boolean.count_uniq.value
-      assert_equal 3, @integer.count_uniq.value
-      assert_equal 3, @double.count_uniq.value
-      assert_equal 2, @string.count_uniq.value
+      assert_equal 1, @boolean.count_uniq
+      assert_equal 3, @integer.count_uniq
+      assert_equal 3, @double.count_uniq
+      assert_equal 2, @string.count_uniq
     end
 
     test '#max' do
-      assert_equal true, @boolean.max.value
-      assert_equal 3, @integer.max.value
-      assert_equal 3, @double.max.value
-      assert_equal 'B', @string.max.to_s
+      assert_equal true, @boolean.max
+      assert_equal 3, @integer.max
+      assert_equal 3, @double.max
+      assert_equal 'B', @string.max
     end
 
     test '#mean' do
-      assert_equal 1, @boolean.mean.value
-      assert_equal 2, @integer.mean.value
-      assert_equal 0.6666666666666666, @double.mean.value
+      assert_equal 1, @boolean.mean
+      assert_equal 2, @integer.mean
+      assert_equal 0.6666666666666666, @double.mean
       assert_raise(Arrow::Error::NotImplemented) { @string.mean }
     end
 
     test '#min' do
-      assert_equal true, @boolean.min.value
-      assert_equal 1, @integer.min.value
-      assert_equal(-2, @double.min.value)
-      assert_equal 'A', @string.min.to_s
+      assert_equal true, @boolean.min
+      assert_equal 1, @integer.min
+      assert_equal(-2, @double.min)
+      assert_equal 'A', @string.min
     end
 
     test '#product' do
-      assert_equal 1, @boolean.product.value
-      assert_equal 6, @integer.product.value
-      assert_equal(-6, @double.product.value)
+      assert_equal 1, @boolean.product
+      assert_equal 6, @integer.product
+      assert_equal(-6, @double.product)
       assert_raise(Arrow::Error::NotImplemented) { @string.product }
     end
 
     test '#stddev' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.stddev }
-      assert_equal 0.816496580927726, @integer.stddev.value
-      assert_equal 2.0548046676563256, @double.stddev.value
+      assert_equal 0.816496580927726, @integer.stddev
+      assert_equal 2.0548046676563256, @double.stddev
       assert_raise(Arrow::Error::NotImplemented) { @string.stddev }
     end
 
     test '#sum' do
-      assert_equal 2, @boolean.sum.value
-      assert_equal 6, @integer.sum.value
-      assert_equal 2, @double.sum.value
+      assert_equal 2, @boolean.sum
+      assert_equal 6, @integer.sum
+      assert_equal 2, @double.sum
       assert_raise(Arrow::Error::NotImplemented) { @string.sum }
     end
 
     test '#variance' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.variance }
-      assert_equal 0.6666666666666666, @integer.variance.value
-      assert_equal 4.222222222222222, @double.variance.value
+      assert_equal 0.6666666666666666, @integer.variance
+      assert_equal 4.222222222222222, @double.variance
       assert_raise(Arrow::Error::NotImplemented) { @string.variance }
     end
   end

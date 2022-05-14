@@ -211,7 +211,8 @@ module RedAmber
     end
 
     def take_out_scalar(output)
-      output.value
+      output = output.value
+      output.is_a?(Arrow::StringScalar) ? output.to_s : output.value
     end
 
     def take_out_element_wise(output)
