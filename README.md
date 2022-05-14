@@ -45,7 +45,7 @@ Or install it yourself as:
 - [x] `new` from a Rover::DataFrame
   - `RedAmber::DataFrame.new(Rover::DataFrame.new(x: [1, 2, 3]))`
 
-- [ ] `load` (class method)
+- [x] `load` (class method)
 
      - [x] from a [`.arrow`, `.arrows`, `.csv`, `.csv.gz`, `.tsv`] file
        - `RedAmber::DataFrame.load("test/entity/with_header.csv")`
@@ -55,9 +55,16 @@ Or install it yourself as:
      - [x] from a URI
        - `RedAmber::DataFrame.load(URI("https://github.com/heronshoes/red_amber/blob/master/test/entity/with_header.csv"))`
 
-     - [ ] from a parquet file
+     - [x] from a Parquet file
 
-- [ ] `save` (instance method)
+       `red-parquet` gem is required.
+
+  ```ruby
+    require 'parquet'
+    dataframe = RedAmber::DataFrame.load("file.parquet")
+  ```
+
+- [x] `save` (instance method)
 
      - [x] to a [`.arrow`, `.arrows`, `.csv`, `.csv.gz`, `.tsv`] file
 
@@ -65,7 +72,14 @@ Or install it yourself as:
 
      - [x] to a URI
 
-     - [ ] to a parquet file
+     - [x] to a Parquet file
+
+       `red-parquet` gem is required.
+
+  ```ruby
+    require 'parquet'
+    dataframe.save("file.parquet")
+  ```
 
 ### Properties
 
@@ -300,7 +314,7 @@ Vectors : 2 numeric, 1 string
 
 
 Options can be used as follows.
-See [document of c++ function](https://arrow.apache.org/docs/cpp/compute.html) for detail.
+See the [document of C++ function](https://arrow.apache.org/docs/cpp/compute.html) for detail.
 
 ```ruby
 double = RedAmber::Vector.new([1, 0/0.0, -1/0.0, 1/0.0, nil, ""])
@@ -342,7 +356,7 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 |[ ]`log10`    |     | [ ] |     |     |       |
 |[ ]`log1p`    |     | [ ] |     |     |       |
 |[ ]`log2`     |     | [ ] |     |     |       |
-|[ ]`round`    |     |     |     |[ ] Round|       |
+|[ ]`round`    |     | [ ] |     |[ ] Round|       |
 |[ ]`round_to_multiple`| | [ ] | |[ ] RoundToMultiple|       |
 | ✓ `sign`     |     |  ✓  |     |     |       |
 | ✓ `sin`      |     |  ✓  |     |     |       |
