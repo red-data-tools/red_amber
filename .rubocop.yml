@@ -79,6 +79,12 @@ Metrics/MethodLength:
   Exclude:
     - 'lib/red_amber/data_frame_output.rb' # Max: 31
 
+# Max: 100
+Metrics/ModuleLength:
+  Max: 100
+  Exclude:
+    - 'lib/red_amber/vector_functions.rb' # Max: 114
+
 # Max: 8
 Metrics/PerceivedComplexity:
   Max: 11

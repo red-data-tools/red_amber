@@ -14,7 +14,10 @@ module RedAmber
     unary_aggregations =
       %i[all any approximate_median count count_distinct max mean min product stddev sum variance]
     unary_aggregations.each do |function|
-      define_method(function) { |opts: nil| exec_func(function, options: opts, aggregate: true) }
+      define_method(function) do |opts: nil|
+        output = exec_func_unary(function, options: opts)
+        take_out_scalar(output)
+      end
     end
     alias_method :count_uniq, :count_distinct
 
@@ -31,16 +34,15 @@ module RedAmber
     unary_element_wise =
       %i[abs atan bit_wise_not ceil cos floor is_finite is_inf is_nan is_null is_valid sign sin tan trunc]
     unary_element_wise.each do |function|
-      define_method(function) { |opts: nil| exec_func(function, options: opts) }
+      define_method(function) do |opts: nil|
+        output = exec_func_unary(function, options: opts)
+        take_out_element_wise(output)
+      end
     end
     alias_method :is_nil, :is_null
 
     def is_na
-      if numeric?
-        is_nil | is_nan
-      else
-        is_nil
-      end
+      numeric? ? (is_nil | is_nan) : is_nil
     end
 
     # [Unary element-wise with operator]: vector.func => vector, op vector
@@ -49,8 +51,15 @@ module RedAmber
       negate: '-@',
     }
     unary_element_wise_op.each do |function, operator|
-      define_method(function) { |opts: nil| exec_func(function, options: opts) }
-      define_method(operator) { |opts: nil| exec_func(function, options: opts) }
+      define_method(function) do |opts: nil|
+        output = exec_func_unary(function, options: opts)
+        take_out_element_wise(output)
+      end
+
+      define_method(operator) do |opts: nil|
+        output = exec_func_unary(function, options: opts)
+        take_out_element_wise(output)
+      end
     end
     alias_method :not, :invert
 
@@ -68,7 +77,10 @@ module RedAmber
     binary_element_wise =
       %i[atan2 and_not and_not_kleene bit_wise_and bit_wise_or bit_wise_xor]
     binary_element_wise.each do |function|
-      define_method(function) { |other, opts: nil| exec_func(function, other: other, options: opts) }
+      define_method(function) do |other, opts: nil|
+        output = exec_func_binary(function, other, options: opts)
+        take_out_element_wise(output)
+      end
     end
 
     # [Logical binary element-wise]: vector.func(other) => vector
@@ -81,7 +93,10 @@ module RedAmber
       or_org: :or,
     }
     logical_binary_element_wise.each do |method, function|
-      define_method(method) { |other, opts: nil| exec_func(function, other: other, options: opts) }
+      define_method(method) do |other, opts: nil|
+        output = exec_func_binary(function, other, options: opts)
+        take_out_element_wise(output)
+      end
     end
 
     # NaN support needed
@@ -111,8 +126,15 @@ module RedAmber
       not_equal: '!=',
     }
     binary_element_wise_op.each do |function, operator|
-      define_method(function) { |other, opts: nil| exec_func(function, other: other, options: opts) }
-      define_method(operator) { |other, opts: nil| exec_func(function, other: other, options: opts) }
+      define_method(function) do |other, opts: nil|
+        output = exec_func_binary(function, other, options: opts)
+        take_out_element_wise(output)
+      end
+
+      define_method(operator) do |other, opts: nil|
+        output = exec_func_binary(function, other, options: opts)
+        take_out_element_wise(output)
+      end
     end
     alias_method :eq, :equal
     alias_method :ge, :greater_equal
@@ -171,22 +193,29 @@ module RedAmber
 
     private # =======
 
-    def exec_func(function, other: nil, options: nil, aggregate: false)
+    def exec_func_unary(function, options: nil)
       func = Arrow::Function.find(function)
-      output =
-        case other
-        when nil
-          func.execute([data], options)
-        when Arrow::Array, Arrow::ChunkedArray, Arrow::Scalar, Numeric
-          func.execute([data, other], options)
-        when Vector
-          func.execute([data, other.data], options)
-        when Rover::Vector
-          func.execute([data, other.to_a], options)
-        else
-          raise ArgumentError, "Operand is not supported: #{other.class}"
-        end
-      aggregate ? output.value : Vector.new(output.value)
+      func.execute([data], options)
+    end
+
+    def exec_func_binary(function, other, options: nil)
+      func = Arrow::Function.find(function)
+      case other
+      when Vector
+        func.execute([data, other.data], options)
+      when Arrow::Array, Arrow::ChunkedArray, Arrow::Scalar, Array, Numeric
+        func.execute([data, other], options)
+      else
+        raise ArgumentError, "Operand is not supported: #{other.class}"
+      end
+    end
+
+    def take_out_scalar(output)
+      output.value
+    end
+
+    def take_out_element_wise(output)
+      Vector.new(output.value)
     end
   end
 end
