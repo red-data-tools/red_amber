@@ -45,7 +45,10 @@ module RedAmber
 
     def select_columns(keys)
       if keys.one?
-        Vector.new(@table[*keys].data)
+        t = @table[*keys]
+        raise DataFrameArgumentError, "Key is not exists #{keys}" unless t
+
+        Vector.new(t.data)
       else
         DataFrame.new(@table[keys])
       end
