@@ -17,15 +17,17 @@ module RedAmber
       format "#<#{self.class}:0x%016x>\n#{self}", object_id
     end
 
+    # - limit: max num of Vectors to show 
     # - tally_level: max level to use tally mode
     # - max_element: max element to show values in each row
     # - TODO: Is it better to change name other than `inspect` ?
     # - TODO: Fall back to inspect_raw when treating large dataset
     # - TODO: Refactor code to smaller methods
-    def inspect(tally_level: 5, max_element: 5)
+    def inspect(limit = 10, tally_level: 5, max_element: 5)
       return '#<RedAmber::DataFrame (empty)>' if empty?
 
-      stringio = StringIO.new # output string buffer
+      limit = ncol if [:all, -1].include? limit
+      sio = StringIO.new # output string buffer
 
       tallys = vectors.map(&:tally)
       levels = tallys.map(&:size)
@@ -36,22 +38,24 @@ module RedAmber
 
       # 1st row: show shape of the dataframe
       vs = "Vector#{pl(ncol)}"
-      stringio.puts \
-        "#{self.class} : #{nrow} x #{ncol} #{vs}"
+      sio.puts "#{self.class} : #{nrow} x #{ncol} #{vs}"
 
       # 2nd row: show var counts by type
-      stringio.puts "#{vs} : #{var_type_count(type_groups).join(', ')}"
+      sio.puts "#{vs} : #{var_type_count(type_groups).join(', ')}"
 
       # 3rd row: print header of rows
-      stringio.printf header_format, *headers.values
+      sio.printf header_format, *headers.values
 
       # 4th row ~: show details for each column (vector)
       vectors.each.with_index do |vector, i|
+        if i >= limit
+          sio << " ... #{ncol - i} more Vector#{pl(ncol - i)} ...\n"
+          break
+        end
         key = quoted_keys[i]
         type = types[i]
         type_group = type_groups[i]
         data_tally = tallys[i]
-
         a = case type_group
             when :numeric, :string, :boolean
               if data_tally.size <= tally_level && data_tally.size != nrow
@@ -62,9 +66,9 @@ module RedAmber
             else
               shorthand(vector, nrow, max_element)
             end
-        stringio.printf header_format, i + 1, key, type, data_tally.size, a.join(', ')
+        sio.printf header_format, i + 1, key, type, data_tally.size, a.join(', ')
       end
-      stringio.string
+      sio.string
     end
 
     private # =====

@@ -48,6 +48,30 @@ class DataFrameOutputTest < Test::Unit::TestCase
       assert_equal str, @df.inspect
     end
 
+    test ':all' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 6 x 3 Vectors
+        Vectors : 1 numeric, 1 string, 1 boolean
+        # key      type   level data_preview
+        1 :integer uint8      6 [1, 2, 3, 4, 5, ... ]
+        2 :string  string     5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
+        3 :boolean bool       3 {true=>2, false=>2, nil=>2}
+      OUTPUT
+      assert_equal str, @df.inspect(:all)
+    end
+
+    test 'limit = 2' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 6 x 3 Vectors
+        Vectors : 1 numeric, 1 string, 1 boolean
+        # key      type   level data_preview
+        1 :integer uint8      6 [1, 2, 3, 4, 5, ... ]
+        2 :string  string     5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
+         ... 1 more Vector ...
+      OUTPUT
+      assert_equal str, @df.inspect(2)
+    end
+
     test 'tally_level' do
       str = <<~OUTPUT
         RedAmber::DataFrame : 6 x 3 Vectors
