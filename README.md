@@ -34,35 +34,56 @@ Or install it yourself as:
 ### Constructors and saving
 
 - [x] `new` from a columnar Hash
-  - `RedAmber::DataFrame.new(x: [1, 2, 3])`
+
+  ```ruby
+    RedAmber::DataFrame.new(x: [1, 2, 3])
+  ```
 
 - [x] `new` from a schema (by Hash) and rows (by Array)
-  - `RedAmber::DataFrame.new({:x=>:uint8}, [[1], [2], [3]])`
+
+  ```ruby
+    RedAmber::DataFrame.new({:x=>:uint8}, [[1], [2], [3]])
+  ```
 
 - [x] `new` from an Arrow::Table
-  - `RedAmber::DataFrame.new(Arrow::Table.new(x: [1, 2, 3]))`
+
+
+  ```ruby
+    table = Arrow::Table.new(x: [1, 2, 3])
+    RedAmber::DataFrame.new(table)
+  ```
 
 - [x] `new` from a Rover::DataFrame
-  - `RedAmber::DataFrame.new(Rover::DataFrame.new(x: [1, 2, 3]))`
+
+
+  ```ruby
+    rover = Rover::DataFrame.new(x: [1, 2, 3])
+    RedAmber::DataFrame.new(rover)
+  ```
 
 - [x] `load` (class method)
 
      - [x] from a [`.arrow`, `.arrows`, `.csv`, `.csv.gz`, `.tsv`] file
-       - `RedAmber::DataFrame.load("test/entity/with_header.csv")`
+       
+    ```ruby
+      RedAmber::DataFrame.load("test/entity/with_header.csv")
+    ```
 
      - [x] from a string buffer
 
      - [x] from a URI
-       - `RedAmber::DataFrame.load(URI("https://github.com/heronshoes/red_amber/blob/master/test/entity/with_header.csv"))`
+
+    ```ruby
+      uri = URI("https://github.com/heronshoes/red_amber/blob/master/test/entity/with_header.csv")
+      RedAmber::DataFrame.load(uri)
+    ```
 
      - [x] from a Parquet file
 
-       `red-parquet` gem is required.
-
-  ```ruby
-    require 'parquet'
-    dataframe = RedAmber::DataFrame.load("file.parquet")
-  ```
+    ```ruby
+      require 'parquet'
+      dataframe = RedAmber::DataFrame.load("file.parquet")
+    ```
 
 - [x] `save` (instance method)
 
@@ -74,12 +95,10 @@ Or install it yourself as:
 
      - [x] to a Parquet file
 
-       `red-parquet` gem is required.
-
-  ```ruby
-    require 'parquet'
-    dataframe.save("file.parquet")
-  ```
+    ```ruby
+      require 'parquet'
+      dataframe.save("file.parquet")
+    ```
 
 ### Properties
 
