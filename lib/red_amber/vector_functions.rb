@@ -195,17 +195,15 @@ module RedAmber
     private # =======
 
     def exec_func_unary(function, options: nil)
-      func = Arrow::Function.find(function)
-      func.execute([data], options)
+      find(function).execute([data], options)
     end
 
     def exec_func_binary(function, other, options: nil)
-      func = Arrow::Function.find(function)
       case other
       when Vector
-        func.execute([data, other.data], options)
+        find(function).execute([data, other.data], options)
       when Arrow::Array, Arrow::ChunkedArray, Arrow::Scalar, Array, Numeric
-        func.execute([data, other], options)
+        find(function).execute([data, other], options)
       else
         raise ArgumentError, "Operand is not supported: #{other.class}"
       end
@@ -218,6 +216,12 @@ module RedAmber
 
     def take_out_element_wise(output)
       Vector.new(output.value)
+    end
+
+    module_function # ======
+
+    def find(function_name)
+      Arrow::Function.find(function_name)
     end
   end
 end
