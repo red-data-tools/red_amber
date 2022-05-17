@@ -6,7 +6,7 @@ module RedAmber
   class DataFrame
     # mix-in
     include DataFrameSelectable
-    include DataFrameOutput
+    include DataFrameDisplayable
 
     def initialize(*args)
       # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)

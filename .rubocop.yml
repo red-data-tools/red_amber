@@ -55,7 +55,7 @@ Layout/LineLength:
 Metrics/AbcSize:
   Max: 23
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 55
+    - 'lib/red_amber/data_frame_displayable.rb' # Max: 55
 
 # Max: 25
 Metrics/BlockLength:
@@ -77,7 +77,7 @@ Metrics/CyclomaticComplexity:
 Metrics/MethodLength:
   Max: 18
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 33
+    - 'lib/red_amber/data_frame_displayable.rb' # Max: 33
 
 # Max: 100
 Metrics/ModuleLength:

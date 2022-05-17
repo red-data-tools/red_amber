@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class DataFrameOutputTest < Test::Unit::TestCase
+class DataFrameDisplayableTest < Test::Unit::TestCase
   sub_test_case 'Properties' do
     hash = { x: [1, 2, 3], y: %w[A B C] }
     data('hash data',

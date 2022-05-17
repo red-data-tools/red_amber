@@ -3,7 +3,7 @@
 require 'arrow'
 require 'rover-df'
 
-require_relative 'red_amber/data_frame_output'
+require_relative 'red_amber/data_frame_displayable'
 require_relative 'red_amber/data_frame_selectable'
 require_relative 'red_amber/data_frame'
 require_relative 'red_amber/vector_functions'

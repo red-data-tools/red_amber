@@ -4,7 +4,7 @@ require 'stringio'
 
 module RedAmber
   # mix-ins for the class DataFrame
-  module DataFrameOutput
+  module DataFrameDisplayable
     def to_s
       @table.to_s
     end
