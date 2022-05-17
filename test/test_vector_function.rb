@@ -272,6 +272,57 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case('unary element-wise categorizations') do
+    setup do
+      @boolean = Vector.new([true, false, true, false, nil])
+      @integer = Vector.new([0, 1, -2, 3, nil])
+      @double = Vector.new([Math::PI, Float::INFINITY, -Float::INFINITY, Float::NAN, nil])
+      @string = Vector.new(['A', 'B', ' ', '', nil])
+    end
+
+    test '#is_finite' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.is_finite }
+      assert_equal_array [true, true, true, true, nil], @integer.is_finite
+      assert_equal_array [true, false, false, false, nil], @double.is_finite
+      assert_raise(Arrow::Error::NotImplemented) { @string.is_finite }
+    end
+
+    test '#is_inf' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.is_inf }
+      assert_equal_array [false, false, false, false, nil], @integer.is_inf
+      assert_equal_array [false, true, true, false, nil], @double.is_inf
+      assert_raise(Arrow::Error::NotImplemented) { @string.is_inf }
+    end
+
+    test '#is_na' do
+      assert_equal_array [false, false, false, false, true], @boolean.is_na
+      assert_equal_array [false, false, false, false, true], @integer.is_na
+      assert_equal_array [false, false, false, true, true], @double.is_na
+      assert_equal_array [false, false, false, false, true], @string.is_na
+    end
+
+    test '#is_nan' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.is_nan }
+      assert_equal_array [false, false, false, false, nil], @integer.is_nan
+      assert_equal_array [false, false, false, true, nil], @double.is_nan
+      assert_raise(Arrow::Error::NotImplemented) { @string.is_nan }
+    end
+
+    test '#is_nil' do
+      assert_equal_array [false, false, false, false, true], @boolean.is_nil
+      assert_equal_array [false, false, false, false, true], @integer.is_nil
+      assert_equal_array [false, false, false, false, true], @double.is_nil
+      assert_equal_array [false, false, false, false, true], @string.is_nil
+    end
+
+    test '#is_valid' do
+      assert_equal_array [true, true, true, true, false], @boolean.is_valid
+      assert_equal_array [true, true, true, true, false], @integer.is_valid
+      assert_equal_array [true, true, true, true, false], @double.is_valid
+      assert_equal_array [true, true, true, true, false], @string.is_valid
+    end
+  end
+
   sub_test_case('binary element-wise') do
     setup do
       @boolean = Vector.new([true, true, nil])
@@ -378,57 +429,6 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @integer.or_org(@integer) }
       assert_raise(Arrow::Error::NotImplemented) { @double.or_org(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.or_org(@string) }
-    end
-  end
-
-  sub_test_case('binary element-wise categorizations') do
-    setup do
-      @boolean = Vector.new([true, false, true, false, nil])
-      @integer = Vector.new([0, 1, -2, 3, nil])
-      @double = Vector.new([Math::PI, Float::INFINITY, -Float::INFINITY, Float::NAN, nil])
-      @string = Vector.new(['A', 'B', ' ', '', nil])
-    end
-
-    test '#is_finite' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.is_finite }
-      assert_equal_array [true, true, true, true, nil], @integer.is_finite
-      assert_equal_array [true, false, false, false, nil], @double.is_finite
-      assert_raise(Arrow::Error::NotImplemented) { @string.is_finite }
-    end
-
-    test '#is_inf' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.is_inf }
-      assert_equal_array [false, false, false, false, nil], @integer.is_inf
-      assert_equal_array [false, true, true, false, nil], @double.is_inf
-      assert_raise(Arrow::Error::NotImplemented) { @string.is_inf }
-    end
-
-    test '#is_na' do
-      assert_equal_array [false, false, false, false, true], @boolean.is_na
-      assert_equal_array [false, false, false, false, true], @integer.is_na
-      assert_equal_array [false, false, false, true, true], @double.is_na
-      assert_equal_array [false, false, false, false, true], @string.is_na
-    end
-
-    test '#is_nan' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.is_nan }
-      assert_equal_array [false, false, false, false, nil], @integer.is_nan
-      assert_equal_array [false, false, false, true, nil], @double.is_nan
-      assert_raise(Arrow::Error::NotImplemented) { @string.is_nan }
-    end
-
-    test '#is_nil' do
-      assert_equal_array [false, false, false, false, true], @boolean.is_nil
-      assert_equal_array [false, false, false, false, true], @integer.is_nil
-      assert_equal_array [false, false, false, false, true], @double.is_nil
-      assert_equal_array [false, false, false, false, true], @string.is_nil
-    end
-
-    test '#is_valid' do
-      assert_equal_array [true, true, true, true, false], @boolean.is_valid
-      assert_equal_array [true, true, true, true, false], @integer.is_valid
-      assert_equal_array [true, true, true, true, false], @double.is_valid
-      assert_equal_array [true, true, true, true, false], @string.is_valid
     end
   end
 
@@ -559,6 +559,14 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [true, true, true], @string.equal(@string)
     end
 
+    test '#equal(scalar)' do
+      assert_equal_array [true, true, nil], @boolean.equal(true)
+      assert_equal_array [false, false, nil], @boolean.equal(false)
+      assert_equal_array [true, false, false], @integer.equal(1)
+      assert_equal_array [true, false, false], @double.equal(1.0)
+      assert_equal_array [true, false, true], @string.equal('A')
+    end
+
     test '#eq(vector)' do
       assert_equal_array [true, true, nil], @boolean.eq(@boolean)
       assert_equal_array [true, true, true], @integer.eq(@integer)
@@ -620,6 +628,14 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [false, false, false], @integer.less(@integer)
       assert_equal_array [false, false, false], @double.less(@double)
       assert_equal_array [false, false, false], @string.less(@string)
+    end
+
+    test '#less(scalar)' do
+      assert_equal_array [false, false, nil], @boolean.less(true)
+      assert_equal_array [false, false, nil], @boolean.less(false)
+      assert_equal_array [true, false, false], @integer.less(2)
+      assert_equal_array [true, true, false], @double.less(2.0)
+      assert_equal_array [true, false, true], @string.less('B')
     end
 
     test '#lt(vector)' do
