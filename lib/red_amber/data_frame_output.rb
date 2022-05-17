@@ -13,21 +13,37 @@ module RedAmber
 
     # def summary() end
 
-    def inspect_raw
-      format "#<#{self.class}:0x%016x>\n#{self}", object_id
+    def inspect
+      "#<#{shape_str(with_id: true)}>\n#{dataframe_info(3)}"
     end
 
-    # - limit: max num of Vectors to show 
+    # - limit: max num of Vectors to show
     # - tally_level: max level to use tally mode
     # - max_element: max element to show values in each row
-    # - TODO: Is it better to change name other than `inspect` ?
-    # - TODO: Fall back to inspect_raw when treating large dataset
-    # - TODO: Refactor code to smaller methods
-    def inspect(limit = 10, tally_level: 5, max_element: 5)
-      return '#<RedAmber::DataFrame (empty)>' if empty?
+    def ls(limit = 10, tally_level: 5, max_element: 5)
+      puts ls_str(limit, tally_level: tally_level, max_element: max_element)
+    end
+
+    def ls_str(limit = 10, tally_level: 5, max_element: 5)
+      "#{shape_str}\n#{dataframe_info(limit, tally_level: tally_level, max_element: max_element)}"
+    end
+
+    private # =====
+
+    def pl(num)
+      num > 1 ? 's' : ''
+    end
+
+    def shape_str(with_id: false)
+      shape_info = empty? ? '(empty)' : "#{nrow} x #{ncol} Vector#{pl(ncol)}"
+      id = with_id ? format(', 0x%016x', object_id) : ''
+      "#{self.class} : #{shape_info}#{id}"
+    end
+
+    def dataframe_info(limit, tally_level: 5, max_element: 5)
+      return '' if empty?
 
       limit = ncol if [:all, -1].include? limit
-      sio = StringIO.new # output string buffer
 
       tallys = vectors.map(&:tally)
       levels = tallys.map(&:size)
@@ -36,17 +52,10 @@ module RedAmber
       headers = { idx: '#', key: 'key', type: 'type', levels: 'level', data: 'data_preview' }
       header_format = make_header_format(levels, headers, quoted_keys)
 
-      # 1st row: show shape of the dataframe
-      vs = "Vector#{pl(ncol)}"
-      sio.puts "#{self.class} : #{nrow} x #{ncol} #{vs}"
-
-      # 2nd row: show var counts by type
-      sio.puts "#{vs} : #{var_type_count(type_groups).join(', ')}"
-
-      # 3rd row: print header of rows
+      sio = StringIO.new # output string buffer
+      sio.puts "Vector#{pl(ncol)} : #{var_type_count(type_groups).join(', ')}"
       sio.printf header_format, *headers.values
 
-      # 4th row ~: show details for each column (vector)
       vectors.each.with_index do |vector, i|
         if i >= limit
           sio << " ... #{ncol - i} more Vector#{pl(ncol - i)} ...\n"
@@ -69,12 +78,6 @@ module RedAmber
         sio.printf header_format, i + 1, key, type, data_tally.size, a.join(', ')
       end
       sio.string
-    end
-
-    private # =====
-
-    def pl(num)
-      num > 1 ? 's' : ''
     end
 
     def make_header_format(levels, headers, quoted_keys)

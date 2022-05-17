@@ -160,16 +160,19 @@ Or install it yourself as:
 
   Returns a `Rover::DataFrame`.
 
-- [x] `inspect(tally_level: 5, max_element: 5)`
+- [x] `ls(limit = 10, tally_level: 5, max_element: 5)`
 
-  Shows some information about self in a transposed style.
+  - Shows some information about self in a transposed style.
+  - `ls_str` returns same info as String.
+
+- [x] `inspect`
 
 ```ruby
 require 'red_amber'
 require 'datasets-arrow'
 
 penguins = Datasets::Penguins.new.to_arrow
-RedAmber::DataFrame.new(penguins)
+puts RedAmber::DataFrame.new(penguins).ls
 # =>
 RedAmber::DataFrame : 344 x 8 Vectors
 Vectors : 5 numeric, 3 strings
@@ -202,11 +205,11 @@ hash = {a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3]}
 df = RedAmber::DataFrame.new(hash)
 df[:b..:c, "a"]
 # =>
-RedAmber::DataFrame : 3 x 3 Vectors
-Vectors : 2 numeric, 1 string
-# key type   level data_preview
-1 :b  string     3 ["A", "B", "C"]
-2 :c  double     3 [1.0, 2.0, 3.0]
+#<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000b02c>
+Vectors : 2 numeric, 1 string            
+# key type   level data_preview         
+1 :b  string     3 ["A", "B", "C"]      
+2 :c  double     3 [1.0, 2.0, 3.0]      
 3 :a  uint8      3 [1, 2, 3]
 ```
 

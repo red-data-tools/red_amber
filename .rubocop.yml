@@ -55,7 +55,7 @@ Layout/LineLength:
 Metrics/AbcSize:
   Max: 23
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 51
+    - 'lib/red_amber/data_frame_output.rb' # Max: 55
 
 # Max: 25
 Metrics/BlockLength:
@@ -71,13 +71,13 @@ Metrics/ClassLength:
 
 # Max: 7
 Metrics/CyclomaticComplexity:
-  Max: 10
+  Max: 12
 
 # Max: 10
 Metrics/MethodLength:
   Max: 18
   Exclude:
-    - 'lib/red_amber/data_frame_output.rb' # Max: 31
+    - 'lib/red_amber/data_frame_output.rb' # Max: 33
 
 # Max: 100
 Metrics/ModuleLength:
@@ -87,7 +87,7 @@ Metrics/ModuleLength:
 
 # Max: 8
 Metrics/PerceivedComplexity:
-  Max: 11
+  Max: 13
 
 # Necessary to define is_na
 Naming/PredicateName:
