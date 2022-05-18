@@ -325,7 +325,7 @@ Vectors : 2 numeric, 1 string
 | ✓ `max`     |  ✓  |  ✓  |  ✓  | ✓ ScalarAggregate|     |
 | ✓ `mean`    |  ✓  |  ✓  |     | ✓ ScalarAggregate|     |
 | ✓ `min`     |  ✓  |  ✓  |  ✓  | ✓ ScalarAggregate|     |
-|[ ]`min_max` | [ ] | [ ] | [ ] |[ ] ScalarAggregate|     |
+| ✓ `min_max` |  ✓  |  ✓  |  ✓  | ✓ ScalarAggregate|     |
 |[ ]`mode`    |     | [ ] |     |[ ] Mode    |     |
 | ✓ `product` |  ✓  |  ✓  |     | ✓ ScalarAggregate|     |
 |[ ]`quantile`|     | [ ] |     |[ ] Quantile|     |

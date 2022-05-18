@@ -121,6 +121,18 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal 'null', @string2.min(opts: { skip_nulls: false })
     end
 
+    test '#min_max' do
+      assert_equal [true, true], @boolean.min_max
+      assert_equal [false, false], @boolean.min_max(opts: { skip_nulls: false })
+      assert_equal [1, 3], @integer.min_max
+      assert_equal [0, 0], @integer2.min_max(opts: { skip_nulls: false })
+      assert_equal([-2, 3], @double.min_max)
+      assert_equal([-Float::INFINITY, Float::INFINITY], @double2.min_max)
+      assert_equal [0.0, 0.0], @double2.min_max(opts: { skip_nulls: false })
+      assert_equal %w[A B], @string.min_max
+      assert_equal %w[null null], @string2.min_max(opts: { skip_nulls: false })
+    end
+
     test '#product' do
       assert_equal 1, @boolean.product
       assert_equal 0, @boolean.product(opts: { skip_nulls: false })
