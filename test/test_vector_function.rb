@@ -121,6 +121,18 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal 'null', @string2.min(opts: { skip_nulls: false })
     end
 
+    test '#min_max' do
+      assert_equal [true, true], @boolean.min_max
+      assert_equal [false, false], @boolean.min_max(opts: { skip_nulls: false })
+      assert_equal [1, 3], @integer.min_max
+      assert_equal [0, 0], @integer2.min_max(opts: { skip_nulls: false })
+      assert_equal([-2, 3], @double.min_max)
+      assert_equal([-Float::INFINITY, Float::INFINITY], @double2.min_max)
+      assert_equal [0.0, 0.0], @double2.min_max(opts: { skip_nulls: false })
+      assert_equal %w[A B], @string.min_max
+      assert_equal %w[null null], @string2.min_max(opts: { skip_nulls: false })
+    end
+
     test '#product' do
       assert_equal 1, @boolean.product
       assert_equal 0, @boolean.product(opts: { skip_nulls: false })
@@ -134,8 +146,19 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#stddev' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.stddev }
       assert_equal 0.816496580927726, @integer.stddev
+      assert_equal 0.0, @integer2.stddev(opts: { skip_nulls: false })
       assert_equal 2.0548046676563256, @double.stddev
+      assert_true @double2.stddev.nan?
+      assert_equal 0.0, @double2.stddev(opts: { skip_nulls: false })
       assert_raise(Arrow::Error::NotImplemented) { @string.stddev }
+    end
+
+    test '#sd (unbiased version of stddev)' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.sd }
+      assert_equal 1.0, @integer.sd
+      assert_equal 2.5166114784235836, @double.sd
+      assert_true @double2.sd.nan?
+      assert_raise(Arrow::Error::NotImplemented) { @string.sd }
     end
 
     test '#sum' do
@@ -153,8 +176,19 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#variance' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.variance }
       assert_equal 0.6666666666666666, @integer.variance
+      assert_equal 0.0, @integer2.variance(opts: { skip_nulls: false })
       assert_equal 4.222222222222222, @double.variance
+      assert_true @double2.variance.nan?
+      assert_equal 0.0, @double2.variance(opts: { skip_nulls: false })
       assert_raise(Arrow::Error::NotImplemented) { @string.variance }
+    end
+
+    test '#var (==unbiased_variance)' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.var }
+      assert_equal 1.0, @integer.var
+      assert_equal 6.333333333333334, @double.var
+      assert_true @double2.var.nan?
+      assert_raise(Arrow::Error::NotImplemented) { @string.var }
     end
   end
 
@@ -692,6 +726,19 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [false, false, false], @integer != @integer
       assert_equal_array [false, false, false], @double != @double
       assert_equal_array [false, false, false], @string != @string
+    end
+  end
+
+  sub_test_case('module_function .arrow_doc') do
+    test 'add' do
+      expected = <<~OUT
+        add(x, y): Add the arguments element-wise
+        ---
+        Results will wrap around on integer overflow.
+        Use function \"add_checked\" if you want overflow
+        to return an error.
+      OUT
+      assert_equal expected.chomp, VectorFunctions.arrow_doc(:add).to_s
     end
   end
 end

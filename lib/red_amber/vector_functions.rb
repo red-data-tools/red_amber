@@ -12,21 +12,30 @@ module RedAmber
   module VectorFunctions
     # [Unary aggregations]: vector.func => scalar
     unary_aggregations =
-      %i[all any approximate_median count count_distinct max mean min product stddev sum variance]
+      %i[all any approximate_median count count_distinct max mean min min_max product stddev sum variance]
     unary_aggregations.each do |function|
       define_method(function) do |opts: nil|
-        output = exec_func_unary(function, options: opts)
-        take_out_scalar(output)
+        datum = exec_func_unary(function, options: opts)
+        take_out_scalar(datum)
       end
     end
     alias_method :median, :approximate_median
     alias_method :count_uniq, :count_distinct
 
+    def unbiased_variance
+      variance(opts: { ddof: 1 })
+    end
+    alias_method :var, :unbiased_variance
+
+    def sd
+      stddev(opts: { ddof: 1 })
+    end
+    alias_method :std, :sd
+
     # option(s) required
     # - index
 
     # Returns other than value
-    # - min_max
     # - mode
     # - quantile
     # - tdigest
@@ -36,8 +45,8 @@ module RedAmber
       %i[abs atan bit_wise_not ceil cos floor is_finite is_inf is_nan is_null is_valid sign sin tan trunc]
     unary_element_wise.each do |function|
       define_method(function) do |opts: nil|
-        output = exec_func_unary(function, options: opts)
-        take_out_element_wise(output)
+        datum = exec_func_unary(function, options: opts)
+        take_out_element_wise(datum)
       end
     end
     alias_method :is_nil, :is_null
@@ -53,13 +62,13 @@ module RedAmber
     }
     unary_element_wise_op.each do |function, operator|
       define_method(function) do |opts: nil|
-        output = exec_func_unary(function, options: opts)
-        take_out_element_wise(output)
+        datum = exec_func_unary(function, options: opts)
+        take_out_element_wise(datum)
       end
 
       define_method(operator) do |opts: nil|
-        output = exec_func_unary(function, options: opts)
-        take_out_element_wise(output)
+        datum = exec_func_unary(function, options: opts)
+        take_out_element_wise(datum)
       end
     end
     alias_method :not, :invert
@@ -79,8 +88,8 @@ module RedAmber
       %i[atan2 and_not and_not_kleene bit_wise_and bit_wise_or bit_wise_xor]
     binary_element_wise.each do |function|
       define_method(function) do |other, opts: nil|
-        output = exec_func_binary(function, other, options: opts)
-        take_out_element_wise(output)
+        datum = exec_func_binary(function, other, options: opts)
+        take_out_element_wise(datum)
       end
     end
 
@@ -95,8 +104,8 @@ module RedAmber
     }
     logical_binary_element_wise.each do |method, function|
       define_method(method) do |other, opts: nil|
-        output = exec_func_binary(function, other, options: opts)
-        take_out_element_wise(output)
+        datum = exec_func_binary(function, other, options: opts)
+        take_out_element_wise(datum)
       end
     end
 
@@ -128,13 +137,13 @@ module RedAmber
     }
     binary_element_wise_op.each do |function, operator|
       define_method(function) do |other, opts: nil|
-        output = exec_func_binary(function, other, options: opts)
-        take_out_element_wise(output)
+        datum = exec_func_binary(function, other, options: opts)
+        take_out_element_wise(datum)
       end
 
       define_method(operator) do |other, opts: nil|
-        output = exec_func_binary(function, other, options: opts)
-        take_out_element_wise(output)
+        datum = exec_func_binary(function, other, options: opts)
+        take_out_element_wise(datum)
       end
     end
     alias_method :eq, :equal
@@ -209,19 +218,31 @@ module RedAmber
       end
     end
 
-    def take_out_scalar(output)
-      output = output.value
-      output.is_a?(Arrow::StringScalar) ? output.to_s : output.value
+    def take_out_scalar(datum)
+      output = datum.value
+      case output
+      when Arrow::StringScalar then output.to_s
+      when Arrow::StructScalar
+        output.value.map { |s| s.is_a?(Arrow::StringScalar) ? s.to_s : s.value }
+      else
+        output.value
+      end
     end
 
-    def take_out_element_wise(output)
-      Vector.new(output.value)
+    def take_out_element_wise(datum)
+      Vector.new(datum.value)
     end
 
     module_function # ======
 
     def find(function_name)
       Arrow::Function.find(function_name)
+    end
+
+    # temporary API until RedAmber document prepared.
+    def arrow_doc(function_name)
+      f = find(function_name)
+      "#{f}\n#{'-' * function_name.size}\n#{f.doc.description}"
     end
   end
 end
