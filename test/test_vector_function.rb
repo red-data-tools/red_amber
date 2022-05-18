@@ -694,4 +694,17 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [false, false, false], @string != @string
     end
   end
+
+  sub_test_case('module_function .arrow_doc') do
+    test 'add' do
+      expected = <<~OUT
+        add(x, y): Add the arguments element-wise
+        ---
+        Results will wrap around on integer overflow.
+        Use function \"add_checked\" if you want overflow
+        to return an error.
+      OUT
+      assert_equal expected.chomp, VectorFunctions.arrow_doc(:add).to_s
+    end
+  end
 end
