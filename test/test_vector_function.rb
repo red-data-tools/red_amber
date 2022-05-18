@@ -146,8 +146,19 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#stddev' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.stddev }
       assert_equal 0.816496580927726, @integer.stddev
+      assert_equal 0.0, @integer2.stddev(opts: { skip_nulls: false })
       assert_equal 2.0548046676563256, @double.stddev
+      assert_true @double2.stddev.nan?
+      assert_equal 0.0, @double2.stddev(opts: { skip_nulls: false })
       assert_raise(Arrow::Error::NotImplemented) { @string.stddev }
+    end
+
+    test '#sd (unbiased version of stddev)' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.sd }
+      assert_equal 1.0, @integer.sd
+      assert_equal 2.5166114784235836, @double.sd
+      assert_true @double2.sd.nan?
+      assert_raise(Arrow::Error::NotImplemented) { @string.sd }
     end
 
     test '#sum' do
@@ -165,8 +176,19 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#variance' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.variance }
       assert_equal 0.6666666666666666, @integer.variance
+      assert_equal 0.0, @integer2.variance(opts: { skip_nulls: false })
       assert_equal 4.222222222222222, @double.variance
+      assert_true @double2.variance.nan?
+      assert_equal 0.0, @double2.variance(opts: { skip_nulls: false })
       assert_raise(Arrow::Error::NotImplemented) { @string.variance }
+    end
+
+    test '#var (==unbiased_variance)' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.var }
+      assert_equal 1.0, @integer.var
+      assert_equal 6.333333333333334, @double.var
+      assert_true @double2.var.nan?
+      assert_raise(Arrow::Error::NotImplemented) { @string.var }
     end
   end
 

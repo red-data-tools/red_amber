@@ -22,6 +22,16 @@ module RedAmber
     alias_method :median, :approximate_median
     alias_method :count_uniq, :count_distinct
 
+    def unbiased_variance
+      variance(opts: { ddof: 1 })
+    end
+    alias_method :var, :unbiased_variance
+
+    def sd
+      stddev(opts: { ddof: 1 })
+    end
+    alias_method :std, :sd
+
     # option(s) required
     # - index
 

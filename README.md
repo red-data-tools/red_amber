@@ -329,10 +329,12 @@ Vectors : 2 numeric, 1 string
 |[ ]`mode`    |     | [ ] |     |[ ] Mode    |     |
 | ✓ `product` |  ✓  |  ✓  |     | ✓ ScalarAggregate|     |
 |[ ]`quantile`|     | [ ] |     |[ ] Quantile|     |
-|[ ]`stddev`  |     |  ✓  |     |[ ] Variance|     |
+| ✓ `sd    `  |     |  ✓  |     |          |ddof: 1 at `stddev`|
+| ✓ `stddev`  |     |  ✓  |     | ✓ Variance|ddof: 0 by default|
 | ✓ `sum`     |  ✓  |  ✓  |     | ✓ ScalarAggregate|     |
 |[ ]`tdigest` |     | [ ] |     |[ ] TDigest |     |
-|[ ]`variance`|     |  ✓  |     |[ ] Variance|     |
+| ✓ `var    `|     |  ✓  |     |   |ddof: 1 at `variance`<br>alias `unbiased_variance`|
+| ✓ `variance`|     |  ✓  |     | ✓ Variance|ddof: 0 by default|
 
 
 Options can be used as follows.
