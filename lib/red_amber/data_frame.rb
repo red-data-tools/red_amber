@@ -44,36 +44,35 @@ module RedAmber
     end
 
     # Properties ===
-    def n_rows
+    def size
       @table.n_rows
     end
-    alias_method :nrow, :n_rows
-    alias_method :size, :n_rows
-    alias_method :length, :n_rows
+    alias_method :n_rows, :size
+    alias_method :n_obs, :size
 
-    def n_columns
+    def n_keys
       @table.n_columns
     end
-    alias_method :ncol, :n_columns
-    alias_method :width, :n_columns
+    alias_method :n_cols, :n_keys
+    alias_method :n_vars, :n_keys
 
     def shape
-      [n_rows, n_columns]
+      [size, n_keys]
     end
 
-    def column_names
+    def keys
       @table.columns.map { |column| column.name.to_sym }
     end
-    alias_method :keys, :column_names
-    alias_method :header, :column_names
+    alias_method :column_names, :keys
+    alias_method :var_names, :keys
 
     def key?(key)
-      column_names.include?(key.to_sym)
+      keys.include?(key.to_sym)
     end
     alias_method :has_key?, :key?
 
     def key_index(key)
-      column_names.find_index(key.to_sym)
+      keys.find_index(key.to_sym)
     end
     alias_method :find_index, :key_index
     alias_method :index, :key_index
