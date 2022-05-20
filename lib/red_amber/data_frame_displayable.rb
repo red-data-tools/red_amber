@@ -20,11 +20,11 @@ module RedAmber
     # - limit: max num of Vectors to show
     # - tally_level: max level to use tally mode
     # - max_element: max element to show values in each row
-    def ls(limit = 10, tally_level: 5, max_element: 5)
-      puts ls_str(limit, tally_level: tally_level, max_element: max_element)
+    def tdr(limit = 10, tally_level: 5, max_element: 5)
+      puts tdr_str(limit, tally_level: tally_level, max_element: max_element)
     end
 
-    def ls_str(limit = 10, tally_level: 5, max_element: 5)
+    def tdr_str(limit = 10, tally_level: 5, max_element: 5)
       "#{shape_str}\n#{dataframe_info(limit, tally_level: tally_level, max_element: max_element)}"
     end
 
