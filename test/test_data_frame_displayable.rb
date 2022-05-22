@@ -51,7 +51,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case 'ls_str' do
+  sub_test_case 'tdr_str' do
     setup do
       hash = { integer: [1, 2, 3, 4, 5, 6],
                double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
@@ -70,7 +70,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         3 :string  string     5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
         4 :boolean bool       3 {true=>2, false=>2, nil=>2}
       OUTPUT
-      assert_equal str, @df.ls_str(:all)
+      assert_equal str, @df.tdr_str(:all)
     end
 
     test 'limit = 2' do
@@ -82,7 +82,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         2 :double  double     6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
          ... 2 more Vectors ...
       OUTPUT
-      assert_equal str, @df.ls_str(2)
+      assert_equal str, @df.tdr_str(2)
     end
 
     test 'tally_level' do
@@ -95,7 +95,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         3 :string  string     5 ["A", "A", "B", "C", "D", ... ]
         4 :boolean bool       3 [true, false, nil, true, false, ... ], 2 nils
       OUTPUT
-      assert_equal str, @df.ls_str(tally_level: 2)
+      assert_equal str, @df.tdr_str(tally_level: 2)
     end
 
     test 'max_element' do
@@ -108,7 +108,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         3 :string  string     5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
         4 :boolean bool       3 {true=>2, false=>2, nil=>2}
       OUTPUT
-      assert_equal str, @df.ls_str(max_element: 6)
+      assert_equal str, @df.tdr_str(max_element: 6)
     end
 
     test 'tally_level and max_element' do
@@ -121,7 +121,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         3 :string  string     5 ["A", "A", "B", "C", "D", "E"]
         4 :boolean bool       3 [true, false, nil, true, false, nil], 2 nils
       OUTPUT
-      assert_equal str, @df.ls_str(tally_level: 2, max_element: 6)
+      assert_equal str, @df.tdr_str(tally_level: 2, max_element: 6)
     end
 
     test 'empty key and key with blank' do
@@ -140,7 +140,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         2 :"  "  uint8     2 [3, 4]
         3 :"a b" uint8     2 [5, 6]
       OUTPUT
-      assert_equal str, df.ls_str
+      assert_equal str, df.tdr_str
     end
   end
 end

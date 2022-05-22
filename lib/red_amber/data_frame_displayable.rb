@@ -20,11 +20,11 @@ module RedAmber
     # - limit: max num of Vectors to show
     # - tally_level: max level to use tally mode
     # - max_element: max element to show values in each row
-    def ls(limit = 10, tally_level: 5, max_element: 5)
-      puts ls_str(limit, tally_level: tally_level, max_element: max_element)
+    def tdr(limit = 10, tally_level: 5, max_element: 5)
+      puts tdr_str(limit, tally_level: tally_level, max_element: max_element)
     end
 
-    def ls_str(limit = 10, tally_level: 5, max_element: 5)
+    def tdr_str(limit = 10, tally_level: 5, max_element: 5)
       "#{shape_str}\n#{dataframe_info(limit, tally_level: tally_level, max_element: max_element)}"
     end
 
@@ -35,7 +35,7 @@ module RedAmber
     end
 
     def shape_str(with_id: false)
-      shape_info = empty? ? '(empty)' : "#{nrow} x #{ncol} Vector#{pl(ncol)}"
+      shape_info = empty? ? '(empty)' : "#{size} x #{n_keys} Vector#{pl(n_keys)}"
       id = with_id ? format(', 0x%016x', object_id) : ''
       "#{self.class} : #{shape_info}#{id}"
     end
@@ -43,7 +43,7 @@ module RedAmber
     def dataframe_info(limit, tally_level: 5, max_element: 5)
       return '' if empty?
 
-      limit = ncol if [:all, -1].include? limit
+      limit = n_keys if [:all, -1].include? limit
 
       tallys = vectors.map(&:tally)
       levels = tallys.map(&:size)
@@ -53,12 +53,12 @@ module RedAmber
       header_format = make_header_format(levels, headers, quoted_keys)
 
       sio = StringIO.new # output string buffer
-      sio.puts "Vector#{pl(ncol)} : #{var_type_count(type_groups).join(', ')}"
+      sio.puts "Vector#{pl(n_keys)} : #{var_type_count(type_groups).join(', ')}"
       sio.printf header_format, *headers.values
 
       vectors.each.with_index do |vector, i|
         if i >= limit
-          sio << " ... #{ncol - i} more Vector#{pl(ncol - i)} ...\n"
+          sio << " ... #{n_keys - i} more Vector#{pl(n_keys - i)} ...\n"
           break
         end
         key = quoted_keys[i]
@@ -67,13 +67,13 @@ module RedAmber
         data_tally = tallys[i]
         a = case type_group
             when :numeric, :string, :boolean
-              if data_tally.size <= tally_level && data_tally.size != nrow
+              if data_tally.size <= tally_level && data_tally.size != size
                 [data_tally.to_s]
               else
-                [shorthand(vector, nrow, max_element)].concat na_string(vector)
+                [shorthand(vector, size, max_element)].concat na_string(vector)
               end
             else
-              shorthand(vector, nrow, max_element)
+              shorthand(vector, size, max_element)
             end
         sio.printf header_format, i + 1, key, type, data_tally.size, a.join(', ')
       end
@@ -82,7 +82,7 @@ module RedAmber
 
     def make_header_format(levels, headers, quoted_keys)
       # find longest word to adjust column width
-      w_idx = ncol.to_s.size
+      w_idx = n_keys.to_s.size
       w_key = [quoted_keys.map(&:size).max, headers[:key].size].max
       w_type = [types.map(&:size).max, headers[:type].size].max
       w_row = [levels.map { |l| l.to_s.size }.max, headers[:levels].size].max
@@ -110,10 +110,10 @@ module RedAmber
       a
     end
 
-    def shorthand(vector, nrow, max_element)
+    def shorthand(vector, size, max_element)
       a = vector.to_a.take(max_element)
       a.map! { |e| e.nil? ? 'nil' : e.inspect }
-      a << '... ' if nrow > max_element
+      a << '... ' if size > max_element
       "[#{a.join(', ')}]"
     end
 

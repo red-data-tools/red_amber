@@ -106,29 +106,29 @@ Or install it yourself as:
 
   Reader of Arrow::Table object inside.
 
-- [x] `n_rows`, `nrow`, `size`, `length`
+- [x] `size`, `n_obs`, `n_rows`
   
-  Returns num of rows (data size).
+  Returns size of Vector (num of observations).
  
-- [x] `n_columns`, `ncol`, `width`
+- [x] `n_keys`, `n_vars`, `n_cols`,
   
-  Returns num of columns (num of vectors).
+  Returns num of keys (num of variables).
  
 - [x] `shape`
  
   Returns shape in an Array[n_rows, n_cols].
  
-- [x] `column_names`, `keys`
+- [x] `keys`, `var_names`, `column_names`
   
-  Returns num of column names by an Array.
+  Returns key names in an Array.
 
 - [x] `types`
   
-  Returns types of columns by an Array of Symbols.
+  Returns types of vectors in an Array of Symbols.
 
 - [x] `data_types`
 
-  Returns types of columns by an Array of `Arrow::DataType`.
+  Returns types of vector in an Array of `Arrow::DataType`.
 
 - [x] `vectors`
 

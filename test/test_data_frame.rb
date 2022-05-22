@@ -59,19 +59,17 @@ class DataFrameTest < Test::Unit::TestCase
          [{}, RedAmber::DataFrame.new, []],
          keep: true)
 
-    test 'n_rows' do
+    test 'size' do
       hash, df, = data
       size = hash.empty? ? 0 : hash.values.first.size
+      assert_equal size, df.size
       assert_equal size, df.n_rows
-      assert_equal size, df.nrow
-      assert_equal size, df.length
     end
 
-    test 'n_columns' do
+    test 'n_keys' do
       hash, df, = data
-      assert_equal hash.keys.size, df.n_columns
-      assert_equal hash.keys.size, df.ncol
-      assert_equal hash.keys.size, df.width
+      assert_equal hash.keys.size, df.n_keys
+      assert_equal hash.keys.size, df.n_cols
     end
 
     test 'empty?' do
