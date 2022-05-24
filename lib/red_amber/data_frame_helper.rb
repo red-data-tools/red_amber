@@ -37,5 +37,9 @@ module RedAmber
     def sym_or_str?(enum)
       enum.all? { |e| e.is_a?(Symbol) || e.is_a?(String) }
     end
+
+    def create_dataframe_from_vector(key, vector)
+      DataFrame.new(key => vector.data)
+    end
   end
 end
