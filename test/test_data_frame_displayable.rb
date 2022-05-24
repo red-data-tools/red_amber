@@ -41,10 +41,10 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       str = <<~OUTPUT
         #<RedAmber::DataFrame : 6 x 4 Vectors, #{format('0x%016x', @df.object_id)}>
         Vectors : 2 numeric, 1 string, 1 boolean
-        # key      type   level data_preview
-        1 :integer uint8      6 [1, 2, 3, 4, 5, ... ]
-        2 :double  double     6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
-        3 :string  string     5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
+        # key      type    level data_preview
+        1 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
+        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
+        3 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
          ... 1 more Vector ...
       OUTPUT
       assert_equal str, @df.inspect
@@ -64,11 +64,11 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       str = <<~OUTPUT
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
-        # key      type   level data_preview
-        1 :integer uint8      6 [1, 2, 3, 4, 5, ... ]
-        2 :double  double     6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
-        3 :string  string     5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
-        4 :boolean bool       3 {true=>2, false=>2, nil=>2}
+        # key      type    level data_preview
+        1 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
+        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
+        3 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
+        4 :boolean boolean     3 {true=>2, false=>2, nil=>2}
       OUTPUT
       assert_equal str, @df.tdr_str(:all)
     end
@@ -77,9 +77,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       str = <<~OUTPUT
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
-        # key      type   level data_preview
-        1 :integer uint8      6 [1, 2, 3, 4, 5, ... ]
-        2 :double  double     6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
+        # key      type    level data_preview
+        1 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
+        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
          ... 2 more Vectors ...
       OUTPUT
       assert_equal str, @df.tdr_str(2)
@@ -89,11 +89,11 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       str = <<~OUTPUT
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
-        # key      type   level data_preview
-        1 :integer uint8      6 [1, 2, 3, 4, 5, ... ]
-        2 :double  double     6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
-        3 :string  string     5 ["A", "A", "B", "C", "D", ... ]
-        4 :boolean bool       3 [true, false, nil, true, false, ... ], 2 nils
+        # key      type    level data_preview
+        1 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
+        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
+        3 :string  string      5 ["A", "A", "B", "C", "D", ... ]
+        4 :boolean boolean     3 [true, false, nil, true, false, ... ], 2 nils
       OUTPUT
       assert_equal str, @df.tdr_str(tally_level: 2)
     end
@@ -102,11 +102,11 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       str = <<~OUTPUT
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
-        # key      type   level data_preview
-        1 :integer uint8      6 [1, 2, 3, 4, 5, 6]
-        2 :double  double     6 [1.0, NaN, Infinity, -Infinity, nil, 0.0], 1 NaN, 1 nil
-        3 :string  string     5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
-        4 :boolean bool       3 {true=>2, false=>2, nil=>2}
+        # key      type    level data_preview
+        1 :integer uint8       6 [1, 2, 3, 4, 5, 6]
+        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, 0.0], 1 NaN, 1 nil
+        3 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
+        4 :boolean boolean     3 {true=>2, false=>2, nil=>2}
       OUTPUT
       assert_equal str, @df.tdr_str(max_element: 6)
     end
@@ -115,11 +115,11 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       str = <<~OUTPUT
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
-        # key      type   level data_preview
-        1 :integer uint8      6 [1, 2, 3, 4, 5, 6]
-        2 :double  double     6 [1.0, NaN, Infinity, -Infinity, nil, 0.0], 1 NaN, 1 nil
-        3 :string  string     5 ["A", "A", "B", "C", "D", "E"]
-        4 :boolean bool       3 [true, false, nil, true, false, nil], 2 nils
+        # key      type    level data_preview
+        1 :integer uint8       6 [1, 2, 3, 4, 5, 6]
+        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, 0.0], 1 NaN, 1 nil
+        3 :string  string      5 ["A", "A", "B", "C", "D", "E"]
+        4 :boolean boolean     3 [true, false, nil, true, false, nil], 2 nils
       OUTPUT
       assert_equal str, @df.tdr_str(tally_level: 2, max_element: 6)
     end
