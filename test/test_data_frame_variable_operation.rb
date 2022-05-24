@@ -32,7 +32,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
         4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
-      assert_equal str, @df.pick.tdr_str
+      assert_true @df.pick.empty? # pick nothing
       assert_equal str, @df.pick(@df.keys).tdr_str
 
       str = <<~OUTPUT
@@ -61,6 +61,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         # key   type    level data_preview
         1 :bool boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
+      assert_true @df.pick {}.empty? # pick nothing
       assert_equal str, @df.pick { :bool }.tdr_str
       assert_equal str, @df.pick { |d| d.keys.detect { |k| d[k].boolean? } }.tdr_str
 

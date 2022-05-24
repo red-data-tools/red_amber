@@ -12,7 +12,7 @@ module RedAmber
       end
       picker = [picker].flatten
 
-      return self if picker.empty?
+      return DataFrame.new if picker.empty? || picker == [nil]
 
       if picker.one?
         key = picker[0]
