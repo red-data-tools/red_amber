@@ -79,7 +79,7 @@ module RedAmber
 
     def types
       @table.columns.map do |column|
-        column.data_type.to_s.to_sym
+        column.data.value_type.nick.to_sym
       end
     end
 
