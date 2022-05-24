@@ -76,4 +76,61 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.pick { |d| d.keys.select { |k| d[k].numeric? } }.tdr_str
     end
   end
+
+  sub_test_case 'drop' do
+    test 'Empty dataframe' do
+      df = DataFrame.new
+      assert_true df.drop.empty?
+      assert_true df.drop(:key).empty?
+    end
+
+    test 'drop by arguments' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal @df, @df.drop # drop nothing
+      assert_equal str, @df.drop([]).tdr_str
+      assert_true @df.drop(@df.keys).empty?
+
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 2 Vectors
+        Vectors : 1 numeric, 1 boolean
+        # key    type    level data_preview
+        1 :index uint8       5 [0, 1, 2, 3, nil], 1 nil
+        2 :bool  boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal str, @df.drop(:float, :string).tdr_str
+      assert_equal str, @df.drop(%i[float string]).tdr_str
+    end
+
+    test 'drop by block' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 3 Vectors
+        Vectors : 2 numeric, 1 string
+        # key     type   level data_preview
+        1 :index  uint8      5 [0, 1, 2, 3, nil], 1 nil
+        2 :float  double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string string     5 ["A", "B", "C", "D", nil], 1 nil
+      OUTPUT
+      assert_equal(@df, @df.drop { nil }) # pick nothing
+      assert_equal str, @df.drop { :bool }.tdr_str
+      assert_equal str, @df.drop { |d| d.keys.detect { |k| d[k].boolean? } }.tdr_str
+
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 2 Vectors
+        Vectors : 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        2 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal str, @df.drop { %i[index float] }.tdr_str
+      assert_equal str, @df.drop { |d| d.keys.select { |k| d[k].numeric? } }.tdr_str
+    end
+  end
 end
