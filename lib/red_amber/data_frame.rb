@@ -5,8 +5,9 @@ module RedAmber
   #   @table   : holds Arrow::Table object
   class DataFrame
     # mix-in
-    include DataFrameSelectable
     include DataFrameDisplayable
+    include DataFrameHelper
+    include DataFrameSelectable
 
     def initialize(*args)
       # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
