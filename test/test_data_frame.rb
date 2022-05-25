@@ -44,7 +44,7 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal d, RedAmber::DataFrame.new(rover)
     end
 
-    test 'Select rows by invalid type' do
+    test 'Select observations by invalid type' do
       int32_array = Arrow::Int32Array.new([1, 2])
       assert_raise(RedAmber::DataFrameTypeError) { RedAmber::DataFrame.new(int32_array) }
     end
@@ -83,14 +83,14 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal expected, df.shape
     end
 
-    test 'column_names' do
+    test 'variable_names' do
       hash, df, = data
       hash_sym = hash.each_with_object({}) do |kv, h|
         k, v = kv
         h[k.to_sym] = v
       end
-      assert_equal hash_sym.keys, df.column_names
       assert_equal hash_sym.keys, df.keys
+      assert_equal hash_sym.keys, df.column_names
     end
 
     test 'key?' do

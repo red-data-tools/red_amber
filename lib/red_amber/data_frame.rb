@@ -5,8 +5,10 @@ module RedAmber
   #   @table   : holds Arrow::Table object
   class DataFrame
     # mix-in
-    include DataFrameSelectable
     include DataFrameDisplayable
+    include DataFrameHelper
+    include DataFrameSelectable
+    include DataFrameVariableOperation
 
     def initialize(*args)
       # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
@@ -94,6 +96,11 @@ module RedAmber
         Vector.new(column.data)
       end
     end
+
+    def indexes
+      0...size
+    end
+    alias_method :indices, :indexes
 
     def to_h
       @table.columns.each_with_object({}) do |column, result|
