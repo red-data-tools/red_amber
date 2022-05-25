@@ -61,8 +61,35 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { df[0.5] }
     end
 
-    test 'Select observations by invalid type' do
+    test 'Select rows by invalid data type' do
+      assert_raise(DataFrameArgumentError) { df[Time.new] }
+    end
+
+    test 'Select rows by invalid length' do
       assert_raise(DataFrameArgumentError) { df[Arrow::Int32Array.new([1, 2])] }
+      assert_raise(Arrow::Error::Invalid) { df[Arrow::BooleanArray.new([true, false])] }
+    end
+
+    test 'Select observations by a boolean' do
+      hash = { x: [1, 2], y: %w[A B] }
+      assert_equal hash, df[true, true, false].to_h
+      assert_equal hash, df[true, true, nil].to_h
+      assert_equal hash, df[[true, true, false]].to_h
+      assert_equal hash, df[Arrow::BooleanArray.new([true, true, false])].to_h
+    end
+
+    test 'Select observations by a Vector' do
+      hash = { x: [1, 2], y: %w[A B] }
+      assert_equal hash, df[Vector.new([true, true, false])].to_h
+      assert_equal hash, df[Vector.new([true, true, nil])].to_h
+      assert_equal hash, df[df[:x] < 3].to_h
+    end
+
+    test 'Select observations by a invalid Array or Vector' do
+      hash = { x: [1, 2], y: %w[A B] }
+      assert_raise(DataFrameArgumentError) { df[1, 2, nil] }
+      assert_raise(DataFrameArgumentError) { df[Arrow::Int32Array.new([1, 2, nil])] }
+      assert_equal hash, df[Vector.new([1, 2, nil])].to_h
     end
 
     test 'Select empty' do

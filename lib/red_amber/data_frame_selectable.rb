@@ -9,10 +9,26 @@ module RedAmber
       raise DataFrameArgumentError, 'Empty dataframe' if empty?
       raise DataFrameArgumentError, 'Empty argument' if args.empty?
 
+      if args.one?
+        case args[0]
+        when Vector
+          return select_obs_by_boolean(Arrow::BooleanArray.new(args[0].data))
+        when Arrow::BooleanArray
+          return select_obs_by_boolean(args[0])
+        when Array
+          return select_obs_by_boolean(Arrow::BooleanArray.new(args[0]))
+
+          # when Hash
+          # specify conditions to select by a Hash
+        end
+      end
+
+      return select_obs_by_boolean(args) if booleans?(args)
+
       # expand Range like [1..3, 4] to [1, 2, 3, 4]
       expanded = expand_range(args)
-      return select_rows(expanded) if integers?(expanded)
-      return select_columns(expanded.map(&:to_sym)) if sym_or_str?(expanded)
+      return select_obs_by_indeces(expanded) if integers?(expanded)
+      return select_vars_by_keys(expanded.map(&:to_sym)) if sym_or_str?(expanded)
 
       raise DataFrameArgumentError, "Invalid argument #{args}"
     end
@@ -35,26 +51,6 @@ module RedAmber
 
     def last(n_rows = 1)
       tail(n_rows)
-    end
-
-    private # =====
-
-    def select_columns(keys)
-      if keys.one?
-        t = @table[*keys]
-        raise DataFrameArgumentError, "Key is not exists #{keys}" unless t
-
-        Vector.new(t.data)
-      else
-        DataFrame.new(@table[keys])
-      end
-    end
-
-    def select_rows(indeces)
-      out_of_range?(indeces) && raise(DataFrameArgumentError, "Invalid index: #{indeces} for 0..#{size - 1}")
-
-      a = indeces.map { |i| @table.slice(i).to_a }
-      DataFrame.new(@table.schema, a)
     end
   end
 end
