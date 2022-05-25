@@ -23,6 +23,9 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'pick by arguments' do
+      assert_raise(DataFrameArgumentError) { @df.pick(:index) { :block } }
+      assert_raise(DataFrameArgumentError) { @df.pick(1, 2) }
+
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
@@ -85,6 +88,9 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'drop by arguments' do
+      assert_raise(DataFrameArgumentError) { @df.drop(:index) { :block } }
+      assert_raise(DataFrameArgumentError) { @df.pick(1, 2) }
+
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean

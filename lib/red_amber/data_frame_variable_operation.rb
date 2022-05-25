@@ -6,7 +6,7 @@ module RedAmber
     def pick(*args, &block)
       picker = args
       if block
-        raise ArgumentError 'Must not specify both arguments and block.' unless args.empty?
+        raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
         picker = yield(self)
       end
@@ -19,13 +19,15 @@ module RedAmber
         return create_dataframe_from_vector(key, self[key])
       end
 
-      self[*picker]
+      return select_vars_by_keys(picker) if sym_or_str?(picker)
+
+      raise DataFrameArgumentError, "Invalid argument #{args}"
     end
 
     def drop(*args, &block)
       dropper = args
       if block
-        raise ArgumentError 'Must not specify both arguments and block.' unless args.empty?
+        raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
         dropper = yield(self)
       end
@@ -39,7 +41,9 @@ module RedAmber
         return create_dataframe_from_vector(key, self[key])
       end
 
-      self[*picker]
+      return select_vars_by_keys(picker) if sym_or_str?(picker)
+
+      raise DataFrameArgumentError, "Invalid argument #{args}"
     end
   end
 end
