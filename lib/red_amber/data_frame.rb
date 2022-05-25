@@ -97,6 +97,11 @@ module RedAmber
       end
     end
 
+    def indexes
+      0...size
+    end
+    alias_method :indices, :indexes
+
     def to_h
       @table.columns.each_with_object({}) do |column, result|
         result[column.name.to_sym] = column.entries
