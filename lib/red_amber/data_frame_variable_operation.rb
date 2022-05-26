@@ -3,6 +3,7 @@
 module RedAmber
   # mix-ins for the class DataFrame
   module DataFrameVariableOperation
+    # pick up some variables to create sub DataFrame
     def pick(*args, &block)
       picker = args
       if block
@@ -11,19 +12,18 @@ module RedAmber
         picker = yield(self)
       end
       picker = [picker].flatten
-
       return DataFrame.new if picker.empty? || picker == [nil]
 
-      if picker.one?
-        key = picker[0]
-        return create_dataframe_from_vector(key, self[key])
-      end
+      picker = keys_by_booleans(picker) if booleans?(picker)
 
-      return select_vars_by_keys(picker) if sym_or_str?(picker)
+      # DataFrame#[] creates a Vector with single key is specified.
+      # DataFrame#pick creates a DataFrame with single key.
+      return DataFrame.new(@table[picker]) if sym_or_str?(picker)
 
       raise DataFrameArgumentError, "Invalid argument #{args}"
     end
 
+    # drop some variables to create remainer sub DataFrame
     def drop(*args, &block)
       dropper = args
       if block
@@ -32,50 +32,15 @@ module RedAmber
         dropper = yield(self)
       end
       dropper = [dropper].flatten
-      picker = keys - dropper
 
+      dropper = keys_by_booleans(dropper) if booleans?(dropper)
+
+      picker = keys - dropper
       return DataFrame.new if picker.empty?
 
-      if picker.one?
-        key = picker[0]
-        return create_dataframe_from_vector(key, self[key])
-      end
-
-      return select_vars_by_keys(picker) if sym_or_str?(picker)
-
-      raise DataFrameArgumentError, "Invalid argument #{args}"
-    end
-
-    def slice(*args, &block)
-      slicer = args
-      if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
-
-        slicer = yield(self)
-      end
-      slicer = [slicer].flatten
-
-      if slicer.empty?
-        # return a DataFrame with same keys as self without values
-        return DataFrame.new(keys.each_with_object({}) { |key, h| h[key] = [] })
-      end
-
-      if slicer.one?
-        case slicer[0]
-        when Vector
-          return select_obs_by_boolean(Arrow::BooleanArray.new(slicer[0].data))
-        when Arrow::BooleanArray
-          return select_obs_by_boolean(slicer[0])
-        when Array
-          return select_obs_by_boolean(Arrow::BooleanArray.new(slicer[0]))
-        end
-      end
-
-      return select_obs_by_boolean(slicer) if booleans?(slicer)
-
-      # expand Range like [1..3, 4] to [1, 2, 3, 4]
-      expanded = expand_range(slicer)
-      return select_obs_by_indeces(expanded) if integers?(expanded)
+      # DataFrame#[] creates a Vector with single key is specified.
+      # DataFrame#drop creates a DataFrame with single key.
+      return DataFrame.new(@table[picker]) if sym_or_str?(picker)
 
       raise DataFrameArgumentError, "Invalid argument #{args}"
     end

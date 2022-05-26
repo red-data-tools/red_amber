@@ -57,15 +57,8 @@ module RedAmber
       DataFrame.new(@table.schema, a)
     end
 
-    def select_vars_by_keys(keys)
-      if keys.one?
-        t = @table[*keys]
-        raise DataFrameArgumentError, "Key is not exists #{keys}" unless t
-
-        Vector.new(t.data)
-      else
-        DataFrame.new(@table[keys])
-      end
+    def keys_by_booleans(booleans)
+      keys.select.with_index { |_, i| booleans[i] }
     end
   end
 end
