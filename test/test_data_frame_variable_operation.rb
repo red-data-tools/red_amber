@@ -19,7 +19,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     test 'Empty dataframe' do
       df = DataFrame.new
       assert_true df.pick.empty?
-      assert_raise(DataFrameArgumentError) { df.pick(:key) }
+      assert_raise(DataFrameArgumentError) { df.pick(1) }
     end
 
     test 'pick by arguments' do

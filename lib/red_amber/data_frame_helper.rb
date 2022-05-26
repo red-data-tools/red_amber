@@ -56,5 +56,9 @@ module RedAmber
       a = indeces.map { |i| @table.slice(i).to_a }
       DataFrame.new(@table.schema, a)
     end
+
+    def keys_by_booleans(booleans)
+      keys.select.with_index { |_, i| booleans[i] }
+    end
   end
 end

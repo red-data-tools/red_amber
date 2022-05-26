@@ -57,7 +57,8 @@ Metrics/AbcSize:
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 55
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 27
-    - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 29
+    - 'lib/red_amber/data_frame_observation_operation.rb' # Max: 29
+    - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 26
 
 # Max: 25
 Metrics/BlockLength:
@@ -80,7 +81,7 @@ Metrics/MethodLength:
   Max: 18
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 33
-    - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 23
+    - 'lib/red_amber/data_frame_observation_operation.rb' # Max: 21
 
 # Max: 100
 Metrics/ModuleLength:
