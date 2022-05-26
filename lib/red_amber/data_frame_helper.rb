@@ -56,16 +56,5 @@ module RedAmber
       a = indeces.map { |i| @table.slice(i).to_a }
       DataFrame.new(@table.schema, a)
     end
-
-    def select_vars_by_keys(keys)
-      if keys.one?
-        t = @table[*keys]
-        raise DataFrameArgumentError, "Key is not exists #{keys}" unless t
-
-        Vector.new(t.data)
-      else
-        DataFrame.new(@table[keys])
-      end
-    end
   end
 end

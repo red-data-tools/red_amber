@@ -52,5 +52,18 @@ module RedAmber
     def last(n_rows = 1)
       tail(n_rows)
     end
+
+    private
+
+    def select_vars_by_keys(keys)
+      if keys.one?
+        t = @table[*keys]
+        raise DataFrameArgumentError, "Key does not exist #{keys}" unless t
+
+        Vector.new(t.data)
+      else
+        DataFrame.new(@table[keys])
+      end
+    end
   end
 end
