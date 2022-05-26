@@ -8,6 +8,7 @@ module RedAmber
     include DataFrameDisplayable
     include DataFrameHelper
     include DataFrameSelectable
+    include DataFrameObservationOperation
     include DataFrameVariableOperation
 
     def initialize(*args)
