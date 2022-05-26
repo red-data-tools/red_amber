@@ -3,6 +3,33 @@
 module RedAmber
   # mix-ins for the class DataFrame
   module DataFrameObservationOperation
+    # slice and select some observations to create sub DataFrame
+    def slice(*args, &block)
+      slicer = args
+      if block
+        raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
+
+        slicer = yield(self)
+      end
+      slicer = [slicer].flatten
+      return remove_all_values if slicer.empty? || slicer[0].nil?
+
+      # filter with same length
+      booleans = nil
+      if slicer[0].is_a?(Vector) || slicer[0].is_a?(Arrow::BooleanArray)
+        booleans = slicer[0].to_a
+      elsif slicer.size == size && booleans?(slicer)
+        booleans = slicer
+      end
+      return select_obs_by_boolean(booleans) if booleans
+
+      # filter with indexes
+      slicer = expand_range(slicer)
+      return select_obs_by_indeces(slicer) if integers?(slicer)
+
+      raise DataFrameArgumentError, "Invalid argument #{args}"
+    end
+
     # remove selected observations to create sub DataFrame
     def remove(*args, &block)
       remover = args
