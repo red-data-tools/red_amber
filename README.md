@@ -57,6 +57,9 @@ Vectors : 5 numeric, 3 strings
 8 :year              uint16     3 {2007=>110, 2008=>114, 2009=>120}
 ```
 
+### DataFrame model
+![dataframe model of RedAmber](doc/image/dataframe_model.png)
+
 See [DataFrame.md](doc/DataFrame.md) for details.
 
 
@@ -72,6 +75,10 @@ penguins[:species]
 ```
 
 See [Vector.md](doc/Vector.md) for details.
+
+## TDR concept
+
+I named the data frame representation method above as TDR (Transposed DataFrame Representation). See [TDR.md](doc/tdr.md) for details。
 
 ## Development
 
