@@ -131,7 +131,7 @@ Class RedAmber::DataFrame represents 2D-data table.
 
   Returns a `Rover::DataFrame`.
 
-- [x] `ls(limit = 10, tally_level: 5, max_element: 5)`
+- [x] `ls(limit = 10, tally: 5, elements: 5)`
 
   - Shows some information about self in a transposed style.
   - `ls_str` returns same info as String.
@@ -158,8 +158,8 @@ Vectors : 5 numeric, 3 strings
 8 :year              uint16     3 {2007=>110, 2008=>114, 2009=>120}
 ```
 
-  - tally_level: max level to use tally mode
-  - max_element: max num of element to show values in each row
+  - tally: max level to use tally mode
+  - elements: max num of element to show values in each observations
 
 ## Selecting
 

@@ -95,7 +95,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         3 :string  string      5 ["A", "A", "B", "C", "D", ... ]
         4 :boolean boolean     3 [true, false, nil, true, false, ... ], 2 nils
       OUTPUT
-      assert_equal str, @df.tdr_str(tally_level: 2)
+      assert_equal str, @df.tdr_str(tally: 2)
     end
 
     test 'max_element' do
@@ -108,7 +108,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         3 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
         4 :boolean boolean     3 {true=>2, false=>2, nil=>2}
       OUTPUT
-      assert_equal str, @df.tdr_str(max_element: 6)
+      assert_equal str, @df.tdr_str(elements: 6)
     end
 
     test 'tally_level and max_element' do
@@ -121,7 +121,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         3 :string  string      5 ["A", "A", "B", "C", "D", "E"]
         4 :boolean boolean     3 [true, false, nil, true, false, nil], 2 nils
       OUTPUT
-      assert_equal str, @df.tdr_str(tally_level: 2, max_element: 6)
+      assert_equal str, @df.tdr_str(tally: 2, elements: 6)
     end
 
     test 'empty key and key with blank' do
