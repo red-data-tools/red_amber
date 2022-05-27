@@ -74,11 +74,13 @@ penguins[:species]
 ["Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", ... ]
 ```
 
+Vectors accepts some [functional methods from Arrow](https://arrow.apache.org/docs/cpp/compute.html).
+
 See [Vector.md](doc/Vector.md) for details.
 
 ## TDR concept
 
-I named the data frame representation method above as TDR (Transposed DataFrame Representation). See [TDR.md](doc/tdr.md) for details。
+I named the data frame representation style in the model above as TDR (Transposed DataFrame Representation). See [TDR.md](doc/tdr.md) for details.
 
 ## Development
 
