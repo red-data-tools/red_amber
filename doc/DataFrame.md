@@ -7,6 +7,8 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 - `variable`s with same vector length are aligned and arranged to be a `DaTaFrame`.
 - Each `Vector` in a `DataFrame` contains a set of relating data at same position. We call it `observation`.
 
+![dataframe model image](doc/../image/dataframe_model.png)
+
 ---
 ## Constructors and saving
 ---
@@ -285,6 +287,8 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
   Pick up some variables (columns) to create a sub DataFrame.
 
+  ![pick method image](doc/../image/dataframe/pick.png)
+
 - keys as arguments
 
   `pick(keys)` accepts keys as arguments in an Array.
@@ -337,6 +341,8 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
   Drop some variables (columns) to create a remainer DataFrame.
 
+  ![drop method image](doc/../image/dataframe/drop.png)
+
 - keys as arguments
 
   `drop(keys)` accepts keys as arguments in an Array.
@@ -378,6 +384,8 @@ If `pick` or `drop` will select single variable (column), it returns a `DataFram
 ### `slice`
 
   Slice and select observations (rows) to create a sub DataFrame.
+
+  ![slice method image](doc/../image/dataframe/slice.png)
 
 - keys as arguments
 
@@ -460,6 +468,8 @@ If `pick` or `drop` will select single variable (column), it returns a `DataFram
 ### `remove`
 
   Slice and reject observations (rows) to create a remainer DataFrame.
+
+  ![remove method image](doc/../image/dataframe/remove.png)
 
 - keys as arguments
 

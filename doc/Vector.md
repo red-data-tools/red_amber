@@ -70,6 +70,8 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ### Unary aggregations: `vector.func => scalar`
 
+  ![unary aggregation](doc/image/../../image/vector/unary_aggregation_w_option.png)
+
 | Method    |Boolean|Numeric|String|Options|Remarks|
 | ----------- | --- | --- | --- | --- | --- |
 | ✓ `all`     |  ✓  |     |     | ✓ ScalarAggregate|     |
@@ -119,6 +121,8 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 
 ### Unary element-wise: `vector.func => vector`
 
+  ![unary element-wise](doc/image/../../image/vector/unary_element_wise.png)
+
 | Method    |Boolean|Numeric|String|Options|Remarks|
 | ------------ | --- | --- | --- | --- | ----- |
 | ✓ `-@`       |     |  ✓  |     |     |as `-vector`|
@@ -144,6 +148,8 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 |[ ]`trunc`    |     |  ✓  |     |     |       |
 
 ### Binary element-wise: `vector.func(vector) => vector`
+
+  ![binary element-wise](doc/image/../../image/vector/binary_element_wise.png)
 
 | Method       |Boolean|Numeric|String|Options|Remarks|
 | ----------------- | --- | --- | --- | --- | ----- |
