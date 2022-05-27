@@ -18,14 +18,14 @@ module RedAmber
     end
 
     # - limit: max num of Vectors to show
-    # - tally_level: max level to use tally mode
-    # - max_element: max element to show values in each row
-    def tdr(limit = 10, tally_level: 5, max_element: 5)
-      puts tdr_str(limit, tally_level: tally_level, max_element: max_element)
+    # - tally: max level to use tally mode
+    # - elements: max element to show values in each vector
+    def tdr(limit = 10, tally: 5, elements: 5)
+      puts tdr_str(limit, tally: tally, elements: elements)
     end
 
-    def tdr_str(limit = 10, tally_level: 5, max_element: 5)
-      "#{shape_str}\n#{dataframe_info(limit, tally_level: tally_level, max_element: max_element)}"
+    def tdr_str(limit = 10, tally: 5, elements: 5)
+      "#{shape_str}\n#{dataframe_info(limit, tally_level: tally, max_element: elements)}"
     end
 
     private # =====
