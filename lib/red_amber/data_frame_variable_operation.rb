@@ -9,7 +9,7 @@ module RedAmber
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        picker = yield(self)
+        picker = instance_eval(&block)
       end
       picker = [picker].flatten
       return DataFrame.new if picker.empty? || picker == [nil]
@@ -29,7 +29,7 @@ module RedAmber
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        dropper = yield(self)
+        dropper = instance_eval(&block)
       end
       dropper = [dropper].flatten
 

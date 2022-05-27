@@ -9,7 +9,7 @@ module RedAmber
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        slicer = yield(self)
+        slicer = instance_eval(&block)
       end
       slicer = [slicer].flatten
       return remove_all_values if slicer.empty? || slicer[0].nil?
@@ -36,7 +36,7 @@ module RedAmber
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        remover = yield(self)
+        remover = instance_eval(&block)
       end
       remover = [remover].flatten
 
