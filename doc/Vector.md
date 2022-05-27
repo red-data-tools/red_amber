@@ -2,44 +2,73 @@
 
 Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
+---
 ## Constructor
+---
 
-- [x] Create from a column in a DataFrame
+### Create from a column in a DataFrame
+  
+  ```ruby
+  df = RedAmber::DataFrame.new(x: [1, 2, 3])
+  df[:x]
+  # =>
+  #<RedAmber::Vector(:uint8, size=3):0x000000000000f4ec>
+  [1, 2, 3]
+  ```
 
-- [x] New from an Array
+### New from an Array
 
+  ```ruby
+  vector = RedAmber::Vector.new([1, 2, 3])
+  # =>
+  #<RedAmber::Vector(:uint8, size=3):0x000000000000f514>
+  [1, 2, 3]
+  ```
+
+---
 ## Properties
+---
 
-- [x] `to_s`
+### `to_s`
 
-- [x] `values`, `to_a`, `entries`
+### `values`, `to_a`, `entries`
 
-- [x] `size`, `length`, `n_rows`, `nrow`
+### `size`, `length`, `n_rows`, `nrow`
 
-- [x] `type`
+### `type`
 
-- [x] `data_type`
+### `data_type`
 
-- [ ] `each`
+### [ ] `each` (not impremented yet)
 
-- [ ] `chunked?`
+### [ ] `chunked?` (not impremented yet)
 
-- [ ] `n_chunks`
+### [ ] `n_chunks` (not impremented yet)
 
-- [ ] `each_chunk`
+### [ ] `each_chunk` (not impremented yet)
 
-- [x] `tally`
+### `tally`
 
-- [x] `n_nils`, `n_nans`
+### `n_nils`, `n_nans`
 
   - `n_nulls` is an alias of `n_nils`
 
-- [x] `inspect(limit: 80)`
+### `inspect(limit: 80)`
 
   - `limit` sets size limit to display long array.
 
+    ```ruby
+    vector = RedAmber::Vector.new((1..50).to_a)
+    # =>
+    #<RedAmber::Vector(:uint8, size=50):0x000000000000f528>
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ... ]
+    ```
+
+---
 ## Functions
-### Unary aggregations: vector.func => scalar
+---
+
+### Unary aggregations: `vector.func => scalar`
 
 | Method    |Boolean|Numeric|String|Options|Remarks|
 | ----------- | --- | --- | --- | --- | --- |
@@ -88,7 +117,7 @@ boolean.all(opts: {skip_nulls: true}) #=> true
 boolean.all(opts: {skip_nulls: false}) #=> false
 ```
 
-### Unary element-wise: vector.func => vector
+### Unary element-wise: `vector.func => vector`
 
 | Method    |Boolean|Numeric|String|Options|Remarks|
 | ------------ | --- | --- | --- | --- | ----- |
@@ -114,7 +143,7 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 | ✓ `tan`      |     |  ✓  |     |     |       |
 |[ ]`trunc`    |     |  ✓  |     |     |       |
 
-### Binary element-wise: vector.func(vector) => vector
+### Binary element-wise: `vector.func(vector) => vector`
 
 | Method       |Boolean|Numeric|String|Options|Remarks|
 | ----------------- | --- | --- | --- | --- | ----- |
@@ -151,15 +180,15 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 | ✓ `shift_right`   |     | (✓) |     |     |`>>`, integer only|
 | ✓ `xor`           |  ✓  |     |     |     | `^`   |
 
-#### (Not impremented)
-- [ ] sort, sort_index
-- [ ] argmin, argmax
-- [ ] (array functions)
-- [ ] (strings functions)
-- [ ] (temporal functions)
-- [ ] (conditional functions)
-- [ ] (index functions)
-- [ ] (other functions)
+(Not impremented functions)
+### [ ] sort, sort_index
+### [ ] argmin, argmax
+### [ ] (array functions)
+### [ ] (strings functions)
+### [ ] (temporal functions)
+### [ ] (conditional functions)
+### [ ] (index functions)
+### [ ] (other functions)
 
 ## Coerce (not impremented)
 
