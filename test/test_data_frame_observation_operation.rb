@@ -93,7 +93,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
         4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
-      assert_equal @df.tdr_str, @df.slice { 0...@df.size }.tdr_str # slice all
+      assert_equal @df.tdr_str, @df.slice { 0...size }.tdr_str # slice all
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 3 x 4 Vectors
@@ -115,7 +115,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :string string      2 ["B", "D"]
         4 :bool   boolean     1 {false=>2}
       OUTPUT
-      assert_equal str, @df.slice { |d| d.indexes.map(&:odd?) }.tdr_str
+      assert_equal str, @df.slice { indexes.map(&:odd?) }.tdr_str
     end
   end
 
@@ -207,7 +207,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :string string     0 []
         4 :bool   string     0 []
       OUTPUT
-      assert_equal str, @df.remove { 0...@df.size }.tdr_str # remove all
+      assert_equal str, @df.remove { 0...size }.tdr_str # remove all
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 2 x 4 Vectors
@@ -229,7 +229,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :string string      2 ["B", "D"]
         4 :bool   boolean     1 {false=>2}
       OUTPUT
-      assert_equal str, @df.remove { |d| d.indexes.map(&:even?) }.tdr_str
+      assert_equal str, @df.remove { indexes.map(&:even?) }.tdr_str
     end
   end
 end

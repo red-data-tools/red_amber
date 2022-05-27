@@ -320,14 +320,10 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
  - keys or booleans by a block
 
-    `pick {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, or a boolean Array with a same length as `n_keys`. Self is passed as block parameter.
+    `pick {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, or a boolean Array with a same length as `n_keys`. Block is called in the context of self.
 
     ```ruby
-    penguins.pick do |df|
-      df.keys.map do |key|
-        key.end_with?('mm')
-      end
-    end
+    penguins.pick { keys.map { |key| key.end_with?('mm') } }
     # =>
     #<RedAmber::DataFrame : 344 x 3 Vectors, 0x000000000000f1cc>
     Vectors : 3 numeric
@@ -353,8 +349,10 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
 - keys or booleans by a block
 
-  `drop {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, or a boolean Array with a same length as `n_keys`. Self is passed as block parameter.
+  `drop {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, or a boolean Array with a same length as `n_keys`. Block is called in the context of self.
   
+- notice for nil
+
   When used with booleans, nil in booleans is treated as a false. This behavior is aligned with Ruby's `nil#!`.
 
   ```ruby
@@ -362,8 +360,9 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
   booleans_invert = booleans.map(&:!) # => [false, true, true]
   df.pick(booleans) == df.drop(booleans_invert) # => true
   ```
+- Difference between `pick`/`drop` and `[]`
 
-If `pick` or `drop` will select single variable (column), it returns a `DataFrame` with one variable. In contrast, `[]` returns a `Vector`.
+  If `pick` or `drop` will select single variable (column), it returns a `DataFrame` with one variable. In contrast, `[]` returns a `Vector`.
 
   ```ruby
   df = RedAmber::DataFrame.new(a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3])
@@ -423,10 +422,12 @@ If `pick` or `drop` will select single variable (column), it returns a `DataFram
 
 - keys or booleans by a block
 
-    `slice {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as `size`. Self is passed as block parameter.
+    `slice {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as `size`. Block is called in the context of self.
 
     ```ruby
+    # return a DataFrame with bill_length_mm is in 2*std range around mean
     penguins.slice do
+      vector = self[:bill_length_mm]
       min = vector.mean - vector.std
       max = vector.mean + vector.std
       vector.to_a.map { |e| (min..max).include? e }
@@ -493,24 +494,30 @@ If `pick` or `drop` will select single variable (column), it returns a `DataFram
   `remove(booleans)` accepts booleans as a argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `size`.
 
     ```ruby
-    vector = penguins[:bill_length_mm]
-    penguins.remove(vector >= 40)
+    # remove all observation contains nil
+    removed = penguins.remove { vectors.map(&:is_nil).reduce(&:|) }
+    removed.tdr
     # =>
-    #<RedAmber::DataFrame : 102 x 8 Vectors, 0x000000000000f35c>
+    RedAmber::DataFrame : 342 x 8 Vectors
     Vectors : 5 numeric, 3 strings
     # key                type   level data_preview
-    1 :species           string     2 {"Adelie"=>101, "Gentoo"=>1}
-    2 :island            string     3 {"Torgersen"=>34, "Biscoe"=>29, "Dream"=>39}
-    3 :bill_length_mm    double    50 [39.1, 39.5, nil, 36.7, 39.3, ... ], 2 nils
-     ... 5 more Vectors ...
+    1 :species           string     3 {"Adelie"=>151, "Chinstrap"=>68, "Gentoo"=>123}
+    2 :island            string     3 {"Torgersen"=>51, "Biscoe"=>167, "Dream"=>124}
+    3 :bill_length_mm    double   164 [39.1, 39.5, 40.3, 36.7, 39.3, ... ]
+    4 :bill_depth_mm     double    80 [18.7, 17.4, 18.0, 19.3, 20.6, ... ]
+    5 :flipper_length_mm int64     55 [181, 186, 195, 193, 190, ... ]
+    6 :body_mass_g       int64     94 [3750, 3800, 3250, 3450, 3650, ... ]
+    7 :sex               string     3 {"male"=>168, "female"=>165, ""=>9}
+    8 :year              int64      3 {2007=>109, 2008=>114, 2009=>119}
     ```
 
 - keys or booleans by a block
 
-    `remove {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as `size`. Self is passed as block parameter.
+    `remove {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as `size`. Block is called in the context of self.
 
     ```ruby
     penguins.remove do
+      vector = self[:bill_length_mm]
       min = vector.mean - vector.std
       max = vector.mean + vector.std
       vector.to_a.map { |e| (min..max).include? e }
