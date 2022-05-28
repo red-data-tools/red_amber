@@ -289,7 +289,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
   ![pick method image](doc/../image/dataframe/pick.png)
 
-- keys as arguments
+- Keys as arguments
 
   `pick(keys)` accepts keys as arguments in an Array.
 
@@ -303,7 +303,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
     2 :bill_length_mm double   165 [39.1, 39.5, 40.3, nil, 36.7, ... ], 2 nils
     ```
 
-- booleans as a argument
+- Booleans as a argument
 
   `pick(booleans)` accepts booleans as a argument in an Array. Booleans must be same length as `n_keys`.
 
@@ -318,7 +318,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
     3 :sex     string     3 {"male"=>168, "female"=>165, ""=>11}
     ```
 
- - keys or booleans by a block
+ - Keys or booleans by a block
 
     `pick {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, or a boolean Array with a same length as `n_keys`. Block is called in the context of self.
 
@@ -339,19 +339,19 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
   ![drop method image](doc/../image/dataframe/drop.png)
 
-- keys as arguments
+- Keys as arguments
 
   `drop(keys)` accepts keys as arguments in an Array.
 
-- booleans as a argument
+- Booleans as a argument
 
   `drop(booleans)` accepts booleans as a argument in an Array. Booleans must be same length as `n_keys`.
 
-- keys or booleans by a block
+- Keys or booleans by a block
 
   `drop {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, or a boolean Array with a same length as `n_keys`. Block is called in the context of self.
   
-- notice for nil
+- Notice for nil
 
   When used with booleans, nil in booleans is treated as a false. This behavior is aligned with Ruby's `nil#!`.
 
@@ -386,7 +386,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
   ![slice method image](doc/../image/dataframe/slice.png)
 
-- keys as arguments
+- Keys as arguments
 
     `slice(indeces)` accepts indeces as arguments. Indeces should be an Integer or a Range of Integer.
 
@@ -403,7 +403,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
      ... 5 more Vectors ...
     ```
 
-- booleans as an argument
+- Booleans as an argument
 
   `slice(booleans)` accepts booleans as a argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `size`.
 
@@ -420,7 +420,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
      ... 5 more Vectors ...
     ```
 
-- keys or booleans by a block
+- Keys or booleans by a block
 
     `slice {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as `size`. Block is called in the context of self.
 
@@ -472,7 +472,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
   ![remove method image](doc/../image/dataframe/remove.png)
 
-- keys as arguments
+- Keys as arguments
 
     `remove(indeces)` accepts indeces as arguments. Indeces should be an Integer or a Range of Integer.
 
@@ -489,7 +489,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
      ... 5 more Vectors ...
     ```
 
-- booleans as an argument
+- Booleans as an argument
 
   `remove(booleans)` accepts booleans as a argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `size`.
 
@@ -511,7 +511,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
     8 :year              int64      3 {2007=>109, 2008=>114, 2009=>119}
     ```
 
-- keys or booleans by a block
+- Keys or booleans by a block
 
     `remove {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as `size`. Block is called in the context of self.
 
@@ -531,7 +531,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
     3 :bill_length_mm    double    75 [nil, 36.7, 34.1, 37.8, 37.8, ... ], 2 nils
      ... 5 more Vectors ...
     ```
-- notice for nil
+- Notice for nil
   - When `remove` used with booleans, nil in booleans is treated as false. This behavior is aligned with Ruby's `nil#!`.
 
     ```ruby
@@ -567,7 +567,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
   ![rename method image](doc/../image/dataframe/rename.png)
 
-- key_pairs as arguments
+- Key pairs as arguments
 
     `rename(key_pairs)` accepts key_pairs as arguments. key_pairs should be a Hash of `{existing_key => new_key}`.
 
@@ -583,7 +583,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
     2 :age_in_1993 uint8      3 [68, 49, 28]
     ```
 
-- key_pairs by a block
+- Key pairs by a block
 
     `rename {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return key_pairs as a Hash of `{existing_key => new_key}`. Block is called in the context of self.
 
@@ -591,17 +591,83 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
   Symbol key and String key are distinguished.
 
+### `assign`
+
+  Assign new variables (columns) and create a updated DataFrame.
+
+  - Variables with new keys will append new variables at bottom (right in the table).
+  - Variables with exisiting keys will update corresponding vectors.
+
+    ![assign method image](doc/../image/dataframe/assign.png)
+
+- Variables as arguments
+
+    `assign(key_pairs)` accepts pairs of key and values as arguments. key_pairs should be a Hash of `{key => array}` or `{key => Vector}`.
+
+    ```ruby
+    df = RedAmber::DataFrame.new(
+      'name' => %w[Yasuko Rui Hinata],
+      'age' => [68, 49, 28])
+    # =>
+    #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000f8fc>
+    Vectors : 1 numeric, 1 string
+    # key   type   level data_preview
+    1 :name string     3 ["Yasuko", "Rui", "Hinata"]
+    2 :age  uint8      3 [68, 49, 28]
+
+    # update :age and add :brother
+    assigner = { age: [97, 78, 57], brother: ['Santa', nil, 'Momotaro'] }
+    df.assign(assigner)
+    # =>
+    #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000f960>
+    Vectors : 1 numeric, 2 strings
+    # key      type   level data_preview
+    1 :name    string     3 ["Yasuko", "Rui", "Hinata"]
+    2 :age     uint8      3 [97, 78, 57]
+    3 :brother string     3 ["Santa", nil, "Momotaro"], 1 nil
+    ```
+
+- Key pairs by a block
+
+    `assign {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return pairs of key and values as a Hash of `{key => array}` or `{key => Vector}`. Block is called in the context of self.
+
+    ```ruby
+    df = RedAmber::DataFrame.new(
+      index: [0, 1, 2, 3, nil],
+      float: [0.0, 1.1,  2.2, Float::NAN, nil],
+      string: ['A', 'B', 'C', 'D', nil])
+    # =>
+    #<RedAmber::DataFrame : 5 x 3 Vectors, 0x000000000000f8c0>
+    Vectors : 2 numeric, 1 string
+    # key     type   level data_preview
+    1 :index  uint8      5 [0, 1, 2, 3, nil], 1 nil
+    2 :float  double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+    3 :string string     5 ["A", "B", "C", "D", nil], 1 nil
+
+    # update numeric variables
+    df.assign do
+      assigner = {}
+      vectors.each_with_index do |v, i|
+        assigner[keys[i]] = v * -1 if v.numeric?
+      end
+      assigner
+    end
+    # =>
+    #<RedAmber::DataFrame : 5 x 3 Vectors, 0x000000000000f924>
+    Vectors : 2 numeric, 1 string
+    # key     type   level data_preview
+    1 :index  int8       5 [0, -1, -2, -3, nil], 1 nil
+    2 :float  double     5 [-0.0, -1.1, -2.2, NaN, nil], 1 NaN, 1 nil
+    3 :string string     5 ["A", "B", "C", "D", nil], 1 nil
+    ```
+
+- Key type
+
+  Symbol key and String key are considered as the same key.
+
 ---
 ## Updating
 ---
-
-- [ ] Add a new column
-
-- [ ] Update a single element
-
-- [ ] Update multiple elements
-
-- [ ] Update all elements
 
 - [ ] Update elements matching a condition
 
@@ -625,7 +691,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 ## Combining DataFrames
 ---
 
-- [ ] Add obs
+- [ ]  obs
 
 - [ ] Add vars
 
