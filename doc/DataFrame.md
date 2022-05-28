@@ -561,6 +561,36 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
     3 :c  double     2 [1.0, 3.0]
     ```
 
+### `rename`
+
+  Rename keys (column names) to create a updated DataFrame.
+
+  ![rename method image](doc/../image/dataframe/rename.png)
+
+- key_pairs as arguments
+
+    `rename(key_pairs)` accepts key_pairs as arguments. key_pairs should be a Hash of `{existing_key => new_key}`.
+
+    ```ruby
+    h = { 'name' => %w[Yasuko Rui Hinata], 'age' => [68, 49, 28] }
+    df = RedAmber::DataFrame.new(h)
+    df.rename(:age => :age_in_1993)
+    # =>
+    #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000f8fc>
+    Vectors : 1 numeric, 1 string
+    # key          type   level data_preview
+    1 :name        string     3 ["Yasuko", "Rui", "Hinata"]
+    2 :age_in_1993 uint8      3 [68, 49, 28]
+    ```
+
+- key_pairs by a block
+
+    `rename {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return key_pairs as a Hash of `{existing_key => new_key}`. Block is called in the context of self.
+
+- Key type
+
+  Symbol key and String key are distinguished.
+
 ---
 ## Updating
 ---
@@ -576,10 +606,6 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 - [ ] Update elements matching a condition
 
 - [ ] Clamp
-
-- [ ] Delete columns
-
-- [ ] Rename columns
 
 - [ ] Sort rows
 

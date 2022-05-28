@@ -139,4 +139,69 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.drop { vectors.map(&:numeric?) }.tdr_str
     end
   end
+
+  sub_test_case 'rename' do
+    # test 'Empty dataframe' do
+    #   df = DataFrame.new
+    #   assert_true df.rename.empty?
+    #   assert_true df.rename(:key).empty?
+    # end
+
+    test 'rename by arguments' do
+      assert_raise(DataFrameArgumentError) { @df.rename(:key) { :block } }
+      assert_raise(DataFrameArgumentError) { @df.rename(:key) }
+
+      assert_equal @df, @df.rename # rename nothing
+      assert_equal @df, @df.rename([])
+
+      unchanged_key_pair = @df.keys.each_with_object({}) { |k, h| h[k] = k }
+      assert_equal @df, @df.rename(unchanged_key_pair)
+
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key      type    level data_preview
+        1 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
+        2 :float   double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool    boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal str, @df.rename(:index, :integer).tdr_str
+      assert_equal str, @df.rename({ index: :integer }).tdr_str
+    end
+
+    test 'rename by block' do
+      assert_raise(DataFrameArgumentError) { @df.rename {} } # empty block
+      assert_raise(DataFrameArgumentError) { @df.rename { nil } } # empty block
+      assert_raise(DataFrameArgumentError) { @df.rename { :key } }
+      assert_equal(@df, @df.rename { {} }) # rename nothing
+      assert_equal(@df, @df.rename { Hash(key_not_exist: :new_key) }) # rename nothing
+
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key      type    level data_preview
+        1 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
+        2 :float   double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool    boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal str, @df.rename {
+        Hash(keys.detect { |key| self[key].type == :uint8 } => :integer)
+      }.tdr_str
+    end
+
+    test 'rename blank key' do
+      df = DataFrame.new('' => [1, 2, 3], 'A' => [4, 5, 6])
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 2 numeric
+        # key    type  level data_preview
+        1 :blank uint8     3 [1, 2, 3]
+        2 :A     uint8     3 [4, 5, 6]
+      OUTPUT
+      assert_equal str, df.rename(:'', 'blank').tdr_str
+      assert_equal str, df.rename('': 'blank').tdr_str
+    end
+  end
 end
