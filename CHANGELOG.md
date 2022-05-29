@@ -1,17 +1,69 @@
-## [0.1.4] - Unreleased
+##  - Unreleased
 
-- Prepare documents for the 'Transposed DataFrame Representation'
-- Feedback to Red Arrow
-- Separate documents
+- Feedback something to Red Arrow
 
 - `DataFrame`
-  - Introduce updating capabilities
-  - Introduce NA support
-  - Add slice method
+  - Introduce `group_by`
+  - Introduce `summarize`
+  - Introduce `summary` or ``describe`
+  - Improve dataframe obs. manipuration methods to accept float as a index (#10)
+  - More performant
 
 - `Vector`
-  - Add NaN support for functions
   - Support more functions
+
+- Document
+  - YARD support
+
+## [0.1.4] - 2022-05-29 (experimental)
+
+- Bug fixes
+  - Fix missing support for scalar argument (#1)
+  - Fix type name of boolean in DF#types to be same as Vector#type (#6, #7)
+  - Fix zero picking to return empty DataFrame (#8)
+  - Fix code at both args and a block given (#8)
+
+- New features and improvements
+  - `DataFrame`
+    - Refine module name `Displayable`
+    - Rename nrow/ncol methods to `size`/`n_keys` to align with TDR concept (#4)
+      - Remain `n_row`/`n_col` for compatibility
+    - Rename `ls` method to `tdr` (#4)
+      - Add limit option to `tdr`
+      - Shorten option name (#11)
+    - Introduce `pick` method to create sub DataFrame (#8)
+      - Add boolean support (#8)
+      - Refactor `pick` (#9)
+    - Introduce `drop` method to create sub DataFrame (#8)
+      - Add boolean support (#8)
+      - Refactor `drop` (#9)
+    - Add boolean array support for `[]` (#9)
+    - Add `indexes`/`indices` to use with selecting observations (#9)
+    - Introduce `slice` method to create sub DataFrame (#8)
+      - Refactor `slice` (#9)
+    - Introduce `remove` method to create sub DataFrame (#9)
+    - Introduce `rename` method to create sub DataFrame (#14)
+    - Introduce `assign` method to create sub DataFrame (#14)
+    - Improve to call block by instance_eval (#13)
+
+  - `Vector`
+    - Refine `find(function)`
+    - Add `min_max` method (#2)
+    - Add `std`/`sd` method (ddof=0 version: `stddev`) (#2)
+    - Add `var` method (ddof=0 version: `variance`) (#2)
+    - Add `VectorFunctions.arrow_doc(func_name)` (temporally)
+
+  - Documentation
+    - Show code in README
+    - Change row/column names for **TDR** concept (#4)
+    - Add documents about **TDR** concept (#4)
+    - Add example about TDR (#4)
+    - Separate README to create DataFrame and Vector documents (#12)
+    - Add DataFrame model concept image to README (#12)
+  
+  - GitHub site
+    - Switched to use merge on GitHub (not to push merged master) (#1)
+    - Create lifetime issue #3 to show the goal of this project (#3)
 
 ## [0.1.3] - 2022-05-15 (experimental)
 
