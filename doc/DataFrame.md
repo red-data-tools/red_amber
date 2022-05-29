@@ -9,9 +9,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
 ![dataframe model image](doc/../image/dataframe_model.png)
 
----
 ## Constructors and saving
----
 
 ### `new` from a columnar Hash
 
@@ -78,9 +76,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
   dataframe.save("file.parquet")
   ```
 
----
 ## Properties
----
 
 ### `table`
 
@@ -136,9 +132,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
  
 ### `empty?`
 
----
 ## Output
----
 
 ### `to_s`
 
@@ -193,9 +187,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
    ... 5 more Vectors ...
   ```
 
----
 ## Selecting
----
 
 ### Select variables (columns in a table) by `[]` as `[key]`, `[keys]`, `[keys[index]]`
 - Key in a Symbol: `df[:symbol]`
@@ -279,9 +271,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
   `head(n=5)`, `tail(n=5)`, `first(n=1)`, `last(n=1)`
 
----
 ## Sub DataFrame manipulations
----
 
 ### `pick`
 
@@ -665,9 +655,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
   Symbol key and String key are considered as the same key.
 
----
 ## Updating
----
 
 - [ ] Update elements matching a condition
 
@@ -677,9 +665,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
 - [ ] Clear data
 
----
 ## Treat na data
----
 
 - [ ] Drop na (NaN, nil)
 
@@ -687,9 +673,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
 - [ ] Interpolate na with convolution array
 
----
 ## Combining DataFrames
----
 
 - [ ]  obs
 
@@ -699,9 +683,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
 - [ ] Left join
 
----
 ## Encoding
----
 
 - [ ] One-hot encoding
 
