@@ -60,6 +60,33 @@ Vectors : 5 numeric, 3 strings
 ### DataFrame model
 ![dataframe model of RedAmber](doc/image/dataframe_model.png)
 
+For example, `DataFrame#pick` accepts keys as an argument and returns a sub DataFrame.
+
+```ruby
+df = penguins.pick(:body_mass_g)
+# =>
+#<RedAmber::DataFrame : 344 x 1 Vector, 0x000000000000fa14>
+Vector : 1 numeric
+# key          type  level data_preview
+1 :body_mass_g int64    95 [3750, 3800, 3250, nil, 3450, ... ], 2 nils
+```
+
+`DataFrame#assign` can accept a block and create new variables.
+
+```ruby
+df.assign do
+  {:body_mass_kg => penguins[:body_mass_g] / 1000.0}
+end
+# =>
+#<RedAmber::DataFrame : 344 x 2 Vectors, 0x000000000000fa28>
+Vectors : 2 numeric
+# key           type   level data_preview
+1 :body_mass_g  int64     95 [3750, 3800, 3250, nil, 3450, ... ], 2 nils
+2 :body_mass_kg double    95 [3.75, 3.8, 3.25, nil, 3.45, ... ], 2 nils
+```
+
+Other DataFrame manipulating methods like `pick`, `drop`, `slice`, `remove` and `rename` also accept a block.
+
 See [DataFrame.md](doc/DataFrame.md) for details.
 
 
