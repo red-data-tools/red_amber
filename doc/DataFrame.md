@@ -1,6 +1,6 @@
 # DataFrame
 
-Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
+Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 - A collection of data which have same data type within. We call it `Vector`.
 - A label is attached to `Vector`. We call it `key`.
 - A `Vector` and associated `key` is grouped as a `variable`.
@@ -11,13 +11,13 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
 ## Constructors and saving
 
-### `new` from a columnar Hash
+### `new` from a Hash
 
   ```ruby
   RedAmber::DataFrame.new(x: [1, 2, 3])
   ```
 
-### `new` from a schema (by Hash) and rows (by Array)
+### `new` from a schema (by Hash) and data (by Array)
 
   ```ruby
   RedAmber::DataFrame.new({:x=>:uint8}, [[1], [2], [3]])
@@ -167,7 +167,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
   8 :year              uint16     3 {2007=>110, 2008=>114, 2009=>120}
   ```
 
-  - limit: limits variable number to show. Default value is 10.
+  - limit: limit of variables to show. Default value is 10.
   - tally: max level to use tally mode.
   - elements: max num of element to show values in each observations.
 
@@ -273,7 +273,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
 ## Sub DataFrame manipulations
 
-### `pick`
+### `pick  ` - pick up variables by key label -
 
   Pick up some variables (columns) to create a sub DataFrame.
 
@@ -313,6 +313,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
     `pick {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, or a boolean Array with a same length as `n_keys`. Block is called in the context of self.
 
     ```ruby
+    # It is ok to write `keys ...` in the block, not `penguins.keys ...`
     penguins.pick { keys.map { |key| key.end_with?('mm') } }
     # =>
     #<RedAmber::DataFrame : 344 x 3 Vectors, 0x000000000000f1cc>
@@ -323,7 +324,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
     3 :flipper_length_mm int64     56 [181, 186, 195, nil, 193, ... ], 2 nils
     ```
 
-### `drop`
+### `drop  ` - pick and drop -
 
   Drop some variables (columns) to create a remainer DataFrame.
 
@@ -352,15 +353,10 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
   ```
 - Difference between `pick`/`drop` and `[]`
 
-  If `pick` or `drop` will select single variable (column), it returns a `DataFrame` with one variable. In contrast, `[]` returns a `Vector`.
+  If `pick` or `drop` will select a single variable (column), it returns a `DataFrame` with one variable. In contrast, `[]` returns a `Vector`. This behavior may be useful to use in a block of DataFrame manipulations.
 
   ```ruby
   df = RedAmber::DataFrame.new(a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3])
-  df[:a]
-  # =>
-  #<RedAmber::Vector(:uint8, size=3):0x000000000000f258>
-  [1, 2, 3]
-
   df.pick(:a) # or
   df.drop(:b, :c)
   # =>
@@ -368,9 +364,14 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
   Vector : 1 numeric
   # key type  level data_preview
   1 :a  uint8     3 [1, 2, 3]
+
+  df[:a]
+  # =>
+  #<RedAmber::Vector(:uint8, size=3):0x000000000000f258>
+  [1, 2, 3]
   ```
 
-### `slice`
+### `slice  `  - to cut vertically is slice -
 
   Slice and select observations (rows) to create a sub DataFrame.
 
@@ -488,17 +489,17 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
     removed = penguins.remove { vectors.map(&:is_nil).reduce(&:|) }
     removed.tdr
     # =>
-    RedAmber::DataFrame : 342 x 8 Vectors
+    RedAmber::DataFrame : 333 x 8 Vectors
     Vectors : 5 numeric, 3 strings
     # key                type   level data_preview
-    1 :species           string     3 {"Adelie"=>151, "Chinstrap"=>68, "Gentoo"=>123}
-    2 :island            string     3 {"Torgersen"=>51, "Biscoe"=>167, "Dream"=>124}
-    3 :bill_length_mm    double   164 [39.1, 39.5, 40.3, 36.7, 39.3, ... ]
-    4 :bill_depth_mm     double    80 [18.7, 17.4, 18.0, 19.3, 20.6, ... ]
-    5 :flipper_length_mm int64     55 [181, 186, 195, 193, 190, ... ]
-    6 :body_mass_g       int64     94 [3750, 3800, 3250, 3450, 3650, ... ]
-    7 :sex               string     3 {"male"=>168, "female"=>165, ""=>9}
-    8 :year              int64      3 {2007=>109, 2008=>114, 2009=>119}
+    1 :species           string     3 {"Adelie"=>146, "Chinstrap"=>68, "Gentoo"=>119}
+    2 :island            string     3 {"Torgersen"=>47, "Biscoe"=>163, "Dream"=>123}
+    3 :bill_length_mm    double   163 [39.1, 39.5, 40.3, 36.7, 39.3, ... ]
+    4 :bill_depth_mm     double    79 [18.7, 17.4, 18.0, 19.3, 20.6, ... ]
+    5 :flipper_length_mm uint8     54 [181, 186, 195, 193, 190, ... ]
+    6 :body_mass_g       uint16    93 [3750, 3800, 3250, 3450, 3650, ... ]
+    7 :sex               string     2 {"male"=>168, "female"=>165}
+    8 :year              uint16     3 {2007=>103, 2008=>113, 2009=>117}    
     ```
 
 - Keys or booleans by a block
@@ -583,7 +584,7 @@ Class `RedAmber::DataFrame` represents 2D-data. `DataFrame` consists with:
 
 ### `assign`
 
-  Assign new variables (columns) and create a updated DataFrame.
+  Assign new or updated variables (columns) and create a updated DataFrame.
 
   - Variables with new keys will append new variables at bottom (right in the table).
   - Variables with exisiting keys will update corresponding vectors.
