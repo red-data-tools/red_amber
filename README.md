@@ -71,11 +71,10 @@ Vector : 1 numeric
 1 :body_mass_g int64    95 [3750, 3800, 3250, nil, 3450, ... ], 2 nils
 ```
 
-`DataFrame#assign` can accept a block and create new variables.
+`DataFrame#assign` creates new variable (column in table).
 
 ```ruby
-df.assign do
-  {:body_mass_kg => penguins[:body_mass_g] / 1000.0}
+df.assign(:body_mass_kg => df[:body_mass_g] / 1000.0)
 end
 # =>
 #<RedAmber::DataFrame : 344 x 2 Vectors, 0x000000000000fa28>
@@ -85,7 +84,27 @@ Vectors : 2 numeric
 2 :body_mass_kg double    95 [3.75, 3.8, 3.25, nil, 3.45, ... ], 2 nils
 ```
 
-Other DataFrame manipulating methods like `pick`, `drop`, `slice`, `remove` and `rename` also accept a block.
+DataFrame manipulating methods like `pick`, `drop`, `slice`, `remove`, `rename` and `assign` accept a block.
+
+This is an exaple to eliminate observations (row in table) containing nil.
+
+```ruby
+# remove all observation contains nil
+nil_removed = penguins.remove { vectors.map(&:is_nil).reduce(&:|) }
+nil_removed.tdr
+# =>
+RedAmber::DataFrame : 342 x 8 Vectors
+Vectors : 5 numeric, 3 strings
+# key                type   level data_preview
+1 :species           string     3 {"Adelie"=>151, "Chinstrap"=>68, "Gentoo"=>123}
+2 :island            string     3 {"Torgersen"=>51, "Biscoe"=>167, "Dream"=>124}
+3 :bill_length_mm    double   164 [39.1, 39.5, 40.3, 36.7, 39.3, ... ]
+4 :bill_depth_mm     double    80 [18.7, 17.4, 18.0, 19.3, 20.6, ... ]
+5 :flipper_length_mm int64     55 [181, 186, 195, 193, 190, ... ]
+6 :body_mass_g       int64     94 [3750, 3800, 3250, 3450, 3650, ... ]
+7 :sex               string     3 {"male"=>168, "female"=>165, ""=>9}
+8 :year              int64      3 {2007=>109, 2008=>114, 2009=>119}
+```
 
 See [DataFrame.md](doc/DataFrame.md) for details.
 
