@@ -37,16 +37,23 @@ TDR に基づいた API はまだ暫定板の段階であり、RedAmber は TDR 
 |-----------|---------|------------|---|
 |TDRでの呼称|`Table`|`TDR`|**T**ransposed **D**ataFrame **R**epresentationの略|
 |変数 |列に配置|`variables`<br>key と `Vector` として横方向に配置|key で選択|
-|観測 |行に配置|`observations`<br>縦方向に切った一つ一つは`slice`|index や `slice` メソッドで選択|
-|行の数|nrow, n_rows など |`size` |`n_row` をエイリアスとして設定|
-|列の数|ncol, n_columns など |`n_keys`  |`n_col` をエイリアスとして設定|
-|shape      |[nrow, ncol]  |`[size, n_keys]` |行, 列の順番は同じ|
-|merge/join left| left_join(a,b)<br>merge(a, b, how='left')|`a.join(b)` |自然に下にくっつける|
-|merge/join right| right_join(a,b))<br>merge(a, b, how='right')|`b.join(a)` |自然に下にくっつける|
+|観測 |行に配置|`observations`<br>縦方向に切った一つ一つはslice|index や `slice` メソッドで選択|
+|変数(列)の数|ncol, n_columns など |`n_keys`  |`n_cols` をエイリアスとして設定|
+|観測(行)の数|nrow, n_rows など |`size` |`n_rows` をエイリアスとして設定|
+|形状      |[nrow, ncol]  |`shape`=`[size, n_keys]` |行, 列の順番は同じ|
+|変数(列)の選択|select, filter, [ ], など|`pick` or `[keys]`  |引数またはブロックで指定|
+|変数(列)の削除|drop, など|`drop`  |引数またはブロックで指定|
+|観測(行)の選択|slice, [ ], iloc, など|`slice` or `[indices]` |引数またはブロックで指定|
+|観測(行)の削除|drop, など|`remove`  |引数またはブロックで指定|
+|変数(列)の追加|mutate, assign, など|`assign`  |引数またはブロックで指定|
+|変数(列)の更新|transmute, [ ]=, など|`assign`  |引数またはブロックで指定|
+|内部結合| inner_join(a,b)<br>merge(a, b, how='inner')|`a.inner_join(b)` |オプション on:|
+|左結合| left_join(a,b)<br>merge(a, b, how='left')|`a.join(b)` |自然に下にくっつける<br>オプション on:|
+|右結合| right_join(a,b))<br>merge(a, b, how='right')|`b.join(a)` |自然に下にくっつける<br>オプション on:|
 
 ## Operation example with TDR API
 
-[TDR の操作例](TDR_operation.pdf) (暫定版)
+[TDR の操作例](image/TDR_operation.pdf) (暫定版)
 
 ## Q and A for TDR
 
