@@ -36,17 +36,24 @@ The API based on TDR is draft and RedAmber is a small experiment to test the TDR
 |     |Basic Table|Transposed DataFrame|Comment for TDR|
 |-----------|---------|------------|---|
 |name in TDR|`Table`|`TDR`|**T**ransposed **D**ataFrame **R**epresentation|
-|variable   |located in a column|a key and a `Vector` in lateral|select by key|
-|observation|located in a row|intersection in a vertical axis|select by index|
-|number of rows|n_rows etc. |`size` |`n_row` is available as an alias|
-|number of columns|n_columns etc. |`n_keys`  |`n_col` is available as an alias|
-|shape      |[n_rows, n_columns]  |`[size, n_keys]` |same order as Table|
-|merge/join left| left_join(a,b)<br>merge(a, b, how='left')|`a.join(b)` |naturally join from bottom|
-|merge/join right| right_join(a,b))<br>merge(a, b, how='right')|`b.join(a)` |naturally join from bottom|
+|variable   |located in a column|a key and a `Vector` in lateral|select by keys|
+|observation|located in a row|sliced in vertical|select by indices|
+|number of variables|n_columns etc. |`n_keys`  |`n_cols` is available as an alias|
+|number of observations|n_rows etc. |`size` |`n_rows` is available as an alias|
+|shape      |[n_rows, n_columns]  |`shape`=`[size, n_keys]` |same order as Table|
+|Select variables|select, filter, [ ], etc.|`pick` or `[keys]`  |accepts arguments or a block|
+|Reject variables|drop, etc.|`drop`  |accepts arguments or a block|
+|Select observations|slice, [ ], iloc, etc.|`slice` or `[indices]` |accepts arguments or a block|
+|Reject observations|drop, etc.|`remove`  |accepts arguments or a block|
+|Add variables|mutate, assign, etc.|`assign`  |accepts arguments or a block|
+|update variables|transmute, [ ]=, etc.|`assign`  |accepts arguments or a block|
+|inner join| inner_join(a,b)<br>merge(a, b, how='inner')|`a.inner_join(b)` |with a option on:|
+|left join| left_join(a,b)<br>merge(a, b, how='left')|`a.join(b)` |naturally join from bottom<br>with a option on:|
+|right join| right_join(a,b))<br>merge(a, b, how='right')|`b.join(a)` |naturally join from bottom<br>with a option on:|
 
-## Operation example with TDR API
+## Operation example of TDR API
 
-[Operation example with TDR API](TDR_operation.pdf) (draft)
+[Operation example of TDR API](image/TDR_operation.pdf) (draft)
 
 ## Q and A for TDR
 
