@@ -18,4 +18,6 @@ module RedAmber
 
   class DataFrameArgumentError < ArgumentError; end
   class DataFrameTypeError < TypeError; end
+
+  class VectorArgumentError < ArgumentError; end
 end

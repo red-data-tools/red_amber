@@ -212,7 +212,7 @@ module RedAmber
       when Arrow::Array, Arrow::ChunkedArray, Arrow::Scalar, Array, Numeric, String, TrueClass, FalseClass
         find(function).execute([data, other], options)
       else
-        raise ArgumentError, "Operand is not supported: #{other.class}"
+        raise VectorArgumentError, "Operand is not supported: #{other.class}"
       end
     end
 
