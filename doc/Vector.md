@@ -130,6 +130,8 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 | ✓ `bit_wise_not`|  | (✓) |     |     |integer only|
 | ✓ `ceil`     |     |  ✓  |     |     |       |
 | ✓ `cos`      |     |  ✓  |     |     |       |
+| ✓`fill_nil_backward`| ✓ | ✓ | ✓ |    |       |
+| ✓`fill_nil_forward` | ✓ | ✓ | ✓ |    |       |
 | ✓ `floor`    |     |  ✓  |     |     |       |
 | ✓ `invert`   |  ✓  |     |     |     |`!`, alias `not`|
 |[ ]`ln`       |     | [ ] |     |     |       |

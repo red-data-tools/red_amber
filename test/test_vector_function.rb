@@ -404,6 +404,29 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case('unary element-wise fill_nil_forward/backward') do
+    setup do
+      @boolean = Vector.new([true, false, nil, true, nil])
+      @integer = Vector.new([0, 1, nil, 3, nil])
+      @double = Vector.new([Math::PI, Float::INFINITY, nil, Float::NAN, nil])
+      @string = Vector.new(['A', 'B', nil, '', nil])
+    end
+
+    test '#fill_nil_backward' do
+      assert_equal_array [true, false, true, true, nil], @boolean.fill_nil_backward
+      assert_equal_array [0, 1, 3, 3, nil], @integer.fill_nil_backward
+      assert_equal_array_with_nan [Math::PI, Float::INFINITY, Float::NAN, Float::NAN, nil], @double.fill_nil_backward
+      assert_equal_array ['A', 'B', '', '', nil], @string.fill_nil_backward
+    end
+
+    test '#fill_nil_forward' do
+      assert_equal_array [true, false, false, true, true], @boolean.fill_nil_forward
+      assert_equal_array [0, 1, 1, 3, 3], @integer.fill_nil_forward
+      assert_equal_array_with_nan [Math::PI, Float::INFINITY, Float::INFINITY, Float::NAN, Float::NAN], @double.fill_nil_forward
+      assert_equal_array ['A', 'B', 'B', '', ''], @string.fill_nil_forward
+    end
+  end
+
   sub_test_case('binary element-wise') do
     setup do
       @boolean = Vector.new([true, true, nil])
