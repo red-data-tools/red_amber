@@ -12,15 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     name: Ruby ${{ matrix.ruby }}
     strategy:
+      fail-fast: false
       matrix:
         ruby: ['2.7', '3.0', '3.1']
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
     - name: Prepare the Apache Arrow
       run: |
         sudo apt update
@@ -28,6 +25,10 @@ jobs:
         wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
         sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
         sudo apt update
+    - name: Set up Ruby ${{ matrix.ruby }}
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
     - name: Install dependencies
       # bundler-cache: true
       run: bundle install
