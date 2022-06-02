@@ -42,7 +42,8 @@ module RedAmber
 
     # [Unary element-wise]: vector.func => vector
     unary_element_wise =
-      %i[abs atan bit_wise_not ceil cos floor is_finite is_inf is_nan is_null is_valid sign sin tan trunc]
+      %i[abs atan bit_wise_not ceil cos floor is_finite is_inf is_nan is_null is_valid
+         round round_to_multiple sign sin tan trunc]
     unary_element_wise.each do |function|
       define_method(function) do |opts: nil|
         datum = exec_func_unary(function, options: opts)
@@ -72,9 +73,6 @@ module RedAmber
       end
     end
     alias_method :not, :invert
-
-    # option(s) required
-    # - round, round_to_multiple
 
     # NaN support needed
     # - acos asin ln log10 log1p log2

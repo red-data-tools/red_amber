@@ -256,25 +256,11 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_not }
     end
 
-    test '#ceil' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.ceil }
-      assert_equal_array [1.0, 2.0, 3.0], @integer.ceil
-      assert_equal_array [1.0, -2.0, 3.0], @double.ceil
-      assert_raise(Arrow::Error::NotImplemented) { @string.ceil }
-    end
-
     test '#cos' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.cos }
       assert_equal_array [0.5403023058681398, -0.4161468365471424, -0.9899924966004454], @integer.cos
       assert_equal_array [0.5403023058681398, -0.4161468365471424, -0.9899924966004454], @double.cos
       assert_raise(Arrow::Error::NotImplemented) { @string.cos }
-    end
-
-    test '#floor' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.floor }
-      assert_equal_array [1.0, 2.0, 3.0], @integer.floor
-      assert_equal_array [1.0, -2.0, 3.0], @double.floor
-      assert_raise(Arrow::Error::NotImplemented) { @string.floor }
     end
 
     test '#sign' do
@@ -297,11 +283,72 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array_in_delta [1.557407724654902, 2.185039863261519, -0.1425465430742778], @double.tan, delta = 1e-15
       assert_raise(Arrow::Error::NotImplemented) { @string.tan }
     end
+  end
+
+  sub_test_case('unary element-wise rounding') do
+    setup do
+      @boolean = Vector.new([true, true, nil])
+      @integer = Vector.new([1, 2, 3])
+      @double = Vector.new([15.15, 2.5, 3.5, -4.5, -5.5])
+      @string = Vector.new(%w[A B A])
+    end
+
+    test '#ceil' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.ceil }
+      assert_equal_array [1, 2, 3], @integer.ceil
+      assert_equal_array [16.0, 3.0, 4.0, -4.0, -5.0], @double.ceil
+      assert_equal_array @double.ceil, @double.round(opts: { mode: :up })
+      assert_raise(Arrow::Error::NotImplemented) { @string.ceil }
+    end
+
+    test '#floor' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.floor }
+      assert_equal_array [1, 2, 3], @integer.floor
+      assert_equal_array [15.0, 2.0, 3.0, -5.0, -6.0], @double.floor
+      assert_equal_array @double.floor, @double.round(opts: { mode: :down })
+      assert_equal_array @double.floor, @double.round(opts: { mode: :half_down })
+      assert_raise(Arrow::Error::NotImplemented) { @string.floor }
+    end
+
+    test '#round' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.round }
+      assert_equal_array [1, 2, 3], @integer.round
+
+      assert_equal_array [15.0, 2.0, 4.0, -4.0, -6.0], @double.round
+      assert_equal_array @double.round, @double.round(opts: { mode: :half_to_even })
+      assert_equal_array [16.0, 3.0, 4.0, -5.0, -6.0], @double.round(opts: { mode: :towards_infinity })
+      assert_equal_array [15.0, 3.0, 4.0, -4.0, -5.0], @double.round(opts: { mode: :half_up })
+      assert_equal_array [15.0, 2.0, 3.0, -4.0, -5.0], @double.round(opts: { mode: :half_towards_zero })
+      assert_equal_array [15.0, 3.0, 4.0, -5.0, -6.0], @double.round(opts: { mode: :half_towards_infinity })
+      assert_equal_array [15.0, 3.0, 3.0, -5.0, -5.0], @double.round(opts: { mode: :half_to_odd })
+
+      assert_equal_array @double.round, @double.round(opts: { n_digits: 0 })
+      assert_equal_array [15.2, 2.5, 3.5, -4.5, -5.5], @double.round(opts: { n_digits: 1 })
+      assert_equal_array [20.0, 0.0, 0.0, -0.0, -10.0], @double.round(opts: { n_digits: -1 })
+
+      assert_raise(Arrow::Error::NotImplemented) { @string.round }
+    end
+
+    test '#round_to_multiple' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.round_to_multiple }
+      assert_equal_array [1, 2, 3], @integer.round_to_multiple
+      assert_equal_array @double.round, @double.round_to_multiple
+      multiple = Arrow::DoubleScalar.new(1)
+      assert_equal_array @double.round_to_multiple, @double.round_to_multiple(opts: { multiple: multiple })
+      multiple = Arrow::DoubleScalar.new(0.1)
+      assert_equal_array [15.200000000000001, 2.5, 3.5, -4.5, -5.5], @double.round_to_multiple(opts: { multiple: multiple })
+      multiple = Arrow::DoubleScalar.new(10)
+      assert_equal_array [20.0, 0.0, 0.0, -0.0, -10.0], @double.round_to_multiple(opts: { multiple: multiple })
+      multiple = Arrow::DoubleScalar.new(2)
+      assert_equal_array [16.0, 2.0, 4.0, -4.0, -6.0], @double.round_to_multiple(opts: { multiple: multiple })
+      assert_raise(Arrow::Error::NotImplemented) { @string.round_to_multiple }
+    end
 
     test '#trunc' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.trunc }
-      assert_equal_array [1.0, 2.0, 3.0], @integer.trunc
-      assert_equal_array [1.0, -2.0, 3.0], @double.trunc
+      assert_equal_array [1, 2, 3], @integer.trunc
+      assert_equal_array [15.0, 2.0, 3.0, -4.0, -5.0], @double.trunc
+      assert_equal_array @double.trunc, @double.round(opts: { mode: :towards_zero })
       assert_raise(Arrow::Error::NotImplemented) { @string.trunc }
     end
   end

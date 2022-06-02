@@ -126,20 +126,20 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 |[ ]`asin`     |     | [ ] |     |     |       |
 | ✓ `atan`     |     |  ✓  |     |     |       |
 | ✓ `bit_wise_not`|  | (✓) |     |     |integer only|
-|[ ]`ceil`     |     |  ✓  |     |     |       |
+| ✓ `ceil`     |     |  ✓  |     |     |       |
 | ✓ `cos`      |     |  ✓  |     |     |       |
-|[ ]`floor`    |     |  ✓  |     |     |       |
+| ✓ `floor`    |     |  ✓  |     |     |       |
 | ✓ `invert`   |  ✓  |     |     |     |`!`, alias `not`|
 |[ ]`ln`       |     | [ ] |     |     |       |
 |[ ]`log10`    |     | [ ] |     |     |       |
 |[ ]`log1p`    |     | [ ] |     |     |       |
 |[ ]`log2`     |     | [ ] |     |     |       |
-|[ ]`round`    |     | [ ] |     |[ ] Round|       |
-|[ ]`round_to_multiple`| | [ ] | |[ ] RoundToMultiple|       |
+| ✓ `round`    |     |  ✓  |     | ✓ Round (:mode, :n_digits)|    |
+| ✓ `round_to_multiple`| | ✓ |   | ✓ RoundToMultiple :mode, :multiple| multiple must be an Arrow::Scalar|
 | ✓ `sign`     |     |  ✓  |     |     |       |
 | ✓ `sin`      |     |  ✓  |     |     |       |
 | ✓ `tan`      |     |  ✓  |     |     |       |
-|[ ]`trunc`    |     |  ✓  |     |     |       |
+| ✓ `trunc`    |     |  ✓  |     |     |       |
 
 ### Binary element-wise: `vector.func(vector) => vector`
 
