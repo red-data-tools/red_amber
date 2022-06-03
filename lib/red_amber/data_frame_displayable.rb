@@ -73,7 +73,7 @@ module RedAmber
                 [shorthand(vector, size, max_element)].concat na_string(vector)
               end
             else
-              shorthand(vector, size, max_element)
+              [shorthand(vector, size, max_element)]
             end
         sio.printf header_format, i + 1, key, type, data_tally.size, a.join(', ')
       end

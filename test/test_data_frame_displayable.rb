@@ -3,13 +3,15 @@
 require 'test_helper'
 
 class DataFrameDisplayableTest < Test::Unit::TestCase
+  include RedAmber
+
   sub_test_case 'Properties' do
     hash = { x: [1, 2, 3], y: %w[A B C] }
     data('hash data',
-         [hash, RedAmber::DataFrame.new(hash), %i[uint8 string]],
+         [hash, DataFrame.new(hash), %i[uint8 string]],
          keep: true)
     data('empty data',
-         [{}, RedAmber::DataFrame.new, []],
+         [{}, DataFrame.new, []],
          keep: true)
 
     test 'to_h' do
@@ -24,7 +26,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
 
   sub_test_case 'inspect' do
     test 'empty dataframe' do
-      df = RedAmber::DataFrame.new
+      df = DataFrame.new
       str = "#<RedAmber::DataFrame : (empty), #{format('0x%016x', df.object_id)}>\n"
       assert_equal str, df.inspect
     end
@@ -34,7 +36,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
                double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
                string: %w[A A B C D E],
                boolean: [true, false, nil, true, false, nil] }
-      @df = RedAmber::DataFrame.new(hash)
+      @df = DataFrame.new(hash)
     end
 
     test 'default' do
@@ -57,7 +59,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
                double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
                string: %w[A A B C D E],
                boolean: [true, false, nil, true, false, nil] }
-      @df = RedAmber::DataFrame.new(hash)
+      @df = DataFrame.new(hash)
     end
 
     test ':all' do
@@ -125,7 +127,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
 
     test 'empty key and key with blank' do
-      df = RedAmber::DataFrame.new(
+      df = DataFrame.new(
         {
           '': [1, 2],
           '  ': [3, 4],
@@ -141,6 +143,18 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         3 :"a b" uint8     2 [5, 6]
       OUTPUT
       assert_equal str, df.tdr_str
+    end
+
+    test 'type timestamp in tdr' do
+      df = DataFrame.load('test/entity/timestamp.csv')
+      assert_equal <<~STR, df.tdr_str
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 temporal
+        # key       type      level data_preview
+        1 :index    int64         3 [1, 2, 3]
+        2 :value    double        3 [0.6745854900288456, 0.13221317634640772, 0.21327735697163186]
+        3 :datetime timestamp     3 [2022-06-04 04:11:16 +0900, 2022-06-04 04:15:35 +0900, 2022-06-04 04:18:43 +0900]
+      STR
     end
   end
 end
