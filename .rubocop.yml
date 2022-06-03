@@ -53,12 +53,9 @@ Layout/LineLength:
 # 18..30 unsatisfactory
 # > 30 dangerous
 Metrics/AbcSize:
-  Max: 23
+  Max: 30
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 55
-    - 'lib/red_amber/data_frame_selectable.rb' # Max: 27
-    - 'lib/red_amber/data_frame_observation_operation.rb' # Max: 29
-    - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 26
 
 # Max: 25
 Metrics/BlockLength:
@@ -68,7 +65,7 @@ Metrics/BlockLength:
 
 # Max: 100
 Metrics/ClassLength:
-  Max: 100
+  Max: 120
   Exclude:
     - 'test/**/*'
 
@@ -78,11 +75,9 @@ Metrics/CyclomaticComplexity:
 
 # Max: 10
 Metrics/MethodLength:
-  Max: 18
+  Max: 25
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 33
-    - 'lib/red_amber/data_frame_observation_operation.rb' # Max: 21
-    - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 20
 
 # Max: 100
 Metrics/ModuleLength:

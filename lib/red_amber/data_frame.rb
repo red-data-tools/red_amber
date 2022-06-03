@@ -64,12 +64,12 @@ module RedAmber
     end
 
     def variables
-      @variables || @variables = keys.zip(vectors).map.with_object({}) { |(k, v), h| h[k] = v }
+      @variables || @variables = init_instance_vars(:variables)
     end
     alias_method :vars, :variables
 
     def keys
-      @keys || @keys = @table.columns.map { |column| column.name.to_sym }
+      @keys || @keys = init_instance_vars(:keys)
     end
     alias_method :column_names, :keys
     alias_method :var_names, :keys
@@ -94,7 +94,7 @@ module RedAmber
     end
 
     def vectors
-      @vectors || @vectors = @table.columns.map { |column| Vector.new(column.data) }
+      @vectors || @vectors = init_instance_vars(:vectors)
     end
 
     def indexes
@@ -127,6 +127,22 @@ module RedAmber
 
     def to_rover
       Rover::DataFrame.new(to_h)
+    end
+
+    private
+
+    # initialize @variable, @keys, @vectors and return one of them
+    def init_instance_vars(var)
+      ary = @table.columns.each_with_object([{}, [], []]) do |column, (variables, keys, vectors)|
+        v = Vector.new(column.data)
+        k = column.name.to_sym
+        v.key = k
+        variables[k] = v
+        keys << k
+        vectors << v
+      end
+      @variables, @keys, @vectors = ary
+      ary[%i[variables keys vectors].index(var)]
     end
   end
 end
