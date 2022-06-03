@@ -33,6 +33,16 @@ module RedAmber
       raise DataFrameArgumentError, "Invalid argument #{args}"
     end
 
+    # Select a variable by a key in String or Symbol
+    def v(key)
+      unless key.is_a?(Symbol) || key.is_a?(String)
+        raise DataFrameArgumentError, "Key is not a Symbol or String [#{key}]"
+      end
+      raise DataFrameArgumentError, "Key not exist [#{key}]" unless key?(key)
+
+      Vector.new(@table[key.to_sym].data)
+    end
+
     def head(n_rows = 5)
       raise DataFrameArgumentError, "Index is out of range #{n_rows}" if n_rows.negative?
 

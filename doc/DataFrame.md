@@ -224,7 +224,16 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   #<RedAmber::Vector(:uint8, size=3):0x000000000000f140>
   [1, 2, 3]
   ```
-  This may be useful to use in a block of DataFrame manipulations.
+  Or `#v` method also returns a Vector for a key.
+
+  ```ruby
+  df.v(:a)
+  # =>
+  #<RedAmber::Vector(:uint8, size=3):0x000000000000f140>
+  [1, 2, 3]
+  ```
+
+  This may be useful to use in a block of DataFrame manipulation verbs. We can write `v(:a)` rather than `self[:a]` or `df[:a]`
 
 ### Select observations (rows in a table) by `[]` as `[index]`, `[range]`, `[array]`
 
