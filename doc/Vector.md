@@ -33,7 +33,7 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ### `type`
 
-### `boolean?`, `numeric?`, `string?`
+### `boolean?`, `numeric?`, `string?`, `temporal?`
 
 ### `type_class`
 

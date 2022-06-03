@@ -75,6 +75,10 @@ module RedAmber
       type == :string
     end
 
+    def temporal?
+      type_class < Arrow::TemporalDataType
+    end
+
     def type_class
       @data.value_data_type.class
     end
