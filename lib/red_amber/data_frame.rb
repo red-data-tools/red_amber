@@ -63,6 +63,10 @@ module RedAmber
       [size, n_keys]
     end
 
+    def variables
+      @variables || @variables = keys.zip(vectors).map.with_object({}) { |(k, v), h| h[k] = v }
+    end
+
     def keys
       @keys || @keys = @table.columns.map { |column| column.name.to_sym }
     end
@@ -98,9 +102,7 @@ module RedAmber
     alias_method :indices, :indexes
 
     def to_h
-      @table.columns.each_with_object({}) do |column, result|
-        result[column.name.to_sym] = column.entries
-      end
+      variables.map.with_object({}) { |(k, v), h| h[k] = v.to_a }
     end
 
     def to_a
