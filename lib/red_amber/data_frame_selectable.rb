@@ -40,7 +40,7 @@ module RedAmber
       end
       raise DataFrameArgumentError, "Key not exist [#{key}]" unless key?(key)
 
-      Vector.new(@table[key.to_sym].data)
+      variables[key.to_sym]
     end
 
     def head(n_rows = 5)
@@ -67,10 +67,10 @@ module RedAmber
 
     def select_vars_by_keys(keys)
       if keys.one?
-        t = @table[*keys]
-        raise DataFrameArgumentError, "Key does not exist #{keys}" unless t
+        key = keys[0].to_sym
+        raise DataFrameArgumentError, "Key does not exist #{keys}" unless key? key
 
-        Vector.new(t.data)
+        variables[key]
       else
         DataFrame.new(@table[keys])
       end

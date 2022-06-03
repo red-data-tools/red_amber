@@ -66,6 +66,7 @@ module RedAmber
     def variables
       @variables || @variables = keys.zip(vectors).map.with_object({}) { |(k, v), h| h[k] = v }
     end
+    alias_method :vars, :variables
 
     def keys
       @keys || @keys = @table.columns.map { |column| column.name.to_sym }
@@ -102,7 +103,7 @@ module RedAmber
     alias_method :indices, :indexes
 
     def to_h
-      variables.map.with_object({}) { |(k, v), h| h[k] = v.to_a }
+      variables.transform_values(&:to_a)
     end
 
     def to_a
@@ -121,13 +122,11 @@ module RedAmber
     end
 
     def empty?
-      @table.columns.empty?
+      variables.empty?
     end
 
     def to_rover
       Rover::DataFrame.new(to_h)
     end
-
-    # def to_parquet() end
   end
 end
