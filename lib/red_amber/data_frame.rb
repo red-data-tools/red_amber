@@ -42,11 +42,14 @@ module RedAmber
 
     attr_reader :table
 
+    def to_arrow
+      table
+    end
+
     def save(output, options = {})
       @table.save(output, options)
     end
 
-    # Properties ===
     def size
       @table.n_rows
     end

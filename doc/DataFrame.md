@@ -78,7 +78,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 ## Properties
 
-### `table`
+### `table`, `to_arrow`
 
 - Reader of Arrow::Table object inside.
 
