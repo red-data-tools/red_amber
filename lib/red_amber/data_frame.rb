@@ -12,15 +12,15 @@ module RedAmber
     include DataFrameVariableOperation
 
     def initialize(*args)
-      # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
-      #   returns empty DataFrame
-      @table = Arrow::Table.new({}, [])
+      @variables = @keys = @vectors = @types = @data_types = nil
       # bug in gobject-introspection: ruby-gnome/ruby-gnome#1472
       #  [Arrow::Table] == [nil] shows ArgumentError
       #  temporary use yoda condition to workaround
-      return if args.empty? || args == [[]] || args == [{}] || [nil] == args
-
-      if args.size > 1
+      if args.empty? || args == [[]] || args == [{}] || [nil] == args
+        # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
+        #   returns empty DataFrame
+        @table = Arrow::Table.new({}, [])
+      elsif args.size > 1
         @table = Arrow::Table.new(*args)
       else
         arg = args[0]
@@ -64,7 +64,7 @@ module RedAmber
     end
 
     def keys
-      @table.columns.map { |column| column.name.to_sym }
+      @keys || @keys = @table.columns.map { |column| column.name.to_sym }
     end
     alias_method :column_names, :keys
     alias_method :var_names, :keys
@@ -81,21 +81,15 @@ module RedAmber
     alias_method :index, :key_index
 
     def types
-      @table.columns.map do |column|
-        column.data.value_type.nick.to_sym
-      end
+      @types || @types = @table.columns.map { |column| column.data.value_type.nick.to_sym }
     end
 
     def data_types
-      @table.columns.map do |column|
-        column.data_type.class
-      end
+      @data_types || @data_types = @table.columns.map { |column| column.data_type.class }
     end
 
     def vectors
-      @table.columns.map do |column|
-        Vector.new(column.data)
-      end
+      @vectors || @vectors = @table.columns.map { |column| Vector.new(column.data) }
     end
 
     def indexes
