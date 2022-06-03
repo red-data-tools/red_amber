@@ -106,7 +106,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   
 - Returns types of vectors in an Array of Symbols.
 
-### `data_types`
+### `type_classes`
 
 - Returns types of vector in an Array of `Arrow::DataType`.
 

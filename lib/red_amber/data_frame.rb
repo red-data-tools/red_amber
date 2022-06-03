@@ -92,7 +92,7 @@ module RedAmber
       @types || @types = @table.columns.map { |column| column.data.value_type.nick.to_sym }
     end
 
-    def data_types
+    def type_classes
       @data_types || @data_types = @table.columns.map { |column| column.data_type.class }
     end
 

@@ -68,15 +68,15 @@ module RedAmber
     end
 
     def numeric?
-      %i[int8 uint8 int16 uint16 int32 uint32 int64 uint64 float double].member? type
+      type_class < Arrow::NumericDataType
     end
 
     def string?
       type == :string
     end
 
-    def data_type
-      @data.value_type
+    def type_class
+      @data.value_data_type.class
     end
 
     # def each() end
