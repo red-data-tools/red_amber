@@ -111,9 +111,10 @@ module RedAmber
     end
 
     def shorthand(vector, size, max_element)
-      a = vector.to_a.take(max_element)
+      max = vector.temporal? ? 2 : max_element
+      a = vector.to_a.take(max)
       a.map! { |e| e.nil? ? 'nil' : e.inspect }
-      a << '... ' if size > max_element
+      a << '... ' if size > max
       "[#{a.join(', ')}]"
     end
 
