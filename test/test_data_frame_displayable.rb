@@ -153,7 +153,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         # key       type      level data_preview
         1 :index    int64         3 [1, 2, 3]
         2 :value    double        3 [0.6745854900288456, 0.13221317634640772, 0.21327735697163186]
-        3 :datetime timestamp     3 [2022-06-04 04:11:16 +0900, 2022-06-04 04:15:35 +0900, ... ]
+        3 :datetime timestamp     3 [2022-06-03 19:11:16 +0900, 2022-06-03 19:15:35 +0900, ... ]
       STR
     end
   end
