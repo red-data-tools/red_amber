@@ -78,7 +78,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 ## Properties
 
-### `table`
+### `table`, `to_arrow`
 
 - Reader of Arrow::Table object inside.
 
@@ -93,7 +93,11 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 ### `shape`
  
 - Returns shape in an Array[n_rows, n_cols].
- 
+
+### `variables`
+
+- Returns key names and Vectors in a Hash.
+
 ### `keys`, `var_names`, `column_names`
   
 - Returns key names in an Array.
@@ -102,7 +106,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   
 - Returns types of vectors in an Array of Symbols.
 
-### `data_types`
+### `type_classes`
 
 - Returns types of vector in an Array of `Arrow::DataType`.
 
@@ -224,7 +228,16 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   #<RedAmber::Vector(:uint8, size=3):0x000000000000f140>
   [1, 2, 3]
   ```
-  This may be useful to use in a block of DataFrame manipulations.
+  Or `#v` method also returns a Vector for a key.
+
+  ```ruby
+  df.v(:a)
+  # =>
+  #<RedAmber::Vector(:uint8, size=3):0x000000000000f140>
+  [1, 2, 3]
+  ```
+
+  This may be useful to use in a block of DataFrame manipulation verbs. We can write `v(:a)` rather than `self[:a]` or `df[:a]`
 
 ### Select observations (rows in a table) by `[]` as `[index]`, `[range]`, `[array]`
 
@@ -650,6 +663,14 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
     1 :index  int8       5 [0, -1, -2, -3, nil], 1 nil
     2 :float  double     5 [-0.0, -1.1, -2.2, NaN, nil], 1 NaN, 1 nil
     3 :string string     5 ["A", "B", "C", "D", nil], 1 nil
+
+    # Or it ’s shorter like this:
+    df.assign do
+      variables.select.with_object({}) do |(key, vector), assigner|
+        assigner[key] = vector * -1 if vector.numeric?
+      end
+    end
+    # => same as above
     ```
 
 - Key type

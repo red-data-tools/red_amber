@@ -73,7 +73,7 @@ module RedAmber
                 [shorthand(vector, size, max_element)].concat na_string(vector)
               end
             else
-              shorthand(vector, size, max_element)
+              [shorthand(vector, size, max_element)]
             end
         sio.printf header_format, i + 1, key, type, data_tally.size, a.join(', ')
       end
@@ -111,9 +111,10 @@ module RedAmber
     end
 
     def shorthand(vector, size, max_element)
-      a = vector.to_a.take(max_element)
+      max = vector.temporal? ? 2 : max_element
+      a = vector.to_a.take(max)
       a.map! { |e| e.nil? ? 'nil' : e.inspect }
-      a << '... ' if size > max_element
+      a << '... ' if size > max
       "[#{a.join(', ')}]"
     end
 

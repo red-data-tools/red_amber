@@ -12,15 +12,15 @@ module RedAmber
     include DataFrameVariableOperation
 
     def initialize(*args)
-      # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
-      #   returns empty DataFrame
-      @table = Arrow::Table.new({}, [])
+      @variables = @keys = @vectors = @types = @data_types = nil
       # bug in gobject-introspection: ruby-gnome/ruby-gnome#1472
       #  [Arrow::Table] == [nil] shows ArgumentError
       #  temporary use yoda condition to workaround
-      return if args.empty? || args == [[]] || args == [{}] || [nil] == args
-
-      if args.size > 1
+      if args.empty? || args == [[]] || args == [{}] || [nil] == args
+        # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
+        #   returns empty DataFrame
+        @table = Arrow::Table.new({}, [])
+      elsif args.size > 1
         @table = Arrow::Table.new(*args)
       else
         arg = args[0]
@@ -42,11 +42,14 @@ module RedAmber
 
     attr_reader :table
 
+    def to_arrow
+      table
+    end
+
     def save(output, options = {})
       @table.save(output, options)
     end
 
-    # Properties ===
     def size
       @table.n_rows
     end
@@ -63,8 +66,13 @@ module RedAmber
       [size, n_keys]
     end
 
+    def variables
+      @variables || @variables = init_instance_vars(:variables)
+    end
+    alias_method :vars, :variables
+
     def keys
-      @table.columns.map { |column| column.name.to_sym }
+      @keys || @keys = init_instance_vars(:keys)
     end
     alias_method :column_names, :keys
     alias_method :var_names, :keys
@@ -81,21 +89,15 @@ module RedAmber
     alias_method :index, :key_index
 
     def types
-      @table.columns.map do |column|
-        column.data.value_type.nick.to_sym
-      end
+      @types || @types = @table.columns.map { |column| column.data.value_type.nick.to_sym }
     end
 
-    def data_types
-      @table.columns.map do |column|
-        column.data_type.class
-      end
+    def type_classes
+      @data_types || @data_types = @table.columns.map { |column| column.data_type.class }
     end
 
     def vectors
-      @table.columns.map do |column|
-        Vector.new(column.data)
-      end
+      @vectors || @vectors = init_instance_vars(:vectors)
     end
 
     def indexes
@@ -104,9 +106,7 @@ module RedAmber
     alias_method :indices, :indexes
 
     def to_h
-      @table.columns.each_with_object({}) do |column, result|
-        result[column.name.to_sym] = column.entries
-      end
+      variables.transform_values(&:to_a)
     end
 
     def to_a
@@ -125,13 +125,27 @@ module RedAmber
     end
 
     def empty?
-      @table.columns.empty?
+      variables.empty?
     end
 
     def to_rover
       Rover::DataFrame.new(to_h)
     end
 
-    # def to_parquet() end
+    private
+
+    # initialize @variable, @keys, @vectors and return one of them
+    def init_instance_vars(var)
+      ary = @table.columns.each_with_object([{}, [], []]) do |column, (variables, keys, vectors)|
+        v = Vector.new(column.data)
+        k = column.name.to_sym
+        v.key = k
+        variables[k] = v
+        keys << k
+        vectors << v
+      end
+      @variables, @keys, @vectors = ary
+      ary[%i[variables keys vectors].index(var)]
+    end
   end
 end

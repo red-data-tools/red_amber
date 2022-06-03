@@ -100,6 +100,13 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { DataFrame.new[0] }
     end
 
+    test 'v method' do
+      assert_equal [1, 2, 3], df.v(:x).to_a
+      assert_equal %w[A B C], df.v('y').to_a
+      assert_raise(DataFrameArgumentError) { df.v(:z) }
+      assert_raise(DataFrameArgumentError) { df.v('') }
+    end
+
     test 'head/first' do
       assert_equal Hash(x: [1, 2, 3], y: %w[A B C]), df.head.to_h
       assert_equal Hash(x: [1, 2, 3], y: %w[A B C]), df.head(4).to_h

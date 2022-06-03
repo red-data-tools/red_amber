@@ -9,6 +9,7 @@ module RedAmber
 
     # chunked_array may come from column.data
     def initialize(array)
+      @key = nil # default is 'headless'
       case array
       when Vector
         @data = array.data
@@ -22,6 +23,7 @@ module RedAmber
     end
 
     attr_reader :data
+    attr_accessor :key
 
     def to_s
       @data.to_a.inspect
@@ -66,15 +68,19 @@ module RedAmber
     end
 
     def numeric?
-      %i[int8 uint8 int16 uint16 int32 uint32 int64 uint64 float double].member? type
+      type_class < Arrow::NumericDataType
     end
 
     def string?
       type == :string
     end
 
-    def data_type
-      @data.value_type
+    def temporal?
+      type_class < Arrow::TemporalDataType
+    end
+
+    def type_class
+      @data.value_data_type.class
     end
 
     # def each() end
