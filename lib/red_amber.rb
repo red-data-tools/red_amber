@@ -9,6 +9,7 @@ require_relative 'red_amber/data_frame_selectable'
 require_relative 'red_amber/data_frame_observation_operation'
 require_relative 'red_amber/data_frame_variable_operation'
 require_relative 'red_amber/data_frame'
+require_relative 'red_amber/vector_compensable'
 require_relative 'red_amber/vector_functions'
 require_relative 'red_amber/vector'
 require_relative 'red_amber/version'
@@ -20,4 +21,5 @@ module RedAmber
   class DataFrameTypeError < TypeError; end
 
   class VectorArgumentError < ArgumentError; end
+  class VectorTypeError < TypeError; end
 end

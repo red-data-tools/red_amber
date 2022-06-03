@@ -56,6 +56,7 @@ Metrics/AbcSize:
   Max: 30
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 55
+    - lib/red_amber/vector_compensable.rb # Max: 36
 
 # Max: 25
 Metrics/BlockLength:
@@ -75,7 +76,7 @@ Metrics/CyclomaticComplexity:
 
 # Max: 10
 Metrics/MethodLength:
-  Max: 25
+  Max: 30
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 33
 

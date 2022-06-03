@@ -193,10 +193,10 @@ module RedAmber
     # choose, index_in, index_in_meta_binary, indices_nonzero
 
     # (others)
-    # coalesce, drop_null, fill_null_backward, fill_null_forward,
+    # coalesce, drop_null,
     # filter, is_in, is_in_meta_binary,
     # list_element, list_flatten, list_parent_indices, list_value_length, make_struct,
-    # max_element_wise, min_element_wise, random, replace_with_mask, select_k_unstable,
+    # max_element_wise, min_element_wise, random, select_k_unstable,
     # sort_indices, struct_field, take
 
     private # =======
