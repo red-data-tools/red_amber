@@ -3,7 +3,7 @@
 A simple dataframe library for Ruby (experimental)
 
 - Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow)
-- Simple API similar to [Rover-df](https://github.com/ankane/rover)
+- Inspired by the dataframe library [Rover-df](https://github.com/ankane/rover)
 
 ## Requirements
 
@@ -71,11 +71,10 @@ Vector : 1 numeric
 1 :body_mass_g int64    95 [3750, 3800, 3250, nil, 3450, ... ], 2 nils
 ```
 
-`DataFrame#assign` creates new variable (column in table).
+`DataFrame#assign` creates new variables (column in the table).
 
 ```ruby
 df.assign(:body_mass_kg => df[:body_mass_g] / 1000.0)
-end
 # =>
 #<RedAmber::DataFrame : 344 x 2 Vectors, 0x000000000000fa28>
 Vectors : 2 numeric
@@ -86,7 +85,7 @@ Vectors : 2 numeric
 
 DataFrame manipulating methods like `pick`, `drop`, `slice`, `remove`, `rename` and `assign` accept a block.
 
-This is an exaple to eliminate observations (row in table) containing nil.
+This is an exaple to eliminate observations (row in the table) containing nil.
 
 ```ruby
 # remove all observation contains nil
