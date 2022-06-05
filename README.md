@@ -15,6 +15,15 @@ gem 'rover-df',    '~> 0.3.0' # if you use IO from/to Rover::DataFrame
 
 ## Installation
 
+Install requirements before you install Red Amber.
+
+- Apache Arrow GLib (>= 7.0.0)
+- Apache Parquet GLib (>= 7.0.0)
+
+  See [Apache Arrow install document](https://arrow.apache.org/install/).
+  
+  Minimum installation example for the latest Ubuntu is in the ['Prepare the Apache Arrow' section in ci test](https://github.com/heronshoes/red_amber/blob/master/.github/workflows/test.yml) of Red Amber.
+
 Add this line to your Gemfile:
 
 ```ruby
