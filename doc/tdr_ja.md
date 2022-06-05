@@ -51,10 +51,6 @@ TDR に基づいた API はまだ暫定板の段階であり、RedAmber は TDR 
 |左結合| left_join(a,b)<br>merge(a, b, how='left')|`a.join(b)` |自然に下にくっつける<br>オプション on:|
 |右結合| right_join(a,b))<br>merge(a, b, how='right')|`b.join(a)` |自然に下にくっつける<br>オプション on:|
 
-## Operation example with TDR API
-
-[TDR の操作例](image/TDR_operation.pdf) (暫定版)
-
 ## Q and A for TDR
 
 （作成中)

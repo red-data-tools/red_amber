@@ -51,10 +51,6 @@ The API based on TDR is draft and RedAmber is a small experiment to test the TDR
 |left join| left_join(a,b)<br>merge(a, b, how='left')|`a.join(b)` |naturally join from bottom<br>with a option on:|
 |right join| right_join(a,b))<br>merge(a, b, how='right')|`b.join(a)` |naturally join from bottom<br>with a option on:|
 
-## Operation example of TDR API
-
-[Operation example of TDR API](image/TDR_operation.pdf) (draft)
-
 ## Q and A for TDR
 
 （Not prepared yet)
