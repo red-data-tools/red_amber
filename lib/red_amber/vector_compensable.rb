@@ -18,8 +18,8 @@ module RedAmber
     # or with null if the mask is null.
     # Hence, for replacement arrays, len(replacements) == sum(mask == true).
 
-    def replace_with(booleans, replacements)
-      boolean_ary =
+    def replace_with(booleans, replacements = nil)
+      specifier =
         if booleans.is_a?(Arrow::BooleanArray)
           booleans
         elsif booleans.is_a?(Vector) && booleans.boolean?
@@ -29,27 +29,30 @@ module RedAmber
         else
           raise VectorTypeError, 'Not a valid type'
         end
-      raise VectorArgumentError, 'Booleans size unmatch' if boolean_ary.length != size
-      raise VectorArgumentError, 'Booleans not have any `true`' unless boolean_ary.any?
+      raise VectorArgumentError, 'Booleans size unmatch' if specifier.length != size
+      raise VectorArgumentError, 'Booleans not have any `true`' unless specifier.any?
 
-      replacement_ary =
-        if Array(replacements).one?
+      r = Array(replacements) # scalar to [scalar]
+      r = [nil] if r.empty?
+
+      replacer =
+        if r.size == 1
           case replacements
           when Arrow::Array then replacements
           when Vector then replacements.data
           else
-            Arrow::Array.new(Array(replacements) * Array(boolean_ary).count(true)) # broadcast
+            Arrow::Array.new(r * specifier.to_a.count(true)) # broadcast
           end
         else
-          Arrow::Array.new(replacements)
+          Arrow::Array.new(r)
         end
-      if Array(boolean_ary).count(true) != replacement_ary.length
-        raise VectorArgumentError, 'Replacements size unmatch'
-      end
+      replacer = data.class.new(replacer) if replacer.uniq == [nil]
 
-      values = replacement_ary.class.new(data)
+      raise VectorArgumentError, 'Replacements size unmatch' if Array(specifier).count(true) != replacer.length
 
-      datum = find('replace_with_mask').execute([values, boolean_ary, replacement_ary])
+      values = replacer.class.new(data)
+
+      datum = find('replace_with_mask').execute([values, specifier, replacer])
       take_out_element_wise(datum)
     end
 

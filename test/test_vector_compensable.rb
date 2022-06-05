@@ -16,14 +16,15 @@ class VectorTest < Test::Unit::TestCase
       vec = Vector.new([1, 2, 3])
       assert_equal [1, 2, 0], vec.replace_with([false, false, true], 0).to_a
       assert_equal [1, 2, 0], vec.replace_with([false, false, true], [0]).to_a
-      assert_raise(VectorArgumentError) { vec.replace_with([true], 0) }
-      assert_raise(VectorArgumentError) { vec.replace_with([false, false, nil], 0) }
-      assert_raise(VectorArgumentError) { vec.replace_with([true, false, nil], [0, 0]) }
+      assert_raise(VectorArgumentError) { vec.replace_with([true], 0) } # boolean size mismatch
+      assert_raise(VectorArgumentError) { vec.replace_with([false, false, nil], 0) } # no true in boolean
+      assert_raise(VectorArgumentError) { vec.replace_with([true, false, nil], [0, 0]) } # replacement size mismatch
     end
 
     test 'replace UInt multi/broadcast' do
       vec = Vector.new([1, 2, 3])
       assert_equal [0, 2, 0], vec.replace_with([true, false, true], [0, 0]).to_a
+      assert_equal [0, 2, 0], vec.replace_with([true, false, true], [0]).to_a
       assert_equal [0, 2, 0], vec.replace_with([true, false, true], 0).to_a
     end
 
@@ -42,6 +43,14 @@ class VectorTest < Test::Unit::TestCase
       vec = Vector.new([1, 2, 3])
       booleans = Arrow::Array.new([true, false, nil])
       assert_equal [0, 2, nil], vec.replace_with(booleans, [0]).to_a
+    end
+
+    test 'replace with nil' do
+      vec = Vector.new([1, 2, 3])
+      assert_equal [0, 2, nil], vec.replace_with([true, false, true], [0, nil]).to_a # 1 nil
+      assert_equal [nil, 2, nil], vec.replace_with([true, false, true], [nil]).to_a # broadcast with nil
+      assert_equal [nil, 2, nil], vec.replace_with([true, false, true], nil).to_a # broadcast with nil
+      assert_equal [nil, 2, nil], vec.replace_with([true, false, true]).to_a # broadcast without replacemant
     end
   end
 end
