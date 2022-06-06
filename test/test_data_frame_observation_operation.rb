@@ -232,4 +232,23 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.remove { indexes.map(&:even?) }.tdr_str
     end
   end
+
+  sub_test_case 'remove_nil empty' do
+    test 'Empty dataframe' do
+      df = DataFrame.new
+      assert_true df.remove_nil.empty?
+    end
+
+    test 'remove_nil' do
+      assert_equal <<~OUTPUT, @df.remove_nil.tdr_str
+        RedAmber::DataFrame : 4 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       4 [0, 1, 2, 3]
+        2 :float  double      4 [0.0, 1.1, 2.2, NaN], 1 NaN
+        3 :string string      4 ["A", "B", "C", "D"]
+        4 :bool   boolean     2 {true=>2, false=>2}
+      OUTPUT
+    end
+  end
 end

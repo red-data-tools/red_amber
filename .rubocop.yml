@@ -56,6 +56,7 @@ Metrics/AbcSize:
   Max: 30
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 55
+    - 'lib/red_amber/vector_compensable.rb' # Max: 36
 
 # Max: 25
 Metrics/BlockLength:
@@ -72,10 +73,12 @@ Metrics/ClassLength:
 # Max: 7
 Metrics/CyclomaticComplexity:
   Max: 12
+  Exclude:
+    - 'lib/red_amber/vector_compensable.rb' # Max: 14
 
 # Max: 10
 Metrics/MethodLength:
-  Max: 25
+  Max: 30
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 33
 
@@ -88,6 +91,8 @@ Metrics/ModuleLength:
 # Max: 8
 Metrics/PerceivedComplexity:
   Max: 13
+  Exclude:
+    - 'lib/red_amber/vector_compensable.rb' # Max: 15
 
 # Necessary to define is_na
 Naming/PredicateName:

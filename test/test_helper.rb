@@ -17,12 +17,16 @@ module Helper
   end
 
   def assert_equal_array(expected, actual, message = nil)
-    assert_equal(expected.to_a, actual.to_a, message)
+    assert_equal(Array(expected), Array(actual), message)
   end
 
   def assert_equal_array_in_delta(expected, actual, delta = 0.001, message = '')
-    expected.to_a.zip(actual.to_a) do |e, a|
+    Array(expected).zip(Array(actual)) do |e, a|
       assert_in_delta(e, a, delta, message)
     end
+  end
+
+  def assert_equal_array_with_nan(expected, actual, message = nil)
+    assert_equal(Array(expected).to_s, Array(actual).to_s, message)
   end
 end

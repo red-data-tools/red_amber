@@ -5,6 +5,7 @@ module RedAmber
   #   @data : holds Arrow::ChunkedArray
   class Vector
     # mix-in
+    include VectorCompensable
     include VectorFunctions
 
     # chunked_array may come from column.data
@@ -18,7 +19,7 @@ module RedAmber
       when Array
         @data = Arrow::Array.new(array)
       else
-        raise ArgumentError, 'Unknown array in argument'
+        raise VectorArgumentError, 'Unknown array in argument'
       end
     end
 
