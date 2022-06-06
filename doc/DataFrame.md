@@ -689,7 +689,9 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 ## Treat na data
 
-- [ ] Drop na (NaN, nil)
+### `remove_nil`
+
+  Remove any observations containing nil.
 
 - [ ] Replace na with value
 

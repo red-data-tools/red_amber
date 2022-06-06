@@ -62,6 +62,12 @@ module RedAmber
       raise DataFrameArgumentError, "Invalid argument #{args}"
     end
 
+    def remove_nil
+      func = Arrow::Function.find(:drop_null)
+      DataFrame.new(func.execute([table]).value)
+    end
+    alias_method :drop_nil, :remove_nil
+
     private
 
     # return a DataFrame with same keys as self without values
