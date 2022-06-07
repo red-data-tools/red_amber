@@ -287,13 +287,13 @@ class VectorFunctionTest < Test::Unit::TestCase
     test `#sort_indexes` do # alias sort_indices, array_sort_indices
       boolean = Vector.new([false, nil, true])
       integer = Vector.new([3, 1, nil, 2])
-      double = Vector.new([1.0, 1.0/0, 0.0/0, nil, -2])
+      double = Vector.new([1.0, 1.0 / 0, 0.0 / 0, nil, -2])
       string = Vector.new(%w[C A B D] << nil)
       assert_equal_array [0, 2, 1], boolean.sort_indexes
       assert_equal_array [2, 0, 1], boolean.sort_indexes(opts: { order: :descending })
       assert_equal_array [1, 3, 0, 2], integer.sort_indexes
       assert_equal_array [4, 0, 1, 2, 3], double.sort_indexes
-      assert_equal_array [1, 0, 4, 2, 3], double.sort_indexes(opts: {order: :descending})
+      assert_equal_array [1, 0, 4, 2, 3], double.sort_indexes(opts: { order: :descending })
       assert_equal_array [1, 2, 0, 3, 4], string.sort_indexes
     end
   end
@@ -363,6 +363,17 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [15.0, 2.0, 3.0, -4.0, -5.0], @double.trunc
       assert_equal_array @double.trunc, @double.round(opts: { mode: :towards_zero })
       assert_raise(Arrow::Error::NotImplemented) { @string.trunc }
+    end
+
+    test '#uniq' do
+      boolean = Vector.new([true, true, nil, false, nil])
+      integer = Vector.new([1, 2, 1, nil])
+      double = Vector.new([1.0, -2, -2.0, 0.0 / 0, Float::NAN])
+      string = Vector.new(%w[A B A])
+      assert_equal_array [true, nil, false], boolean.uniq
+      assert_equal_array [1, 2, nil], integer.uniq
+      assert_equal_array_with_nan [1.0, -2.0, Float::NAN], double.uniq
+      assert_equal_array %w[A B], string.uniq
     end
   end
 

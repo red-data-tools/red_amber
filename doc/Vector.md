@@ -185,7 +185,12 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 | ✓ `shift_right`   |     | (✓) |     |     |`>>`, integer only|
 | ✓ `xor`           |  ✓  |     |     |     | `^`   |
 
+### `uniq`
+
+  Returns a new array with distinct elements.
+
 (Not impremented functions)
+
 ### [ ] sort, sort_index
 ### [ ] argmin, argmax
 ### [ ] (array functions)
