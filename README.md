@@ -8,8 +8,8 @@ A simple dataframe library for Ruby (experimental)
 ## Requirements
 
 ```ruby
-gem 'red-arrow',   '>= 7.0.0'
-gem 'red-parquet', '>= 7.0.0' # if you use IO from/to parquet
+gem 'red-arrow',   '>= 8.0.0'
+gem 'red-parquet', '>= 8.0.0' # if you use IO from/to parquet
 gem 'rover-df',    '~> 0.3.0' # if you use IO from/to Rover::DataFrame
 ```
 
