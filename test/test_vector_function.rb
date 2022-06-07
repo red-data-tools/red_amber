@@ -283,6 +283,19 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array_in_delta [1.557407724654902, 2.185039863261519, -0.1425465430742778], @double.tan, delta = 1e-15
       assert_raise(Arrow::Error::NotImplemented) { @string.tan }
     end
+
+    test `#sort_indexes` do # alias sort_indices, array_sort_indices
+      boolean = Vector.new([false, nil, true])
+      integer = Vector.new([3, 1, nil, 2])
+      double = Vector.new([1.0, 1.0/0, 0.0/0, nil, -2])
+      string = Vector.new(%w[C A B D] << nil)
+      assert_equal_array [0, 2, 1], boolean.sort_indexes
+      assert_equal_array [2, 0, 1], boolean.sort_indexes(opts: { order: :descending })
+      assert_equal_array [1, 3, 0, 2], integer.sort_indexes
+      assert_equal_array [4, 0, 1, 2, 3], double.sort_indexes
+      assert_equal_array [1, 0, 4, 2, 3], double.sort_indexes(opts: {order: :descending})
+      assert_equal_array [1, 2, 0, 3, 4], string.sort_indexes
+    end
   end
 
   sub_test_case('unary element-wise rounding') do

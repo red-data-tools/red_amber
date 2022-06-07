@@ -42,7 +42,7 @@ module RedAmber
 
     # [Unary element-wise]: vector.func => vector
     unary_element_wise =
-      %i[abs atan bit_wise_not ceil cos fill_null_backward fill_null_forward floor is_finite
+      %i[abs array_sort_indices atan bit_wise_not ceil cos fill_null_backward fill_null_forward floor is_finite
          is_inf is_nan is_null is_valid round round_to_multiple sign sin tan trunc]
     unary_element_wise.each do |function|
       define_method(function) do |opts: nil|
@@ -58,6 +58,9 @@ module RedAmber
 
     alias_method :fill_nil_backward, :fill_null_backward
     alias_method :fill_nil_forward, :fill_null_forward
+
+    alias_method :sort_indexes, :array_sort_indices
+    alias_method :sort_indices, :array_sort_indices
 
     # [Unary element-wise with operator]: vector.func => vector, op vector
     unary_element_wise_op = {
@@ -155,7 +158,7 @@ module RedAmber
     alias_method :ne, :not_equal
 
     # (array functions)
-    # array_filter, array_sort_indices, array_take
+    # array_filter, array_take
     # dictionary_encode, hash_all, hash_any, hash_approximate_median,
     # hash_count, hash_count_distinct, hash_distinct, hash_max, hash_mean, hash_min,
     # hash_min_max, hash_product, hash_stddev, hash_sum, hash_tdigest, hash_variance,

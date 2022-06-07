@@ -142,6 +142,7 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 | ✓ `round_to_multiple`| | ✓ |   | ✓ RoundToMultiple :mode, :multiple| multiple must be an Arrow::Scalar|
 | ✓ `sign`     |     |  ✓  |     |     |       |
 | ✓ `sin`      |     |  ✓  |     |     |       |
+| ✓`sort_indexes`| ✓  | ✓  | ✓  |:order|alias `sort_indices`|
 | ✓ `tan`      |     |  ✓  |     |     |       |
 | ✓ `trunc`    |     |  ✓  |     |     |       |
 
