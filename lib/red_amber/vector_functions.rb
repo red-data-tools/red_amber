@@ -166,7 +166,6 @@ module RedAmber
     # hash_min_max, hash_product, hash_stddev, hash_sum, hash_tdigest, hash_variance,
     # partition_nth_indices,
     # quarter, quarters_between,
-    # value_counts
 
     # (strings)
     # ascii_capitalize, ascii_center, ascii_is_alnum, ascii_is_alpha, ascii_is_decimal,

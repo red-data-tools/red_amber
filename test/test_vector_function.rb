@@ -364,16 +364,32 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array @double.trunc, @double.round(opts: { mode: :towards_zero })
       assert_raise(Arrow::Error::NotImplemented) { @string.trunc }
     end
+  end
+
+  sub_test_case('unary output vector') do
+    setup do
+      @boolean = Vector.new([true, true, nil, false, nil])
+      @integer = Vector.new([1, 2, 1, nil])
+      @double = Vector.new([1.0, -2, -2.0, 0.0 / 0, Float::NAN])
+      @string = Vector.new(%w[A B A])
+    end
 
     test '#uniq' do
-      boolean = Vector.new([true, true, nil, false, nil])
-      integer = Vector.new([1, 2, 1, nil])
-      double = Vector.new([1.0, -2, -2.0, 0.0 / 0, Float::NAN])
-      string = Vector.new(%w[A B A])
-      assert_equal_array [true, nil, false], boolean.uniq
-      assert_equal_array [1, 2, nil], integer.uniq
-      assert_equal_array_with_nan [1.0, -2.0, Float::NAN], double.uniq
-      assert_equal_array %w[A B], string.uniq
+      assert_equal_array [true, nil, false], @boolean.uniq
+      assert_equal_array [1, 2, nil], @integer.uniq
+      assert_equal_array_with_nan [1.0, -2.0, Float::NAN], @double.uniq
+      assert_equal_array %w[A B], @string.uniq
+    end
+
+    test '#tally/value_count' do
+      assert_equal({ true => 2, nil => 2, false => 1 }, @boolean.tally)
+      assert_equal @boolean.tally, @boolean.value_counts
+      assert_equal({ 1 => 2, 2 => 1, nil => 1 }, @integer.tally)
+      assert_equal @integer.tally, @integer.value_counts
+      assert_equal({ 1.0 => 1, -2.0 => 2, Float::NAN => 2 }.to_s, @double.tally.to_s)
+      assert_equal @double.tally.to_s, @double.value_counts.to_s
+      assert_equal({ 'A' => 2, 'B' => 1 }, @string.tally)
+      assert_equal @string.tally, @string.value_counts
     end
   end
 

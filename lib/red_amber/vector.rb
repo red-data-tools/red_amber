@@ -97,7 +97,23 @@ module RedAmber
     # def each_chunk() end
 
     def tally
-      values.tally
+      hash = values.tally
+      if (type_class < Arrow::FloatingPointDataType) && is_nan.any
+        a = 0
+        hash.each do |key, value|
+          if key.is_a?(Float) && key.nan?
+            hash.delete(key)
+            a += value
+          end
+        end
+        hash[Float::NAN] = a
+      end
+      hash
+    end
+
+    def value_counts
+      values, counts = Arrow::Function.find(:value_counts).execute([data]).value.fields
+      values.zip(counts).to_h
     end
 
     def n_nulls
