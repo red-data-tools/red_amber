@@ -7,6 +7,7 @@ module RedAmber
     # mix-in
     include DataFrameDisplayable
     include DataFrameHelper
+    include DataFrameIndexable
     include DataFrameSelectable
     include DataFrameObservationOperation
     include DataFrameVariableOperation
