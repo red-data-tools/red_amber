@@ -19,7 +19,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     test 'Empty dataframe' do
       df = DataFrame.new
       assert_true df.slice.empty?
-      assert_raise(DataFrameArgumentError) { df.slice(1) }
+      assert_true df.slice(1).empty?
     end
 
     test 'slice by arguments' do

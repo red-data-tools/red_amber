@@ -25,7 +25,7 @@ module RedAmber
 
       # filter with indexes
       slicer = expand_range(slicer)
-      return select_obs_by_indeces(slicer) if integers?(slicer)
+      return map_indices(*slicer) if integers?(slicer)
 
       raise DataFrameArgumentError, "Invalid argument #{args}"
     end
@@ -57,7 +57,7 @@ module RedAmber
       # filter with indexes
       slicer = indexes.to_a - expand_range(remover)
       return remove_all_values if slicer.empty?
-      return select_obs_by_indeces(slicer) if integers?(slicer)
+      return map_indices(*slicer) if integers?(slicer)
 
       raise DataFrameArgumentError, "Invalid argument #{args}"
     end

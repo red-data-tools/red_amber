@@ -50,8 +50,8 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
 
     test 'Select observations over range' do
-      assert_raise(DataFrameArgumentError) { df[3] }
-      assert_raise(DataFrameArgumentError) { df[-4] }
+      assert_raise(Arrow::Error::Index) { df[3] }
+      assert_raise(Arrow::Error::Index) { df[-4] }
       assert_raise(DataFrameArgumentError) { df[2..3, 0] }
       assert_raise(DataFrameArgumentError) { df[3..4, 0] }
       assert_raise(DataFrameArgumentError) { df[-4..-1] }

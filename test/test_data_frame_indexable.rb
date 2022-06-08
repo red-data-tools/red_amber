@@ -100,4 +100,20 @@ class DataFrameIndexableTest < Test::Unit::TestCase
       assert_equal str, @df.sort('+float', '-string').tdr_str(tally: 0)
     end
   end
+
+  sub_test_case 'map_indices' do
+    test 'indices by Vector/Arrow::Array' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       3 [nil, 1, 0, 0, 1], 1 nil
+        2 :float  double      4 [0.0, 1.1, 1.1, NaN, nil], 1 NaN, 1 nil
+        3 :string string      4 ["A", "C", "B", nil, "B"], 1 nil
+        4 :bool   boolean     3 [true, nil, false, false, true], 1 nil
+      OUTPUT
+      vector = Vector.new([3, 0, 4, 2, 1])
+      assert_equal str, @df.map_indices(vector).tdr_str(tally: 0)
+    end
+  end
 end

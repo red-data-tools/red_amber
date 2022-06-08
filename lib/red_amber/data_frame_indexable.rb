@@ -3,6 +3,15 @@
 module RedAmber
   # mix-ins for the class DataFrame
   module DataFrameIndexable
+    # Common method
+    def map_indices(*indices)
+      return self if indices.empty?
+
+      indices = indices[0].data if indices[0].is_a?(Vector)
+
+      new_dataframe_by(indices)
+    end
+
     # @param sort_keys [Arrow::SortKey]
     #   :key, "key" or "+key" denotes ascending,
     #   "-key" denotes descending order
