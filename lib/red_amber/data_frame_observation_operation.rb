@@ -68,6 +68,11 @@ module RedAmber
     end
     alias_method :drop_nil, :remove_nil
 
+    def group(aggregating_keys, func, target_keys)
+      t = table.group(*aggregating_keys)
+      RedAmber::DataFrame.new(t.send(func, *target_keys))
+    end
+
     private
 
     # return a DataFrame with same keys as self without values

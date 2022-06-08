@@ -697,6 +697,30 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 - [ ] Interpolate na with convolution array
 
+## Grouping
+
+### `group(aggregating_keys, function, target_keys)`
+
+  Create grouped dataframe by `aggregation_keys` and apply `function` to each group and returns in `target_keys`. Aggregated key name is `function(key)` style.
+
+  Available functions are:
+
+  - [ ] all                 
+  - [ ] any
+  - [ ] approximate_median
+  - ✓ count
+  - [ ] count_distinct
+  - [ ] distinct
+  - ✓ max
+  - ✓ mean
+  - ✓ min
+  - [ ] min_max
+  - ✓ product
+  - ✓ stddev
+  - ✓ sum
+  - [ ] tdigest
+  - ✓ variance
+
 ## Combining DataFrames
 
 - [ ]  obs
