@@ -14,4 +14,7 @@ group :test do
 
   gem 'test-unit'
   gem 'webrick'
+
+  gem 'benchmark_driver'
+  gem 'red-datasets-arrow'
 end
