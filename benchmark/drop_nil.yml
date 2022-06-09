@@ -1,0 +1,11 @@
+prelude: |
+  require 'datasets-arrow'
+  require 'red_amber'
+
+  penguins = RedAmber::DataFrame.new(Datasets::Penguins.new.to_arrow)
+
+  def drop_nil(penguins)
+    penguins.remove { vectors.map { |v| v.is_nil} }
+  end
+
+benchmark: drop_nil(penguins)
