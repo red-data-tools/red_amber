@@ -27,7 +27,7 @@ module RedAmber
 
       # expand Range like [1..3, 4] to [1, 2, 3, 4]
       expanded = expand_range(args)
-      return select_obs_by_indeces(expanded) if integers?(expanded)
+      return map_indices(*expanded) if integers?(expanded)
       return select_vars_by_keys(expanded.map(&:to_sym)) if sym_or_str?(expanded)
 
       raise DataFrameArgumentError, "Invalid argument #{args}"

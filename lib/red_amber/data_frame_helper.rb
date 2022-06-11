@@ -6,8 +6,15 @@ module RedAmber
     private
 
     def expand_range(args)
-      args.each_with_object([]) do |e, a|
+      ary = args.each_with_object([]) do |e, a|
         e.is_a?(Range) ? a.concat(normalized_array(e)) : a.append(e)
+      end
+      ary.map do |e|
+        if e.is_a?(Integer) && e.negative?
+          e + size
+        else
+          e
+        end
       end
     end
 
@@ -48,13 +55,6 @@ module RedAmber
 
     def select_obs_by_boolean(array)
       DataFrame.new(@table.filter(array))
-    end
-
-    def select_obs_by_indeces(indeces)
-      out_of_range?(indeces) && raise(DataFrameArgumentError, "Invalid index: #{indeces} for 0..#{size - 1}")
-
-      a = indeces.map { |i| @table.slice(i).to_a }
-      DataFrame.new(@table.schema, a)
     end
 
     def keys_by_booleans(booleans)

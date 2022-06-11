@@ -142,6 +142,7 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 | ✓ `round_to_multiple`| | ✓ |   | ✓ RoundToMultiple :mode, :multiple| multiple must be an Arrow::Scalar|
 | ✓ `sign`     |     |  ✓  |     |     |       |
 | ✓ `sin`      |     |  ✓  |     |     |       |
+| ✓`sort_indexes`| ✓  | ✓  | ✓  |:order|alias `sort_indices`|
 | ✓ `tan`      |     |  ✓  |     |     |       |
 | ✓ `trunc`    |     |  ✓  |     |     |       |
 
@@ -184,7 +185,27 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 | ✓ `shift_right`   |     | (✓) |     |     |`>>`, integer only|
 | ✓ `xor`           |  ✓  |     |     |     | `^`   |
 
+### `uniq`
+
+  Returns a new array with distinct elements.
+
 (Not impremented functions)
+
+### `tally` and `value_counts`
+
+  Compute counts of unique elements and return a Hash.
+
+  It returns almost same result as Ruby's tally. These methods consider NaNs are same.
+
+  ```ruby
+  array = [0.0/0, Float::NAN]
+  array.tally #=> {NaN=>1, NaN=>1}
+
+  vector = RedAmber::Vector.new(array)
+  vector.tally #=> {NaN=>2}
+  vector.value_counts #=> {NaN=>2}
+  ```
+
 ### [ ] sort, sort_index
 ### [ ] argmin, argmax
 ### [ ] (array functions)

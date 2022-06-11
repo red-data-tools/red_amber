@@ -283,6 +283,19 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array_in_delta [1.557407724654902, 2.185039863261519, -0.1425465430742778], @double.tan, delta = 1e-15
       assert_raise(Arrow::Error::NotImplemented) { @string.tan }
     end
+
+    test `#sort_indexes` do # alias sort_indices, array_sort_indices
+      boolean = Vector.new([false, nil, true])
+      integer = Vector.new([3, 1, nil, 2])
+      double = Vector.new([1.0, 1.0 / 0, 0.0 / 0, nil, -2])
+      string = Vector.new(%w[C A B D] << nil)
+      assert_equal_array [0, 2, 1], boolean.sort_indexes
+      assert_equal_array [2, 0, 1], boolean.sort_indexes(opts: { order: :descending })
+      assert_equal_array [1, 3, 0, 2], integer.sort_indexes
+      assert_equal_array [4, 0, 1, 2, 3], double.sort_indexes
+      assert_equal_array [1, 0, 4, 2, 3], double.sort_indexes(opts: { order: :descending })
+      assert_equal_array [1, 2, 0, 3, 4], string.sort_indexes
+    end
   end
 
   sub_test_case('unary element-wise rounding') do
@@ -350,6 +363,33 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [15.0, 2.0, 3.0, -4.0, -5.0], @double.trunc
       assert_equal_array @double.trunc, @double.round(opts: { mode: :towards_zero })
       assert_raise(Arrow::Error::NotImplemented) { @string.trunc }
+    end
+  end
+
+  sub_test_case('unary output vector') do
+    setup do
+      @boolean = Vector.new([true, true, nil, false, nil])
+      @integer = Vector.new([1, 2, 1, nil])
+      @double = Vector.new([1.0, -2, -2.0, 0.0 / 0, Float::NAN])
+      @string = Vector.new(%w[A B A])
+    end
+
+    test '#uniq' do
+      assert_equal_array [true, nil, false], @boolean.uniq
+      assert_equal_array [1, 2, nil], @integer.uniq
+      assert_equal_array_with_nan [1.0, -2.0, Float::NAN], @double.uniq
+      assert_equal_array %w[A B], @string.uniq
+    end
+
+    test '#tally/value_count' do
+      assert_equal({ true => 2, nil => 2, false => 1 }, @boolean.tally)
+      assert_equal @boolean.tally, @boolean.value_counts
+      assert_equal({ 1 => 2, 2 => 1, nil => 1 }, @integer.tally)
+      assert_equal @integer.tally, @integer.value_counts
+      assert_equal({ 1.0 => 1, -2.0 => 2, Float::NAN => 2 }.to_s, @double.tally.to_s)
+      assert_equal @double.tally.to_s, @double.value_counts.to_s
+      assert_equal({ 'A' => 2, 'B' => 1 }, @string.tally)
+      assert_equal @string.tally, @string.value_counts
     end
   end
 
