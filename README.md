@@ -3,7 +3,7 @@
 A simple dataframe library for Ruby (experimental)
 
 - Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow)
-- Simple API similar to [Rover-df](https://github.com/ankane/rover)
+- Inspired by the dataframe library [Rover-df](https://github.com/ankane/rover)
 
 ## Requirements
 
@@ -14,6 +14,15 @@ gem 'rover-df',    '~> 0.3.0' # if you use IO from/to Rover::DataFrame
 ```
 
 ## Installation
+
+Install requirements before you install Red Amber.
+
+- Apache Arrow GLib (>= 8.0.0)
+- Apache Parquet GLib (>= 8.0.0)
+
+  See [Apache Arrow install document](https://arrow.apache.org/install/).
+  
+  Minimum installation example for the latest Ubuntu is in the ['Prepare the Apache Arrow' section in ci test](https://github.com/heronshoes/red_amber/blob/master/.github/workflows/test.yml) of Red Amber.
 
 Add this line to your Gemfile:
 
@@ -41,8 +50,9 @@ Represents a set of data in 2D-shape.
 require 'red_amber'
 require 'datasets-arrow'
 
-penguins = Datasets::Penguins.new.to_arrow
-puts RedAmber::DataFrame.new(penguins).tdr
+arrow = Datasets::Penguins.new.to_arrow
+penguins = RedAmber::DataFrame.new(arrow)
+penguins.tdr
 # =>
 RedAmber::DataFrame : 344 x 8 Vectors
 Vectors : 5 numeric, 3 strings
@@ -71,11 +81,10 @@ Vector : 1 numeric
 1 :body_mass_g int64    95 [3750, 3800, 3250, nil, 3450, ... ], 2 nils
 ```
 
-`DataFrame#assign` creates new variable (column in table).
+`DataFrame#assign` creates new variables (column in the table).
 
 ```ruby
 df.assign(:body_mass_kg => df[:body_mass_g] / 1000.0)
-end
 # =>
 #<RedAmber::DataFrame : 344 x 2 Vectors, 0x000000000000fa28>
 Vectors : 2 numeric
@@ -86,7 +95,7 @@ Vectors : 2 numeric
 
 DataFrame manipulating methods like `pick`, `drop`, `slice`, `remove`, `rename` and `assign` accept a block.
 
-This is an exaple to eliminate observations (row in table) containing nil.
+This is an exaple to eliminate observations (row in the table) containing nil.
 
 ```ruby
 # remove all observation contains nil
@@ -106,6 +115,12 @@ Vectors : 5 numeric, 3 strings
 8 :year              int64      3 {2007=>109, 2008=>114, 2009=>119}
 ```
 
+For this frequently needed task, we can do it much simpler.
+
+```ruby
+penguins.remove_nil # => same result as above
+```
+
 See [DataFrame.md](doc/DataFrame.md) for details.
 
 
@@ -114,10 +129,10 @@ See [DataFrame.md](doc/DataFrame.md) for details.
 Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ```ruby
-penguins[:species]
+penguins[:bill_length_mm]
 # =>
-#<RedAmber::Vector(:string, size=344):0x000000000000f8e8>
-["Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", ... ]
+#<RedAmber::Vector(:double, size=344):0x000000000000f8fc>
+[39.1, 39.5, 40.3, nil, 36.7, 39.3, 38.9, 39.2, 34.1, 42.0, 37.8, 37.8, 41.1, ... ]
 ```
 
 Vectors accepts some [functional methods from Arrow](https://arrow.apache.org/docs/cpp/compute.html).

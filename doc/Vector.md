@@ -45,8 +45,6 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ### [ ] `each_chunk` (not impremented yet)
 
-### `tally`
-
 ### `n_nils`, `n_nans`
 
   - `n_nulls` is an alias of `n_nils`
@@ -206,7 +204,9 @@ boolean.all(opts: {skip_nulls: false}) #=> false
   vector.value_counts #=> {NaN=>2}
   ```
 
-### [ ] sort, sort_index
+### `sort_indexes`, `sort_indices`, `array_sort_indices`
+
+### [ ] `sort`, `sort_by`
 ### [ ] argmin, argmax
 ### [ ] (array functions)
 ### [ ] (strings functions)
@@ -286,4 +286,32 @@ vec.replace_with(booleans)
 => 
 #<RedAmber::Vector(:int8, size=3):0x00000000000304d0>
 [nil, 2, nil]
+```
+
+- An example to replace 'NA' to nil.
+
+```ruby
+vector = RedAmber::Vector.new(['A', 'B', 'NA'])
+vector.replace_with(vector == 'NA', nil)
+# =>
+#<RedAmber::Vector(:string, size=3):0x000000000000f8ac>
+["A", "B", nil]
+```
+
+### `fill_nil_forward`, `fill_nil_backward` => vector
+
+Propagate the last valid observation forward (or backward).
+Or preserve nil if all previous values are nil or at the end.
+
+```ruby
+integer = RedAmber::Vector.new([0, 1, nil, 3, nil])
+integer.fill_nil_forward
+# =>
+#<RedAmber::Vector(:uint8, size=5):0x000000000000f960>
+[0, 1, 1, 3, 3]
+
+integer.fill_nil_backward
+# =>
+#<RedAmber::Vector(:uint8, size=5):0x000000000000f974>
+[0, 1, 3, 3, nil]
 ```

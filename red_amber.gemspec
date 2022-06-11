@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email = ['heronshoes877@gmail.com']
 
   spec.summary = 'Simple dataframe library for Ruby'
-  spec.description = 'RedAmber is a simple dataframe library powered by Red Arrow with API similar to Rover-df.'
+  spec.description = 'RedAmber is a simple dataframe library inspired by Rover-df and powered by Red Arrow.'
   spec.homepage = 'https://github.com/heronshoes/red_amber'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 2.7'
@@ -37,7 +37,4 @@ Gem::Specification.new do |spec|
   # Development dependency has gone to the Gemfile (rubygems/bundler#7237)
 
   spec.metadata['rubygems_mfa_required'] = 'true'
-
-  # For more information and examples about making a new gem, check out our
-  # guide at: https://bundler.io/guides/creating_gem.html
 end
