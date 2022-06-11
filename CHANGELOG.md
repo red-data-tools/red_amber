@@ -1,19 +1,86 @@
-##  - Unreleased
-
-- Feedback something to Red Arrow
-
-- `DataFrame`
-  - Introduce `group_by`
-  - Introduce `summarize`
-  - Introduce `summary` or ``describe`
-  - Improve dataframe obs. manipuration methods to accept float as a index (#10)
-  - More performant
-
-- `Vector`
-  - Support more functions
+## [0.2.0] - unreleased
 
 - Document
   - YARD support
+
+- DataFrame#join features
+
+## [0.1.6] - Unreleased
+
+- Feedback something to Red Data Tools
+
+- `DataFrame`
+  - Introduce `summary` or ``describe`
+  - Add `Quantile` by own code?
+  - Improve dataframe obs. manipuration methods to accept float as a index (#10)
+  - Improve as more performant by benchmark check.
+
+- `Vector`
+  - Support more functions
+  - Support coerece
+
+- More examples of frequently needed tasks
+
+## [0.1.5] - 2022-06-12 (experimental)
+
+- Bug fixes
+  - Fix DF#tdr to display timestamp type (#19)
+  - Add TZ setting in CI test to pass temporal tests (#19)
+  - Fix example in document of #load(csv_from_URI) (#23)
+
+- New features and improvements
+  - Improve usability of DataFrame manipulating block (#19)
+    - Add `DataFrame#v` to select a Vector
+    - Add `DataFrame#variables` method
+    - Add `DataFrame#to_arrow`
+    - Add instance variables in DataFrame with lazy initialization
+    - Add `Vector#key` to get key name
+    - Add `Vector#temporal?` to check if temporal type
+    - Refine around DataFrame#variables
+    - Refine init of instance variables
+    - Refine DataFrame#type_classes, V#ectortype_class
+    - Refine DataFrame#tdr to shorten temporal data
+
+  - Add supports to make up for missing values (#20)
+    - Add VectorArgumentError
+    - Add `Vector#replace_with`
+    - Add helper function to assert with NaN
+      - To assert NaN == NaN
+    - Add `Vector#fill_nil_backward`, `Vector#forward`
+    - Add `DataFrame#remove_nil` method
+    - Change to accept nil as replacement in Vector#replace_with
+
+  - Introduce index related methods (#22)
+    - Add `Vector#sort_indexes` method
+    - Add `Vector#uniq` method
+    - Add `Vector#tally` and `Vectorvalue_counts` methods
+    - Add `DataFrame#sort` method
+    - Add `DataFrame#group` method
+    - Change to use DataFrame#map_indices in #[]
+
+  - Add rounding functions with opts (#21)
+    -  With options :mode and :n_digits 
+    -  :n_digits also can be specified with :multiple option in `Vector#round_to_multiple`
+    - `Vector#round`
+    - `Vector#ceil`
+    - `Vector#floor`
+    - `Vector#trunc`
+
+  - Documentation
+    - Update TDR, TDR_ja documents to latest (#18)
+    - Refinement and small fix in DataFrame.md (#18)
+    - Update README to use more effective example (#18)
+    - Delete expired TDR_operations.pdf (#23)
+    - Update README and dataframe_model image (#23)
+    - Update description about rover-df in README (#23)
+    - Add installation of Arrow in README (#23)
+
+  - Others
+    - Tried but cannot use bundler cache in ci test (#17)
+    - Bump up requirements to Arrow 8.0.0 (#25)
+      - Arrow 7.0.0 with Ubuntu 21.04 causes an fatal error in replace_with_mask function.
+    - Update the description of gem (#23)
+    - Add benchmark tests (#26)
 
 ## [0.1.4] - 2022-05-29 (experimental)
 
