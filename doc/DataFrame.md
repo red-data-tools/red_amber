@@ -52,7 +52,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 - from a URI
 
   ```ruby
-  uri = URI("https://github.com/heronshoes/red_amber/blob/master/test/entity/with_header.csv")
+  uri = URI("uri = URI("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv")
   RedAmber::DataFrame.load(uri)
   ```
 
@@ -96,11 +96,44 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 ### `variables`
 
-- Returns key names and Vectors in a Hash.
+- Returns key names and Vectors pair in a Hash.
+
+  It is convenient to use in a block when both key and vector required. We will write:
+
+  ```ruby
+    # update numeric variables
+    df.assign do
+      variables.select.with_object({}) do |(key, vector), assigner|
+        assigner[key] = vector * -1 if vector.numeric?
+      end
+    end
+  ```
+
+  Instead of:
+  ```ruby
+    df.assign do
+      assigner = {}
+      vectors.each_with_index do |vector, i|
+        assigner[keys[i]] = vector * -1 if vector.numeric?
+      end
+      assigner
+    end
+  ```
 
 ### `keys`, `var_names`, `column_names`
   
 - Returns key names in an Array.
+
+  When we use it with vectors, Vector#key is useful to get the key inside of DataFrame.
+
+  ```ruby
+    # update numeric variables, another solution
+    df.assign do
+      vectors.each_with_object({}) do |vector, assigner|
+        assigner[vector.key] = vector * -1 if vector.numeric?
+      end
+    end
+  ```
 
 ### `types`
   
@@ -280,7 +313,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
     3 :c  double     1 [1.0]
     ```
 
-### Select rows from top or bottom
+### Select rows from top or from bottom
 
   `head(n=5)`, `tail(n=5)`, `first(n=1)`, `last(n=1)`
 
@@ -679,11 +712,29 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 ## Updating
 
-- [ ] Update elements matching a condition
+### `sort`
+
+  `sort` accepts parameters as sort_keys thanks to the amazing Red Arrow feature。
+    - :key, "key" or "+key" denotes ascending order
+    - "-key" denotes descending order
+
+  ```ruby
+  df = RedAmber::DataFrame.new({
+        index:  [1, 1, 0, nil, 0],
+        string: ['C', 'B', nil, 'A', 'B'],
+        bool:   [nil, true, false, true, false],
+      })
+  df.sort(:index, '-bool').tdr(tally: 0)
+  # =>
+  RedAmber::DataFrame : 5 x 3 Vectors
+  Vectors : 1 numeric, 1 string, 1 boolean
+  # key     type    level data_preview
+  1 :index  uint8       3 [0, 0, 1, 1, nil], 1 nil
+  2 :string string      4 [nil, "B", "B", "C", "A"], 1 nil
+  3 :bool   boolean     3 [false, false, true, nil, true], 1 nil
+  ```
 
 - [ ] Clamp
-
-- [ ] Sort rows
 
 - [ ] Clear data
 
@@ -693,15 +744,66 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
   Remove any observations containing nil.
 
-- [ ] Replace na with value
-
-- [ ] Interpolate na with convolution array
-
 ## Grouping
 
 ### `group(aggregating_keys, function, target_keys)`
 
   Create grouped dataframe by `aggregation_keys` and apply `function` to each group and returns in `target_keys`. Aggregated key name is `function(key)` style.
+
+  (The current implementation is not intuitive. Needs improvement.)
+
+  ```ruby
+  ds = Datasets::Rdatasets.new('dplyr', 'starwars')
+  starwars = RedAmber::DataFrame.new(ds.to_table.to_h)
+  starwars.tdr(11)
+  # =>
+  RedAmber::DataFrame : 87 x 11 Vectors
+  Vectors : 3 numeric, 8 strings
+  #  key         type   level data_preview
+  1  :name       string    87 ["Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader",   "Leia Organa", ... ]
+  2  :height     uint16    46 [172, 167, 96, 202, 150, ... ], 6 nils
+  3  :mass       double    39 [77.0, 75.0, 32.0, 136.0, 49.0, ... ], 28 nils
+  4  :hair_color string    13 ["blond", nil, nil, "none", "brown", ... ], 5 nils
+  5  :skin_color string    31 ["fair", "gold", "white, blue", "white", "light", ..  . ]
+  6  :eye_color  string    15 ["blue", "yellow", "red", "yellow", "brown", ... ]
+  7  :birth_year double    37 [19.0, 112.0, 33.0, 41.9, 19.0, ... ], 44 nils
+  8  :sex        string     5 {"male"=>60, "none"=>6, "female"=>16, "hermaphroditic"=>1, nil=>4}
+  9  :gender     string     3 {"masculine"=>66, "feminine"=>17, nil=>4}
+  10 :homeworld  string    49 ["Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan", ... ], 10 nils
+  11 :species    string    38 ["Human", "Droid", "Droid", "Human", "Human", ... ], 4 nils
+
+  grouped = starwars.group(:species, :mean, [:mass, :height])
+  # =>
+  #<RedAmber::DataFrame : 38 x 3 Vectors, 0x000000000000fbf4>
+  Vectors : 2 numeric, 1 string
+  # key             type   level data_preview
+  1 :"mean(mass)"   double    27 [82.78181818181818, 69.75, 124.0, 74.0, 1358.0, ... ], 6 nils
+  2 :"mean(height)" double    32 [176.6451612903226, 131.2, 231.0, 173.0, 175.0, ... ]
+  3 :species        string    38 ["Human", "Droid", "Wookiee", "Rodian", "Hutt", ... ], 1 nil
+
+  count = starwars.group(:species, :count, :species)[:"count(species)"]
+  df = grouped.slice(count > 1)
+  # =>
+  #<RedAmber::DataFrame : 8 x 3 Vectors, 0x000000000000fc44>
+  Vectors : 2 numeric, 1 string
+  # key             type   level data_preview
+  1 :"mean(mass)"   double     8 [82.78181818181818, 69.75, 124.0, 74.0, 80.0, ... ]
+  2 :"mean(height)" double     8 [176.6451612903226, 131.2, 231.0, 208.66666666666666, 173.0, ... ]
+  3 :species        string     8 ["Human", "Droid", "Wookiee", "Gungan", "Zabrak", ... ]
+
+  df.table
+  # =>
+  #<Arrow::Table:0x1165593c8 ptr=0x7fb3db144c70>
+	mean(mass)	mean(height)	species
+  0	 82.781818	  176.645161	Human  
+  1	 69.750000	  131.200000	Droid  
+  2	124.000000	  231.000000	Wookiee
+  3	 74.000000	  208.666667	Gungan 
+  4	 80.000000	  173.000000	Zabrak 
+  5	 55.000000	  179.000000	Twi'lek
+  6	 53.100000	  168.000000	Mirialan
+  7	 88.000000	  221.000000	Kaminoan
+  ```
 
   Available functions are:
 
