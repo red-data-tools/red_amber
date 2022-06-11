@@ -17,8 +17,8 @@ gem 'rover-df',    '~> 0.3.0' # if you use IO from/to Rover::DataFrame
 
 Install requirements before you install Red Amber.
 
-- Apache Arrow GLib (>= 7.0.0)
-- Apache Parquet GLib (>= 7.0.0)
+- Apache Arrow GLib (>= 8.0.0)
+- Apache Parquet GLib (>= 8.0.0)
 
   See [Apache Arrow install document](https://arrow.apache.org/install/).
   
@@ -50,8 +50,9 @@ Represents a set of data in 2D-shape.
 require 'red_amber'
 require 'datasets-arrow'
 
-penguins = Datasets::Penguins.new.to_arrow
-puts RedAmber::DataFrame.new(penguins).tdr
+arrow = Datasets::Penguins.new.to_arrow
+penguins = RedAmber::DataFrame.new(arrow)
+penguins.tdr
 # =>
 RedAmber::DataFrame : 344 x 8 Vectors
 Vectors : 5 numeric, 3 strings
@@ -114,6 +115,12 @@ Vectors : 5 numeric, 3 strings
 8 :year              int64      3 {2007=>109, 2008=>114, 2009=>119}
 ```
 
+For this frequently needed task, we can do it much simpler.
+
+```ruby
+penguins.remove_nil # => same result as above
+```
+
 See [DataFrame.md](doc/DataFrame.md) for details.
 
 
@@ -122,10 +129,10 @@ See [DataFrame.md](doc/DataFrame.md) for details.
 Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ```ruby
-penguins[:species]
+penguins[:bill_length_mm]
 # =>
-#<RedAmber::Vector(:string, size=344):0x000000000000f8e8>
-["Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", "Adelie", ... ]
+#<RedAmber::Vector(:double, size=344):0x000000000000f8fc>
+[39.1, 39.5, 40.3, nil, 36.7, 39.3, 38.9, 39.2, 34.1, 42.0, 37.8, 37.8, 41.1, ... ]
 ```
 
 Vectors accepts some [functional methods from Arrow](https://arrow.apache.org/docs/cpp/compute.html).
