@@ -133,6 +133,19 @@ module RedAmber
       Rover::DataFrame.new(to_h)
     end
 
+    def to_html
+      require 'iruby'
+      return '(empty DataFrame)' if empty?
+
+      html =
+        if size > 8
+          IRuby::HTML.table((self[0..4, -4..-1]).to_h, maxrows: 8, maxcols: 15)
+        else
+          IRuby::HTML.table(to_h)
+        end
+      "#{size} x #{n_keys} vector#{n_keys > 1 ? 's' : ''} ; #{html}"
+    end
+
     private
 
     # initialize @variable, @keys, @vectors and return one of them

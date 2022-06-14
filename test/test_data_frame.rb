@@ -3,60 +3,62 @@
 require 'test_helper'
 
 class DataFrameTest < Test::Unit::TestCase
+  include RedAmber
+
   sub_test_case 'Constructor' do
     test 'new empty DataFrame' do
-      assert_equal [], RedAmber::DataFrame.new.table.columns
-      assert_equal [], RedAmber::DataFrame.new([]).table.columns
-      assert_equal [], RedAmber::DataFrame.new(nil).table.columns
+      assert_equal [], DataFrame.new.table.columns
+      assert_equal [], DataFrame.new([]).table.columns
+      assert_equal [], DataFrame.new(nil).table.columns
     end
 
     hash = { x: [1, 2, 3] }
-    df = RedAmber::DataFrame.new(hash)
+    df = DataFrame.new(hash)
     data('hash 1 column', [hash, df], keep: true)
 
     hash = { x: [1, 2, 3], 'y' => %w[A B C] }
-    df = RedAmber::DataFrame.new(hash)
+    df = DataFrame.new(hash)
     data('hash 2 colums', [hash, df], keep: true)
 
     test 'new from a Hash' do |(h, d)|
       assert_equal Arrow::Table.new(h), d.table
     end
 
-    test 'new from a RedAmber::DataFrame' do |(_, d)|
-      assert_equal d.table, RedAmber::DataFrame.new(d).table
+    test 'new from a DataFrame' do |(_, d)|
+      assert_equal d.table, DataFrame.new(d).table
     end
 
     test 'new from a Arrow::Table' do |(h, _)|
       table = Arrow::Table.new(h)
-      df = RedAmber::DataFrame.new(table)
+      df = DataFrame.new(table)
       assert_equal table, df.table
     end
 
     test 'new from schema and Array' do
-      expected = RedAmber::DataFrame.new(x: [1, 2, 3])
+      expected = DataFrame.new(x: [1, 2, 3])
       schema = { x: :uint8 }
       array = [[1], [2], [3]]
-      assert_equal expected, RedAmber::DataFrame.new(schema, array)
+      assert_equal expected, DataFrame.new(schema, array)
     end
 
     test 'new from a Rover::DataFrame' do |(h, d)|
       rover = Rover::DataFrame.new(h)
-      assert_equal d, RedAmber::DataFrame.new(rover)
+      assert_equal d, DataFrame.new(rover)
     end
 
     test 'Select observations by invalid type' do
       int32_array = Arrow::Int32Array.new([1, 2])
-      assert_raise(RedAmber::DataFrameTypeError) { RedAmber::DataFrame.new(int32_array) }
+      assert_raise(DataFrameTypeError) { DataFrame.new(int32_array) }
     end
   end
 
   sub_test_case 'Properties' do
     hash = { x: [1, 2, 3], y: %w[A B C] }
     data('hash data',
-         [hash, RedAmber::DataFrame.new(hash), %i[uint8 string]],
+         [hash, DataFrame.new(hash), %i[uint8 string]],
          keep: true)
     data('empty data',
-         [{}, RedAmber::DataFrame.new, []],
+         [{}, DataFrame.new, []],
          keep: true)
 
     test 'size' do
@@ -137,19 +139,45 @@ class DataFrameTest < Test::Unit::TestCase
 
     test 'hash I/O' do
       hash, schema, array = data
-      assert_equal RedAmber::DataFrame.new(hash), RedAmber::DataFrame.new(schema, array)
-      assert_equal hash, RedAmber::DataFrame.new(hash).to_h
-      assert_equal schema, RedAmber::DataFrame.new(hash).schema
-      assert_equal array, RedAmber::DataFrame.new(hash).to_a
+      assert_equal DataFrame.new(hash), DataFrame.new(schema, array)
+      assert_equal hash, DataFrame.new(hash).to_h
+      assert_equal schema, DataFrame.new(hash).schema
+      assert_equal array, DataFrame.new(hash).to_a
     end
 
     test 'rover I/O' do
       # Rover::DataFrame doesn't support empty dataframe
       hash = { name: %w[Yasuko Rui Hinata], age: [68, 49, 28] }
-      redamber = RedAmber::DataFrame.new(hash)
+      redamber = DataFrame.new(hash)
       rover = Rover::DataFrame.new(hash)
-      assert_equal redamber, RedAmber::DataFrame.new(rover)
+      assert_equal redamber, DataFrame.new(rover)
       assert_equal rover, redamber.to_rover
+    end
+  end
+
+  sub_test_case 'to_html' do
+    test 'empty' do
+      df = DataFrame.new
+      assert_equal '(empty DataFrame)', df.to_html
+    end
+
+    test 'simple dataframe' do
+      df = DataFrame.new(x: [1, 2, Float::NAN], y: %w[A B] << nil, z: [true, false, nil])
+      html = '3 x 3 vectors ; <table><tr><th>x</th><th>y</th><th>z</th></tr><tr><td>1.0</td><td>A</td><td>true</td></tr><tr><td>2.0</td><td>B</td><td>false</td></tr><tr><td>NaN</td><td></td><td></td></tr></table>'
+      assert_equal html, df.to_html
+    end
+
+    test 'long dataframe' do
+      df = RedAmber::DataFrame.new(x: [*1..10])
+      html = '10 x 1 vector ; <table><tr><th>x</th></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr><tr><td>4</td></tr><tr><td>&#8942;</td></tr><tr><td>8</td></tr><tr><td>9</td></tr><tr><td>10</td></tr></table>'
+      assert_equal html, df.to_html
+    end
+
+    test 'wide dataframe' do
+      raw_record = (1..16).each.with_object({}) { |i, h| h[(64 + i).chr] = [i] }
+      df = RedAmber::DataFrame.new(raw_record)
+      html = '1 x 16 vectors ; <table><tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>&#8230;</th><th>J</th><th>K</th><th>L</th><th>M</th><th>N</th><th>O</th><th>P</th></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>&#8230;</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr></table>'
+      assert_equal html, df.to_html
     end
   end
 end

@@ -12,6 +12,7 @@ group :test do
   gem 'rubocop-rake'
   gem 'rubocop-rubycw', require: false
 
+  gem 'iruby'
   gem 'test-unit'
   gem 'webrick'
 
