@@ -179,6 +179,10 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 - Returns a `Rover::DataFrame`.
 
+### `to_html`
+
+- Show the DataFrame as a Table in Jupyter Notebook or Jupyter Lab with IRuby.
+
 ### `tdr(limit = 10, tally: 5, elements: 5)`
 
   - Shows some information about self in a transposed style.
