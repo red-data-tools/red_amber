@@ -133,7 +133,7 @@ module RedAmber
       Rover::DataFrame.new(to_h)
     end
 
-    def to_html
+    def to_iruby
       require 'iruby'
       return '(empty DataFrame)' if empty?
 
@@ -143,7 +143,8 @@ module RedAmber
         else
           IRuby::HTML.table(to_h)
         end
-      "#{size} x #{n_keys} vector#{n_keys > 1 ? 's' : ''} ; #{html}"
+      html = "#{size} x #{n_keys} vector#{n_keys > 1 ? 's' : ''} ; #{html}"
+      ['text/html', html]
     end
 
     private

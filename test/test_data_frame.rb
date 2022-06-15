@@ -155,29 +155,29 @@ class DataFrameTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case 'to_html' do
+  sub_test_case 'to_iruby' do
     test 'empty' do
       df = DataFrame.new
-      assert_equal '(empty DataFrame)', df.to_html
+      assert_equal '(empty DataFrame)', df.to_iruby
     end
 
     test 'simple dataframe' do
       df = DataFrame.new(x: [1, 2, Float::NAN], y: %w[A B] << nil, z: [true, false, nil])
       html = '3 x 3 vectors ; <table><tr><th>x</th><th>y</th><th>z</th></tr><tr><td>1.0</td><td>A</td><td>true</td></tr><tr><td>2.0</td><td>B</td><td>false</td></tr><tr><td>NaN</td><td></td><td></td></tr></table>'
-      assert_equal html, df.to_html
+      assert_equal html, df.to_iruby[1]
     end
 
     test 'long dataframe' do
       df = RedAmber::DataFrame.new(x: [*1..10])
       html = '10 x 1 vector ; <table><tr><th>x</th></tr><tr><td>1</td></tr><tr><td>2</td></tr><tr><td>3</td></tr><tr><td>4</td></tr><tr><td>&#8942;</td></tr><tr><td>8</td></tr><tr><td>9</td></tr><tr><td>10</td></tr></table>'
-      assert_equal html, df.to_html
+      assert_equal html, df.to_iruby[1]
     end
 
     test 'wide dataframe' do
       raw_record = (1..16).each.with_object({}) { |i, h| h[(64 + i).chr] = [i] }
       df = RedAmber::DataFrame.new(raw_record)
       html = '1 x 16 vectors ; <table><tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>&#8230;</th><th>J</th><th>K</th><th>L</th><th>M</th><th>N</th><th>O</th><th>P</th></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>&#8230;</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr></table>'
-      assert_equal html, df.to_html
+      assert_equal html, df.to_iruby[1]
     end
   end
 end
