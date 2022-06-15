@@ -7,6 +7,7 @@ module RedAmber
     # mix-in
     include VectorFunctions
     include VectorUpdatable
+    include VectorSelectable
 
     # chunked_array may come from column.data
     def initialize(array)

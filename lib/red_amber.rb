@@ -12,6 +12,7 @@ require_relative 'red_amber/data_frame_variable_operation'
 require_relative 'red_amber/data_frame'
 require_relative 'red_amber/vector_functions'
 require_relative 'red_amber/vector_updatable'
+require_relative 'red_amber/vector_selectable'
 require_relative 'red_amber/vector'
 require_relative 'red_amber/version'
 
