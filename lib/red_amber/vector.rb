@@ -20,7 +20,7 @@ module RedAmber
       when Array
         @data = Arrow::Array.new(array)
       else
-        raise VectorArgumentError, 'Unknown array in argument'
+        raise VectorArgumentError, "Unknown array in argument #{array}"
       end
     end
 

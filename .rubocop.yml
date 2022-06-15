@@ -57,6 +57,7 @@ Metrics/AbcSize:
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 55
     - 'lib/red_amber/vector_updatable.rb' # Max: 36
+    - 'lib/red_amber/vector_selectable.rb' # Max: 33
 
 # Max: 25
 Metrics/BlockLength:
@@ -105,3 +106,8 @@ Naming/PredicateName:
 Style/SlicingWithRange:
   Exclude:
     - 'test/test_data_frame_selectable.rb'
+
+# Necessary to Vector < 0 element-wise comparison
+Style/NumericPredicate:
+  Exclude:
+    - 'lib/red_amber/vector_selectable.rb'

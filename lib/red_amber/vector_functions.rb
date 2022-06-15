@@ -172,7 +172,7 @@ module RedAmber
     end
 
     # (array functions)
-    # array_filter, array_take
+    # array_filter
     # dictionary_encode,
     # partition_nth_indices,
     # quarter, quarters_between,

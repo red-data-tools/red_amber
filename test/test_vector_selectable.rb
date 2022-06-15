@@ -18,4 +18,28 @@ class VectorTest < Test::Unit::TestCase
       assert_equal [], Vector.new([nil, nil, nil]).drop_nil.to_a
     end
   end
+
+  sub_test_case('take(indices)') do
+    setup do
+      @string = Vector.new(%w[A B C D E])
+    end
+
+    test 'empty vector' do
+      assert_equal [], Vector.new([]).take.to_a
+    end
+
+    test 'take' do
+      assert_equal [], @string.take.to_a
+      assert_equal %w[B], @string.take(1).to_a # single value
+      assert_equal %w[B D], @string.take(1, 3).to_a # array without bracket
+      assert_equal %w[D A D], @string.take([3, 0, -2]).to_a # array, negative index
+      assert_equal %w[D A D], @string.take(Vector.new([3, 0, -2])).to_a # array, negative index
+      assert_equal %w[D E C], @string.take([3.1, -0.5, -2.5]).to_a # float index
+    end
+
+    test 'take out of range' do
+      assert_raise(VectorArgumentError) { @string.take(-6) } # out of lower limit
+      assert_raise(VectorArgumentError) { @string.take(5) } # out of upper limit
+    end
+  end
 end
