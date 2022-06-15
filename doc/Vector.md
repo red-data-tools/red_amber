@@ -64,6 +64,26 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ... ]
     ```
 
+## Selecting Values
+
+### `take(indices)`, `[](indices)`
+
+- Acceptable class for indices:
+  - Integer, Float
+  - Vector of integer or float
+  - Arrow::Arry of integer or float
+- Negative index is also OK like the Ruby's primitive Array.
+
+```ruby
+array = RedAmber::Vector.new(%w[A B C D E])
+indices = RedAmber::Vector.new([0.1, -0.5, -5.1])
+array[indices]
+
+# =>
+#<RedAmber::Vector(:string, size=3):0x000000000000f820>
+["A", "E", "A"]
+```
+
 ## Functions
 
 ### Unary aggregations: `vector.func => scalar`

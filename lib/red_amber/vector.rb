@@ -27,6 +27,8 @@ module RedAmber
     attr_reader :data
     attr_accessor :key
 
+    alias_method :[], :take
+
     def to_s
       @data.to_a.inspect
     end
