@@ -319,3 +319,22 @@ integer.fill_nil_backward
 #<RedAmber::Vector(:uint8, size=5):0x000000000000f974>
 [0, 1, 3, 3, nil]
 ```
+
+### `boolean_vector.if_else(true_choice, false_choice)` => vector
+
+Choose values based on self. Self must be a boolean Vector.
+
+`true_choice`, `false_choice` must be of the same type scalar / array / Vector.
+`nil` values in `cond` will be promoted to the output.
+
+This example will normalize negative indices to positive ones.
+
+```ruby
+indices = RedAmber::Vector.new([1, -1, 3, -4])
+array_size = 10
+normalized_indices = (indices < 0).if_else(indices + array_size, indices)
+
+# =>
+#<RedAmber::Vector(:int16, size=4):0x000000000000f85c>
+[1, 9, 3, 6]
+```
