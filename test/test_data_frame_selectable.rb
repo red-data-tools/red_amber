@@ -50,15 +50,16 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
 
     test 'Select observations over range' do
-      assert_raise(Arrow::Error::Index) { df[3] }
-      assert_raise(Arrow::Error::Index) { df[-4] }
+      assert_raise(DataFrameArgumentError) { df[3] }
+      assert_raise(DataFrameArgumentError) { df[-4] }
       assert_raise(DataFrameArgumentError) { df[2..3, 0] }
       assert_raise(DataFrameArgumentError) { df[3..4, 0] }
       assert_raise(DataFrameArgumentError) { df[-4..-1] }
     end
 
-    test 'Select observations by invalid index' do
-      assert_raise(DataFrameArgumentError) { df[0.5] }
+    test 'Select observations by float index' do
+      assert_equal Hash(x: [1], y: ['A']), df[0.5].to_h
+      assert_equal Hash(x: [3], y: ['C']), df[-0.5].to_h
     end
 
     test 'Select rows by invalid data type' do
@@ -66,8 +67,8 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
 
     test 'Select rows by invalid length' do
-      assert_raise(DataFrameArgumentError) { df[Arrow::Int32Array.new([1, 2])] }
-      assert_raise(Arrow::Error::Invalid) { df[Arrow::BooleanArray.new([true, false])] }
+      assert_raise(ArgumentError) { df[Arrow::Int32Array.new([1, 2])] }
+      assert_raise(DataFrameArgumentError) { df[Arrow::BooleanArray.new([true, false])] }
     end
 
     test 'Select observations by a boolean' do
@@ -86,9 +87,9 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
 
     test 'Select observations by a invalid Array or Vector' do
-      hash = { x: [1, 2], y: %w[A B] }
-      assert_raise(DataFrameArgumentError) { df[1, 2, nil] }
-      assert_raise(DataFrameArgumentError) { df[Arrow::Int32Array.new([1, 2, nil])] }
+      hash = { x: [2, 3, nil], y: %w[B C] << nil }
+      assert_equal hash, df[1, 2, nil].to_h
+      assert_raise(ArgumentError) { df[Arrow::Int32Array.new([1, 2, nil])] }
       assert_equal hash, df[Vector.new([1, 2, nil])].to_h
     end
 

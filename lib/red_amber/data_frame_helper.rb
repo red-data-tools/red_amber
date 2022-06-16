@@ -6,15 +6,8 @@ module RedAmber
     private
 
     def expand_range(args)
-      ary = args.each_with_object([]) do |e, a|
+      args.each_with_object([]) do |e, a|
         e.is_a?(Range) ? a.concat(normalized_array(e)) : a.append(e)
-      end
-      ary.map do |e|
-        if e.is_a?(Integer) && e.negative?
-          e + size
-        else
-          e
-        end
       end
     end
 

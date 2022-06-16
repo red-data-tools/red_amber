@@ -40,31 +40,32 @@ module RedAmber
     # select columns: [symbol] or [string]
     # select rows: [array of index], [range]
     def [](*args)
+      args.flatten!
       raise DataFrameArgumentError, 'Empty dataframe' if empty?
       raise DataFrameArgumentError, 'Empty argument' if args.empty?
 
-      if args.one?
-        case args[0]
-        when Vector
-          return select_obs_by_boolean(Arrow::BooleanArray.new(args[0].data))
-        when Arrow::BooleanArray
-          return select_obs_by_boolean(args[0])
-        when Array
-          return select_obs_by_boolean(Arrow::BooleanArray.new(args[0]))
+      arg = args[0]
+      case arg
+      when Vector
+        return generic_take(arg) if arg.numeric?
+        return generic_filter(arg.data) if arg.boolean?
 
-          # when Hash
-          # specify conditions to select by a Hash
-        end
+        raise DataFrameArgumentError, "Argument by Vector must be numeric or boolean: #{arg}"
+      when Arrow::BooleanArray
+        return generic_filter(arg)
       end
-
-      return select_obs_by_boolean(args) if booleans?(args)
 
       # expand Range like [1..3, 4] to [1, 2, 3, 4]
       expanded = expand_range(args)
-      return map_indices(*expanded) if integers?(expanded)
       return select_vars_by_keys(expanded.map(&:to_sym)) if sym_or_str?(expanded)
 
-      raise DataFrameArgumentError, "Invalid argument #{args}"
+      array = Arrow::Array.new(expanded)
+      return generic_filter(array) if array.is_a?(Arrow::BooleanArray)
+
+      vector = Vector.new(array)
+      return generic_take(vector) if vector.numeric?
+
+      raise DataFrameArgumentError, "Invalid argument: #{args}"
     end
 
     # Select a variable by a key in String or Symbol

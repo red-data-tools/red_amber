@@ -110,4 +110,5 @@ Style/SlicingWithRange:
 # Necessary to Vector < 0 element-wise comparison
 Style/NumericPredicate:
   Exclude:
+    - 'lib/red_amber/data_frame_selectable.rb'
     - 'lib/red_amber/vector_selectable.rb'

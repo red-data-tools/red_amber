@@ -284,6 +284,9 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   An end-less or a begin-less Range can be used to represent indeces.
 
 - Select obs. by indeces in an Array: `df[1, 2]`
+
+- You can use float indices.
+
 - Mixed case: `df[2, 0..]`
 
   ```ruby
