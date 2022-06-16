@@ -84,6 +84,23 @@ array[indices]
 ["A", "E", "A"]
 ```
 
+### `filter(booleans)`, `[](booleans)`
+
+- Acceptable class for booleans:
+  - An array of true, false, or nil
+  - Boolean Vector
+  - Arrow::BooleanArray
+
+```ruby
+array = RedAmber::Vector.new(%w[A B C D E])
+booleans = [true, false, nil, false, true]
+array.filter(booleans)
+
+# =>
+#<RedAmber::Vector(:string, size=2):0x000000000000f21c>
+["A", "E"]
+```
+
 ## Functions
 
 ### Unary aggregations: `vector.func => scalar`

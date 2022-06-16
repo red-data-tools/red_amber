@@ -49,4 +49,33 @@ class VectorTest < Test::Unit::TestCase
       assert_equal %w[D E C], @string[3.1, -0.5, -2.5].to_a # float index
     end
   end
+
+  sub_test_case('#filter(booleans)') do
+    setup do
+      @string = Vector.new(%w[A B C D E])
+      @booleans = [true, false, nil, false, true]
+    end
+
+    test 'empty vector' do
+      assert_equal [], Vector.new([]).filter.to_a
+    end
+
+    test '#filter' do
+      assert_equal [], @string.filter.to_a
+      assert_equal %w[A E], @string.filter(*@booleans).to_a # arguments
+      assert_equal %w[A E], @string.filter(@booleans).to_a # primitive Array
+      assert_equal %w[A E], @string.filter(Arrow::BooleanArray.new(@booleans)).to_a # Arrow::BooleanArray
+      assert_equal %w[A E], @string.filter(Vector.new(@booleans)).to_a # Vector
+      assert_equal [], @string.filter([nil] * 5).to_a # nil array
+    end
+
+    test '#filter not booleans' do
+      assert_raise(VectorTypeError) { @string.filter(1) }
+      assert_raise(VectorTypeError) { @string.filter([*1..5]) }
+    end
+
+    test '#filter size unmatch' do
+      assert_raise(VectorArgumentError) { @string.filter([true]) } # out of lower limit
+    end
+  end
 end

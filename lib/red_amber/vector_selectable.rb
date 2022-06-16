@@ -13,6 +13,7 @@ module RedAmber
     end
 
     # vector calculation version of selection by indices
+    # TODO: support for option {boundscheck: true}
     def take(*indices)
       indices.flatten!
       return Vector.new([]) if indices.empty?
@@ -28,6 +29,32 @@ module RedAmber
       index_array = Arrow::UInt64ArrayBuilder.build(index_vector.data) # round to integer array
 
       datum = find(:array_take).execute([data, index_array])
+      take_out_element_wise(datum)
+    end
+
+    # TODO: support for option {null_selection_behavior: :drop}
+    def filter(*booleans)
+      booleans.flatten!
+      return Vector.new([]) if booleans.empty?
+
+      b = booleans[0]
+      boolean_array =
+        case b
+        when Vector
+          raise VectorTypeError, 'Argument is not a boolean.' unless b.boolean?
+
+          b.data
+        when Arrow::BooleanArray
+          b
+        else
+          raise VectorTypeError, 'Argument is not a boolean.' unless booleans?(booleans)
+
+          Arrow::BooleanArray.new(booleans)
+        end
+
+      raise VectorArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
+
+      datum = find(:array_filter).execute([data, boolean_array])
       take_out_element_wise(datum)
     end
   end
