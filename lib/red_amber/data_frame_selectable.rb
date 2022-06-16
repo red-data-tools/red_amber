@@ -14,6 +14,29 @@ module RedAmber
       generic_take(indices) # returns sub DataFrame
     end
 
+    # TODO: support for option {null_selection_behavior: :drop}
+    def filter(*booleans)
+      booleans.flatten!
+      return remove(*0...size) if booleans.empty?
+
+      b = booleans[0]
+      boolean_array =
+        case b
+        when Vector
+          raise DataFrameArgumentError, 'Argument is not a boolean.' unless b.boolean?
+
+          b.data
+        when Arrow::BooleanArray
+          b
+        else
+          raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans?(booleans)
+
+          Arrow::BooleanArray.new(booleans)
+        end
+
+      generic_filter(boolean_array) # returns sub DataFrame
+    end
+
     # select columns: [symbol] or [string]
     # select rows: [array of index], [range]
     def [](*args)
@@ -98,6 +121,14 @@ module RedAmber
       index_array = Arrow::UInt64ArrayBuilder.build(normalized_indices.data) # round to integer array
 
       datum = Arrow::Function.find(:take).execute([table, index_array])
+      DataFrame.new(datum.value)
+    end
+
+    # Accepts booleans by Arrow::BooleanArray
+    def generic_filter(boolean_array)
+      raise DataFrameArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
+
+      datum = Arrow::Function.find(:filter).execute([table, boolean_array])
       DataFrame.new(datum.value)
     end
   end

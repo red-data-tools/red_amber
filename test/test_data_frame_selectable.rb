@@ -125,6 +125,36 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#filter(booleans)' do
+    setup do
+      @df = RedAmber::DataFrame.new(x: [1, 2, 3, 4, nil], y: %w[A B C D] << nil)
+      @booleans = [true, false, nil, false, true]
+      @hash = { x: [1, nil], y: ['A', nil] }
+    end
+
+    test 'empty dataframe' do
+      assert_true DataFrame.new({}, []).filter.empty?
+    end
+
+    test '#filter' do
+      assert_equal({ x: [], y: [] }, @df.filter.to_h) # nothing to get
+      assert_equal @hash, @df.filter(*@booleans).to_h # arguments
+      assert_equal @hash, @df.filter(@booleans).to_h # primitive Array
+      assert_equal @hash, @df.filter(Arrow::BooleanArray.new(@booleans)).to_h # Arrow::BooleanArray
+      assert_equal @hash, @df.filter(Vector.new(@booleans)).to_h # Vector
+      assert_equal({ x: [], y: [] }, @df.filter([nil] * 5).to_h) # head only dataframe
+    end
+
+    test '#filter not booleans' do
+      assert_raise(DataFrameArgumentError) { @df.filter(1) }
+      assert_raise(DataFrameArgumentError) { @df.filter([*1..5]) }
+    end
+
+    test '#filter size unmatch' do
+      assert_raise(DataFrameArgumentError) { @df.filter([true]) } # out of lower limit
+    end
+  end
+
   sub_test_case 'others' do
     df = DataFrame.new(x: [1, 2, 3], y: %w[A B C])
 
