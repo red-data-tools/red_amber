@@ -77,6 +77,8 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 ```ruby
 array = RedAmber::Vector.new(%w[A B C D E])
 indices = RedAmber::Vector.new([0.1, -0.5, -5.1])
+array.take(indices)
+# or
 array[indices]
 
 # =>
@@ -95,6 +97,8 @@ array[indices]
 array = RedAmber::Vector.new(%w[A B C D E])
 booleans = [true, false, nil, false, true]
 array.filter(booleans)
+# or
+array[booleans]
 
 # =>
 #<RedAmber::Vector(:string, size=2):0x000000000000f21c>

@@ -41,13 +41,6 @@ class VectorTest < Test::Unit::TestCase
       assert_raise(VectorArgumentError) { @string.take(-6) } # out of lower limit
       assert_raise(VectorArgumentError) { @string.take(5) } # out of upper limit
     end
-
-    test '#[]' do
-      assert_equal %w[B], @string[1].to_a # single value
-      assert_equal %w[D A D], @string[[3, 0, -2]].to_a # array, negative index
-      assert_equal %w[D A D], @string[Vector.new([3, 0, -2])].to_a # array, negative index
-      assert_equal %w[D E C], @string[3.1, -0.5, -2.5].to_a # float index
-    end
   end
 
   sub_test_case('#filter(booleans)') do
@@ -76,6 +69,35 @@ class VectorTest < Test::Unit::TestCase
 
     test '#filter size unmatch' do
       assert_raise(VectorArgumentError) { @string.filter([true]) } # out of lower limit
+    end
+  end
+
+  sub_test_case '#[]' do
+    setup do
+      @string = Vector.new(%w[A B C D E])
+      @booleans = [true, false, nil, false, true]
+    end
+
+    test 'empty vector' do
+      assert_equal [], Vector.new([])[].to_a
+    end
+
+    test '#[indices]' do
+      assert_equal %w[B], @string[1].to_a # single value
+      assert_equal %w[D A D], @string[[3, 0, -2]].to_a # array, negative index
+      assert_equal %w[D A D], @string[Vector.new([3, 0, -2])].to_a # array, negative index
+      assert_equal %w[D E C], @string[3.1, -0.5, -2.5].to_a # float index
+      assert_equal %w[D A D], @string[Arrow::Array.new([3, 0, -2])].to_a # Arrow
+    end
+
+    test '#[booleans]' do
+      assert_equal %w[B], @string[1].to_a # single value
+      assert_equal %w[A E], @string[*@booleans].to_a # arguments
+      assert_equal %w[A E], @string[@booleans].to_a # primitive Array
+      assert_equal %w[A E], @string[Arrow::BooleanArray.new(@booleans)].to_a # Arrow::BooleanArray
+      assert_equal %w[A E], @string[Vector.new(@booleans)].to_a # Vector
+      assert_raise(VectorArgumentError) { @string[nil] } # nil array
+      assert_raise(VectorArgumentError) { @string[[nil] * 5] } # nil array
     end
   end
 end

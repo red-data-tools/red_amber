@@ -47,6 +47,37 @@ module RedAmber
       generic_filter(boolean_array) # returns sub Vector
     end
 
+    #   @param indices
+    #   @param booleans
+    def [](*args)
+      args.flatten!
+      return Vector.new([]) if args.empty?
+
+      arg = args[0]
+      case arg
+      when Vector
+        return generic_take(arg) if arg.numeric?
+        return generic_filter(arg.data) if arg.boolean?
+
+        raise VectorTypeError, "Argument must be numeric or boolean: #{arg}"
+      when Arrow::BooleanArray
+        return generic_filter(arg)
+      when Arrow::Array
+        array = arg
+      else
+        unless arg.is_a?(Numeric) || booleans?([arg])
+          raise VectorArgumentError, "Argument must be numeric or boolean: #{args}"
+        end
+      end
+      array ||= Arrow::Array.new(args)
+      return generic_filter(array) if array.is_a?(Arrow::BooleanArray)
+
+      vector = Vector.new(array)
+      return generic_take(vector) if vector.numeric?
+
+      raise VectorArgumentError, "Invalid argument: #{args}"
+    end
+
     private
 
     # Accepts indices by numeric Vector
