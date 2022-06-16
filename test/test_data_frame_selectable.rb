@@ -5,7 +5,7 @@ require 'test_helper'
 class DataFrameSelectableTest < Test::Unit::TestCase
   include RedAmber
 
-  sub_test_case 'Selecting' do
+  sub_test_case '#[]' do
     df = DataFrame.new(x: [1, 2, 3], y: %w[A B C])
 
     test 'Select variables' do
@@ -99,6 +99,34 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     test 'Select for empty dataframe' do
       assert_raise(DataFrameArgumentError) { DataFrame.new[0] }
     end
+  end
+
+  sub_test_case '#take(indices)' do
+    setup do
+      @df = RedAmber::DataFrame.new(x: [1, 2, 3, 4, nil], y: %w[A B C D] << nil)
+    end
+
+    test 'empty dataframe' do
+      assert_true DataFrame.new({}, []).take.empty?
+    end
+
+    test '#take' do
+      assert_true @df.take.empty?
+      assert_equal({ x: [2], y: ['B'] }, @df.take(1).to_h) # single value
+      assert_equal({ x: [2, 4], y: %w[B D] }, @df.take(1, 3).to_h) # array without bracket
+      assert_equal({ x: [4, 1, 4], y: %w[D A D] }, @df.take([3, 0, -2]).to_h) # array, negative index
+      assert_equal({ x: [4, 1, 4], y: %w[D A D] }, @df.take(Vector.new([3, 0, -2])).to_h) # array, negative index
+      assert_equal({ x: [4, nil, 3], y: ['D', nil, 'C'] }, @df.take([3.1, -0.5, -2.5]).to_h) # float index
+    end
+
+    test '#take out of range' do
+      assert_raise(DataFrameArgumentError) { @df.take(-6) } # out of lower limit
+      assert_raise(DataFrameArgumentError) { @df.take(5) } # out of upper limit
+    end
+  end
+
+  sub_test_case 'others' do
+    df = DataFrame.new(x: [1, 2, 3], y: %w[A B C])
 
     test 'v method' do
       assert_equal [1, 2, 3], df.v(:x).to_a

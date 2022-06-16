@@ -3,6 +3,17 @@
 module RedAmber
   # mix-in for the class DataFrame
   module DataFrameSelectable
+    # TODO: support for option {boundscheck: true}
+    def take(*indices)
+      indices.flatten!
+      return DataFrame.new({}, []) if indices.empty?
+
+      indices = indices[0] if indices.one? && !indices[0].is_a?(Numeric)
+      indices = Vector.new(indices) unless indices.is_a?(Vector)
+
+      generic_take(indices) # returns sub DataFrame
+    end
+
     # select columns: [symbol] or [string]
     # select rows: [array of index], [range]
     def [](*args)
@@ -74,6 +85,20 @@ module RedAmber
       else
         DataFrame.new(@table[keys])
       end
+    end
+
+    # Accepts indices by numeric Vector
+    def generic_take(indices)
+      raise DataFrameArgumentError, "Indices must be a numeric Vector: #{indices}" unless indices.numeric?
+      raise DataFrameArgumentError, "Index out of range: #{indices.min}" if indices.min <= -size - 1
+
+      normalized_indices = (indices < 0).if_else(indices + size, indices) # normalize index from tail
+      raise DataFrameArgumentError, "Index out of range: #{normalized_indices.max}" if normalized_indices.max >= size
+
+      index_array = Arrow::UInt64ArrayBuilder.build(normalized_indices.data) # round to integer array
+
+      datum = Arrow::Function.find(:take).execute([table, index_array])
+      DataFrame.new(datum.value)
     end
   end
 end
