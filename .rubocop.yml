@@ -96,11 +96,12 @@ Metrics/PerceivedComplexity:
   Exclude:
     - 'lib/red_amber/vector_updatable.rb' # Max: 15
 
-# Necessary to define is_na
+# Necessary to define is_na, is_in, etc.
 Naming/PredicateName:
   Exclude:
     - 'lib/red_amber/vector_functions.rb'
     - 'lib/red_amber/vector.rb'
+    - 'lib/red_amber/vector_selectable.rb'
 
 # Necessary to test when range.end == -1
 Style/SlicingWithRange:

@@ -379,3 +379,29 @@ normalized_indices = (indices < 0).if_else(indices + array_size, indices)
 #<RedAmber::Vector(:int16, size=4):0x000000000000f85c>
 [1, 9, 3, 6]
 ```
+
+### `is_in(values)` => boolean vector
+
+For each element in self, return true if it is found in given `values`, false otherwise.
+By default, nulls are matched against the value set. (This will be changed in SetLookupOptions: not impremented.)
+
+```ruby
+vector = RedAmber::Vector.new %W[A B C D]
+values = ['A', 'C', 'X']
+vector.is_in(values)
+
+# =>
+#<RedAmber::Vector(:boolean, size=4):0x000000000000f2a8>
+[true, false, true, false]
+```
+
+`values` are casted to the same Class of Vector.
+
+```ruby
+vector = RedAmber::Vector.new([1, 2, 255])
+vector.is_in(1, -1)
+
+# =>
+#<RedAmber::Vector(:boolean, size=3):0x000000000000f320>
+[true, false, true]
+```

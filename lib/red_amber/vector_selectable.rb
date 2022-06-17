@@ -78,6 +78,20 @@ module RedAmber
       raise VectorArgumentError, "Invalid argument: #{args}"
     end
 
+    #   @param values [Array, Arrow::Array, Vector]
+    def is_in(*values)
+      values.flatten!
+      array =
+        case values[0]
+        when Vector
+          values[0].data
+        when Arrow::Array
+          values[0]
+        end
+      array ||= data.class.new(values)
+      Vector.new(data.is_in(array))
+    end
+
     private
 
     # Accepts indices by numeric Vector

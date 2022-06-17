@@ -100,4 +100,30 @@ class VectorTest < Test::Unit::TestCase
       assert_raise(VectorArgumentError) { @string[[nil] * 5] } # nil array
     end
   end
+
+  sub_test_case '#is_in' do
+    setup do
+      @vector = Vector.new([1, 2, 3, 4, 5])
+      @values = [0, 2, 3] # 0 is not exist in vector
+      @expected = [false, true, true, false, false]
+    end
+
+    test 'empty vector' do
+      assert_equal [], Vector.new([]).is_in.to_a
+    end
+
+    test '#is_in(values)' do
+      assert_equal [false] * 5, @vector.is_in.to_a # no value
+      assert_equal [false] * 5, @vector.is_in([]).to_a # empty array
+      assert_equal [false] * 5, @vector.is_in([nil]).to_a # nil array
+      assert_equal @expected, @vector.is_in(*@values).to_a # arguments
+      assert_equal @expected, @vector.is_in(@values).to_a # Array
+      assert_equal @expected, @vector.is_in(Arrow::Array.new(@values)).to_a # Arrow::Array
+      assert_equal @expected, @vector.is_in(Vector.new(@values)).to_a # Vector
+      assert_equal @expected, @vector.is_in([2.0, 3.0]).to_a # Cast
+      assert_equal @expected, Vector.new([1.0, 2, 3, 4, 5]).is_in([2, 3]).to_a # Cast
+      assert_equal [true, false, false, false, false], @vector.is_in([1, '2']).to_a # [1, '2'] => [1, 50]
+      assert_raise(TypeError) { @vector.is_in([1, true]) } # Can't cast
+    end
+  end
 end
