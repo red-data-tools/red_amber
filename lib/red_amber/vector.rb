@@ -124,5 +124,9 @@ module RedAmber
     def n_nans
       numeric? ? is_nan.to_a.count(true) : 0
     end
+
+    def has_nil?
+      is_nil.any
+    end
   end
 end
