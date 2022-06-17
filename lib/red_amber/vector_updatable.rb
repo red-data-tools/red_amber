@@ -6,7 +6,7 @@
 module RedAmber
   # mix-ins for class Vector
   # Functions to make up some data (especially missing) for new data.
-  module VectorCompensable
+  module VectorUpdatable
     # [Ternary]: replace_with(booleans, replacements) => vector
     # Replace items selected with a boolean mask
     #

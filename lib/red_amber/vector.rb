@@ -5,8 +5,8 @@ module RedAmber
   #   @data : holds Arrow::ChunkedArray
   class Vector
     # mix-in
-    include VectorCompensable
     include VectorFunctions
+    include VectorUpdatable
 
     # chunked_array may come from column.data
     def initialize(array)
