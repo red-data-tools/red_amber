@@ -161,16 +161,6 @@ module RedAmber
     alias_method :lt, :less
     alias_method :ne, :not_equal
 
-    # [Ternary element-wise]: boolean_vector.func(if_true, else) => vector
-    def if_else(true_choice, false_choice)
-      true_choice = true_choice.data if true_choice.is_a? Vector
-      false_choice = false_choice.data if false_choice.is_a? Vector
-      raise VectorTypeError, 'Reciever must be a boolean' unless boolean?
-
-      datum = find(:if_else).execute([data, true_choice, false_choice])
-      take_out_element_wise(datum)
-    end
-
     # (array functions)
     # dictionary_encode,
     # partition_nth_indices,
@@ -210,10 +200,10 @@ module RedAmber
 
     # (others)
     # coalesce,
-    # filter, is_in, is_in_meta_binary,
+    # is_in_meta_binary,
     # list_element, list_flatten, list_parent_indices, list_value_length, make_struct,
     # max_element_wise, min_element_wise, random, select_k_unstable,
-    # sort_indices, struct_field, take
+    # sort_indices, struct_field,
 
     private # =======
 
