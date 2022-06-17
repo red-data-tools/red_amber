@@ -162,8 +162,8 @@ class DataFrameTest < Test::Unit::TestCase
     end
 
     test 'simple dataframe' do
-      df = DataFrame.new(x: [1, 2, Float::NAN], y: %w[A B] << nil, z: [true, false, nil])
-      html = '3 x 3 vectors ; <table><tr><th>x</th><th>y</th><th>z</th></tr><tr><td>1.0</td><td>A</td><td>true</td></tr><tr><td>2.0</td><td>B</td><td>false</td></tr><tr><td>NaN</td><td></td><td></td></tr></table>'
+      df = DataFrame.new(x: [1, 2, Float::NAN], y: ['', ' ', nil], z: [true, false, nil])
+      html = '3 x 3 vectors ; <table><tr><th>x</th><th>y</th><th>z</th></tr><tr><td>1.0</td><td>""</td><td>true</td></tr><tr><td>2.0</td><td>" "</td><td>false</td></tr><tr><td>NaN</td><td><i>(nil)</i></td><td><i>(nil)</i></td></tr></table>'
       assert_equal html, df.to_iruby[1]
     end
 

@@ -66,9 +66,10 @@ Metrics/BlockLength:
 
 # Max: 100
 Metrics/ClassLength:
-  Max: 125
+  Max: 100
   Exclude:
     - 'test/**/*'
+    - 'lib/red_amber/data_frame.rb' #Max: 131
 
 # Max: 7
 Metrics/CyclomaticComplexity:

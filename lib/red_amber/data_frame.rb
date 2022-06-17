@@ -137,12 +137,21 @@ module RedAmber
       require 'iruby'
       return '(empty DataFrame)' if empty?
 
-      html =
-        if size > 8
-          IRuby::HTML.table((self[0..4, -4..-1]).to_h, maxrows: 8, maxcols: 15)
-        else
-          IRuby::HTML.table(to_h)
+      reduced = size > 8 ? self[0..4, -4..-1] : self
+
+      converted = reduced.assign do
+        vectors.select.with_object({}) do |vector, assigner|
+          if vector.has_nil?
+            assigner[vector.key] = vector.to_a.map do |e|
+              e = e.nil? ? '<i>(nil)</i>' : e.to_s # nil
+              e = '""' if e.empty? # empty string
+              e.sub(/(\s+)/, '"\1"') # blank spaces
+            end
+          end
         end
+      end
+
+      html = IRuby::HTML.table(converted.to_h, maxrows: 8, maxcols: 15)
       html = "#{size} x #{n_keys} vector#{n_keys > 1 ? 's' : ''} ; #{html}"
       ['text/html', html]
     end
