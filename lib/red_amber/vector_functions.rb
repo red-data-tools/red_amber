@@ -21,6 +21,8 @@ module RedAmber
     end
     alias_method :median, :approximate_median
     alias_method :count_uniq, :count_distinct
+    alias_method :all?, :all
+    alias_method :any?, :any
 
     def unbiased_variance
       variance(opts: { ddof: 1 })

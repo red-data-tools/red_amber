@@ -72,8 +72,8 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 | Method    |Boolean|Numeric|String|Options|Remarks|
 | ----------- | --- | --- | --- | --- | --- |
-| ✓ `all`     |  ✓  |     |     | ✓ ScalarAggregate|     |
-| ✓ `any`     |  ✓  |     |     | ✓ ScalarAggregate|     |
+| ✓ `all?`     |  ✓  |     |     | ✓ ScalarAggregate| alias `all` |
+| ✓ `any?`     |  ✓  |     |     | ✓ ScalarAggregate| alias `any` |
 | ✓ `approximate_median`|  |✓|  | ✓ ScalarAggregate| alias `median`|
 | ✓ `count`   |  ✓  |  ✓  |  ✓  | ✓  Count  |     |
 | ✓ `count_distinct`| ✓ | ✓ | ✓ | ✓  Count  |alias `count_uniq`|
