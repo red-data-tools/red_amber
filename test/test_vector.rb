@@ -42,6 +42,11 @@ class VectorTest < Test::Unit::TestCase
       actual = Vector.new(array)
       assert_equal type_class, actual.type_class
     end
+
+    test '#has_nil?' do
+      assert_true Vector.new([1, 2, nil]).has_nil?
+      assert_false Vector.new([1, 2, 3]).has_nil?
+    end
   end
 
   sub_test_case('#inspect') do

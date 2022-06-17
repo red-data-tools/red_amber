@@ -98,6 +98,7 @@ Metrics/PerceivedComplexity:
 Naming/PredicateName:
   Exclude:
     - 'lib/red_amber/vector_functions.rb'
+    - 'lib/red_amber/vector.rb'
 
 # Necessary to test when range.end == -1
 Style/SlicingWithRange:
