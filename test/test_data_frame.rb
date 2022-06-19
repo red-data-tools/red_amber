@@ -158,7 +158,7 @@ class DataFrameTest < Test::Unit::TestCase
   sub_test_case 'to_iruby' do
     test 'empty' do
       df = DataFrame.new
-      assert_equal '(empty DataFrame)', df.to_iruby
+      assert_equal ['text/html', '(empty DataFrame)'], df.to_iruby
     end
 
     test 'simple dataframe' do
