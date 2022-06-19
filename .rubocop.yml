@@ -89,6 +89,7 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Max: 100
   Exclude:
+    - 'lib/red_amber/data_frame_selectable.rb' # Max: 141
     - 'lib/red_amber/vector_functions.rb' # Max: 114
 
 # Max: 8
