@@ -8,7 +8,7 @@ module RedAmber
     def [](*args)
       args.flatten!
       raise DataFrameArgumentError, 'Empty dataframe' if empty?
-      raise DataFrameArgumentError, 'Empty argument' if args.empty?
+      return remove_all_values if args.empty? || args[0].nil?
 
       arg = args[0]
       case arg
@@ -132,7 +132,7 @@ module RedAmber
     # TODO: support for option {boundscheck: true}
     def take(*indices)
       indices.flatten!
-      return DataFrame.new({}, []) if indices.empty?
+      return remove_all_values if indices.empty?
 
       indices = indices[0] if indices.one? && !indices[0].is_a?(Numeric)
       indices = Vector.new(indices) unless indices.is_a?(Vector)

@@ -94,7 +94,8 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
 
     test 'Select empty' do
-      assert_raise(DataFrameArgumentError) { df[] }
+      assert_equal(Hash(x: [], y: []), df[].to_h) # nothing to get
+      assert_equal(Hash(x: [], y: []), df[nil].to_h) # nothing to get
     end
 
     test 'Select for empty dataframe' do
@@ -360,7 +361,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
 
     test '#take' do
-      assert_true @df.take.empty?
+      assert_equal(Hash(x: [], y: []), @df.take.to_h) # nothing to get
       assert_equal({ x: [2], y: ['B'] }, @df.take(1).to_h) # single value
       assert_equal({ x: [2, 4], y: %w[B D] }, @df.take(1, 3).to_h) # array without bracket
       assert_equal({ x: [4, 1, 4], y: %w[D A D] }, @df.take([3, 0, -2]).to_h) # array, negative index
