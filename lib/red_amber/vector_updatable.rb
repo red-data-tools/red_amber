@@ -53,7 +53,7 @@ module RedAmber
       values = replacer.class.new(data)
 
       datum = find('replace_with_mask').execute([values, specifier, replacer])
-      take_out_element_wise(datum)
+      Vector.new(datum.value)
     end
 
     # (related functions)
@@ -66,7 +66,7 @@ module RedAmber
       raise VectorTypeError, 'Reciever must be a boolean' unless boolean?
 
       datum = find(:if_else).execute([data, true_choice, false_choice])
-      take_out_element_wise(datum)
+      Vector.new(datum.value)
     end
 
     private

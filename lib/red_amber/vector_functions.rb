@@ -16,7 +16,7 @@ module RedAmber
     unary_aggregations.each do |function|
       define_method(function) do |opts: nil|
         datum = exec_func_unary(function, options: opts)
-        take_out_scalar(datum)
+        get_scalar(datum)
       end
     end
     alias_method :median, :approximate_median
@@ -49,7 +49,7 @@ module RedAmber
     unary_element_wise.each do |function|
       define_method(function) do |opts: nil|
         datum = exec_func_unary(function, options: opts)
-        take_out_element_wise(datum)
+        Vector.new(datum.value)
       end
     end
     alias_method :is_nil, :is_null
@@ -74,12 +74,12 @@ module RedAmber
     unary_element_wise_op.each do |function, operator|
       define_method(function) do |opts: nil|
         datum = exec_func_unary(function, options: opts)
-        take_out_element_wise(datum)
+        Vector.new(datum.value)
       end
 
       define_method(operator) do |opts: nil|
         datum = exec_func_unary(function, options: opts)
-        take_out_element_wise(datum)
+        Vector.new(datum.value)
       end
     end
     alias_method :not, :invert
@@ -97,7 +97,7 @@ module RedAmber
     binary_element_wise.each do |function|
       define_method(function) do |other, opts: nil|
         datum = exec_func_binary(function, other, options: opts)
-        take_out_element_wise(datum)
+        Vector.new(datum.value)
       end
     end
 
@@ -113,7 +113,7 @@ module RedAmber
     logical_binary_element_wise.each do |method, function|
       define_method(method) do |other, opts: nil|
         datum = exec_func_binary(function, other, options: opts)
-        take_out_element_wise(datum)
+        Vector.new(datum.value)
       end
     end
 
@@ -146,12 +146,12 @@ module RedAmber
     binary_element_wise_op.each do |function, operator|
       define_method(function) do |other, opts: nil|
         datum = exec_func_binary(function, other, options: opts)
-        take_out_element_wise(datum)
+        Vector.new(datum.value)
       end
 
       define_method(operator) do |other, opts: nil|
         datum = exec_func_binary(function, other, options: opts)
-        take_out_element_wise(datum)
+        Vector.new(datum.value)
       end
     end
     alias_method :eq, :equal
@@ -222,7 +222,7 @@ module RedAmber
       end
     end
 
-    def take_out_scalar(datum)
+    def get_scalar(datum)
       output = datum.value
       case output
       when Arrow::StringScalar then output.to_s
@@ -231,10 +231,6 @@ module RedAmber
       else
         output.value
       end
-    end
-
-    def take_out_element_wise(datum)
-      Vector.new(datum.value)
     end
 
     module_function # ======

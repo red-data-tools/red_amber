@@ -9,7 +9,7 @@ module RedAmber
   module VectorSelectable
     def drop_nil
       datum = find(:drop_null).execute([data])
-      take_out_element_wise(datum)
+      Vector.new(datum.value)
     end
 
     # vector calculation version of selection by indices
@@ -105,7 +105,7 @@ module RedAmber
       index_array = Arrow::UInt64ArrayBuilder.build(normalized_indices.data) # round to integer array
 
       datum = find(:array_take).execute([data, index_array])
-      take_out_element_wise(datum)
+      Vector.new(datum.value)
     end
 
     # Accepts booleans by Arrow::BooleanArray
@@ -113,7 +113,7 @@ module RedAmber
       raise VectorArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 
       datum = find(:array_filter).execute([data, boolean_array])
-      take_out_element_wise(datum)
+      Vector.new(datum.value)
     end
   end
 end
