@@ -117,8 +117,8 @@ class DataFrameSelectableTest < Test::Unit::TestCase
   sub_test_case 'slice' do
     test 'Empty dataframe' do
       df = DataFrame.new
-      assert_true df.slice.empty?
-      assert_true df.slice(1).empty?
+      assert_raise(DataFrameArgumentError) { df.slice }
+      assert_raise(DataFrameArgumentError) { df.slice(1) }
     end
 
     test 'slice by arguments' do

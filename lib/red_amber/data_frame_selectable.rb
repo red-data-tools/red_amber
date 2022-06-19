@@ -43,6 +43,7 @@ module RedAmber
         slicer = instance_eval(&block)
       end
       slicer = [slicer].flatten
+      raise DataFrameArgumentError, 'Empty dataframe' if empty?
       return remove_all_values if slicer.empty? || slicer[0].nil?
 
       # filter with same length
