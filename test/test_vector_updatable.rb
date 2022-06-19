@@ -53,4 +53,11 @@ class VectorTest < Test::Unit::TestCase
       assert_equal [nil, 2, nil], vec.replace_with([true, false, true]).to_a # broadcast without replacemant
     end
   end
+
+  sub_test_case '#primitive_invert' do
+    test '#primitive_invert' do
+      assert_raise(VectorTypeError) { Vector.new([1]).primitive_invert }
+      assert_equal [false, true, true], Vector.new([true, false, nil]).primitive_invert.to_a
+    end
+  end
 end

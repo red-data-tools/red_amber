@@ -69,6 +69,14 @@ module RedAmber
       Vector.new(datum.value)
     end
 
+    # same behavior as Ruby's invert
+    # ![true, false, nil] #=> [false, true, true]
+    def primitive_invert
+      raise VectorTypeError, "Not a boolean Vector: #{self}" unless boolean?
+
+      is_nil.if_else(false, self).invert
+    end
+
     private
 
     def booleans?(enum)
