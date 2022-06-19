@@ -129,6 +129,7 @@ module RedAmber
       tail(n_rows)
     end
 
+    # Undocumented
     # TODO: support for option {boundscheck: true}
     def take(*indices)
       indices.flatten!
@@ -137,30 +138,28 @@ module RedAmber
       indices = indices[0] if indices.one? && !indices[0].is_a?(Numeric)
       indices = Vector.new(indices) unless indices.is_a?(Vector)
 
-      generic_take(indices) # returns sub DataFrame
+      generic_take(indices)
     end
 
+    # Undocumented
     # TODO: support for option {null_selection_behavior: :drop}
     def filter(*booleans)
       booleans.flatten!
-      return remove(*0...size) if booleans.empty?
+      return remove_all_values if booleans.empty?
 
       b = booleans[0]
-      boolean_array =
-        case b
-        when Vector
-          raise DataFrameArgumentError, 'Argument is not a boolean.' unless b.boolean?
+      case b
+      when Vector
+        raise DataFrameArgumentError, 'Argument is not a boolean.' unless b.boolean?
 
-          b.data
-        when Arrow::BooleanArray
-          b
-        else
-          raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans?(booleans)
+        generic_filter(b.data)
+      when Arrow::BooleanArray
+        generic_filter(b)
+      else
+        raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans?(booleans)
 
-          Arrow::BooleanArray.new(booleans)
-        end
-
-      generic_filter(boolean_array) # returns sub DataFrame
+        generic_filter(Arrow::BooleanArray.new(booleans))
+      end
     end
 
     private
