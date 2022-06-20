@@ -21,7 +21,7 @@ module RedAmber
       indices = indices[0] if indices.one? && !indices[0].is_a?(Numeric)
       indices = Vector.new(indices) unless indices.is_a?(Vector)
 
-      generic_take(indices) # returns sub Vector
+      take_by_vector(indices) # returns sub Vector
     end
 
     # TODO: support for option {null_selection_behavior: :drop}
@@ -44,7 +44,7 @@ module RedAmber
           Arrow::BooleanArray.new(booleans)
         end
 
-      generic_filter(boolean_array) # returns sub Vector
+      filter_by_array(boolean_array) # returns sub Vector
     end
 
     #   @param indices
@@ -56,12 +56,12 @@ module RedAmber
       arg = args[0]
       case arg
       when Vector
-        return generic_take(arg) if arg.numeric?
-        return generic_filter(arg.data) if arg.boolean?
+        return take_by_vector(arg) if arg.numeric?
+        return filter_by_array(arg.data) if arg.boolean?
 
         raise VectorTypeError, "Argument must be numeric or boolean: #{arg}"
       when Arrow::BooleanArray
-        return generic_filter(arg)
+        return filter_by_array(arg)
       when Arrow::Array
         array = arg
       else
@@ -70,10 +70,10 @@ module RedAmber
         end
       end
       array ||= Arrow::Array.new(args)
-      return generic_filter(array) if array.is_a?(Arrow::BooleanArray)
+      return filter_by_array(array) if array.is_a?(Arrow::BooleanArray)
 
       vector = Vector.new(array)
-      return generic_take(vector) if vector.numeric?
+      return take_by_vector(vector) if vector.numeric?
 
       raise VectorArgumentError, "Invalid argument: #{args}"
     end
@@ -95,7 +95,7 @@ module RedAmber
     private
 
     # Accepts indices by numeric Vector
-    def generic_take(indices)
+    def take_by_vector(indices)
       raise VectorTypeError, "Indices must be numeric Vector: #{indices}" unless indices.numeric?
       raise VectorArgumentError, "Index out of range: #{indices.min}" if indices.min <= -size - 1
 
@@ -109,7 +109,7 @@ module RedAmber
     end
 
     # Accepts booleans by Arrow::BooleanArray
-    def generic_filter(boolean_array)
+    def filter_by_array(boolean_array)
       raise VectorArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 
       datum = find(:array_filter).execute([data, boolean_array])
