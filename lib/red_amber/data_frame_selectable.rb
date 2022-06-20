@@ -3,8 +3,8 @@
 module RedAmber
   # mix-in for the class DataFrame
   module DataFrameSelectable
-    # select columns: [symbol] or [string]
-    # select rows: [array of index], [range]
+    # select variables: [symbol] or [string]
+    # select observations: [array of index], [range]
     def [](*args)
       args.flatten!
       raise DataFrameArgumentError, 'Empty dataframe' if empty?
@@ -102,24 +102,24 @@ module RedAmber
       variables[key.to_sym]
     end
 
-    def head(n_rows = 5)
-      raise DataFrameArgumentError, "Index is out of range #{n_rows}" if n_rows.negative?
+    def head(n_obs = 5)
+      raise DataFrameArgumentError, "Index is out of range #{n_obs}" if n_obs.negative?
 
-      self[0...[n_rows, size].min]
+      self[0...[n_obs, size].min]
     end
 
-    def tail(n_rows = 5)
-      raise DataFrameArgumentError, "Index is out of range #{n_rows}" if n_rows.negative?
+    def tail(n_obs = 5)
+      raise DataFrameArgumentError, "Index is out of range #{n_obs}" if n_obs.negative?
 
-      self[-[n_rows, size].min..]
+      self[-[n_obs, size].min..]
     end
 
-    def first(n_rows = 1)
-      head(n_rows)
+    def first(n_obs = 1)
+      head(n_obs)
     end
 
-    def last(n_rows = 1)
-      tail(n_rows)
+    def last(n_obs = 1)
+      tail(n_obs)
     end
 
     # Undocumented

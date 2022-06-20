@@ -14,11 +14,11 @@ class DataFrameTest < Test::Unit::TestCase
 
     hash = { x: [1, 2, 3] }
     df = DataFrame.new(hash)
-    data('hash 1 column', [hash, df], keep: true)
+    data('hash 1 variable', [hash, df], keep: true)
 
     hash = { x: [1, 2, 3], 'y' => %w[A B C] }
     df = DataFrame.new(hash)
-    data('hash 2 colums', [hash, df], keep: true)
+    data('hash 2 variables', [hash, df], keep: true)
 
     test 'new from a Hash' do |(h, d)|
       assert_equal Arrow::Table.new(h), d.table

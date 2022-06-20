@@ -81,12 +81,12 @@ module RedAmber
     end
 
     def make_header_format(levels, headers, quoted_keys)
-      # find longest word to adjust column width
+      # find longest word to adjust width
       w_idx = n_keys.to_s.size
       w_key = [quoted_keys.map(&:size).max, headers[:key].size].max
       w_type = [types.map(&:size).max, headers[:type].size].max
-      w_row = [levels.map { |l| l.to_s.size }.max, headers[:levels].size].max
-      "%-#{w_idx}s %-#{w_key}s %-#{w_type}s %#{w_row}s %s\n"
+      w_level = [levels.map { |l| l.to_s.size }.max, headers[:levels].size].max
+      "%-#{w_idx}s %-#{w_key}s %-#{w_type}s %#{w_level}s %s\n"
     end
 
     def type_group(data_type)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # Columnar data object
+  # Values in variable (columnar) data object
   #   @data : holds Arrow::ChunkedArray
   class Vector
     # mix-in
