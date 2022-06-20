@@ -12,11 +12,11 @@ module RedAmber
 
       vector = parse_to_vector(args)
       if vector.boolean?
-        return generic_filter(vector.data) if vector.size == size
+        return filter_by_vector(vector.data) if vector.size == size
 
         raise DataFrameArgumentError, "Size is not match in booleans: #{args}"
       end
-      return generic_take(vector) if vector.numeric?
+      return take_by_array(vector) if vector.numeric?
       return select_vars_by_keys(vector.to_a.map(&:to_sym)) if vector.string? || vector.type == :dictionary
 
       raise DataFrameArgumentError, "Invalid argument: #{args}"
@@ -37,11 +37,11 @@ module RedAmber
 
       vector = parse_to_vector(slicer)
       if vector.boolean?
-        return generic_filter(vector.data) if vector.size == size
+        return filter_by_vector(vector.data) if vector.size == size
 
         raise DataFrameArgumentError, "Size is not match in booleans: #{slicer}"
       end
-      return generic_take(vector) if vector.numeric?
+      return take_by_array(vector) if vector.numeric?
 
       raise DataFrameArgumentError, "Invalid argument #{slicer}"
     end
@@ -61,7 +61,7 @@ module RedAmber
 
       vector = parse_to_vector(remover)
       if vector.boolean?
-        return generic_filter(vector.primitive_invert.data) if vector.size == size
+        return filter_by_vector(vector.primitive_invert.data) if vector.size == size
 
         raise DataFrameArgumentError, "Size is not match in booleans: #{remover}"
       end
@@ -131,7 +131,7 @@ module RedAmber
       indices = indices[0] if indices.one? && !indices[0].is_a?(Numeric)
       indices = Vector.new(indices) unless indices.is_a?(Vector)
 
-      generic_take(indices)
+      take_by_array(indices)
     end
 
     # Undocumented
@@ -145,13 +145,13 @@ module RedAmber
       when Vector
         raise DataFrameArgumentError, 'Argument is not a boolean.' unless b.boolean?
 
-        generic_filter(b.data)
+        filter_by_vector(b.data)
       when Arrow::BooleanArray
-        generic_filter(b)
+        filter_by_vector(b)
       else
         raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans?(booleans)
 
-        generic_filter(Arrow::BooleanArray.new(booleans))
+        filter_by_vector(Arrow::BooleanArray.new(booleans))
       end
     end
 
@@ -198,7 +198,7 @@ module RedAmber
     end
 
     # Accepts indices by numeric Vector
-    def generic_take(indices)
+    def take_by_array(indices)
       raise DataFrameArgumentError, "Indices must be a numeric Vector: #{indices}" unless indices.numeric?
       raise DataFrameArgumentError, "Index out of range: #{indices.min}" if indices.min <= -size - 1
 
@@ -212,7 +212,7 @@ module RedAmber
     end
 
     # Accepts booleans by Arrow::BooleanArray
-    def generic_filter(boolean_array)
+    def filter_by_vector(boolean_array)
       raise DataFrameArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 
       datum = Arrow::Function.find(:filter).execute([table, boolean_array])
@@ -221,7 +221,7 @@ module RedAmber
 
     # return a DataFrame with same keys as self without values
     def remove_all_values
-      generic_filter(Arrow::BooleanArray.new([false] * size))
+      filter_by_vector(Arrow::BooleanArray.new([false] * size))
     end
   end
 end
