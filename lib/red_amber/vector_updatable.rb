@@ -53,11 +53,29 @@ module RedAmber
       values = replacer.class.new(data)
 
       datum = find('replace_with_mask').execute([values, specifier, replacer])
-      take_out_element_wise(datum)
+      Vector.new(datum.value)
     end
 
     # (related functions)
     # fill_null_backward, fill_null_forward
+
+    # [Ternary element-wise]: boolean_vector.func(if_true, else) => vector
+    def if_else(true_choice, false_choice)
+      true_choice = true_choice.data if true_choice.is_a? Vector
+      false_choice = false_choice.data if false_choice.is_a? Vector
+      raise VectorTypeError, 'Reciever must be a boolean' unless boolean?
+
+      datum = find(:if_else).execute([data, true_choice, false_choice])
+      Vector.new(datum.value)
+    end
+
+    # same behavior as Ruby's invert
+    # ![true, false, nil] #=> [false, true, true]
+    def primitive_invert
+      raise VectorTypeError, "Not a boolean Vector: #{self}" unless boolean?
+
+      is_nil.if_else(false, self).invert
+    end
 
     private
 

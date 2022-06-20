@@ -7,6 +7,7 @@ module RedAmber
     # mix-in
     include VectorFunctions
     include VectorUpdatable
+    include VectorSelectable
 
     # chunked_array may come from column.data
     def initialize(array)
@@ -19,7 +20,7 @@ module RedAmber
       when Array
         @data = Arrow::Array.new(array)
       else
-        raise VectorArgumentError, 'Unknown array in argument'
+        raise VectorArgumentError, "Unknown array in argument #{array}"
       end
     end
 
@@ -59,6 +60,10 @@ module RedAmber
     alias_method :length, :size
     alias_method :n_rows, :size
     alias_method :nrow, :size
+
+    def empty?
+      size.zero?
+    end
 
     def type
       @data.value_type.nick.to_sym

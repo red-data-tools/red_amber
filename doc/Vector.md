@@ -31,6 +31,8 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ### `size`, `length`, `n_rows`, `nrow`
 
+### `empty?`
+
 ### `type`
 
 ### `boolean?`, `numeric?`, `string?`, `temporal?`
@@ -63,6 +65,47 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
     #<RedAmber::Vector(:uint8, size=50):0x000000000000f528>
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ... ]
     ```
+
+## Selecting Values
+
+### `take(indices)`, `[](indices)`
+
+- Acceptable class for indices:
+  - Integer, Float
+  - Vector of integer or float
+  - Arrow::Arry of integer or float
+- Negative index is also OK like the Ruby's primitive Array.
+
+```ruby
+array = RedAmber::Vector.new(%w[A B C D E])
+indices = RedAmber::Vector.new([0.1, -0.5, -5.1])
+array.take(indices)
+# or
+array[indices]
+
+# =>
+#<RedAmber::Vector(:string, size=3):0x000000000000f820>
+["A", "E", "A"]
+```
+
+### `filter(booleans)`, `[](booleans)`
+
+- Acceptable class for booleans:
+  - An array of true, false, or nil
+  - Boolean Vector
+  - Arrow::BooleanArray
+
+```ruby
+array = RedAmber::Vector.new(%w[A B C D E])
+booleans = [true, false, nil, false, true]
+array.filter(booleans)
+# or
+array[booleans]
+
+# =>
+#<RedAmber::Vector(:string, size=2):0x000000000000f21c>
+["A", "E"]
+```
 
 ## Functions
 
@@ -318,4 +361,49 @@ integer.fill_nil_backward
 # =>
 #<RedAmber::Vector(:uint8, size=5):0x000000000000f974>
 [0, 1, 3, 3, nil]
+```
+
+### `boolean_vector.if_else(true_choice, false_choice)` => vector
+
+Choose values based on self. Self must be a boolean Vector.
+
+`true_choice`, `false_choice` must be of the same type scalar / array / Vector.
+`nil` values in `cond` will be promoted to the output.
+
+This example will normalize negative indices to positive ones.
+
+```ruby
+indices = RedAmber::Vector.new([1, -1, 3, -4])
+array_size = 10
+normalized_indices = (indices < 0).if_else(indices + array_size, indices)
+
+# =>
+#<RedAmber::Vector(:int16, size=4):0x000000000000f85c>
+[1, 9, 3, 6]
+```
+
+### `is_in(values)` => boolean vector
+
+For each element in self, return true if it is found in given `values`, false otherwise.
+By default, nulls are matched against the value set. (This will be changed in SetLookupOptions: not impremented.)
+
+```ruby
+vector = RedAmber::Vector.new %W[A B C D]
+values = ['A', 'C', 'X']
+vector.is_in(values)
+
+# =>
+#<RedAmber::Vector(:boolean, size=4):0x000000000000f2a8>
+[true, false, true, false]
+```
+
+`values` are casted to the same Class of Vector.
+
+```ruby
+vector = RedAmber::Vector.new([1, 2, 255])
+vector.is_in(1, -1)
+
+# =>
+#<RedAmber::Vector(:boolean, size=3):0x000000000000f320>
+[true, false, true]
 ```

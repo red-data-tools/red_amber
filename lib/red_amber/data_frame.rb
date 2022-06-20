@@ -135,7 +135,7 @@ module RedAmber
 
     def to_iruby
       require 'iruby'
-      return '(empty DataFrame)' if empty?
+      return ['text/html', '(empty DataFrame)'] if empty?
 
       reduced = size > 8 ? self[0..4, -4..-1] : self
 

@@ -3,34 +3,69 @@
 module RedAmber
   # mix-in for the class DataFrame
   module DataFrameSelectable
+    # TODO: support for option {boundscheck: true}
+    def take(*indices)
+      indices.flatten!
+      return DataFrame.new({}, []) if indices.empty?
+
+      indices = indices[0] if indices.one? && !indices[0].is_a?(Numeric)
+      indices = Vector.new(indices) unless indices.is_a?(Vector)
+
+      generic_take(indices) # returns sub DataFrame
+    end
+
+    # TODO: support for option {null_selection_behavior: :drop}
+    def filter(*booleans)
+      booleans.flatten!
+      return remove(*0...size) if booleans.empty?
+
+      b = booleans[0]
+      boolean_array =
+        case b
+        when Vector
+          raise DataFrameArgumentError, 'Argument is not a boolean.' unless b.boolean?
+
+          b.data
+        when Arrow::BooleanArray
+          b
+        else
+          raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans?(booleans)
+
+          Arrow::BooleanArray.new(booleans)
+        end
+
+      generic_filter(boolean_array) # returns sub DataFrame
+    end
+
     # select columns: [symbol] or [string]
     # select rows: [array of index], [range]
     def [](*args)
+      args.flatten!
       raise DataFrameArgumentError, 'Empty dataframe' if empty?
       raise DataFrameArgumentError, 'Empty argument' if args.empty?
 
-      if args.one?
-        case args[0]
-        when Vector
-          return select_obs_by_boolean(Arrow::BooleanArray.new(args[0].data))
-        when Arrow::BooleanArray
-          return select_obs_by_boolean(args[0])
-        when Array
-          return select_obs_by_boolean(Arrow::BooleanArray.new(args[0]))
+      arg = args[0]
+      case arg
+      when Vector
+        return generic_take(arg) if arg.numeric?
+        return generic_filter(arg.data) if arg.boolean?
 
-          # when Hash
-          # specify conditions to select by a Hash
-        end
+        raise DataFrameArgumentError, "Argument by Vector must be numeric or boolean: #{arg}"
+      when Arrow::BooleanArray
+        return generic_filter(arg)
       end
-
-      return select_obs_by_boolean(args) if booleans?(args)
 
       # expand Range like [1..3, 4] to [1, 2, 3, 4]
       expanded = expand_range(args)
-      return map_indices(*expanded) if integers?(expanded)
       return select_vars_by_keys(expanded.map(&:to_sym)) if sym_or_str?(expanded)
 
-      raise DataFrameArgumentError, "Invalid argument #{args}"
+      array = Arrow::Array.new(expanded)
+      return generic_filter(array) if array.is_a?(Arrow::BooleanArray)
+
+      vector = Vector.new(array)
+      return generic_take(vector) if vector.numeric?
+
+      raise DataFrameArgumentError, "Invalid argument: #{args}"
     end
 
     # Select a variable by a key in String or Symbol
@@ -74,6 +109,28 @@ module RedAmber
       else
         DataFrame.new(@table[keys])
       end
+    end
+
+    # Accepts indices by numeric Vector
+    def generic_take(indices)
+      raise DataFrameArgumentError, "Indices must be a numeric Vector: #{indices}" unless indices.numeric?
+      raise DataFrameArgumentError, "Index out of range: #{indices.min}" if indices.min <= -size - 1
+
+      normalized_indices = (indices < 0).if_else(indices + size, indices) # normalize index from tail
+      raise DataFrameArgumentError, "Index out of range: #{normalized_indices.max}" if normalized_indices.max >= size
+
+      index_array = Arrow::UInt64ArrayBuilder.build(normalized_indices.data) # round to integer array
+
+      datum = Arrow::Function.find(:take).execute([table, index_array])
+      DataFrame.new(datum.value)
+    end
+
+    # Accepts booleans by Arrow::BooleanArray
+    def generic_filter(boolean_array)
+      raise DataFrameArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
+
+      datum = Arrow::Function.find(:filter).execute([table, boolean_array])
+      DataFrame.new(datum.value)
     end
   end
 end
