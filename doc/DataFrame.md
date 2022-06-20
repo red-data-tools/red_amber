@@ -430,9 +430,11 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
   ![slice method image](doc/../image/dataframe/slice.png)
 
-- Keys as arguments
+- Indices as arguments
 
-    `slice(indeces)` accepts indeces as arguments. Indeces should be an Integer or a Range of Integer.
+    `slice(indeces)` accepts indices as arguments. Indices should be Integers, Floats or Ranges of Integers.
+
+    Negative index from the tail like Ruby's Array is also acceptable.
 
     ```ruby
     # returns 5 obs. at start and 5 obs. from end
