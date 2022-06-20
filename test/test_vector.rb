@@ -31,6 +31,10 @@ class VectorTest < Test::Unit::TestCase
       assert_equal expect.size, actual.size
     end
 
+    test '#empty?' do
+      assert_true Vector.new([]).empty?
+    end
+
     test '#type' do
       _, type, _, array = data
       actual = Vector.new(array)

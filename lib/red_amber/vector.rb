@@ -61,6 +61,10 @@ module RedAmber
     alias_method :n_rows, :size
     alias_method :nrow, :size
 
+    def empty?
+      size.zero?
+    end
+
     def type
       @data.value_type.nick.to_sym
     end
