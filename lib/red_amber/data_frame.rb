@@ -101,10 +101,10 @@ module RedAmber
       @vectors || @vectors = init_instance_vars(:vectors)
     end
 
-    def indexes
-      0...size
+    def indices
+      (0...size).to_a
     end
-    alias_method :indices, :indexes
+    alias_method :indexes, :indices
 
     def to_h
       variables.transform_values(&:to_a)

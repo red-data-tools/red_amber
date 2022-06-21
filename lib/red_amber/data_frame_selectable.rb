@@ -74,10 +74,10 @@ module RedAmber
         end
 
         normalized_indices = normalized_indices.floor.to_a.map(&:to_i) # round to integer array
-        return remove_all_values if normalized_indices == indices.to_a
+        return remove_all_values if normalized_indices == indices
         return self if normalized_indices.empty?
 
-        index_array = indices.to_a - normalized_indices
+        index_array = indices - normalized_indices
 
         datum = Arrow::Function.find(:take).execute([table, index_array])
         return DataFrame.new(datum.value)

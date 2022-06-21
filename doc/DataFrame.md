@@ -147,9 +147,9 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 - Returns an Array of Vectors.
 
-### `indexes`, `indices`
+### `indices`, `indexes`
 
-- Returns all indexes in a Range.
+- Returns all indexes in an Array.
 
 ### `to_h`
 
