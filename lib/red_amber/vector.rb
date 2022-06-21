@@ -53,6 +53,10 @@ module RedAmber
     alias_method :to_a, :values
     alias_method :entries, :values
 
+    def to_ary
+      to_a
+    end
+
     def size
       # only defined :length in Arrow?
       @data.length

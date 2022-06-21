@@ -29,6 +29,16 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ### `values`, `to_a`, `entries`
 
+### `to_ary`
+  Vector has `#to_ary`. It implicitly converts a Vector to an Array when required.
+
+  ```ruby
+  [1, 2] + Vector.new([3, 4])
+
+  # =>
+  [1, 2, 3, 4]
+  ```
+
 ### `size`, `length`, `n_rows`, `nrow`
 
 ### `empty?`
