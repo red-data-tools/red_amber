@@ -4,7 +4,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 - A collection of data which have same data type within. We call it `Vector`.
 - A label is attached to `Vector`. We call it `key`.
 - A `Vector` and associated `key` is grouped as a `variable`.
-- `variable`s with same vector length are aligned and arranged to be a `DaTaFrame`.
+- `variable`s with same vector length are aligned and arranged to be a `DataFrame`.
 - Each `Vector` in a `DataFrame` contains a set of relating data at same position. We call it `observation`.
 
 ![dataframe model image](doc/../image/dataframe_model.png)
@@ -52,7 +52,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 - from a URI
 
   ```ruby
-  uri = URI("uri = URI("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv")
+  uri = URI("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv")
   RedAmber::DataFrame.load(uri)
   ```
 
@@ -430,9 +430,11 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
   ![slice method image](doc/../image/dataframe/slice.png)
 
-- Keys as arguments
+- Indices as arguments
 
-    `slice(indeces)` accepts indeces as arguments. Indeces should be an Integer or a Range of Integer.
+    `slice(indeces)` accepts indices as arguments. Indices should be Integers, Floats or Ranges of Integers.
+
+    Negative index from the tail like Ruby's Array is also acceptable.
 
     ```ruby
     # returns 5 obs. at start and 5 obs. from end

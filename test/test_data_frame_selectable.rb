@@ -62,12 +62,11 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal Hash(x: [3], y: ['C']), df[-0.5].to_h
     end
 
-    test 'Select rows by invalid data type' do
+    test 'Select observations by invalid data type' do
       assert_raise(DataFrameArgumentError) { df[Time.new] }
     end
 
-    test 'Select rows by invalid length' do
-      assert_raise(ArgumentError) { df[Arrow::Int32Array.new([1, 2])] }
+    test 'Select observations by invalid length' do
       assert_raise(DataFrameArgumentError) { df[Arrow::BooleanArray.new([true, false])] }
     end
 
@@ -86,19 +85,353 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal hash, df[df[:x] < 3].to_h
     end
 
-    test 'Select observations by a invalid Array or Vector' do
+    test 'Select observations by Array or Vector with nil' do
       hash = { x: [2, 3, nil], y: %w[B C] << nil }
       assert_equal hash, df[1, 2, nil].to_h
-      assert_raise(ArgumentError) { df[Arrow::Int32Array.new([1, 2, nil])] }
+      assert_equal hash, df[Arrow::Int32Array.new([1, 2, nil])].to_h
       assert_equal hash, df[Vector.new([1, 2, nil])].to_h
     end
 
     test 'Select empty' do
-      assert_raise(DataFrameArgumentError) { df[] }
+      assert_equal(Hash(x: [], y: []), df[].to_h) # nothing to get
+      assert_equal(Hash(x: [], y: []), df[nil].to_h) # nothing to get
     end
 
     test 'Select for empty dataframe' do
       assert_raise(DataFrameArgumentError) { DataFrame.new[0] }
+    end
+  end
+
+  setup do
+    @df = DataFrame.new(
+      {
+        index: [0, 1, 2, 3, nil],
+        float: [0.0, 1.1,  2.2, Float::NAN, nil],
+        string: ['A', 'B', 'C', 'D', nil],
+        bool: [true, false, true, false, nil],
+      }
+    )
+  end
+
+  sub_test_case 'slice by arguments' do
+    test 'Empty dataframe' do
+      df = DataFrame.new
+      assert_raise(DataFrameArgumentError) { df.slice }
+      assert_raise(DataFrameArgumentError) { df.slice(1) }
+    end
+
+    test 'both arguments and a block' do
+      assert_raise(DataFrameArgumentError) { @df.slice(1) { 2 } }
+    end
+
+    test 'argument by key' do
+      assert_raise(DataFrameArgumentError) { @df.slice(:key) }
+    end
+
+    test 'slice nothing' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 0 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       0 []
+        2 :float  double      0 []
+        3 :string string      0 []
+        4 :bool   boolean     0 []
+      OUTPUT
+      assert_equal str, @df.slice.tdr_str
+      assert_equal str, @df.slice([]).tdr_str
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 0 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       0 []
+        2 :float  double      0 []
+        3 :string string      0 []
+        4 :bool   boolean     0 []
+      OUTPUT
+      assert_equal str, @df.slice([false] * @df.size).tdr_str
+    end
+
+    test 'slice all' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal str, @df.slice(0...@df.size).tdr_str
+      assert_equal str, @df.slice([true] * @df.size).tdr_str
+    end
+
+    test 'slice by indices' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       3 [0, 1, 2]
+        2 :float  double      3 [0.0, 1.1, 2.2]
+        3 :string string      3 ["A", "B", "C"]
+        4 :bool   boolean     2 {true=>2, false=>1}
+      OUTPUT
+      assert_equal str, @df.slice(0, 1, 2).tdr_str
+      assert_equal str, @df.slice([0, 1, 2]).tdr_str
+      assert_equal str, @df.slice([0..2]).tdr_str
+      assert_equal str, @df.slice([0...2, 2]).tdr_str
+      assert_equal str, @df.slice([0, -4, -3]).tdr_str
+      assert_equal str, @df.slice([0, 1.5, -2.5]).tdr_str
+      assert_equal str, @df.slice(Arrow::Array.new([0, 1, 2])).tdr_str
+      assert_equal str, @df.slice(Vector.new([0, 1, 2])).tdr_str
+    end
+
+    test 'slice by booleans' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       3 [0, 1, 2]
+        2 :float  double      3 [0.0, 1.1, 2.2]
+        3 :string string      3 ["A", "B", "C"]
+        4 :bool   boolean     2 {true=>2, false=>1}
+      OUTPUT
+      boolean = [true, true, true, false, nil]
+      assert_equal str, @df.slice(*boolean).tdr_str
+      assert_equal str, @df.slice(boolean).tdr_str
+      assert_equal str, @df.slice(Arrow::BooleanArray.new(boolean)).tdr_str
+      assert_equal str, @df.slice(RedAmber::Vector.new(boolean)).tdr_str
+      assert_equal str, @df.slice(@df[:index] < 3).tdr_str
+      assert_equal str, @df.slice(!@df[:float].is_na).tdr_str
+    end
+  end
+
+  sub_test_case 'slice with the block' do
+    test 'slice nothing with the block' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 0 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       0 []
+        2 :float  double      0 []
+        3 :string string      0 []
+        4 :bool   boolean     0 []
+      OUTPUT
+      assert_equal str, @df.slice { [nil] }.tdr_str
+      assert_equal str, @df.slice { [] }.tdr_str
+    end
+
+    test 'slice all with the block' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal @df.tdr_str, @df.slice { 0...size }.tdr_str
+      assert_equal str, @df.slice { [true] * size }.tdr_str
+    end
+
+    test 'slice by indices with the block' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       3 [0, 1, 2]
+        2 :float  double      3 [0.0, 1.1, 2.2]
+        3 :string string      3 ["A", "B", "C"]
+        4 :bool   boolean     2 {true=>2, false=>1}
+      OUTPUT
+      assert_equal str, @df.slice { [0, 1, 2] }.tdr_str
+      assert_equal str, @df.slice { [0..2] }.tdr_str
+      assert_equal str, @df.slice { [0...2, 2] }.tdr_str
+      assert_equal str, @df.slice { [0, -4, -3] }.tdr_str
+      assert_equal str, @df.slice { [0, 1.5, -2.5] }.tdr_str
+    end
+
+    test 'slice by booleans with the block' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 2 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       2 [1, 3]
+        2 :float  double      2 [1.1, NaN], 1 NaN
+        3 :string string      2 ["B", "D"]
+        4 :bool   boolean     1 {false=>2}
+      OUTPUT
+      assert_equal str, @df.slice { [false, true, false, true, false] }.tdr_str
+      assert_equal str, @df.slice { indexes.map(&:odd?) }.tdr_str
+    end
+  end
+
+  sub_test_case 'remove by arguments' do
+    test 'Empty dataframe' do
+      df = DataFrame.new
+      assert_raise(DataFrameArgumentError) { df.remove }
+      assert_raise(DataFrameArgumentError) { df.remove(1) }
+    end
+
+    test 'both arguments and a block' do
+      assert_raise(DataFrameArgumentError) { @df.remove(1) { 2 } }
+    end
+
+    test 'argument by key' do
+      assert_raise(DataFrameArgumentError) { @df.remove(:key) }
+    end
+
+    test 'remove nothing' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal str, @df.remove.tdr_str
+      assert_equal str, @df.remove([]).tdr_str
+      assert_equal str, @df.remove([false] * @df.size).tdr_str
+    end
+
+    test 'remove all' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 0 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       0 []
+        2 :float  double      0 []
+        3 :string string      0 []
+        4 :bool   boolean     0 []
+      OUTPUT
+      assert_equal str, @df.remove(0..4).tdr_str
+      assert_equal str, @df.remove([true] * 5).tdr_str
+    end
+
+    test 'remove by indices' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       3 [0, 1, 2]
+        2 :float  double      3 [0.0, 1.1, 2.2]
+        3 :string string      3 ["A", "B", "C"]
+        4 :bool   boolean     2 {true=>2, false=>1}
+      OUTPUT
+      assert_equal str, @df.remove(3, 4).tdr_str
+      assert_equal str, @df.remove([3, 4]).tdr_str
+      assert_equal str, @df.remove([3..4]).tdr_str
+      assert_equal str, @df.remove([3...4, 4]).tdr_str
+      assert_equal str, @df.remove([-2, -1]).tdr_str
+      assert_equal str, @df.remove([3.5, -0.1]).tdr_str
+      assert_equal str, @df.remove(Arrow::Array.new([3, 4])).tdr_str
+      assert_equal str, @df.remove(Vector.new([3, 4])).tdr_str
+    end
+
+    test 'remove by booleans' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       3 [0, 1, 2]
+        2 :float  double      3 [0.0, 1.1, 2.2]
+        3 :string string      3 ["A", "B", "C"]
+        4 :bool   boolean     2 {true=>2, false=>1}
+      OUTPUT
+      boolean = [false, nil, false, true, true]
+      assert_equal str, @df.remove(*boolean).tdr_str
+      assert_equal str, @df.remove(boolean).tdr_str
+      assert_equal str, @df.remove(Arrow::BooleanArray.new(boolean)).tdr_str
+      assert_equal str, @df.remove(RedAmber::Vector.new(boolean)).tdr_str
+      assert_equal str, @df.remove(@df[:float].is_na).tdr_str
+
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 4 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       4 [0, 1, 2, nil], 1 nil
+        2 :float  double      4 [0.0, 1.1, 2.2, nil], 1 nil
+        3 :string string      4 ["A", "B", "C", nil], 1 nil
+        4 :bool   boolean     3 {true=>2, false=>1, nil=>1}
+      OUTPUT
+      assert_equal str, @df.remove(@df[:index] > 2).tdr_str
+    end
+  end
+
+  sub_test_case 'remove with the block' do
+    test 'remove nothing with the block' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal str, @df.remove { nil }.tdr_str
+      assert_equal str, @df.remove { [] }.tdr_str
+    end
+
+    test 'remove all with the block' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 0 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       0 []
+        2 :float  double      0 []
+        3 :string string      0 []
+        4 :bool   boolean     0 []
+      OUTPUT
+      assert_equal str, @df.remove { 0...size }.tdr_str
+    end
+
+    test 'remove by indices with the block' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 2 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       2 [3, nil], 1 nil
+        2 :float  double      2 [NaN, nil], 1 NaN, 1 nil
+        3 :string string      2 ["D", nil], 1 nil
+        4 :bool   boolean     2 [false, nil], 1 nil
+      OUTPUT
+      assert_equal str, @df.remove { [0, 1, 2] }.tdr_str
+    end
+
+    test 'remove by booleans with the block' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 2 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       2 [1, 3]
+        2 :float  double      2 [1.1, NaN], 1 NaN
+        3 :string string      2 ["B", "D"]
+        4 :bool   boolean     1 {false=>2}
+      OUTPUT
+      assert_equal str, @df.remove { indexes.map(&:even?) }.tdr_str
+    end
+  end
+
+  sub_test_case 'remove_nil' do
+    test 'Empty dataframe' do
+      df = DataFrame.new
+      assert_true df.remove_nil.empty?
+    end
+
+    test 'remove_nil' do
+      assert_equal <<~OUTPUT, @df.remove_nil.tdr_str
+        RedAmber::DataFrame : 4 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       4 [0, 1, 2, 3]
+        2 :float  double      4 [0.0, 1.1, 2.2, NaN], 1 NaN
+        3 :string string      4 ["A", "B", "C", "D"]
+        4 :bool   boolean     2 {true=>2, false=>2}
+      OUTPUT
     end
   end
 
@@ -112,7 +445,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
 
     test '#take' do
-      assert_true @df.take.empty?
+      assert_equal(Hash(x: [], y: []), @df.take.to_h) # nothing to get
       assert_equal({ x: [2], y: ['B'] }, @df.take(1).to_h) # single value
       assert_equal({ x: [2, 4], y: %w[B D] }, @df.take(1, 3).to_h) # array without bracket
       assert_equal({ x: [4, 1, 4], y: %w[D A D] }, @df.take([3, 0, -2]).to_h) # array, negative index

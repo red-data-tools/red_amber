@@ -47,7 +47,7 @@ gem install red_amber
 Represents a set of data in 2D-shape.
 
 ```ruby
-require 'red_amber'
+require 'red_amber' # require 'red-amber' is also OK.
 require 'datasets-arrow'
 
 arrow = Datasets::Penguins.new.to_arrow
