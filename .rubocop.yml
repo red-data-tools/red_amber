@@ -101,6 +101,10 @@ Metrics/PerceivedComplexity:
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 14
     - 'lib/red_amber/vector_updatable.rb' # Max: 15
 
+Naming/FileName:
+  Exclude:
+    - 'lib/red-amber.rb'
+
 # Necessary to define is_na, is_in, etc.
 Naming/PredicateName:
   Exclude:
