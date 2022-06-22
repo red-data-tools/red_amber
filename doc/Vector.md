@@ -29,6 +29,10 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ### `values`, `to_a`, `entries`
 
+### `indices`, `indexes`, `indeces`
+
+  Return indices in an Array
+
 ### `to_ary`
   Vector has `#to_ary`. It implicitly converts a Vector to an Array when required.
 

@@ -31,6 +31,10 @@ class VectorTest < Test::Unit::TestCase
       assert_equal expect.size, actual.size
     end
 
+    test '#indices' do
+      assert_equal [0, 1, 2], Vector.new(%w[A B C]).indices
+    end
+
     test '#to_ary' do
       assert_equal [1, 2, 3, 4], [1, 2] + Vector.new([3, 4])
     end

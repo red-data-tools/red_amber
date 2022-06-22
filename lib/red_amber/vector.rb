@@ -53,6 +53,12 @@ module RedAmber
     alias_method :to_a, :values
     alias_method :entries, :values
 
+    def indices
+      (0...size).to_a
+    end
+    alias_method :indexes, :indices
+    alias_method :indeces, :indices
+
     def to_ary
       to_a
     end
