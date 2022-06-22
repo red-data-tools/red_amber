@@ -155,7 +155,11 @@ class DataFrameTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case 'to_iruby' do
+  sub_test_case 'to_iruby in table mode' do
+    setup do
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'table'
+    end
+
     test 'empty' do
       df = DataFrame.new
       assert_equal ['text/html', '(empty DataFrame)'], df.to_iruby
@@ -177,6 +181,63 @@ class DataFrameTest < Test::Unit::TestCase
       raw_record = (1..16).each.with_object({}) { |i, h| h[(64 + i).chr] = [i] }
       df = RedAmber::DataFrame.new(raw_record)
       html = '1 x 16 vectors ; <table><tr><th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>&#8230;</th><th>J</th><th>K</th><th>L</th><th>M</th><th>N</th><th>O</th><th>P</th></tr><tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>&#8230;</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr></table>'
+      assert_equal html, df.to_iruby[1]
+    end
+  end
+
+  sub_test_case 'to_iruby in tdr mode' do
+    setup do
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'tdr'
+    end
+
+    test 'empty' do
+      df = DataFrame.new
+      assert_equal ['text/html', '(empty DataFrame)'], df.to_iruby
+    end
+
+    test 'simple dataframe' do
+      df = DataFrame.new(x: [1, 2, Float::NAN], y: ['', ' ', nil], z: [true, false, nil])
+      html = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 1 numeric, 1 string, 1 boolean
+        # key type    level data_preview
+        1 :x  double      3 [1.0, 2.0, NaN], 1 NaN
+        2 :y  string      3 ["", " ", nil], 1 nil
+        3 :z  boolean     3 [true, false, nil], 1 nil
+      OUTPUT
+      assert_equal html, df.to_iruby[1]
+    end
+
+    test 'long dataframe' do
+      df = RedAmber::DataFrame.new(x: [*1..10])
+      html = <<~OUTPUT
+        RedAmber::DataFrame : 10 x 1 Vector
+        Vector : 1 numeric
+        # key type  level data_preview
+        1 :x  uint8    10 [1, 2, 3, 4, 5, ... ]
+      OUTPUT
+      assert_equal html, df.to_iruby[1]
+    end
+
+    test 'wide dataframe' do
+      raw_record = (1..16).each.with_object({}) { |i, h| h[(64 + i).chr] = [i] }
+      df = RedAmber::DataFrame.new(raw_record)
+      html = <<~OUTPUT
+        RedAmber::DataFrame : 1 x 16 Vectors
+        Vectors : 16 numeric
+        #  key type  level data_preview
+        1  :A  uint8     1 [1]
+        2  :B  uint8     1 [2]
+        3  :C  uint8     1 [3]
+        4  :D  uint8     1 [4]
+        5  :E  uint8     1 [5]
+        6  :F  uint8     1 [6]
+        7  :G  uint8     1 [7]
+        8  :H  uint8     1 [8]
+        9  :I  uint8     1 [9]
+        10 :J  uint8     1 [10]
+         ... 6 more Vectors ...
+      OUTPUT
       assert_equal html, df.to_iruby[1]
     end
   end

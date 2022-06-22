@@ -24,7 +24,11 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case 'inspect' do
+  sub_test_case 'inspect by tdr mode' do
+    setup do
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'tdr'
+    end
+
     test 'empty dataframe' do
       df = DataFrame.new
       str = "#<RedAmber::DataFrame : (empty), #{format('0x%016x', df.object_id)}>\n"
@@ -48,6 +52,40 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
         3 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
          ... 1 more Vector ...
+      OUTPUT
+      assert_equal str, @df.inspect
+    end
+  end
+
+  sub_test_case 'inspect by table mode' do
+    setup do
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'table'
+    end
+
+    test 'empty dataframe' do
+      df = DataFrame.new
+      str = "#<RedAmber::DataFrame : (empty), #{format('0x%016x', df.object_id)}>\n\n"
+      assert_equal str, df.inspect
+    end
+
+    setup do
+      hash = { integer: [1, 2, 3, 4, 5, 6],
+               double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
+               string: %w[A A B C D E],
+               boolean: [true, false, nil, true, false, nil] }
+      @df = DataFrame.new(hash)
+    end
+
+    test 'default' do
+      str = <<~OUTPUT
+        #<RedAmber::DataFrame : 6 x 4 Vectors, #{format('0x%016x', @df.object_id)}>
+        \tinteger\t    double\tstring\tboolean
+        0\t      1\t  1.000000\tA     \ttrue   
+        1\t      2\t       NaN\tA     \tfalse  
+        2\t      3\t       Inf\tB     \t (null)
+        3\t      4\t      -Inf\tC     \ttrue   
+        4\t      5\t    (null)\tD     \tfalse  
+        5\t      6\t  0.000000\tE     \t (null)
       OUTPUT
       assert_equal str, @df.inspect
     end
