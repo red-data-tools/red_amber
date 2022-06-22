@@ -129,5 +129,9 @@ module RedAmber
         arrays << Arrow::ChunkedArray.new([a])
       end
     end
+
+    def keys_by_booleans(booleans)
+      keys.select.with_index { |_, i| booleans[i] }
+    end
   end
 end

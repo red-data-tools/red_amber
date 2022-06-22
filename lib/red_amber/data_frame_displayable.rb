@@ -30,10 +30,6 @@ module RedAmber
 
     private # =====
 
-    def pl(num)
-      num > 1 ? 's' : ''
-    end
-
     def shape_str(with_id: false)
       shape_info = empty? ? '(empty)' : "#{size} x #{n_keys} Vector#{pl(n_keys)}"
       id = with_id ? format(', 0x%016x', object_id) : ''
