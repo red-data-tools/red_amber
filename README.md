@@ -141,7 +141,17 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## TDR concept
 
-I named the data frame representation style in the model above as TDR (Transposed DataFrame Representation). See [TDR.md](doc/tdr.md) for details.
+I named the data frame representation style in the model above as TDR (Transposed DataFrame Representation). 
+
+This library can be used with both TDR mode and usual Table mode.
+If you set the environment variable `RED_AMBER_OUTPUT_MODE` to `"table"`, output style by `inspect` and `to_iruby` is the Table mode. Other value including nil will output TDR style.
+
+You can switch the mode in Ruby like this.
+```ruby
+ENV['RED_AMBER_OUTPUT_STYLE'] = 'table' # => Table mode
+```
+
+For more detail information about TDR, see [TDR.md](doc/tdr.md).
 
 ## Development
 

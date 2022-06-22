@@ -14,7 +14,11 @@ module RedAmber
     # def summary() end
 
     def inspect
-      "#<#{shape_str(with_id: true)}>\n#{dataframe_info(3)}"
+      if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'tdr') == 'table'
+        "#<#{shape_str(with_id: true)}>\n#{self}"
+      else
+        "#<#{shape_str(with_id: true)}>\n#{dataframe_info(3)}"
+      end
     end
 
     # - limit: max num of Vectors to show
