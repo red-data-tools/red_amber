@@ -126,4 +126,14 @@ class VectorTest < Test::Unit::TestCase
       assert_raise(TypeError) { @vector.is_in([1, true]) } # Can't cast
     end
   end
+
+  sub_test_case '#index' do
+    vector = Vector.new([1, 2, 3, nil])
+    test 'found index' do
+      assert_equal 1, vector.index(2)
+      assert_equal 3, vector.index(nil)
+      assert_nil vector.index(0) # out of range
+      assert_equal 1, vector.index(2.0) # types are ignored
+    end
+  end
 end

@@ -264,6 +264,9 @@ boolean.all(opts: {skip_nulls: false}) #=> false
   vector.tally #=> {NaN=>2}
   vector.value_counts #=> {NaN=>2}
   ```
+### `index(element)`
+
+  Returns index of specified element.
 
 ### `sort_indexes`, `sort_indices`, `array_sort_indices`
 

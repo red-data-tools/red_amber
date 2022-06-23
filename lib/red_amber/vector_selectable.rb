@@ -92,6 +92,11 @@ module RedAmber
       Vector.new(data.is_in(array))
     end
 
+    # Arrow's support required
+    def index(element)
+      to_a.index(element)
+    end
+
     private
 
     # Accepts indices by numeric Vector
