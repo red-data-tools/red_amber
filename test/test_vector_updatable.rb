@@ -6,51 +6,70 @@ class VectorTest < Test::Unit::TestCase
   include RedAmber
   include Helper
 
-  sub_test_case('replace_with') do
+  sub_test_case('replace') do
     test 'empty vector' do
       vec = Vector.new([])
-      assert_raise(VectorArgumentError) { vec.replace_with([], nil) }
+      assert_true vec.replace(nil, nil).empty?
+      assert_true vec.replace([], nil).empty?
+      assert_true vec.replace([nil], nil).empty?
+    end
+
+    test 'replace UInt argument' do
+      vec = Vector.new([1, 2, 3])
+      assert_equal [0, 2, 0], vec.replace([0, 2], 0).to_a
+      assert_equal [0, 2, 0], vec.replace([2, 0], [0]).to_a
+      assert_equal [0, 2, 4], vec.replace([0, 2], [0, 4]).to_a
+      assert_raise(VectorArgumentError) { vec.replace([0, 2], [0, 0, 0]) } # size mismatch
+      assert_raise(VectorArgumentError) { vec.replace([0, 1, 2], [0, 0]) } # size mismatch
+      assert_equal [5, 2, 4], vec.replace([0, 2, nil], [5, 4]).to_a
+      assert_equal [0, 2, nil], vec.replace([0, 2], [0, nil]).to_a
+    end
+
+    test 'replace Int/Range argument mixture' do
+      vec = Vector.new([1, 2, 3])
+      assert_equal [0, 0, 0], vec.replace([0..1, 2], 0).to_a
+      assert_equal [1, 2, 0], vec.replace([2, -1], 0).to_a
     end
 
     test 'replace UInt single' do
       vec = Vector.new([1, 2, 3])
-      assert_equal [1, 2, 0], vec.replace_with([false, false, true], 0).to_a
-      assert_equal [1, 2, 0], vec.replace_with([false, false, true], [0]).to_a
-      assert_raise(VectorArgumentError) { vec.replace_with([true], 0) } # boolean size mismatch
-      assert_raise(VectorArgumentError) { vec.replace_with([false, false, nil], 0) } # no true in boolean
-      assert_raise(VectorArgumentError) { vec.replace_with([true, false, nil], [0, 0]) } # replacement size mismatch
+      assert_equal [1, 2, 0], vec.replace([false, false, true], 0).to_a
+      assert_equal [1, 2, 0], vec.replace([false, false, true], [0]).to_a
+      assert_raise(VectorArgumentError) { vec.replace([true], 0) } # boolean size mismatch
+      assert_raise(VectorArgumentError) { vec.replace([false, false, nil], 0) } # no true in boolean
+      assert_raise(VectorArgumentError) { vec.replace([true, false, nil], [0, 0]) } # replacement size mismatch
     end
 
-    test 'replace UInt multi/broadcast' do
+    test 'replace multi/broadcast' do
       vec = Vector.new([1, 2, 3])
-      assert_equal [0, 2, 0], vec.replace_with([true, false, true], [0, 0]).to_a
-      assert_equal [0, 2, 0], vec.replace_with([true, false, true], [0]).to_a
-      assert_equal [0, 2, 0], vec.replace_with([true, false, true], 0).to_a
+      assert_equal [0, 2, 0], vec.replace([true, false, true], [0, 0]).to_a
+      assert_equal [0, 2, 0], vec.replace([true, false, true], [0]).to_a
+      assert_equal [0, 2, 0], vec.replace([true, false, true], 0).to_a
     end
 
-    test 'replace UInt multi/upcast' do
+    test 'replace multi/upcast' do
       vec = Vector.new([1, 2, 3])
-      assert_equal [0, 2, -1], vec.replace_with([true, false, true], [0, -1]).to_a
-      assert_equal :int8, vec.replace_with([true, false, true], [0, -1]).type
+      assert_equal [0, 2, -1], vec.replace([true, false, true], [0, -1]).to_a
+      assert_equal :int8, vec.replace([true, false, true], [0, -1]).type
     end
 
     test 'replace containing nil' do
       vec = Vector.new([1, 2, 3])
-      assert_equal [0, 2, nil], vec.replace_with([true, false, nil], [0]).to_a
+      assert_equal [0, 2, nil], vec.replace([true, false, nil], [0]).to_a
     end
 
     test 'replace Arrow::Array' do
       vec = Vector.new([1, 2, 3])
       booleans = Arrow::Array.new([true, false, nil])
-      assert_equal [0, 2, nil], vec.replace_with(booleans, [0]).to_a
+      assert_equal [0, 2, nil], vec.replace(booleans, [0]).to_a
     end
 
     test 'replace with nil' do
       vec = Vector.new([1, 2, 3])
-      assert_equal [0, 2, nil], vec.replace_with([true, false, true], [0, nil]).to_a # 1 nil
-      assert_equal [nil, 2, nil], vec.replace_with([true, false, true], [nil]).to_a # broadcast with nil
-      assert_equal [nil, 2, nil], vec.replace_with([true, false, true], nil).to_a # broadcast with nil
-      assert_equal [nil, 2, nil], vec.replace_with([true, false, true]).to_a # broadcast without replacemant
+      assert_equal [0, 2, nil], vec.replace([true, false, true], [0, nil]).to_a # 1 nil
+      assert_equal [nil, 2, nil], vec.replace([true, false, true], [nil]).to_a # broadcast with nil
+      assert_equal [nil, 2, nil], vec.replace([true, false, true], nil).to_a # broadcast with nil
+      assert_raise(ArgumentError) { vec.replace([true, false, true]) } # w/o replacer
     end
   end
 

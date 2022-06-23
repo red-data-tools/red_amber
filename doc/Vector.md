@@ -289,39 +289,40 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 ## Coerce (not impremented)
 
 ## Update vector's value
-### `replace_with(booleans, replacements)` => vector
+### `replace(specifier, replacer)` => vector
 
-- Accepts Vector, Array, Arrow::Array for booleans and replacements.
-  - Replacements can accept scalar
-- Booleans specifies the position of replacement in true.
-- Replacements specifies the vaues to be replaced.
-  - The number of true in booleans must be equal to the length of replacement
+- Accepts Scalar, Range  of Integer, Vector, Array, Arrow::Array as a specifier
+- Accepts Scalar, Vector, Array and Arrow::Array as a replacer.
+- Boolean specifiers specify the position of replacer in true.
+- Index specifiers specify the position of replacer in indices.
+- replacer specifies the values to be replaced.
+  - The number of true in booleans must be equal to the length of replacer
 
 ```ruby
 vector = RedAmber::Vector.new([1, 2, 3])
 booleans = [true, false, true]
-replacemants = [4, 5]
-vector.replace_with(booleans, replacemants)
+replacer = [4, 5]
+vector.replace(booleans, replacer)
 # => 
 #<RedAmber::Vector(:uint8, size=3):0x000000000001ee10>
 [4, 2, 5] 
 ```
 
-- Scalar value in replacements can be broadcasted.
+- Scalar value in replacer can be broadcasted.
 
 ```ruby
-replacemant = 0
-vector.replace_with(booleans, replacement)
+replacer = 0
+vector.replace(booleans, replacer)
 # => 
 #<RedAmber::Vector(:uint8, size=3):0x000000000001ee10>
 [0, 2, 0] 
 ```
 
-- Returned data type is automatically up-casted by replacement.
+- Returned data type is automatically up-casted by replacer.
 
 ```ruby
-replacement = 1.0
-vector.replace_with(booleans, replacement)
+replacer = 1.0
+vector.replace(booleans, replacer)
 # => 
 #<RedAmber::Vector(:double, size=3):0x0000000000025d78>
 [1.0, 2.0, 1.0]
@@ -331,29 +332,29 @@ vector.replace_with(booleans, replacement)
 
 ```ruby
 booleans = [true, false, nil]
-replacemant = -1
-vec.replace_with(booleans, replacement)
+replacer = -1
+vec.replace(booleans, replacer)
 => 
 #<RedAmber::Vector(:int8, size=3):0x00000000000304d0>
 [-1, 2, nil]
 ```
 
-- Replacemants can have nil in it.
+- replacer can have nil in it.
 
 ```ruby
 booleans = [true, false, true]
-replacemants = [nil]
-vec.replace_with(booleans, replacemants)
+replacer = [nil]
+vec.replace(booleans, replacer)
 => 
 #<RedAmber::Vector(:int8, size=3):0x00000000000304d0>
 [nil, 2, nil]
 ```
 
-- If no replacemants specified, it is same as to specify nil.
+- If no replacer specified, it is same as to specify nil.
 
 ```ruby
 booleans = [true, false, true]
-vec.replace_with(booleans)
+vec.replace(booleans)
 => 
 #<RedAmber::Vector(:int8, size=3):0x00000000000304d0>
 [nil, 2, nil]
@@ -363,11 +364,25 @@ vec.replace_with(booleans)
 
 ```ruby
 vector = RedAmber::Vector.new(['A', 'B', 'NA'])
-vector.replace_with(vector == 'NA', nil)
+vector.replace(vector == 'NA', nil)
 # =>
 #<RedAmber::Vector(:string, size=3):0x000000000000f8ac>
 ["A", "B", nil]
 ```
+
+- Specifier in indices.
+
+Specified indices are used 'as sorted'. Position in indices and replacer may not have correspondence.
+
+```ruby
+indices = [2, 1]
+replacer = [4, 5]
+vector.replace(indices, replacer)
+# =>
+#<RedAmber::Vector(:uint8, size=3):0x000000000000f244>
+[1, 4, 5]
+```
+
 
 ### `fill_nil_forward`, `fill_nil_backward` => vector
 
