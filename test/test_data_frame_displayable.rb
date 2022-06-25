@@ -80,11 +80,11 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       str = <<~OUTPUT
         #<RedAmber::DataFrame : 6 x 4 Vectors, #{format('0x%016x', @df.object_id)}>
         \tinteger\t    double\tstring\tboolean
-        0\t      1\t  1.000000\tA     \ttrue   
-        1\t      2\t       NaN\tA     \tfalse  
+        0\t      1\t  1.000000\tA     \ttrue   \n\
+        1\t      2\t       NaN\tA     \tfalse  \n\
         2\t      3\t       Inf\tB     \t (null)
-        3\t      4\t      -Inf\tC     \ttrue   
-        4\t      5\t    (null)\tD     \tfalse  
+        3\t      4\t      -Inf\tC     \ttrue   \n\
+        4\t      5\t    (null)\tD     \tfalse  \n\
         5\t      6\t  0.000000\tE     \t (null)
       OUTPUT
       assert_equal str, @df.inspect

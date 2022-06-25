@@ -162,7 +162,7 @@ class DataFrameTest < Test::Unit::TestCase
 
     test 'empty' do
       df = DataFrame.new
-      assert_equal ['text/html', '(empty DataFrame)'], df.to_iruby
+      assert_equal ['text/plain', '(empty DataFrame)'], df.to_iruby
     end
 
     test 'simple dataframe' do
@@ -192,7 +192,7 @@ class DataFrameTest < Test::Unit::TestCase
 
     test 'empty' do
       df = DataFrame.new
-      assert_equal ['text/html', '(empty DataFrame)'], df.to_iruby
+      assert_equal ['text/plain', '(empty DataFrame)'], df.to_iruby
     end
 
     test 'simple dataframe' do
