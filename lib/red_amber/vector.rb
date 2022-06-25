@@ -10,18 +10,28 @@ module RedAmber
     include VectorSelectable
     include Helper
 
-    # chunked_array may come from column.data
-    def initialize(array)
+    def initialize(*array)
       @key = nil # default is 'headless'
-      case array
-      when Vector
-        @data = array.data
-      when Arrow::Array, Arrow::ChunkedArray
-        @data = array
-      when Array
-        @data = Arrow::Array.new(array)
+      if array.empty? || array[0].nil?
+        Vector.new([])
       else
-        raise VectorArgumentError, "Unknown array in argument #{array}"
+        array.flatten!
+        case array[0]
+        when Vector
+          @data = array[0].data
+          return
+        when Arrow::Array, Arrow::ChunkedArray
+          @data = array[0]
+          return
+        when Range
+          @data = Arrow::Array.new(Array(array[0]))
+          return
+        end
+        begin
+          @data = Arrow::Array.new(Array(array))
+        rescue Error
+          raise VectorArgumentError, "Invalid argument: #{array}"
+        end
       end
     end
 

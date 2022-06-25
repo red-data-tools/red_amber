@@ -18,6 +18,13 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
   ```ruby
   vector = RedAmber::Vector.new([1, 2, 3])
+  # or
+  vector = RedAmber::Vector.new(1, 2, 3)
+  # or
+  vector = RedAmber::Vector.new(1..3)
+  # or
+  vector = RedAmber::Vector.new(Arrow::Array([1, 2, 3])
+
   # =>
   #<RedAmber::Vector(:uint8, size=3):0x000000000000f514>
   [1, 2, 3]
