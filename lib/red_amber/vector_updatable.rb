@@ -76,11 +76,5 @@ module RedAmber
 
       is_nil.if_else(false, self).invert
     end
-
-    private
-
-    def booleans?(enum)
-      enum.all? { |e| e.is_a?(TrueClass) || e.is_a?(FalseClass) || e.is_a?(NilClass) }
-    end
   end
 end

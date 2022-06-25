@@ -74,10 +74,10 @@ module RedAmber
         end
 
         normalized_indices = normalized_indices.floor.to_a.map(&:to_i) # round to integer array
-        return remove_all_values if normalized_indices == indices.to_a
+        return remove_all_values if normalized_indices == indices
         return self if normalized_indices.empty?
 
-        index_array = indices.to_a - normalized_indices
+        index_array = indices - normalized_indices
 
         datum = Arrow::Function.find(:take).execute([table, index_array])
         return DataFrame.new(datum.value)
@@ -156,35 +156,6 @@ module RedAmber
     end
 
     private
-
-    def parse_to_vector(args)
-      a = args.reduce([]) do |accum, elem|
-        accum.concat(normalize_element(elem))
-      end
-      Vector.new(a)
-    end
-
-    def normalize_element(elem)
-      case elem
-      when Numeric, String, Symbol, TrueClass, FalseClass, NilClass
-        [elem]
-      when Range
-        both_end = [elem.begin, elem.end]
-        both_end[1] -= 1 if elem.exclude_end? && elem.end.is_a?(Integer)
-
-        if both_end.any?(Integer) || both_end.all?(&:nil?)
-          if both_end.any? { |e| e&.>=(size) || e&.<(-size) }
-            raise DataFrameArgumentError, "Index out of range: #{elem} for 0..#{size - 1}"
-          end
-
-          (0...size).to_a[elem]
-        else
-          elem.to_a
-        end
-      else
-        Array(elem)
-      end
-    end
 
     def select_vars_by_keys(keys)
       if keys.one?

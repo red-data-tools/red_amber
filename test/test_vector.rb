@@ -8,10 +8,13 @@ class VectorTest < Test::Unit::TestCase
   sub_test_case('Basic properties') do
     data(keep: true) do
       a = [0, 1, nil, 4]
+      # h in [expect, type, type_class, array]
       h = {
-        'array' => [a, :uint8, Arrow::UInt8DataType, a],
-        'Arrow::Array' => [a, :uint8, Arrow::UInt8DataType, Arrow::UInt8Array.new(a)],
-        'vector' => [a, :uint8, Arrow::UInt8DataType, Vector.new(a)],
+        array: [a, :uint8, Arrow::UInt8DataType, a],
+        'Arrow::Array': [a, :uint8, Arrow::UInt8DataType, Arrow::UInt8Array.new(a)],
+        vector: [a, :uint8, Arrow::UInt8DataType, Vector.new(a)],
+        Range: [[1, 2, 3], :uint8, Arrow::UInt8DataType, 1..3],
+        Float: [[1.0], :double, Arrow::DoubleDataType, 1.0],
       }
       chunks = [Arrow::UInt32Array.new(a[0..1]),
                 Arrow::UInt32Array.new(a[2..3])]
@@ -25,10 +28,23 @@ class VectorTest < Test::Unit::TestCase
       assert_equal expect, actual
     end
 
+    test '.initialize by an expanded Array' do
+      array = [1, 2, 3]
+      assert_equal array, Vector.new(*array).to_a
+    end
+
     test '#size' do
       expect, _, _, array = data
       actual = Vector.new(array)
       assert_equal expect.size, actual.size
+    end
+
+    test '#indices' do
+      assert_equal [0, 1, 2], Vector.new(%w[A B C]).indices
+    end
+
+    test '#to_ary' do
+      assert_equal [1, 2, 3, 4], [1, 2] + Vector.new([3, 4])
     end
 
     test '#empty?' do

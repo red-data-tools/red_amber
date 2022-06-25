@@ -8,19 +8,30 @@ module RedAmber
     include VectorFunctions
     include VectorUpdatable
     include VectorSelectable
+    include Helper
 
-    # chunked_array may come from column.data
-    def initialize(array)
+    def initialize(*array)
       @key = nil # default is 'headless'
-      case array
-      when Vector
-        @data = array.data
-      when Arrow::Array, Arrow::ChunkedArray
-        @data = array
-      when Array
-        @data = Arrow::Array.new(array)
+      if array.empty? || array[0].nil?
+        Vector.new([])
       else
-        raise VectorArgumentError, "Unknown array in argument #{array}"
+        array.flatten!
+        case array[0]
+        when Vector
+          @data = array[0].data
+          return
+        when Arrow::Array, Arrow::ChunkedArray
+          @data = array[0]
+          return
+        when Range
+          @data = Arrow::Array.new(Array(array[0]))
+          return
+        end
+        begin
+          @data = Arrow::Array.new(Array(array))
+        rescue Error
+          raise VectorArgumentError, "Invalid argument: #{array}"
+        end
       end
     end
 
@@ -52,6 +63,16 @@ module RedAmber
     end
     alias_method :to_a, :values
     alias_method :entries, :values
+
+    def indices
+      (0...size).to_a
+    end
+    alias_method :indexes, :indices
+    alias_method :indeces, :indices
+
+    def to_ary
+      to_a
+    end
 
     def size
       # only defined :length in Arrow?

@@ -3,8 +3,8 @@
 require 'arrow'
 require 'rover-df'
 
+require_relative 'red_amber/helper'
 require_relative 'red_amber/data_frame_displayable'
-require_relative 'red_amber/data_frame_helper'
 require_relative 'red_amber/data_frame_indexable'
 require_relative 'red_amber/data_frame_selectable'
 require_relative 'red_amber/data_frame_observation_operation'

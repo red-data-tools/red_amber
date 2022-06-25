@@ -6,11 +6,11 @@ module RedAmber
   class DataFrame
     # mix-in
     include DataFrameDisplayable
-    include DataFrameHelper
     include DataFrameIndexable
     include DataFrameSelectable
     include DataFrameObservationOperation
     include DataFrameVariableOperation
+    include Helper
 
     def initialize(*args)
       @variables = @keys = @vectors = @types = @data_types = nil
@@ -101,10 +101,10 @@ module RedAmber
       @vectors || @vectors = init_instance_vars(:vectors)
     end
 
-    def indexes
-      0...size
+    def indices
+      (0...size).to_a
     end
-    alias_method :indices, :indexes
+    alias_method :indexes, :indices
 
     def to_h
       variables.transform_values(&:to_a)
@@ -152,7 +152,7 @@ module RedAmber
       end
 
       html = IRuby::HTML.table(converted.to_h, maxrows: 8, maxcols: 15)
-      html = "#{size} x #{n_keys} vector#{n_keys > 1 ? 's' : ''} ; #{html}"
+      html = "#{size} x #{n_keys} vector#{pl(n_keys)} ; #{html}"
       ['text/html', html]
     end
 

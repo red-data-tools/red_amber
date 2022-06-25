@@ -161,6 +161,16 @@ module RedAmber
     alias_method :lt, :less
     alias_method :ne, :not_equal
 
+    def coerce(other)
+      case other
+      when Vector, Array, Arrow::Array
+        raise VectorArgumentError, "Size unmatch: #{size} != #{other.length}" unless size == other.length
+
+        [Vector.new(Array(other)), self]
+      end
+      [Vector.new(Array(other) * size), self]
+    end
+
     # (array functions)
     # dictionary_encode,
     # partition_nth_indices,
@@ -203,7 +213,7 @@ module RedAmber
     # is_in_meta_binary,
     # list_element, list_flatten, list_parent_indices, list_value_length, make_struct,
     # max_element_wise, min_element_wise, random, select_k_unstable,
-    # sort_indices, struct_field,
+    # struct_field,
 
     private # =======
 

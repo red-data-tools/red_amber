@@ -18,6 +18,13 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
   ```ruby
   vector = RedAmber::Vector.new([1, 2, 3])
+  # or
+  vector = RedAmber::Vector.new(1, 2, 3)
+  # or
+  vector = RedAmber::Vector.new(1..3)
+  # or
+  vector = RedAmber::Vector.new(Arrow::Array([1, 2, 3])
+
   # =>
   #<RedAmber::Vector(:uint8, size=3):0x000000000000f514>
   [1, 2, 3]
@@ -28,6 +35,20 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 ### `to_s`
 
 ### `values`, `to_a`, `entries`
+
+### `indices`, `indexes`, `indeces`
+
+  Return indices in an Array
+
+### `to_ary`
+  Vector has `#to_ary`. It implicitly converts a Vector to an Array when required.
+
+  ```ruby
+  [1, 2] + Vector.new([3, 4])
+
+  # =>
+  [1, 2, 3, 4]
+  ```
 
 ### `size`, `length`, `n_rows`, `nrow`
 
@@ -250,6 +271,9 @@ boolean.all(opts: {skip_nulls: false}) #=> false
   vector.tally #=> {NaN=>2}
   vector.value_counts #=> {NaN=>2}
   ```
+### `index(element)`
+
+  Returns index of specified element.
 
 ### `sort_indexes`, `sort_indices`, `array_sort_indices`
 
