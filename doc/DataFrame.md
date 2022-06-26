@@ -466,7 +466,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
      ... 5 more Vectors ...
     ```
 
-- Keys or booleans by a block
+- Indices or booleans by a block
 
     `slice {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as `size`. Block is called in the context of self.
 
@@ -518,7 +518,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
   ![remove method image](doc/../image/dataframe/remove.png)
 
-- Keys as arguments
+- Indices as arguments
 
     `remove(indeces)` accepts indeces as arguments. Indeces should be an Integer or a Range of Integer.
 
@@ -557,7 +557,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
     8 :year              uint16     3 {2007=>103, 2008=>113, 2009=>117}    
     ```
 
-- Keys or booleans by a block
+- Indices or booleans by a block
 
     `remove {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as `size`. Block is called in the context of self.
 
