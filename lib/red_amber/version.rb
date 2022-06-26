@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module RedAmber
-  VERSION = '0.1.6-HEAD'
+  VERSION = '0.1.6'
 end
