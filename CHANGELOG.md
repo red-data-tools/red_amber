@@ -1,30 +1,115 @@
-## [0.2.0] - unreleased
+## - unreleased
 
 - Document
   - YARD support
 
-- DataFrame#join features
+- `datasets-red-amber` gem
+- `red-amber` gem
 
-## [0.1.6] - Unreleased
+- `Vector#divmod`
+  - Introduce if Arrow's function is ready
 
-- Feedback something to Red Data Tools
+## - Unreleased, will be after Arrow 9.0.0 released
 
 - `DataFrame`
   - Introduce `summary` or ``describe`
-  - Add `Quantile` by own code?
-  - Improve dataframe obs. manipuration methods to accept float as a index (#10)
-  - Improve as more performant by benchmark check.
+    - `Quantile` will be available
 
-- `Vector`
-  - Support more functions
-  - Support coerece
+## [0.1.7] - Unreleased, may be 2022-07-10
 
+- Feedback something to Red Data Tools
+- Support more functions
+- Improve as more performant
 - More examples of frequently needed tasks
+
+- New `Group` API
+- `DataFrame#join features
+
+## [0.1.6] - 2022-06-26 (experimental)
+
+- Bug fixes
+  - Fix mime-type of empty DataFrame in `#to_iruby` (#31)
+  - Fix mime setting in `DataFrame#to_iruby` (#36)
+  - Fix unmatched return val in Selectable (#34)
+  - Fix to return same error as `#[]` in `DataFrame#slice` (#34)
+
+- New features and improvements
+  - Introduce Jupyter support (#29, #30, #31, #32)
+    - Add `DataFrame#to_html (changed to use #to_iruby)
+    - Add feature to show nil in to_iruby
+      - nil is expressed as (nil)
+      - empty string('') is ""
+      - blank spaces are " "
+
+  - Enable to change DataFrame display mode by ENV (#36)
+    - Support ENV['RED_AMBER_OUTPUT_STYLE'] to change display mode in `#inspect` and `#to_iruby`
+      - ENV['RED_AMBER_OUTPUT_STYLE'] = 'table' # => Table mode
+      - ENV['RED_AMBER_OUTPUT_STYLE'] = nil or other than 'table' # => TDR mode
+
+  - Support `require 'red-amber'`, as well (#34)
+
+  - Refine Vector slicing methods (#31)
+    - Introduce `Vector#take` method
+    - Introduce `Vector#filter` method
+    - Improve `Vector#[]` to overload take and filter
+    - Introduce `Vector#drop_nil` method
+    - Introduce `Vector#if_else` method
+    - Intorduce `Vector#is_in` method
+    - Add alias `Vector#all?`, `#any?` methods (#32)
+    - Add `Vector#has_nil?` method(#32)
+    - Add `Vector#empty?` method
+    - Add `Vector#primitive_invert` method
+    - Refactor `Vector#take`, `#filter`
+    - Move `Vector#if_else` from function to Updatable
+    - Move if_else test to updatable
+    - Rename updatable in test
+    - Remove method `Vector#take_out_element_wise`
+    - Rename inner metthod name
+
+  - Refine DataFrame slicing methods (#31)
+    - Introduce `DataFrame#take method
+      - #take is implemented as vector calculation by #if_else
+    - Introduce `DataFrame#fliter method
+    - Change `DataFrame#[] to use take and filter
+      - Float indices is acceptable (#10)
+      - Negative index (like Array) is also acceptable
+
+  - Further refinement in DataFrame slicing methods (#34)
+   -  Improve `DataFrame#[]`, `#slice`, `#remove` by a new engine
+      -  It parses arguments to Vector internally.
+      -  Used Kernel#Array to simplify code (#16) .
+    - recycle: Move `DataFrame#slice`, `#remove` to Selectable
+    - Refine `DataFrame#take`, `#filter` (undocumented)
+
+  - Introduce coerce in Vector (#35)
+    - Introduce `Vector#coerce`
+      - Now we can `-1 * Vector.new([1, 2, 3])`
+    - Add `Vector#to_ary` method
+      - Now we can `[1, 2] + Vector.new([3, 4, 5])`
+
+  - Other new feature or refinements
+    - Common
+      - Refactor helper as common for DataFrame and Vector (#35)
+      - Change name row/col to obs/var (#34)
+      - Rename internal function name (#34)
+      - Delete unused methods (#34)
+    - DataFrame
+      - Change to return instance variable in `#to_arrow`, `#keys` and `#key_index` (#34)
+      - Change to return an Array in `DataFrame#indices` (#35)
+    - Vector
+      - Introduce `Vector#replace` method
+      - Accept Range and expanded Array in `Vector#new`
+      - Add `Vector#indices` method (#35)
+      - Add `Vector#index` method (#35)
+      - Rename VectorCompensable to *Updatable (#33)
+
+  - Documentation
+    - Fix typo in DataFrame.md
 
 ## [0.1.5] - 2022-06-12 (experimental)
 
 - Bug fixes
-  - Fix DF#tdr to display timestamp type (#19)
+  - Fix DataFrame#tdr to display timestamp type (#19)
   - Add TZ setting in CI test to pass temporal tests (#19)
   - Fix example in document of #load(csv_from_URI) (#23)
 
@@ -38,7 +123,7 @@
     - Add `Vector#temporal?` to check if temporal type
     - Refine around DataFrame#variables
     - Refine init of instance variables
-    - Refine DataFrame#type_classes, V#ectortype_class
+    - Refine DataFrame#type_classes, Vector#ectortype_class
     - Refine DataFrame#tdr to shorten temporal data
 
   - Add supports to make up for missing values (#20)
@@ -86,7 +171,7 @@
 
 - Bug fixes
   - Fix missing support for scalar argument (#1)
-  - Fix type name of boolean in DF#types to be same as Vector#type (#6, #7)
+  - Fix type name of boolean in DataFrame#types to be same as Vector#type (#6, #7)
   - Fix zero picking to return empty DataFrame (#8)
   - Fix code at both args and a block given (#8)
 
