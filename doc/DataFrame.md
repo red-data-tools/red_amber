@@ -9,6 +9,8 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 ![dataframe model image](doc/../image/dataframe_model.png)
 
+(No change in this model in v0.1.6 .)
+
 ## Constructors and saving
 
 ### `new` from a Hash
@@ -478,6 +480,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
       max = vector.mean + vector.std
       vector.to_a.map { |e| (min..max).include? e }
     end
+
     # =>
     #<RedAmber::DataFrame : 204 x 8 Vectors, 0x000000000000f30c>
     Vectors : 5 numeric, 3 strings
@@ -756,6 +759,8 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 ## Grouping
 
 ### `group(aggregating_keys, function, target_keys)`
+
+  (This is a temporary API and may change in the future version.)
 
   Create grouped dataframe by `aggregation_keys` and apply `function` to each group and returns in `target_keys`. Aggregated key name is `function(key)` style.
 
