@@ -1,6 +1,6 @@
 # RedAmber
 
-A simple dataframe library for Ruby (experimental)
+A simple dataframe library for Ruby (experimental).
 
 - Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow)
 - Inspired by the dataframe library [Rover-df](https://github.com/ankane/rover)
@@ -42,9 +42,14 @@ Or install it yourself as:
 gem install red_amber
 ```
 
+(From v0.1.6)
+
+RedAmber uses TDR mode for `#inspect` and `#to_iruby` by default. If you prefer Table mode, please set the environment variable
+`RED_AMBER_OUTPUT_MODE` to `"table"`. See [TDR section](#TDR) for detail.
+
 ## `RedAmber::DataFrame`
 
-Represents a set of data in 2D-shape.
+Represents a set of data in 2D-shape. The entity is a Red Arrow's Table object. 
 
 ```ruby
 require 'red_amber' # require 'red-amber' is also OK.
@@ -52,7 +57,41 @@ require 'datasets-arrow'
 
 arrow = Datasets::Penguins.new.to_arrow
 penguins = RedAmber::DataFrame.new(arrow)
-penguins.tdr
+penguins.table
+
+# =>
+#<Arrow::Table:0x111271098 ptr=0x7f9118b3e0b0>
+	species	island	bill_length_mm	bill_depth_mm	flipper_length_mm	body_mass_g	sex	year
+  0	Adelie 	Torgersen	     39.100000	    18.700000	              181	       3750	male	2007
+  1	Adelie 	Torgersen	     39.500000	    17.400000	              186	       3800	female	2007
+  2	Adelie 	Torgersen	     40.300000	    18.000000	              195	       3250	female	2007
+  3	Adelie 	Torgersen	        (null)	       (null)	           (null)	     (null)	(null)	2007
+  4	Adelie 	Torgersen	     36.700000	    19.300000	              193	       3450	female	2007
+  5	Adelie 	Torgersen	     39.300000	    20.600000	              190	       3650	male	2007
+  6	Adelie 	Torgersen	     38.900000	    17.800000	              181	       3625	female	2007
+  7	Adelie 	Torgersen	     39.200000	    19.600000	              195	       4675	male	2007
+  8	Adelie 	Torgersen	     34.100000	    18.100000	              193	       3475	(null)	2007
+  9	Adelie 	Torgersen	     42.000000	    20.200000	              190	       4250	(null)	2007
+...
+334	Gentoo 	Biscoe	     46.200000	    14.100000	              217	       4375	female	2009
+335	Gentoo 	Biscoe	     55.100000	    16.000000	              230	       5850	male	2009
+336	Gentoo 	Biscoe	     44.500000	    15.700000	              217	       4875	(null)	2009
+337	Gentoo 	Biscoe	     48.800000	    16.200000	              222	       6000	male	2009
+338	Gentoo 	Biscoe	     47.200000	    13.700000	              214	       4925	female	2009
+339	Gentoo 	Biscoe	        (null)	       (null)	           (null)	     (null)	(null)	2009
+340	Gentoo 	Biscoe	     46.800000	    14.300000	              215	       4850	female	2009
+341	Gentoo 	Biscoe	     50.400000	    15.700000	              222	       5750	male	2009
+342	Gentoo 	Biscoe	     45.200000	    14.800000	              212	       5200	female	2009
+343	Gentoo 	Biscoe	     49.900000	    16.100000	              213	       5400	male	2009
+```
+
+By default, RedAmber shows self by compact transposed style. This unfamiliar style (TDR) is designed for
+the exploratory data processing. It keeps Vectors as row vectors, shows keys and types at a glance, shows levels 
+for the 'factor-like' variables and shows the number of abnormal values like NaN and nil.
+
+```ruby
+penguins
+
 # =>
 RedAmber::DataFrame : 344 x 8 Vectors
 Vectors : 5 numeric, 3 strings
@@ -139,7 +178,7 @@ Vectors accepts some [functional methods from Arrow](https://arrow.apache.org/do
 
 See [Vector.md](doc/Vector.md) for details.
 
-## TDR concept
+## TDR
 
 I named the data frame representation style in the model above as TDR (Transposed DataFrame Representation). 
 
