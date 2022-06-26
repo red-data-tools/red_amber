@@ -375,12 +375,13 @@ vector.replace(vector == 'NA', nil)
 Specified indices are used 'as sorted'. Position in indices and replacer may not have correspondence.
 
 ```ruby
+vector = RedAmber::Vector.new([1, 2, 3])
 indices = [2, 1]
 replacer = [4, 5]
 vector.replace(indices, replacer)
 # =>
 #<RedAmber::Vector(:uint8, size=3):0x000000000000f244>
-[1, 4, 5]
+[1, 4, 5] # not [1, 5, 4]
 ```
 
 
