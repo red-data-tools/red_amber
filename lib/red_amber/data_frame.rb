@@ -137,12 +137,10 @@ module RedAmber
       require 'iruby'
       return ['text/plain', '(empty DataFrame)'] if empty?
 
-      if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'tdr') == 'table'
-        ['text/html', html_table]
-      elsif size <= 5
-        ['text/plain', tdr_str(tally: 0)]
+      if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table') == 'TDR'
+        size <= 5 ? ['text/plain', tdr_str(tally: 0)] : ['text/plain', tdr_str]
       else
-        ['text/plain', tdr_str]
+        ['text/html', html_table]
       end
     end
 

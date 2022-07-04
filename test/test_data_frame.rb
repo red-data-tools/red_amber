@@ -157,7 +157,7 @@ class DataFrameTest < Test::Unit::TestCase
 
   sub_test_case 'to_iruby in table mode' do
     setup do
-      ENV['RED_AMBER_OUTPUT_MODE'] = 'table'
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'Table'
     end
 
     test 'empty' do
@@ -187,7 +187,7 @@ class DataFrameTest < Test::Unit::TestCase
 
   sub_test_case 'to_iruby in tdr mode' do
     setup do
-      ENV['RED_AMBER_OUTPUT_MODE'] = 'tdr'
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'TDR'
     end
 
     test 'empty' do

@@ -14,10 +14,10 @@ module RedAmber
     # def summary() end
 
     def inspect
-      if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'tdr') == 'table'
-        "#<#{shape_str(with_id: true)}>\n#{self}"
-      else
+      if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table') == 'TDR'
         "#<#{shape_str(with_id: true)}>\n#{dataframe_info(3)}"
+      else
+        "#<#{shape_str(with_id: true)}>\n#{self}"
       end
     end
 
