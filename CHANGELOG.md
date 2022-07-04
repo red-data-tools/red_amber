@@ -1,29 +1,9 @@
-## - unreleased
+## [0.1.7] - Unreleased
 
-- Document
-  - YARD support
-
-- `datasets-red-amber` gem
-- `red-amber` gem
-
-- `Vector#divmod`
-  - Introduce if Arrow's function is ready
-
-## - Unreleased, will be after Arrow 9.0.0 released
-
-- `DataFrame`
-  - Introduce `summary` or ``describe`
-    - `Quantile` will be available
-
-## [0.1.7] - Unreleased, may be 2022-07-10
-
-- Feedback something to Red Data Tools
-- Support more functions
-- Improve as more performant
-- More examples of frequently needed tasks
-
-- New `Group` API
-- `DataFrame#join features
+- Bump version up to 0.1.7
+- Change to Table mode as default.
+  - Enable to use the word rows/columns.
+  - Change images of data processing.
 
 ## [0.1.6] - 2022-06-26 (experimental)
 
