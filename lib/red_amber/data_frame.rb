@@ -176,7 +176,7 @@ module RedAmber
       end
 
       html = IRuby::HTML.table(converted.to_h, maxrows: 8, maxcols: 15)
-      "#{size} x #{n_keys} vector#{pl(n_keys)} ; #{html}"
+      "#{self.class} <#{size} x #{n_keys} vector#{pl(n_keys)}> #{html}"
     end
   end
 end
