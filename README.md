@@ -1,5 +1,7 @@
 # RedAmber
 
+[![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en)
+
 A simple dataframe library for Ruby (experimental).
 
 - Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow)
