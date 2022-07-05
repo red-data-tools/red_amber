@@ -286,7 +286,32 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 ### [ ] (index functions)
 ### [ ] (other functions)
 
-## Coerce (not impremented)
+## Coerce
+
+```ruby
+vector = RedAmber::Vector.new(1,2,3)
+# => 
+#<RedAmber::Vector(:uint8, size=3):0x00000000000decc4>            
+[1, 2, 3]                                                         
+
+# Vector's `#*` method
+vector * -1
+# =>
+#<RedAmber::Vector(:int16, size=3):0x00000000000e3698>            
+[-1, -2, -3]                                                      
+
+# coerced calculation
+-1 * vector
+# => 
+#<RedAmber::Vector(:int16, size=3):0x00000000000ea4ac>            
+[-1, -2, -3]
+
+# `@-` operator
+-vector
+# =>
+#<RedAmber::Vector(:uint8, size=3):0x00000000000ee7b4>
+[255, 254, 253]
+```
 
 ## Update vector's value
 ### `replace(specifier, replacer)` => vector
