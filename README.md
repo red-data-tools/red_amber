@@ -104,10 +104,6 @@ For example, `DataFrame#pick` accepts keys as an argument and returns a sub Data
 
 ```ruby
 df = penguins.pick(:body_mass_g)
-# =>
-#<RedAmber::DataFrame : 344 x 1 Vector, 0x000000000000fa14>
-Vector : 1 numeric
-# key          type  level data_preview
 #<RedAmber::DataFrame : 344 x 1 Vector, 0x000000000002268c>
         body_mass_g
   0            3750
