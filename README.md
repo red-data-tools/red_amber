@@ -1,10 +1,11 @@
 # RedAmber
 
-[![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en)
+[![Gem Version](https://badge.fury.io/rb/red_amber.svg)](https://badge.fury.io/rb/red_amber)
+[![Ruby](https://github.com/heronshoes/red_amber/actions/workflows/test.yml/badge.svg)](https://github.com/heronshoes/red_amber/actions/workflows/test.yml)
 
 A simple dataframe library for Ruby (experimental).
 
-- Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow)
+- Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow) [![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en)
 - Inspired by the dataframe library [Rover-df](https://github.com/ankane/rover)
 
 ## Requirements
