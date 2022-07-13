@@ -118,7 +118,13 @@ module RedAmber
       @data.value_data_type.class
     end
 
-    # def each() end
+    def each
+      return enum_for(:each) unless block_given?
+
+      size.times do |i|
+        yield self[i]
+      end
+    end
 
     def chunked?
       @data.is_a? Arrow::ChunkedArray

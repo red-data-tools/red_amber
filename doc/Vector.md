@@ -61,13 +61,9 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ### `type_class`
 
-### [ ] `each` (not impremented yet)
+### `each`
 
-### [ ] `chunked?` (not impremented yet)
-
-### [ ] `n_chunks` (not impremented yet)
-
-### [ ] `each_chunk` (not impremented yet)
+  If block is not given, returns Enumerator.
 
 ### `n_nils`, `n_nans`
 

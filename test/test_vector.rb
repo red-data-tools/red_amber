@@ -67,6 +67,10 @@ class VectorTest < Test::Unit::TestCase
       assert_true Vector.new([1, 2, nil]).has_nil?
       assert_false Vector.new([1, 2, 3]).has_nil?
     end
+
+    test '#each' do
+      assert_kind_of Enumerator, Vector.new(1, 2, 3).each
+    end
   end
 
   sub_test_case('type check') do
