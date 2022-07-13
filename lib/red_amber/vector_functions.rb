@@ -14,8 +14,8 @@ module RedAmber
     unary_aggregations =
       %i[all any approximate_median count count_distinct max mean min min_max product stddev sum variance]
     unary_aggregations.each do |function|
-      define_method(function) do |opts: nil|
-        datum = exec_func_unary(function, options: opts)
+      define_method(function) do |**options|
+        datum = exec_func_unary(function, options)
         get_scalar(datum)
       end
     end
@@ -25,12 +25,12 @@ module RedAmber
     alias_method :any?, :any
 
     def unbiased_variance
-      variance(opts: { ddof: 1 })
+      variance(ddof: 1)
     end
     alias_method :var, :unbiased_variance
 
     def sd
-      stddev(opts: { ddof: 1 })
+      stddev(ddof: 1)
     end
     alias_method :std, :sd
 
@@ -47,8 +47,8 @@ module RedAmber
       %i[abs array_sort_indices atan bit_wise_not ceil cos fill_null_backward fill_null_forward floor is_finite
          is_inf is_nan is_null is_valid round round_to_multiple sign sin tan trunc unique]
     unary_element_wise.each do |function|
-      define_method(function) do |opts: nil|
-        datum = exec_func_unary(function, options: opts)
+      define_method(function) do |**options|
+        datum = exec_func_unary(function, options)
         Vector.new(datum.value)
       end
     end
@@ -72,13 +72,13 @@ module RedAmber
       negate: '-@',
     }
     unary_element_wise_op.each do |function, operator|
-      define_method(function) do |opts: nil|
-        datum = exec_func_unary(function, options: opts)
+      define_method(function) do |**options|
+        datum = exec_func_unary(function, options)
         Vector.new(datum.value)
       end
 
-      define_method(operator) do |opts: nil|
-        datum = exec_func_unary(function, options: opts)
+      define_method(operator) do |**options|
+        datum = exec_func_unary(function, options)
         Vector.new(datum.value)
       end
     end
@@ -95,8 +95,8 @@ module RedAmber
     binary_element_wise =
       %i[atan2 and_not and_not_kleene bit_wise_and bit_wise_or bit_wise_xor]
     binary_element_wise.each do |function|
-      define_method(function) do |other, opts: nil|
-        datum = exec_func_binary(function, other, options: opts)
+      define_method(function) do |other, **options|
+        datum = exec_func_binary(function, other, options)
         Vector.new(datum.value)
       end
     end
@@ -111,8 +111,8 @@ module RedAmber
       or_org: :or,
     }
     logical_binary_element_wise.each do |method, function|
-      define_method(method) do |other, opts: nil|
-        datum = exec_func_binary(function, other, options: opts)
+      define_method(method) do |other, **options|
+        datum = exec_func_binary(function, other, options)
         Vector.new(datum.value)
       end
     end
@@ -144,13 +144,13 @@ module RedAmber
       not_equal: '!=',
     }
     binary_element_wise_op.each do |function, operator|
-      define_method(function) do |other, opts: nil|
-        datum = exec_func_binary(function, other, options: opts)
+      define_method(function) do |other, **options|
+        datum = exec_func_binary(function, other, options)
         Vector.new(datum.value)
       end
 
-      define_method(operator) do |other, opts: nil|
-        datum = exec_func_binary(function, other, options: opts)
+      define_method(operator) do |other, **options|
+        datum = exec_func_binary(function, other, options)
         Vector.new(datum.value)
       end
     end
@@ -217,11 +217,13 @@ module RedAmber
 
     private # =======
 
-    def exec_func_unary(function, options: nil)
+    def exec_func_unary(function, options)
+      options = nil if options.empty?
       find(function).execute([data], options)
     end
 
-    def exec_func_binary(function, other, options: nil)
+    def exec_func_binary(function, other, options)
+      options = nil if options.empty?
       case other
       when Vector
         find(function).execute([data, other.data], options)

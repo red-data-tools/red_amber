@@ -38,10 +38,11 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ### `indices`, `indexes`, `indeces`
 
-  Return indices in an Array
+  Return indices in an Array.
 
 ### `to_ary`
-  Vector has `#to_ary`. It implicitly converts a Vector to an Array when required.
+
+  It implicitly converts a Vector to an Array when required.
 
   ```ruby
   [1, 2] + Vector.new([3, 4])
@@ -78,7 +79,7 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ### `inspect(limit: 80)`
 
-  - `limit` sets size limit to display long array.
+  - `limit` sets size limit to display a long array.
 
     ```ruby
     vector = RedAmber::Vector.new((1..50).to_a)
@@ -167,9 +168,9 @@ double = RedAmber::Vector.new([1, 0/0.0, -1/0.0, 1/0.0, nil, ""])
 [1.0, NaN, -Infinity, Infinity, nil, 0.0]
 
 double.count #=> 5
-double.count(opts: {mode: :only_valid}) #=> 5, default
-double.count(opts: {mode: :only_null}) #=> 1
-double.count(opts: {mode: :all}) #=> 6
+double.count(mode: :only_valid) #=> 5, default
+double.count(mode: :only_null) #=> 1
+double.count(mode: :all) #=> 6
 
 boolean = RedAmber::Vector.new([true, true, nil])
 #=>
@@ -177,8 +178,8 @@ boolean = RedAmber::Vector.new([true, true, nil])
 [true, true, nil]
 
 boolean.all #=> true
-boolean.all(opts: {skip_nulls: true}) #=> true
-boolean.all(opts: {skip_nulls: false}) #=> false
+boolean.all(skip_nulls: true) #=> true
+boolean.all(skip_nulls: false) #=> false
 ```
 
 ### Unary element-wise: `vector.func => vector`
@@ -211,6 +212,37 @@ boolean.all(opts: {skip_nulls: false}) #=> false
 | ✓`sort_indexes`| ✓  | ✓  | ✓  |:order|alias `sort_indices`|
 | ✓ `tan`      |     |  ✓  |     |     |       |
 | ✓ `trunc`    |     |  ✓  |     |     |       |
+
+Examples of options for `#round`;
+
+- `:n-digits` The number of digits to show.
+- `round_mode` Specify rounding mode.
+
+```ruby
+double = RedAmber::Vector.new([15.15, 2.5, 3.5, -4.5, -5.5])
+# => [15.15, 2.5, 3.5, -4.5, -5.5]
+double.round
+# => [15.0, 2.0, 4.0, -4.0, -6.0]
+double.round(mode: :half_to_even)
+# => Default. Same as double.round
+double.round(mode: :towards_infinity)
+# => [16.0, 3.0, 4.0, -5.0, -6.0]
+double.round(mode: :half_up)
+# => [15.0, 3.0, 4.0, -4.0, -5.0]
+double.round(mode: :half_towards_zero)
+# => [15.0, 2.0, 3.0, -4.0, -5.0]
+double.round(mode: :half_towards_infinity)
+# => [15.0, 3.0, 4.0, -5.0, -6.0]
+double.round(mode: :half_to_odd)
+# => [15.0, 3.0, 3.0, -5.0, -5.0]
+
+double.round(n_digits: 0)
+# => Default. Same as double.round
+double.round(n_digits: 1)
+# => [15.2, 2.5, 3.5, -4.5, -5.5]
+double.round(n_digits: -1)
+# => [20.0, 0.0, 0.0, -0.0, -10.0]
+```
 
 ### Binary element-wise: `vector.func(vector) => vector`
 
