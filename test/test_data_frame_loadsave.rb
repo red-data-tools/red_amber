@@ -211,6 +211,7 @@ class DataFrameLoadSaveTest < Test::Unit::TestCase
 
     sub_test_case('URI') do
       def start_web_server(path, data, content_type)
+        $stderr = StringIO.new
         http_server =
           WEBrick::HTTPServer.new(Port: 0, Logger: WEBrick::Log.new(nil, WEBrick::BasicLog::WARN))
         http_server.mount_proc(path) do |_, response|
@@ -227,6 +228,7 @@ class DataFrameLoadSaveTest < Test::Unit::TestCase
         ensure
           http_server.shutdown
           http_server_thread.join
+          $stderr = STDERR
         end
       end
 
