@@ -91,15 +91,23 @@ module RedAmber
     end
 
     def boolean?
-      type == :boolean
+      type_class == Arrow::BooleanDataType
     end
 
     def numeric?
       type_class < Arrow::NumericDataType
     end
 
+    def float?
+      type_class < Arrow::FloatingPointDataType
+    end
+
+    def integer?
+      type_class < Arrow::IntegerDataType
+    end
+
     def string?
-      type == :string
+      type_class == Arrow::StringDataType
     end
 
     def temporal?

@@ -69,6 +69,32 @@ class VectorTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case('type check') do
+    test '#boolean?' do
+      assert_true Vector.new([true, false, nil]).boolean?
+    end
+
+    test '#numeric?/#float?' do
+      v = Vector.new([1.0, 2, 3])
+      assert_true v.numeric?
+      assert_true v.float?
+    end
+
+    test '#numeric?/#integer?' do
+      v = Vector.new([1, -2, 3])
+      assert_true v.numeric?
+      assert_true v.integer?
+    end
+
+    test '#string?' do
+      assert_true Vector.new(%w[A B C]).string?
+    end
+
+    test '#temporal?' do
+      assert_true Vector.new(Arrow::Date32Array.new([19_186])).temporal?
+    end
+  end
+
   sub_test_case('#inspect') do
     setup do
       @double = Vector.new([0.3841307461261749, 0.6028782725334167, 0.3752671480178833, 0.9437413811683655])
