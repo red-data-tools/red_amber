@@ -80,6 +80,7 @@ Metrics/CyclomaticComplexity:
   Exclude:
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 14
     - 'lib/red_amber/vector_updatable.rb' # Max: 14
+    - 'lib/red_amber/data_frame_displayable.rb' # Max: 18
 
 # Max: 10
 Metrics/MethodLength:
@@ -93,6 +94,7 @@ Metrics/ModuleLength:
   Exclude:
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 141
     - 'lib/red_amber/vector_functions.rb' # Max: 114
+    - 'lib/red_amber/data_frame_displayable.rb' # Max: 132
 
 # Max: 8
 Metrics/PerceivedComplexity:
@@ -100,6 +102,7 @@ Metrics/PerceivedComplexity:
   Exclude:
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 14
     - 'lib/red_amber/vector_updatable.rb' # Max: 15
+    - 'lib/red_amber/data_frame_displayable.rb' # Max: 19
 
 Naming/FileName:
   Exclude:

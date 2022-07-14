@@ -64,7 +64,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
 
     test 'empty dataframe' do
       df = DataFrame.new
-      str = "#<RedAmber::DataFrame : (empty), #{format('0x%016x', df.object_id)}>\n\n"
+      str = "#<RedAmber::DataFrame : (empty), #{format('0x%016x', df.object_id)}>\n"
       assert_equal str, df.inspect
     end
 
@@ -79,15 +79,73 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     test 'default' do
       str = <<~OUTPUT
         #<RedAmber::DataFrame : 6 x 4 Vectors, #{format('0x%016x', @df.object_id)}>
-        \tinteger\t    double\tstring\tboolean
-        0\t      1\t  1.000000\tA     \ttrue   \n\
-        1\t      2\t       NaN\tA     \tfalse  \n\
-        2\t      3\t       Inf\tB     \t (null)
-        3\t      4\t      -Inf\tC     \ttrue   \n\
-        4\t      5\t    (null)\tD     \tfalse  \n\
-        5\t      6\t  0.000000\tE     \t (null)
+          integer    double string   boolean
+          <uint8>  <double> <string> <boolean>
+        1       1       1.0 A        true
+        2       2       NaN A        false
+        3       3  Infinity B        (nil)
+        4       4 -Infinity C        true
+        5       5     (nil) D        false
+        6       6       0.0 E        (nil)
       OUTPUT
       assert_equal str, @df.inspect
+    end
+
+    setup do
+      @df2 = DataFrame.load('test/entity/test_penguins.csv')
+    end
+
+    test 'ellipsis in row and column' do
+      str = <<~OUTPUT
+        #<RedAmber::DataFrame : 10 x 7 Vectors, #{format('0x%016x', @df2.object_id)}>
+           ID       Date Egg   Culmen_Length_mm Culmen_Depth_mm Flipper_Length_mm ... Sex
+           <string> <date32>           <double>        <double>           <int64> ... <string>
+         1 N1A1     2007-11-11             39.1            18.7               181 ... MALE
+         2 N1A2     2007-11-11             39.5            17.4               186 ... FEMALE
+         3 N2A1     2007-11-16             40.3            18.0               195 ... FEMALE
+         4 N2A2     2007-11-16            (nil)           (nil)             (nil) ...
+         5 N3A1     2007-11-16             36.7            19.3               193 ... FEMALE
+         : :        :                         :               :                 : ... :
+         8 N4A2     2007-11-15             39.2            19.6               195 ... MALE
+         9 N5A1     2007-11-09             34.1            18.1               193 ...
+        10 N5A2     2007-11-09             42.0            20.2               190 ...
+      OUTPUT
+      assert_equal str, @df2.inspect
+    end
+
+    test 'ellipsis in row' do
+      df = @df2.drop(:'Date Egg')
+      str = <<~OUTPUT
+        #<RedAmber::DataFrame : 10 x 6 Vectors, #{format('0x%016x', df.object_id)}>
+           ID       Culmen_Length_mm Culmen_Depth_mm Flipper_Length_mm Body_Mass_g Sex
+           <string>         <double>        <double>           <int64>     <int64> <string>
+         1 N1A1                 39.1            18.7               181        3750 MALE
+         2 N1A2                 39.5            17.4               186        3800 FEMALE
+         3 N2A1                 40.3            18.0               195        3250 FEMALE
+         4 N2A2                (nil)           (nil)             (nil)       (nil)
+         5 N3A1                 36.7            19.3               193        3450 FEMALE
+         : :                       :               :                 :           : :
+         8 N4A2                 39.2            19.6               195        4675 MALE
+         9 N5A1                 34.1            18.1               193        3475
+        10 N5A2                 42.0            20.2               190        4250
+      OUTPUT
+      assert_equal str, df.inspect
+    end
+
+    test 'ellipsis in column' do
+      df = @df2.slice(0..5)
+      str = <<~OUTPUT
+        #<RedAmber::DataFrame : 6 x 7 Vectors, #{format('0x%016x', df.object_id)}>
+          ID       Date Egg   Culmen_Length_mm Culmen_Depth_mm Flipper_Length_mm ... Sex
+          <string> <date32>           <double>        <double>           <int64> ... <string>
+        1 N1A1     2007-11-11             39.1            18.7               181 ... MALE
+        2 N1A2     2007-11-11             39.5            17.4               186 ... FEMALE
+        3 N2A1     2007-11-16             40.3            18.0               195 ... FEMALE
+        4 N2A2     2007-11-16            (nil)           (nil)             (nil) ...
+        5 N3A1     2007-11-16             36.7            19.3               193 ... FEMALE
+        6 N3A2     2007-11-16             39.3            20.6               190 ... MALE
+      OUTPUT
+      assert_equal str, df.inspect
     end
   end
 

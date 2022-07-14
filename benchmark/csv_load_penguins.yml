@@ -1,11 +1,11 @@
 prelude: |
-  require 'datasets-arrow'
   require 'rover'
   require 'red_amber'
 
   penguins_csv = 'benchmark/cache/penguins.csv'
 
   unless File.exist?(penguins_csv)
+    require 'datasets-arrow'
     arrow = Datasets::Penguins.new.to_arrow
     RedAmber::DataFrame.new(arrow).save(penguins_csv)
   end
