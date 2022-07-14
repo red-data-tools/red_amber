@@ -6,7 +6,9 @@ module RedAmber
   # mix-ins for the class DataFrame
   module DataFrameDisplayable
     def to_s
-      @table.to_s
+      return '' if empty?
+
+      format_table(width: 80)
     end
 
     # def describe() end
@@ -127,6 +129,79 @@ module RedAmber
       a << "#{n_nan} NaN#{pl(n_nan)}" unless n_nan.zero?
       a << "#{n_nil} nil#{pl(n_nil)}" unless n_nil.zero?
       a
+    end
+
+    def format_table(width: 80)
+      head = 5
+      tail = 3
+      n_digit = 1
+
+      original = self
+      indices = size > head + tail ? [*0...head, *(size - tail)...size] : [*0...size]
+      df = slice(indices).assign do
+        assigner = { '': indices.map { |i| (i + 1).to_s } }
+        vectors.each_with_object(assigner) do |v, a|
+          a[v.key] = v.to_a.map do |e|
+            if e.nil?
+              '(nil)'
+            elsif v.float?
+              e.round(n_digit).to_s
+            elsif v.string?
+              e
+            else
+              e.to_s
+            end
+          end
+        end
+      end
+
+      df = df.pick { [keys[-1], keys[0..-2]] }
+      df = size > head + tail ? df[0, 0, 0...head, 0, -tail..-1] : df[0, 0, 0..-1]
+      df = df.assign do
+        vectors.each_with_object({}) do |v, assigner|
+          vec = v.replace(0, v.key.to_s)
+                 .replace(1, v.key == :'' ? '' : "<#{original[v.key].type}>")
+          assigner[v.key] = size > head + tail ? vec.replace(head + 2, ':') : vec
+        end
+      end
+
+      width_list = df.vectors.map { |v| v.to_a.map(&:length).max }
+      total_length = width_list[-1] # reserved for last column
+
+      formats = []
+      row_ellipsis = nil
+      df.vectors.each_with_index do |v, i|
+        w = width_list[i]
+        if total_length + w > width && i < df.n_keys - 1
+          row_ellipsis = i
+          formats << '%3s'
+          formats << format_for_column(df.vectors[-1], original, width_list[-1])
+          break
+        end
+        formats << format_for_column(v, original, w)
+        total_length += w
+      end
+      format_str = formats.join(' ')
+
+      str = StringIO.new
+      if row_ellipsis
+        df = df[df.keys[0..row_ellipsis], df.keys[-1]]
+        df = df.assign(df.keys[row_ellipsis] => ['...'] * df.size)
+      end
+
+      df.to_a.each do |row|
+        str.puts format(format_str, *row).rstrip
+      end
+
+      str.string
+    end
+
+    def format_for_column(vector, original, width)
+      if vector.key != :'' && !original[vector.key].numeric?
+        "%-#{width}s"
+      else
+        "%#{width}s"
+      end
     end
   end
 end

@@ -140,23 +140,24 @@ class DataFrameLoadSaveTest < Test::Unit::TestCase
             path = entity_path / 'with_header.csv'
             table = RedAmber::DataFrame.load(path, skip_lines: /^\#/)
             assert_equal(<<~TABLE, table.to_s)
-              	name	age
-              0	Yasuko	 68
-              1	Rui 	 49
-              2	Hinata	 28
+                name         age
+                <string> <uint8>
+              1 Yasuko        68
+              2 Rui           49
+              3 Hinata        28
             TABLE
           end
 
           test('csv_empty') do
             path = entity_path / 'empty.csv'
             table = RedAmber::DataFrame.load(path, skip_lines: /^\#/)
-            assert_equal("\n", table.to_s)
+            assert_equal('', table.to_s)
           end
 
           test('csv_two_empty_lines') do
             path = entity_path / 'empty2.csv'
             table = RedAmber::DataFrame.load(path, skip_lines: /^\#/)
-            assert_equal("\n", table.to_s)
+            assert_equal('', table.to_s)
           end
 
           test('csv.gz') do
@@ -171,10 +172,11 @@ class DataFrameLoadSaveTest < Test::Unit::TestCase
               CSV
             end
             assert_equal(<<~TABLE, RedAmber::DataFrame.load(file.path).to_s)
-              	name	age
-              0	Yasuko	 68
-              1	Rui 	 49
-              2	Hinata	 28
+                name         age
+                <string> <int64>
+              1 Yasuko        68
+              2 Rui           49
+              3 Hinata        28
             TABLE
           end
 
@@ -189,10 +191,11 @@ class DataFrameLoadSaveTest < Test::Unit::TestCase
             file.close
             table = RedAmber::DataFrame.load(file.path)
             assert_equal(<<~TABLE, table.to_s)
-              	name	age
-              0	Yasuko	 68
-              1	Rui 	 49
-              2	Hinata	 28
+                name         age
+                <string> <int64>
+              1 Yasuko        68
+              2 Rui           49
+              3 Hinata        28
             TABLE
           end
         end
@@ -246,7 +249,7 @@ class DataFrameLoadSaveTest < Test::Unit::TestCase
         start_web_server(path, tmpfile.data.to_s, content_type) do |port|
           input = URI("http://127.0.0.1:#{port}#{path}")
           loaded_df = RedAmber::DataFrame.load(input)
-          assert_equal(@df.to_s, loaded_df.to_s)
+          assert_equal(@df.to_h, loaded_df.to_h)
         end
       end
     end
