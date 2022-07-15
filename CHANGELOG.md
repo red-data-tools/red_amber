@@ -1,9 +1,55 @@
-## [0.1.7] - Unreleased
+## [0.1.9] - Unreleased
 
-- Bump version up to 0.1.7
-- Change to Table mode as default.
-  - Enable to use the word rows/columns.
-  - Change images of data processing.
+- Supports Arrow 9.0.0
+
+## [0.1.7] - 2022-07-15 (experimental)
+
+- Bug fixes
+
+  - Remove development dependency for red-dataset-arrow (#47)
+    - To avoid irregular fails in CI test
+    - Add red-datasets to development dependency instead (#49)
+
+  - Supress useless log in tests (#46)
+    Suppress log of Webrick and iruby.
+
+- New features and improvements
+
+  - Use Table mode as default preview mode in `inspect`/`to_s` (#40)
+    - Show examples in documents in Table
+    - Use the word rows/columns
+    - Update images of data processing in Table style
+
+  - Introduce a new Table formatter (#47)
+    - Migrate from the Arrow's formatter
+      - Do not use TAB, format by spaces only.
+      - Align column width with head rows and tail rows.
+      - Show nils.
+      - Show data types.
+    - Refine documents to use new formatter output
+  
+  - Simplify options of Vector functions (#46)
+    Vector functions with options use optional argument opt in previous code.
+
+  - Add `#float?`, `#integer?` to Vector (#46)
+  - Add `#each` to Vector (#47)
+
+  - Introduce class `Group` (#48)
+    - Refine `DataFrame#group` to use class Group
+    - Add methods to Group
+
+  - Move parquet and rover to development dependency (#49)
+  
+  - Refine text in `DataFrame#to_iruby` (#40)
+
+  - Add badges in Github site
+    - Gitter badge for Red Data Tools (#42)
+    - Gem version and CI status badge (#45)
+
+  - Exchange containers in red-amber.rb and red_amber.rb (#47)
+    - Mainly use red_amber by consistency with the folder name
+
+  - Add Jupyter notebook '47 Examples of Red Amber' (#49)
 
 ## [0.1.6] - 2022-06-26 (experimental)
 
