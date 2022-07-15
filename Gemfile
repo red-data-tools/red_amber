@@ -20,4 +20,5 @@ group :test do
   gem 'webrick'
 
   gem 'benchmark_driver'
+  gem 'red-datasets'
 end
