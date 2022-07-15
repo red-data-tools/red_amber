@@ -35,6 +35,8 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 
   ```ruby
+  require 'rover'
+
   rover = Rover::DataFrame.new(x: [1, 2, 3])
   RedAmber::DataFrame.new(rover)
   ```
@@ -59,6 +61,8 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 - from a Parquet file
 
   ```ruby
+  require 'parquet'
+
   dataframe = RedAmber::DataFrame.load("file.parquet")
   ```
 
@@ -73,6 +77,8 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 - to a Parquet file
 
   ```ruby
+  require 'parquet'
+
   dataframe.save("file.parquet")
   ```
 
@@ -201,6 +207,12 @@ puts penguins.to_s
 ### `to_rover`
 
 - Returns a `Rover::DataFrame`.
+
+```ruby
+require 'rover'
+
+penguins.to_rover
+```
 
 ### `to_iruby`
 

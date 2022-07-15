@@ -7,6 +7,9 @@ gemspec
 group :test do
   gem 'rake'
 
+  gem 'red-parquet', '>= 8.0.0'
+  gem 'rover-df', '~> 0.3.0'
+
   gem 'rubocop'
   gem 'rubocop-performance', require: false
   gem 'rubocop-rake'
