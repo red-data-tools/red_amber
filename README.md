@@ -22,7 +22,8 @@ gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 Install requirements before you install Red Amber.
 
 - Apache Arrow GLib (>= 8.0.0)
-- Apache Parquet GLib (>= 8.0.0)
+
+- Apache Parquet GLib (>= 8.0.0)  # If you use IO from/to parquet
 
   See [Apache Arrow install document](https://arrow.apache.org/install/).
   
@@ -161,6 +162,10 @@ penguins[:bill_length_mm]
 Vectors accepts some [functional methods from Arrow](https://arrow.apache.org/docs/cpp/compute.html).
 
 See [Vector.md](doc/Vector.md) for details.
+
+## Jupyter notebook
+
+[47 Examples of Red Amber](doc/47_examples_of_red_amber.ipynb)
 
 ## Development
 
