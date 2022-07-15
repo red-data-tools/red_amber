@@ -31,8 +31,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'red-arrow', '>= 8.0.0'
-  spec.add_dependency 'red-parquet', '>= 8.0.0'
-  spec.add_dependency 'rover-df', '~> 0.3.0'
 
   # Development dependency has gone to the Gemfile (rubygems/bundler#7237)
 

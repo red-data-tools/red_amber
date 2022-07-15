@@ -42,6 +42,7 @@ class DataFrameTest < Test::Unit::TestCase
     end
 
     test 'new from a Rover::DataFrame' do |(h, d)|
+      require 'rover'
       rover = Rover::DataFrame.new(h)
       assert_equal d, DataFrame.new(rover)
     end
@@ -146,6 +147,7 @@ class DataFrameTest < Test::Unit::TestCase
     end
 
     test 'rover I/O' do
+      require 'rover'
       # Rover::DataFrame doesn't support empty dataframe
       hash = { name: %w[Yasuko Rui Hinata], age: [68, 49, 28] }
       redamber = DataFrame.new(hash)

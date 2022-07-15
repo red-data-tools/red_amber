@@ -129,6 +129,7 @@ module RedAmber
     end
 
     def to_rover
+      require 'rover'
       Rover::DataFrame.new(to_h)
     end
 
