@@ -2,12 +2,12 @@
 
 require 'test_helper'
 
-class DataFrameVariableOperationTest < Test::Unit::TestCase
+class GroupTest < Test::Unit::TestCase
   include RedAmber
   sub_test_case 'group' do
     test 'Empty dataframe' do
       df = DataFrame.new
-      assert_raise(Arrow::Error::Invalid) { df.group(:x, :count, :x) }
+      assert_raise(GroupArgumentError) { df.group(:x).by(:count, :x) }
     end
 
     setup do
@@ -32,7 +32,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         4 :"count(b)" int64     3 [2, 1, 2, 0]
         5 :i          uint8     4 [0, 1, 2, nil], 1 nil
       OUTPUT
-      assert_equal str, @df.group(:i, :count, %i[i f s b]).tdr_str(tally: 0)
+      assert_equal str, @df.group(:i).by(:count, %i[i f s b]).tdr_str(tally: 0)
     end
 
     test 'group max' do
@@ -46,7 +46,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         4 :"max(b)" boolean     3 [true, false, nil], 1 nil
         5 :b        boolean     3 [true, false, nil], 1 nil
       OUTPUT
-      assert_equal str, @df.group(:b, :max, %i[i f s b]).tdr_str(tally: 0)
+      assert_equal str, @df.group(:b).by(:max, %i[i f s b]).tdr_str(tally: 0)
     end
 
     test 'group mean' do
@@ -59,7 +59,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :"mean(b)" double      3 [1.0, 0.0, nil], 1 nil
         4 :b         boolean     3 [true, false, nil], 1 nil
       OUTPUT
-      assert_equal str, @df.group(:b, :mean, %i[i f b]).tdr_str(tally: 0)
+      assert_equal str, @df.group(:b).by(:mean, %i[i f b]).tdr_str(tally: 0)
     end
 
     test 'group min' do
@@ -73,7 +73,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         4 :"min(b)" boolean     3 [true, false, nil], 1 nil
         5 :b        boolean     3 [true, false, nil], 1 nil
       OUTPUT
-      assert_equal str, @df.group(:b, :min, %i[i f s b]).tdr_str(tally: 0)
+      assert_equal str, @df.group(:b).by(:min, %i[i f s b]).tdr_str(tally: 0)
     end
 
     test 'group product' do
@@ -86,7 +86,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :"product(b)" uint64      3 [1, 0, nil], 1 nil
         4 :b            boolean     3 [true, false, nil], 1 nil
       OUTPUT
-      assert_equal str, @df.group(:b, :product, %i[i f b]).tdr_str(tally: 0)
+      assert_equal str, @df.group(:b).by(:product, %i[i f b]).tdr_str(tally: 0)
     end
 
     test 'group stddev' do
@@ -98,7 +98,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         2 :"stddev(f)" double      3 [NaN, 1.0999999999999999, nil], 1 NaN, 1 nil
         3 :b           boolean     3 [true, false, nil], 1 nil
       OUTPUT
-      assert_equal str, @df.group(:b, :stddev, %i[i f]).tdr_str(tally: 0)
+      assert_equal str, @df.group(:b).by(:stddev, %i[i f]).tdr_str(tally: 0)
     end
 
     test 'group sum' do
@@ -111,7 +111,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :"sum(b)" uint64      3 [3, 0, nil], 1 nil
         4 :b        boolean     3 [true, false, nil], 1 nil
       OUTPUT
-      assert_equal str, @df.group(:b, :sum, %i[i f b]).tdr_str(tally: 0)
+      assert_equal str, @df.group(:b).by(:sum, %i[i f b]).tdr_str(tally: 0)
     end
 
     test 'group variance' do
@@ -123,7 +123,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         2 :"variance(f)" double      3 [NaN, 1.2099999999999997, nil], 1 NaN, 1 nil
         3 :b             boolean     3 [true, false, nil], 1 nil
       OUTPUT
-      assert_equal str, @df.group(:b, :variance, %i[i f]).tdr_str(tally: 0)
+      assert_equal str, @df.group(:b).by(:variance, %i[i f]).tdr_str(tally: 0)
     end
   end
 end

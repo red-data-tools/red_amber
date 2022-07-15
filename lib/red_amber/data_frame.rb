@@ -8,7 +8,6 @@ module RedAmber
     include DataFrameDisplayable
     include DataFrameIndexable
     include DataFrameSelectable
-    include DataFrameObservationOperation
     include DataFrameVariableOperation
     include Helper
 
@@ -142,6 +141,10 @@ module RedAmber
       else
         ['text/html', html_table]
       end
+    end
+
+    def group(*group_keys)
+      Group.new(self, group_keys)
     end
 
     private
