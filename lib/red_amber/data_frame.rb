@@ -13,10 +13,7 @@ module RedAmber
 
     def initialize(*args)
       @variables = @keys = @vectors = @types = @data_types = nil
-      # bug in gobject-introspection: ruby-gnome/ruby-gnome#1472
-      #  [Arrow::Table] == [nil] shows ArgumentError
-      #  temporary use yoda condition to workaround
-      if args.empty? || args == [[]] || args == [{}] || [nil] == args
+      if args.empty? || args[0] == [] || args[0] == {} || args[0].nil?
         # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
         #   returns empty DataFrame
         @table = Arrow::Table.new({}, [])
