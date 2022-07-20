@@ -58,6 +58,18 @@ module RedAmber
       is_nil.if_else(false, self).invert
     end
 
+    def shift(amount = 1, fill: nil)
+      raise VectorArgumentError, 'Shift amount is too large' if amount.abs > size
+
+      if amount.positive?
+        replace(amount..-1, self[0...-amount]).replace(0...amount, fill)
+      elsif amount.negative?
+        replace(0...amount, self[-amount..]).replace(amount..-1, fill)
+      else # amount == 0
+        self
+      end
+    end
+
     private
 
     # [Ternary]: replace_with(booleans, replacements) => vector

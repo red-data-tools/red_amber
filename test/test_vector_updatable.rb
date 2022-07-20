@@ -133,4 +133,13 @@ class VectorTest < Test::Unit::TestCase
       assert_equal [false, true, true], Vector.new([true, false, nil]).primitive_invert.to_a
     end
   end
+
+  sub_test_case '#shift' do
+    test '#shift' do
+      vector = Vector.new([1, 2, 3, 4, 5])
+      assert_equal [nil, 1, 2, 3, 4], vector.shift
+      assert_equal [3, 4, 5, nil, nil], vector.shift(-2)
+      assert_equal [0, 0, 1, 2, 3], vector.shift(2, fill: 0)
+    end
+  end
 end
