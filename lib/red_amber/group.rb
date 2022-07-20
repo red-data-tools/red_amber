@@ -16,36 +16,18 @@ module RedAmber
       @group = @table.group(*@group_keys)
     end
 
-    def count(*summary_keys)
-      by(:count, summary_keys)
+    functions = %i[count sum product mean min max stddev variance]
+    functions.each do |function|
+      define_method(function) do |*summary_keys|
+        by(function, summary_keys)
+      end
     end
 
-    def sum(*summary_keys)
-      by(:sum, summary_keys)
-    end
-
-    def product(*summary_keys)
-      by(:product, summary_keys)
-    end
-
-    def mean(*summary_keys)
-      by(:mean, summary_keys)
-    end
-
-    def min(*summary_keys)
-      by(:min, summary_keys)
-    end
-
-    def max(*summary_keys)
-      by(:max, summary_keys)
-    end
-
-    def stddev(*summary_keys)
-      by(:stddev, summary_keys)
-    end
-
-    def variance(*summary_keys)
-      by(:variance, summary_keys)
+    def inspect
+      tallys = @dataframe.pick(@group_keys).vectors.map.with_object({}) do |v, h|
+        h[v.key] = v.tally
+      end
+      "#<#{self.class}:#{format('0x%016x', object_id)}\n#{tallys}>"
     end
 
     private
