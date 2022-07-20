@@ -64,6 +64,8 @@ module RedAmber
         return filter_by_array(arg)
       when Arrow::Array
         array = arg
+      when Range
+        array = normalize_element(arg)
       else
         unless arg.is_a?(Numeric) || booleans?([arg])
           raise VectorArgumentError, "Argument must be numeric or boolean: #{args}"

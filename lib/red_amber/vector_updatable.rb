@@ -12,7 +12,15 @@ module RedAmber
     # @param replacer [Array, Vector, Arrow::Array] new data to replace for.
     # @return [Vector] Replaced new Vector
     def replace(args, replacer)
-      args = args.is_a?(Array) ? args : Array(args)
+      args =
+        case args
+        when Array
+          args
+        when Range
+          normalize_element(args)
+        else
+          Array(args)
+        end
       replacer = Array(replacer)
       return self if args.empty? || args[0].nil?
 

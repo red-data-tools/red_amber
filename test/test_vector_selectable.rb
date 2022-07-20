@@ -99,6 +99,14 @@ class VectorTest < Test::Unit::TestCase
       assert_raise(VectorArgumentError) { @string[nil] } # nil array
       assert_raise(VectorArgumentError) { @string[[nil] * 5] } # nil array
     end
+
+    test '#[Range]' do
+      assert_equal %w[B C D], @string[1..3] # Normal Range
+      assert_equal %w[B C D E], @string[1..] # Endless Range
+      assert_equal %w[A B C], @string[..2] # Beginless Range
+      assert_equal %w[B C D], @string[1..-2] # Range to index from tail
+      assert_raise(RedAmber::DataFrameArgumentError) { @string[1..6] }
+    end
   end
 
   sub_test_case '#is_in' do

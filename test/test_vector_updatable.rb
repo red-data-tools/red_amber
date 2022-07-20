@@ -31,6 +31,13 @@ class VectorTest < Test::Unit::TestCase
       assert_equal [1, 2, 0], vec.replace([2, -1], 0).to_a
     end
 
+    test 'replace Range' do
+      vec = Vector.new([1, 2, 3])
+      expected = [0, 0, 3]
+      assert_equal expected, vec.replace([0..1], 0).to_a
+      assert_equal expected, vec.replace([0...-1], 0).to_a
+    end
+
     test 'replace UInt single' do
       vec = Vector.new([1, 2, 3])
       assert_equal [1, 2, 0], vec.replace([false, false, true], 0).to_a
