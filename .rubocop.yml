@@ -78,9 +78,10 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Max: 12
   Exclude:
-    - 'lib/red_amber/data_frame_selectable.rb' # Max: 14
-    - 'lib/red_amber/vector_updatable.rb' # Max: 14
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 18
+    - 'lib/red_amber/data_frame_selectable.rb' # Max: 14
+    - 'lib/red_amber/vector_selectable.rb' # Max: 13
+    - 'lib/red_amber/vector_updatable.rb' # Max: 14
 
 # Max: 10
 Metrics/MethodLength:

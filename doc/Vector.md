@@ -500,3 +500,28 @@ vector.is_in(1, -1)
 #<RedAmber::Vector(:boolean, size=3):0x000000000000f320>
 [true, false, true]
 ```
+
+### `shift(amount = 1, fill: nil)`
+
+Shift vector's values by specified `amount`. Shifted space is filled by value `fill`.
+
+```ruby
+vector = RedAmber::Vector.new([1, 2, 3, 4, 5])
+vector.shift
+
+# =>
+#<RedAmber::Vector(:uint8, size=5):0x00000000000072d8>  
+[nil, 1, 2, 3, 4]
+
+vector.shift(-2)
+
+# =>
+#<RedAmber::Vector(:uint8, size=5):0x0000000000009970>  
+[3, 4, 5, nil, nil]
+
+vector.shift(fill: Float::NAN)
+
+# =>
+#<RedAmber::Vector(:double, size=5):0x0000000000011d3c>                    
+[NaN, 1.0, 2.0, 3.0, 4.0]
+```

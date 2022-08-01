@@ -12,7 +12,15 @@ module RedAmber
     # @param replacer [Array, Vector, Arrow::Array] new data to replace for.
     # @return [Vector] Replaced new Vector
     def replace(args, replacer)
-      args = args.is_a?(Array) ? args : Array(args)
+      args =
+        case args
+        when Array
+          args
+        when Range
+          normalize_element(args)
+        else
+          Array(args)
+        end
       replacer = Array(replacer)
       return self if args.empty? || args[0].nil?
 
@@ -48,6 +56,18 @@ module RedAmber
       raise VectorTypeError, "Not a boolean Vector: #{self}" unless boolean?
 
       is_nil.if_else(false, self).invert
+    end
+
+    def shift(amount = 1, fill: nil)
+      raise VectorArgumentError, 'Shift amount is too large' if amount.abs > size
+
+      if amount.positive?
+        replace(amount..-1, self[0...-amount]).replace(0...amount, fill)
+      elsif amount.negative?
+        replace(0...amount, self[-amount..]).replace(amount..-1, fill)
+      else # amount == 0
+        self
+      end
     end
 
     private
