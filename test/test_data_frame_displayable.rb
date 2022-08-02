@@ -147,6 +147,19 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, df.inspect
     end
+
+    test 'empty key name' do
+      df = DataFrame.new("": [1, 2, 3], x: %w[A B C])
+      str = <<~OUTPUT
+        #<RedAmber::DataFrame : 3 x 2 Vectors, #{format('0x%016x', df.object_id)}>
+                  x
+          <uint8> <string>
+        1       1 A
+        2       2 B
+        3       3 C
+      OUTPUT
+      assert_equal str, df.inspect
+    end
   end
 
   sub_test_case 'tdr_str' do

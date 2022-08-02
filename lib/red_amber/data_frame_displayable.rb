@@ -5,6 +5,8 @@ require 'stringio'
 module RedAmber
   # mix-ins for the class DataFrame
   module DataFrameDisplayable
+    INDEX_KEY = :index_key_for_format_table
+
     def to_s
       return '' if empty?
 
@@ -139,7 +141,7 @@ module RedAmber
       original = self
       indices = size > head + tail ? [*0...head, *(size - tail)...size] : [*0...size]
       df = slice(indices).assign do
-        assigner = { '': indices.map { |i| (i + 1).to_s } }
+        assigner = { INDEX_KEY => indices.map { |i| (i + 1).to_s } }
         vectors.each_with_object(assigner) do |v, a|
           a[v.key] = v.to_a.map do |e|
             if e.nil?
@@ -155,12 +157,12 @@ module RedAmber
         end
       end
 
-      df = df.pick { [keys[-1], keys[0..-2]] }
+      df = df.pick { [INDEX_KEY, keys - [INDEX_KEY]] }
       df = size > head + tail ? df[0, 0, 0...head, 0, -tail..-1] : df[0, 0, 0..-1]
       df = df.assign do
         vectors.each_with_object({}) do |v, assigner|
-          vec = v.replace(0, v.key.to_s)
-                 .replace(1, v.key == :'' ? '' : "<#{original[v.key].type}>")
+          vec = v.replace(0, v.key == INDEX_KEY ? '' : v.key.to_s)
+                 .replace(1, v.key == INDEX_KEY ? '' : "<#{original[v.key].type}>")
           assigner[v.key] = size > head + tail ? vec.replace(head + 2, ':') : vec
         end
       end
@@ -197,7 +199,7 @@ module RedAmber
     end
 
     def format_for_column(vector, original, width)
-      if vector.key != :'' && !original[vector.key].numeric?
+      if vector.key != INDEX_KEY && !original[vector.key].numeric?
         "%-#{width}s"
       else
         "%#{width}s"
