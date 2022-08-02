@@ -141,8 +141,10 @@ module RedAmber
       end
     end
 
-    def group(*group_keys)
-      Group.new(self, group_keys)
+    def group(*group_keys, &block)
+      g = Group.new(self, group_keys)
+      g = g.aggregate_by(&block) if block
+      g
     end
 
     private

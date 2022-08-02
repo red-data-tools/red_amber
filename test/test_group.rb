@@ -137,5 +137,28 @@ class GroupTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, @df.group(:b).variance(%i[i f]).tdr_str(tally: 0)
     end
+
+    test 'group with a block' do
+      assert_raise(GroupArgumentError) { @df.group(:i) {} }
+
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 4 x 2 Vectors
+        Vectors : 2 numeric
+        # key    type  level data_preview
+        1 :i     uint8     4 [0, 1, 2, nil], 1 nil
+        2 :count int64     3 [2, 1, 2, 0]
+      OUTPUT
+      assert_equal str, @df.group(:i) { count(:i, :f, :b) }.tdr_str(tally: 0)
+
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 4 x 3 Vectors
+        Vectors : 3 numeric
+        # key       type   level data_preview
+        1 :i        uint8      4 [0, 1, 2, nil], 1 nil
+        2 :count    int64      3 [2, 1, 2, 0]
+        3 :"sum(f)" double     4 [1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+      OUTPUT
+      assert_equal str, @df.group(:i) { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
+    end
   end
 end

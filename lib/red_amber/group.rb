@@ -30,6 +30,18 @@ module RedAmber
       "#<#{self.class}:#{format('0x%016x', object_id)}\n#{tallys}>"
     end
 
+    def aggregate_by(&block)
+      agg = instance_eval(&block)
+      case agg
+      when DataFrame
+        agg
+      when Array
+        agg.reduce { |aggregated, df| aggregated.assign(df.to_h) }
+      else
+        raise GroupArgumentError, "Unknown argument: #{agg}"
+      end
+    end
+
     private
 
     def by(func, summary_keys)

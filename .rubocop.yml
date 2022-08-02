@@ -43,6 +43,11 @@ Lint/BinaryOperatorWithIdenticalOperands:
   Exclude:
     - 'test/test_vector_function.rb'
 
+# Need for test with empty block
+Lint/EmptyBlock:
+  Exclude:
+    - 'test/test_group.rb'
+
 # Max: 120
 Layout/LineLength:
   Max: 118
