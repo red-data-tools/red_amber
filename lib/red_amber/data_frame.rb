@@ -31,6 +31,7 @@ module RedAmber
             raise DataFrameTypeError, "invalid argument: #{arg}"
           end
       end
+      name_unnamed_keys
     end
 
     def self.load(path, options = {})
@@ -180,6 +181,24 @@ module RedAmber
 
       html = IRuby::HTML.table(converted.to_h, maxrows: 8, maxcols: 15)
       "#{self.class} <#{size} x #{n_keys} vector#{pl(n_keys)}> #{html}"
+    end
+
+    def name_unnamed_keys
+      return unless @table[:'']
+
+      # We can't use #keys because it causes mismatch of @table and @keys
+      keys = @table.schema.fields.map { |f| f.name.to_sym }
+      unnamed = (:unnamed1..).find { |e| !keys.include?(e) }
+      fields =
+        @table.schema.fields.map do |field|
+          if field.name.empty?
+            Arrow::Field.new(unnamed, field.data_type)
+          else
+            field
+          end
+        end
+      schema = Arrow::Schema.new(fields)
+      @table = Arrow::Table.new(schema, @table.columns)
     end
   end
 end

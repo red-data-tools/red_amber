@@ -152,11 +152,11 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       df = DataFrame.new("": [1, 2, 3], x: %w[A B C])
       str = <<~OUTPUT
         #<RedAmber::DataFrame : 3 x 2 Vectors, #{format('0x%016x', df.object_id)}>
-                  x
-          <uint8> <string>
-        1       1 A
-        2       2 B
-        3       3 C
+          unnamed1 x
+           <uint8> <string>
+        1        1 A
+        2        2 B
+        3        3 C
       OUTPUT
       assert_equal str, df.inspect
     end
@@ -246,10 +246,10 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       str = <<~OUTPUT
         RedAmber::DataFrame : 2 x 3 Vectors
         Vectors : 3 numeric
-        # key    type  level data_preview
-        1 :""    uint8     2 [1, 2]
-        2 :"  "  uint8     2 [3, 4]
-        3 :"a b" uint8     2 [5, 6]
+        # key       type  level data_preview
+        1 :unnamed1 uint8     2 [1, 2]
+        2 :"  "     uint8     2 [3, 4]
+        3 :"a b"    uint8     2 [5, 6]
       OUTPUT
       assert_equal str, df.tdr_str
     end
