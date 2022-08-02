@@ -37,7 +37,8 @@ module RedAmber
       d = summary_keys - @dataframe.keys
       raise GroupArgumentError, "#{d} is not a key of\n #{@dataframe}." unless summary_keys.empty? || d.empty?
 
-      RedAmber::DataFrame.new(@group.send(func, *summary_keys))
+      df = RedAmber::DataFrame.new(@group.send(func, *summary_keys))
+      df[df.keys[-1], df.keys[0...-1]]
     end
   end
 end
