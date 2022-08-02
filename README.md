@@ -273,6 +273,44 @@ For this frequently needed task, we can do it much simpler.
 penguins.remove_nil # => same result as above
 ```
 
+`DataFrame#group` method can be used for the grouping tasks.
+
+```ruby
+starwars = RedAmber::DataFrame.load(URI("https://vincentarelbundock.github.io/Rdatasets/csv/dplyr/starwars.csv"))
+starwars
+
+# =>
+#<RedAmber::DataFrame : 87 x 12 Vectors, 0x000000000000607c>
+   unnamed1 name            height     mass hair_color skin_color  eye_color ... species
+    <int64> <string>       <int64> <double> <string>   <string>    <string>  ... <string>
+ 1        1 Luke Skywalker     172     77.0 blond      fair        blue      ... Human
+ 2        2 C-3PO              167     75.0 NA         gold        yellow    ... Droid
+ 3        3 R2-D2               96     32.0 NA         white, blue red       ... Droid
+ 4        4 Darth Vader        202    136.0 none       white       yellow    ... Human
+ 5        5 Leia Organa        150     49.0 brown      light       brown     ... Human
+ :        : :                    :        : :          :           :         ... :
+85       85 BB8              (nil)    (nil) none       none        black     ... Droid
+86       86 Captain Phasma   (nil)    (nil) unknown    unknown     unknown   ... NA
+87       87 Padmé Amidala      165     45.0 brown      light       brown     ... Human
+
+grouped = starwars.group(:species) { [count(:species), mean(:height, :mass)] }
+grouped.slice { v(:count) > 1 }
+
+# =>
+#<RedAmber::DataFrame : 9 x 4 Vectors, 0x000000000006e848>
+  species    count mean(height) mean(mass)
+  <string> <int64>     <double>   <double>
+1 Human         35        176.6       82.8
+2 Droid          6        131.2       69.8
+3 Wookiee        2        231.0      124.0
+4 Gungan         3        208.7       74.0
+5 NA             4        181.3       48.0
+: :              :            :          :
+7 Twi'lek        2        179.0       55.0
+8 Mirialan       2        168.0       53.1
+9 Kaminoan       2        221.0       88.0 
+```
+
 See [DataFrame.md](doc/DataFrame.md) for details.
 
 
