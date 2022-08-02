@@ -56,7 +56,7 @@ require 'red_amber' # require 'red-amber' is also OK.
 require 'datasets-arrow'
 
 arrow = Datasets::Penguins.new.to_arrow
-RedAmber::DataFrame.new(arrow)
+penguins = RedAmber::DataFrame.new(arrow)
 
 # =>
 #<RedAmber::DataFrame : 344 x 8 Vectors, 0x0000000000013790>
@@ -78,28 +78,71 @@ RedAmber::DataFrame.new(arrow)
 
 For example, `DataFrame#pick` accepts keys as an argument and returns a sub DataFrame.
 
+![pick method image](doc/image/dataframe/pick.png)
+
 ```ruby
-df = penguins.pick(:body_mass_g)
+penguins.keys
+# =>
+[:species,                                       
+ :island,                                        
+ :bill_length_mm,
+ :bill_depth_mm,
+ :flipper_length_mm,
+ :body_mass_g,
+ :sex,
+ :year]
+
+df = penguins.pick(:species, :island, :body_mass_g)
 df
 
 # =>
-#<RedAmber::DataFrame : 344 x 1 Vector, 0x0000000000015cc0>
-    body_mass_g
-       <uint16>
-  1        3750
-  2        3800
-  3        3250
-  4       (nil)
-  5        3450
-  :           :
-342        5750
-343        5200
+#<RedAmber::DataFrame : 344 x 3 Vectors, 0x000000000003cc1c>                 
+    species  island    body_mass_g                                           
+    <string> <string>     <uint16>                                           
+  1 Adelie   Torgersen        3750                                           
+  2 Adelie   Torgersen        3800                                           
+  3 Adelie   Torgersen        3250                                           
+  4 Adelie   Torgersen       (nil)                                           
+  5 Adelie   Torgersen        3450                                           
+  : :        :                   :                                           
+342 Gentoo   Biscoe           5750                                           
+343 Gentoo   Biscoe           5200                                           
+344 Gentoo   Biscoe           5400
+```
+
+`DataFrame#drop` drops some columns to create a remainer DataFrame.
+
+![drop method image](doc/image/dataframe/drop.png)
+
+You can specify by keys or a boolean array (same size as n_keys).
+
+```ruby
+# Same as df.drop(:species, :island)
+df = df.drop(true, true, false)
+
+# =>
+#<RedAmber::DataFrame : 344 x 1 Vector, 0x0000000000048760>
+    body_mass_g                                     
+       <uint16>                                     
+  1        3750                                     
+  2        3800                                     
+  3        3250                                     
+  4       (nil)                                     
+  5        3450                                     
+  :           :                                     
+342        5750                                     
+343        5200                                     
 344        5400
 ```
 
+Arrow data is immutable, so these methods always return an new object.
+
 `DataFrame#assign` creates new variables (column in the table).
 
+![assign method image](doc/image/dataframe/assign.png)
+
 ```ruby
+# New column is created because ':body_mass_kg' is a new key.
 df.assign(:body_mass_kg => df[:body_mass_g] / 1000.0)
 
 # =>
@@ -117,12 +160,97 @@ df.assign(:body_mass_kg => df[:body_mass_g] / 1000.0)
 344        5400          5.4
 ```
 
-DataFrame manipulating methods like `pick`, `drop`, `slice`, `remove`, `rename` and `assign` accept a block.
+`DataFrame#slice` selects rows (observations) to create a sub DataFrame.
 
-This is an exaple to eliminate observations (row in the table) containing nil.
+![slice method image](doc/image/dataframe/slice.png)
 
 ```ruby
-# remove all observation contains nil
+# returns 5 rows at the start and 5 rows from the end
+penguins.slice(0...5, -5..-1)
+
+# =>
+#<RedAmber::DataFrame : 10 x 8 Vectors, 0x0000000000042be4>
+   species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+   <string> <string>        <double>      <double>           <uint8> ... <uint16>
+ 1 Adelie   Torgersen           39.1          18.7               181 ...     2007
+ 2 Adelie   Torgersen           39.5          17.4               186 ...     2007
+ 3 Adelie   Torgersen           40.3          18.0               195 ...     2007
+ 4 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+ 5 Adelie   Torgersen           36.7          19.3               193 ...     2007
+ : :        :                      :             :                 : ...        :
+ 8 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+ 9 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+10 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+```
+
+`DataFrame#remove` rejects rows (observations) to create a remainer DataFrame.
+
+![remove method image](doc/image/dataframe/remove.png)
+
+```ruby
+# penguins[:bill_length_mm] < 40 returns a boolean Vector
+penguins.remove(penguins[:bill_length_mm] < 40)
+
+# =>
+#<RedAmber::DataFrame : 244 x 8 Vectors, 0x000000000007d6f4>
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    <string> <string>        <double>      <double>           <uint8> ... <uint16>
+  1 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  2 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  3 Adelie   Torgersen           42.0          20.2               190 ...     2007
+  4 Adelie   Torgersen           41.1          17.6               182 ...     2007
+  5 Adelie   Torgersen           42.5          20.7               197 ...     2007
+  : :        :                      :             :                 : ...        :
+242 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+243 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+244 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+```
+
+DataFrame manipulating methods like `pick`, `drop`, `slice`, `remove`, `rename` and `assign` accept a block.
+
+This example is usage of block to update numeric columns.
+
+```ruby
+df = RedAmber::DataFrame.new(
+  integer: [0, 1, 2, 3, nil],
+  float:   [0.0, 1.1,  2.2, Float::NAN, nil],
+  string:  ['A', 'B', 'C', 'D', nil],
+  boolean: [true, false, true, false, nil])
+df
+
+# =>
+#<RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000003131c>
+  integer    float string   boolean
+  <uint8> <double> <string> <boolean>
+1       0      0.0 A        true
+2       1      1.1 B        false
+3       2      2.2 C        true
+4       3      NaN D        false
+5   (nil)    (nil) (nil)    (nil)
+
+df.assign do
+  vectors.each_with_object({}) do |v, h|
+    h[v.key] = -v if v.numeric?
+  end
+end
+
+# =>
+#<RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000009a1b4>
+  integer    float string   boolean
+  <uint8> <double> <string> <boolean>
+1       0     -0.0 A        true
+2     255     -1.1 B        false
+3     254     -2.2 C        true
+4     253      NaN D        false
+5   (nil)    (nil) (nil)    (nil)
+```
+
+Negate (-@) method of unsigned integer Vector returns complement. 
+
+Next example is to eliminate observations (row in the table) containing nil.
+
+```ruby
+# remove all observations containing nil
 nil_removed = penguins.remove { vectors.map(&:is_nil).reduce(&:|) }
 nil_removed.tdr
 # =>
@@ -151,6 +279,7 @@ See [DataFrame.md](doc/DataFrame.md) for details.
 ## `RedAmber::Vector`
 
 Class `RedAmber::Vector` represents a series of data in the DataFrame.
+Method `RedAmber::DataFrame#[key]` returns a Vector with the key `key`. 
 
 ```ruby
 penguins[:bill_length_mm]
@@ -160,6 +289,29 @@ penguins[:bill_length_mm]
 ```
 
 Vectors accepts some [functional methods from Arrow](https://arrow.apache.org/docs/cpp/compute.html).
+
+This is an element-wise comparison and returns a boolean Vector of same size.
+
+![unary element-wise](doc/image/vector/unary_element_wise.png)
+
+```ruby
+penguins[:bill_length_mm] < 40
+
+# =>
+#<RedAmber::Vector(:boolean, size=344):0x000000000007e7ac>
+[true, true, false, nil, true, true, true, true, true, false, true, true, false, ... ]
+```
+
+Next example returns aggregated result.
+
+![unary aggregation](doc/image/vector/unary_aggregation.png)
+
+```ruby
+penguins[:bill_length_mm].mean
+43.92192982456141
+# =>
+
+```
 
 See [Vector.md](doc/Vector.md) for details.
 
