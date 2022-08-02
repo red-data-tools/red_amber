@@ -38,7 +38,10 @@ module RedAmber
       raise GroupArgumentError, "#{d} is not a key of\n #{@dataframe}." unless summary_keys.empty? || d.empty?
 
       df = RedAmber::DataFrame.new(@group.send(func, *summary_keys))
-      df[df.keys[-1], df.keys[0...-1]]
+      df = df[df.keys[-1], df.keys[0...-1]]
+      # if counts are the same (no nil included), aggregate count columns.
+      df = df[df.keys[0..1]].rename(df.keys[1], :count) if func == :count && df.to_h.values[1..].uniq.size == 1
+      df
     end
   end
 end

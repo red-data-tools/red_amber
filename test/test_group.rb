@@ -35,6 +35,18 @@ class GroupTest < Test::Unit::TestCase
       assert_equal str, @df.group(:i).count(%i[i f s b]).tdr_str(tally: 0)
     end
 
+    test 'group count (aggregation)' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 4 x 2 Vectors
+        Vectors : 2 numeric
+        # key    type  level data_preview
+        1 :i     uint8     4 [0, 1, 2, nil], 1 nil
+        2 :count int64     3 [2, 1, 2, 0]
+      OUTPUT
+      df = @df.pick(:i, :f, :b)
+      assert_equal str, df.group(:i).count.tdr_str(tally: 0)
+    end
+
     test 'group max' do
       str = <<~OUTPUT
         RedAmber::DataFrame : 3 x 5 Vectors
