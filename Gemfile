@@ -18,6 +18,7 @@ group :test do
   gem 'iruby'
   gem 'test-unit'
   gem 'webrick'
+  gem 'yard'
 
   gem 'benchmark_driver'
   gem 'red-datasets'

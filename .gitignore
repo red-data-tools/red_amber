@@ -1,8 +1,6 @@
 /.bundle/
-/.yardoc
-/_yardoc/
-/coverage/
-#/doc/
+/.yardoc/
+/doc/yard/
 /pkg/
 /spec/reports/
 /tmp/
