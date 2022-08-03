@@ -2,6 +2,41 @@
 
 - Supports Arrow 9.0.0
 
+## [0.1.8] - 2022-08-04 (experimental)
+
+- Bug fixes
+
+  - Fix unnamed column in table formatter (#52)
+  - Fix DataFrame#key?, DataFrame#key_index when @keys.nil? (#52)
+  - Align order of replacer in Vector#replace (#53, resolved #38)
+
+- New features and improvements
+
+  - Refine DataFrame.new for empty arguments (#50)
+    - Delete .rubocop_todo.yml for not to use yoda condition (#50)
+
+  - Refine Group (#52, resolved #28)
+    - Refine Group methods creation
+    - Make group key at first(left)
+    - Show only one group count when same counts
+    - Add block acceptability for group
+    - Rename empty key to :unnamed in DataFrame.new
+    - Rename Group#aggregated_by to #summarize (#54)
+
+  - Add Vector#shift (#51)
+
+  - Vector#[] accepts Range as an argument (#51)
+
+- Update documents
+
+  - Add support for yard (#54)
+
+  - Renew jupyter notebook '53 examples' (#54)
+
+  - Add more examples and images in README (#52)
+  - Add document of group manipulations in README (#52)
+  - Renew DF#group document in DataFrame.md (#52)
+
 ## [0.1.7] - 2022-07-15 (experimental)
 
 - Bug fixes
