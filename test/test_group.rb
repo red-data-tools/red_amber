@@ -149,6 +149,7 @@ class GroupTest < Test::Unit::TestCase
         2 :count int64     3 [2, 1, 2, 0]
       OUTPUT
       assert_equal str, @df.group(:i) { count(:i, :f, :b) }.tdr_str(tally: 0)
+      assert_equal str, @df.group(:i).summarize { count(:i, :f, :b) }.tdr_str(tally: 0)
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 4 x 3 Vectors
@@ -159,6 +160,7 @@ class GroupTest < Test::Unit::TestCase
         3 :"sum(f)" double     4 [1.1, 2.2, NaN, nil], 1 NaN, 1 nil
       OUTPUT
       assert_equal str, @df.group(:i) { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
+      assert_equal str, @df.group(:i).summarize { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
     end
   end
 end

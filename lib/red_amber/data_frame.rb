@@ -144,7 +144,7 @@ module RedAmber
 
     def group(*group_keys, &block)
       g = Group.new(self, group_keys)
-      g = g.aggregate_by(&block) if block
+      g = g.summarize(&block) if block
       g
     end
 
