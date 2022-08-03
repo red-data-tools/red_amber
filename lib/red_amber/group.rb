@@ -30,7 +30,7 @@ module RedAmber
       "#<#{self.class}:#{format('0x%016x', object_id)}\n#{tallys}>"
     end
 
-    def aggregate_by(&block)
+    def summarize(&block)
       agg = instance_eval(&block)
       case agg
       when DataFrame
