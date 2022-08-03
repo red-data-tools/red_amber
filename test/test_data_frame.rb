@@ -131,6 +131,18 @@ class DataFrameTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case 'init_instance_vars' do
+    test 'key?' do
+      df = DataFrame.new(x: [1, 2, 3])
+      assert_true df.key?(:x)
+    end
+
+    test 'key_index' do
+      df = DataFrame.new(x: [1, 2, 3])
+      assert_equal 0, df.key_index(:x)
+    end
+  end
+
   sub_test_case '.new and .to_ I/O' do
     # data in Array(hash, schema, array)
     data(

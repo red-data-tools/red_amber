@@ -76,12 +76,12 @@ module RedAmber
     alias_method :var_names, :keys
 
     def key?(key)
-      @keys.include?(key.to_sym)
+      keys.include?(key.to_sym)
     end
     alias_method :has_key?, :key?
 
     def key_index(key)
-      @keys.find_index(key.to_sym)
+      keys.find_index(key.to_sym)
     end
     alias_method :find_index, :key_index
     alias_method :index, :key_index
