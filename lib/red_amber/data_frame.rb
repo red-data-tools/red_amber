@@ -31,6 +31,7 @@ module RedAmber
             raise DataFrameTypeError, "invalid argument: #{arg}"
           end
       end
+      name_unnamed_keys
     end
 
     def self.load(path, options = {})
@@ -75,12 +76,12 @@ module RedAmber
     alias_method :var_names, :keys
 
     def key?(key)
-      @keys.include?(key.to_sym)
+      keys.include?(key.to_sym)
     end
     alias_method :has_key?, :key?
 
     def key_index(key)
-      @keys.find_index(key.to_sym)
+      keys.find_index(key.to_sym)
     end
     alias_method :find_index, :key_index
     alias_method :index, :key_index
@@ -141,8 +142,10 @@ module RedAmber
       end
     end
 
-    def group(*group_keys)
-      Group.new(self, group_keys)
+    def group(*group_keys, &block)
+      g = Group.new(self, group_keys)
+      g = g.aggregate_by(&block) if block
+      g
     end
 
     private
@@ -178,6 +181,24 @@ module RedAmber
 
       html = IRuby::HTML.table(converted.to_h, maxrows: 8, maxcols: 15)
       "#{self.class} <#{size} x #{n_keys} vector#{pl(n_keys)}> #{html}"
+    end
+
+    def name_unnamed_keys
+      return unless @table[:'']
+
+      # We can't use #keys because it causes mismatch of @table and @keys
+      keys = @table.schema.fields.map { |f| f.name.to_sym }
+      unnamed = (:unnamed1..).find { |e| !keys.include?(e) }
+      fields =
+        @table.schema.fields.map do |field|
+          if field.name.empty?
+            Arrow::Field.new(unnamed, field.data_type)
+          else
+            field
+          end
+        end
+      schema = Arrow::Schema.new(fields)
+      @table = Arrow::Table.new(schema, @table.columns)
     end
   end
 end

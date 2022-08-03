@@ -200,8 +200,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         1 :blank uint8     3 [1, 2, 3]
         2 :A     uint8     3 [4, 5, 6]
       OUTPUT
-      assert_equal str, df.rename(:'', 'blank').tdr_str
-      assert_equal str, df.rename('': 'blank').tdr_str
+      assert_equal str, df.rename(:unnamed1, :blank).tdr_str
+      assert_equal str, df.rename(unnamed1: :blank).tdr_str
     end
   end
 

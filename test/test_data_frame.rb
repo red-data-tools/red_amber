@@ -51,6 +51,11 @@ class DataFrameTest < Test::Unit::TestCase
       int32_array = Arrow::Int32Array.new([1, 2])
       assert_raise(DataFrameTypeError) { DataFrame.new(int32_array) }
     end
+
+    test 'empty key renaming' do
+      df = DataFrame.new('': [1, 2], unnamed1: [3, 4])
+      assert_equal %i[unnamed2 unnamed1], df.keys
+    end
   end
 
   sub_test_case 'Properties' do
@@ -123,6 +128,18 @@ class DataFrameTest < Test::Unit::TestCase
       _, df, = data
       assert_equal df.variables.keys, df.keys
       assert_equal df.variables.values, df.vectors
+    end
+  end
+
+  sub_test_case 'init_instance_vars' do
+    test 'key?' do
+      df = DataFrame.new(x: [1, 2, 3])
+      assert_true df.key?(:x)
+    end
+
+    test 'key_index' do
+      df = DataFrame.new(x: [1, 2, 3])
+      assert_equal 0, df.key_index(:x)
     end
   end
 
