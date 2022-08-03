@@ -30,6 +30,7 @@ module RedAmber
         if vector.boolean?
           vector
         elsif vector.numeric?
+          replacer.sort_by! { |x| args[replacer.index(x)] } if replacer # rubocop:disable Style/SafeNavigation
           Vector.new(indices).is_in(vector)
         else
           raise VectorArgumentError, "Invalid data type #{args}"

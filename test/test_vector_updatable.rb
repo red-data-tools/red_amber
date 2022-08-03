@@ -78,6 +78,11 @@ class VectorTest < Test::Unit::TestCase
       assert_equal [nil, 2, nil], vec.replace([true, false, true], nil).to_a # broadcast with nil
       assert_raise(ArgumentError) { vec.replace([true, false, true]) } # w/o replacer
     end
+
+    test 'align order of replacer to arg' do
+      vec = Vector.new([1, 2, 3])
+      assert_equal [1, 5, 4], vec.replace([2, 1], [4, 5]).to_a
+    end
   end
 
   sub_test_case('Ternary function #if_else') do
