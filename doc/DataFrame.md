@@ -860,16 +860,10 @@ penguins.to_rover
 
 ## Grouping
 
-### `group(aggregating_keys)`
-
-  (
-    This API will change in the future version. Especcially I want to change:
-      - Order of the column of the result (aggregation_keys should be the first)
-      - DataFrame#group will accept a block (heronshoes/red_amber #28)
-  )
+### `group(group_keys)`
 
   `group` creates a class `Group` object. `Group` accepts functions below as a method.
-  Method accepts options as `summary_keys`.
+  Method accepts options as `group_keys`.
 
   Available functions are:
 
@@ -889,8 +883,8 @@ penguins.to_rover
   - [ ] tdigest
   - ✓ variance
 
-  For the each group of `aggregation_keys`, the aggregation `function` is applied and returns a new dataframe with aggregated keys according to `summary_keys`.
-  Aggregated key name is `function(summary_key)` style.
+  For the each group of `group_keys`, the aggregation `function` is applied and returns a new dataframe with aggregated keys according to `summary_keys`.
+  Summary key names are provided by `function(summary_keys)` style.
 
   This is an example of grouping of famous STARWARS dataset.
 
@@ -900,18 +894,18 @@ penguins.to_rover
   starwars
   
   # =>
-  #<RedAmber::DataFrame : 87 x 12 Vectors, 0x00000000000773bc>
-  species     name            height     mass hair_color skin_color  eye_color ... homeworld
-  <string>    <string>       <int64> <double> <string>   <string>    <string>  ... <string>
-  Human     1 Luke Skywalker     172     77.0 blond      fair        blue      ... Tatooine
-  Droid     2 C-3PO              167     75.0 NA         gold        yellow    ... Tatooine
-  Droid     3 R2-D2               96     32.0 NA         white, blue red       ... Naboo
-  Human     4 Darth Vader        202    136.0 none       white       yellow    ... Tatooine
-  Human     5 Leia Organa        150     49.0 brown      light       brown     ... Alderaan
-  :         : :                    :        : :          :           :         ... :
-  Droid    85 BB8              (nil)    (nil) none       none        black     ... NA
-  NA       86 Captain Phasma   (nil)    (nil) unknown    unknown     unknown   ... NA
-  Human    87 Padmé Amidala      165     45.0 brown      light       brown     ... Naboo
+  #<RedAmber::DataFrame : 87 x 12 Vectors, 0x0000000000005a50>
+     unnamed1 name            height     mass hair_color skin_color  eye_color ... species
+      <int64> <string>       <int64> <double> <string>   <string>    <string>  ... <string>
+   1        1 Luke Skywalker     172     77.0 blond      fair        blue      ... Human
+   2        2 C-3PO              167     75.0 NA         gold        yellow    ... Droid
+   3        3 R2-D2               96     32.0 NA         white, blue red       ... Droid
+   4        4 Darth Vader        202    136.0 none       white       yellow    ... Human
+   5        5 Leia Organa        150     49.0 brown      light       brown     ... Human
+   :        : :                    :        : :          :           :         ... :
+  85       85 BB8              (nil)    (nil) none       none        black     ... Droid
+  86       86 Captain Phasma   (nil)    (nil) unknown    unknown     unknown   ... NA
+  87       87 Padmé Amidala      165     45.0 brown      light       brown     ... Human
 
   starwars.tdr(12)
 
@@ -919,7 +913,7 @@ penguins.to_rover
   RedAmber::DataFrame : 87 x 12 Vectors
   Vectors : 4 numeric, 8 strings
   #  key         type   level data_preview
-  1  :""         int64     87 [1, 2, 3, 4, 5, ... ]
+  1  :unnamed1   int64     87 [1, 2, 3, 4, 5, ... ]
   2  :name       string    87 ["Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia Organa", ... ]
   3  :height     int64     46 [172, 167, 96, 202, 150, ... ], 6 nils
   4  :mass       double    39 [77.0, 75.0, 32.0, 136.0, 49.0, ... ], 28 nils
@@ -933,73 +927,69 @@ penguins.to_rover
   12 :species    string    38 ["Human", "Droid", "Droid", "Human", "Human", ... ]
   ```
 
-  We can aggregate for `:species` and calculate the mean of `:mass` and `:height`.
+  We can group by `:species` and calculate the count.
 
   ```ruby
-  grouped = starwars.group(:species).mean(:mass, :height)
-  grouped
+  starwars.group(:species).count(:species)
 
   # =>
-  #<RedAmber::DataFrame : 38 x 3 Vectors, 0x000000000008e620>                                 
-     mean(mass) mean(height) species                                                          
-       <double>     <double> <string>                                                         
-   1       82.8        176.6 Human                                                            
-   2       69.8        131.2 Droid                                                            
-   3      124.0        231.0 Wookiee                                                          
-   4       74.0        173.0 Rodian                                                           
-   5     1358.0        175.0 Hutt                                                             
-   :          :            : :                                                                
-  36      159.0        216.0 Kaleesh                                                          
-  37       80.0        206.0 Pau'an
-  38       80.0        188.0 Kel Dor
+  #<RedAmber::DataFrame : 38 x 2 Vectors, 0x000000000001d6f0>                                 
+     species    count                                                                         
+     <string> <int64>                                                                         
+   1 Human         35                                                                         
+   2 Droid          6                                                                         
+   3 Wookiee        2                                                                         
+   4 Rodian         1                                                                         
+   5 Hutt           1                                                                         
+   : :              :                                                                         
+  36 Kaleesh        1                                                                         
+  37 Pau'an         1                                                                         
+  38 Kel Dor        1
+  ```
+
+  We can also calculate the mean of `:mass` and `:height` together.
+
+  ```ruby
+  grouped = starwars.group(:species) { [count(:species), mean(:height, :mass)] }
+
+  # =>
+  #<RedAmber::DataFrame : 38 x 4 Vectors, 0x00000000000407cc>                                 
+     species    count mean(height) mean(mass)                                                 
+     <string> <int64>     <double>   <double>                                                 
+   1 Human         35        176.6       82.8                                                 
+   2 Droid          6        131.2       69.8                                                 
+   3 Wookiee        2        231.0      124.0                                                 
+   4 Rodian         1        173.0       74.0                                                 
+   5 Hutt           1        175.0     1358.0                                                 
+   : :              :            :          :                                                 
+  36 Kaleesh        1        216.0      159.0                                                 
+  37 Pau'an         1        206.0       80.0                                                 
+  38 Kel Dor        1        188.0       80.0
   ```
 
   Select rows for count > 1.
   
   ```ruby
-  count = starwars.group(:species).count(:species)[:'count(species)'] # => Vector
-  grouped = grouped.slice(count > 1)
+  grouped.slice(grouped[:count] > 1)
 
   # =>
-  #<RedAmber::DataFrame : 9 x 3 Vectors, 0x0000000000098260>
-    mean(mass) mean(height) species       
-      <double>     <double> <string>      
-  1       82.8        176.6 Human         
-  2       69.8        131.2 Droid         
-  3      124.0        231.0 Wookiee       
-  4       74.0        208.7 Gungan        
-  5       48.0        181.3 NA            
-  :          :            : :
-  7       55.0        179.0 Twi'lek
-  8       53.1        168.0 Mirialan
-  9       88.0        221.0 Kaminoan
-  ```
-
-  Assemble the result and change the order of columns.
-
-  ```ruby
-  grouped.assign(count: count[count > 1]).pick { [2,3,0,1].map{ |i| keys[i] } }
-  
-  # =>
-  #<RedAmber::DataFrame : 9 x 4 Vectors, 0x0000000000141838>                                  
-    species    count mean(mass) mean(height)                                                  
-    <string> <uint8>   <double>     <double>                                                  
-  1 Human         35       82.8        176.6                                                  
-  2 Droid          6       69.8        131.2                                                  
-  3 Wookiee        2      124.0        231.0                                                  
-  4 Gungan         3       74.0        208.7                                                  
-  5 NA             4       48.0        181.3                                                  
-  : :              :          :            :                                                  
-  7 Twi'lek        2       55.0        179.0                                                  
-  8 Mirialan       2       53.1        168.0                                                  
-  9 Kaminoan       2       88.0        221.0
+  #<RedAmber::DataFrame : 9 x 4 Vectors, 0x000000000004c270>
+    species    count mean(height) mean(mass)
+    <string> <int64>     <double>   <double>
+  1 Human         35        176.6       82.8
+  2 Droid          6        131.2       69.8
+  3 Wookiee        2        231.0      124.0
+  4 Gungan         3        208.7       74.0
+  5 NA             4        181.3       48.0
+  : :              :            :          :
+  7 Twi'lek        2        179.0       55.0
+  8 Mirialan       2        168.0       53.1
+  9 Kaminoan       2        221.0       88.0
   ```
 
 ## Combining DataFrames
 
 - [ ] Combining rows to a dataframe
-
-- [ ] Add vars
 
 - [ ] Inner join
 
@@ -1009,6 +999,6 @@ penguins.to_rover
 
 - [ ] One-hot encoding
 
-## Iteration (not impremented)
+## Iteration
 
 - [ ] each_rows
