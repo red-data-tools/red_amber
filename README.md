@@ -355,7 +355,7 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## Jupyter notebook
 
-[47 Examples of Red Amber](doc/47_examples_of_red_amber.ipynb)
+[53 Examples of Red Amber](doc/examples_of_red_amber.ipynb)
 
 ## Development
 
