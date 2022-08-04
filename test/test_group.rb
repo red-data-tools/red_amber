@@ -34,6 +34,18 @@ class GroupTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, @df.group(:i).count(%i[i f s b]).tdr_str(tally: 0)
     end
+    test 'group with multiple keys' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 6 x 4 Vectors
+        Vectors : 3 numeric, 1 string
+        # key         type   level data_preview
+        1 :i          uint8      4 [0, 0, 1, 2, 2, ... ], 1 nil
+        2 :s          string     3 ["A", "B", nil, "A", "B", ... ], 1 nil
+        3 :"count(f)" int64      2 [1, 1, 1, 1, 1, ... ]
+        4 :"count(b)" int64      2 [1, 1, 1, 1, 1, ... ]
+      OUTPUT
+      assert_equal str, @df.group(:i, :s).count.tdr_str(tally: 0)
+    end
 
     test 'group count (aggregation)' do
       str = <<~OUTPUT
