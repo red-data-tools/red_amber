@@ -25,10 +25,13 @@ module RedAmber
           case arg
           when Arrow::Table then arg
           when DataFrame then arg.table
-          when Rover::DataFrame then Arrow::Table.new(arg.to_h)
-          when Hash then Arrow::Table.new(arg)
           else
-            raise DataFrameTypeError, "invalid argument: #{arg}"
+            begin
+              # Accepts Rover::DataFrame or Hash
+              Arrow::Table.new(arg.to_h)
+            rescue StandardError
+              raise DataFrameTypeError, "invalid argument: #{arg}"
+            end
           end
       end
       name_unnamed_keys
