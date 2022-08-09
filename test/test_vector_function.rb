@@ -192,6 +192,39 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case 'Quantile' do
+    setup do
+      @boolean = Vector.new([true, true, nil])
+      @integer = Vector.new([1, 2, nil])
+      @double = Vector.new([1.0, -2, 3])
+      @double2 = Vector.new([1, 0 / 0.0, -1 / 0.0, 1 / 0.0, nil, ''])
+      @string = Vector.new(%w[A B A])
+    end
+
+    test '#quantile @integer' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.quantile }
+      assert_raise(Arrow::Error::NotImplemented) { @string.quantile }
+      assert_equal 1.5, @integer.quantile
+      assert_equal 1.5, @integer.quantile(0.5)
+      assert_equal 1.0, @integer.quantile(0)
+      assert_equal 2.0, @integer.quantile(1)
+      assert_equal 1.75, @integer.quantile(0.75)
+      assert_raise(VectorArgumentError) { @integer.quantile(1.5) }
+      assert_nil @integer.quantile(skip_nils: false)
+    end
+
+    test '#quantile @double' do
+      assert_equal 2.0, @double.quantile(0.75)
+      assert_equal Float::INFINITY, @double2.quantile(0.75)
+      assert_nil @double2.quantile(0.75, skip_nils: false)
+      assert_equal 0.5, @double2.quantile(0.5, interpolation: :LINEAR)
+      assert_equal 0.0, @double2.quantile(0.5, interpolation: :LOWER)
+      assert_equal 1.0, @double2.quantile(0.5, interpolation: :HIGHER)
+      assert_equal 1.0, @double2.quantile(0.5, interpolation: :NEAREST)
+      assert_equal 0.5, @double2.quantile(0.5, interpolation: :MIDPOINT)
+    end
+  end
+
   sub_test_case('unary element-wise') do
     setup do
       @boolean = Vector.new([true, true, nil])
