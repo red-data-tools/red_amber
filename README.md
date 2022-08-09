@@ -11,9 +11,9 @@ A simple dataframe library for Ruby (experimental).
 ## Requirements
 
 ```ruby
-gem 'red-arrow',   '>= 8.0.0'
+gem 'red-arrow',   '>= 9.0.0'
 
-gem 'red-parquet', '>= 8.0.0' # Optional, if you use IO from/to parquet
+gem 'red-parquet', '>= 9.0.0' # Optional, if you use IO from/to parquet
 gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 ```
 
@@ -21,9 +21,9 @@ gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 
 Install requirements before you install Red Amber.
 
-- Apache Arrow GLib (>= 8.0.0)
+- Apache Arrow GLib (>= 9.0.0)
 
-- Apache Parquet GLib (>= 8.0.0)  # If you use IO from/to parquet
+- Apache Parquet GLib (>= 9.0.0)  # If you use IO from/to parquet
 
   See [Apache Arrow install document](https://arrow.apache.org/install/).
   
