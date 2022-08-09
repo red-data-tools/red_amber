@@ -145,7 +145,7 @@ array[booleans]
 | ✓ `min_max` |  ✓  |  ✓  |  ✓  | ✓ ScalarAggregate|     |
 |[ ]`mode`    |     | [ ] |     |[ ] Mode    |     |
 | ✓ `product` |  ✓  |  ✓  |     | ✓ ScalarAggregate|     |
-|[ ]`quantile`|     | [ ] |     |[ ] Quantile|     |
+| ✓ `quantile`|     |  ✓  |     | ✓ Quantile|Specify probability in (0..1) by a parameter (default=0.5)|
 | ✓ `sd    `  |     |  ✓  |     |          |ddof: 1 at `stddev`|
 | ✓ `stddev`  |     |  ✓  |     | ✓ Variance|ddof: 0 by default|
 | ✓ `sum`     |  ✓  |  ✓  |     | ✓ ScalarAggregate|     |

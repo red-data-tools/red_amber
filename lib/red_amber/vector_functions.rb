@@ -39,8 +39,37 @@ module RedAmber
 
     # Returns other than value
     # - mode
-    # - quantile
     # - tdigest
+
+    # Return quantiles in a Vector
+    #   0.5 quantiles (median) are returned by default.
+    #   Or return quantiles for specified probability (q).
+    #   If quantile lies between two data points, interpolated value is
+    #   returned based on selected interpolation method.
+    #   Nils and NaNs are ignored.
+    #   An array of nils are returned if there are no valid data point.
+    #
+    # @param prob [Float] probability.
+    # @param interpolation [Symbol] specifies interpolation method to use,
+    #   when the quantile lies between the data i and j.
+    #   - Default value is :linear, which returns i + (j - i) * fraction.
+    #   - :lower returns i.
+    #   - :higher returns j.
+    #   - :nearest returns i or j, whichever is closer.
+    #   - :midpoint returns (i + j) / 2.
+    # @param skip_nils [Boolean] wheather to ignore nil.
+    # @param min_count [Integer] min count.
+    # @return [Float, Array<Float>] quantile(s).
+    def quantile(prob = 0.5, interpolation: :linear, skip_nils: true, min_count: 0)
+      raise VectorArgumentError, "Invalid: probability #{prob} must be between 0 and 1" unless (0..1).cover? prob
+
+      datum = find(:quantile).execute([data],
+                                      q: prob,
+                                      interpolation: interpolation,
+                                      skip_nulls: skip_nils,
+                                      min_count: min_count)
+      datum.value.to_a.first
+    end
 
     # [Unary element-wise]: vector.func => vector
     unary_element_wise =
@@ -63,6 +92,7 @@ module RedAmber
 
     alias_method :sort_indexes, :array_sort_indices
     alias_method :sort_indices, :array_sort_indices
+    alias_method :sort_index, :array_sort_indices
 
     alias_method :uniq, :unique
 
