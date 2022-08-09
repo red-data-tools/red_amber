@@ -92,6 +92,7 @@ module RedAmber
 
     alias_method :sort_indexes, :array_sort_indices
     alias_method :sort_indices, :array_sort_indices
+    alias_method :sort_index, :array_sort_indices
 
     alias_method :uniq, :unique
 
