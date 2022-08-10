@@ -143,6 +143,14 @@ class DataFrameTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case 'each_row' do
+    test 'each_row' do
+      df = DataFrame.new(x: [1, 2, 3])
+      assert_kind_of Enumerator, df.each_row
+      assert_equal [[1], [2], [3]], df.each_row.to_a # This will crash on 8.0.0
+    end
+  end
+
   sub_test_case '.new and .to_ I/O' do
     # data in Array(hash, schema, array)
     data(

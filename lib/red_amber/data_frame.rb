@@ -129,6 +129,14 @@ module RedAmber
       variables.empty?
     end
 
+    def each_row
+      return enum_for(:each_row) unless block_given?
+
+      size.times do |i|
+        yield vectors.map { |v| v.data[i] }
+      end
+    end
+
     def to_rover
       require 'rover'
       Rover::DataFrame.new(to_h)

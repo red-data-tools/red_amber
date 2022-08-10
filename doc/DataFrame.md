@@ -167,6 +167,11 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   
   If you need a column-oriented full array, use `.to_h.to_a`
 
+### `each_row`
+
+  Yield each row in Array of Arrays.
+  Returns Enumerator if block is not given.
+
 ### `schema`
 
 - Returns column name and data type in a Hash.
