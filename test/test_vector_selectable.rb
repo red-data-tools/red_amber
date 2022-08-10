@@ -90,6 +90,13 @@ class VectorTest < Test::Unit::TestCase
       assert_equal %w[D A D], @string[Arrow::Array.new([3, 0, -2])].to_a # Arrow
     end
 
+    test '#[indices] with ChunkedArray' do
+      ca = Arrow::ChunkedArray.new([[0, 1], [2, 3]])
+      vector = Vector.new(ca)
+      assert_true vector.chunked?
+      assert_equal 2, vector[2] # This will fail in 8.0.0
+    end
+
     test '#[booleans]' do
       assert_equal %w[B], @string[1].to_a # single value
       assert_equal %w[A E], @string[*@booleans].to_a # arguments

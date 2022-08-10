@@ -111,7 +111,7 @@ module RedAmber
 
       index_array = Arrow::UInt64ArrayBuilder.build(normalized_indices.data) # round to integer array
 
-      datum = find(:array_take).execute([data, index_array])
+      datum = find(:take).execute([data, index_array]) # :array_take will fail with ChunkedArray
       Vector.new(datum.value)
     end
 
