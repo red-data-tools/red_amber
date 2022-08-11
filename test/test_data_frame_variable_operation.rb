@@ -175,7 +175,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal(@df, @df.rename { nil }) # empty block
       assert_raise(DataFrameArgumentError) { @df.rename { :key } }
       assert_equal(@df, @df.rename { {} }) # rename nothing
-      assert_equal(@df, @df.rename { Hash(key_not_exist: :new_key) }) # rename nothing
+      assert_raise(DataFrameArgumentError) { @df.rename { { key_not_exist: :new_key } } }
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 4 Vectors

@@ -97,6 +97,9 @@ module RedAmber
     private
 
     def rename_by_hash(key_pairs)
+      not_existing_keys = key_pairs.keys - keys
+      raise DataFrameArgumentError, "Not existing: #{not_existing_keys}" unless not_existing_keys.empty?
+
       fields =
         keys.map do |key|
           new_key = key_pairs[key]

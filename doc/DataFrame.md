@@ -728,6 +728,10 @@ penguins.to_rover
 
     `rename {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return key_pairs as a Hash of `{existing_key => new_key}`. Block is called in the context of self.
 
+- Not existing keys
+
+    If specified `existing_key` is not exist, raise a `DataFrameArgumentError`.
+
 - Key type
 
   Symbol key and String key are distinguished.
