@@ -267,5 +267,33 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
     end
+
+    test 'assign_left by param' do
+      assigner = { index: [-1, -2, -3, -4, -5], new: %w[a a b b c] }
+      assert_equal <<~OUTPUT, @df.assign_left(assigner).tdr_str
+        RedAmber::DataFrame : 5 x 5 Vectors
+        Vectors : 2 numeric, 2 strings, 1 boolean
+        # key     type    level data_preview
+        1 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+        2 :index  int8        5 [-1, -2, -3, -4, -5]
+        3 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        4 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        5 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+    end
+
+    test 'assign_left by block' do
+      assigner = { index: [-1, -2, -3, -4, -5], new: %w[a a b b c] }
+      assert_equal <<~OUTPUT, @df.assign_left { assigner }.tdr_str
+        RedAmber::DataFrame : 5 x 5 Vectors
+        Vectors : 2 numeric, 2 strings, 1 boolean
+        # key     type    level data_preview
+        1 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+        2 :index  int8        5 [-1, -2, -3, -4, -5]
+        3 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        4 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        5 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+    end
   end
 end

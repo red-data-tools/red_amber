@@ -834,6 +834,24 @@ penguins.to_rover
   
   If assigner is empty or nil, returns self.
 
+- Append from left
+
+  `assign_left` method accepts the same parameters and block as `assign`, but append new columns from leftside.
+
+  ```ruby
+  df.assign_left(new_index: [1, 2, 3, 4, 5])
+  
+  # => 
+  #<RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000001787c>
+    new_index   index    float string
+      <uint8> <uint8> <double> <string>
+  1         1       0      0.0 A
+  2         2       1      1.1 B
+  3         3       2      2.2 C
+  4         4       3      NaN D
+  5         5   (nil)    (nil) (nil)
+  ```
+
 ## Updating
 
 ### `sort`

@@ -68,6 +68,26 @@ module RedAmber
 
     # assign variables to create a new DataFrame
     def assign(*assigner, &block)
+      appender, fields, arrays = assign_update(*assigner, &block)
+      return self if appender.is_a?(DataFrame)
+
+      append_to_fields_and_arrays(appender, fields, arrays, append_to_left: false) unless appender.empty?
+
+      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
+    end
+
+    def assign_left(*assigner, &block)
+      appender, fields, arrays = assign_update(*assigner, &block)
+      return self if appender.is_a?(DataFrame)
+
+      append_to_fields_and_arrays(appender, fields, arrays, append_to_left: true) unless appender.empty?
+
+      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
+    end
+
+    private
+
+    def assign_update(*assigner, &block)
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless assigner.empty?
 
@@ -95,13 +115,8 @@ module RedAmber
           appender[key] = array
         end
       end
-      fields, arrays = update_fields_and_arrays(updater)
-      append_to_fields_and_arrays(appender, fields, arrays) unless appender.empty?
-
-      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
+      [appender, *update_fields_and_arrays(updater)]
     end
-
-    private
 
     def rename_by_hash(key_pairs)
       not_existing_keys = key_pairs.keys - keys
@@ -135,13 +150,20 @@ module RedAmber
       [fields, arrays]
     end
 
-    def append_to_fields_and_arrays(appender, fields, arrays)
-      appender.each do |key, data|
+    def append_to_fields_and_arrays(appender, fields, arrays, append_to_left: false)
+      enum = append_to_left ? appender.reverse_each : appender.each
+      enum.each do |key, data|
         raise DataFrameArgumentError, "Data size mismatch (#{data.size} != #{size})" if data.size != size
 
         a = Arrow::Array.new(data.is_a?(Vector) ? data.to_a : data)
-        fields << Arrow::Field.new(key.to_sym, a.value_data_type)
-        arrays << Arrow::ChunkedArray.new([a])
+
+        if append_to_left
+          fields.unshift(Arrow::Field.new(key.to_sym, a.value_data_type))
+          arrays.unshift(Arrow::ChunkedArray.new([a]))
+        else
+          fields << Arrow::Field.new(key.to_sym, a.value_data_type)
+          arrays << Arrow::ChunkedArray.new([a])
+        end
       end
     end
 
