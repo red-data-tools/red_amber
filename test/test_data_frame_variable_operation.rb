@@ -171,8 +171,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'rename by block' do
-      assert_raise(DataFrameArgumentError) { @df.rename {} } # empty block
-      assert_raise(DataFrameArgumentError) { @df.rename { nil } } # empty block
+      assert_equal(@df, @df.rename {}) # empty block
+      assert_equal(@df, @df.rename { nil }) # empty block
       assert_raise(DataFrameArgumentError) { @df.rename { :key } }
       assert_equal(@df, @df.rename { {} }) # rename nothing
       assert_equal(@df, @df.rename { Hash(key_not_exist: :new_key) }) # rename nothing
@@ -187,7 +187,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         4 :bool    boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal str, @df.rename {
-        Hash(keys.detect { |key| self[key].type == :uint8 } => :integer)
+        { keys.detect { |key| self[key].type == :uint8 } => :integer }
       }.tdr_str
     end
 

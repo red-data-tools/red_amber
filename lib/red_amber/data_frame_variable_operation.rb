@@ -44,21 +44,26 @@ module RedAmber
       raise DataFrameArgumentError, "Invalid argument #{args}"
     end
 
-    # rename variables to create new DataFrame
-    def rename(*args, &block)
-      renamer = args
+    # rename variables to create a new DataFrame
+    def rename(*renamer, &block)
       if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless args.empty?
+        raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless renamer.empty?
 
         renamer = instance_eval(&block)
       end
-      renamer = [renamer].flatten
-      return self if renamer.empty?
-
-      return rename_by_hash([renamer].to_h) if renamer.size == 2 && sym_or_str?(renamer) # rename(from, to)
-      return rename_by_hash(renamer[0]) if renamer.one? && renamer[0].is_a?(Hash) # rename({from => to})
-
-      raise DataFrameArgumentError, "Invalid argument #{args}"
+      case renamer
+      in nil | [nil] | {} | [] | [{}] | [[]]
+        return self
+      in Hash => key_pairs
+      # noop
+      in [Hash => key_pairs]
+      # noop
+      in [ (Symbol | String) => from, (Symbol | String) => to]
+        key_pairs = { from => to }
+      else
+        raise DataFrameArgumentError, "Invalid argument #{renamer}"
+      end
+      rename_by_hash(key_pairs)
     end
 
     # assign variables to create new DataFrame
@@ -92,16 +97,16 @@ module RedAmber
     private
 
     def rename_by_hash(key_pairs)
-      fields = keys.map do |key|
-        new_key = key_pairs[key]
-        if new_key
-          Arrow::Field.new(new_key.to_sym, @table[key].data_type)
-        else
-          @table.schema[key]
+      fields =
+        keys.map do |key|
+          new_key = key_pairs[key]
+          if new_key
+            Arrow::Field.new(new_key.to_sym, @table[key].data_type)
+          else
+            @table.schema[key]
+          end
         end
-      end
-      schema = Arrow::Schema.new(fields)
-      DataFrame.new(Arrow::Table.new(schema, @table.columns))
+      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), @table.columns))
     end
 
     def update_fields_and_arrays(updater)
