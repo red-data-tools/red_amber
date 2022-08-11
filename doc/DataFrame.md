@@ -747,7 +747,7 @@ penguins.to_rover
 
 - Variables as arguments
 
-    `assign(key_pairs)` accepts pairs of key and values as parameters. `key_pairs` should be a Hash of `{key => Array}`, `{key => Vector}` or `{key => Arrow::Array}`.
+    `assign(key_pairs)` accepts pairs of key and values as parameters. `key_pairs` should be a Hash of `{key => array_like}` or an Array of Arrays like `[[key, array_like], ... ]`. `array_like` is ether `Vector`, `Array` or `Arrow::Array`.
 
     ```ruby
     df = RedAmber::DataFrame.new(
@@ -778,7 +778,7 @@ penguins.to_rover
 
 - Key pairs by a block
 
-    `assign {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return pairs of key and values as a Hash of `{key => array}`, `{key => Vector}` or `{key => Arrow::Array}`. The block is called in the context of self.
+    `assign {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return pairs of key and values as a Hash of `{key => array_like}` or an Array of Arrays like `[[key, array_like], ... ]`. `array_like` is ether `Vector`, `Array` or `Arrow::Array`. The block is called in the context of self.
 
     ```ruby
     df = RedAmber::DataFrame.new(
@@ -797,29 +797,27 @@ penguins.to_rover
     4       3      NaN D
     5   (nil)    (nil) (nil)
 
-    # update numeric variables
+    # update :float
+    # assigner by an Array
     df.assign do
-      assigner = {}
-      vectors.each_with_index do |v, i|
-        assigner[keys[i]] = v * -1 if v.numeric?
-      end
-      assigner
+      vectors.select(&:float?)
+             .map { |v| [v.key, -v] }
     end
 
     # =>
-    #<RedAmber::DataFrame : 5 x 3 Vectors, 0x000000000006e000>
-       index    float string
-      <int8> <double> <string>
-    1      0     -0.0 A
-    2     -1     -1.1 B
-    3     -2     -2.2 C
-    4     -3      NaN D
-    5  (nil)    (nil) (nil)
+    #<RedAmber::DataFrame : 5 x 3 Vectors, 0x00000000000dfffc>
+        index    float string             
+      <uint8> <double> <string>           
+    1       0     -0.0 A                  
+    2       1     -1.1 B                  
+    3       2     -2.2 C                  
+    4       3      NaN D                  
+    5   (nil)    (nil) (nil) 
 
-    # Or it ’s shorter like this:
+    # Or we can use assigner by a Hash
     df.assign do
-      variables.select.with_object({}) do |(key, vector), assigner|
-        assigner[key] = vector * -1 if vector.numeric?
+      vectors.select.with_object({}) do |v, assigner|
+        assigner[v.key] = -v if v.float?
       end
     end
 

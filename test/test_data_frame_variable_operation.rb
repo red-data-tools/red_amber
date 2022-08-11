@@ -246,7 +246,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal @df.tdr_str, @df.assign(unchanged_pair).tdr_str
 
       assigner = { index: [-1, -2, -3, -4, -5], new: %w[a a b b c] }
-      assert_equal <<~OUTPUT, @df.assign(assigner).tdr_str
+      str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
@@ -256,6 +256,9 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
         5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
+      assert_equal str, @df.assign(assigner).tdr_str
+      assert_equal str, @df.assign(assigner.to_a).tdr_str
+      assert_equal str, @df.assign(*assigner.to_a).tdr_str # assign([:x, ary1], [:y, ary2]) style
     end
 
     test 'assign by block' do
@@ -265,22 +268,19 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal(@df, @df.assign { {} }) # assign nothing
       assert_equal(@df, @df.assign { [] }) # assign nothing
 
-      actual = @df.assign do
-        assigner = {}
-        vectors.each_with_index do |v, i|
-          assigner[keys[i]] = v * 10 if v.numeric?
-        end
-        assigner
-      end
-      assert_equal <<~OUTPUT, actual.tdr_str
-        RedAmber::DataFrame : 5 x 4 Vectors
-        Vectors : 2 numeric, 1 string, 1 boolean
+      assigner = { index: [-1, -2, -3, -4, -5], new: %w[a a b b c] }
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 5 Vectors
+        Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       5 [0, 10, 20, 30, nil], 1 nil
-        2 :float  double      5 [0.0, 11.0, 22.0, NaN, nil], 1 NaN, 1 nil
+        1 :index  int8        5 [-1, -2, -3, -4, -5]
+        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
         3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
         4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
+      assert_equal str, @df.assign { assigner }.tdr_str
+      assert_equal str, @df.assign { assigner.to_a }.tdr_str
     end
 
     test 'assign_left by param' do

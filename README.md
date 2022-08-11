@@ -208,7 +208,7 @@ penguins.remove(penguins[:bill_length_mm] < 40)
 
 DataFrame manipulating methods like `pick`, `drop`, `slice`, `remove`, `rename` and `assign` accept a block.
 
-This example is usage of block to update numeric columns.
+This example is usage of block to update a column.
 
 ```ruby
 df = RedAmber::DataFrame.new(
@@ -229,23 +229,20 @@ df
 5   (nil)    (nil) (nil)    (nil)
 
 df.assign do
-  vectors.each_with_object({}) do |v, h|
-    h[v.key] = -v if v.numeric?
-  end
+  vectors.select(&:float?).map { |v| [v.key, -v] }
+  # => returns [[:float], [-0.0, -1.1, -2.2, NAN, nil]]
 end
 
 # =>
-#<RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000009a1b4>
-  integer    float string   boolean
-  <uint8> <double> <string> <boolean>
-1       0     -0.0 A        true
-2     255     -1.1 B        false
-3     254     -2.2 C        true
-4     253      NaN D        false
-5   (nil)    (nil) (nil)    (nil)
+#<RedAmber::DataFrame : 5 x 3 Vectors, 0x00000000000e270c>
+    index    float string
+  <uint8> <double> <string>
+1       0     -0.0 A
+2       1     -1.1 B
+3       2     -2.2 C
+4       3      NaN D
+5   (nil)    (nil) (nil)
 ```
-
-Negate (-@) method of unsigned integer Vector returns complement. 
 
 Next example is to eliminate rows containing nil.
 
@@ -253,6 +250,7 @@ Next example is to eliminate rows containing nil.
 # remove all observations containing nil
 nil_removed = penguins.remove { vectors.map(&:is_nil).reduce(&:|) }
 nil_removed.tdr
+
 # =>
 RedAmber::DataFrame : 342 x 8 Vectors
 Vectors : 5 numeric, 3 strings

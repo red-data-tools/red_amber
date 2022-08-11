@@ -93,17 +93,19 @@ module RedAmber
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless assigner.empty?
 
-        assigner = instance_eval(&block)
+        assigner = [instance_eval(&block)]
       end
       case assigner
-      in nil | [nil] | {} | [] | [{}] | [[]]
+      in [] | [nil] | [{}] | [[]]
         return self
-      in Hash => key_array_pairs
-      # noop
       in [Hash => key_array_pairs]
       # noop
       in [(Symbol | String) => key, (Vector | Array | Arrow::Array) => array]
         key_array_pairs = { key => array }
+      in [Array => array_in_array]
+        key_array_pairs = try_convert_to_hash(array_in_array)
+      in [Array, *] => array_in_array1
+        key_array_pairs = try_convert_to_hash(array_in_array1)
       else
         raise DataFrameArgumentError, "Invalid argument #{assigner}"
       end
