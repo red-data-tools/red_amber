@@ -13,26 +13,24 @@ module RedAmber
 
     def initialize(*args)
       @variables = @keys = @vectors = @types = @data_types = nil
-      if args.empty? || args[0] == [] || args[0] == {} || args[0].nil?
+      case args
+      in nil | [nil] | [] | {} | [[]] | [{}]
         # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
         #   returns empty DataFrame
         @table = Arrow::Table.new({}, [])
-      elsif args.size > 1
-        @table = Arrow::Table.new(*args)
+      in [Arrow::Table => table]
+        @table = table
+      in [DataFrame => dataframe]
+        @table = dataframe.table
+      in [rover_or_hash]
+        begin
+          # Accepts Rover::DataFrame or Hash
+          @table = Arrow::Table.new(rover_or_hash.to_h)
+        rescue StandardError
+          raise DataFrameTypeError, "invalid argument: #{rover_or_hash}"
+        end
       else
-        arg = args[0]
-        @table =
-          case arg
-          when Arrow::Table then arg
-          when DataFrame then arg.table
-          else
-            begin
-              # Accepts Rover::DataFrame or Hash
-              Arrow::Table.new(arg.to_h)
-            rescue StandardError
-              raise DataFrameTypeError, "invalid argument: #{arg}"
-            end
-          end
+        @table = Arrow::Table.new(*args)
       end
       name_unnamed_keys
     end
