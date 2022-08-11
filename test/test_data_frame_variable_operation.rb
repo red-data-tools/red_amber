@@ -191,6 +191,21 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       }.tdr_str
     end
 
+    test 'rename with array' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key      type    level data_preview
+        1 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
+        2 :double  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool    boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal str, @df.rename(%i[index integer], %i[float double]).tdr_str
+      assert_equal str, @df.rename([%i[index integer], %i[float double]]).tdr_str
+      assert_equal str, @df.rename { [%i[index integer], %i[float double]] }.tdr_str
+    end
+
     test 'rename blank key' do
       df = DataFrame.new('' => [1, 2, 3], 'A' => [4, 5, 6])
       str = <<~OUTPUT

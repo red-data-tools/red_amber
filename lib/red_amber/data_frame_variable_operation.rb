@@ -49,17 +49,19 @@ module RedAmber
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless renamer.empty?
 
-        renamer = instance_eval(&block)
+        renamer = [instance_eval(&block)]
       end
       case renamer
-      in nil | [nil] | {} | [] | [{}] | [[]]
+      in [] | [nil] | [{}] | [[]]
         return self
-      in Hash => key_pairs
-      # noop
       in [Hash => key_pairs]
       # noop
       in [ (Symbol | String) => from, (Symbol | String) => to]
         key_pairs = { from => to }
+      in [Array => array_in_array]
+        key_pairs = try_convert_to_hash(array_in_array)
+      in [Array, *] => array_in_array1
+        key_pairs = try_convert_to_hash(array_in_array1)
       else
         raise DataFrameArgumentError, "Invalid argument #{renamer}"
       end
@@ -116,6 +118,12 @@ module RedAmber
         end
       end
       [appender, *update_fields_and_arrays(updater)]
+    end
+
+    def try_convert_to_hash(array)
+      array.to_h
+    rescue TypeError
+      raise DataFrameArgumentError, "Invalid argument in Array #{array}"
     end
 
     def rename_by_hash(key_pairs)
