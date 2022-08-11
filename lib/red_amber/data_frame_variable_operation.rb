@@ -66,26 +66,33 @@ module RedAmber
       rename_by_hash(key_pairs)
     end
 
-    # assign variables to create new DataFrame
-    def assign(*args, &block)
-      assigner = args
+    # assign variables to create a new DataFrame
+    def assign(*assigner, &block)
       if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless args.empty?
+        raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless assigner.empty?
 
         assigner = instance_eval(&block)
       end
-      assigner = [assigner].flatten
-      return self if assigner.empty? || assigner == [nil]
-
-      raise DataFrameArgumentError, "Invalid argument #{args}" unless assigner.one? && assigner[0].is_a?(Hash)
+      case assigner
+      in nil | [nil] | {} | [] | [{}] | [[]]
+        return self
+      in Hash => key_array_pairs
+      # noop
+      in [Hash => key_array_pairs]
+      # noop
+      in [(Symbol | String) => key, (Vector | Array | Arrow::Array) => array]
+        key_array_pairs = { key => array }
+      else
+        raise DataFrameArgumentError, "Invalid argument #{assigner}"
+      end
 
       updater = {}
       appender = {}
-      assigner[0].each do |key, value|
+      key_array_pairs.each do |key, array|
         if keys.include? key
-          updater[key] = value
+          updater[key] = array
         else
-          appender[key] = value
+          appender[key] = array
         end
       end
       fields, arrays = update_fields_and_arrays(updater)

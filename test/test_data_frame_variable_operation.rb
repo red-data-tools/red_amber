@@ -209,15 +209,23 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     test 'Empty dataframe' do
       df = DataFrame.new
       assert_true df.assign.empty?
-      assert_raise(DataFrameArgumentError) { df.assign(:key) }
+      assert_raise(DataFrameArgumentError) { df.assign(:key) } # Causes error for key only
+      assert_equal <<~OUTPUT, df.assign(key: []).tdr_str # You can add vector with size zero to empty dataframe
+        RedAmber::DataFrame : 0 x 1 Vector
+        Vector : 1 string
+        # key  type   level data_preview
+        1 :key string     0 []
+      OUTPUT
     end
 
     test 'assign by arguments' do
-      assert_raise(DataFrameArgumentError) { @df.assign(:key) { :block } }
-      assert_raise(DataFrameArgumentError) { @df.assign(:key) }
+      assert_raise(DataFrameArgumentError) { @df.assign(:key) { :block } } # both param and block
+      assert_raise(DataFrameArgumentError) { @df.assign(:key) } # key only
 
       assert_equal @df, @df.assign # assign nothing
-      assert_equal @df, @df.assign([])
+      assert_equal @df, @df.assign(nil) # assign nil
+      assert_equal @df, @df.assign([]) # assign empty array
+      assert_equal @df, @df.assign({}) # assign empty hash
 
       unchanged_pair = @df.keys.each_with_object({}) { |k, h| h[k] = @df[k].to_a }
       assert_equal @df.tdr_str, @df.assign(unchanged_pair).tdr_str
@@ -236,12 +244,20 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'assign by block' do
-      assert_equal @df.tdr_str, @df.assign {}.tdr_str # empty block
-      assert_equal @df.tdr_str, @df.assign { nil }.tdr_str # empty block
-      assert_raise(DataFrameArgumentError) { @df.assign { :key } }
+      assert_raise(DataFrameArgumentError) { @df.assign { :key } } # key only
+      assert_equal(@df, @df.assign {}) # assign nothing
+      assert_equal(@df, @df.assign { nil }) # assign nothing
       assert_equal(@df, @df.assign { {} }) # assign nothing
+      assert_equal(@df, @df.assign { [] }) # assign nothing
 
-      str = <<~OUTPUT
+      actual = @df.assign do
+        assigner = {}
+        vectors.each_with_index do |v, i|
+          assigner[keys[i]] = v * 10 if v.numeric?
+        end
+        assigner
+      end
+      assert_equal <<~OUTPUT, actual.tdr_str
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
@@ -250,14 +266,6 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
         4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
-      actual = @df.assign do
-        assigner = {}
-        vectors.each_with_index do |v, i|
-          assigner[keys[i]] = v * 10 if v.numeric?
-        end
-        assigner
-      end
-      assert_equal str, actual.tdr_str
     end
   end
 end

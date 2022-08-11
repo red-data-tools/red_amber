@@ -738,16 +738,16 @@ penguins.to_rover
 
 ### `assign`
 
-  Assign new or updated variables (columns) and create a updated DataFrame.
+  Assign new or updated columns (variables) and create a updated DataFrame.
 
-  - Variables with new keys will append new variables at bottom (right in the table).
+  - Variables with new keys will append new columns from the right.
   - Variables with exisiting keys will update corresponding vectors.
 
     ![assign method image](doc/../image/dataframe/assign.png)
 
 - Variables as arguments
 
-    `assign(key_pairs)` accepts pairs of key and values as arguments. key_pairs should be a Hash of `{key => array}` or `{key => Vector}`.
+    `assign(key_pairs)` accepts pairs of key and values as parameters. `key_pairs` should be a Hash of `{key => Array}`, `{key => Vector}` or `{key => Arrow::Array}`.
 
     ```ruby
     df = RedAmber::DataFrame.new(
@@ -778,7 +778,7 @@ penguins.to_rover
 
 - Key pairs by a block
 
-    `assign {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return pairs of key and values as a Hash of `{key => array}` or `{key => Vector}`. Block is called in the context of self.
+    `assign {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return pairs of key and values as a Hash of `{key => array}`, `{key => Vector}` or `{key => Arrow::Array}`. The block is called in the context of self.
 
     ```ruby
     df = RedAmber::DataFrame.new(
@@ -829,6 +829,10 @@ penguins.to_rover
 - Key type
 
   Symbol key and String key are considered as the same key.
+
+- Empty assignment
+  
+  If assigner is empty or nil, returns self.
 
 ## Updating
 

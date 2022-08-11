@@ -137,7 +137,7 @@ df = df.drop(true, true, false)
 
 Arrow data is immutable, so these methods always return an new object.
 
-`DataFrame#assign` creates new variables (column in the table).
+`DataFrame#assign` creates new columns or update existing columns.
 
 ![assign method image](doc/image/dataframe/assign.png)
 
@@ -247,7 +247,7 @@ end
 
 Negate (-@) method of unsigned integer Vector returns complement. 
 
-Next example is to eliminate observations (row in the table) containing nil.
+Next example is to eliminate rows containing nil.
 
 ```ruby
 # remove all observations containing nil
@@ -311,7 +311,7 @@ grouped.slice { v(:count) > 1 }
 9 Kaminoan       2        221.0       88.0 
 ```
 
-See [DataFrame.md](doc/DataFrame.md) for details.
+See [DataFrame.md](doc/DataFrame.md) for other examples and details.
 
 
 ## `RedAmber::Vector`
@@ -355,7 +355,7 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## Jupyter notebook
 
-[53 Examples of Red Amber](doc/examples_of_red_amber.ipynb)
+[53 Examples of Red Amber](doc/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
 
 ## Development
 
