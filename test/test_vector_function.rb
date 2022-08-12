@@ -217,11 +217,37 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal 2.0, @double.quantile(0.75)
       assert_equal Float::INFINITY, @double2.quantile(0.75)
       assert_nil @double2.quantile(0.75, skip_nils: false)
-      assert_equal 0.5, @double2.quantile(0.5, interpolation: :LINEAR)
-      assert_equal 0.0, @double2.quantile(0.5, interpolation: :LOWER)
-      assert_equal 1.0, @double2.quantile(0.5, interpolation: :HIGHER)
-      assert_equal 1.0, @double2.quantile(0.5, interpolation: :NEAREST)
-      assert_equal 0.5, @double2.quantile(0.5, interpolation: :MIDPOINT)
+      assert_equal 0.5, @double2.quantile(0.5, interpolation: :linear)
+      assert_equal 0.0, @double2.quantile(0.5, interpolation: :lower)
+      assert_equal 1.0, @double2.quantile(0.5, interpolation: :higher)
+      assert_equal 1.0, @double2.quantile(0.5, interpolation: :nearest)
+      assert_equal 0.5, @double2.quantile(0.5, interpolation: :midpoint)
+    end
+  end
+
+  sub_test_case 'Quantiles' do
+    setup do
+      @vector = Vector.new([2, 3, 5, 7])
+    end
+
+    test '#quantiles' do
+      assert_raise(VectorArgumentError) { @vector.quantiles([]) }
+      assert_raise(VectorArgumentError) { @vector.quantiles([1.2]) }
+      assert_equal <<~STR, @vector.quantiles.tdr_str
+        RedAmber::DataFrame : 5 x 2 Vectors
+        Vectors : 2 numeric
+        # key        type   level data_preview
+        1 :probs     double     5 [1.0, 0.75, 0.5, 0.25, 0.0]
+        2 :quantiles double     5 [7.0, 5.5, 4.0, 2.75, 2.0]
+      STR
+
+      assert_equal <<~STR, @vector.quantiles([0.3], interpolation: :midpoint).tdr_str
+        RedAmber::DataFrame : 1 x 2 Vectors
+        Vectors : 2 numeric
+        # key        type   level data_preview
+        1 :probs     double     1 [0.3]
+        2 :quantiles double     1 [2.5]
+      STR
     end
   end
 

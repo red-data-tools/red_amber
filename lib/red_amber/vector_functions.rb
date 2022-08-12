@@ -41,13 +41,13 @@ module RedAmber
     # - mode
     # - tdigest
 
-    # Return quantiles in a Vector
-    #   0.5 quantiles (median) are returned by default.
-    #   Or return quantiles for specified probability (q).
+    # Return quantile
+    #   0.5 quantile (median) is returned by default.
+    #   Or return quantile for specified probability (prob).
     #   If quantile lies between two data points, interpolated value is
     #   returned based on selected interpolation method.
     #   Nils and NaNs are ignored.
-    #   An array of nils are returned if there are no valid data point.
+    #   Nil is returned if there are no valid data point.
     #
     # @param prob [Float] probability.
     # @param interpolation [Symbol] specifies interpolation method to use,
@@ -59,7 +59,7 @@ module RedAmber
     #   - :midpoint returns (i + j) / 2.
     # @param skip_nils [Boolean] wheather to ignore nil.
     # @param min_count [Integer] min count.
-    # @return [Float, Array<Float>] quantile(s).
+    # @return [Float] quantile.
     def quantile(prob = 0.5, interpolation: :linear, skip_nils: true, min_count: 0)
       raise VectorArgumentError, "Invalid: probability #{prob} must be between 0 and 1" unless (0..1).cover? prob
 
@@ -69,6 +69,21 @@ module RedAmber
                                       skip_nulls: skip_nils,
                                       min_count: min_count)
       datum.value.to_a.first
+    end
+
+    # Return quantiles in a DataFrame
+    #
+    def quantiles(probs = [1.0, 0.75, 0.5, 0.25, 0.0], interpolation: :linear, skip_nils: true, min_count: 0)
+      if probs.empty? || !probs.all? { |q| (0..1).cover?(q) }
+        raise VectorArgumentError, "Invarid probavilities #{probs}"
+      end
+
+      DataFrame.new(
+        probs: probs,
+        quantiles: probs.map do |q|
+          quantile(q, interpolation: interpolation, skip_nils: skip_nils, min_count: min_count)
+        end
+      )
     end
 
     # [Unary element-wise]: vector.func => vector
