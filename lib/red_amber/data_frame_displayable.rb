@@ -133,11 +133,7 @@ module RedAmber
       a
     end
 
-    def format_table(width: 80)
-      head = 5
-      tail = 3
-      n_digit = 1
-
+    def format_table(width: 80, head: 5, tail: 3, n_digit: 2)
       original = self
       indices = size > head + tail ? [*0...head, *(size - tail)...size] : [*0...size]
       df = slice(indices).assign do
