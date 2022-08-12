@@ -709,7 +709,7 @@ penguins.to_rover
 
 - Key pairs as arguments
 
-    `rename(key_pairs)` accepts key_pairs as arguments. key_pairs should be a Hash of `{existing_key => new_key}`.
+    `rename(key_pairs)` accepts key_pairs as arguments. key_pairs should be a Hash of `{existing_key => new_key}` or an Array of Arrays like `[[existing_key, new_key], ... ]`.
 
     ```ruby
     df = RedAmber::DataFrame.new( 'name' => %w[Yasuko Rui Hinata], 'age' => [68, 49, 28] )
@@ -726,7 +726,11 @@ penguins.to_rover
 
 - Key pairs by a block
 
-    `rename {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return key_pairs as a Hash of `{existing_key => new_key}`. Block is called in the context of self.
+    `rename {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return key_pairs as a Hash of `{existing_key => new_key}` or an Array of Arrays like `[[existing_key, new_key], ... ]`. Block is called in the context of self.
+
+- Not existing keys
+
+    If specified `existing_key` is not exist, raise a `DataFrameArgumentError`.
 
 - Key type
 
@@ -734,16 +738,16 @@ penguins.to_rover
 
 ### `assign`
 
-  Assign new or updated variables (columns) and create a updated DataFrame.
+  Assign new or updated columns (variables) and create a updated DataFrame.
 
-  - Variables with new keys will append new variables at bottom (right in the table).
+  - Variables with new keys will append new columns from the right.
   - Variables with exisiting keys will update corresponding vectors.
 
     ![assign method image](doc/../image/dataframe/assign.png)
 
 - Variables as arguments
 
-    `assign(key_pairs)` accepts pairs of key and values as arguments. key_pairs should be a Hash of `{key => array}` or `{key => Vector}`.
+    `assign(key_pairs)` accepts pairs of key and values as parameters. `key_pairs` should be a Hash of `{key => array_like}` or an Array of Arrays like `[[key, array_like], ... ]`. `array_like` is ether `Vector`, `Array` or `Arrow::Array`.
 
     ```ruby
     df = RedAmber::DataFrame.new(
@@ -774,7 +778,7 @@ penguins.to_rover
 
 - Key pairs by a block
 
-    `assign {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return pairs of key and values as a Hash of `{key => array}` or `{key => Vector}`. Block is called in the context of self.
+    `assign {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return pairs of key and values as a Hash of `{key => array_like}` or an Array of Arrays like `[[key, array_like], ... ]`. `array_like` is ether `Vector`, `Array` or `Arrow::Array`. The block is called in the context of self.
 
     ```ruby
     df = RedAmber::DataFrame.new(
@@ -793,29 +797,27 @@ penguins.to_rover
     4       3      NaN D
     5   (nil)    (nil) (nil)
 
-    # update numeric variables
+    # update :float
+    # assigner by an Array
     df.assign do
-      assigner = {}
-      vectors.each_with_index do |v, i|
-        assigner[keys[i]] = v * -1 if v.numeric?
-      end
-      assigner
+      vectors.select(&:float?)
+             .map { |v| [v.key, -v] }
     end
 
     # =>
-    #<RedAmber::DataFrame : 5 x 3 Vectors, 0x000000000006e000>
-       index    float string
-      <int8> <double> <string>
-    1      0     -0.0 A
-    2     -1     -1.1 B
-    3     -2     -2.2 C
-    4     -3      NaN D
-    5  (nil)    (nil) (nil)
+    #<RedAmber::DataFrame : 5 x 3 Vectors, 0x00000000000dfffc>
+        index    float string             
+      <uint8> <double> <string>           
+    1       0     -0.0 A                  
+    2       1     -1.1 B                  
+    3       2     -2.2 C                  
+    4       3      NaN D                  
+    5   (nil)    (nil) (nil) 
 
-    # Or it ’s shorter like this:
+    # Or we can use assigner by a Hash
     df.assign do
-      variables.select.with_object({}) do |(key, vector), assigner|
-        assigner[key] = vector * -1 if vector.numeric?
+      vectors.select.with_object({}) do |v, assigner|
+        assigner[v.key] = -v if v.float?
       end
     end
 
@@ -825,6 +827,28 @@ penguins.to_rover
 - Key type
 
   Symbol key and String key are considered as the same key.
+
+- Empty assignment
+  
+  If assigner is empty or nil, returns self.
+
+- Append from left
+
+  `assign_left` method accepts the same parameters and block as `assign`, but append new columns from leftside.
+
+  ```ruby
+  df.assign_left(new_index: [1, 2, 3, 4, 5])
+  
+  # => 
+  #<RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000001787c>
+    new_index   index    float string
+      <uint8> <uint8> <double> <string>
+  1         1       0      0.0 A
+  2         2       1      1.1 B
+  3         3       2      2.2 C
+  4         4       3      NaN D
+  5         5   (nil)    (nil) (nil)
+  ```
 
 ## Updating
 

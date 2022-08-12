@@ -44,64 +44,104 @@ module RedAmber
       raise DataFrameArgumentError, "Invalid argument #{args}"
     end
 
-    # rename variables to create new DataFrame
-    def rename(*args, &block)
-      renamer = args
+    # rename variables to create a new DataFrame
+    def rename(*renamer, &block)
       if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless args.empty?
+        raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless renamer.empty?
 
-        renamer = instance_eval(&block)
+        renamer = [instance_eval(&block)]
       end
-      renamer = [renamer].flatten
-      return self if renamer.empty?
-
-      return rename_by_hash([renamer].to_h) if renamer.size == 2 && sym_or_str?(renamer) # rename(from, to)
-      return rename_by_hash(renamer[0]) if renamer.one? && renamer[0].is_a?(Hash) # rename({from => to})
-
-      raise DataFrameArgumentError, "Invalid argument #{args}"
+      case renamer
+      in [] | [nil] | [{}] | [[]]
+        return self
+      in [Hash => key_pairs]
+      # noop
+      in [ (Symbol | String) => from, (Symbol | String) => to]
+        key_pairs = { from => to }
+      in [Array => array_in_array]
+        key_pairs = try_convert_to_hash(array_in_array)
+      in [Array, *] => array_in_array1
+        key_pairs = try_convert_to_hash(array_in_array1)
+      else
+        raise DataFrameArgumentError, "Invalid argument #{renamer}"
+      end
+      rename_by_hash(key_pairs)
     end
 
-    # assign variables to create new DataFrame
-    def assign(*args, &block)
-      assigner = args
-      if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless args.empty?
+    # assign variables to create a new DataFrame
+    def assign(*assigner, &block)
+      appender, fields, arrays = assign_update(*assigner, &block)
+      return self if appender.is_a?(DataFrame)
 
-        assigner = instance_eval(&block)
-      end
-      assigner = [assigner].flatten
-      return self if assigner.empty? || assigner == [nil]
+      append_to_fields_and_arrays(appender, fields, arrays, append_to_left: false) unless appender.empty?
 
-      raise DataFrameArgumentError, "Invalid argument #{args}" unless assigner.one? && assigner[0].is_a?(Hash)
+      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
+    end
 
-      updater = {}
-      appender = {}
-      assigner[0].each do |key, value|
-        if keys.include? key
-          updater[key] = value
-        else
-          appender[key] = value
-        end
-      end
-      fields, arrays = update_fields_and_arrays(updater)
-      append_to_fields_and_arrays(appender, fields, arrays) unless appender.empty?
+    def assign_left(*assigner, &block)
+      appender, fields, arrays = assign_update(*assigner, &block)
+      return self if appender.is_a?(DataFrame)
+
+      append_to_fields_and_arrays(appender, fields, arrays, append_to_left: true) unless appender.empty?
 
       DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
     end
 
     private
 
-    def rename_by_hash(key_pairs)
-      fields = keys.map do |key|
-        new_key = key_pairs[key]
-        if new_key
-          Arrow::Field.new(new_key.to_sym, @table[key].data_type)
+    def assign_update(*assigner, &block)
+      if block
+        raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless assigner.empty?
+
+        assigner = [instance_eval(&block)]
+      end
+      case assigner
+      in [] | [nil] | [{}] | [[]]
+        return self
+      in [Hash => key_array_pairs]
+      # noop
+      in [(Symbol | String) => key, (Vector | Array | Arrow::Array) => array]
+        key_array_pairs = { key => array }
+      in [Array => array_in_array]
+        key_array_pairs = try_convert_to_hash(array_in_array)
+      in [Array, *] => array_in_array1
+        key_array_pairs = try_convert_to_hash(array_in_array1)
+      else
+        raise DataFrameArgumentError, "Invalid argument #{assigner}"
+      end
+
+      updater = {}
+      appender = {}
+      key_array_pairs.each do |key, array|
+        if keys.include? key
+          updater[key] = array
         else
-          @table.schema[key]
+          appender[key] = array
         end
       end
-      schema = Arrow::Schema.new(fields)
-      DataFrame.new(Arrow::Table.new(schema, @table.columns))
+      [appender, *update_fields_and_arrays(updater)]
+    end
+
+    def try_convert_to_hash(array)
+      array.to_h
+    rescue TypeError
+      raise DataFrameArgumentError, "Invalid argument in Array #{array}"
+    end
+
+    def rename_by_hash(key_pairs)
+      not_existing_keys = key_pairs.keys - keys
+      raise DataFrameArgumentError, "Not existing: #{not_existing_keys}" unless not_existing_keys.empty?
+
+      fields =
+        keys.map do |key|
+          new_key = key_pairs[key]
+          if new_key
+            Arrow::Field.new(new_key.to_sym, @table[key].data_type)
+          else
+            @table.schema[key]
+          end
+        end
+      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), @table.columns))
     end
 
     def update_fields_and_arrays(updater)
@@ -120,13 +160,20 @@ module RedAmber
       [fields, arrays]
     end
 
-    def append_to_fields_and_arrays(appender, fields, arrays)
-      appender.each do |key, data|
+    def append_to_fields_and_arrays(appender, fields, arrays, append_to_left: false)
+      enum = append_to_left ? appender.reverse_each : appender.each
+      enum.each do |key, data|
         raise DataFrameArgumentError, "Data size mismatch (#{data.size} != #{size})" if data.size != size
 
         a = Arrow::Array.new(data.is_a?(Vector) ? data.to_a : data)
-        fields << Arrow::Field.new(key.to_sym, a.value_data_type)
-        arrays << Arrow::ChunkedArray.new([a])
+
+        if append_to_left
+          fields.unshift(Arrow::Field.new(key.to_sym, a.value_data_type))
+          arrays.unshift(Arrow::ChunkedArray.new([a]))
+        else
+          fields << Arrow::Field.new(key.to_sym, a.value_data_type)
+          arrays << Arrow::ChunkedArray.new([a])
+        end
       end
     end
 
