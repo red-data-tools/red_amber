@@ -7,10 +7,10 @@ module RedAmber
   module DataFrameDisplayable
     INDEX_KEY = :index_key_for_format_table
 
-    def to_s
+    def to_s(width: 80)
       return '' if empty?
 
-      format_table(width: 80)
+      format_table(width: width)
     end
 
     # def describe() end
