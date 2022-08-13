@@ -13,9 +13,28 @@ module RedAmber
       format_table(width: width)
     end
 
-    # def describe() end
+    # Show statistical summary by a new DatFrame.
+    #   Make stats for numeric columns only.
+    #   NaNs are ignored.
+    #   Counts also show non-NaN counts.
+    #
+    # @return [DataFrame] a new dataframe.
+    def summary
+      num_keys = keys.select { |key| self[key].numeric? }
 
-    # def summary() end
+      DataFrame.new(
+        variables: num_keys,
+        count: num_keys.map { |k| self[k].count },
+        mean: num_keys.map { |k| self[k].mean },
+        std: num_keys.map { |k| self[k].std },
+        min: num_keys.map { |k| self[k].min },
+        '25%': num_keys.map { |k| self[k].quantile(0.25) },
+        median: num_keys.map { |k| self[k].median },
+        '75%': num_keys.map { |k| self[k].quantile(0.75) },
+        max: num_keys.map { |k| self[k].max }
+      )
+    end
+    alias_method :describe, :summary
 
     def inspect
       if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table') == 'TDR'
