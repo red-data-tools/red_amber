@@ -169,7 +169,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 ### `each_row`
 
-  Yield each row in Array of Arrays.
+  Yield each row in a `{ key => row}` Hash.
   Returns Enumerator if block is not given.
 
 ### `schema`
@@ -1027,7 +1027,3 @@ penguins.to_rover
 ## Encoding
 
 - [ ] One-hot encoding
-
-## Iteration
-
-- [ ] each_rows

@@ -145,9 +145,12 @@ class DataFrameTest < Test::Unit::TestCase
 
   sub_test_case 'each_row' do
     test 'each_row' do
-      df = DataFrame.new(x: [1, 2, 3])
+      df = DataFrame.new(x: [1, 2, 3], y: [4, 5, 6])
       assert_kind_of Enumerator, df.each_row
-      assert_equal [[1], [2], [3]], df.each_row.to_a # This will crash on 8.0.0
+      # This will crash on 8.0.0
+      assert_equal [{ x: 1, y: 4 },
+                    { x: 2, y: 5 },
+                    { x: 3, y: 6 }], df.each_row.to_a
     end
   end
 

@@ -131,7 +131,11 @@ module RedAmber
       return enum_for(:each_row) unless block_given?
 
       size.times do |i|
-        yield vectors.map { |v| v.data[i] }
+        key_row_pairs =
+          vectors.each_with_object({}) do |v, h|
+            h[v.key] = v.data[i]
+          end
+        yield key_row_pairs
       end
     end
 
