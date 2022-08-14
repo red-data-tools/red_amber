@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # data frame class
-  #   @table   : holds Arrow::Table object
+  # Class to represent a data frame.
+  # Variable @table holds an Arrow::Table object.
   class DataFrame
     # mix-in
     include DataFrameDisplayable
@@ -12,6 +12,24 @@ module RedAmber
     include DataFrameVariableOperation
     include Helper
 
+    # Creates a new RedAmber::DataFrame.
+    #
+    # @overload initialize(hash)
+    #
+    #   @params hash [Hash]
+    #
+    # @overload initialize(table)
+    #
+    #   @params table [Arrow::Table]
+    #
+    # @overload initialize(dataframe)
+    #
+    #   @params dataframe [RedAmber::DataFrame, Rover::DataFrame]
+    #
+    # @overload initialize(null)
+    #
+    #   @params null [NilClass] No arguments.
+    #
     def initialize(*args)
       @variables = @keys = @vectors = @types = @data_types = nil
       case args
@@ -50,56 +68,101 @@ module RedAmber
       @table.save(output, options)
     end
 
+    # Returns the number of rows.
+    #
+    # @return [Integer] Number of rows.
     def size
       @table.n_rows
     end
     alias_method :n_rows, :size
     alias_method :n_obs, :size
 
+    # Returns the number of columns.
+    #
+    # @return [Integer] Number of columns.
     def n_keys
       @table.n_columns
     end
     alias_method :n_cols, :n_keys
     alias_method :n_vars, :n_keys
 
+    # Returns the numbers of rows and columns.
+    #
+    # @return [Array]
+    #   Number of rows and number of columns in an array.
+    #   Same as [size, n_keys].
     def shape
       [size, n_keys]
     end
 
+    # Returns a Hash of key and Vector pairs in the columns.
+    #
+    # @return [Hash]
+    #   key => Vector pairs for each columns.
     def variables
       @variables || @variables = init_instance_vars(:variables)
     end
     alias_method :vars, :variables
 
+    # Returns an Array of keys.
+    #
+    # @return [Array]
+    #   Keys in an Array.
     def keys
       @keys || @keys = init_instance_vars(:keys)
     end
     alias_method :column_names, :keys
     alias_method :var_names, :keys
 
+    # Returns true if self has a specified key in the argument.
+    #
+    # @param key [Symbol, String] Key to test.
+    # @return [Boolean]
+    #   Returns true if self has key in Symbol.
     def key?(key)
       keys.include?(key.to_sym)
     end
     alias_method :has_key?, :key?
 
+    # Returns index of specified key in the Array keys.
+    #
+    # @param key [Symbol, String] key to know.
+    # @return [Integer]
+    #   Index of key in the Array keys.
     def key_index(key)
       keys.find_index(key.to_sym)
     end
     alias_method :find_index, :key_index
     alias_method :index, :key_index
 
+    # Returns abbreviated type names in an Array.
+    #
+    # @return [Array]
+    #   Abbreviated Red Arrow data type names.
     def types
       @types || @types = @table.columns.map { |column| column.data.value_type.nick.to_sym }
     end
 
+    # Returns an Array of Classes of data type.
+    #
+    # @return [Array]
+    #   An Array of Red Arrow data type Classes.
     def type_classes
       @data_types || @data_types = @table.columns.map { |column| column.data_type.class }
     end
 
+    # Returns Vectors in an Array.
+    #
+    # @return [Array]
+    #   An Array of RedAmber::Vector s.
     def vectors
       @vectors || @vectors = init_instance_vars(:vectors)
     end
 
+    # Returns row indices (0...size) in an Array.
+    #
+    # @return [Array]
+    #   An Array of all indices of rows.
     def indices
       (0...size).to_a
     end

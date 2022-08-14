@@ -3,6 +3,10 @@
 module RedAmber
   # group class
   class Group
+    # Creates a new Group object.
+    #
+    # @param dataframe [DataFrame] dataframe to be grouped.
+    # @param group_keys [Array<>] keys for grouping.
     def initialize(dataframe, *group_keys)
       @dataframe = dataframe
       @table = @dataframe.table
