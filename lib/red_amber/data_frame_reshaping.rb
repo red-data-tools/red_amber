@@ -26,5 +26,36 @@ module RedAmber
       end
       DataFrame.new(hash)
     end
+
+    # Reshape wide DataFrame to a longer DataFrame.
+    #
+    # @param keep_keys [Array] keys to keep.
+    # @param name [Symbol, String] key of the column which is come **from values**.
+    # @param value [Symbol, String] key of the column which is come **from values**.
+    # @return [DataFrame] long DataFrame.
+    def to_long(*keep_keys, name: :name, value: :value)
+      not_included = keep_keys - keys
+      raise DataFrameArgumentError, "Not have keys #{not_included}" unless not_included.empty?
+
+      name = name.to_sym
+      raise DataFrameArgumentError, "Invalid key: #{name}" if keep_keys.include?(name)
+
+      value = value.to_sym
+      raise DataFrameArgumentError, "Invalid key: #{value}" if keep_keys.include?(value)
+
+      hash = Hash.new { |h, k| h[k] = [] }
+      l = keys.size - keep_keys.size
+      each_row do |row|
+        row.each do |k, v|
+          if keep_keys.include?(k)
+            hash[k].concat([v] * l)
+          else
+            hash[name] << k
+            hash[value] << v
+          end
+        end
+      end
+      DataFrame.new(hash)
+    end
   end
 end

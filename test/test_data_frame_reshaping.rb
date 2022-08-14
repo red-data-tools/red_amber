@@ -42,4 +42,49 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       assert_equal str, @df.transpose(new_key: :name1).to_s
     end
   end
+
+  sub_test_case 'to_long' do
+    setup do
+      @df = DataFrame.new(
+        names: %w[name1 name2 name3],
+        One: [1.1, 1.2, 1.3],
+        Two: [2.1, 2.2, 2.3],
+        Three: [3.1, 3.2, 3.3]
+      )
+    end
+
+    test '#to_long' do
+      assert_raise(DataFrameArgumentError) { @df.to_long(:not_exist) }
+      assert_raise(DataFrameArgumentError) { @df.to_long(:names, name: :names) }
+      assert_raise(DataFrameArgumentError) { @df.to_long(:names, value: :names) }
+
+      assert_equal <<~STR, @df.to_long(:names).to_s
+          names    name            value
+          <string> <dictionary> <double>
+        1 name1    One               1.1
+        2 name1    Two               2.1
+        3 name1    Three             3.1
+        4 name2    One               1.2
+        5 name2    Two               2.2
+        : :        :                   :
+        7 name3    One               1.3
+        8 name3    Two               2.3
+        9 name3    Three             3.3
+      STR
+
+      assert_equal <<~STR, @df.to_long.to_s
+           name         value
+           <dictionary> <string>
+         1 names        name1
+         2 One          1.1
+         3 Two          2.1
+         4 Three        3.1
+         5 names        name2
+         : :            :
+        10 One          1.3
+        11 Two          2.3
+        12 Three        3.3
+      STR
+    end
+  end
 end

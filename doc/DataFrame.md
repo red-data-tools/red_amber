@@ -1066,6 +1066,51 @@ penguins.to_rover
   The leftmost column is created by original keys. Key name of the column is
   named by 'name'.
 
+### `to_long(*keep_keys)`
+
+  Creates a 'long' DataFrame.
+
+  - Parameter `keep_keys` specifies the key names to keep.
+
+  ```ruby
+  import_cars.to_long(:Year)
+
+  # =>
+  #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000012750>               
+         Year name             value
+     <uint16> <dictionary>  <uint32>
+   1     2021 Audi             22535
+   2     2021 BMW              35905
+   3     2021 BMW_MINI         18211
+   4     2021 Mercedes-Benz    51722
+   5     2021 VW               35215
+   :        : :                    :
+  23     2017 BMW_MINI         25427
+  24     2017 Mercedes-Benz    68221
+  25     2017 VW               49040
+  ```
+
+  - Option `:name` : key of the column which is come **from key names**.
+  - Option `:value` : key of the column which is come **from values**.
+
+  ```ruby
+  import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
+
+  # =>
+  #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000017700>
+         Year Manufacturer  Num_of_imported
+     <uint16> <dictionary>         <uint32>
+   1     2021 Audi                    22535
+   2     2021 BMW                     35905
+   3     2021 BMW_MINI                18211
+   4     2021 Mercedes-Benz           51722
+   5     2021 VW                      35215
+   :        : :                           :
+  23     2017 BMW_MINI                25427
+  24     2017 Mercedes-Benz           68221
+  25     2017 VW                      49040
+  ```
+
 ## Combine
 
 - [ ] Combining dataframes
