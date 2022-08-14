@@ -7,15 +7,34 @@ module RedAmber
   module DataFrameDisplayable
     INDEX_KEY = :index_key_for_format_table
 
-    def to_s
+    def to_s(width: 80)
       return '' if empty?
 
-      format_table(width: 80)
+      format_table(width: width)
     end
 
-    # def describe() end
+    # Show statistical summary by a new DatFrame.
+    #   Make stats for numeric columns only.
+    #   NaNs are ignored.
+    #   Counts also show non-NaN counts.
+    #
+    # @return [DataFrame] a new dataframe.
+    def summary
+      num_keys = keys.select { |key| self[key].numeric? }
 
-    # def summary() end
+      DataFrame.new(
+        variables: num_keys,
+        count: num_keys.map { |k| self[k].count },
+        mean: num_keys.map { |k| self[k].mean },
+        std: num_keys.map { |k| self[k].std },
+        min: num_keys.map { |k| self[k].min },
+        '25%': num_keys.map { |k| self[k].quantile(0.25) },
+        median: num_keys.map { |k| self[k].median },
+        '75%': num_keys.map { |k| self[k].quantile(0.75) },
+        max: num_keys.map { |k| self[k].max }
+      )
+    end
+    alias_method :describe, :summary
 
     def inspect
       if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table') == 'TDR'
@@ -133,11 +152,7 @@ module RedAmber
       a
     end
 
-    def format_table(width: 80)
-      head = 5
-      tail = 3
-      n_digit = 1
-
+    def format_table(width: 80, head: 5, tail: 3, n_digit: 2)
       original = self
       indices = size > head + tail ? [*0...head, *(size - tail)...size] : [*0...size]
       df = slice(indices).assign do

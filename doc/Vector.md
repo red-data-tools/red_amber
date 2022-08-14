@@ -303,6 +303,10 @@ double.round(n_digits: -1)
 
   Returns index of specified element.
 
+### `quantiles(probs = [1.0, 0.75, 0.5, 0.25, 0.0], interpolation: :linear, skip_nils: true, min_count: 0)`
+
+  Returns quantiles for specified probabilities in a DataFrame.
+
 ### `sort_indexes`, `sort_indices`, `array_sort_indices`
 
 ### [ ] `sort`, `sort_by`

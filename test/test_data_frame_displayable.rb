@@ -266,4 +266,27 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       STR
     end
   end
+
+  sub_test_case 'summary' do
+    setup do
+      @df = DataFrame.new(integers: [2, 3, 5, 7], floats: [2.0, 3.0, 5.0, 7.0])
+    end
+
+    test '#summary' do
+      assert_equal <<~STR, @df.summary.tdr_str
+        RedAmber::DataFrame : 2 x 9 Vectors
+        Vectors : 8 numeric
+        # key        type       level data_preview
+        1 :variables dictionary     2 ["integers", "floats"]
+        2 :count     uint8          1 {4=>2}
+        3 :mean      double         1 {4.25=>2}
+        4 :std       double         1 {2.217355782608345=>2}
+        5 :min       double         1 {2.0=>2}
+        6 :"25%"     double         1 {2.75=>2}
+        7 :median    double         1 {4.0=>2}
+        8 :"75%"     double         1 {5.5=>2}
+        9 :max       double         1 {7.0=>2}
+      STR
+    end
+  end
 end

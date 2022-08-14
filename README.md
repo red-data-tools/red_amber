@@ -271,6 +271,21 @@ For this frequently needed task, we can do it much simpler.
 penguins.remove_nil # => same result as above
 ```
 
+`DataFrame#summary` shows summary statistics in a DataFrame.
+
+```ruby
+puts penguins.summary.to_s(width: 82)
+
+# =>
+  variables            count     mean      std      min      25%   median      75%      max
+  <dictionary>      <uint16> <double> <double> <double> <double> <double> <double> <double>
+1 bill_length_mm         342    43.92     5.46     32.1    39.23    44.38     48.5     59.6
+2 bill_depth_mm          342    17.15     1.97     13.1     15.6    17.32     18.7     21.5
+3 flipper_length_mm      342   200.92    14.06    172.0    190.0    197.0    213.0    231.0
+4 body_mass_g            342  4201.75   801.95   2700.0   3550.0   4031.5   4750.0   6300.0
+5 year                   344  2008.03     0.82   2007.0   2007.0   2008.0   2009.0   2009.0
+```
+
 `DataFrame#group` method can be used for the grouping tasks.
 
 ```ruby
