@@ -125,6 +125,8 @@ module RedAmber
     def try_convert_to_hash(array)
       array.to_h
     rescue TypeError
+      [array].to_h
+    rescue TypeError # rubocop:disable Lint/DuplicateRescueException
       raise DataFrameArgumentError, "Invalid argument in Array #{array}"
     end
 
