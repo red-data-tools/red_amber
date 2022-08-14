@@ -1111,6 +1111,29 @@ penguins.to_rover
   25     2017 VW                      49040
   ```
 
+### `to_wide`
+
+  Creates a 'wide' DataFrame.
+
+  - Option `:name` : key of the column which will be expanded **to key name**.
+  - Option `:value` : key of the column which will be expanded **to values**.
+
+  ```ruby
+  import_cars.to_long(:Year).to_wide
+  # import_cars.to_long(:Year).to_wide(name: :name, value: :value)
+  # is also OK
+
+  # =>
+  #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000f0f0>
+        Year     Audi      BMW BMW_MINI Mercedes-Benz       VW
+    <uint16> <uint16> <uint16> <uint16>      <uint32> <uint16>
+  1     2021    22535    35905    18211         51722    35215
+  2     2020    22304    35712    20196         57041    36576
+  3     2019    24222    46814    23813         66553    46794
+  4     2018    26473    50982    25984         67554    51961
+  5     2017    28336    52527    25427         68221    49040
+  ```
+
 ## Combine
 
 - [ ] Combining dataframes

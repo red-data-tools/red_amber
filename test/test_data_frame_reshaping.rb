@@ -87,4 +87,28 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       STR
     end
   end
+
+  sub_test_case 'to_wide' do
+    setup do
+      df = DataFrame.new(
+        names: %w[name1 name2 name3],
+        One: [1.1, 1.2, 1.3],
+        Two: [2.1, 2.2, 2.3],
+        Three: [3.1, 3.2, 3.3]
+      )
+      @df = df.to_long(:names)
+      @str = df.to_s
+    end
+
+    test '#to_wide' do
+      assert_raise(DataFrameArgumentError) { @df.to_wide(name: :not_exist) }
+      assert_raise(DataFrameArgumentError) { @df.to_wide(value: :not_exist) }
+      assert_equal @str, @df.to_wide.to_s
+    end
+
+    test '#to_wide with options' do
+      df = @df.rename(name: :key1, value: :key2)
+      assert_equal @str, df.to_wide(name: :key1, value: :key2).to_s
+    end
+  end
 end

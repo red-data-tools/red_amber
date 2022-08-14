@@ -57,5 +57,29 @@ module RedAmber
       end
       DataFrame.new(hash)
     end
+
+    # Reshape long DataFrame to a wide DataFrame.
+    #
+    # @param name [Symbol, String] key of the column which will be expanded **to key names**.
+    # @param value [Symbol, String] key of the column which will be expanded **to values**.
+    # @return [DataFrame] wide DataFrame.
+    def to_wide(name: :name, value: :value)
+      name = name.to_sym
+      raise DataFrameArgumentError, "Invalid key: #{name}" unless keys.include?(name)
+
+      value = value.to_sym
+      raise DataFrameArgumentError, "Invalid key: #{value}" unless keys.include?(value)
+
+      hash = Hash.new { |h, k| h[k] = {} }
+      keep_keys = keys - [name, value]
+      each_row do |row|
+        keeps, converts = row.partition { |k, _| keep_keys.include?(k) }
+        h = converts.to_h
+        hash[keeps.to_h][h[name].to_s.to_sym] = h[value]
+      end
+      ks = hash.first[0].keys + hash.first[1].keys
+      vs = hash.map { |k, v| k.values + v.values }.transpose
+      DataFrame.new(ks.zip(vs))
+    end
   end
 end
