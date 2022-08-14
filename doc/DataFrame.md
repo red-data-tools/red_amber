@@ -977,17 +977,17 @@ penguins.to_rover
   starwars.group(:species).count(:species)
 
   # =>
-  #<RedAmber::DataFrame : 38 x 2 Vectors, 0x000000000001d6f0>                                 
-     species    count                                                                         
-     <string> <int64>                                                                         
-   1 Human         35                                                                         
-   2 Droid          6                                                                         
-   3 Wookiee        2                                                                         
-   4 Rodian         1                                                                         
-   5 Hutt           1                                                                         
-   : :              :                                                                         
-  36 Kaleesh        1                                                                         
-  37 Pau'an         1                                                                         
+  #<RedAmber::DataFrame : 38 x 2 Vectors, 0x000000000001d6f0>
+     species    count
+     <string> <int64>
+   1 Human         35
+   2 Droid          6
+   3 Wookiee        2
+   4 Rodian         1
+   5 Hutt           1
+   : :              :
+  36 Kaleesh        1
+  37 Pau'an         1
   38 Kel Dor        1
   ```
 
@@ -997,17 +997,17 @@ penguins.to_rover
   grouped = starwars.group(:species) { [count(:species), mean(:height, :mass)] }
 
   # =>
-  #<RedAmber::DataFrame : 38 x 4 Vectors, 0x00000000000407cc>                                 
-     species    count mean(height) mean(mass)                                                 
-     <string> <int64>     <double>   <double>                                                 
-   1 Human         35        176.6       82.8                                                 
-   2 Droid          6        131.2       69.8                                                 
-   3 Wookiee        2        231.0      124.0                                                 
-   4 Rodian         1        173.0       74.0                                                 
-   5 Hutt           1        175.0     1358.0                                                 
-   : :              :            :          :                                                 
-  36 Kaleesh        1        216.0      159.0                                                 
-  37 Pau'an         1        206.0       80.0                                                 
+  #<RedAmber::DataFrame : 38 x 4 Vectors, 0x00000000000407cc>
+     specie  s    count mean(height) mean(mass)
+     <strin  g> <int64>     <double>   <double>
+   1 Human           35        176.6       82.8
+   2 Droid            6        131.2       69.8
+   3 Wookie  e        2        231.0      124.0
+   4 Rodian           1        173.0       74.0
+   5 Hutt             1        175.0     1358.0
+   : :                :            :          :
+  36 Kalees  h        1        216.0      159.0
+  37 Pau'an           1        206.0       80.0
   38 Kel Dor        1        188.0       80.0
   ```
 
@@ -1031,13 +1031,114 @@ penguins.to_rover
   9 Kaminoan       2        221.0       88.0
   ```
 
-## Combining DataFrames
+## Reshape
 
-- [ ] Combining rows to a dataframe
+### `transpose`
 
-- [ ] Inner join
+  Creates transposed DataFrame for wide type dataframe.
 
-- [ ] Left join
+  ```ruby
+  import_cars = RedAmber::DataFrame.load('test/entity/import_cars.tsv')
+
+  # =>
+  #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000d520>
+       Year    Audi     BMW BMW_MINI Mercedes-Benz      VW
+    <int64> <int64> <int64>  <int64>       <int64> <int64>
+  1    2021   22535   35905    18211         51722   35215
+  2    2020   22304   35712    20196         57041   36576
+  3    2019   24222   46814    23813         66553   46794
+  4    2018   26473   50982    25984         67554   51961
+  5    2017   28336   52527    25427         68221   49040
+
+  import_cars.transpose
+
+  # =>
+  #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000ef74>
+    name              2021     2020     2019     2018     2017
+    <dictionary>  <uint16> <uint16> <uint32> <uint32> <uint32>
+  1 Audi             22535    22304    24222    26473    28336
+  2 BMW              35905    35712    46814    50982    52527
+  3 BMW_MINI         18211    20196    23813    25984    25427
+  4 Mercedes-Benz    51722    57041    66553    67554    68221
+  5 VW               35215    36576    46794    51961    49040
+  ```
+  
+  The leftmost column is created by original keys. Key name of the column is
+  named by 'name'.
+
+### `to_long(*keep_keys)`
+
+  Creates a 'long' DataFrame.
+
+  - Parameter `keep_keys` specifies the key names to keep.
+
+  ```ruby
+  import_cars.to_long(:Year)
+
+  # =>
+  #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000012750>               
+         Year name             value
+     <uint16> <dictionary>  <uint32>
+   1     2021 Audi             22535
+   2     2021 BMW              35905
+   3     2021 BMW_MINI         18211
+   4     2021 Mercedes-Benz    51722
+   5     2021 VW               35215
+   :        : :                    :
+  23     2017 BMW_MINI         25427
+  24     2017 Mercedes-Benz    68221
+  25     2017 VW               49040
+  ```
+
+  - Option `:name` : key of the column which is come **from key names**.
+  - Option `:value` : key of the column which is come **from values**.
+
+  ```ruby
+  import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
+
+  # =>
+  #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000017700>
+         Year Manufacturer  Num_of_imported
+     <uint16> <dictionary>         <uint32>
+   1     2021 Audi                    22535
+   2     2021 BMW                     35905
+   3     2021 BMW_MINI                18211
+   4     2021 Mercedes-Benz           51722
+   5     2021 VW                      35215
+   :        : :                           :
+  23     2017 BMW_MINI                25427
+  24     2017 Mercedes-Benz           68221
+  25     2017 VW                      49040
+  ```
+
+### `to_wide`
+
+  Creates a 'wide' DataFrame.
+
+  - Option `:name` : key of the column which will be expanded **to key name**.
+  - Option `:value` : key of the column which will be expanded **to values**.
+
+  ```ruby
+  import_cars.to_long(:Year).to_wide
+  # import_cars.to_long(:Year).to_wide(name: :name, value: :value)
+  # is also OK
+
+  # =>
+  #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000f0f0>
+        Year     Audi      BMW BMW_MINI Mercedes-Benz       VW
+    <uint16> <uint16> <uint16> <uint16>      <uint32> <uint16>
+  1     2021    22535    35905    18211         51722    35215
+  2     2020    22304    35712    20196         57041    36576
+  3     2019    24222    46814    23813         66553    46794
+  4     2018    26473    50982    25984         67554    51961
+  5     2017    28336    52527    25427         68221    49040
+  ```
+
+## Combine
+
+- [ ] Combining dataframes
+
+- [ ] Join
 
 ## Encoding
 

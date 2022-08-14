@@ -61,6 +61,7 @@ Metrics/AbcSize:
   Max: 30
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 55
+    - 'lib/red_amber/data_frame_reshaping.rb' # Max 40.91
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 51
     - 'lib/red_amber/vector_updatable.rb' # Max: 36
     - 'lib/red_amber/vector_selectable.rb' # Max: 33
