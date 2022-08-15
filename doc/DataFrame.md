@@ -155,7 +155,25 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 ### `indices`, `indexes`
 
-- Returns all indexes in an Array.
+- Returns indexes in an Array.
+  Accepts an option `start` as the first of indexes.
+
+  ```ruby
+  df = RedAmber::DataFrame.new(x: [1, 2, 3, 4, 5])
+  df.indices
+
+  # =>
+  [0, 1, 2, 3, 4]
+
+  df.indices(1)
+
+  # =>
+  [1, 2, 3, 4, 5]
+
+  df.indices(:a)
+  # =>
+  [:a, :b, :c, :d, :e]
+  ```
 
 ### `to_h`
 
@@ -772,10 +790,10 @@ penguins.to_rover
     
     # =>
     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000062804>
-      name         age                      
-      <string> <uint8>                      
-    1 Yasuko        68                      
-    2 Rui           49                      
+      name         age
+      <string> <uint8>
+    1 Yasuko        68
+    2 Rui           49
     3 Hinata        28
 
     # update :age and add :brother
@@ -821,13 +839,13 @@ penguins.to_rover
 
     # =>
     #<RedAmber::DataFrame : 5 x 3 Vectors, 0x00000000000dfffc>
-        index    float string             
-      <uint8> <double> <string>           
-    1       0     -0.0 A                  
-    2       1     -1.1 B                  
-    3       2     -2.2 C                  
-    4       3      NaN D                  
-    5   (nil)    (nil) (nil) 
+        index    float string
+      <uint8> <double> <string>
+    1       0     -0.0 A
+    2       1     -1.1 B
+    3       2     -2.2 C
+    4       3      NaN D
+    5   (nil)    (nil) (nil)
 
     # Or we can use assigner by a Hash
     df.assign do
@@ -852,7 +870,7 @@ penguins.to_rover
   `assign_left` method accepts the same parameters and block as `assign`, but append new columns from leftside.
 
   ```ruby
-  df.assign_left(new_index: [1, 2, 3, 4, 5])
+  df.assign_left(new_index: df.indices(1))
   
   # => 
   #<RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000001787c>

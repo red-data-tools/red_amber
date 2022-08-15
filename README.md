@@ -102,17 +102,17 @@ df = penguins.pick(:species, :island, :body_mass_g)
 df
 
 # =>
-#<RedAmber::DataFrame : 344 x 3 Vectors, 0x000000000003cc1c>                 
-    species  island    body_mass_g                                           
-    <string> <string>     <uint16>                                           
-  1 Adelie   Torgersen        3750                                           
-  2 Adelie   Torgersen        3800                                           
-  3 Adelie   Torgersen        3250                                           
-  4 Adelie   Torgersen       (nil)                                           
-  5 Adelie   Torgersen        3450                                           
-  : :        :                   :                                           
-342 Gentoo   Biscoe           5750                                           
-343 Gentoo   Biscoe           5200                                           
+#<RedAmber::DataFrame : 344 x 3 Vectors, 0x000000000003cc1c>
+    species  island    body_mass_g
+    <string> <string>     <uint16>
+  1 Adelie   Torgersen        3750
+  2 Adelie   Torgersen        3800
+  3 Adelie   Torgersen        3250
+  4 Adelie   Torgersen       (nil)
+  5 Adelie   Torgersen        3450
+  : :        :                   :
+342 Gentoo   Biscoe           5750
+343 Gentoo   Biscoe           5200
 344 Gentoo   Biscoe           5400
 ```
 
