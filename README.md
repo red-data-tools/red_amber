@@ -3,14 +3,20 @@
 [![Gem Version](https://badge.fury.io/rb/red_amber.svg)](https://badge.fury.io/rb/red_amber)
 [![Ruby](https://github.com/heronshoes/red_amber/actions/workflows/test.yml/badge.svg)](https://github.com/heronshoes/red_amber/actions/workflows/test.yml)
 
-A simple dataframe library for Ruby (experimental).
+A simple dataframe library for Ruby.
 
 - Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow) [![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en)
 - Inspired by the dataframe library [Rover-df](https://github.com/ankane/rover)
 
 ## Requirements
 
+Supported Ruby version is >= 2.7.
+
+Since v0.2.0, this library uses pattern matching which is an experimental feature in 2.7 . It is usable but a warning message will be shown in 2.7 .
+I recommend Ruby 3 for performance.
+
 ```ruby
+# Libraries required
 gem 'red-arrow',   '>= 9.0.0'
 
 gem 'red-parquet', '>= 9.0.0' # Optional, if you use IO from/to parquet
@@ -122,16 +128,16 @@ df = df.drop(true, true, false)
 
 # =>
 #<RedAmber::DataFrame : 344 x 1 Vector, 0x0000000000048760>
-    body_mass_g                                     
-       <uint16>                                     
-  1        3750                                     
-  2        3800                                     
-  3        3250                                     
-  4       (nil)                                     
-  5        3450                                     
-  :           :                                     
-342        5750                                     
-343        5200                                     
+    body_mass_g
+       <uint16>
+  1        3750
+  2        3800
+  3        3250
+  4       (nil)
+  5        3450
+  :           :
+342        5750
+343        5200
 344        5400
 ```
 
@@ -368,7 +374,7 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## Jupyter notebook
 
-[53 Examples of Red Amber](doc/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
+[61 Examples of Red Amber](doc/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
 
 ## Development
 
@@ -378,6 +384,12 @@ cd red_amber
 bundle install
 bundle exec rake test
 ```
+
+I will appreciate if you could help to improve this project. Here are a few ways you can help:
+
+- [Report bugs or suggest new features](https://github.com/heronshoes/red_amber/issues)
+- Fix bugs and [submit pull requests](https://github.com/heronshoes/red_amber/pulls)
+- Write, clarify, or fix documentation
 
 ## License
 
