@@ -1,6 +1,75 @@
-## [0.1.9] - Unreleased
+## [0.2.0] - 2022-08-15
 
-- Supports Arrow 9.0.0
+- Bump version up to 0.2.0
+
+- Bug fixes
+
+  - Fix order of multiple group keys (#55)
+  
+    Only 1 group key comes to left. Other keys remain in right.
+
+  - Remove optional `require` for rover (#55)
+
+    Fix DataFrame.new for argument with Rover::DataFrame.
+
+  - Fix occasional failure in CI (#59)
+
+    Sometimes the CI test fails. I added -dev dependency 
+    in Arrow install by apt, not doing in bundler.
+
+  - Fix calling :take in V#[] (#56)
+
+    Fixed to call Arrow function :take instead of :array_take in Vector#take_by_vector. This will prevent the error below
+    when called with Arrow::ChunkedArray.
+
+  - Raise error renaming non existing key (#61)
+
+    Add error when specified key is not exist.
+
+  - Fix DataFrame#rename #assign by array (#65)
+
+- New features and improvements
+
+  - Support Arrow 9.0.0
+    - Upgrade to Arrow 9.0.0 (#59)
+    - Add Vector#quantile method (#59)
+      Arrow::QuantileOptions has supported in Arrow GLib 9.0.0 (ARROW-16623, Thanks!)
+  
+    - Add Vector#quantiles (#62)
+
+    - Add DataFrame#each_row (#56)
+      - Returns Enumerator if block is not given.
+      - Change DataFrame#each_row to return a Hash {key => row} (#63)
+
+  - Refactor to use pattern match in overloaded parameter parsing (#61)
+    - Refine DataFrame.new to use pattern match
+    - Use pattern match in DataFrame#assign
+    - Use pattern match in DataFrame#rename
+  
+  - Accept Array for renamer/assigner in #rename/#assign (#61)
+    - Accept assigner by Arrays in DataFrame#assign
+    - Accept renamer pairs by Arrays in DataFrame#rename
+    - Add DataFrame#assign_left method
+
+  - Add summary/describe (#62)
+    - Introduce DataFrame#summary(#describe)
+
+  - Introduce reshaping methods for DataFrame (#64)
+    - Introduce DataFrame#transpose method
+    - Intorduce DataFrame#to_long method
+    - Intorduce DataFrame#to_wide method
+
+  - Others
+ 
+    - Add alias sort_index for array_sort_indices (#59)
+    - Enable :width option in DataFrame#to_s (#62)
+    - Add options to DataFrame#format_table (#62)
+
+  - Update Documents
+  
+    - Add Yard doc for some methods
+  
+    - Update Jupyter notebook '61 Examples of Red Amber' (#65)
 
 ## [0.1.8] - 2022-08-04 (experimental)
 
