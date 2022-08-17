@@ -69,7 +69,12 @@ class VectorTest < Test::Unit::TestCase
     end
 
     test '#each' do
-      assert_kind_of Enumerator, Vector.new(1, 2, 3).each
+      expect, _, _, array = data
+      vector = Vector.new(array)
+      assert_kind_of Enumerator, vector.each
+      a = []
+      vector.each { |x| a << x }
+      assert_equal expect, a
     end
   end
 

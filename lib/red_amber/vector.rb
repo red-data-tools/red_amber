@@ -122,7 +122,7 @@ module RedAmber
       return enum_for(:each) unless block_given?
 
       size.times do |i|
-        yield self[i]
+        yield data[i]
       end
     end
 
