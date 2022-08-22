@@ -66,7 +66,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
         3 name1    Three             3.1
         4 name2    One               1.2
         5 name2    Two               2.2
-        : :        :                   :
+        6 name2    Three             3.2
         7 name3    One               1.3
         8 name3    Two               2.3
         9 name3    Three             3.3
