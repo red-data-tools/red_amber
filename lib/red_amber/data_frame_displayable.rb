@@ -154,7 +154,7 @@ module RedAmber
 
     def format_table(width: 80, head: 5, tail: 3, n_digit: 2)
       original = self
-      indices = size > head + tail ? [*0...head, *(size - tail)...size] : [*0...size]
+      indices = size > head + tail ? [*0..head, *(size - tail)...size] : [*0...size]
       df = slice(indices).assign do
         assigner = { INDEX_KEY => indices.map { |i| (i + 1).to_s } }
         vectors.each_with_object(assigner) do |v, a|
@@ -173,12 +173,12 @@ module RedAmber
       end
 
       df = df.pick { [INDEX_KEY, keys - [INDEX_KEY]] }
-      df = size > head + tail ? df[0, 0, 0...head, 0, -tail..-1] : df[0, 0, 0..-1]
+      df = size > head + tail ? df[0, 0, 0..head, -tail..-1] : df[0, 0, 0..-1]
       df = df.assign do
         vectors.each_with_object({}) do |v, assigner|
           vec = v.replace(0, v.key == INDEX_KEY ? '' : v.key.to_s)
                  .replace(1, v.key == INDEX_KEY ? '' : "<#{original[v.key].type}>")
-          assigner[v.key] = size > head + tail ? vec.replace(head + 2, ':') : vec
+          assigner[v.key] = original.size > head + tail + 1 ? vec.replace(head + 2, ':') : vec
         end
       end
 
