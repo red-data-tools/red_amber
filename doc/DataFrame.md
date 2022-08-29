@@ -1053,7 +1053,7 @@ penguins.to_rover
 
 ### `transpose`
 
-  Creates transposed DataFrame for wide type dataframe.
+  Creates transposed DataFrame for the wide (messy) dataframe.
 
   ```ruby
   import_cars = RedAmber::DataFrame.load('test/entity/import_cars.tsv')
@@ -1062,31 +1062,30 @@ penguins.to_rover
   #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000d520>
        Year    Audi     BMW BMW_MINI Mercedes-Benz      VW
     <int64> <int64> <int64>  <int64>       <int64> <int64>
-  1    2021   22535   35905    18211         51722   35215
-  2    2020   22304   35712    20196         57041   36576
+  1    2017   28336   52527    25427         68221   49040
+  2    2018   26473   50982    25984         67554   51961
   3    2019   24222   46814    23813         66553   46794
-  4    2018   26473   50982    25984         67554   51961
-  5    2017   28336   52527    25427         68221   49040
-
-  import_cars.transpose
+  4    2020   22304   35712    20196         57041   36576
+  5    2021   22535   35905    18211         51722   35215
+  import_cars.transpose(:Manufacturer)
 
   # =>
   #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000ef74>
-    name              2021     2020     2019     2018     2017
-    <dictionary>  <uint16> <uint16> <uint32> <uint32> <uint32>
-  1 Audi             22535    22304    24222    26473    28336
-  2 BMW              35905    35712    46814    50982    52527
-  3 BMW_MINI         18211    20196    23813    25984    25427
-  4 Mercedes-Benz    51722    57041    66553    67554    68221
-  5 VW               35215    36576    46794    51961    49040
+    Manufacturer      2017     2018     2019     2020     2021
+    <dictionary>  <uint32> <uint32> <uint32> <uint16> <uint16>
+  1 Audi             28336    26473    24222    22304    22535
+  2 BMW              52527    50982    46814    35712    35905
+  3 BMW_MINI         25427    25984    23813    20196    18211
+  4 Mercedes-Benz    68221    67554    66553    57041    51722
+  5 VW               49040    51961    46794    36576    35215
   ```
   
   The leftmost column is created by original keys. Key name of the column is
-  named by 'name'.
+  named by parameter `:name`. If `:name` is not specified, `:N` is used for the key.
 
 ### `to_long(*keep_keys)`
 
-  Creates a 'long' DataFrame.
+  Creates a 'long' (tidy) DataFrame from a 'wide' DataFrame.
 
   - Parameter `keep_keys` specifies the key names to keep.
 
@@ -1095,21 +1094,21 @@ penguins.to_rover
 
   # =>
   #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000012750>               
-         Year name             value
+         Year N                    V
      <uint16> <dictionary>  <uint32>
-   1     2021 Audi             22535
-   2     2021 BMW              35905
-   3     2021 BMW_MINI         18211
-   4     2021 Mercedes-Benz    51722
-   5     2021 VW               35215
+   1     2017 Audi             28336
+   2     2017 BMW              52527
+   3     2017 BMW_MINI         25427
+   4     2017 Mercedes-Benz    68221
+   5     2017 VW               49040
    :        : :                    :
-  23     2017 BMW_MINI         25427
-  24     2017 Mercedes-Benz    68221
-  25     2017 VW               49040
+  23     2021 BMW_MINI         18211
+  24     2021 Mercedes-Benz    51722
+  25     2021 VW               35215
   ```
 
-  - Option `:name` : key of the column which is come **from key names**.
-  - Option `:value` : key of the column which is come **from values**.
+  - Option `:name` is the key of the column which came **from key names**.
+  - Option `:value` is the key of the column which came **from values**.
 
   ```ruby
   import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
@@ -1118,38 +1117,40 @@ penguins.to_rover
   #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000017700>
          Year Manufacturer  Num_of_imported
      <uint16> <dictionary>         <uint32>
-   1     2021 Audi                    22535
-   2     2021 BMW                     35905
-   3     2021 BMW_MINI                18211
-   4     2021 Mercedes-Benz           51722
-   5     2021 VW                      35215
+   1     2017 Audi                    28336
+   2     2017 BMW                     52527
+   3     2017 BMW_MINI                25427
+   4     2017 Mercedes-Benz           68221
+   5     2017 VW                      49040
    :        : :                           :
-  23     2017 BMW_MINI                25427
-  24     2017 Mercedes-Benz           68221
-  25     2017 VW                      49040
+  23     2021 BMW_MINI                18211
+  24     2021 Mercedes-Benz           51722
+  25     2021 VW                      35215
   ```
 
 ### `to_wide`
 
-  Creates a 'wide' DataFrame.
+  Creates a 'wide' (messy) DataFrame from a 'long' DataFrame.
 
-  - Option `:name` : key of the column which will be expanded **to key name**.
-  - Option `:value` : key of the column which will be expanded **to values**.
+  - Option `:name` is the key of the column which will be expanded **to key names**.
+  - Option `:value` is the key of the column which will be expanded **to values**.
 
   ```ruby
   import_cars.to_long(:Year).to_wide
-  # import_cars.to_long(:Year).to_wide(name: :name, value: :value)
+  # import_cars.to_long(:Year).to_wide(name: :N, value: :V)
   # is also OK
 
   # =>
   #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000f0f0>
         Year     Audi      BMW BMW_MINI Mercedes-Benz       VW
     <uint16> <uint16> <uint16> <uint16>      <uint32> <uint16>
-  1     2021    22535    35905    18211         51722    35215
-  2     2020    22304    35712    20196         57041    36576
+  1     2017    28336    52527    25427         68221    49040
+  2     2018    26473    50982    25984         67554    51961
   3     2019    24222    46814    23813         66553    46794
-  4     2018    26473    50982    25984         67554    51961
-  5     2017    28336    52527    25427         68221    49040
+  4     2020    22304    35712    20196         57041    36576
+  5     2021    22535    35905    18211         51722    35215
+
+  # == import_cars
   ```
 
 ## Combine
