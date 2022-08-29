@@ -8,7 +8,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
   sub_test_case 'transpose' do
     setup do
       @df = DataFrame.new(
-        index: %w[name1 name2 name3],
+        index: %w[N1 N2 N3],
         One: [1.1, 1.2, 1.3],
         Two: [2.1, 2.2, 2.3],
         Three: [3.1, 3.2, 3.3]
@@ -17,7 +17,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
 
     test '#transpose' do
       str = <<~STR
-          name            name1    name2    name3
+          N                  N1       N2       N3
           <dictionary> <double> <double> <double>
         1 One               1.1      1.2      1.3
         2 Two               2.1      2.2      2.3
@@ -31,15 +31,15 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { @df.transpose(key: :not_exist) }
     end
 
-    test '#transpose with :new_key' do
+    test '#transpose with :name' do
       str = <<~STR
-          name4           name1    name2    name3
+          N4                 N1       N2       N3
           <dictionary> <double> <double> <double>
         1 One               1.1      1.2      1.3
         2 Two               2.1      2.2      2.3
         3 Three             3.1      3.2      3.3
       STR
-      assert_equal str, @df.transpose(new_key: :name1).to_s
+      assert_equal str, @df.transpose(name: :N1).to_s
     end
   end
 
@@ -59,7 +59,21 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { @df.to_long(:names, value: :names) }
 
       assert_equal <<~STR, @df.to_long(:names).to_s
-          names    name            value
+          names    N                   V
+          <string> <dictionary> <double>
+        1 name1    One               1.1
+        2 name1    Two               2.1
+        3 name1    Three             3.1
+        4 name2    One               1.2
+        5 name2    Two               2.2
+        6 name2    Three             3.2
+        7 name3    One               1.3
+        8 name3    Two               2.3
+        9 name3    Three             3.3
+      STR
+
+      assert_equal <<~STR, @df.to_long(:names, name: :order, value: :value).to_s
+          names    order           value
           <string> <dictionary> <double>
         1 name1    One               1.1
         2 name1    Two               2.1
@@ -73,7 +87,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       STR
 
       assert_equal <<~STR, @df.to_long.to_s
-           name         value
+           N            V
            <dictionary> <string>
          1 names        name1
          2 One          1.1
@@ -107,7 +121,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
     end
 
     test '#to_wide with options' do
-      df = @df.rename(name: :key1, value: :key2)
+      df = @df.rename(N: :key1, V: :key2)
       assert_equal @str, df.to_wide(name: :key1, value: :key2).to_s
     end
   end

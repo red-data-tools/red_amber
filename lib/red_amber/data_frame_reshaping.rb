@@ -5,20 +5,20 @@ module RedAmber
   module DataFrameReshaping
     # Transpose a wide DataFrame.
     #
-    # @param key [Symbol, FalseClass] key of the index column
+    # @param key [Symbol] key of the index column
     #   to transepose into keys.
-    #   If it is false, keys[0] is used.
-    # @param new_key [Symbol, FalseClass] key name of transposed index column.
-    #   If it is false, :name is used. If it already exists, :name1.succ is used.
+    #   If it is not specified, keys[0] is used.
+    # @param new_key [Symbol] key name of transposed index column.
+    #   If it is not specified, :N is used. If it already exists, :N1 or :N1.succ is used.
     # @return [DataFrame] trnsposed DataFrame
-    def transpose(key: keys.first, new_key: :name)
-      raise DataFrameArgumentError, "Not include: #{key}" unless keys.include?(key)
+    def transpose(key: keys.first, name: :N)
+      raise DataFrameArgumentError, "Self does not include: #{key}" unless keys.include?(key)
 
       # Find unused name
       new_keys = self[key].to_a.map { |e| e.to_s.to_sym }
-      new_key = (:name1..).find { |k| !new_keys.include?(k) } if new_keys.include?(new_key)
+      name = (:N1..).find { |k| !new_keys.include?(k) } if new_keys.include?(name)
 
-      hash = { new_key => (keys - [key]) }
+      hash = { name => (keys - [key]) }
       i = keys.index(key)
       each_row do |h|
         k = h.values[i]
@@ -33,7 +33,7 @@ module RedAmber
     # @param name [Symbol, String] key of the column which is come **from values**.
     # @param value [Symbol, String] key of the column which is come **from values**.
     # @return [DataFrame] long DataFrame.
-    def to_long(*keep_keys, name: :name, value: :value)
+    def to_long(*keep_keys, name: :N, value: :V)
       not_included = keep_keys - keys
       raise DataFrameArgumentError, "Not have keys #{not_included}" unless not_included.empty?
 
@@ -63,7 +63,7 @@ module RedAmber
     # @param name [Symbol, String] key of the column which will be expanded **to key names**.
     # @param value [Symbol, String] key of the column which will be expanded **to values**.
     # @return [DataFrame] wide DataFrame.
-    def to_wide(name: :name, value: :value)
+    def to_wide(name: :N, value: :V)
       name = name.to_sym
       raise DataFrameArgumentError, "Invalid key: #{name}" unless keys.include?(name)
 
