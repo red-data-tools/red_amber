@@ -129,7 +129,7 @@ df
 
 ![drop method image](doc/image/dataframe/drop.png)
 
-You can specify by keys or a boolean array (same size as n_keys).
+You can specify by keys or a boolean array of same size as n_keys.
 
 ```ruby
 # Same as df.drop(:species, :island)
@@ -223,7 +223,13 @@ penguins.remove(penguins[:bill_length_mm] < 40)
 
 DataFrame manipulating methods like `pick`, `drop`, `slice`, `remove`, `rename` and `assign` accept a block.
 
-This example is usage of block to update a column.
+Previous example is also OK with a block.
+
+```ruby
+penguins.remove { bill_length_mm < 40 }
+```
+
+Next example is an usage of block to update a column.
 
 ```ruby
 df = RedAmber::DataFrame.new(
@@ -321,8 +327,8 @@ starwars
 86       86 Captain Phasma   (nil)    (nil) unknown    unknown     unknown   ... NA
 87       87 Padmé Amidala      165     45.0 brown      light       brown     ... Human
 
-grouped = starwars.group(:species) { [count(:species), mean(:height, :mass)] }
-grouped.slice { v(:count) > 1 }
+starwars.group(:species) { [count(:species), mean(:height, :mass)] }
+        .slice { count > 1 }
 
 # =>
 #<RedAmber::DataFrame : 9 x 4 Vectors, 0x000000000006e848>

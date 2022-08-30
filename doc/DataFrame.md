@@ -511,6 +511,17 @@ penguins.to_rover
   [1, 2, 3]
   ```
 
+  A simple key name is usable as a method of the DataFrame if the key name is acceptable as a method name.
+  It returns a Vector same as `[]`.
+
+  ```ruby
+  df.a
+
+  # =>
+  #<RedAmber::Vector(:uint8, size=3):0x000000000000f258>
+  [1, 2, 3]
+  ```
+
 ### `slice  `  - to cut vertically is slice -
 
   Slice and select observations (rows) to create a sub DataFrame.
@@ -678,10 +689,12 @@ penguins.to_rover
 
     ```ruby
     penguins.remove do
-      vector = self[:bill_length_mm]
-      min = vector.mean - vector.std
-      max = vector.mean + vector.std
-      vector.to_a.map { |e| (min..max).include? e }
+      # We will use another style shown in slice
+      # self.bill_length_mm returns Vector
+      mean = bill_length_mm.mean
+      min = mean - bill_length_mm.std
+      max = mean + bill_length_mm.std
+      bill_length_mm.to_a.map { |e| (min..max).include? e }
     end
 
     # =>
@@ -698,6 +711,7 @@ penguins.to_rover
     139 Gentoo   Biscoe              50.4          15.7               222 ...     2009
     140 Gentoo   Biscoe              49.9          16.1               213 ...     2009
     ```
+
 - Notice for nil
   - When `remove` used with booleans, nil in booleans is treated as false. This behavior is aligned with Ruby's `nil#!`.
 
@@ -797,8 +811,12 @@ penguins.to_rover
     3 Hinata        28
 
     # update :age and add :brother
-    assigner = { age: [97, 78, 57], brother: ['Santa', nil, 'Momotaro'] }
-    df.assign(assigner)
+    df.assign do
+      {
+        age: age + 29,
+        brother: ['Santa', nil, 'Momotaro']
+      }
+    end
 
     # =>
     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000658b0>
@@ -817,7 +835,8 @@ penguins.to_rover
     df = RedAmber::DataFrame.new(
       index: [0, 1, 2, 3, nil],
       float: [0.0, 1.1,  2.2, Float::NAN, nil],
-      string: ['A', 'B', 'C', 'D', nil])
+      string: ['A', 'B', 'C', 'D', nil]
+    )
     df
 
     # =>
@@ -892,11 +911,11 @@ penguins.to_rover
     - "-key" denotes descending order
 
   ```ruby
-  df = RedAmber::DataFrame.new({
+  df = RedAmber::DataFrame.new(
         index:  [1, 1, 0, nil, 0],
         string: ['C', 'B', nil, 'A', 'B'],
         bool:   [nil, true, false, true, false],
-      })
+      )
   df.sort(:index, '-bool')
   
   # =>

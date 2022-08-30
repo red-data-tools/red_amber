@@ -279,4 +279,25 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal html, df.to_iruby[1]
     end
   end
+
+  sub_test_case 'method_missing' do
+    setup do
+      @df = DataFrame.new(number: [1, 2, 3], 'string.1': %w[Aa Bb Cc])
+    end
+
+    test 'key as a method' do
+      assert_raise(DataFrameArgumentError) { @df.key_not_exist }
+      assert_equal [1, 2, 3], @df.number.to_a
+    end
+
+    test 'key as a method in block' do
+      assert_equal <<~STR, @df.assign { [:number, number / 10.0] }.tdr_str
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 1 numeric, 1 string
+        # key         type   level data_preview
+        1 :number     double     3 [0.1, 0.2, 0.3]
+        2 :"string.1" string     3 ["Aa", "Bb", "Cc"]
+      STR
+    end
+  end
 end
