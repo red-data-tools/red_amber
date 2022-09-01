@@ -53,6 +53,15 @@ Or install it yourself as:
 gem install red_amber
 ```
 
+## Docker image and Jupyter Notebook
+
+[RubyData Docker Stacks](https://github.com/RubyData/docker-stacks) is available as a ready-to-run Docker image containing Jupyter and useful data tools as well as RedAmber (Thanks to @mrkn).
+
+Also you can try the contents of this README interactively by [Binder](https://mybinder.org/v2/gh/RubyData/docker-stacks/master?filepath=red-amber.ipynb). 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/RubyData/docker-stacks/master?filepath=red-amber.ipynb)
+
+
+
 ## `RedAmber::DataFrame`
 
 Represents a set of data in 2D-shape. The entity is a Red Arrow's Table object. 
