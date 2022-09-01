@@ -232,6 +232,18 @@ module RedAmber
       g
     end
 
+    def method_missing(name, *args, &block)
+      return v(name) if args.empty?
+
+      super
+    end
+
+    def respond_to_missing?(name, include_private)
+      return true if key?(name)
+
+      super
+    end
+
     private
 
     # initialize @variable, @keys, @vectors and return one of them

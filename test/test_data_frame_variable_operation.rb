@@ -246,7 +246,6 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'assign by arguments' do
-      assert_raise(DataFrameArgumentError) { @df.assign(:key) { :block } } # both param and block
       assert_raise(DataFrameArgumentError) { @df.assign(:key) } # key only
 
       assert_equal @df, @df.assign # assign nothing
@@ -323,6 +322,34 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str2, @df.assign { assigner2 }.tdr_str
       assert_equal str2, @df.assign { assigner2.to_a }.tdr_str
+    end
+
+    test 'assign by both args and block' do
+      assert_raise(DataFrameArgumentError) { @df.assign(:key) {} } # rubocop:disable Lint/EmptyBlock
+
+      str = <<~STR
+        RedAmber::DataFrame : 5 x 5 Vectors
+        Vectors : 2 numeric, 2 strings, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+      STR
+      assert_equal str, @df.assign(:new) { %w[a a b b c] }.tdr_str
+
+      str2 = <<~STR
+        RedAmber::DataFrame : 5 x 5 Vectors
+        Vectors : 2 numeric, 2 strings, 1 boolean
+        # key     type    level data_preview
+        1 :index  int8        5 [-1, -2, -3, -4, -5]
+        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+      STR
+      assert_equal str2, @df.assign(:index, :new) { [[-1, -2, -3, -4, -5], %w[a a b b c]] }.tdr_str
     end
 
     test 'assign_left by param' do
