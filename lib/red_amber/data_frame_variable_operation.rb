@@ -91,10 +91,20 @@ module RedAmber
 
     def assign_update(*assigner, &block)
       if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless assigner.empty?
-
-        assigner = [instance_eval(&block)]
+        assigner_from_block = instance_eval(&block)
+        assigner =
+          if assigner.empty?
+            # block only
+            [assigner_from_block]
+          # If Ruby >= 3.0, one line pattern match can be used
+          # assigner_from_block in [Array, *]
+          elsif multiple_assigner?(assigner_from_block)
+            assigner.zip(assigner_from_block)
+          else
+            assigner.zip([assigner_from_block])
+          end
       end
+
       case assigner
       in [] | [nil] | [{}] | [[]]
         return self
@@ -113,6 +123,8 @@ module RedAmber
       updater = {}
       appender = {}
       key_array_pairs.each do |key, array|
+        raise DataFrameArgumentError, "Empty column data: #{key} => nil" if array.nil?
+
         if keys.include? key
           updater[key] = array
         else
@@ -153,7 +165,7 @@ module RedAmber
         data = updater[key]
         next unless data
 
-        raise DataFrameArgumentError, "Data size mismatch (#{data.size} != #{size})" if data.size != size
+        raise DataFrameArgumentError, "Data size mismatch (#{data.size} != #{size})" if data.nil? || data.size != size
 
         a = Arrow::Array.new(data.is_a?(Vector) ? data.to_a : data)
         fields[i] = Arrow::Field.new(key, a.value_data_type)
@@ -181,6 +193,11 @@ module RedAmber
 
     def keys_by_booleans(booleans)
       keys.select.with_index { |_, i| booleans[i] }
+    end
+
+    def multiple_assigner?(assigner)
+      a1, *a2 = assigner
+      a1.is_a?(Array) && !a2.empty?
     end
   end
 end
