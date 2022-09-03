@@ -5,13 +5,11 @@ require 'test_helper'
 class DataFrameVariableOperationTest < Test::Unit::TestCase
   include RedAmber
   setup do
-    @df = RedAmber::DataFrame.new(
-      {
-        index: [0, 1, 2, 3, nil],
-        float: [0.0, 1.1,  2.2, Float::NAN, nil],
-        string: ['A', 'B', 'C', 'D', nil],
-        bool: [true, false, true, false, nil],
-      }
+    @df = DataFrame.new(
+      index: [0, 1, 2, 3, nil],
+      float: [0.0, 1.1,  2.2, Float::NAN, nil],
+      string: ['A', 'B', 'C', 'D', nil],
+      bool: [true, false, true, false, nil]
     )
   end
 
@@ -19,24 +17,14 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     test 'Empty dataframe' do
       df = DataFrame.new
       assert_true df.pick.empty?
-      assert_raise(DataFrameArgumentError) { df.pick(1) }
+      assert_raise(VectorArgumentError) { df.pick(1) }
     end
 
     test 'pick by arguments' do
       assert_raise(DataFrameArgumentError) { @df.pick(:index) { :block } }
-      assert_raise(DataFrameArgumentError) { @df.pick(1, 2) }
 
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 4 Vectors
-        Vectors : 2 numeric, 1 string, 1 boolean
-        # key     type    level data_preview
-        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-      OUTPUT
       assert_true @df.pick.empty? # pick nothing
-      assert_equal str, @df.pick(@df.keys).tdr_str
+      assert_equal @df.tdr_str, @df.pick(@df.keys).tdr_str # pick all
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 1 Vector
@@ -45,6 +33,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         1 :index uint8     5 [0, 1, 2, 3, nil], 1 nil
       OUTPUT
       assert_equal str, @df.pick(:index).tdr_str
+      assert_equal str, @df.pick(0).tdr_str
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 2 Vectors
@@ -55,6 +44,10 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, @df.pick(:index, :float).tdr_str
       assert_equal str, @df.pick(%i[index float]).tdr_str
+      assert_equal str, @df.pick(0, 1).tdr_str
+      assert_equal str, @df.pick([0, 1]).tdr_str
+      assert_equal str, @df.pick([0, -3]).tdr_str
+      assert_equal str, @df.pick(0..1).tdr_str
     end
 
     test 'pick by block' do
@@ -66,6 +59,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       OUTPUT
       assert_true @df.pick {}.empty? # pick nothing
       assert_equal str, @df.pick { :bool }.tdr_str
+      assert_equal str, @df.pick { 3 }.tdr_str
       assert_equal str, @df.pick { vectors.map(&:boolean?) }.tdr_str
 
       str = <<~OUTPUT
@@ -77,6 +71,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, @df.pick { %i[index float] }.tdr_str
       assert_equal str, @df.pick { vectors.map(&:numeric?) }.tdr_str
+      assert_equal str, @df.pick { [0, 1] }.tdr_str
     end
   end
 
@@ -89,20 +84,10 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
 
     test 'drop by arguments' do
       assert_raise(DataFrameArgumentError) { @df.drop(:index) { :block } }
-      assert_equal @df, @df.drop(1, 2)
 
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 4 Vectors
-        Vectors : 2 numeric, 1 string, 1 boolean
-        # key     type    level data_preview
-        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-      OUTPUT
       assert_equal @df, @df.drop # drop nothing
-      assert_equal str, @df.drop([]).tdr_str
-      assert_true @df.drop(@df.keys).empty?
+      assert_equal @df, @df.drop([]) # drop nothing
+      assert_true @df.drop(@df.keys).empty? # drop all
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 2 Vectors
@@ -113,6 +98,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, @df.drop(:float, :string).tdr_str
       assert_equal str, @df.drop(%i[float string]).tdr_str
+      assert_equal str, @df.drop(1, -2).tdr_str
+      assert_equal str, @df.drop(1..2).tdr_str
     end
 
     test 'drop by block' do
@@ -127,6 +114,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal(@df, @df.drop { nil }) # drop nothing
       assert_equal str, @df.drop { :bool }.tdr_str
       assert_equal str, @df.drop { vectors.map(&:boolean?) }.tdr_str
+      assert_equal str, @df.drop { -1 }.tdr_str
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 2 Vectors
@@ -137,6 +125,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, @df.drop { %i[index float] }.tdr_str
       assert_equal str, @df.drop { vectors.map(&:numeric?) }.tdr_str
+      assert_equal str, @df.drop { [0, 1] }.tdr_str
     end
   end
 

@@ -390,13 +390,13 @@ penguins.to_rover
 
 ### `pick  ` - pick up variables by key label -
 
-  Pick up some variables (columns) to create a sub DataFrame.
+  Pick up some columns (variables) to create a sub DataFrame.
 
   ![pick method image](doc/../image/dataframe/pick.png)
 
 - Keys as arguments
 
-  `pick(keys)` accepts keys as arguments in an Array.
+  `pick(keys)` accepts keys as arguments in an Array or a Range.
 
     ```ruby
     penguins.pick(:species, :bill_length_mm)
@@ -416,9 +416,31 @@ penguins.to_rover
     344 Gentoo             49.9
     ```
 
-- Booleans as a argument
+- Indices as arguments
 
-  `pick(booleans)` accepts booleans as a argument in an Array. Booleans must be same length as `n_keys`.
+  `pick(indices)` accepts indices as arguments. Indices should be Integers, Floats or Ranges of Integers.
+
+    ```ruby
+    penguins.pick(0..2, -1)
+    
+    # =>
+    #<RedAmber::DataFrame : 344 x 4 Vectors, 0x0000000000055ce4>
+        species  island    bill_length_mm     year
+        <string> <string>        <double> <uint16>
+      1 Adelie   Torgersen           39.1     2007
+      2 Adelie   Torgersen           39.5     2007
+      3 Adelie   Torgersen           40.3     2007
+      4 Adelie   Torgersen          (nil)     2007
+      5 Adelie   Torgersen           36.7     2007
+      : :        :                      :        :
+    342 Gentoo   Biscoe              50.4     2009
+    343 Gentoo   Biscoe              45.2     2009
+    344 Gentoo   Biscoe              49.9     2009
+    ```
+
+- Booleans as arguments
+
+  `pick(booleans)` accepts booleans as arguments in an Array. Booleans must be same length as `n_keys`.
 
     ```ruby
     penguins.pick(penguins.types.map { |type| type == :string })
@@ -438,9 +460,9 @@ penguins.to_rover
     344 Gentoo   Biscoe    male
     ```
 
- - Keys or booleans by a block
+- Keys or booleans by a block
 
-    `pick {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, or a boolean Array with a same length as `n_keys`. Block is called in the context of self.
+    `pick {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, indices or a boolean Array with a same length as `n_keys`. Block is called in the context of self.
 
     ```ruby
     penguins.pick { keys.map { |key| key.end_with?('mm') } }
@@ -462,21 +484,25 @@ penguins.to_rover
 
 ### `drop  ` - pick and drop -
 
-  Drop some variables (columns) to create a remainer DataFrame.
+  Drop some columns (variables) to create a remainer DataFrame.
 
   ![drop method image](doc/../image/dataframe/drop.png)
 
 - Keys as arguments
 
-  `drop(keys)` accepts keys as arguments in an Array.
+  `drop(keys)` accepts keys as arguments in an Array or a Range.
 
-- Booleans as a argument
+- Indices as arguments
 
-  `drop(booleans)` accepts booleans as a argument in an Array. Booleans must be same length as `n_keys`.
+  `drop(indices)` accepts indices as a arguments. Indices should be Integers, Floats or Ranges of Integers.
+
+- Booleans as arguments
+
+  `drop(booleans)` accepts booleans as an argument in an Array. Booleans must be same length as `n_keys`.
 
 - Keys or booleans by a block
 
-  `drop {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, or a boolean Array with a same length as `n_keys`. Block is called in the context of self.
+  `drop {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return keys, indices or a boolean Array with a same length as `n_keys`. Block is called in the context of self.
   
 - Notice for nil
 
@@ -524,7 +550,7 @@ penguins.to_rover
 
 ### `slice  `  - to cut vertically is slice -
 
-  Slice and select observations (rows) to create a sub DataFrame.
+  Slice and select rows (observations) to create a sub DataFrame.
 
   ![slice method image](doc/../image/dataframe/slice.png)
 
@@ -555,7 +581,7 @@ penguins.to_rover
 
 - Booleans as an argument
 
-  `slice(booleans)` accepts booleans as a argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `size`.
+  `slice(booleans)` accepts booleans as an argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `size`.
 
     ```ruby
     vector = penguins[:bill_length_mm]
@@ -632,7 +658,7 @@ penguins.to_rover
 
 ### `remove`
 
-  Slice and reject observations (rows) to create a remainer DataFrame.
+  Slice and reject rows (observations) to create a remainer DataFrame.
 
   ![remove method image](doc/../image/dataframe/remove.png)
 
@@ -661,7 +687,7 @@ penguins.to_rover
 
 - Booleans as an argument
 
-  `remove(booleans)` accepts booleans as a argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `size`.
+  `remove(booleans)` accepts booleans as an argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `size`.
 
     ```ruby
     # remove all observation contains nil

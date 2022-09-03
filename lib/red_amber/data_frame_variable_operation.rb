@@ -9,12 +9,16 @@ module RedAmber
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        picker = instance_eval(&block)
+        picker = [instance_eval(&block)]
       end
-      picker = [picker].flatten
+      picker.flatten!
       return DataFrame.new if picker.empty? || picker == [nil]
 
-      picker = keys_by_booleans(picker) if booleans?(picker)
+      key_vector = Vector.new(keys)
+      picker_vector = parse_to_vector(picker)
+
+      picker = key_vector.filter(*picker_vector).to_a if picker_vector.boolean?
+      picker = key_vector.take(*picker_vector).to_a if picker_vector.numeric?
 
       # DataFrame#[] creates a Vector with single key is specified.
       # DataFrame#pick creates a DataFrame with single key.
@@ -29,12 +33,22 @@ module RedAmber
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        dropper = instance_eval(&block)
+        dropper = [instance_eval(&block)]
       end
-      dropper = [dropper].flatten
-      dropper = keys_by_booleans(dropper) if booleans?(dropper)
+      dropper.flatten!
 
-      picker = keys - dropper
+      key_vector = Vector.new(keys)
+      dropper_vector = parse_to_vector(dropper)
+
+      picker =
+        if dropper_vector.boolean?
+          key_vector.filter(*dropper_vector.primitive_invert).each.map(&:to_sym)
+        elsif dropper_vector.numeric?
+          keys - key_vector.take(*dropper_vector).each.map(&:to_sym)
+        else
+          keys - dropper
+        end
+
       return DataFrame.new if picker.empty?
 
       # DataFrame#[] creates a Vector with single key is specified.
@@ -189,10 +203,6 @@ module RedAmber
           arrays << Arrow::ChunkedArray.new([a])
         end
       end
-    end
-
-    def keys_by_booleans(booleans)
-      keys.select.with_index { |_, i| booleans[i] }
     end
 
     def multiple_assigner?(assigner)
