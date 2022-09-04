@@ -94,6 +94,7 @@ Metrics/MethodLength:
   Max: 30
   Exclude:
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 33
+    - 'lib/red_amber/data_frame_selectable.rb' # Max: 38
     - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 35
 
 # Max: 100
