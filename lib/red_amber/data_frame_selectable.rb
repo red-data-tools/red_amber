@@ -3,8 +3,8 @@
 module RedAmber
   # mix-in for the class DataFrame
   module DataFrameSelectable
-    # select variables: [symbol] or [string]
-    # select observations: [array of index], [range]
+    # select columns: [symbol] or [string]
+    # select rows: [array of index], [range]
     def [](*args)
       args.flatten!
       raise DataFrameArgumentError, 'Empty dataframe' if empty?
@@ -22,7 +22,7 @@ module RedAmber
       raise DataFrameArgumentError, "Invalid argument: #{args}"
     end
 
-    # slice and select some observations to create sub DataFrame
+    # slice and select rows to create sub DataFrame
     def slice(*args, &block)
       slicer = args
       if block
@@ -32,7 +32,7 @@ module RedAmber
       end
       slicer.flatten!
 
-      raise DataFrameArgumentError, 'Empty dataframe' if empty?
+      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
       return remove_all_values if slicer.empty? || slicer[0].nil?
 
       vector = parse_to_vector(slicer)
@@ -46,7 +46,51 @@ module RedAmber
       raise DataFrameArgumentError, "Invalid argument #{slicer}"
     end
 
-    # remove selected observations to create sub DataFrame
+    def slice_by(key, keep_key: false, &block)
+      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
+      raise DataFrameArgumentError, 'No block given' unless block
+      raise DataFrameArgumentError, "#{key} is no a key of self" unless key?(key)
+      return self if key.nil?
+
+      slicer = instance_eval(&block)
+      return DataFrame.new unless slicer
+
+      if slicer.is_a?(Range)
+        from = slicer.begin
+        from =
+          if from.is_a?(String)
+            self[key].index(from)
+          elsif from.nil?
+            0
+          elsif from < 0
+            size + from
+          else
+            from
+          end
+        to = slicer.end
+        to =
+          if to.is_a?(String)
+            self[key].index(to)
+          elsif to.nil?
+            size - 1
+          elsif to < 0
+            size + to
+          else
+            to
+          end
+        slicer = (from..to).to_a
+      else
+        slicer = slicer.map { |x| x.is_a?(String) ? self[key].index(x) : x }
+      end
+
+      if keep_key
+        take(slicer)
+      else
+        take(slicer).drop(key)
+      end
+    end
+
+    # remove selected rows to create remainer DataFrame
     def remove(*args, &block)
       remover = args
       if block

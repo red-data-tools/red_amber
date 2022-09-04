@@ -928,6 +928,74 @@ penguins.to_rover
   5         5   (nil)    (nil) (nil)
   ```
 
+### `slice_by(key, keep_key: false) { block }`
+
+`slice_by` accepts a key and a block to select rows.
+
+(Since 0.2.1)
+
+  ```ruby
+  df = RedAmber::DataFrame.new(
+    index: [0, 1, 2, 3, nil],
+    float: [0.0, 1.1,  2.2, Float::NAN, nil],
+    string: ['A', 'B', 'C', 'D', nil]
+  )
+  df
+
+  # =>
+  #<RedAmber::DataFrame : 5 x 3 Vectors, 0x0000000000069e60>
+      index    float string
+    <uint8> <double> <string>
+  1       0      0.0 A
+  2       1      1.1 B
+  3       2      2.2 C
+  4       3      NaN D
+  5   (nil)    (nil) (nil)
+
+  df.slice_by(:string) { ["A", "C"] }
+
+  # =>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x000000000001b1ac>
+      index    float
+    <uint8> <double>
+  1       0      0.0
+  2       2      2.2
+  ```
+
+It is the same behavior as;
+
+  ```ruby
+  df.slice { [string.index("A"), string.index("C")] }.drop(:string)
+  ```
+
+`slice_by` also accepts a Range.
+
+  ```ruby
+  df.slice_by(:string) { "A".."C" }
+
+  # =>
+  #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000069668>
+      index    float
+    <uint8> <double>
+  1       0      0.0
+  2       1      1.1
+  3       2      2.2
+  ```
+
+When the option `keep_key: true` used, the column `key` will be preserved.
+
+  ```ruby
+  df.slice_by(:string, keep_key: true) { "A".."C" }
+
+  # =>
+  #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000073c44>
+      index    float string
+    <uint8> <double> <string>
+  1       0      0.0 A
+  2       1      1.1 B
+  3       2      2.2 C
+  ```
+
 ## Updating
 
 ### `sort`

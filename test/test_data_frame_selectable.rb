@@ -267,6 +267,70 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case 'slice_by' do
+    test 'Invalid arguments' do
+      assert_raise(ArgumentError) { @df.slice_by {} } # no key
+      assert_raise(DataFrameArgumentError) { @df.slice_by(:string) } # no block
+      assert_raise(DataFrameArgumentError) { @df.slice_by(:key_not_exist) { [1, 2] } }
+      assert_raise(DataFrameArgumentError) { @df.slice_by(:string) { [1, 5] } }
+    end
+
+    test 'by Range' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 boolean
+        # key    type    level data_preview
+        1 :index uint8       3 [0, 1, 2]
+        2 :float double      3 [0.0, 1.1, 2.2]
+        3 :bool  boolean     2 {true=>2, false=>1}
+      OUTPUT
+      assert_equal str, @df.slice_by(:string) { 0..2 }.tdr_str
+      assert_equal str, @df.slice_by(:string) { ..2 }.tdr_str
+      assert_equal str, @df.slice_by(:string) { 'A'..'C' }.tdr_str
+      assert_equal str, @df.slice_by(:string) { ..'C' }.tdr_str
+
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 boolean
+        # key    type    level data_preview
+        1 :index uint8       3 [2, 3, nil], 1 nil
+        2 :float double      3 [2.2, NaN, nil], 1 NaN, 1 nil
+        3 :bool  boolean     3 [true, false, nil], 1 nil
+      OUTPUT
+      assert_equal str, @df.slice_by(:string) { 2..-1 }.tdr_str
+      assert_equal str, @df.slice_by(:string) { 2.. }.tdr_str
+      assert_equal str, @df.slice_by(:string) { 'C'..nil }.tdr_str
+      assert_equal str, @df.slice_by(:string) { 'C'.. }.tdr_str
+    end
+
+    test 'by Array' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 boolean
+        # key    type    level data_preview
+        1 :index uint8       3 [0, 1, nil], 1 nil
+        2 :float double      3 [0.0, 1.1, nil], 1 nil
+        3 :bool  boolean     3 [true, false, nil], 1 nil
+      OUTPUT
+      assert_equal str, @df.slice_by(:string) { [0, 1, 4] }.tdr_str
+      assert_equal str, @df.slice_by(:string) { [0, 1, -1] }.tdr_str
+      assert_equal str, @df.slice_by(:string) { ['A', 'B', nil] }.tdr_str
+    end
+
+    test 'option keep_key: true' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        1 :index  uint8       3 [0, 1, 2]
+        2 :float  double      3 [0.0, 1.1, 2.2]
+        3 :string string      3 ["A", "B", "C"]
+        4 :bool   boolean     2 {true=>2, false=>1}
+      OUTPUT
+      assert_equal str, @df.slice_by(:string, keep_key: true) { 0..2 }.tdr_str
+    end
+  end
+
   sub_test_case 'remove by arguments' do
     test 'Empty dataframe' do
       df = DataFrame.new
