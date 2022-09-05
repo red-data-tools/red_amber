@@ -197,10 +197,10 @@ boolean.all(skip_nulls: false) #=> false
 | ✓`fill_nil_forward` | ✓ | ✓ | ✓ |    |       |
 | ✓ `floor`    |     |  ✓  |     |     |       |
 | ✓ `invert`   |  ✓  |     |     |     |`!`, alias `not`|
-|[ ]`ln`       |     | [ ] |     |     |       |
-|[ ]`log10`    |     | [ ] |     |     |       |
-|[ ]`log1p`    |     | [ ] |     |     |       |
-|[ ]`log2`     |     | [ ] |     |     |       |
+| ✓ `ln`       |     |  ✓  |     |     |       |
+| ✓ `log10`    |     |  ✓  |     |     |       |
+| ✓ `log1p`    |     |  ✓  |     |     |Compute natural log of (1+x)|
+| ✓ `log2`     |     |  ✓  |     |     |       |
 | ✓ `round`    |     |  ✓  |     | ✓ Round (:mode, :n_digits)|    |
 | ✓ `round_to_multiple`| | ✓ |   | ✓ RoundToMultiple :mode, :multiple| multiple must be an Arrow::Scalar|
 | ✓ `sign`     |     |  ✓  |     |     |       |
