@@ -206,8 +206,12 @@ module RedAmber
     end
 
     def multiple_assigner?(assigner)
-      a1, *a2 = assigner
-      a1.is_a?(Array) && !a2.empty?
+      case assigner
+      in [Vector, *] | [Array, *] | [Arrow::Array, *]
+        true
+      else
+        false
+      end
     end
   end
 end
