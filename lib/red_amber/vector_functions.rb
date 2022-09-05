@@ -125,7 +125,7 @@ module RedAmber
 
     # [Binary element-wise]: vector.func(other) => vector
     binary_element_wise =
-      %i[atan2 and_not and_not_kleene bit_wise_and bit_wise_or bit_wise_xor]
+      %i[atan2 and_not and_not_kleene bit_wise_and bit_wise_or bit_wise_xor logb]
     binary_element_wise.each do |function|
       define_method(function) do |other, **options|
         datum = exec_func_binary(function, other, options)
@@ -197,9 +197,6 @@ module RedAmber
     end
 
     # < Not implimented yet > ---
-
-    # NaN support needed
-    # - logb
 
     # option(s) required
     # - index
