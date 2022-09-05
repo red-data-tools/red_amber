@@ -246,6 +246,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal @df.tdr_str, @df.assign(unchanged_pair).tdr_str
 
       assigner = { new: %w[a a b b c] }
+      assigner_vector = { new: Vector.new(assigner[:new]) }
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
@@ -260,6 +261,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.assign(new: %w[a a b b c]).tdr_str # directly write assigner
       assert_equal str, @df.assign(assigner.to_a).tdr_str
       assert_equal str, @df.assign(*assigner.to_a).tdr_str # assign(:x, ary) style
+      assert_equal str, @df.assign(assigner_vector).tdr_str
 
       assigner2 = { index: [-1, -2, -3, -4, -5], new: %w[a a b b c] }
       str2 = <<~OUTPUT
@@ -339,6 +341,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       STR
       assert_equal str2, @df.assign(:index, :new) { [[-1, -2, -3, -4, -5], %w[a a b b c]] }.tdr_str
+      assert_equal str2, @df.assign(:index, :new) { [Vector.new([-1, -2, -3, -4, -5]), %w[a a b b c]] }.tdr_str
     end
 
     test 'assign_left by param' do
