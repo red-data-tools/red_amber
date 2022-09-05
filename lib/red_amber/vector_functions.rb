@@ -34,13 +34,6 @@ module RedAmber
     end
     alias_method :std, :sd
 
-    # option(s) required
-    # - index
-
-    # Returns other than value
-    # - mode
-    # - tdigest
-
     # Return quantile
     #   0.5 quantile (median) is returned by default.
     #   Or return quantile for specified probability (prob).
@@ -88,8 +81,9 @@ module RedAmber
 
     # [Unary element-wise]: vector.func => vector
     unary_element_wise =
-      %i[abs array_sort_indices atan bit_wise_not ceil cos fill_null_backward fill_null_forward floor is_finite
-         is_inf is_nan is_null is_valid round round_to_multiple sign sin tan trunc unique]
+      %i[abs acos asin array_sort_indices atan bit_wise_not ceil cos fill_null_backward \
+         fill_null_forward floor is_finite is_inf is_nan is_null is_valid \
+         round round_to_multiple sign sin tan trunc unique]
     unary_element_wise.each do |function|
       define_method(function) do |**options|
         datum = exec_func_unary(function, options)
@@ -129,13 +123,6 @@ module RedAmber
     end
     alias_method :not, :invert
 
-    # NaN support needed
-    # - acos asin ln log10 log1p log2
-
-    # Functions with numerical range check
-    # - abs_checked acos_checked asin_checked cos_checked ln_checked
-    #   log10_checked log1p_checked log2_checked sin_checked tan_checked
-
     # [Binary element-wise]: vector.func(other) => vector
     binary_element_wise =
       %i[atan2 and_not and_not_kleene bit_wise_and bit_wise_or bit_wise_xor]
@@ -161,13 +148,6 @@ module RedAmber
         Vector.new(datum.value)
       end
     end
-
-    # NaN support needed
-    # - logb
-
-    # Functions with numerical range check
-    # - add_checked divide_checked logb_checked multiply_checked power_checked subtract_checked
-    #   shift_left_checked shift_right_checked
 
     # [Binary element-wise with operator]: vector.func(other) => vector
     binary_element_wise_op = {
@@ -215,6 +195,27 @@ module RedAmber
       end
       [Vector.new(Array(other) * size), self]
     end
+
+    # < Not implimented yet > ---
+
+    # NaN support needed
+    # - ln log10 log1p log2
+    # - logb
+
+    # option(s) required
+    # - index
+
+    # Returns other than value
+    # - mode
+    # - tdigest
+
+    # Functions with numerical range check (unary)
+    # - abs_checked acos_checked asin_checked cos_checked ln_checked
+    #   log10_checked log1p_checked log2_checked sin_checked tan_checked
+
+    # Functions with numerical range check (binary)
+    # - add_checked divide_checked logb_checked multiply_checked power_checked subtract_checked
+    #   shift_left_checked shift_right_checked
 
     # (array functions)
     # dictionary_encode,

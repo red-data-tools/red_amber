@@ -187,8 +187,8 @@ boolean.all(skip_nulls: false) #=> false
 | ✓ `-@`       |     |  ✓  |     |     |as `-vector`|
 | ✓ `negate`   |     |  ✓  |     |     |`-@`   |
 | ✓ `abs`      |     |  ✓  |     |     |       |
-|[ ]`acos`     |     | [ ] |     |     |       |
-|[ ]`asin`     |     | [ ] |     |     |       |
+| ✓ `acos`     |     |  ✓  |     |     |       |
+| ✓ `asin`     |     |  ✓  |     |     |       |
 | ✓ `atan`     |     |  ✓  |     |     |       |
 | ✓ `bit_wise_not`|  | (✓) |     |     |integer only|
 | ✓ `ceil`     |     |  ✓  |     |     |       |

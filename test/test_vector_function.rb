@@ -357,6 +357,31 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case('unary element-wise with NaN or Infinity') do
+    setup do
+      @boolean = Vector.new([true, false, nil])
+      @integer = Vector.new([-1, 0, 1, 2])
+      @double = Vector.new([-1.0, 0.0, 1.0, 2])
+      @string = Vector.new(%w[A B C])
+    end
+
+    test '#acos' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.acos }
+      expected = [Math::PI, Math::acos(0), 0.0, Float::NAN]
+      assert_equal_array_with_nan expected, @integer.acos
+      assert_equal_array_with_nan expected, @double.acos
+      assert_raise(Arrow::Error::NotImplemented) { @string.acos }
+    end
+
+    test '#asin' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.asin }
+      expected = [Math::asin(-1), 0.0, Math::asin(1), Float::NAN]
+      assert_equal_array_with_nan expected, @integer.asin
+      assert_equal_array_with_nan expected, @double.asin
+      assert_raise(Arrow::Error::NotImplemented) { @string.asin }
+    end
+  end
+
   sub_test_case('unary element-wise rounding') do
     setup do
       @boolean = Vector.new([true, true, nil])
