@@ -1,3 +1,61 @@
+## [0.2.1] - 2022-09-07
+
+-Bug fixes
+
+  - Fix `Vector#each` with block (#66)
+    `Vector#each` will return value of each element with block.
+
+  - Fix table format at size == 9 (#67)
+
+  - Fix to support Vector in `DataFrame#assign` (#77)
+
+  - Add `assert_delta` functionality for `assert_with_NaN` (#78)
+
+  - Fix Vector#is_in when self is chunked (#79)
+
+  - Fix Array type error (uint/int) (#79)
+
+- New features and improvements
+
+  - Refine `DataFrame#indices` method (#67)
+
+  - Update DataFrame reshaping methods (#73)
+
+    - Change default option value of DataFrame reshaping
+
+    - Change the order of import_cars example
+
+  - Add `DataFrame#method_missing` to get column vector by method (#75)
+
+    - Add `DataFrame#method_missing` to get column (#75)
+
+  - Accept both args and block in `DataFrame#assign` (#75)
+
+  - Accept indices in `DataFrame#pick` and `DataFrame#drop` (#76)
+
+  - Add `DataFrame#slice_by` method (#77)
+  
+  - Add new Vector functions (#78)
+
+    - Add inverse trigonometric function for Vector
+      - `acos`
+      - `asin`
+
+    - Add logarithmic function for Vector
+      - `ln`
+      - `log10`
+      - `log1p`
+      - `log2`
+
+    - Add binary function `Vector#logb`
+
+  - Docker image and Jupyter Notebook (Thanks to @mrkn)
+    - Add link to RubyData in README
+    - Add link to interactive README by Binder
+
+  - Update Jupyter Notebook `71 examples of RedAmber`
+
+
 ## [0.2.0] - 2022-08-15
 
 - Bump version up to 0.2.0
