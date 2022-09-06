@@ -137,8 +137,39 @@ class VectorTest < Test::Unit::TestCase
       assert_equal @expected, @vector.is_in(Vector.new(@values)).to_a # Vector
       assert_equal @expected, @vector.is_in([2.0, 3.0]).to_a # Cast
       assert_equal @expected, Vector.new([1.0, 2, 3, 4, 5]).is_in([2, 3]).to_a # Cast
-      assert_equal [true, false, false, false, false], @vector.is_in([1, '2']).to_a # [1, '2'] => [1, 50]
       assert_raise(TypeError) { @vector.is_in([1, true]) } # Can't cast
+    end
+
+    test 'chunked array' do
+      chunked_vector = Vector.new(Arrow::ChunkedArray.new([[1, 2], [3, 4, 5]]))
+      chunked_values = Vector.new(Arrow::ChunkedArray.new([[0, 2], [3]]))
+      assert_equal @expected, chunked_vector.is_in(@values).to_a # Chunked Vector
+      assert_equal @expected, @vector.is_in(chunked_values).to_a # Chunked values
+    end
+
+    test 'str and numeric' do
+      array = ['1', 2, 3]
+      assert_equal @expected, @vector.is_in(array).to_a
+    end
+
+    setup do 
+      @uint = [1, 2, 3, 4, 5]
+      @int = [2, 3, -1]
+      @int_vector = Vector.new(@int)
+      @uint_vector = Vector.new(@uint)
+    end
+
+    test 'uint is_in int' do
+      assert_equal @expected, @uint_vector.is_in(@int).to_a
+      assert_equal @expected, @uint_vector.is_in(Arrow::Array.new(@int)).to_a
+      assert_equal @expected, @uint_vector.is_in(@int_vector).to_a
+    end
+
+    test 'int is_in uint' do
+      expected = [true, true, false]
+      assert_equal expected, @int_vector.is_in(@uint).to_a
+      assert_equal expected, @int_vector.is_in(Arrow::Array.new(@uint)).to_a
+      assert_equal expected, @int_vector.is_in(@uint_vector).to_a
     end
   end
 

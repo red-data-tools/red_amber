@@ -82,16 +82,17 @@ module RedAmber
 
     #   @param values [Array, Arrow::Array, Vector]
     def is_in(*values)
-      values.flatten!
+      self_data = chunked? ? data.pack : data
+
       array =
-        case values[0]
-        when Vector
-          values[0].data
-        when Arrow::Array
-          values[0]
+        case values
+        in [Vector] | [Arrow::Array] | [Arrow::ChunkedArray]
+          values[0].to_a
+        else
+          Array(values).flatten
         end
-      array ||= data.class.new(values)
-      Vector.new(data.is_in(array))
+
+      Vector.new(self_data.is_in(array))
     end
 
     # Arrow's support required
