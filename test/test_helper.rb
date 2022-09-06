@@ -26,7 +26,13 @@ module Helper
     end
   end
 
-  def assert_equal_array_with_nan(expected, actual, message = nil)
-    assert_equal(Array(expected).to_s, Array(actual).to_s, message)
+  def assert_equal_array_with_nan(expected, actual, delta = 1e-15, message = nil)
+    Array(expected).zip(Array(actual)) do |e, a|
+      if e.nil? || e.nan? || e.infinite?
+        assert_equal(e.to_s, a.to_s, message)
+      else
+        assert_in_delta(e, a, delta, message)
+      end
+    end
   end
 end

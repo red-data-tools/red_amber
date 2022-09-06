@@ -187,8 +187,8 @@ boolean.all(skip_nulls: false) #=> false
 | ✓ `-@`       |     |  ✓  |     |     |as `-vector`|
 | ✓ `negate`   |     |  ✓  |     |     |`-@`   |
 | ✓ `abs`      |     |  ✓  |     |     |       |
-|[ ]`acos`     |     | [ ] |     |     |       |
-|[ ]`asin`     |     | [ ] |     |     |       |
+| ✓ `acos`     |     |  ✓  |     |     |       |
+| ✓ `asin`     |     |  ✓  |     |     |       |
 | ✓ `atan`     |     |  ✓  |     |     |       |
 | ✓ `bit_wise_not`|  | (✓) |     |     |integer only|
 | ✓ `ceil`     |     |  ✓  |     |     |       |
@@ -197,10 +197,10 @@ boolean.all(skip_nulls: false) #=> false
 | ✓`fill_nil_forward` | ✓ | ✓ | ✓ |    |       |
 | ✓ `floor`    |     |  ✓  |     |     |       |
 | ✓ `invert`   |  ✓  |     |     |     |`!`, alias `not`|
-|[ ]`ln`       |     | [ ] |     |     |       |
-|[ ]`log10`    |     | [ ] |     |     |       |
-|[ ]`log1p`    |     | [ ] |     |     |       |
-|[ ]`log2`     |     | [ ] |     |     |       |
+| ✓ `ln`       |     |  ✓  |     |     |       |
+| ✓ `log10`    |     |  ✓  |     |     |       |
+| ✓ `log1p`    |     |  ✓  |     |     |Compute natural log of (1+x)|
+| ✓ `log2`     |     |  ✓  |     |     |       |
 | ✓ `round`    |     |  ✓  |     | ✓ Round (:mode, :n_digits)|    |
 | ✓ `round_to_multiple`| | ✓ |   | ✓ RoundToMultiple :mode, :multiple| multiple must be an Arrow::Scalar|
 | ✓ `sign`     |     |  ✓  |     |     |       |
@@ -267,7 +267,7 @@ double.round(n_digits: -1)
 | ✓ `is_valid`      |  ✓  |  ✓  |  ✓  |     |       |
 | ✓ `less`          |  ✓  |  ✓  |  ✓  |     |`<`, alias `lt`|
 | ✓ `less_equal`    |  ✓  |  ✓  |  ✓  |     |`<=`, alias `le`|
-|[ ]`logb`          |     | [ ] |     |     |       |
+| ✓ `logb`          |     |  ✓  |     |     |logb(b) Compute base `b` logarithm|
 |[ ]`mod`           |     | [ ] |     |     | `%`   |
 | ✓ `multiply`      |     |  ✓  |     |     | `*`   |
 | ✓ `not_equal`     |  ✓  |  ✓  |  ✓  |     |`!=`, alias `ne`|
@@ -282,8 +282,6 @@ double.round(n_digits: -1)
 ### `uniq`
 
   Returns a new array with distinct elements.
-
-(Not impremented functions)
 
 ### `tally` and `value_counts`
 
@@ -308,15 +306,6 @@ double.round(n_digits: -1)
   Returns quantiles for specified probabilities in a DataFrame.
 
 ### `sort_indexes`, `sort_indices`, `array_sort_indices`
-
-### [ ] `sort`, `sort_by`
-### [ ] argmin, argmax
-### [ ] (array functions)
-### [ ] (strings functions)
-### [ ] (temporal functions)
-### [ ] (conditional functions)
-### [ ] (index functions)
-### [ ] (other functions)
 
 ## Coerce
 

@@ -357,6 +357,71 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case('element-wise with NaN or Infinity') do
+    setup do
+      @boolean = Vector.new([true, false, nil])
+      @integer = Vector.new([-1, 0, 1, 2])
+      @double = Vector.new([-1.0, 0.0, 1.0, 2])
+      @string = Vector.new(%w[A B C])
+    end
+
+    test '#acos' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.acos }
+      expected = [Math::PI, Math.acos(0), 0.0, Float::NAN]
+      assert_equal_array_with_nan expected, @integer.acos
+      assert_equal_array_with_nan expected, @double.acos
+      assert_raise(Arrow::Error::NotImplemented) { @string.acos }
+    end
+
+    test '#asin' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.asin }
+      expected = [Math.asin(-1), 0.0, Math.asin(1), Float::NAN]
+      assert_equal_array_with_nan expected, @integer.asin
+      assert_equal_array_with_nan expected, @double.asin
+      assert_raise(Arrow::Error::NotImplemented) { @string.asin }
+    end
+
+    test '#ln' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.ln }
+      expected = [Float::NAN, -Float::INFINITY, 0.0, Math.log(2)]
+      assert_equal_array_with_nan expected, @integer.ln
+      assert_equal_array_with_nan expected, @double.ln
+      assert_raise(Arrow::Error::NotImplemented) { @string.ln }
+    end
+
+    test '#log10' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.log10 }
+      expected = [Float::NAN, -Float::INFINITY, 0.0, Math.log10(2)]
+      assert_equal_array_with_nan expected, @integer.log10
+      assert_equal_array_with_nan expected, @double.log10
+      assert_raise(Arrow::Error::NotImplemented) { @string.log10 }
+    end
+
+    test '#log1p' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.log1p }
+      expected = [-Float::INFINITY, 0.0, Math.log(2), Math.log(3)]
+      assert_equal_array_with_nan expected, @integer.log1p
+      assert_equal_array_with_nan expected, @double.log1p
+      assert_raise(Arrow::Error::NotImplemented) { @string.log1p }
+    end
+
+    test '#log2' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.log2 }
+      expected = [Float::NAN, -Float::INFINITY, 0.0, 1.0]
+      assert_equal_array_with_nan expected, @integer.log2
+      assert_equal_array_with_nan expected, @double.log2
+      assert_raise(Arrow::Error::NotImplemented) { @string.log2 }
+    end
+
+    test '#logb(b)' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.logb(2) }
+      assert_equal_array_with_nan @integer.log2, @integer.logb(2)
+      assert_equal_array_with_nan @double.log2, @double.logb(2)
+      assert_equal_array_with_nan [Float::NAN, Float::NAN, -0.0, -0.0], @double.logb(0)
+      assert_raise(Arrow::Error::NotImplemented) { @string.logb(2) }
+    end
+  end
+
   sub_test_case('unary element-wise rounding') do
     setup do
       @boolean = Vector.new([true, true, nil])
