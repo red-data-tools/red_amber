@@ -64,7 +64,9 @@ Also you can try the contents of this README interactively by [Binder](https://m
 
 ## `RedAmber::DataFrame`
 
-Represents a set of data in 2D-shape. The entity is a Red Arrow's Table object. 
+It represents a set of data in 2D-shape. The entity is a Red Arrow's Table object. 
+
+![dataframe model of RedAmber](doc/image/dataframe_model.png)
 
 ```ruby
 require 'red_amber' # require 'red-amber' is also OK.
@@ -88,18 +90,15 @@ penguins = RedAmber::DataFrame.new(arrow)
 344 Gentoo   Biscoe              49.9          16.1               213 ...     2009
 ```
 
-### DataFrame model
-![dataframe model of RedAmber](doc/image/dataframe_model.png)
-
-For example, `DataFrame#pick` accepts keys as an argument and returns a sub DataFrame.
+For example, `DataFrame#pick` accepts keys as arguments and returns a sub DataFrame.
 
 ![pick method image](doc/image/dataframe/pick.png)
 
 ```ruby
 penguins.keys
 # =>
-[:species,                                       
- :island,                                        
+[:species,
+ :island,
  :bill_length_mm,
  :bill_depth_mm,
  :flipper_length_mm,
@@ -339,7 +338,7 @@ starwars.group(:species) { [count(:species), mean(:height, :mass)] }
 3 Wookiee        2        231.0      124.0
 4 Gungan         3        208.7       74.0
 5 NA             4        181.3       48.0
-: :              :            :          :
+6 Zabrak         2        173.0       80.0
 7 Twi'lek        2        179.0       55.0
 8 Mirialan       2        168.0       53.1
 9 Kaminoan       2        221.0       88.0 
@@ -389,7 +388,7 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## Jupyter notebook
 
-[61 Examples of Red Amber](doc/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
+[71 Examples of Red Amber](doc/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
 
 ## Development
 
