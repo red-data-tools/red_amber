@@ -1,6 +1,6 @@
 ## [0.2.1] - 2022-09-07
 
--Bug fixes
+- Bug fixes
 
   - Fix `Vector#each` with block (#66)
     `Vector#each` will return value of each element with block.
