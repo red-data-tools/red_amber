@@ -387,7 +387,11 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## Jupyter notebook
 
-[71 Examples of Red Amber](doc/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
+[71 Examples of Red Amber](binder/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
+
+You can try this notebook on [Binder](https://mybinder.org/v2/gh/heronshoes/red_amber/master?filepath=examples_of_red_amber.ipynb). 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/red_amber/master?filepath=examples_of_red_amber.ipynb)
+
 
 ## Development
 
