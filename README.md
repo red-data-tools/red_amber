@@ -57,8 +57,8 @@ gem install red_amber
 
 [RubyData Docker Stacks](https://github.com/RubyData/docker-stacks) is available as a ready-to-run Docker image containing Jupyter and useful data tools as well as RedAmber (Thanks to @mrkn).
 
-Also you can try the contents of this README interactively by [Binder](https://mybinder.org/v2/gh/heronshoes/red_amber/master?filepath=README.ipynb). 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/red_amber/master?filepath=README.ipynb)
+Also you can try the contents of this README interactively by [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=README.ipynb). 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=README.ipynb)
 
 
 ## `RedAmber::DataFrame`
@@ -378,9 +378,9 @@ Next example returns aggregated result.
 
 ```ruby
 penguins[:bill_length_mm].mean
-43.92192982456141
-# =>
 
+# =>
+43.92192982456141
 ```
 
 See [Vector.md](doc/Vector.md) for details.
@@ -389,8 +389,8 @@ See [Vector.md](doc/Vector.md) for details.
 
 [71 Examples of Red Amber](binder/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
 
-You can try this notebook on [Binder](https://mybinder.org/v2/gh/heronshoes/red_amber/master?filepath=examples_of_red_amber.ipynb). 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/red_amber/master?filepath=examples_of_red_amber.ipynb)
+You can try this notebook on [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb). 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb)
 
 
 ## Development
