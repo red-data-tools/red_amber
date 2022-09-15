@@ -133,10 +133,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 0 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       0 []
-        2 :float  double      0 []
-        3 :string string      0 []
-        4 :bool   boolean     0 []
+        0 :index  uint8       0 []
+        1 :float  double      0 []
+        2 :string string      0 []
+        3 :bool   boolean     0 []
       OUTPUT
       assert_equal str, @df.slice.tdr_str
       assert_equal str, @df.slice([]).tdr_str
@@ -144,10 +144,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 0 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       0 []
-        2 :float  double      0 []
-        3 :string string      0 []
-        4 :bool   boolean     0 []
+        0 :index  uint8       0 []
+        1 :float  double      0 []
+        2 :string string      0 []
+        3 :bool   boolean     0 []
       OUTPUT
       assert_equal str, @df.slice([false] * @df.size).tdr_str
     end
@@ -157,10 +157,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        0 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal str, @df.slice(0...@df.size).tdr_str
       assert_equal str, @df.slice([true] * @df.size).tdr_str
@@ -171,10 +171,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [0, 1, 2]
-        2 :float  double      3 [0.0, 1.1, 2.2]
-        3 :string string      3 ["A", "B", "C"]
-        4 :bool   boolean     2 {true=>2, false=>1}
+        0 :index  uint8       3 [0, 1, 2]
+        1 :float  double      3 [0.0, 1.1, 2.2]
+        2 :string string      3 ["A", "B", "C"]
+        3 :bool   boolean     2 {true=>2, false=>1}
       OUTPUT
       assert_equal str, @df.slice(0, 1, 2).tdr_str
       assert_equal str, @df.slice([0, 1, 2]).tdr_str
@@ -191,10 +191,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [0, 1, 2]
-        2 :float  double      3 [0.0, 1.1, 2.2]
-        3 :string string      3 ["A", "B", "C"]
-        4 :bool   boolean     2 {true=>2, false=>1}
+        0 :index  uint8       3 [0, 1, 2]
+        1 :float  double      3 [0.0, 1.1, 2.2]
+        2 :string string      3 ["A", "B", "C"]
+        3 :bool   boolean     2 {true=>2, false=>1}
       OUTPUT
       boolean = [true, true, true, false, nil]
       assert_equal str, @df.slice(*boolean).tdr_str
@@ -212,10 +212,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 0 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       0 []
-        2 :float  double      0 []
-        3 :string string      0 []
-        4 :bool   boolean     0 []
+        0 :index  uint8       0 []
+        1 :float  double      0 []
+        2 :string string      0 []
+        3 :bool   boolean     0 []
       OUTPUT
       assert_equal str, @df.slice { [nil] }.tdr_str
       assert_equal str, @df.slice { [] }.tdr_str
@@ -226,10 +226,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        0 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal @df.tdr_str, @df.slice { 0...size }.tdr_str
       assert_equal str, @df.slice { [true] * size }.tdr_str
@@ -240,10 +240,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [0, 1, 2]
-        2 :float  double      3 [0.0, 1.1, 2.2]
-        3 :string string      3 ["A", "B", "C"]
-        4 :bool   boolean     2 {true=>2, false=>1}
+        0 :index  uint8       3 [0, 1, 2]
+        1 :float  double      3 [0.0, 1.1, 2.2]
+        2 :string string      3 ["A", "B", "C"]
+        3 :bool   boolean     2 {true=>2, false=>1}
       OUTPUT
       assert_equal str, @df.slice { [0, 1, 2] }.tdr_str
       assert_equal str, @df.slice { [0..2] }.tdr_str
@@ -257,10 +257,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 2 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       2 [1, 3]
-        2 :float  double      2 [1.1, NaN], 1 NaN
-        3 :string string      2 ["B", "D"]
-        4 :bool   boolean     1 {false=>2}
+        0 :index  uint8       2 [1, 3]
+        1 :float  double      2 [1.1, NaN], 1 NaN
+        2 :string string      2 ["B", "D"]
+        3 :bool   boolean     1 {false=>2}
       OUTPUT
       assert_equal str, @df.slice { [false, true, false, true, false] }.tdr_str
       assert_equal str, @df.slice { indexes.map(&:odd?) }.tdr_str
@@ -280,9 +280,9 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 3 Vectors
         Vectors : 2 numeric, 1 boolean
         # key    type    level data_preview
-        1 :index uint8       3 [0, 1, 2]
-        2 :float double      3 [0.0, 1.1, 2.2]
-        3 :bool  boolean     2 {true=>2, false=>1}
+        0 :index uint8       3 [0, 1, 2]
+        1 :float double      3 [0.0, 1.1, 2.2]
+        2 :bool  boolean     2 {true=>2, false=>1}
       OUTPUT
       assert_equal str, @df.slice_by(:string) { 0..2 }.tdr_str
       assert_equal str, @df.slice_by(:string) { ..2 }.tdr_str
@@ -293,9 +293,9 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 3 Vectors
         Vectors : 2 numeric, 1 boolean
         # key    type    level data_preview
-        1 :index uint8       3 [2, 3, nil], 1 nil
-        2 :float double      3 [2.2, NaN, nil], 1 NaN, 1 nil
-        3 :bool  boolean     3 [true, false, nil], 1 nil
+        0 :index uint8       3 [2, 3, nil], 1 nil
+        1 :float double      3 [2.2, NaN, nil], 1 NaN, 1 nil
+        2 :bool  boolean     3 [true, false, nil], 1 nil
       OUTPUT
       assert_equal str, @df.slice_by(:string) { 2..-1 }.tdr_str
       assert_equal str, @df.slice_by(:string) { 2.. }.tdr_str
@@ -308,9 +308,9 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 3 Vectors
         Vectors : 2 numeric, 1 boolean
         # key    type    level data_preview
-        1 :index uint8       3 [0, 1, nil], 1 nil
-        2 :float double      3 [0.0, 1.1, nil], 1 nil
-        3 :bool  boolean     3 [true, false, nil], 1 nil
+        0 :index uint8       3 [0, 1, nil], 1 nil
+        1 :float double      3 [0.0, 1.1, nil], 1 nil
+        2 :bool  boolean     3 [true, false, nil], 1 nil
       OUTPUT
       assert_equal str, @df.slice_by(:string) { [0, 1, 4] }.tdr_str
       assert_equal str, @df.slice_by(:string) { [0, 1, -1] }.tdr_str
@@ -322,10 +322,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [0, 1, 2]
-        2 :float  double      3 [0.0, 1.1, 2.2]
-        3 :string string      3 ["A", "B", "C"]
-        4 :bool   boolean     2 {true=>2, false=>1}
+        0 :index  uint8       3 [0, 1, 2]
+        1 :float  double      3 [0.0, 1.1, 2.2]
+        2 :string string      3 ["A", "B", "C"]
+        3 :bool   boolean     2 {true=>2, false=>1}
       OUTPUT
       assert_equal str, @df.slice_by(:string, keep_key: true) { 0..2 }.tdr_str
     end
@@ -351,10 +351,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        0 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal str, @df.remove.tdr_str
       assert_equal str, @df.remove([]).tdr_str
@@ -366,10 +366,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 0 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       0 []
-        2 :float  double      0 []
-        3 :string string      0 []
-        4 :bool   boolean     0 []
+        0 :index  uint8       0 []
+        1 :float  double      0 []
+        2 :string string      0 []
+        3 :bool   boolean     0 []
       OUTPUT
       assert_equal str, @df.remove(0..4).tdr_str
       assert_equal str, @df.remove([true] * 5).tdr_str
@@ -380,10 +380,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [0, 1, 2]
-        2 :float  double      3 [0.0, 1.1, 2.2]
-        3 :string string      3 ["A", "B", "C"]
-        4 :bool   boolean     2 {true=>2, false=>1}
+        0 :index  uint8       3 [0, 1, 2]
+        1 :float  double      3 [0.0, 1.1, 2.2]
+        2 :string string      3 ["A", "B", "C"]
+        3 :bool   boolean     2 {true=>2, false=>1}
       OUTPUT
       assert_equal str, @df.remove(3, 4).tdr_str
       assert_equal str, @df.remove([3, 4]).tdr_str
@@ -400,10 +400,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [0, 1, 2]
-        2 :float  double      3 [0.0, 1.1, 2.2]
-        3 :string string      3 ["A", "B", "C"]
-        4 :bool   boolean     2 {true=>2, false=>1}
+        0 :index  uint8       3 [0, 1, 2]
+        1 :float  double      3 [0.0, 1.1, 2.2]
+        2 :string string      3 ["A", "B", "C"]
+        3 :bool   boolean     2 {true=>2, false=>1}
       OUTPUT
       boolean = [false, nil, false, true, true]
       assert_equal str, @df.remove(*boolean).tdr_str
@@ -416,10 +416,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 4 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       4 [0, 1, 2, nil], 1 nil
-        2 :float  double      4 [0.0, 1.1, 2.2, nil], 1 nil
-        3 :string string      4 ["A", "B", "C", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>1, nil=>1}
+        0 :index  uint8       4 [0, 1, 2, nil], 1 nil
+        1 :float  double      4 [0.0, 1.1, 2.2, nil], 1 nil
+        2 :string string      4 ["A", "B", "C", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>1, nil=>1}
       OUTPUT
       assert_equal str, @df.remove(@df[:index] > 2).tdr_str
     end
@@ -431,10 +431,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        0 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal str, @df.remove { nil }.tdr_str
       assert_equal str, @df.remove { [] }.tdr_str
@@ -445,10 +445,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 0 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       0 []
-        2 :float  double      0 []
-        3 :string string      0 []
-        4 :bool   boolean     0 []
+        0 :index  uint8       0 []
+        1 :float  double      0 []
+        2 :string string      0 []
+        3 :bool   boolean     0 []
       OUTPUT
       assert_equal str, @df.remove { 0...size }.tdr_str
     end
@@ -458,10 +458,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 2 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       2 [3, nil], 1 nil
-        2 :float  double      2 [NaN, nil], 1 NaN, 1 nil
-        3 :string string      2 ["D", nil], 1 nil
-        4 :bool   boolean     2 [false, nil], 1 nil
+        0 :index  uint8       2 [3, nil], 1 nil
+        1 :float  double      2 [NaN, nil], 1 NaN, 1 nil
+        2 :string string      2 ["D", nil], 1 nil
+        3 :bool   boolean     2 [false, nil], 1 nil
       OUTPUT
       assert_equal str, @df.remove { [0, 1, 2] }.tdr_str
     end
@@ -471,10 +471,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 2 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       2 [1, 3]
-        2 :float  double      2 [1.1, NaN], 1 NaN
-        3 :string string      2 ["B", "D"]
-        4 :bool   boolean     1 {false=>2}
+        0 :index  uint8       2 [1, 3]
+        1 :float  double      2 [1.1, NaN], 1 NaN
+        2 :string string      2 ["B", "D"]
+        3 :bool   boolean     1 {false=>2}
       OUTPUT
       assert_equal str, @df.remove { indexes.map(&:even?) }.tdr_str
     end
@@ -491,10 +491,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 4 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       4 [0, 1, 2, 3]
-        2 :float  double      4 [0.0, 1.1, 2.2, NaN], 1 NaN
-        3 :string string      4 ["A", "B", "C", "D"]
-        4 :bool   boolean     2 {true=>2, false=>2}
+        0 :index  uint8       4 [0, 1, 2, 3]
+        1 :float  double      4 [0.0, 1.1, 2.2, NaN], 1 NaN
+        2 :string string      4 ["A", "B", "C", "D"]
+        3 :bool   boolean     2 {true=>2, false=>2}
       OUTPUT
     end
   end

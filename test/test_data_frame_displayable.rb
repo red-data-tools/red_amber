@@ -48,9 +48,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         #<RedAmber::DataFrame : 6 x 4 Vectors, #{format('0x%016x', @df.object_id)}>
         Vectors : 2 numeric, 1 string, 1 boolean
         # key      type    level data_preview
-        1 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
-        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
-        3 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
+        0 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
+        1 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
+        2 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
          ... 1 more Vector ...
       OUTPUT
       assert_equal str, @df.inspect
@@ -81,12 +81,12 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         #<RedAmber::DataFrame : 6 x 4 Vectors, #{format('0x%016x', @df.object_id)}>
           integer    double string   boolean
           <uint8>  <double> <string> <boolean>
-        1       1       1.0 A        true
-        2       2       NaN A        false
-        3       3  Infinity B        (nil)
-        4       4 -Infinity C        true
-        5       5     (nil) D        false
-        6       6       0.0 E        (nil)
+        0       1       1.0 A        true
+        1       2       NaN A        false
+        2       3  Infinity B        (nil)
+        3       4 -Infinity C        true
+        4       5     (nil) D        false
+        5       6       0.0 E        (nil)
       OUTPUT
       assert_equal str, @df.inspect
     end
@@ -98,17 +98,17 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     test 'ellipsis in row and column' do
       str = <<~OUTPUT
         #<RedAmber::DataFrame : 10 x 7 Vectors, #{format('0x%016x', @df2.object_id)}>
-           ID       Date Egg   Culmen_Length_mm Culmen_Depth_mm Flipper_Length_mm ... Sex
-           <string> <date32>           <double>        <double>           <int64> ... <string>
-         1 N1A1     2007-11-11             39.1            18.7               181 ... MALE
-         2 N1A2     2007-11-11             39.5            17.4               186 ... FEMALE
-         3 N2A1     2007-11-16             40.3            18.0               195 ... FEMALE
-         4 N2A2     2007-11-16            (nil)           (nil)             (nil) ...
-         5 N3A1     2007-11-16             36.7            19.3               193 ... FEMALE
-         : :        :                         :               :                 : ... :
-         8 N4A2     2007-11-15             39.2            19.6               195 ... MALE
-         9 N5A1     2007-11-09             34.1            18.1               193 ...
-        10 N5A2     2007-11-09             42.0            20.2               190 ...
+          ID       Date Egg   Culmen_Length_mm Culmen_Depth_mm Flipper_Length_mm ... Sex
+          <string> <date32>           <double>        <double>           <int64> ... <string>
+        0 N1A1     2007-11-11             39.1            18.7               181 ... MALE
+        1 N1A2     2007-11-11             39.5            17.4               186 ... FEMALE
+        2 N2A1     2007-11-16             40.3            18.0               195 ... FEMALE
+        3 N2A2     2007-11-16            (nil)           (nil)             (nil) ...
+        4 N3A1     2007-11-16             36.7            19.3               193 ... FEMALE
+        : :        :                         :               :                 : ... :
+        7 N4A2     2007-11-15             39.2            19.6               195 ... MALE
+        8 N5A1     2007-11-09             34.1            18.1               193 ...
+        9 N5A2     2007-11-09             42.0            20.2               190 ...
       OUTPUT
       assert_equal str, @df2.inspect
     end
@@ -117,17 +117,17 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       df = @df2.drop(:'Date Egg')
       str = <<~OUTPUT
         #<RedAmber::DataFrame : 10 x 6 Vectors, #{format('0x%016x', df.object_id)}>
-           ID       Culmen_Length_mm Culmen_Depth_mm Flipper_Length_mm Body_Mass_g Sex
-           <string>         <double>        <double>           <int64>     <int64> <string>
-         1 N1A1                 39.1            18.7               181        3750 MALE
-         2 N1A2                 39.5            17.4               186        3800 FEMALE
-         3 N2A1                 40.3            18.0               195        3250 FEMALE
-         4 N2A2                (nil)           (nil)             (nil)       (nil)
-         5 N3A1                 36.7            19.3               193        3450 FEMALE
-         : :                       :               :                 :           : :
-         8 N4A2                 39.2            19.6               195        4675 MALE
-         9 N5A1                 34.1            18.1               193        3475
-        10 N5A2                 42.0            20.2               190        4250
+          ID       Culmen_Length_mm Culmen_Depth_mm Flipper_Length_mm Body_Mass_g Sex
+          <string>         <double>        <double>           <int64>     <int64> <string>
+        0 N1A1                 39.1            18.7               181        3750 MALE
+        1 N1A2                 39.5            17.4               186        3800 FEMALE
+        2 N2A1                 40.3            18.0               195        3250 FEMALE
+        3 N2A2                (nil)           (nil)             (nil)       (nil)
+        4 N3A1                 36.7            19.3               193        3450 FEMALE
+        : :                       :               :                 :           : :
+        7 N4A2                 39.2            19.6               195        4675 MALE
+        8 N5A1                 34.1            18.1               193        3475
+        9 N5A2                 42.0            20.2               190        4250
       OUTPUT
       assert_equal str, df.inspect
     end
@@ -138,12 +138,12 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         #<RedAmber::DataFrame : 6 x 7 Vectors, #{format('0x%016x', df.object_id)}>
           ID       Date Egg   Culmen_Length_mm Culmen_Depth_mm Flipper_Length_mm ... Sex
           <string> <date32>           <double>        <double>           <int64> ... <string>
-        1 N1A1     2007-11-11             39.1            18.7               181 ... MALE
-        2 N1A2     2007-11-11             39.5            17.4               186 ... FEMALE
-        3 N2A1     2007-11-16             40.3            18.0               195 ... FEMALE
-        4 N2A2     2007-11-16            (nil)           (nil)             (nil) ...
-        5 N3A1     2007-11-16             36.7            19.3               193 ... FEMALE
-        6 N3A2     2007-11-16             39.3            20.6               190 ... MALE
+        0 N1A1     2007-11-11             39.1            18.7               181 ... MALE
+        1 N1A2     2007-11-11             39.5            17.4               186 ... FEMALE
+        2 N2A1     2007-11-16             40.3            18.0               195 ... FEMALE
+        3 N2A2     2007-11-16            (nil)           (nil)             (nil) ...
+        4 N3A1     2007-11-16             36.7            19.3               193 ... FEMALE
+        5 N3A2     2007-11-16             39.3            20.6               190 ... MALE
       OUTPUT
       assert_equal str, df.inspect
     end
@@ -154,9 +154,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         #<RedAmber::DataFrame : 3 x 2 Vectors, #{format('0x%016x', df.object_id)}>
           unnamed1 x
            <uint8> <string>
-        1        1 A
-        2        2 B
-        3        3 C
+        0        1 A
+        1        2 B
+        2        3 C
       OUTPUT
       assert_equal str, df.inspect
     end
@@ -176,10 +176,10 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key      type    level data_preview
-        1 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
-        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
-        3 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
-        4 :boolean boolean     3 {true=>2, false=>2, nil=>2}
+        0 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
+        1 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
+        2 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
+        3 :boolean boolean     3 {true=>2, false=>2, nil=>2}
       OUTPUT
       assert_equal str, @df.tdr_str(:all)
     end
@@ -189,8 +189,8 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key      type    level data_preview
-        1 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
-        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
+        0 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
+        1 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
          ... 2 more Vectors ...
       OUTPUT
       assert_equal str, @df.tdr_str(2)
@@ -201,10 +201,10 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key      type    level data_preview
-        1 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
-        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
-        3 :string  string      5 ["A", "A", "B", "C", "D", ... ]
-        4 :boolean boolean     3 [true, false, nil, true, false, ... ], 2 nils
+        0 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
+        1 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
+        2 :string  string      5 ["A", "A", "B", "C", "D", ... ]
+        3 :boolean boolean     3 [true, false, nil, true, false, ... ], 2 nils
       OUTPUT
       assert_equal str, @df.tdr_str(tally: 2)
     end
@@ -214,10 +214,10 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key      type    level data_preview
-        1 :integer uint8       6 [1, 2, 3, 4, 5, 6]
-        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, 0.0], 1 NaN, 1 nil
-        3 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
-        4 :boolean boolean     3 {true=>2, false=>2, nil=>2}
+        0 :integer uint8       6 [1, 2, 3, 4, 5, 6]
+        1 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, 0.0], 1 NaN, 1 nil
+        2 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
+        3 :boolean boolean     3 {true=>2, false=>2, nil=>2}
       OUTPUT
       assert_equal str, @df.tdr_str(elements: 6)
     end
@@ -227,10 +227,10 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key      type    level data_preview
-        1 :integer uint8       6 [1, 2, 3, 4, 5, 6]
-        2 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, 0.0], 1 NaN, 1 nil
-        3 :string  string      5 ["A", "A", "B", "C", "D", "E"]
-        4 :boolean boolean     3 [true, false, nil, true, false, nil], 2 nils
+        0 :integer uint8       6 [1, 2, 3, 4, 5, 6]
+        1 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, 0.0], 1 NaN, 1 nil
+        2 :string  string      5 ["A", "A", "B", "C", "D", "E"]
+        3 :boolean boolean     3 [true, false, nil, true, false, nil], 2 nils
       OUTPUT
       assert_equal str, @df.tdr_str(tally: 2, elements: 6)
     end
@@ -247,9 +247,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 2 x 3 Vectors
         Vectors : 3 numeric
         # key       type  level data_preview
-        1 :unnamed1 uint8     2 [1, 2]
-        2 :"  "     uint8     2 [3, 4]
-        3 :"a b"    uint8     2 [5, 6]
+        0 :unnamed1 uint8     2 [1, 2]
+        1 :"  "     uint8     2 [3, 4]
+        2 :"a b"    uint8     2 [5, 6]
       OUTPUT
       assert_equal str, df.tdr_str
     end
@@ -260,9 +260,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 3 Vectors
         Vectors : 2 numeric, 1 temporal
         # key       type      level data_preview
-        1 :index    int64         3 [1, 2, 3]
-        2 :value    double        3 [0.6745854900288456, 0.13221317634640772, 0.21327735697163186]
-        3 :datetime timestamp     3 [2022-06-03 19:11:16 +0900, 2022-06-03 19:15:35 +0900, ... ]
+        0 :index    int64         3 [1, 2, 3]
+        1 :value    double        3 [0.6745854900288456, 0.13221317634640772, 0.21327735697163186]
+        2 :datetime timestamp     3 [2022-06-03 19:11:16 +0900, 2022-06-03 19:15:35 +0900, ... ]
       STR
     end
   end
@@ -277,15 +277,15 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 2 x 9 Vectors
         Vectors : 8 numeric
         # key        type       level data_preview
-        1 :variables dictionary     2 ["integers", "floats"]
-        2 :count     uint8          1 {4=>2}
-        3 :mean      double         1 {4.25=>2}
-        4 :std       double         1 {2.217355782608345=>2}
-        5 :min       double         1 {2.0=>2}
-        6 :"25%"     double         1 {2.75=>2}
-        7 :median    double         1 {4.0=>2}
-        8 :"75%"     double         1 {5.5=>2}
-        9 :max       double         1 {7.0=>2}
+        0 :variables dictionary     2 ["integers", "floats"]
+        1 :count     uint8          1 {4=>2}
+        2 :mean      double         1 {4.25=>2}
+        3 :std       double         1 {2.217355782608345=>2}
+        4 :min       double         1 {2.0=>2}
+        5 :"25%"     double         1 {2.75=>2}
+        6 :median    double         1 {4.0=>2}
+        7 :"75%"     double         1 {5.5=>2}
+        8 :max       double         1 {7.0=>2}
       STR
     end
   end

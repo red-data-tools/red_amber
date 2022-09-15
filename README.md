@@ -78,15 +78,15 @@ penguins = RedAmber::DataFrame.new(arrow)
 #<RedAmber::DataFrame : 344 x 8 Vectors, 0x0000000000013790>
     species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
     <string> <string>        <double>      <double>           <uint8> ... <uint16>
-  1 Adelie   Torgersen           39.1          18.7               181 ...     2007
-  2 Adelie   Torgersen           39.5          17.4               186 ...     2007
-  3 Adelie   Torgersen           40.3          18.0               195 ...     2007
-  4 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
-  5 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  4 Adelie   Torgersen           36.7          19.3               193 ...     2007
   : :        :                      :             :                 : ...        :
-342 Gentoo   Biscoe              50.4          15.7               222 ...     2009
-343 Gentoo   Biscoe              45.2          14.8               212 ...     2009
-344 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+341 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+342 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+343 Gentoo   Biscoe              49.9          16.1               213 ...     2009
 ```
 
 For example, `DataFrame#pick` accepts keys as arguments and returns a sub DataFrame.
@@ -112,15 +112,15 @@ df
 #<RedAmber::DataFrame : 344 x 3 Vectors, 0x000000000003cc1c>
     species  island    body_mass_g
     <string> <string>     <uint16>
-  1 Adelie   Torgersen        3750
-  2 Adelie   Torgersen        3800
-  3 Adelie   Torgersen        3250
-  4 Adelie   Torgersen       (nil)
-  5 Adelie   Torgersen        3450
+  0 Adelie   Torgersen        3750
+  1 Adelie   Torgersen        3800
+  2 Adelie   Torgersen        3250
+  3 Adelie   Torgersen       (nil)
+  4 Adelie   Torgersen        3450
   : :        :                   :
-342 Gentoo   Biscoe           5750
-343 Gentoo   Biscoe           5200
-344 Gentoo   Biscoe           5400
+341 Gentoo   Biscoe           5750
+342 Gentoo   Biscoe           5200
+343 Gentoo   Biscoe           5400
 ```
 
 `DataFrame#drop` drops some columns to create a remainer DataFrame.
@@ -137,15 +137,15 @@ df = df.drop(true, true, false)
 #<RedAmber::DataFrame : 344 x 1 Vector, 0x0000000000048760>
     body_mass_g
        <uint16>
-  1        3750
-  2        3800
-  3        3250
-  4       (nil)
-  5        3450
+  0        3750
+  1        3800
+  2        3250
+  3       (nil)
+  4        3450
   :           :
-342        5750
-343        5200
-344        5400
+341        5750
+342        5200
+343        5400
 ```
 
 Arrow data is immutable, so these methods always return an new object.
@@ -162,15 +162,15 @@ df.assign(:body_mass_kg => df[:body_mass_g] / 1000.0)
 #<RedAmber::DataFrame : 344 x 2 Vectors, 0x00000000000212f0>
     body_mass_g body_mass_kg
        <uint16>     <double>
-  1        3750          3.8
-  2        3800          3.8
-  3        3250          3.3
-  4       (nil)        (nil)
-  5        3450          3.5
+  0        3750          3.8
+  1        3800          3.8
+  2        3250          3.3
+  3       (nil)        (nil)
+  4        3450          3.5
   :           :            :
-342        5750          5.8
-343        5200          5.2
-344        5400          5.4
+341        5750          5.8
+342        5200          5.2
+343        5400          5.4
 ```
 
 `DataFrame#slice` selects rows (observations) to create a sub DataFrame.
@@ -183,17 +183,17 @@ penguins.slice(0...5, -5..-1)
 
 # =>
 #<RedAmber::DataFrame : 10 x 8 Vectors, 0x0000000000042be4>
-   species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
-   <string> <string>        <double>      <double>           <uint8> ... <uint16>
- 1 Adelie   Torgersen           39.1          18.7               181 ...     2007
- 2 Adelie   Torgersen           39.5          17.4               186 ...     2007
- 3 Adelie   Torgersen           40.3          18.0               195 ...     2007
- 4 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
- 5 Adelie   Torgersen           36.7          19.3               193 ...     2007
- : :        :                      :             :                 : ...        :
- 8 Gentoo   Biscoe              50.4          15.7               222 ...     2009
- 9 Gentoo   Biscoe              45.2          14.8               212 ...     2009
-10 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+  species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+  <string> <string>        <double>      <double>           <uint8> ... <uint16>
+0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+: :        :                      :             :                 : ...        :
+7 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+8 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+9 Gentoo   Biscoe              49.9          16.1               213 ...     2009
 ```
 
 `DataFrame#remove` rejects rows (observations) to create a remainer DataFrame.
@@ -208,15 +208,15 @@ penguins.remove(penguins[:bill_length_mm] < 40)
 #<RedAmber::DataFrame : 244 x 8 Vectors, 0x000000000007d6f4>
     species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
     <string> <string>        <double>      <double>           <uint8> ... <uint16>
-  1 Adelie   Torgersen           40.3          18.0               195 ...     2007
-  2 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
-  3 Adelie   Torgersen           42.0          20.2               190 ...     2007
-  4 Adelie   Torgersen           41.1          17.6               182 ...     2007
-  5 Adelie   Torgersen           42.5          20.7               197 ...     2007
+  0 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  1 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  2 Adelie   Torgersen           42.0          20.2               190 ...     2007
+  3 Adelie   Torgersen           41.1          17.6               182 ...     2007
+  4 Adelie   Torgersen           42.5          20.7               197 ...     2007
   : :        :                      :             :                 : ...        :
-242 Gentoo   Biscoe              50.4          15.7               222 ...     2009
-243 Gentoo   Biscoe              45.2          14.8               212 ...     2009
-244 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+241 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+242 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+243 Gentoo   Biscoe              49.9          16.1               213 ...     2009
 ```
 
 DataFrame manipulating methods like `pick`, `drop`, `slice`, `remove`, `rename` and `assign` accept a block.
@@ -241,11 +241,11 @@ df
 #<RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000003131c>
   integer    float string   boolean
   <uint8> <double> <string> <boolean>
-1       0      0.0 A        true
-2       1      1.1 B        false
-3       2      2.2 C        true
-4       3      NaN D        false
-5   (nil)    (nil) (nil)    (nil)
+0       0      0.0 A        true
+1       1      1.1 B        false
+2       2      2.2 C        true
+3       3      NaN D        false
+4   (nil)    (nil) (nil)    (nil)
 
 df.assign do
   vectors.select(&:float?).map { |v| [v.key, -v] }
@@ -256,11 +256,11 @@ end
 #<RedAmber::DataFrame : 5 x 3 Vectors, 0x00000000000e270c>
     index    float string
   <uint8> <double> <string>
-1       0     -0.0 A
-2       1     -1.1 B
-3       2     -2.2 C
-4       3      NaN D
-5   (nil)    (nil) (nil)
+0       0     -0.0 A
+1       1     -1.1 B
+2       2     -2.2 C
+3       3      NaN D
+4   (nil)    (nil) (nil)
 ```
 
 Next example is to eliminate rows containing nil.
@@ -274,14 +274,14 @@ nil_removed.tdr
 RedAmber::DataFrame : 342 x 8 Vectors
 Vectors : 5 numeric, 3 strings
 # key                type   level data_preview
-1 :species           string     3 {"Adelie"=>151, "Chinstrap"=>68, "Gentoo"=>123}
-2 :island            string     3 {"Torgersen"=>51, "Biscoe"=>167, "Dream"=>124}
-3 :bill_length_mm    double   164 [39.1, 39.5, 40.3, 36.7, 39.3, ... ]
-4 :bill_depth_mm     double    80 [18.7, 17.4, 18.0, 19.3, 20.6, ... ]
-5 :flipper_length_mm int64     55 [181, 186, 195, 193, 190, ... ]
-6 :body_mass_g       int64     94 [3750, 3800, 3250, 3450, 3650, ... ]
-7 :sex               string     3 {"male"=>168, "female"=>165, ""=>9}
-8 :year              int64      3 {2007=>109, 2008=>114, 2009=>119}
+0 :species           string     3 {"Adelie"=>151, "Chinstrap"=>68, "Gentoo"=>123}
+1 :island            string     3 {"Torgersen"=>51, "Biscoe"=>167, "Dream"=>124}
+2 :bill_length_mm    double   164 [39.1, 39.5, 40.3, 36.7, 39.3, ... ]
+3 :bill_depth_mm     double    80 [18.7, 17.4, 18.0, 19.3, 20.6, ... ]
+4 :flipper_length_mm int64     55 [181, 186, 195, 193, 190, ... ]
+5 :body_mass_g       int64     94 [3750, 3800, 3250, 3450, 3650, ... ]
+6 :sex               string     3 {"male"=>168, "female"=>165, ""=>9}
+7 :year              int64      3 {2007=>109, 2008=>114, 2009=>119}
 ```
 
 For this frequently needed task, we can do it much simpler.
@@ -298,11 +298,11 @@ puts penguins.summary.to_s(width: 82)
 # =>
   variables            count     mean      std      min      25%   median      75%      max
   <dictionary>      <uint16> <double> <double> <double> <double> <double> <double> <double>
-1 bill_length_mm         342    43.92     5.46     32.1    39.23    44.38     48.5     59.6
-2 bill_depth_mm          342    17.15     1.97     13.1     15.6    17.32     18.7     21.5
-3 flipper_length_mm      342   200.92    14.06    172.0    190.0    197.0    213.0    231.0
-4 body_mass_g            342  4201.75   801.95   2700.0   3550.0   4031.5   4750.0   6300.0
-5 year                   344  2008.03     0.82   2007.0   2007.0   2008.0   2009.0   2009.0
+0 bill_length_mm         342    43.92     5.46     32.1    39.23    44.38     48.5     59.6
+1 bill_depth_mm          342    17.15     1.97     13.1     15.6    17.32     18.7     21.5
+2 flipper_length_mm      342   200.92    14.06    172.0    190.0    197.0    213.0    231.0
+3 body_mass_g            342  4201.75   801.95   2700.0   3550.0   4031.5   4750.0   6300.0
+4 year                   344  2008.03     0.82   2007.0   2007.0   2008.0   2009.0   2009.0
 ```
 
 `DataFrame#group` method can be used for the grouping tasks.
@@ -315,15 +315,15 @@ starwars
 #<RedAmber::DataFrame : 87 x 12 Vectors, 0x000000000000607c>
    unnamed1 name            height     mass hair_color skin_color  eye_color ... species
     <int64> <string>       <int64> <double> <string>   <string>    <string>  ... <string>
- 1        1 Luke Skywalker     172     77.0 blond      fair        blue      ... Human
- 2        2 C-3PO              167     75.0 NA         gold        yellow    ... Droid
- 3        3 R2-D2               96     32.0 NA         white, blue red       ... Droid
- 4        4 Darth Vader        202    136.0 none       white       yellow    ... Human
- 5        5 Leia Organa        150     49.0 brown      light       brown     ... Human
+ 0        1 Luke Skywalker     172     77.0 blond      fair        blue      ... Human
+ 1        2 C-3PO              167     75.0 NA         gold        yellow    ... Droid
+ 2        3 R2-D2               96     32.0 NA         white, blue red       ... Droid
+ 3        4 Darth Vader        202    136.0 none       white       yellow    ... Human
+ 4        5 Leia Organa        150     49.0 brown      light       brown     ... Human
  :        : :                    :        : :          :           :         ... :
-85       85 BB8              (nil)    (nil) none       none        black     ... Droid
-86       86 Captain Phasma   (nil)    (nil) unknown    unknown     unknown   ... NA
-87       87 Padmé Amidala      165     45.0 brown      light       brown     ... Human
+84       85 BB8              (nil)    (nil) none       none        black     ... Droid
+85       86 Captain Phasma   (nil)    (nil) unknown    unknown     unknown   ... NA
+86       87 Padmé Amidala      165     45.0 brown      light       brown     ... Human
 
 starwars.group(:species) { [count(:species), mean(:height, :mass)] }
         .slice { count > 1 }
@@ -332,15 +332,15 @@ starwars.group(:species) { [count(:species), mean(:height, :mass)] }
 #<RedAmber::DataFrame : 9 x 4 Vectors, 0x000000000006e848>
   species    count mean(height) mean(mass)
   <string> <int64>     <double>   <double>
-1 Human         35        176.6       82.8
-2 Droid          6        131.2       69.8
-3 Wookiee        2        231.0      124.0
-4 Gungan         3        208.7       74.0
-5 NA             4        181.3       48.0
-6 Zabrak         2        173.0       80.0
-7 Twi'lek        2        179.0       55.0
-8 Mirialan       2        168.0       53.1
-9 Kaminoan       2        221.0       88.0 
+0 Human         35        176.6       82.8
+1 Droid          6        131.2       69.8
+2 Wookiee        2        231.0      124.0
+3 Gungan         3        208.7       74.0
+4 NA             4        181.3       48.0
+5 Zabrak         2        173.0       80.0
+6 Twi'lek        2        179.0       55.0
+7 Mirialan       2        168.0       53.1
+8 Kaminoan       2        221.0       88.0 
 ```
 
 See [DataFrame.md](doc/DataFrame.md) for other examples and details.

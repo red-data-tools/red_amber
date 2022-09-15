@@ -239,9 +239,9 @@ class DataFrameTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 3 Vectors
         Vectors : 1 numeric, 1 string, 1 boolean
         # key type    level data_preview
-        1 :x  double      3 [1.0, 2.0, NaN], 1 NaN
-        2 :y  string      3 ["", " ", nil], 1 nil
-        3 :z  boolean     3 [true, false, nil], 1 nil
+        0 :x  double      3 [1.0, 2.0, NaN], 1 NaN
+        1 :y  string      3 ["", " ", nil], 1 nil
+        2 :z  boolean     3 [true, false, nil], 1 nil
       OUTPUT
       assert_equal html, df.to_iruby[1]
     end
@@ -252,7 +252,7 @@ class DataFrameTest < Test::Unit::TestCase
         RedAmber::DataFrame : 10 x 1 Vector
         Vector : 1 numeric
         # key type  level data_preview
-        1 :x  uint8    10 [1, 2, 3, 4, 5, ... ]
+        0 :x  uint8    10 [1, 2, 3, 4, 5, ... ]
       OUTPUT
       assert_equal html, df.to_iruby[1]
     end
@@ -264,16 +264,16 @@ class DataFrameTest < Test::Unit::TestCase
         RedAmber::DataFrame : 1 x 16 Vectors
         Vectors : 16 numeric
         #  key type  level data_preview
-        1  :A  uint8     1 [1]
-        2  :B  uint8     1 [2]
-        3  :C  uint8     1 [3]
-        4  :D  uint8     1 [4]
-        5  :E  uint8     1 [5]
-        6  :F  uint8     1 [6]
-        7  :G  uint8     1 [7]
-        8  :H  uint8     1 [8]
-        9  :I  uint8     1 [9]
-        10 :J  uint8     1 [10]
+        0  :A  uint8     1 [1]
+        1  :B  uint8     1 [2]
+        2  :C  uint8     1 [3]
+        3  :D  uint8     1 [4]
+        4  :E  uint8     1 [5]
+        5  :F  uint8     1 [6]
+        6  :G  uint8     1 [7]
+        7  :H  uint8     1 [8]
+        8  :I  uint8     1 [9]
+        9  :J  uint8     1 [10]
          ... 6 more Vectors ...
       OUTPUT
       assert_equal html, df.to_iruby[1]
@@ -295,8 +295,8 @@ class DataFrameTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 2 Vectors
         Vectors : 1 numeric, 1 string
         # key         type   level data_preview
-        1 :number     double     3 [0.1, 0.2, 0.3]
-        2 :"string.1" string     3 ["Aa", "Bb", "Cc"]
+        0 :number     double     3 [0.1, 0.2, 0.3]
+        1 :"string.1" string     3 ["Aa", "Bb", "Cc"]
       STR
     end
   end

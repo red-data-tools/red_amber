@@ -30,7 +30,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 1 Vector
         Vector : 1 numeric
         # key    type  level data_preview
-        1 :index uint8     5 [0, 1, 2, 3, nil], 1 nil
+        0 :index uint8     5 [0, 1, 2, 3, nil], 1 nil
       OUTPUT
       assert_equal str, @df.pick(:index).tdr_str
       assert_equal str, @df.pick(0).tdr_str
@@ -39,8 +39,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 2 Vectors
         Vectors : 2 numeric
         # key    type   level data_preview
-        1 :index uint8      5 [0, 1, 2, 3, nil], 1 nil
-        2 :float double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        0 :index uint8      5 [0, 1, 2, 3, nil], 1 nil
+        1 :float double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
       OUTPUT
       assert_equal str, @df.pick(:index, :float).tdr_str
       assert_equal str, @df.pick(%i[index float]).tdr_str
@@ -55,7 +55,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 1 Vector
         Vector : 1 boolean
         # key   type    level data_preview
-        1 :bool boolean     3 {true=>2, false=>2, nil=>1}
+        0 :bool boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_true @df.pick {}.empty? # pick nothing
       assert_equal str, @df.pick { :bool }.tdr_str
@@ -66,8 +66,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 2 Vectors
         Vectors : 2 numeric
         # key    type   level data_preview
-        1 :index uint8      5 [0, 1, 2, 3, nil], 1 nil
-        2 :float double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        0 :index uint8      5 [0, 1, 2, 3, nil], 1 nil
+        1 :float double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
       OUTPUT
       assert_equal str, @df.pick { %i[index float] }.tdr_str
       assert_equal str, @df.pick { vectors.map(&:numeric?) }.tdr_str
@@ -93,8 +93,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 2 Vectors
         Vectors : 1 numeric, 1 boolean
         # key    type    level data_preview
-        1 :index uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :bool  boolean     3 {true=>2, false=>2, nil=>1}
+        0 :index uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :bool  boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal str, @df.drop(:float, :string).tdr_str
       assert_equal str, @df.drop(%i[float string]).tdr_str
@@ -107,9 +107,9 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 3 Vectors
         Vectors : 2 numeric, 1 string
         # key     type   level data_preview
-        1 :index  uint8      5 [0, 1, 2, 3, nil], 1 nil
-        2 :float  double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string     5 ["A", "B", "C", "D", nil], 1 nil
+        0 :index  uint8      5 [0, 1, 2, 3, nil], 1 nil
+        1 :float  double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string     5 ["A", "B", "C", "D", nil], 1 nil
       OUTPUT
       assert_equal(@df, @df.drop { nil }) # drop nothing
       assert_equal str, @df.drop { :bool }.tdr_str
@@ -120,8 +120,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 2 Vectors
         Vectors : 1 string, 1 boolean
         # key     type    level data_preview
-        1 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        2 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        0 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        1 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal str, @df.drop { %i[index float] }.tdr_str
       assert_equal str, @df.drop { vectors.map(&:numeric?) }.tdr_str
@@ -150,10 +150,10 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key      type    level data_preview
-        1 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float   double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool    boolean     3 {true=>2, false=>2, nil=>1}
+        0 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float   double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool    boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal str, @df.rename(:index, :integer).tdr_str
       assert_equal str, @df.rename({ index: :integer }).tdr_str
@@ -170,10 +170,10 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key      type    level data_preview
-        1 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float   double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool    boolean     3 {true=>2, false=>2, nil=>1}
+        0 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float   double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool    boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal str, @df.rename {
         { keys.detect { |key| self[key].type == :uint8 } => :integer }
@@ -185,10 +185,10 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key      type    level data_preview
-        1 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float   double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool    boolean     3 {true=>2, false=>2, nil=>1}
+        0 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float   double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool    boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal str, @df.rename(%i[index integer]).tdr_str
       assert_equal str, @df.rename { %i[index integer] }.tdr_str
@@ -197,10 +197,10 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key      type    level data_preview
-        1 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :double  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool    boolean     3 {true=>2, false=>2, nil=>1}
+        0 :integer uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :double  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool    boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
       assert_equal str2, @df.rename(%i[index integer], %i[float double]).tdr_str
       assert_equal str2, @df.rename([%i[index integer], %i[float double]]).tdr_str
@@ -213,8 +213,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 2 Vectors
         Vectors : 2 numeric
         # key    type  level data_preview
-        1 :blank uint8     3 [1, 2, 3]
-        2 :A     uint8     3 [4, 5, 6]
+        0 :blank uint8     3 [1, 2, 3]
+        1 :A     uint8     3 [4, 5, 6]
       OUTPUT
       assert_equal str, df.rename(:unnamed1, :blank).tdr_str
       assert_equal str, df.rename(unnamed1: :blank).tdr_str
@@ -230,7 +230,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 0 x 1 Vector
         Vector : 1 string
         # key  type   level data_preview
-        1 :key string     0 []
+        0 :key string     0 []
       OUTPUT
     end
 
@@ -251,11 +251,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-        5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+        0 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
       assert_equal str, @df.assign(assigner).tdr_str
       assert_equal str, @df.assign(new: %w[a a b b c]).tdr_str # directly write assigner
@@ -268,11 +268,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
-        1 :index  int8        5 [-1, -2, -3, -4, -5]
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-        5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+        0 :index  int8        5 [-1, -2, -3, -4, -5]
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
       assert_equal str2, @df.assign(assigner2).tdr_str
       assert_equal str2, @df.assign(assigner2.to_a).tdr_str
@@ -291,11 +291,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-        5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+        0 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
       assert_equal str, @df.assign { assigner }.tdr_str
       assert_equal str, @df.assign { assigner.to_a }.tdr_str
@@ -305,11 +305,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
-        1 :index  int8        5 [-1, -2, -3, -4, -5]
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-        5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+        0 :index  int8        5 [-1, -2, -3, -4, -5]
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
       assert_equal str2, @df.assign { assigner2 }.tdr_str
       assert_equal str2, @df.assign { assigner2.to_a }.tdr_str
@@ -322,11 +322,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-        5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+        0 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       STR
       assert_equal str, @df.assign(:new) { %w[a a b b c] }.tdr_str
 
@@ -334,11 +334,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
-        1 :index  int8        5 [-1, -2, -3, -4, -5]
-        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-        5 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+        0 :index  int8        5 [-1, -2, -3, -4, -5]
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       STR
       assert_equal str2, @df.assign(:index, :new) { [[-1, -2, -3, -4, -5], %w[a a b b c]] }.tdr_str
       assert_equal str2, @df.assign(:index, :new) { [Vector.new([-1, -2, -3, -4, -5]), %w[a a b b c]] }.tdr_str
@@ -350,11 +350,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
-        1 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
-        2 :index  int8        5 [-1, -2, -3, -4, -5]
-        3 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        4 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        5 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        0 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+        1 :index  int8        5 [-1, -2, -3, -4, -5]
+        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
     end
 
@@ -364,11 +364,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
-        1 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
-        2 :index  int8        5 [-1, -2, -3, -4, -5]
-        3 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        4 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        5 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        0 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
+        1 :index  int8        5 [-1, -2, -3, -4, -5]
+        2 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        3 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        4 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
     end
   end

@@ -142,9 +142,9 @@ class DataFrameLoadSaveTest < Test::Unit::TestCase
             assert_equal(<<~TABLE, table.to_s)
                 name         age
                 <string> <uint8>
-              1 Yasuko        68
-              2 Rui           49
-              3 Hinata        28
+              0 Yasuko        68
+              1 Rui           49
+              2 Hinata        28
             TABLE
           end
 
@@ -174,9 +174,9 @@ class DataFrameLoadSaveTest < Test::Unit::TestCase
             assert_equal(<<~TABLE, RedAmber::DataFrame.load(file.path).to_s)
                 name         age
                 <string> <int64>
-              1 Yasuko        68
-              2 Rui           49
-              3 Hinata        28
+              0 Yasuko        68
+              1 Rui           49
+              2 Hinata        28
             TABLE
           end
 
@@ -193,9 +193,9 @@ class DataFrameLoadSaveTest < Test::Unit::TestCase
             assert_equal(<<~TABLE, table.to_s)
                 name         age
                 <string> <int64>
-              1 Yasuko        68
-              2 Rui           49
-              3 Hinata        28
+              0 Yasuko        68
+              1 Rui           49
+              2 Hinata        28
             TABLE
           end
         end

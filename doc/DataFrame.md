@@ -210,15 +210,15 @@ puts penguins.to_s
 # =>
     species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
     <string> <string>        <double>      <double>           <uint8> ... <uint16>
-  1 Adelie   Torgersen           39.1          18.7               181 ...     2007
-  2 Adelie   Torgersen           39.5          17.4               186 ...     2007
-  3 Adelie   Torgersen           40.3          18.0               195 ...     2007
-  4 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
-  5 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  4 Adelie   Torgersen           36.7          19.3               193 ...     2007
   : :        :                      :             :                 : ...        :
-342 Gentoo   Biscoe              50.4          15.7               222 ...     2009
-343 Gentoo   Biscoe              45.2          14.8               212 ...     2009
-344 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+341 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+342 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+343 Gentoo   Biscoe              49.9          16.1               213 ...     2009
 ```
 ### `inspect`
 
@@ -235,11 +235,11 @@ puts penguins.summary.to_s(width: 82) # needs more width to show all stats in th
 # =>
   variables            count     mean      std      min      25%   median      75%      max
   <dictionary>      <uint16> <double> <double> <double> <double> <double> <double> <double>
-1 bill_length_mm         342    43.92     5.46     32.1    39.23    44.38     48.5     59.6
-2 bill_depth_mm          342    17.15     1.97     13.1     15.6    17.32     18.7     21.5
-3 flipper_length_mm      342   200.92    14.06    172.0    190.0    197.0    213.0    231.0
-4 body_mass_g            342  4201.75   801.95   2700.0   3550.0   4031.5   4750.0   6300.0
-5 year                   344  2008.03     0.82   2007.0   2007.0   2008.0   2009.0   2009.0
+0 bill_length_mm         342    43.92     5.46     32.1    39.23    44.38     48.5     59.6
+1 bill_depth_mm          342    17.15     1.97     13.1     15.6    17.32     18.7     21.5
+2 flipper_length_mm      342   200.92    14.06    172.0    190.0    197.0    213.0    231.0
+3 body_mass_g            342  4201.75   801.95   2700.0   3550.0   4031.5   4750.0   6300.0
+4 year                   344  2008.03     0.82   2007.0   2007.0   2008.0   2009.0   2009.0
 ```
 
 ### `to_rover`
@@ -272,14 +272,14 @@ penguins.to_rover
   RedAmber::DataFrame : 344 x 8 Vectors
   Vectors : 5 numeric, 3 strings
   # key                type   level data_preview
-  1 :species           string     3 {"Adelie"=>152, "Chinstrap"=>68, "Gentoo"=>124}
-  2 :island            string     3 {"Torgersen"=>52, "Biscoe"=>168, "Dream"=>124}
-  3 :bill_length_mm    double   165 [39.1, 39.5, 40.3, nil, 36.7, ... ], 2 nils
-  4 :bill_depth_mm     double    81 [18.7, 17.4, 18.0, nil, 19.3, ... ], 2 nils
-  5 :flipper_length_mm uint8     56 [181, 186, 195, nil, 193, ... ], 2 nils
-  6 :body_mass_g       uint16    95 [3750, 3800, 3250, nil, 3450, ... ], 2 nils
-  7 :sex               string     3 {"male"=>168, "female"=>165, nil=>11}
-  8 :year              uint16     3 {2007=>110, 2008=>114, 2009=>120}
+  0 :species           string     3 {"Adelie"=>152, "Chinstrap"=>68, "Gentoo"=>124}
+  1 :island            string     3 {"Torgersen"=>52, "Biscoe"=>168, "Dream"=>124}
+  2 :bill_length_mm    double   165 [39.1, 39.5, 40.3, nil, 36.7, ... ], 2 nils
+  3 :bill_depth_mm     double    81 [18.7, 17.4, 18.0, nil, 19.3, ... ], 2 nils
+  4 :flipper_length_mm uint8     56 [181, 186, 195, nil, 193, ... ], 2 nils
+  5 :body_mass_g       uint16    95 [3750, 3800, 3250, nil, 3450, ... ], 2 nils
+  6 :sex               string     3 {"male"=>168, "female"=>165, nil=>11}
+  7 :year              uint16     3 {2007=>110, 2008=>114, 2009=>120}
   ```
 
   - limit: limit of variables to show. Default value is 10.
@@ -311,9 +311,9 @@ penguins.to_rover
   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000328fc>
     b               c       a
     <string> <double> <uint8>
-  1 A             1.0       1
-  2 B             2.0       2
-  3 C             3.0       3
+  0 A             1.0       1
+  1 B             2.0       2
+  2 C             3.0       3
   ```
 
   If `#[]` represents single variable (column), it returns a Vector object.
@@ -359,10 +359,10 @@ penguins.to_rover
   #<RedAmber::DataFrame : 4 x 3 Vectors, 0x0000000000033270>
           a b               c
     <uint8> <string> <double>
-  1       3 C             3.0
-  2       1 A             1.0
-  3       2 B             2.0
-  4       3 C             3.0
+  0       3 C             3.0
+  1       1 A             1.0
+  2       2 B             2.0
+  3       3 C             3.0
   ```
 
 - Select obs. by a boolean Array or a boolean RedAmber::Vector at same size as self.
@@ -405,15 +405,15 @@ penguins.to_rover
     #<RedAmber::DataFrame : 344 x 2 Vectors, 0x0000000000035ebc>
         species  bill_length_mm
         <string>       <double>
-      1 Adelie             39.1
-      2 Adelie             39.5
-      3 Adelie             40.3
-      4 Adelie            (nil)
-      5 Adelie             36.7
+      0 Adelie             39.1
+      1 Adelie             39.5
+      2 Adelie             40.3
+      3 Adelie            (nil)
+      4 Adelie             36.7
       : :                     :
-    342 Gentoo             50.4
-    343 Gentoo             45.2
-    344 Gentoo             49.9
+    341 Gentoo             50.4
+    342 Gentoo             45.2
+    343 Gentoo             49.9
     ```
 
 - Indices as arguments
@@ -427,15 +427,15 @@ penguins.to_rover
     #<RedAmber::DataFrame : 344 x 4 Vectors, 0x0000000000055ce4>
         species  island    bill_length_mm     year
         <string> <string>        <double> <uint16>
-      1 Adelie   Torgersen           39.1     2007
-      2 Adelie   Torgersen           39.5     2007
-      3 Adelie   Torgersen           40.3     2007
-      4 Adelie   Torgersen          (nil)     2007
-      5 Adelie   Torgersen           36.7     2007
+      0 Adelie   Torgersen           39.1     2007
+      1 Adelie   Torgersen           39.5     2007
+      2 Adelie   Torgersen           40.3     2007
+      3 Adelie   Torgersen          (nil)     2007
+      4 Adelie   Torgersen           36.7     2007
       : :        :                      :        :
-    342 Gentoo   Biscoe              50.4     2009
-    343 Gentoo   Biscoe              45.2     2009
-    344 Gentoo   Biscoe              49.9     2009
+    341 Gentoo   Biscoe              50.4     2009
+    342 Gentoo   Biscoe              45.2     2009
+    343 Gentoo   Biscoe              49.9     2009
     ```
 
 - Booleans as arguments
@@ -449,15 +449,15 @@ penguins.to_rover
     #<RedAmber::DataFrame : 344 x 3 Vectors, 0x00000000000387ac>
         species  island    sex
         <string> <string>  <string>
-      1 Adelie   Torgersen male
+      0 Adelie   Torgersen male
+      1 Adelie   Torgersen female
       2 Adelie   Torgersen female
-      3 Adelie   Torgersen female
-      4 Adelie   Torgersen (nil)
-      5 Adelie   Torgersen female
+      3 Adelie   Torgersen (nil)
+      4 Adelie   Torgersen female
       : :        :         :
-    342 Gentoo   Biscoe    male
-    343 Gentoo   Biscoe    female
-    344 Gentoo   Biscoe    male
+    341 Gentoo   Biscoe    male
+    342 Gentoo   Biscoe    female
+    343 Gentoo   Biscoe    male
     ```
 
 - Keys or booleans by a block
@@ -471,15 +471,15 @@ penguins.to_rover
     #<RedAmber::DataFrame : 344 x 3 Vectors, 0x000000000003dd4c>
         bill_length_mm bill_depth_mm flipper_length_mm
               <double>      <double>           <uint8>
-      1           39.1          18.7               181
-      2           39.5          17.4               186
-      3           40.3          18.0               195
-      4          (nil)         (nil)             (nil)
-      5           36.7          19.3               193
+      0           39.1          18.7               181
+      1           39.5          17.4               186
+      2           40.3          18.0               195
+      3          (nil)         (nil)             (nil)
+      4           36.7          19.3               193
       :              :             :                 :
-    342           50.4          15.7               222
-    343           45.2          14.8               212
-    344           49.9          16.1               213
+    341           50.4          15.7               222
+    342           45.2          14.8               212
+    343           49.9          16.1               213
     ```
 
 ### `drop  ` - pick and drop -
@@ -526,9 +526,9 @@ penguins.to_rover
   #<RedAmber::DataFrame : 3 x 1 Vector, 0x000000000003f4bc>
           a
     <uint8>
-  1       1
-  2       2
-  3       3
+  0       1
+  1       2
+  2       3
 
   df[:a]
 
@@ -566,17 +566,17 @@ penguins.to_rover
 
     # =>
     #<RedAmber::DataFrame : 10 x 8 Vectors, 0x0000000000042be4>
-       species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
-       <string> <string>        <double>      <double>           <uint8> ... <uint16>
-     1 Adelie   Torgersen           39.1          18.7               181 ...     2007
-     2 Adelie   Torgersen           39.5          17.4               186 ...     2007
-     3 Adelie   Torgersen           40.3          18.0               195 ...     2007
-     4 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
-     5 Adelie   Torgersen           36.7          19.3               193 ...     2007
-     : :        :                      :             :                 : ...        :
-     8 Gentoo   Biscoe              50.4          15.7               222 ...     2009
-     9 Gentoo   Biscoe              45.2          14.8               212 ...     2009
-    10 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+      species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+      <string> <string>        <double>      <double>           <uint8> ... <uint16>
+    0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+    1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+    2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+    3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+    4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+    : :        :                      :             :                 : ...        :
+    7 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+    8 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+    9 Gentoo   Biscoe              49.9          16.1               213 ...     2009
     ```
 
 - Booleans as an argument
@@ -591,15 +591,15 @@ penguins.to_rover
     #<RedAmber::DataFrame : 242 x 8 Vectors, 0x0000000000043d3c>
         species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
         <string> <string>        <double>      <double>           <uint8> ... <uint16>
-      1 Adelie   Torgersen           40.3          18.0               195 ...     2007
-      2 Adelie   Torgersen           42.0          20.2               190 ...     2007
-      3 Adelie   Torgersen           41.1          17.6               182 ...     2007
-      4 Adelie   Torgersen           42.5          20.7               197 ...     2007
-      5 Adelie   Torgersen           46.0          21.5               194 ...     2007
+      0 Adelie   Torgersen           40.3          18.0               195 ...     2007
+      1 Adelie   Torgersen           42.0          20.2               190 ...     2007
+      2 Adelie   Torgersen           41.1          17.6               182 ...     2007
+      3 Adelie   Torgersen           42.5          20.7               197 ...     2007
+      4 Adelie   Torgersen           46.0          21.5               194 ...     2007
       : :        :                      :             :                 : ...        :
-    240 Gentoo   Biscoe              50.4          15.7               222 ...     2009
-    241 Gentoo   Biscoe              45.2          14.8               212 ...     2009
-    242 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+    239 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+    240 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+    241 Gentoo   Biscoe              49.9          16.1               213 ...     2009
     ```
 
 - Indices or booleans by a block
@@ -619,15 +619,15 @@ penguins.to_rover
     #<RedAmber::DataFrame : 204 x 8 Vectors, 0x0000000000047a40>
         species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
         <string> <string>        <double>      <double>           <uint8> ... <uint16>
-      1 Adelie   Torgersen           39.1          18.7               181 ...     2007
-      2 Adelie   Torgersen           39.5          17.4               186 ...     2007
-      3 Adelie   Torgersen           40.3          18.0               195 ...     2007
-      4 Adelie   Torgersen           39.3          20.6               190 ...     2007
-      5 Adelie   Torgersen           38.9          17.8               181 ...     2007
+      0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+      1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+      2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+      3 Adelie   Torgersen           39.3          20.6               190 ...     2007
+      4 Adelie   Torgersen           38.9          17.8               181 ...     2007
       : :        :                      :             :                 : ...        :
-    202 Gentoo   Biscoe              47.2          13.7               214 ...     2009
-    203 Gentoo   Biscoe              46.8          14.3               215 ...     2009
-    204 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+    201 Gentoo   Biscoe              47.2          13.7               214 ...     2009
+    202 Gentoo   Biscoe              46.8          14.3               215 ...     2009
+    203 Gentoo   Biscoe              45.2          14.8               212 ...     2009
     ```
 
 - Notice: nil option
@@ -674,15 +674,15 @@ penguins.to_rover
     #<RedAmber::DataFrame : 334 x 8 Vectors, 0x00000000000487c4>
         species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
         <string> <string>        <double>      <double>           <uint8> ... <uint16>
-      1 Adelie   Torgersen           39.3          20.6               190 ...     2007
-      2 Adelie   Torgersen           38.9          17.8               181 ...     2007
-      3 Adelie   Torgersen           39.2          19.6               195 ...     2007
-      4 Adelie   Torgersen           34.1          18.1               193 ...     2007
-      5 Adelie   Torgersen           42.0          20.2               190 ...     2007
+      0 Adelie   Torgersen           39.3          20.6               190 ...     2007
+      1 Adelie   Torgersen           38.9          17.8               181 ...     2007
+      2 Adelie   Torgersen           39.2          19.6               195 ...     2007
+      3 Adelie   Torgersen           34.1          18.1               193 ...     2007
+      4 Adelie   Torgersen           42.0          20.2               190 ...     2007
       : :        :                      :             :                 : ...        :
-    332 Gentoo   Biscoe              44.5          15.7               217 ...     2009
-    333 Gentoo   Biscoe              48.8          16.2               222 ...     2009
-    334 Gentoo   Biscoe              47.2          13.7               214 ...     2009
+    331 Gentoo   Biscoe              44.5          15.7               217 ...     2009
+    332 Gentoo   Biscoe              48.8          16.2               222 ...     2009
+    333 Gentoo   Biscoe              47.2          13.7               214 ...     2009
     ```
 
 - Booleans as an argument
@@ -698,15 +698,15 @@ penguins.to_rover
     #<RedAmber::DataFrame : 333 x 8 Vectors, 0x0000000000049fac>
         species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
         <string> <string>        <double>      <double>           <uint8> ... <uint16>
-      1 Adelie   Torgersen           39.1          18.7               181 ...     2007
-      2 Adelie   Torgersen           39.5          17.4               186 ...     2007
-      3 Adelie   Torgersen           40.3          18.0               195 ...     2007
-      4 Adelie   Torgersen           36.7          19.3               193 ...     2007
-      5 Adelie   Torgersen           39.3          20.6               190 ...     2007
+      0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+      1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+      2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+      3 Adelie   Torgersen           36.7          19.3               193 ...     2007
+      4 Adelie   Torgersen           39.3          20.6               190 ...     2007
       : :        :                      :             :                 : ...        :
-    331 Gentoo   Biscoe              50.4          15.7               222 ...     2009
-    332 Gentoo   Biscoe              45.2          14.8               212 ...     2009
-    333 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+    330 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+    331 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+    332 Gentoo   Biscoe              49.9          16.1               213 ...     2009
     ```
 
 - Indices or booleans by a block
@@ -727,15 +727,15 @@ penguins.to_rover
     #<RedAmber::DataFrame : 140 x 8 Vectors, 0x000000000004de40>
         species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
         <string> <string>        <double>      <double>           <uint8> ... <uint16>
-      1 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
-      2 Adelie   Torgersen           36.7          19.3               193 ...     2007
-      3 Adelie   Torgersen           34.1          18.1               193 ...     2007
-      4 Adelie   Torgersen           37.8          17.1               186 ...     2007
-      5 Adelie   Torgersen           37.8          17.3               180 ...     2007
+      0 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+      1 Adelie   Torgersen           36.7          19.3               193 ...     2007
+      2 Adelie   Torgersen           34.1          18.1               193 ...     2007
+      3 Adelie   Torgersen           37.8          17.1               186 ...     2007
+      4 Adelie   Torgersen           37.8          17.3               180 ...     2007
       : :        :                      :             :                 : ...        :
-    138 Gentoo   Biscoe             (nil)         (nil)             (nil) ...     2009
-    139 Gentoo   Biscoe              50.4          15.7               222 ...     2009
-    140 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+    137 Gentoo   Biscoe             (nil)         (nil)             (nil) ...     2009
+    138 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+    139 Gentoo   Biscoe              49.9          16.1               213 ...     2009
     ```
 
 - Notice for nil
@@ -770,8 +770,8 @@ penguins.to_rover
     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000005df98>
             a b               c
       <uint8> <string> <double>
-    1       1 A             1.0
-    2   (nil) C             3.0
+    0       1 A             1.0
+    1   (nil) C             3.0
     ```
 
 ### `rename`
@@ -792,9 +792,9 @@ penguins.to_rover
     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000060838>
       name     age_in_1993
       <string>     <uint8>
-    1 Yasuko            68
-    2 Rui               49
-    3 Hinata            28
+    0 Yasuko            68
+    1 Rui               49
+    2 Hinata            28
     ```
 
 - Key pairs by a block
@@ -832,9 +832,9 @@ penguins.to_rover
     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000062804>
       name         age
       <string> <uint8>
-    1 Yasuko        68
-    2 Rui           49
-    3 Hinata        28
+    0 Yasuko        68
+    1 Rui           49
+    2 Hinata        28
 
     # update :age and add :brother
     df.assign do
@@ -848,9 +848,9 @@ penguins.to_rover
     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000658b0>
       name         age brother
       <string> <uint8> <string>
-    1 Yasuko        97 Santa
-    2 Rui           78 (nil)
-    3 Hinata        57 Momotaro
+    0 Yasuko        97 Santa
+    1 Rui           78 (nil)
+    2 Hinata        57 Momotaro
     ```
 
 - Key pairs by a block
@@ -869,11 +869,11 @@ penguins.to_rover
     #<RedAmber::DataFrame : 5 x 3 Vectors, 0x0000000000069e60>
         index    float string
       <uint8> <double> <string>
-    1       0      0.0 A
-    2       1      1.1 B
-    3       2      2.2 C
-    4       3      NaN D
-    5   (nil)    (nil) (nil)
+    0       0      0.0 A
+    1       1      1.1 B
+    2       2      2.2 C
+    3       3      NaN D
+    4   (nil)    (nil) (nil)
 
     # update :float
     # assigner by an Array
@@ -886,11 +886,11 @@ penguins.to_rover
     #<RedAmber::DataFrame : 5 x 3 Vectors, 0x00000000000dfffc>
         index    float string
       <uint8> <double> <string>
-    1       0     -0.0 A
-    2       1     -1.1 B
-    3       2     -2.2 C
-    4       3      NaN D
-    5   (nil)    (nil) (nil)
+    0       0     -0.0 A
+    1       1     -1.1 B
+    2       2     -2.2 C
+    3       3      NaN D
+    4   (nil)    (nil) (nil)
 
     # Or we can use assigner by a Hash
     df.assign do
@@ -921,11 +921,11 @@ penguins.to_rover
   #<RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000001787c>
     new_index   index    float string
       <uint8> <uint8> <double> <string>
-  1         1       0      0.0 A
-  2         2       1      1.1 B
-  3         3       2      2.2 C
-  4         4       3      NaN D
-  5         5   (nil)    (nil) (nil)
+  0         1       0      0.0 A
+  1         2       1      1.1 B
+  2         3       2      2.2 C
+  3         4       3      NaN D
+  4         5   (nil)    (nil) (nil)
   ```
 
 ### `slice_by(key, keep_key: false) { block }`
@@ -946,11 +946,11 @@ penguins.to_rover
   #<RedAmber::DataFrame : 5 x 3 Vectors, 0x0000000000069e60>
       index    float string
     <uint8> <double> <string>
-  1       0      0.0 A
-  2       1      1.1 B
-  3       2      2.2 C
-  4       3      NaN D
-  5   (nil)    (nil) (nil)
+  0       0      0.0 A
+  1       1      1.1 B
+  2       2      2.2 C
+  3       3      NaN D
+  4   (nil)    (nil) (nil)
 
   df.slice_by(:string) { ["A", "C"] }
 
@@ -958,8 +958,8 @@ penguins.to_rover
   #<RedAmber::DataFrame : 2 x 2 Vectors, 0x000000000001b1ac>
       index    float
     <uint8> <double>
-  1       0      0.0
-  2       2      2.2
+  0       0      0.0
+  1       2      2.2
   ```
 
 It is the same behavior as;
@@ -977,9 +977,9 @@ It is the same behavior as;
   #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000069668>
       index    float
     <uint8> <double>
-  1       0      0.0
-  2       1      1.1
-  3       2      2.2
+  0       0      0.0
+  1       1      1.1
+  2       2      2.2
   ```
 
 When the option `keep_key: true` used, the column `key` will be preserved.
@@ -991,9 +991,9 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000073c44>
       index    float string
     <uint8> <double> <string>
-  1       0      0.0 A
-  2       1      1.1 B
-  3       2      2.2 C
+  0       0      0.0 A
+  1       1      1.1 B
+  2       2      2.2 C
   ```
 
 ## Updating
@@ -1016,11 +1016,11 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   #<RedAmber::DataFrame : 5 x 3 Vectors, 0x000000000009b03c>
       index string   bool
     <uint8> <string> <boolean>
-  1       0 (nil)    false
-  2       0 B        false
-  3       1 B        true
-  4       1 C        (nil)
-  5   (nil) A        true
+  0       0 (nil)    false
+  1       0 B        false
+  2       1 B        true
+  3       1 C        (nil)
+  4   (nil) A        true
   ```
 
 - [ ] Clamp
@@ -1072,15 +1072,15 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   #<RedAmber::DataFrame : 87 x 12 Vectors, 0x0000000000005a50>
      unnamed1 name            height     mass hair_color skin_color  eye_color ... species
       <int64> <string>       <int64> <double> <string>   <string>    <string>  ... <string>
-   1        1 Luke Skywalker     172     77.0 blond      fair        blue      ... Human
-   2        2 C-3PO              167     75.0 NA         gold        yellow    ... Droid
-   3        3 R2-D2               96     32.0 NA         white, blue red       ... Droid
-   4        4 Darth Vader        202    136.0 none       white       yellow    ... Human
-   5        5 Leia Organa        150     49.0 brown      light       brown     ... Human
+   0        1 Luke Skywalker     172     77.0 blond      fair        blue      ... Human
+   1        2 C-3PO              167     75.0 NA         gold        yellow    ... Droid
+   2        3 R2-D2               96     32.0 NA         white, blue red       ... Droid
+   3        4 Darth Vader        202    136.0 none       white       yellow    ... Human
+   4        5 Leia Organa        150     49.0 brown      light       brown     ... Human
    :        : :                    :        : :          :           :         ... :
-  85       85 BB8              (nil)    (nil) none       none        black     ... Droid
-  86       86 Captain Phasma   (nil)    (nil) unknown    unknown     unknown   ... NA
-  87       87 Padmé Amidala      165     45.0 brown      light       brown     ... Human
+  84       85 BB8              (nil)    (nil) none       none        black     ... Droid
+  85       86 Captain Phasma   (nil)    (nil) unknown    unknown     unknown   ... NA
+  86       87 Padmé Amidala      165     45.0 brown      light       brown     ... Human
 
   starwars.tdr(12)
 
@@ -1088,18 +1088,18 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   RedAmber::DataFrame : 87 x 12 Vectors
   Vectors : 4 numeric, 8 strings
   #  key         type   level data_preview
-  1  :unnamed1   int64     87 [1, 2, 3, 4, 5, ... ]
-  2  :name       string    87 ["Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia Organa", ... ]
-  3  :height     int64     46 [172, 167, 96, 202, 150, ... ], 6 nils
-  4  :mass       double    39 [77.0, 75.0, 32.0, 136.0, 49.0, ... ], 28 nils
-  5  :hair_color string    13 ["blond", "NA", "NA", "none", "brown", ... ]
-  6  :skin_color string    31 ["fair", "gold", "white, blue", "white", "light", ... ]
-  7  :eye_color  string    15 ["blue", "yellow", "red", "yellow", "brown", ... ]
-  8  :birth_year double    37 [19.0, 112.0, 33.0, 41.9, 19.0, ... ], 44 nils
-  9  :sex        string     5 {"male"=>60, "none"=>6, "female"=>16, "hermaphroditic"=>1, "NA"=>4}
-  10 :gender     string     3 {"masculine"=>66, "feminine"=>17, "NA"=>4}
-  11 :homeworld  string    49 ["Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan", ... ]
-  12 :species    string    38 ["Human", "Droid", "Droid", "Human", "Human", ... ]
+  0  :unnamed1   int64     87 [1, 2, 3, 4, 5, ... ]
+  1  :name       string    87 ["Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia Organa", ... ]
+  2  :height     int64     46 [172, 167, 96, 202, 150, ... ], 6 nils
+  3  :mass       double    39 [77.0, 75.0, 32.0, 136.0, 49.0, ... ], 28 nils
+  4  :hair_color string    13 ["blond", "NA", "NA", "none", "brown", ... ]
+  5  :skin_color string    31 ["fair", "gold", "white, blue", "white", "light", ... ]
+  6  :eye_color  string    15 ["blue", "yellow", "red", "yellow", "brown", ... ]
+  7  :birth_year double    37 [19.0, 112.0, 33.0, 41.9, 19.0, ... ], 44 nils
+  8  :sex        string     5 {"male"=>60, "none"=>6, "female"=>16, "hermaphroditic"=>1, "NA"=>4}
+  9  :gender     string     3 {"masculine"=>66, "feminine"=>17, "NA"=>4}
+  10 :homeworld  string    49 ["Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan", ... ]
+  11 :species    string    38 ["Human", "Droid", "Droid", "Human", "Human", ... ]
   ```
 
   We can group by `:species` and calculate the count.
@@ -1111,15 +1111,15 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   #<RedAmber::DataFrame : 38 x 2 Vectors, 0x000000000001d6f0>
      species    count
      <string> <int64>
-   1 Human         35
-   2 Droid          6
-   3 Wookiee        2
-   4 Rodian         1
-   5 Hutt           1
+   0 Human         35
+   1 Droid          6
+   2 Wookiee        2
+   3 Rodian         1
+   4 Hutt           1
    : :              :
-  36 Kaleesh        1
-  37 Pau'an         1
-  38 Kel Dor        1
+  35 Kaleesh        1
+  36 Pau'an         1
+  37 Kel Dor        1
   ```
 
   We can also calculate the mean of `:mass` and `:height` together.
@@ -1131,15 +1131,15 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   #<RedAmber::DataFrame : 38 x 4 Vectors, 0x00000000000407cc>
      specie  s    count mean(height) mean(mass)
      <strin  g> <int64>     <double>   <double>
-   1 Human           35        176.6       82.8
-   2 Droid            6        131.2       69.8
-   3 Wookie  e        2        231.0      124.0
-   4 Rodian           1        173.0       74.0
-   5 Hutt             1        175.0     1358.0
+   0 Human           35        176.6       82.8
+   1 Droid            6        131.2       69.8
+   2 Wookie  e        2        231.0      124.0
+   3 Rodian           1        173.0       74.0
+   4 Hutt             1        175.0     1358.0
    : :                :            :          :
-  36 Kalees  h        1        216.0      159.0
-  37 Pau'an           1        206.0       80.0
-  38 Kel Dor        1        188.0       80.0
+  35 Kalees  h        1        216.0      159.0
+  36 Pau'an           1        206.0       80.0
+  37 Kel Dor        1        188.0       80.0
   ```
 
   Select rows for count > 1.
@@ -1151,15 +1151,15 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   #<RedAmber::DataFrame : 9 x 4 Vectors, 0x000000000004c270>
     species    count mean(height) mean(mass)
     <string> <int64>     <double>   <double>
-  1 Human         35        176.6       82.8
-  2 Droid          6        131.2       69.8
-  3 Wookiee        2        231.0      124.0
-  4 Gungan         3        208.7       74.0
-  5 NA             4        181.3       48.0
+  0 Human         35        176.6       82.8
+  1 Droid          6        131.2       69.8
+  2 Wookiee        2        231.0      124.0
+  3 Gungan         3        208.7       74.0
+  4 NA             4        181.3       48.0
   : :              :            :          :
-  7 Twi'lek        2        179.0       55.0
-  8 Mirialan       2        168.0       53.1
-  9 Kaminoan       2        221.0       88.0
+  6 Twi'lek        2        179.0       55.0
+  7 Mirialan       2        168.0       53.1
+  8 Kaminoan       2        221.0       88.0
   ```
 
 ## Reshape
@@ -1175,22 +1175,22 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000d520>
        Year    Audi     BMW BMW_MINI Mercedes-Benz      VW
     <int64> <int64> <int64>  <int64>       <int64> <int64>
-  1    2017   28336   52527    25427         68221   49040
-  2    2018   26473   50982    25984         67554   51961
-  3    2019   24222   46814    23813         66553   46794
-  4    2020   22304   35712    20196         57041   36576
-  5    2021   22535   35905    18211         51722   35215
+  0    2017   28336   52527    25427         68221   49040
+  1    2018   26473   50982    25984         67554   51961
+  2    2019   24222   46814    23813         66553   46794
+  3    2020   22304   35712    20196         57041   36576
+  4    2021   22535   35905    18211         51722   35215
   import_cars.transpose(:Manufacturer)
 
   # =>
   #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000ef74>
     Manufacturer      2017     2018     2019     2020     2021
     <dictionary>  <uint32> <uint32> <uint32> <uint16> <uint16>
-  1 Audi             28336    26473    24222    22304    22535
-  2 BMW              52527    50982    46814    35712    35905
-  3 BMW_MINI         25427    25984    23813    20196    18211
-  4 Mercedes-Benz    68221    67554    66553    57041    51722
-  5 VW               49040    51961    46794    36576    35215
+  0 Audi             28336    26473    24222    22304    22535
+  1 BMW              52527    50982    46814    35712    35905
+  2 BMW_MINI         25427    25984    23813    20196    18211
+  3 Mercedes-Benz    68221    67554    66553    57041    51722
+  4 VW               49040    51961    46794    36576    35215
   ```
   
   The leftmost column is created by original keys. Key name of the column is
@@ -1209,15 +1209,15 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000012750>               
          Year N                    V
      <uint16> <dictionary>  <uint32>
-   1     2017 Audi             28336
-   2     2017 BMW              52527
-   3     2017 BMW_MINI         25427
-   4     2017 Mercedes-Benz    68221
-   5     2017 VW               49040
+   0     2017 Audi             28336
+   1     2017 BMW              52527
+   2     2017 BMW_MINI         25427
+   3     2017 Mercedes-Benz    68221
+   4     2017 VW               49040
    :        : :                    :
-  23     2021 BMW_MINI         18211
-  24     2021 Mercedes-Benz    51722
-  25     2021 VW               35215
+  22     2021 BMW_MINI         18211
+  23     2021 Mercedes-Benz    51722
+  24     2021 VW               35215
   ```
 
   - Option `:name` is the key of the column which came **from key names**.
@@ -1230,15 +1230,15 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000017700>
          Year Manufacturer  Num_of_imported
      <uint16> <dictionary>         <uint32>
-   1     2017 Audi                    28336
-   2     2017 BMW                     52527
-   3     2017 BMW_MINI                25427
-   4     2017 Mercedes-Benz           68221
-   5     2017 VW                      49040
+   0     2017 Audi                    28336
+   1     2017 BMW                     52527
+   2     2017 BMW_MINI                25427
+   3     2017 Mercedes-Benz           68221
+   4     2017 VW                      49040
    :        : :                           :
-  23     2021 BMW_MINI                18211
-  24     2021 Mercedes-Benz           51722
-  25     2021 VW                      35215
+  22     2021 BMW_MINI                18211
+  23     2021 Mercedes-Benz           51722
+  24     2021 VW                      35215
   ```
 
 ### `to_wide`
@@ -1257,11 +1257,11 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000f0f0>
         Year     Audi      BMW BMW_MINI Mercedes-Benz       VW
     <uint16> <uint16> <uint16> <uint16>      <uint32> <uint16>
-  1     2017    28336    52527    25427         68221    49040
-  2     2018    26473    50982    25984         67554    51961
-  3     2019    24222    46814    23813         66553    46794
-  4     2020    22304    35712    20196         57041    36576
-  5     2021    22535    35905    18211         51722    35215
+  0     2017    28336    52527    25427         68221    49040
+  1     2018    26473    50982    25984         67554    51961
+  2     2019    24222    46814    23813         66553    46794
+  3     2020    22304    35712    20196         57041    36576
+  4     2021    22535    35905    18211         51722    35215
 
   # == import_cars
   ```

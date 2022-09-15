@@ -98,7 +98,7 @@ module RedAmber
             else
               [shorthand(vector, size, max_element)]
             end
-        sio.printf header_format, i + 1, key, type, data_tally.size, a.join(', ')
+        sio.printf header_format, i, key, type, data_tally.size, a.join(', ')
       end
       sio.string
     end
@@ -156,7 +156,7 @@ module RedAmber
       original = self
       indices = size > head + tail ? [*0..head, *(size - tail)...size] : [*0...size]
       df = slice(indices).assign do
-        assigner = { INDEX_KEY => indices.map { |i| (i + 1).to_s } }
+        assigner = { INDEX_KEY => indices.map(&:to_s) }
         vectors.each_with_object(assigner) do |v, a|
           a[v.key] = v.to_a.map do |e|
             if e.nil?
