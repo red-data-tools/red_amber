@@ -274,14 +274,14 @@ nil_removed.tdr
 RedAmber::DataFrame : 342 x 8 Vectors
 Vectors : 5 numeric, 3 strings
 # key                type   level data_preview
-1 :species           string     3 {"Adelie"=>151, "Chinstrap"=>68, "Gentoo"=>123}
-2 :island            string     3 {"Torgersen"=>51, "Biscoe"=>167, "Dream"=>124}
-3 :bill_length_mm    double   164 [39.1, 39.5, 40.3, 36.7, 39.3, ... ]
-4 :bill_depth_mm     double    80 [18.7, 17.4, 18.0, 19.3, 20.6, ... ]
-5 :flipper_length_mm int64     55 [181, 186, 195, 193, 190, ... ]
-6 :body_mass_g       int64     94 [3750, 3800, 3250, 3450, 3650, ... ]
-7 :sex               string     3 {"male"=>168, "female"=>165, ""=>9}
-8 :year              int64      3 {2007=>109, 2008=>114, 2009=>119}
+0 :species           string     3 {"Adelie"=>151, "Chinstrap"=>68, "Gentoo"=>123}
+1 :island            string     3 {"Torgersen"=>51, "Biscoe"=>167, "Dream"=>124}
+2 :bill_length_mm    double   164 [39.1, 39.5, 40.3, 36.7, 39.3, ... ]
+3 :bill_depth_mm     double    80 [18.7, 17.4, 18.0, 19.3, 20.6, ... ]
+4 :flipper_length_mm int64     55 [181, 186, 195, 193, 190, ... ]
+5 :body_mass_g       int64     94 [3750, 3800, 3250, 3450, 3650, ... ]
+6 :sex               string     3 {"male"=>168, "female"=>165, ""=>9}
+7 :year              int64      3 {2007=>109, 2008=>114, 2009=>119}
 ```
 
 For this frequently needed task, we can do it much simpler.

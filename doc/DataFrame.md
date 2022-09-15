@@ -272,14 +272,14 @@ penguins.to_rover
   RedAmber::DataFrame : 344 x 8 Vectors
   Vectors : 5 numeric, 3 strings
   # key                type   level data_preview
-  1 :species           string     3 {"Adelie"=>152, "Chinstrap"=>68, "Gentoo"=>124}
-  2 :island            string     3 {"Torgersen"=>52, "Biscoe"=>168, "Dream"=>124}
-  3 :bill_length_mm    double   165 [39.1, 39.5, 40.3, nil, 36.7, ... ], 2 nils
-  4 :bill_depth_mm     double    81 [18.7, 17.4, 18.0, nil, 19.3, ... ], 2 nils
-  5 :flipper_length_mm uint8     56 [181, 186, 195, nil, 193, ... ], 2 nils
-  6 :body_mass_g       uint16    95 [3750, 3800, 3250, nil, 3450, ... ], 2 nils
-  7 :sex               string     3 {"male"=>168, "female"=>165, nil=>11}
-  8 :year              uint16     3 {2007=>110, 2008=>114, 2009=>120}
+  0 :species           string     3 {"Adelie"=>152, "Chinstrap"=>68, "Gentoo"=>124}
+  1 :island            string     3 {"Torgersen"=>52, "Biscoe"=>168, "Dream"=>124}
+  2 :bill_length_mm    double   165 [39.1, 39.5, 40.3, nil, 36.7, ... ], 2 nils
+  3 :bill_depth_mm     double    81 [18.7, 17.4, 18.0, nil, 19.3, ... ], 2 nils
+  4 :flipper_length_mm uint8     56 [181, 186, 195, nil, 193, ... ], 2 nils
+  5 :body_mass_g       uint16    95 [3750, 3800, 3250, nil, 3450, ... ], 2 nils
+  6 :sex               string     3 {"male"=>168, "female"=>165, nil=>11}
+  7 :year              uint16     3 {2007=>110, 2008=>114, 2009=>120}
   ```
 
   - limit: limit of variables to show. Default value is 10.
@@ -1088,18 +1088,18 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   RedAmber::DataFrame : 87 x 12 Vectors
   Vectors : 4 numeric, 8 strings
   #  key         type   level data_preview
-  1  :unnamed1   int64     87 [1, 2, 3, 4, 5, ... ]
-  2  :name       string    87 ["Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia Organa", ... ]
-  3  :height     int64     46 [172, 167, 96, 202, 150, ... ], 6 nils
-  4  :mass       double    39 [77.0, 75.0, 32.0, 136.0, 49.0, ... ], 28 nils
-  5  :hair_color string    13 ["blond", "NA", "NA", "none", "brown", ... ]
-  6  :skin_color string    31 ["fair", "gold", "white, blue", "white", "light", ... ]
-  7  :eye_color  string    15 ["blue", "yellow", "red", "yellow", "brown", ... ]
-  8  :birth_year double    37 [19.0, 112.0, 33.0, 41.9, 19.0, ... ], 44 nils
-  9  :sex        string     5 {"male"=>60, "none"=>6, "female"=>16, "hermaphroditic"=>1, "NA"=>4}
-  10 :gender     string     3 {"masculine"=>66, "feminine"=>17, "NA"=>4}
-  11 :homeworld  string    49 ["Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan", ... ]
-  12 :species    string    38 ["Human", "Droid", "Droid", "Human", "Human", ... ]
+  0  :unnamed1   int64     87 [1, 2, 3, 4, 5, ... ]
+  1  :name       string    87 ["Luke Skywalker", "C-3PO", "R2-D2", "Darth Vader", "Leia Organa", ... ]
+  2  :height     int64     46 [172, 167, 96, 202, 150, ... ], 6 nils
+  3  :mass       double    39 [77.0, 75.0, 32.0, 136.0, 49.0, ... ], 28 nils
+  4  :hair_color string    13 ["blond", "NA", "NA", "none", "brown", ... ]
+  5  :skin_color string    31 ["fair", "gold", "white, blue", "white", "light", ... ]
+  6  :eye_color  string    15 ["blue", "yellow", "red", "yellow", "brown", ... ]
+  7  :birth_year double    37 [19.0, 112.0, 33.0, 41.9, 19.0, ... ], 44 nils
+  8  :sex        string     5 {"male"=>60, "none"=>6, "female"=>16, "hermaphroditic"=>1, "NA"=>4}
+  9  :gender     string     3 {"masculine"=>66, "feminine"=>17, "NA"=>4}
+  10 :homeworld  string    49 ["Tatooine", "Tatooine", "Naboo", "Tatooine", "Alderaan", ... ]
+  11 :species    string    38 ["Human", "Droid", "Droid", "Human", "Human", ... ]
   ```
 
   We can group by `:species` and calculate the count.

@@ -26,11 +26,11 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 4 x 5 Vectors
         Vectors : 5 numeric
         # key         type  level data_preview
-        1 :i          uint8     4 [0, 1, 2, nil], 1 nil
-        2 :"count(i)" int64     3 [2, 1, 2, 0]
-        3 :"count(f)" int64     3 [2, 1, 2, 0]
-        4 :"count(s)" int64     3 [2, 0, 2, 1]
-        5 :"count(b)" int64     3 [2, 1, 2, 0]
+        0 :i          uint8     4 [0, 1, 2, nil], 1 nil
+        1 :"count(i)" int64     3 [2, 1, 2, 0]
+        2 :"count(f)" int64     3 [2, 1, 2, 0]
+        3 :"count(s)" int64     3 [2, 0, 2, 1]
+        4 :"count(b)" int64     3 [2, 1, 2, 0]
       OUTPUT
       assert_equal str, @df.group(:i).count(%i[i f s b]).tdr_str(tally: 0)
     end
@@ -39,10 +39,10 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 6 x 4 Vectors
         Vectors : 3 numeric, 1 string
         # key         type   level data_preview
-        1 :i          uint8      4 [0, 0, 1, 2, 2, ... ], 1 nil
-        2 :s          string     3 ["A", "B", nil, "A", "B", ... ], 1 nil
-        3 :"count(f)" int64      2 [1, 1, 1, 1, 1, ... ]
-        4 :"count(b)" int64      2 [1, 1, 1, 1, 1, ... ]
+        0 :i          uint8      4 [0, 0, 1, 2, 2, ... ], 1 nil
+        1 :s          string     3 ["A", "B", nil, "A", "B", ... ], 1 nil
+        2 :"count(f)" int64      2 [1, 1, 1, 1, 1, ... ]
+        3 :"count(b)" int64      2 [1, 1, 1, 1, 1, ... ]
       OUTPUT
       assert_equal str, @df.group(:i, :s).count.tdr_str(tally: 0)
     end
@@ -52,8 +52,8 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 4 x 2 Vectors
         Vectors : 2 numeric
         # key    type  level data_preview
-        1 :i     uint8     4 [0, 1, 2, nil], 1 nil
-        2 :count int64     3 [2, 1, 2, 0]
+        0 :i     uint8     4 [0, 1, 2, nil], 1 nil
+        1 :count int64     3 [2, 1, 2, 0]
       OUTPUT
       df = @df.pick(:i, :f, :b)
       assert_equal str, df.group(:i).count.tdr_str(tally: 0)
@@ -64,11 +64,11 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 5 Vectors
         Vectors : 2 numeric, 1 string, 2 boolean
         # key       type    level data_preview
-        1 :b        boolean     3 [true, false, nil], 1 nil
-        2 :"max(i)" uint8       2 [2, 2, nil], 1 nil
-        3 :"max(f)" double      3 [2.2, 3.3, nil], 1 nil
-        4 :"max(s)" string      2 ["B", "B", "A"]
-        5 :"max(b)" boolean     3 [true, false, nil], 1 nil
+        0 :b        boolean     3 [true, false, nil], 1 nil
+        1 :"max(i)" uint8       2 [2, 2, nil], 1 nil
+        2 :"max(f)" double      3 [2.2, 3.3, nil], 1 nil
+        3 :"max(s)" string      2 ["B", "B", "A"]
+        4 :"max(b)" boolean     3 [true, false, nil], 1 nil
       OUTPUT
       assert_equal str, @df.group(:b).max(%i[i f s b]).tdr_str(tally: 0)
     end
@@ -78,10 +78,10 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 4 Vectors
         Vectors : 3 numeric, 1 boolean
         # key        type    level data_preview
-        1 :b         boolean     3 [true, false, nil], 1 nil
-        2 :"mean(i)" double      2 [1.0, 1.0, nil], 1 nil
-        3 :"mean(f)" double      3 [NaN, 2.2, nil], 1 NaN, 1 nil
-        4 :"mean(b)" double      3 [1.0, 0.0, nil], 1 nil
+        0 :b         boolean     3 [true, false, nil], 1 nil
+        1 :"mean(i)" double      2 [1.0, 1.0, nil], 1 nil
+        2 :"mean(f)" double      3 [NaN, 2.2, nil], 1 NaN, 1 nil
+        3 :"mean(b)" double      3 [1.0, 0.0, nil], 1 nil
       OUTPUT
       assert_equal str, @df.group(:b).mean(%i[i f b]).tdr_str(tally: 0)
     end
@@ -91,11 +91,11 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 5 Vectors
         Vectors : 2 numeric, 1 string, 2 boolean
         # key       type    level data_preview
-        1 :b        boolean     3 [true, false, nil], 1 nil
-        2 :"min(i)" uint8       2 [0, 0, nil], 1 nil
-        3 :"min(f)" double      3 [0.0, 1.1, nil], 1 nil
-        4 :"min(s)" string      1 ["A", "A", "A"]
-        5 :"min(b)" boolean     3 [true, false, nil], 1 nil
+        0 :b        boolean     3 [true, false, nil], 1 nil
+        1 :"min(i)" uint8       2 [0, 0, nil], 1 nil
+        2 :"min(f)" double      3 [0.0, 1.1, nil], 1 nil
+        3 :"min(s)" string      1 ["A", "A", "A"]
+        4 :"min(b)" boolean     3 [true, false, nil], 1 nil
       OUTPUT
       assert_equal str, @df.group(:b).min(%i[i f s b]).tdr_str(tally: 0)
     end
@@ -105,10 +105,10 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 4 Vectors
         Vectors : 3 numeric, 1 boolean
         # key           type    level data_preview
-        1 :b            boolean     3 [true, false, nil], 1 nil
-        2 :"product(i)" uint64      2 [0, 0, nil], 1 nil
-        3 :"product(f)" double      3 [NaN, 3.63, nil], 1 NaN, 1 nil
-        4 :"product(b)" uint64      3 [1, 0, nil], 1 nil
+        0 :b            boolean     3 [true, false, nil], 1 nil
+        1 :"product(i)" uint64      2 [0, 0, nil], 1 nil
+        2 :"product(f)" double      3 [NaN, 3.63, nil], 1 NaN, 1 nil
+        3 :"product(b)" uint64      3 [1, 0, nil], 1 nil
       OUTPUT
       assert_equal str, @df.group(:b).product(%i[i f b]).tdr_str(tally: 0)
     end
@@ -118,9 +118,9 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 3 Vectors
         Vectors : 2 numeric, 1 boolean
         # key          type    level data_preview
-        1 :b           boolean     3 [true, false, nil], 1 nil
-        2 :"stddev(i)" double      3 [0.816496580927726, 1.0, nil], 1 nil
-        3 :"stddev(f)" double      3 [NaN, 1.0999999999999999, nil], 1 NaN, 1 nil
+        0 :b           boolean     3 [true, false, nil], 1 nil
+        1 :"stddev(i)" double      3 [0.816496580927726, 1.0, nil], 1 nil
+        2 :"stddev(f)" double      3 [NaN, 1.0999999999999999, nil], 1 NaN, 1 nil
       OUTPUT
       assert_equal str, @df.group(:b).stddev(%i[i f]).tdr_str(tally: 0)
     end
@@ -130,10 +130,10 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 4 Vectors
         Vectors : 3 numeric, 1 boolean
         # key       type    level data_preview
-        1 :b        boolean     3 [true, false, nil], 1 nil
-        2 :"sum(i)" uint64      3 [3, 2, nil], 1 nil
-        3 :"sum(f)" double      3 [NaN, 4.4, nil], 1 NaN, 1 nil
-        4 :"sum(b)" uint64      3 [3, 0, nil], 1 nil
+        0 :b        boolean     3 [true, false, nil], 1 nil
+        1 :"sum(i)" uint64      3 [3, 2, nil], 1 nil
+        2 :"sum(f)" double      3 [NaN, 4.4, nil], 1 NaN, 1 nil
+        3 :"sum(b)" uint64      3 [3, 0, nil], 1 nil
       OUTPUT
       assert_equal str, @df.group(:b).sum(%i[i f b]).tdr_str(tally: 0)
     end
@@ -143,9 +143,9 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 3 x 3 Vectors
         Vectors : 2 numeric, 1 boolean
         # key            type    level data_preview
-        1 :b             boolean     3 [true, false, nil], 1 nil
-        2 :"variance(i)" double      3 [0.6666666666666666, 1.0, nil], 1 nil
-        3 :"variance(f)" double      3 [NaN, 1.2099999999999997, nil], 1 NaN, 1 nil
+        0 :b             boolean     3 [true, false, nil], 1 nil
+        1 :"variance(i)" double      3 [0.6666666666666666, 1.0, nil], 1 nil
+        2 :"variance(f)" double      3 [NaN, 1.2099999999999997, nil], 1 NaN, 1 nil
       OUTPUT
       assert_equal str, @df.group(:b).variance(%i[i f]).tdr_str(tally: 0)
     end
@@ -157,8 +157,8 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 4 x 2 Vectors
         Vectors : 2 numeric
         # key    type  level data_preview
-        1 :i     uint8     4 [0, 1, 2, nil], 1 nil
-        2 :count int64     3 [2, 1, 2, 0]
+        0 :i     uint8     4 [0, 1, 2, nil], 1 nil
+        1 :count int64     3 [2, 1, 2, 0]
       OUTPUT
       assert_equal str, @df.group(:i) { count(:i, :f, :b) }.tdr_str(tally: 0)
       assert_equal str, @df.group(:i).summarize { count(:i, :f, :b) }.tdr_str(tally: 0)
@@ -167,9 +167,9 @@ class GroupTest < Test::Unit::TestCase
         RedAmber::DataFrame : 4 x 3 Vectors
         Vectors : 3 numeric
         # key       type   level data_preview
-        1 :i        uint8      4 [0, 1, 2, nil], 1 nil
-        2 :count    int64      3 [2, 1, 2, 0]
-        3 :"sum(f)" double     4 [1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        0 :i        uint8      4 [0, 1, 2, nil], 1 nil
+        1 :count    int64      3 [2, 1, 2, 0]
+        2 :"sum(f)" double     4 [1.1, 2.2, NaN, nil], 1 NaN, 1 nil
       OUTPUT
       assert_equal str, @df.group(:i) { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
       assert_equal str, @df.group(:i).summarize { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)

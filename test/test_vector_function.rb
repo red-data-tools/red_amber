@@ -237,16 +237,16 @@ class VectorFunctionTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 2 Vectors
         Vectors : 2 numeric
         # key        type   level data_preview
-        1 :probs     double     5 [1.0, 0.75, 0.5, 0.25, 0.0]
-        2 :quantiles double     5 [7.0, 5.5, 4.0, 2.75, 2.0]
+        0 :probs     double     5 [1.0, 0.75, 0.5, 0.25, 0.0]
+        1 :quantiles double     5 [7.0, 5.5, 4.0, 2.75, 2.0]
       STR
 
       assert_equal <<~STR, @vector.quantiles([0.3], interpolation: :midpoint).tdr_str
         RedAmber::DataFrame : 1 x 2 Vectors
         Vectors : 2 numeric
         # key        type   level data_preview
-        1 :probs     double     1 [0.3]
-        2 :quantiles double     1 [2.5]
+        0 :probs     double     1 [0.3]
+        1 :quantiles double     1 [2.5]
       STR
     end
   end

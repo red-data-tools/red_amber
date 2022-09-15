@@ -98,7 +98,7 @@ module RedAmber
             else
               [shorthand(vector, size, max_element)]
             end
-        sio.printf header_format, i + 1, key, type, data_tally.size, a.join(', ')
+        sio.printf header_format, i, key, type, data_tally.size, a.join(', ')
       end
       sio.string
     end

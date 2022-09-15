@@ -57,10 +57,10 @@ class DataFrameIndexableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [nil, 1, 0, 0, 1], 1 nil
-        2 :float  double      4 [0.0, 1.1, 1.1, NaN, nil], 1 NaN, 1 nil
-        3 :string string      4 ["A", "C", "B", nil, "B"], 1 nil
-        4 :bool   boolean     3 [true, nil, false, false, true], 1 nil
+        0 :index  uint8       3 [nil, 1, 0, 0, 1], 1 nil
+        1 :float  double      4 [0.0, 1.1, 1.1, NaN, nil], 1 NaN, 1 nil
+        2 :string string      4 ["A", "C", "B", nil, "B"], 1 nil
+        3 :bool   boolean     3 [true, nil, false, false, true], 1 nil
       OUTPUT
       assert_equal str, @df.sort('+float').tdr_str(tally: 0)
 
@@ -68,10 +68,10 @@ class DataFrameIndexableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [1, nil, 0, 0, 1], 1 nil
-        2 :float  double      4 [nil, 0.0, NaN, 1.1, 1.1], 1 NaN, 1 nil
-        3 :string string      4 ["B", "A", nil, "B", "C"], 1 nil
-        4 :bool   boolean     3 [true, true, false, false, nil], 1 nil
+        0 :index  uint8       3 [1, nil, 0, 0, 1], 1 nil
+        1 :float  double      4 [nil, 0.0, NaN, 1.1, 1.1], 1 NaN, 1 nil
+        2 :string string      4 ["B", "A", nil, "B", "C"], 1 nil
+        3 :bool   boolean     3 [true, true, false, false, nil], 1 nil
       OUTPUT
       assert_equal str, @df.sort('-bool').tdr_str(tally: 0)
     end
@@ -81,10 +81,10 @@ class DataFrameIndexableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [0, 0, 1, 1, nil], 1 nil
-        2 :float  double      4 [1.1, NaN, 1.1, nil, 0.0], 1 NaN, 1 nil
-        3 :string string      4 ["B", nil, "C", "B", "A"], 1 nil
-        4 :bool   boolean     3 [false, false, nil, true, true], 1 nil
+        0 :index  uint8       3 [0, 0, 1, 1, nil], 1 nil
+        1 :float  double      4 [1.1, NaN, 1.1, nil, 0.0], 1 NaN, 1 nil
+        2 :string string      4 ["B", nil, "C", "B", "A"], 1 nil
+        3 :bool   boolean     3 [false, false, nil, true, true], 1 nil
       OUTPUT
       assert_equal str, @df.sort(:index, 'float').tdr_str(tally: 0)
 
@@ -92,10 +92,10 @@ class DataFrameIndexableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [nil, 1, 0, 0, 1], 1 nil
-        2 :float  double      4 [0.0, 1.1, 1.1, NaN, nil], 1 NaN, 1 nil
-        3 :string string      4 ["A", "C", "B", nil, "B"], 1 nil
-        4 :bool   boolean     3 [true, nil, false, false, true], 1 nil
+        0 :index  uint8       3 [nil, 1, 0, 0, 1], 1 nil
+        1 :float  double      4 [0.0, 1.1, 1.1, NaN, nil], 1 NaN, 1 nil
+        2 :string string      4 ["A", "C", "B", nil, "B"], 1 nil
+        3 :bool   boolean     3 [true, nil, false, false, true], 1 nil
       OUTPUT
       assert_equal str, @df.sort('+float', '-string').tdr_str(tally: 0)
     end
@@ -107,10 +107,10 @@ class DataFrameIndexableTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 4 Vectors
         Vectors : 2 numeric, 1 string, 1 boolean
         # key     type    level data_preview
-        1 :index  uint8       3 [nil, 1, 0, 0, 1], 1 nil
-        2 :float  double      4 [0.0, 1.1, 1.1, NaN, nil], 1 NaN, 1 nil
-        3 :string string      4 ["A", "C", "B", nil, "B"], 1 nil
-        4 :bool   boolean     3 [true, nil, false, false, true], 1 nil
+        0 :index  uint8       3 [nil, 1, 0, 0, 1], 1 nil
+        1 :float  double      4 [0.0, 1.1, 1.1, NaN, nil], 1 NaN, 1 nil
+        2 :string string      4 ["A", "C", "B", nil, "B"], 1 nil
+        3 :bool   boolean     3 [true, nil, false, false, true], 1 nil
       OUTPUT
       vector = Vector.new([3, 0, 4, 2, 1])
       assert_equal str, @df.map_indices(vector).tdr_str(tally: 0)
