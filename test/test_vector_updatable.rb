@@ -43,7 +43,8 @@ class VectorTest < Test::Unit::TestCase
       assert_equal [1, 2, 0], @vec.replace([false, false, true], 0).to_a
       assert_equal [1, 2, 0], @vec.replace([false, false, true], [0]).to_a
       assert_raise(VectorArgumentError) { @vec.replace([true], 0) } # boolean size mismatch
-      assert_raise(VectorArgumentError) { @vec.replace([false, false, nil], 0) } # no true in boolean
+      assert_equal @vec.to_a, @vec.replace([false, false, nil], 0).to_a # no true in boolean, return self
+      assert_equal @vec.to_a, @vec.replace(Vector.new([false, false, nil]), 0).to_a # no true in boolean, return self
       assert_raise(VectorArgumentError) { @vec.replace([true, false, nil], [0, 0]) } # replacement size mismatch
     end
 

@@ -8,9 +8,10 @@ module RedAmber
   # Functions to make up some data (especially missing) for new data.
   module VectorUpdatable
     # Replace data
-    # @param arg [Array, Vector, Arrow::Array] index specifier
+    # @param arg [Array, Vector, Arrow::Array] index specifier or boolean
     # @param replacer [Array, Vector, Arrow::Array] new data to replace for.
-    # @return [Vector] Replaced new Vector
+    # @return [Vector] Replaced new Vector.
+    #   If arg has no true, return self.
     def replace(args, replacer)
       args =
         case args
@@ -24,10 +25,12 @@ module RedAmber
       replacer = Array(replacer)
       return self if args.empty? || args[0].nil?
 
-      replacer = nil if replacer.empty?
       vector = parse_to_vector(args)
+      replacer = nil if replacer.empty?
       booleans =
         if vector.boolean?
+          return self unless vector.any
+
           vector
         elsif vector.numeric?
           replacer.sort_by! { |x| args[replacer.index(x)] } if replacer # rubocop:disable Style/SafeNavigation

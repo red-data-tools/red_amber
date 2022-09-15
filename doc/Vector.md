@@ -340,6 +340,7 @@ vector * -1
 - Accepts Scalar, Range  of Integer, Vector, Array, Arrow::Array as a specifier
 - Accepts Scalar, Vector, Array and Arrow::Array as a replacer.
 - Boolean specifiers specify the position of replacer in true.
+  - If booleans.any is false, no replacement happen and return self.
 - Index specifiers specify the position of replacer in indices.
 - replacer specifies the values to be replaced.
   - The number of true in booleans must be equal to the length of replacer
