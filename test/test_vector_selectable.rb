@@ -152,7 +152,7 @@ class VectorTest < Test::Unit::TestCase
       assert_equal @expected, @vector.is_in(array).to_a
     end
 
-    setup do 
+    setup do
       @uint = [1, 2, 3, 4, 5]
       @int = [2, 3, -1]
       @int_vector = Vector.new(@int)
