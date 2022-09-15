@@ -19,9 +19,9 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       str = <<~STR
           N                  N1       N2       N3
           <dictionary> <double> <double> <double>
-        1 One               1.1      1.2      1.3
-        2 Two               2.1      2.2      2.3
-        3 Three             3.1      3.2      3.3
+        0 One               1.1      1.2      1.3
+        1 Two               2.1      2.2      2.3
+        2 Three             3.1      3.2      3.3
       STR
       assert_equal str, @df.transpose.to_s
 
@@ -35,9 +35,9 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       str = <<~STR
           N4                 N1       N2       N3
           <dictionary> <double> <double> <double>
-        1 One               1.1      1.2      1.3
-        2 Two               2.1      2.2      2.3
-        3 Three             3.1      3.2      3.3
+        0 One               1.1      1.2      1.3
+        1 Two               2.1      2.2      2.3
+        2 Three             3.1      3.2      3.3
       STR
       assert_equal str, @df.transpose(name: :N1).to_s
     end
@@ -61,43 +61,43 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       assert_equal <<~STR, @df.to_long(:names).to_s
           names    N                   V
           <string> <dictionary> <double>
-        1 name1    One               1.1
-        2 name1    Two               2.1
-        3 name1    Three             3.1
-        4 name2    One               1.2
-        5 name2    Two               2.2
-        6 name2    Three             3.2
-        7 name3    One               1.3
-        8 name3    Two               2.3
-        9 name3    Three             3.3
+        0 name1    One               1.1
+        1 name1    Two               2.1
+        2 name1    Three             3.1
+        3 name2    One               1.2
+        4 name2    Two               2.2
+        5 name2    Three             3.2
+        6 name3    One               1.3
+        7 name3    Two               2.3
+        8 name3    Three             3.3
       STR
 
       assert_equal <<~STR, @df.to_long(:names, name: :order, value: :value).to_s
           names    order           value
           <string> <dictionary> <double>
-        1 name1    One               1.1
-        2 name1    Two               2.1
-        3 name1    Three             3.1
-        4 name2    One               1.2
-        5 name2    Two               2.2
-        6 name2    Three             3.2
-        7 name3    One               1.3
-        8 name3    Two               2.3
-        9 name3    Three             3.3
+        0 name1    One               1.1
+        1 name1    Two               2.1
+        2 name1    Three             3.1
+        3 name2    One               1.2
+        4 name2    Two               2.2
+        5 name2    Three             3.2
+        6 name3    One               1.3
+        7 name3    Two               2.3
+        8 name3    Three             3.3
       STR
 
       assert_equal <<~STR, @df.to_long.to_s
            N            V
            <dictionary> <string>
-         1 names        name1
-         2 One          1.1
-         3 Two          2.1
-         4 Three        3.1
-         5 names        name2
+         0 names        name1
+         1 One          1.1
+         2 Two          2.1
+         3 Three        3.1
+         4 names        name2
          : :            :
-        10 One          1.3
-        11 Two          2.3
-        12 Three        3.3
+         9 One          1.3
+        10 Two          2.3
+        11 Three        3.3
       STR
     end
   end
