@@ -2,6 +2,7 @@
 
 [![Gem Version](https://badge.fury.io/rb/red_amber.svg)](https://badge.fury.io/rb/red_amber)
 [![Ruby](https://github.com/heronshoes/red_amber/actions/workflows/test.yml/badge.svg)](https://github.com/heronshoes/red_amber/actions/workflows/test.yml)
+[![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/heronshoes/red_amber/discussions)
 
 A simple dataframe library for Ruby.
 
@@ -402,8 +403,14 @@ bundle install
 bundle exec rake test
 ```
 
+## Community
+
 I will appreciate if you could help to improve this project. Here are a few ways you can help:
 
+- Let's talk in the [discussions](https://github.com/heronshoes/red_amber/discussions). [![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/heronshoes/red_amber/discussions)
+  - Browse Q and A, how to use, tips, etc.
+  - Ask questions you’re wondering about.
+  - Share ideas. The idea may be promoted to issues or pull requests.
 - [Report bugs or suggest new features](https://github.com/heronshoes/red_amber/issues)
 - Fix bugs and [submit pull requests](https://github.com/heronshoes/red_amber/pulls)
 - Write, clarify, or fix documentation
