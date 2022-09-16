@@ -61,7 +61,7 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 
 ### `type_class`
 
-### `each`
+### `each`, `map`, `collect`
 
   If block is not given, returns Enumerator.
 
