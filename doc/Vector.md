@@ -106,7 +106,7 @@ array[indices]
 ["A", "E", "A"]
 ```
 
-### `filter(booleans)`, `[](booleans)`
+### `filter(booleans)`, `select(booleans)`, `[](booleans)`
 
 - Acceptable class for booleans:
   - An array of true, false, or nil
@@ -124,6 +124,7 @@ array[booleans]
 #<RedAmber::Vector(:string, size=2):0x000000000000f21c>
 ["A", "E"]
 ```
+`filter` and `select` also accepts a block.
 
 ## Functions
 
