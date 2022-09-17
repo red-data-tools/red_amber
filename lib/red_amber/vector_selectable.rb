@@ -25,7 +25,13 @@ module RedAmber
     end
 
     # TODO: support for option {null_selection_behavior: :drop}
-    def filter(*booleans)
+    def filter(*booleans, &block)
+      if block
+        raise VectorArgumentError, 'Must not specify both arguments and block.' unless booleans.empty?
+
+        booleans = [yield]
+      end
+
       booleans.flatten!
       return Vector.new([]) if booleans.empty?
 
@@ -46,6 +52,8 @@ module RedAmber
 
       filter_by_array(boolean_array) # returns sub Vector
     end
+    alias_method :select, :filter
+    alias_method :find_all, :filter
 
     #   @param indices
     #   @param booleans

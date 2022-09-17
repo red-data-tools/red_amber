@@ -126,10 +126,19 @@ module RedAmber
       end
     end
 
+    def map(&block)
+      return enum_for(:map) unless block
+
+      Vector.new(to_a.map(&block))
+    end
+    alias_method :collect, :map
+
+    # undocumented
     def chunked?
       @data.is_a? Arrow::ChunkedArray
     end
 
+    # undocumented
     def n_chunks
       chunked? ? @data.n_chunks : 0
     end

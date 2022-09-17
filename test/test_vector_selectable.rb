@@ -70,6 +70,13 @@ class VectorTest < Test::Unit::TestCase
     test '#filter size unmatch' do
       assert_raise(VectorArgumentError) { @string.filter([true]) } # out of lower limit
     end
+
+    test '#filter with a block' do
+      assert_raise(VectorArgumentError) { @string.filter(@booleans) { @booleans } } # with both args and a block
+      assert_equal %w[A E], @string.filter { @booleans }.to_a # primitive Array
+      assert_equal %w[A E], @string.filter { Arrow::BooleanArray.new(@booleans) }.to_a # Arrow::BooleanArray
+      assert_equal %w[A E], @string.filter { Vector.new(@booleans) }.to_a # Vector
+    end
   end
 
   sub_test_case '#[]' do

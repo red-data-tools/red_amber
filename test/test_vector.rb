@@ -76,6 +76,14 @@ class VectorTest < Test::Unit::TestCase
       vector.each { |x| a << x }
       assert_equal expect, a
     end
+
+    test '#map' do
+      expect, _, _, array = data
+      vector = Vector.new(array)
+      assert_kind_of Enumerator, vector.map
+      assert_kind_of Vector, vector.map(&:to_s)
+      assert_equal expect.map(&:to_s), vector.map(&:to_s).to_a
+    end
   end
 
   sub_test_case('type check') do
