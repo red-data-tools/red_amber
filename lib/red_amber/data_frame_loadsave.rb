@@ -20,5 +20,17 @@ module RedAmber
     def save(output, options = {})
       @table.save(output, options)
     end
+
+    # Save and reload to cast automatically
+    #   Via tsv format file temporally as default
+    #
+    #   experimental feature
+    def auto_cast(format: :tsv)
+      return self if empty?
+
+      tempfile = Arrow::ResizableBuffer.new(1024)
+      save(tempfile, format: format)
+      DataFrame.load(tempfile, format: format)
+    end
   end
 end

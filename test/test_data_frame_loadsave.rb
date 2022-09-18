@@ -254,4 +254,29 @@ class DataFrameLoadSaveTest < Test::Unit::TestCase
       end
     end
   end
+
+  sub_test_case('#auto_cast') do
+    test 'empty dataframe' do
+      df = RedAmber::DataFrame.new
+      assert df.auto_cast.empty?
+    end
+
+    test 'string dataframe' do
+      df = RedAmber::DataFrame.new(
+        index: %w[1 2 3],
+        string: %w[A B C],
+        float: %w[0.1 0.2 0.3],
+        boolean: %w[true false] << ''
+      )
+      assert_equal <<~STR, df.auto_cast.tdr_str
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key      type    level data_preview
+        0 :index   int64       3 [1, 2, 3]
+        1 :string  string      3 ["A", "B", "C"]
+        2 :float   double      3 [0.1, 0.2, 0.3]
+        3 :boolean boolean     3 [true, false, nil], 1 nil
+      STR
+    end
+  end
 end
