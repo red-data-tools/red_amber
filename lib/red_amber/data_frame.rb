@@ -7,6 +7,7 @@ module RedAmber
     # mix-in
     include DataFrameDisplayable
     include DataFrameIndexable
+    include DataFrameLoadSave
     include DataFrameReshaping
     include DataFrameSelectable
     include DataFrameVariableOperation
@@ -61,18 +62,10 @@ module RedAmber
       name_unnamed_keys
     end
 
-    def self.load(path, options = {})
-      DataFrame.new(Arrow::Table.load(path, options))
-    end
-
     attr_reader :table
 
     def to_arrow
       @table
-    end
-
-    def save(output, options = {})
-      @table.save(output, options)
     end
 
     # Returns the number of rows.
