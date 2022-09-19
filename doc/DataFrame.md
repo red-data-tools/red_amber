@@ -31,6 +31,14 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   RedAmber::DataFrame.new(table)
   ```
 
+### `new` from an Object which responds to `to_arrow`
+
+  ```ruby
+  require "datasets-arrow"
+  dataset = Datasets::Penguins.new
+  RedAmber::DataFrame.new(dataset)
+  ```
+
 ### `new` from a Rover::DataFrame
 
 
@@ -265,8 +273,9 @@ penguins.to_rover
   require 'red_amber'
   require 'datasets-arrow'
 
-  penguins = Datasets::Penguins.new.to_arrow
-  RedAmber::DataFrame.new(penguins).tdr
+  dataset = Datasets::Penguins.new
+  # (From 0.2.2) responsible to the object which has `to_arrow` method.
+  RedAmber::DataFrame.new(dataset).tdr
 
   # =>
   RedAmber::DataFrame : 344 x 8 Vectors
