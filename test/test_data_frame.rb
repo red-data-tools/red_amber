@@ -56,6 +56,19 @@ class DataFrameTest < Test::Unit::TestCase
       df = DataFrame.new('': [1, 2], unnamed1: [3, 4])
       assert_equal %i[unnamed2 unnamed1], df.keys
     end
+
+    test 'new from a to_arrow-resposible object' do |(h, _)|
+      table = Arrow::Table.new(h)
+      (o = Object.new).define_singleton_method(:to_arrow) { table }
+
+      df = DataFrame.new(o)
+      assert_equal df.table, table
+    end
+
+    test 'new from a to_arrow-resposible object that returns non-Arrow::Table' do |(_, d)|
+      (o = Object.new).define_singleton_method(:to_arrow) { d }
+      assert_raise(DataFrameTypeError) { DataFrame.new(o) }
+    end
   end
 
   sub_test_case 'Properties' do

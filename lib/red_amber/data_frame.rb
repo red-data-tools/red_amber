@@ -37,6 +37,13 @@ module RedAmber
         # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
         #   returns empty DataFrame
         @table = Arrow::Table.new({}, [])
+      in [->(x) { x.respond_to?(:to_arrow) } => arrowable]
+        table = arrowable.to_arrow
+        unless table.is_a?(Arrow::Table)
+          raise DataFrameTypeError,
+                "to_arrow must return an Arrow::Table but #{table.class}: #{arrowable}"
+        end
+        @table = table
       in [Arrow::Table => table]
         @table = table
       in [DataFrame => dataframe]
