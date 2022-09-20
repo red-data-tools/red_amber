@@ -72,8 +72,7 @@ It represents a set of data in 2D-shape. The entity is a Red Arrow's Table objec
 require 'red_amber' # require 'red-amber' is also OK.
 require 'datasets-arrow'
 
-arrow = Datasets::Penguins.new.to_arrow
-penguins = RedAmber::DataFrame.new(arrow)
+penguins = RedAmber::DataFrame.new(Datasets::Penguins.new)
 
 # =>
 #<RedAmber::DataFrame : 344 x 8 Vectors, 0x0000000000013790>
@@ -179,7 +178,7 @@ df.assign(:body_mass_kg => df[:body_mass_g] / 1000.0)
 ![slice method image](doc/image/dataframe/slice.png)
 
 ```ruby
-# returns 5 rows at the start and 5 rows from the end
+# returns 5 rows from the start and 5 rows from the end
 penguins.slice(0...5, -5..-1)
 
 # =>
@@ -373,7 +372,7 @@ penguins[:bill_length_mm] < 40
 [true, true, false, nil, true, true, true, true, true, false, true, true, false, ... ]
 ```
 
-Next example returns aggregated result.
+Next example returns an aggregated result.
 
 ![unary aggregation](doc/image/vector/unary_aggregation.png)
 
