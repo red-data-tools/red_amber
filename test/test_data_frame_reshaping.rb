@@ -8,7 +8,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
   sub_test_case 'transpose' do
     setup do
       @df = DataFrame.new(
-        index: %w[N1 N2 N3],
+        index: %w[NAME1 NAME2 NAME3],
         One: [1.1, 1.2, 1.3],
         Two: [2.1, 2.2, 2.3],
         Three: [3.1, 3.2, 3.3]
@@ -17,7 +17,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
 
     test '#transpose' do
       str = <<~STR
-          N                  N1       N2       N3
+          NAME            NAME1    NAME2    NAME3
           <dictionary> <double> <double> <double>
         0 One               1.1      1.2      1.3
         1 Two               2.1      2.2      2.3
@@ -33,13 +33,13 @@ class DataFrameReshapingTest < Test::Unit::TestCase
 
     test '#transpose with :name' do
       str = <<~STR
-          N4                 N1       N2       N3
+          NAME4           NAME1    NAME2    NAME3
           <dictionary> <double> <double> <double>
         0 One               1.1      1.2      1.3
         1 Two               2.1      2.2      2.3
         2 Three             3.1      3.2      3.3
       STR
-      assert_equal str, @df.transpose(name: :N1).to_s
+      assert_equal str, @df.transpose(name: :NAME1).to_s
     end
   end
 
@@ -59,7 +59,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { @df.to_long(:names, value: :names) }
 
       assert_equal <<~STR, @df.to_long(:names).to_s
-          names    N                   V
+          names    NAME            VALUE
           <string> <dictionary> <double>
         0 name1    One               1.1
         1 name1    Two               2.1
@@ -87,7 +87,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       STR
 
       assert_equal <<~STR, @df.to_long.to_s
-           N            V
+           NAME         VALUE
            <dictionary> <string>
          0 names        name1
          1 One          1.1
@@ -121,7 +121,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
     end
 
     test '#to_wide with options' do
-      df = @df.rename(N: :key1, V: :key2)
+      df = @df.rename(NAME: :key1, VALUE: :key2)
       assert_equal @str, df.to_wide(name: :key1, value: :key2).to_s
     end
   end
