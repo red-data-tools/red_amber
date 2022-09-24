@@ -1173,6 +1173,8 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ## Reshape
 
+![dataframe reshapeing image](doc/../image/reshaping_dataframe.png)
+
 ### `transpose`
 
   Creates transposed DataFrame for the wide (messy) dataframe.
@@ -1203,7 +1205,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   ```
   
   The leftmost column is created by original keys. Key name of the column is
-  named by parameter `:name`. If `:name` is not specified, `:N` is used for the key.
+  named by parameter `:name`. If `:name` is not specified, `:NAME` is used for the key.
 
 ### `to_long(*keep_keys)`
 
@@ -1216,7 +1218,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
   # =>
   #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000012750>               
-         Year N                    V
+         Year NAME             VALUE
      <uint16> <dictionary>  <uint32>
    0     2017 Audi             28336
    1     2017 BMW              52527
@@ -1230,7 +1232,9 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   ```
 
   - Option `:name` is the key of the column which came **from key names**.
+    The default value is `:NAME` if it is not specified.
   - Option `:value` is the key of the column which came **from values**.
+    The default value is `:VALUE` if it is not specified.
 
   ```ruby
   import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
@@ -1255,7 +1259,9 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   Creates a 'wide' (messy) DataFrame from a 'long' DataFrame.
 
   - Option `:name` is the key of the column which will be expanded **to key names**.
+    The default value is `:NAME` if it is not specified.
   - Option `:value` is the key of the column which will be expanded **to values**.
+    The default value is `:VALUE` if it is not specified.
 
   ```ruby
   import_cars.to_long(:Year).to_wide
@@ -1271,8 +1277,6 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   2     2019    24222    46814    23813         66553    46794
   3     2020    22304    35712    20196         57041    36576
   4     2021    22535    35905    18211         51722    35215
-
-  # == import_cars
   ```
 
 ## Combine
