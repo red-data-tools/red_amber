@@ -237,11 +237,24 @@ module RedAmber
 
       converted = reduced.assign do
         vectors.select.with_object({}) do |vector, assigner|
-          if vector.has_nil?
-            assigner[vector.key] = vector.to_a.map do |e|
-              e = e.nil? ? '<i>(nil)</i>' : e.to_s # nil
-              e = '""' if e.empty? # empty string
-              e.sub(/(\s+)/, '"\1"') # blank spaces
+          assigner[vector.key] = vector.map do |element|
+            case element
+            in TrueClass
+              '<i>(true)</i>'
+            in FalseClass
+              '<i>(false)</i>'
+            in NilClass
+              '<i>(nil)</i>'
+            in ''
+              '""'
+            in String
+              element.sub(/(\s+)/, '"\1"') # blank spaces
+            in Float
+              format('%g', element)
+            in Integer
+              format('%d', element)
+            else
+              element
             end
           end
         end
