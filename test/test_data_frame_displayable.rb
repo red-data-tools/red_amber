@@ -324,6 +324,12 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       html = 'RedAmber::DataFrame <9 x 1 vector> <table><tr><th>digits</th></tr><tr><td>123456</td></tr><tr><td>12345.6</td></tr><tr><td>1234.56</td></tr><tr><td>123.456</td></tr><tr><td>&#8942;</td></tr><tr><td>0.123456</td></tr><tr><td>0.0123456</td></tr><tr><td>0.00123456</td></tr></table>'
       assert_equal html, df.to_iruby[1]
     end
+
+    test 'blank spaces' do
+      df = DataFrame.new(str: ['', ' ', 'two words'])
+      html = 'RedAmber::DataFrame <3 x 1 vector> <table><tr><th>str</th></tr><tr><td>""</td></tr><tr><td>" "</td></tr><tr><td>two words</td></tr></table>'
+      assert_equal html, df.to_iruby[1]
+    end
   end
 
   sub_test_case 'to_iruby in tdr mode' do
