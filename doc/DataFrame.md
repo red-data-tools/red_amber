@@ -1046,7 +1046,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ### `group(group_keys)`
 
-  `group` creates a class `Group` object. `Group` accepts functions below as a method.
+  `group` creates a instance of class `Group`. `Group` accepts functions below as a method.
   Method accepts options as `group_keys`.
 
   Available functions are:
@@ -1138,16 +1138,16 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
   # =>
   #<RedAmber::DataFrame : 38 x 4 Vectors, 0x00000000000407cc>
-     specie  s    count mean(height) mean(mass)
-     <strin  g> <int64>     <double>   <double>
-   0 Human           35        176.6       82.8
-   1 Droid            6        131.2       69.8
-   2 Wookie  e        2        231.0      124.0
-   3 Rodian           1        173.0       74.0
-   4 Hutt             1        175.0     1358.0
-   : :                :            :          :
-  35 Kalees  h        1        216.0      159.0
-  36 Pau'an           1        206.0       80.0
+     species    count mean(height) mean(mass)
+     <string> <int64>     <double>   <double>
+   0 Human         35        176.6       82.8
+   1 Droid          6        131.2       69.8
+   2 Wookiee        2        231.0      124.0
+   3 Rodian         1        173.0       74.0
+   4 Hutt           1        175.0     1358.0
+   : :              :            :          :
+  35 Kaleesh        1        216.0      159.0
+  36 Pau'an         1        206.0       80.0
   37 Kel Dor        1        188.0       80.0
   ```
 

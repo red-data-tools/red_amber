@@ -215,17 +215,6 @@ module RedAmber
       Rover::DataFrame.new(to_h)
     end
 
-    def to_iruby
-      require 'iruby'
-      return ['text/plain', '(empty DataFrame)'] if empty?
-
-      if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table') == 'TDR'
-        size <= 5 ? ['text/plain', tdr_str(tally: 0)] : ['text/plain', tdr_str]
-      else
-        ['text/html', html_table]
-      end
-    end
-
     def group(*group_keys, &block)
       g = Group.new(self, group_keys)
       g = g.summarize(&block) if block
@@ -258,25 +247,6 @@ module RedAmber
       end
       @variables, @keys, @vectors = ary
       ary[%i[variables keys vectors].index(var)]
-    end
-
-    def html_table
-      reduced = size > 8 ? self[0..4, -4..-1] : self
-
-      converted = reduced.assign do
-        vectors.select.with_object({}) do |vector, assigner|
-          if vector.has_nil?
-            assigner[vector.key] = vector.to_a.map do |e|
-              e = e.nil? ? '<i>(nil)</i>' : e.to_s # nil
-              e = '""' if e.empty? # empty string
-              e.sub(/(\s+)/, '"\1"') # blank spaces
-            end
-          end
-        end
-      end
-
-      html = IRuby::HTML.table(converted.to_h, maxrows: 8, maxcols: 15)
-      "#{self.class} <#{size} x #{n_keys} vector#{pl(n_keys)}> #{html}"
     end
 
     def name_unnamed_keys
