@@ -7,7 +7,7 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 ### Create from a column in a DataFrame
   
   ```ruby
-  df = RedAmber::DataFrame.new(x: [1, 2, 3])
+  df = DataFrame.new(x: [1, 2, 3])
   df[:x]
   # =>
   #<RedAmber::Vector(:uint8, size=3):0x000000000000f4ec>
@@ -17,13 +17,13 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 ### New from an Array
 
   ```ruby
-  vector = RedAmber::Vector.new([1, 2, 3])
+  vector = Vector.new([1, 2, 3])
   # or
-  vector = RedAmber::Vector.new(1, 2, 3)
+  vector = Vector.new(1, 2, 3)
   # or
-  vector = RedAmber::Vector.new(1..3)
+  vector = Vector.new(1..3)
   # or
-  vector = RedAmber::Vector.new(Arrow::Array([1, 2, 3])
+  vector = Vector.new(Arrow::Array.new([1, 2, 3])
 
   # =>
   #<RedAmber::Vector(:uint8, size=3):0x000000000000f514>
@@ -78,7 +78,7 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
   - `limit` sets size limit to display a long array.
 
     ```ruby
-    vector = RedAmber::Vector.new((1..50).to_a)
+    vector = Vector.new((1..50).to_a)
     # =>
     #<RedAmber::Vector(:uint8, size=50):0x000000000000f528>
     [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ... ]
@@ -95,8 +95,8 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
 - Negative index is also OK like the Ruby's primitive Array.
 
 ```ruby
-array = RedAmber::Vector.new(%w[A B C D E])
-indices = RedAmber::Vector.new([0.1, -0.5, -5.1])
+array = Vector.new(%w[A B C D E])
+indices = Vector.new([0.1, -0.5, -5.1])
 array.take(indices)
 # or
 array[indices]
@@ -114,7 +114,7 @@ array[indices]
   - Arrow::BooleanArray
 
 ```ruby
-array = RedAmber::Vector.new(%w[A B C D E])
+array = Vector.new(%w[A B C D E])
 booleans = [true, false, nil, false, true]
 array.filter(booleans)
 # or
@@ -159,7 +159,7 @@ Options can be used as follows.
 See the [document of C++ function](https://arrow.apache.org/docs/cpp/compute.html) for detail.
 
 ```ruby
-double = RedAmber::Vector.new([1, 0/0.0, -1/0.0, 1/0.0, nil, ""])
+double = Vector.new([1, 0/0.0, -1/0.0, 1/0.0, nil, ""])
 #=>
 #<RedAmber::Vector(:double, size=6):0x000000000000f910>
 [1.0, NaN, -Infinity, Infinity, nil, 0.0]
@@ -169,7 +169,7 @@ double.count(mode: :only_valid) #=> 5, default
 double.count(mode: :only_null) #=> 1
 double.count(mode: :all) #=> 6
 
-boolean = RedAmber::Vector.new([true, true, nil])
+boolean = Vector.new([true, true, nil])
 #=>
 #<RedAmber::Vector(:boolean, size=3):0x000000000000f924>
 [true, true, nil]
@@ -216,7 +216,7 @@ Examples of options for `#round`;
 - `round_mode` Specify rounding mode.
 
 ```ruby
-double = RedAmber::Vector.new([15.15, 2.5, 3.5, -4.5, -5.5])
+double = Vector.new([15.15, 2.5, 3.5, -4.5, -5.5])
 # => [15.15, 2.5, 3.5, -4.5, -5.5]
 double.round
 # => [15.0, 2.0, 4.0, -4.0, -6.0]
@@ -294,7 +294,7 @@ double.round(n_digits: -1)
   array = [0.0/0, Float::NAN]
   array.tally #=> {NaN=>1, NaN=>1}
 
-  vector = RedAmber::Vector.new(array)
+  vector = Vector.new(array)
   vector.tally #=> {NaN=>2}
   vector.value_counts #=> {NaN=>2}
   ```
@@ -311,7 +311,7 @@ double.round(n_digits: -1)
 ## Coerce
 
 ```ruby
-vector = RedAmber::Vector.new(1,2,3)
+vector = Vector.new(1,2,3)
 # => 
 #<RedAmber::Vector(:uint8, size=3):0x00000000000decc4>            
 [1, 2, 3]                                                         
@@ -347,7 +347,7 @@ vector * -1
   - The number of true in booleans must be equal to the length of replacer
 
 ```ruby
-vector = RedAmber::Vector.new([1, 2, 3])
+vector = Vector.new([1, 2, 3])
 booleans = [true, false, true]
 replacer = [4, 5]
 vector.replace(booleans, replacer)
@@ -381,7 +381,7 @@ vector.replace(booleans, replacer)
 ```ruby
 booleans = [true, false, nil]
 replacer = -1
-vec.replace(booleans, replacer)
+vector.replace(booleans, replacer)
 => 
 #<RedAmber::Vector(:int8, size=3):0x00000000000304d0>
 [-1, 2, nil]
@@ -392,17 +392,7 @@ vec.replace(booleans, replacer)
 ```ruby
 booleans = [true, false, true]
 replacer = [nil]
-vec.replace(booleans, replacer)
-=> 
-#<RedAmber::Vector(:int8, size=3):0x00000000000304d0>
-[nil, 2, nil]
-```
-
-- If no replacer specified, it is same as to specify nil.
-
-```ruby
-booleans = [true, false, true]
-vec.replace(booleans)
+vector.replace(booleans, replacer)
 => 
 #<RedAmber::Vector(:int8, size=3):0x00000000000304d0>
 [nil, 2, nil]
@@ -411,7 +401,7 @@ vec.replace(booleans)
 - An example to replace 'NA' to nil.
 
 ```ruby
-vector = RedAmber::Vector.new(['A', 'B', 'NA'])
+vector = Vector.new(['A', 'B', 'NA'])
 vector.replace(vector == 'NA', nil)
 # =>
 #<RedAmber::Vector(:string, size=3):0x000000000000f8ac>
@@ -423,7 +413,7 @@ vector.replace(vector == 'NA', nil)
 Specified indices are used 'as sorted'. Position in indices and replacer may not have correspondence.
 
 ```ruby
-vector = RedAmber::Vector.new([1, 2, 3])
+vector = Vector.new([1, 2, 3])
 indices = [2, 1]
 replacer = [4, 5]
 vector.replace(indices, replacer)
@@ -439,7 +429,7 @@ Propagate the last valid observation forward (or backward).
 Or preserve nil if all previous values are nil or at the end.
 
 ```ruby
-integer = RedAmber::Vector.new([0, 1, nil, 3, nil])
+integer = Vector.new([0, 1, nil, 3, nil])
 integer.fill_nil_forward
 # =>
 #<RedAmber::Vector(:uint8, size=5):0x000000000000f960>
@@ -461,7 +451,7 @@ Choose values based on self. Self must be a boolean Vector.
 This example will normalize negative indices to positive ones.
 
 ```ruby
-indices = RedAmber::Vector.new([1, -1, 3, -4])
+indices = Vector.new([1, -1, 3, -4])
 array_size = 10
 normalized_indices = (indices < 0).if_else(indices + array_size, indices)
 
@@ -476,7 +466,7 @@ For each element in self, return true if it is found in given `values`, false ot
 By default, nulls are matched against the value set. (This will be changed in SetLookupOptions: not impremented.)
 
 ```ruby
-vector = RedAmber::Vector.new %W[A B C D]
+vector = Vector.new %W[A B C D]
 values = ['A', 'C', 'X']
 vector.is_in(values)
 
@@ -488,7 +478,7 @@ vector.is_in(values)
 `values` are casted to the same Class of Vector.
 
 ```ruby
-vector = RedAmber::Vector.new([1, 2, 255])
+vector = Vector.new([1, 2, 255])
 vector.is_in(1, -1)
 
 # =>
@@ -501,7 +491,7 @@ vector.is_in(1, -1)
 Shift vector's values by specified `amount`. Shifted space is filled by value `fill`.
 
 ```ruby
-vector = RedAmber::Vector.new([1, 2, 3, 4, 5])
+vector = Vector.new([1, 2, 3, 4, 5])
 vector.shift
 
 # =>
