@@ -14,20 +14,20 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 ### `new` from a Hash
 
   ```ruby
-  RedAmber::DataFrame.new(x: [1, 2, 3])
+  df = RedAmber::DataFrame.new(x: [1, 2, 3], y: %w[A B C])
   ```
 
 ### `new` from a schema (by Hash) and data (by Array)
 
   ```ruby
-  RedAmber::DataFrame.new({:x=>:uint8}, [[1], [2], [3]])
+  RedAmber::DataFrame.new({x: :uint8, y: :string}, [[1, "A"], [2, "B"], [3, "C"]])
   ```
 
 ### `new` from an Arrow::Table
 
 
   ```ruby
-  table = Arrow::Table.new(x: [1, 2, 3])
+  table = Arrow::Table.new(x: [1, 2, 3], y: %w[A B C])
   RedAmber::DataFrame.new(table)
   ```
 
@@ -45,7 +45,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   ```ruby
   require 'rover'
 
-  rover = Rover::DataFrame.new(x: [1, 2, 3])
+  rover = Rover::DataFrame.new(x: [1, 2, 3], y: %w[A B C])
   RedAmber::DataFrame.new(rover)
   ```
 
@@ -71,7 +71,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   ```ruby
   require 'parquet'
 
-  dataframe = RedAmber::DataFrame.load("file.parquet")
+  df = RedAmber::DataFrame.load("file.parquet")
   ```
 
 ### `save` (instance method)
@@ -87,7 +87,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   ```ruby
   require 'parquet'
 
-  dataframe.save("file.parquet")
+  df.save("file.parquet")
   ```
 
 ## Properties
@@ -452,7 +452,7 @@ penguins.to_rover
   `pick(booleans)` accepts booleans as arguments in an Array. Booleans must be same length as `n_keys`.
 
     ```ruby
-    penguins.pick(penguins.types.map { |type| type == :string })
+    penguins.pick(penguins.vectors.map(&:string?))
     
     # =>
     #<RedAmber::DataFrame : 344 x 3 Vectors, 0x00000000000387ac>
@@ -1073,9 +1073,8 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   This is an example of grouping of famous STARWARS dataset.
 
   ```ruby
-  starwars =
-    RedAmber::DataFrame.load(URI("https://vincentarelbundock.github.io/Rdatasets/csv/dplyr/starwars.csv"))
-  starwars
+  uri = URI("https://vincentarelbundock.github.io/Rdatasets/csv/dplyr/starwars.csv")
+  starwars = RedAmber::DataFrame.load(uri)
   
   # =>
   #<RedAmber::DataFrame : 87 x 12 Vectors, 0x0000000000005a50>
@@ -1114,10 +1113,11 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   We can group by `:species` and calculate the count.
 
   ```ruby
-  starwars.group(:species).count(:species)
+  starwars.remove { species == "NA" }
+          .group(:species).count(:species)
 
   # =>
-  #<RedAmber::DataFrame : 38 x 2 Vectors, 0x000000000001d6f0>
+  #<RedAmber::DataFrame : 37 x 2 Vectors, 0x000000000000ffa0>
      species    count
      <string> <int64>
    0 Human         35
@@ -1126,29 +1126,30 @@ When the option `keep_key: true` used, the column `key` will be preserved.
    3 Rodian         1
    4 Hutt           1
    : :              :
-  35 Kaleesh        1
-  36 Pau'an         1
-  37 Kel Dor        1
+  34 Kaleesh        1
+  35 Pau'an         1
+  36 Kel Dor        1
   ```
 
   We can also calculate the mean of `:mass` and `:height` together.
 
   ```ruby
-  grouped = starwars.group(:species) { [count(:species), mean(:height, :mass)] }
+  grouped = starwars.remove { species == "NA" }
+                    .group(:species) { [count(:species), mean(:height, :mass)] }
 
   # =>
-  #<RedAmber::DataFrame : 38 x 4 Vectors, 0x00000000000407cc>
+  #<RedAmber::DataFrame : 37 x 4 Vectors, 0x000000000000fff0>
      species    count mean(height) mean(mass)
      <string> <int64>     <double>   <double>
-   0 Human         35        176.6       82.8
-   1 Droid          6        131.2       69.8
+   0 Human         35       176.65      82.78
+   1 Droid          6        131.2      69.75
    2 Wookiee        2        231.0      124.0
    3 Rodian         1        173.0       74.0
    4 Hutt           1        175.0     1358.0
    : :              :            :          :
-  35 Kaleesh        1        216.0      159.0
-  36 Pau'an         1        206.0       80.0
-  37 Kel Dor        1        188.0       80.0
+  34 Kaleesh        1        216.0      159.0
+  35 Pau'an         1        206.0       80.0
+  36 Kel Dor        1        188.0       80.0
   ```
 
   Select rows for count > 1.
@@ -1157,18 +1158,17 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   grouped.slice(grouped[:count] > 1)
 
   # =>
-  #<RedAmber::DataFrame : 9 x 4 Vectors, 0x000000000004c270>
+  #<RedAmber::DataFrame : 8 x 4 Vectors, 0x000000000001002c>
     species    count mean(height) mean(mass)
     <string> <int64>     <double>   <double>
-  0 Human         35        176.6       82.8
-  1 Droid          6        131.2       69.8
+  0 Human         35       176.65      82.78
+  1 Droid          6        131.2      69.75
   2 Wookiee        2        231.0      124.0
-  3 Gungan         3        208.7       74.0
-  4 NA             4        181.3       48.0
-  : :              :            :          :
-  6 Twi'lek        2        179.0       55.0
-  7 Mirialan       2        168.0       53.1
-  8 Kaminoan       2        221.0       88.0
+  3 Gungan         3       208.67       74.0
+  4 Zabrak         2        173.0       80.0
+  5 Twi'lek        2        179.0       55.0
+  6 Mirialan       2        168.0       53.1
+  7 Kaminoan       2        221.0       88.0
   ```
 
 ## Reshape
@@ -1191,7 +1191,8 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   2    2019   24222   46814    23813         66553   46794
   3    2020   22304   35712    20196         57041   36576
   4    2021   22535   35905    18211         51722   35215
-  import_cars.transpose(:Manufacturer)
+
+  import_cars.transpose(name: :Manufacturer)
 
   # =>
   #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000ef74>
