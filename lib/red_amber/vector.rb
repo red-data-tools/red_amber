@@ -71,7 +71,7 @@ module RedAmber
     alias_method :indeces, :indices
 
     def to_ary
-      to_a
+      values
     end
 
     def size
@@ -108,6 +108,10 @@ module RedAmber
 
     def string?
       type_class == Arrow::StringDataType
+    end
+
+    def dictionary?
+      type_class == Arrow::DictionaryDataType
     end
 
     def temporal?
