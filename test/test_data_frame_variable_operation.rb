@@ -73,6 +73,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.pick { vectors.map(&:numeric?) }.tdr_str
       assert_equal str, @df.pick { [0, 1] }.tdr_str
     end
+
+    test 'pick duplicate keys' do
+      assert_raise(DataFrameArgumentError) { @df.pick(0, 1, 0) }
+      assert_raise(DataFrameArgumentError) { @df.pick { %i[index index] } }
+    end
   end
 
   sub_test_case 'drop' do

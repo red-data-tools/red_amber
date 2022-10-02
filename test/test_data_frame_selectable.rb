@@ -12,7 +12,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal [1, 2, 3], df[:x].to_a
       assert_equal %w[A B C], df['y'].to_a
       assert_equal Hash(y: %w[A B C], x: [1, 2, 3]), df[:y, :x].to_h
-      assert_equal Hash(x: [1, 2, 3]), df[:x, :x].to_h
+      assert_raise(DataFrameArgumentError) { df[:x, :x] }
       assert_raise(DataFrameArgumentError) { df[:z] }
     end
 

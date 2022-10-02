@@ -60,6 +60,9 @@ module RedAmber
         @table = Arrow::Table.new(*args)
       end
       name_unnamed_keys
+
+      duplicated_keys = keys.tally.select { |_k, v| v > 1 }.keys
+      raise DataFrameArgumentError, "duplicate keys: #{duplicated_keys}" unless duplicated_keys.empty?
     end
 
     attr_reader :table
