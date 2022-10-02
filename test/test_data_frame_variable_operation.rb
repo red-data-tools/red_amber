@@ -48,6 +48,23 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.pick([0, 1]).tdr_str
       assert_equal str, @df.pick([0, -3]).tdr_str
       assert_equal str, @df.pick(0..1).tdr_str
+      assert_equal str, @df.pick(0...2).tdr_str
+      assert_equal str, @df.pick(..1).tdr_str
+      assert_raise(DataFrameArgumentError) { @df.pick(0..5) }
+    end
+
+    test 'pick by endless Range' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 2 Vectors
+        Vectors : 1 string, 1 boolean
+        # key     type    level data_preview
+        0 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        1 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal str, @df.pick(2..).tdr_str
+      assert_equal str, @df.pick(-2..).tdr_str
+      assert_equal str, @df.pick(2...).tdr_str
+      assert_equal str, @df.pick(2..-1).tdr_str
     end
 
     test 'pick by block' do
@@ -72,6 +89,19 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.pick { %i[index float] }.tdr_str
       assert_equal str, @df.pick { vectors.map(&:numeric?) }.tdr_str
       assert_equal str, @df.pick { [0, 1] }.tdr_str
+    end
+
+    test 'pick by mixed args' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 3 Vectors
+        Vectors : 1 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        0 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        1 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+        2 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+      OUTPUT
+      assert_equal str, @df.pick(2..-1, 0).tdr_str
+      assert_equal str, @df.pick { [2..-1, 0] }.tdr_str
     end
 
     test 'pick duplicate keys' do
@@ -105,6 +135,23 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.drop(%i[float string]).tdr_str
       assert_equal str, @df.drop(1, -2).tdr_str
       assert_equal str, @df.drop(1..2).tdr_str
+      assert_equal str, @df.drop(1...3).tdr_str
+      assert_true @df.drop(..3).empty?
+      assert_raise(DataFrameArgumentError) { @df.drop(0..5) }
+    end
+
+    test 'drop by endless Range' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 2 Vectors
+        Vectors : 2 numeric
+        # key    type   level data_preview
+        0 :index uint8      5 [0, 1, 2, 3, nil], 1 nil
+        1 :float double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+      OUTPUT
+      assert_equal str, @df.drop(2..).tdr_str
+      assert_equal str, @df.drop(-2..).tdr_str
+      assert_equal str, @df.drop(2...).tdr_str
+      assert_equal str, @df.drop(2..-1).tdr_str
     end
 
     test 'drop by block' do
@@ -131,6 +178,17 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.drop { %i[index float] }.tdr_str
       assert_equal str, @df.drop { vectors.map(&:numeric?) }.tdr_str
       assert_equal str, @df.drop { [0, 1] }.tdr_str
+    end
+
+    test 'drop by mixed args' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 1 Vector
+        Vector : 1 numeric
+        # key    type  level data_preview
+        0 :index uint8     5 [0, 1, 2, 3, nil], 1 nil
+      OUTPUT
+      assert_equal str, @df.drop(2..-1, 1).tdr_str
+      assert_equal str, @df.drop { [2..-1, 1] }.tdr_str
     end
   end
 

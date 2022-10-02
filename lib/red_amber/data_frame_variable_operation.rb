@@ -15,7 +15,7 @@ module RedAmber
       return DataFrame.new if picker.empty? || picker == [nil]
 
       key_vector = Vector.new(keys)
-      vec = parse_to_vector(picker)
+      vec = parse_to_vector(picker, vsize: n_keys)
 
       ary =
         if vec.boolean?
@@ -44,7 +44,7 @@ module RedAmber
       dropper.flatten!
 
       key_vector = Vector.new(keys)
-      vec = parse_to_vector(dropper)
+      vec = parse_to_vector(dropper, vsize: n_keys)
 
       ary =
         if vec.boolean?

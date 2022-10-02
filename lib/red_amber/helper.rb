@@ -25,32 +25,36 @@ module RedAmber
       DataFrame.new(key => vector.data)
     end
 
-    def parse_to_vector(args)
+    def parse_to_vector(args, vsize: size)
       a = args.reduce([]) do |accum, elem|
-        accum.concat(normalize_element(elem))
+        accum.concat(normalize_element(elem, vsize: vsize))
       end
       Vector.new(a)
     end
 
-    def normalize_element(elem)
+    def normalize_element(elem, vsize: size)
       case elem
       when NilClass
         [nil]
       when Range
-        both_end = [elem.begin, elem.end]
-        both_end[1] -= 1 if elem.exclude_end? && elem.end.is_a?(Integer)
-
-        if both_end.any?(Integer) || both_end.all?(&:nil?)
-          if both_end.any? { |e| e&.>=(size) || e&.<(-size) }
+        bg = elem.begin
+        en = elem.end
+        if [bg, en].any?(Integer)
+          bg += vsize if bg&.negative?
+          en += vsize if en&.negative?
+          en -= 1 if en.is_a?(Integer) && elem.exclude_end?
+          if bg&.negative? || (en && en >= size)
             raise DataFrameArgumentError, "Index out of range: #{elem} for 0..#{size - 1}"
           end
 
-          (0...size).to_a[elem]
+          Array(0...vsize)[elem]
+        elsif bg.nil? && en.nil?
+          Array(0...vsize)
         else
           Array[elem]
         end
       else
-        Array(elem)
+        Array[elem]
       end
     end
   end
