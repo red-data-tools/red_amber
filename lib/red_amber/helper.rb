@@ -17,10 +17,6 @@ module RedAmber
       enum.all?(Integer)
     end
 
-    def sym_or_str?(enum)
-      enum.all? { |e| e.is_a?(Symbol) || e.is_a?(String) }
-    end
-
     def booleans?(enum)
       enum.all? { |e| e.is_a?(TrueClass) || e.is_a?(FalseClass) || e.is_a?(NilClass) }
     end
@@ -38,8 +34,8 @@ module RedAmber
 
     def normalize_element(elem)
       case elem
-      when Numeric, String, Symbol, TrueClass, FalseClass, NilClass
-        [elem]
+      when NilClass
+        [nil]
       when Range
         both_end = [elem.begin, elem.end]
         both_end[1] -= 1 if elem.exclude_end? && elem.end.is_a?(Integer)
@@ -51,7 +47,7 @@ module RedAmber
 
           (0...size).to_a[elem]
         else
-          elem.to_a
+          Array[elem]
         end
       else
         Array(elem)
