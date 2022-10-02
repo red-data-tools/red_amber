@@ -11,27 +11,28 @@ module RedAmber
     include Helper
 
     def initialize(*array)
-      @key = nil # default is 'headless'
-      if array.empty? || array[0].nil?
+      @key = nil # default is 'headless' Vector
+      if array.empty? || array.first.nil?
         Vector.new([])
       else
         array.flatten!
-        case array[0]
-        when Vector
-          @data = array[0].data
-          return
-        when Arrow::Array, Arrow::ChunkedArray
-          @data = array[0]
-          return
-        when Range
-          @data = Arrow::Array.new(Array(array[0]))
-          return
-        end
-        begin
-          @data = Arrow::Array.new(Array(array))
-        rescue Error
-          raise VectorArgumentError, "Invalid argument: #{array}"
-        end
+        @data =
+          case array
+          in [Vector => v]
+            v.data
+          in [Arrow::Array => a]
+            a
+          in [Arrow::ChunkedArray => ca]
+            ca
+          in [Range => r]
+            Arrow::Array.new(Array(r))
+          else
+            begin
+              Arrow::Array.new(Array(array))
+            rescue Error
+              raise VectorArgumentError, "Invalid argument: #{array}"
+            end
+          end
       end
     end
 
