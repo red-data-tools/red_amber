@@ -114,6 +114,7 @@ class VectorTest < Test::Unit::TestCase
 
   sub_test_case('#inspect') do
     setup do
+      ENV['RED_AMBER_OUTPUT_MODE'] = nil
       @double = Vector.new([0.3841307461261749, 0.6028782725334167, 0.3752671480178833, 0.9437413811683655])
       @string = Vector.new([*'A'..'P'])
     end
@@ -148,6 +149,19 @@ class VectorTest < Test::Unit::TestCase
         ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", ... ]
       OUTPUT
       assert_equal exp, @string.inspect(limit: 79)
+    end
+  end
+
+  sub_test_case '#inspect with minimum mode' do
+    setup do
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'Minimum'
+      @double = Vector.new([0.3841307461261749, 0.6028782725334167, 0.3752671480178833, 0.9437413811683655])
+      @string = Vector.new([*'A'..'P'])
+    end
+
+    test 'double default' do
+      assert_equal 'RedAmber::Vector(:double, size=4)', @double.inspect
+      assert_equal 'RedAmber::Vector(:string, size=16)', @string.inspect
     end
   end
 end

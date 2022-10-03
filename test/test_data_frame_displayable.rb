@@ -24,42 +24,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case 'inspect by tdr mode' do
-    setup do
-      ENV['RED_AMBER_OUTPUT_MODE'] = 'TDR'
-    end
-
-    test 'empty dataframe' do
-      df = DataFrame.new
-      str = "#<RedAmber::DataFrame : (empty), #{format('0x%016x', df.object_id)}>\n"
-      assert_equal str, df.inspect
-    end
-
-    setup do
-      hash = { integer: [1, 2, 3, 4, 5, 6],
-               double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
-               string: %w[A A B C D E],
-               boolean: [true, false, nil, true, false, nil] }
-      @df = DataFrame.new(hash)
-    end
-
-    test 'default' do
-      str = <<~OUTPUT
-        #<RedAmber::DataFrame : 6 x 4 Vectors, #{format('0x%016x', @df.object_id)}>
-        Vectors : 2 numeric, 1 string, 1 boolean
-        # key      type    level data_preview
-        0 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
-        1 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
-        2 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
-         ... 1 more Vector ...
-      OUTPUT
-      assert_equal str, @df.inspect
-    end
-  end
-
   sub_test_case 'inspect by table mode' do
     setup do
-      ENV['RED_AMBER_OUTPUT_MODE'] = 'Table'
+      ENV['RED_AMBER_OUTPUT_MODE'] = nil # Table mode
     end
 
     test 'empty dataframe' do
@@ -159,6 +126,63 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         2        3 C
       OUTPUT
       assert_equal str, df.inspect
+    end
+  end
+
+  sub_test_case 'inspect by tdr mode' do
+    setup do
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'TDR'
+    end
+
+    test 'empty dataframe' do
+      df = DataFrame.new
+      str = "#<RedAmber::DataFrame : (empty), #{format('0x%016x', df.object_id)}>\n"
+      assert_equal str, df.inspect
+    end
+
+    setup do
+      hash = { integer: [1, 2, 3, 4, 5, 6],
+               double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
+               string: %w[A A B C D E],
+               boolean: [true, false, nil, true, false, nil] }
+      @df = DataFrame.new(hash)
+    end
+
+    test 'default' do
+      str = <<~OUTPUT
+        #<RedAmber::DataFrame : 6 x 4 Vectors, #{format('0x%016x', @df.object_id)}>
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key      type    level data_preview
+        0 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
+        1 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
+        2 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
+         ... 1 more Vector ...
+      OUTPUT
+      assert_equal str, @df.inspect
+    end
+  end
+
+  sub_test_case 'inspect by minimum mode' do
+    setup do
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'Minimum'
+    end
+
+    test 'empty dataframe' do
+      df = DataFrame.new
+      assert_equal 'RedAmber::DataFrame : (empty)', df.inspect
+    end
+
+    setup do
+      @df = DataFrame.new(
+        integer: [1, 2, 3, 4, 5, 6],
+        double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
+        string: %w[A A B C D E],
+        boolean: [true, false, nil, true, false, nil]
+      )
+    end
+
+    test 'default' do
+      assert_equal 'RedAmber::DataFrame : 6 x 4 Vectors', @df.inspect
     end
   end
 
@@ -292,7 +316,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
 
   sub_test_case 'to_iruby in table mode' do
     setup do
-      ENV['RED_AMBER_OUTPUT_MODE'] = 'Table'
+      ENV['RED_AMBER_OUTPUT_MODE'] = nil # Table mode
     end
 
     test 'empty' do
@@ -329,6 +353,88 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       df = DataFrame.new(str: ['', ' ', 'two words'])
       html = 'RedAmber::DataFrame <3 x 1 vector> <table><tr><th>str</th></tr><tr><td>""</td></tr><tr><td>" "</td></tr><tr><td>two words</td></tr></table>'
       assert_equal html, df.to_iruby[1]
+    end
+  end
+
+  sub_test_case 'to_iruby in plain mode' do
+    setup do
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'PLAIN'
+    end
+
+    test 'empty' do
+      df = DataFrame.new
+      assert_equal ['text/plain', '(empty DataFrame)'], df.to_iruby
+    end
+
+    test 'simple dataframe' do
+      df = DataFrame.new(x: [1, 2, Float::NAN], y: ['', ' ', nil], z: [true, false, nil])
+      text = <<~OUTPUT
+        #<RedAmber::DataFrame : 3 x 3 Vectors, #{format('0x%016x', df.object_id)}>
+                 x y        z
+          <double> <string> <boolean>
+        0      1.0          true
+        1      2.0          false
+        2      NaN (nil)    (nil)
+      OUTPUT
+      assert_equal ['text/plain', text], df.to_iruby
+    end
+
+    test 'long dataframe' do
+      df = RedAmber::DataFrame.new(x: [*1..10])
+      text = <<~OUTPUT
+        #<RedAmber::DataFrame : 10 x 1 Vector, #{format('0x%016x', df.object_id)}>
+                x
+          <uint8>
+        0       1
+        1       2
+        2       3
+        3       4
+        4       5
+        :       :
+        7       8
+        8       9
+        9      10
+      OUTPUT
+      assert_equal ['text/plain', text], df.to_iruby
+    end
+
+    test 'wide dataframe' do
+      raw_record = (1..16).each.with_object({}) { |i, h| h[(64 + i).chr] = [i] }
+      df = RedAmber::DataFrame.new(raw_record)
+      text = <<~OUTPUT
+        #<RedAmber::DataFrame : 1 x 16 Vectors, #{format('0x%016x', df.object_id)}>
+                A       B       C       D       E       F       G       H       I       J ...       P
+          <uint8> <uint8> <uint8> <uint8> <uint8> <uint8> <uint8> <uint8> <uint8> <uint8> ... <uint8>
+        0       1       2       3       4       5       6       7       8       9      10 ...      16
+      OUTPUT
+      assert_equal ['text/plain', text], df.to_iruby
+    end
+  end
+
+  sub_test_case 'to_iruby in minimum mode' do
+    setup do
+      ENV['RED_AMBER_OUTPUT_MODE'] = 'Minimum'
+    end
+
+    test 'empty' do
+      df = DataFrame.new
+      assert_equal ['text/plain', '(empty DataFrame)'], df.to_iruby
+    end
+
+    test 'simple dataframe' do
+      df = DataFrame.new(x: [1, 2, Float::NAN], y: ['', ' ', nil], z: [true, false, nil])
+      assert_equal ['text/plain', 'RedAmber::DataFrame : 3 x 3 Vectors'], df.to_iruby
+    end
+
+    test 'long dataframe' do
+      df = RedAmber::DataFrame.new(x: [*1..10])
+      assert_equal ['text/plain', 'RedAmber::DataFrame : 10 x 1 Vector'], df.to_iruby
+    end
+
+    test 'wide dataframe' do
+      raw_record = (1..16).each.with_object({}) { |i, h| h[(64 + i).chr] = [i] }
+      df = RedAmber::DataFrame.new(raw_record)
+      assert_equal ['text/plain', 'RedAmber::DataFrame : 1 x 16 Vectors'], df.to_iruby
     end
   end
 
