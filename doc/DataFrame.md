@@ -1195,9 +1195,9 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   import_cars.transpose(name: :Manufacturer)
 
   # =>
-  #<RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000ef74>
+  #<RedAmber::DataFrame : 5 x 6 Vectors, 0x0000000000010a2c>
     Manufacturer      2017     2018     2019     2020     2021
-    <dictionary>  <uint32> <uint32> <uint32> <uint16> <uint16>
+    <string>      <uint32> <uint32> <uint32> <uint16> <uint16>
   0 Audi             28336    26473    24222    22304    22535
   1 BMW              52527    50982    46814    35712    35905
   2 BMW_MINI         25427    25984    23813    20196    18211
@@ -1218,9 +1218,9 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   import_cars.to_long(:Year)
 
   # =>
-  #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000012750>               
+  #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000011864>
          Year NAME             VALUE
-     <uint16> <dictionary>  <uint32>
+     <uint16> <string>      <uint32>
    0     2017 Audi             28336
    1     2017 BMW              52527
    2     2017 BMW_MINI         25427
@@ -1241,9 +1241,9 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
 
   # =>
-  #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000017700>
+  #<RedAmber::DataFrame : 25 x 3 Vectors, 0x000000000001359c>
          Year Manufacturer  Num_of_imported
-     <uint16> <dictionary>         <uint32>
+     <uint16> <string>             <uint32>
    0     2017 Audi                    28336
    1     2017 BMW                     52527
    2     2017 BMW_MINI                25427

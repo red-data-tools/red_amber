@@ -11,27 +11,28 @@ module RedAmber
     include Helper
 
     def initialize(*array)
-      @key = nil # default is 'headless'
-      if array.empty? || array[0].nil?
+      @key = nil # default is 'headless' Vector
+      if array.empty? || array.first.nil?
         Vector.new([])
       else
         array.flatten!
-        case array[0]
-        when Vector
-          @data = array[0].data
-          return
-        when Arrow::Array, Arrow::ChunkedArray
-          @data = array[0]
-          return
-        when Range
-          @data = Arrow::Array.new(Array(array[0]))
-          return
-        end
-        begin
-          @data = Arrow::Array.new(Array(array))
-        rescue Error
-          raise VectorArgumentError, "Invalid argument: #{array}"
-        end
+        @data =
+          case array
+          in [Vector => v]
+            v.data
+          in [Arrow::Array => a]
+            a
+          in [Arrow::ChunkedArray => ca]
+            ca
+          in [Range => r]
+            Arrow::Array.new(Array(r))
+          else
+            begin
+              Arrow::Array.new(Array(array))
+            rescue Error
+              raise VectorArgumentError, "Invalid argument: #{array}"
+            end
+          end
       end
     end
 
@@ -43,19 +44,24 @@ module RedAmber
     end
 
     def inspect(limit: 80)
-      sio = StringIO.new << '['
-      to_a.each_with_object(sio).with_index do |(e, s), i|
-        next_str = "#{s.size > 1 ? ', ' : ''}#{e.inspect}"
-        if (s.size + next_str.size) < limit
-          s << next_str
-        else
-          s << ', ... ' if i < size
-          break
+      if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table').casecmp('MINIMUM').zero?
+        # Better performance than `.upcase == 'MINIMUM'``
+        "#{self.class}(:#{type}, size=#{size})"
+      else
+        sio = StringIO.new << '['
+        to_a.each_with_object(sio).with_index do |(e, s), i|
+          next_str = "#{s.size > 1 ? ', ' : ''}#{e.inspect}"
+          if (s.size + next_str.size) < limit
+            s << next_str
+          else
+            s << ', ... ' if i < size
+            break
+          end
         end
-      end
-      sio << ']'
+        sio << ']'
 
-      format "#<#{self.class}(:#{type}, size=#{size}):0x%016x>\n%s\n", object_id, sio.string
+        format "#<#{self.class}(:#{type}, size=#{size}):0x%016x>\n%s\n", object_id, sio.string
+      end
     end
 
     def values
@@ -71,7 +77,7 @@ module RedAmber
     alias_method :indeces, :indices
 
     def to_ary
-      to_a
+      values
     end
 
     def size
@@ -108,6 +114,10 @@ module RedAmber
 
     def string?
       type_class == Arrow::StringDataType
+    end
+
+    def dictionary?
+      type_class == Arrow::DictionaryDataType
     end
 
     def temporal?

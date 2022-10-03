@@ -18,7 +18,8 @@ module RedAmber
       new_keys = self[key].to_a.map { |e| e.to_s.to_sym }
       name = (:NAME1..).find { |k| !new_keys.include?(k) } if new_keys.include?(name)
 
-      hash = { name => (keys - [key]) }
+      names = (keys - [key]).map { |x| x&.to_s }
+      hash = { name => names }
       i = keys.index(key)
       each_row do |h|
         k = h.values[i]
@@ -55,6 +56,7 @@ module RedAmber
           end
         end
       end
+      hash[name] = hash[name].map { |x| x&.to_s }
       DataFrame.new(hash)
     end
 

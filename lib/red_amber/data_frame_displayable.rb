@@ -37,8 +37,12 @@ module RedAmber
     alias_method :describe, :summary
 
     def inspect
-      if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table') == 'TDR'
+      mode = ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table')
+      case mode.upcase
+      when 'TDR'
         "#<#{shape_str(with_id: true)}>\n#{dataframe_info(3)}"
+      when 'MINIMUM'
+        shape_str
       else
         "#<#{shape_str(with_id: true)}>\n#{self}"
       end
@@ -59,9 +63,15 @@ module RedAmber
       require 'iruby'
       return ['text/plain', '(empty DataFrame)'] if empty?
 
-      if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table') == 'TDR'
+      mode = ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table')
+      case mode.upcase
+      when 'PLAIN'
+        ['text/plain', inspect]
+      when 'MINIMUM'
+        ['text/plain', shape_str]
+      when 'TDR'
         size <= 5 ? ['text/plain', tdr_str(tally: 0)] : ['text/plain', tdr_str]
-      else
+      else # 'TABLE'
         ['text/html', html_table]
       end
     end

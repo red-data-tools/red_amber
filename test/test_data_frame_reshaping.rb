@@ -17,11 +17,11 @@ class DataFrameReshapingTest < Test::Unit::TestCase
 
     test '#transpose' do
       str = <<~STR
-          NAME            NAME1    NAME2    NAME3
-          <dictionary> <double> <double> <double>
-        0 One               1.1      1.2      1.3
-        1 Two               2.1      2.2      2.3
-        2 Three             3.1      3.2      3.3
+          NAME        NAME1    NAME2    NAME3
+          <string> <double> <double> <double>
+        0 One           1.1      1.2      1.3
+        1 Two           2.1      2.2      2.3
+        2 Three         3.1      3.2      3.3
       STR
       assert_equal str, @df.transpose.to_s
 
@@ -33,11 +33,11 @@ class DataFrameReshapingTest < Test::Unit::TestCase
 
     test '#transpose with :name' do
       str = <<~STR
-          NAME4           NAME1    NAME2    NAME3
-          <dictionary> <double> <double> <double>
-        0 One               1.1      1.2      1.3
-        1 Two               2.1      2.2      2.3
-        2 Three             3.1      3.2      3.3
+          NAME4       NAME1    NAME2    NAME3
+          <string> <double> <double> <double>
+        0 One           1.1      1.2      1.3
+        1 Two           2.1      2.2      2.3
+        2 Three         3.1      3.2      3.3
       STR
       assert_equal str, @df.transpose(name: :NAME1).to_s
     end
@@ -59,45 +59,45 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { @df.to_long(:names, value: :names) }
 
       assert_equal <<~STR, @df.to_long(:names).to_s
-          names    NAME            VALUE
-          <string> <dictionary> <double>
-        0 name1    One               1.1
-        1 name1    Two               2.1
-        2 name1    Three             3.1
-        3 name2    One               1.2
-        4 name2    Two               2.2
-        5 name2    Three             3.2
-        6 name3    One               1.3
-        7 name3    Two               2.3
-        8 name3    Three             3.3
+          names    NAME        VALUE
+          <string> <string> <double>
+        0 name1    One           1.1
+        1 name1    Two           2.1
+        2 name1    Three         3.1
+        3 name2    One           1.2
+        4 name2    Two           2.2
+        5 name2    Three         3.2
+        6 name3    One           1.3
+        7 name3    Two           2.3
+        8 name3    Three         3.3
       STR
 
       assert_equal <<~STR, @df.to_long(:names, name: :order, value: :value).to_s
-          names    order           value
-          <string> <dictionary> <double>
-        0 name1    One               1.1
-        1 name1    Two               2.1
-        2 name1    Three             3.1
-        3 name2    One               1.2
-        4 name2    Two               2.2
-        5 name2    Three             3.2
-        6 name3    One               1.3
-        7 name3    Two               2.3
-        8 name3    Three             3.3
+          names    order       value
+          <string> <string> <double>
+        0 name1    One           1.1
+        1 name1    Two           2.1
+        2 name1    Three         3.1
+        3 name2    One           1.2
+        4 name2    Two           2.2
+        5 name2    Three         3.2
+        6 name3    One           1.3
+        7 name3    Two           2.3
+        8 name3    Three         3.3
       STR
 
       assert_equal <<~STR, @df.to_long.to_s
-           NAME         VALUE
-           <dictionary> <string>
-         0 names        name1
-         1 One          1.1
-         2 Two          2.1
-         3 Three        3.1
-         4 names        name2
-         : :            :
-         9 One          1.3
-        10 Two          2.3
-        11 Three        3.3
+           NAME     VALUE
+           <string> <string>
+         0 names    name1
+         1 One      1.1
+         2 Two      2.1
+         3 Three    3.1
+         4 names    name2
+         : :        :
+         9 One      1.3
+        10 Two      2.3
+        11 Three    3.3
       STR
     end
   end

@@ -15,16 +15,22 @@ module RedAmber
       return DataFrame.new if picker.empty? || picker == [nil]
 
       key_vector = Vector.new(keys)
-      picker_vector = parse_to_vector(picker)
+      vec = parse_to_vector(picker, vsize: n_keys)
 
-      picker = key_vector.filter(*picker_vector).to_a if picker_vector.boolean?
-      picker = key_vector.take(*picker_vector).to_a if picker_vector.numeric?
+      ary =
+        if vec.boolean?
+          key_vector.filter(*vec).to_a
+        elsif vec.numeric?
+          key_vector.take(*vec).to_a
+        elsif vec.string? || vec.dictionary?
+          picker
+        else
+          raise DataFrameArgumentError, "Invalid argument #{args}"
+        end
 
       # DataFrame#[] creates a Vector with single key is specified.
       # DataFrame#pick creates a DataFrame with single key.
-      return DataFrame.new(@table[picker]) if sym_or_str?(picker)
-
-      raise DataFrameArgumentError, "Invalid argument #{args}"
+      DataFrame.new(@table[ary])
     end
 
     # drop some variables to create remainer sub DataFrame
@@ -38,24 +44,24 @@ module RedAmber
       dropper.flatten!
 
       key_vector = Vector.new(keys)
-      dropper_vector = parse_to_vector(dropper)
+      vec = parse_to_vector(dropper, vsize: n_keys)
 
-      picker =
-        if dropper_vector.boolean?
-          key_vector.filter(*dropper_vector.primitive_invert).each.map(&:to_sym)
-        elsif dropper_vector.numeric?
-          keys - key_vector.take(*dropper_vector).each.map(&:to_sym)
-        else
+      ary =
+        if vec.boolean?
+          key_vector.filter(*vec.primitive_invert).each.map(&:to_sym) # Array
+        elsif vec.numeric?
+          keys - key_vector.take(*vec).each.map(&:to_sym) # Array
+        elsif vec.string? || vec.dictionary?
           keys - dropper
+        else
+          raise DataFrameArgumentError, "Invalid argument #{args}"
         end
 
-      return DataFrame.new if picker.empty?
+      return DataFrame.new if ary.empty?
 
       # DataFrame#[] creates a Vector with single key is specified.
       # DataFrame#drop creates a DataFrame with single key.
-      return DataFrame.new(@table[picker]) if sym_or_str?(picker)
-
-      raise DataFrameArgumentError, "Invalid argument #{args}"
+      DataFrame.new(@table[ary])
     end
 
     # rename variables to create a new DataFrame
