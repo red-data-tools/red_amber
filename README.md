@@ -9,6 +9,8 @@ A simple dataframe library for Ruby.
 - Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow) [![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en)
 - Inspired by the dataframe library [Rover-df](https://github.com/ankane/rover)
 
+![screenshot from jupyterlab](doc/image/screenshot.png)
+
 ## Requirements
 
 Supported Ruby version is >= 2.7.
@@ -102,9 +104,8 @@ For example, we can compute mean prices per 'cut' for the data larger than 1 car
 ```ruby
 df = diamonds
   .slice { carat > 1 }
-  .pick(:cut, :price)
   .group(:cut)
-  .mean
+  .mean(:price) # `pick` prior to `group` is not required if `:price` is specified here.
   .sort('-mean(price)')
 
 # =>
