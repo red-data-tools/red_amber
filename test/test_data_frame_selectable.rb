@@ -265,6 +265,11 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal str, @df.slice { [false, true, false, true, false] }.tdr_str
       assert_equal str, @df.slice { indexes.map(&:odd?) }.tdr_str
     end
+
+    test 'slice by Enumerator' do
+      df = DataFrame.new(x: [*0..10])
+      assert_equal [1, 4, 7, 10], df.slice(1.step(by: 3, to: 10))[:x].to_a
+    end
   end
 
   sub_test_case 'slice_by' do

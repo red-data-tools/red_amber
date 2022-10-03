@@ -43,8 +43,8 @@ module RedAmber
           bg += vsize if bg&.negative?
           en += vsize if en&.negative?
           en -= 1 if en.is_a?(Integer) && elem.exclude_end?
-          if bg&.negative? || (en && en >= size)
-            raise DataFrameArgumentError, "Index out of range: #{elem} for 0..#{size - 1}"
+          if bg&.negative? || (en && en >= vsize)
+            raise DataFrameArgumentError, "Index out of range: #{elem} for 0..#{vsize - 1}"
           end
 
           Array(0...vsize)[elem]
@@ -53,6 +53,8 @@ module RedAmber
         else
           Array[elem]
         end
+      when Enumerator
+        elem.to_a
       else
         Array[elem]
       end
