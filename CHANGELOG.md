@@ -1,3 +1,60 @@
+## [0.2.2] - 2022-10-04
+
+- Bug fixes
+
+  - Return self when no replacement happen in Vector#replace. (#92)
+
+  - Limit n-digits in to_iruby. (#111)
+
+  - Fix displaying space in to_iruby. (#111)
+
+  - Raise error if key is duplicated. (#113)
+
+  - Fix DataFrame#pick/#drop with endless Range. (#113)
+
+  - Change type from dictionary to string in DataFrame reshaping methods. (#113)
+
+  - Fix arguments parser to accept Enumerator. (#114)
+
+- New features and improvements
+
+  - Support to make a data frame from a to_arrow-responsible object. (#106) [Patch by Kenta Murata]
+
+  - Introduce DataFrame#auto_cast (experimental feature) (#105)
+
+  - Change default name in DataFrame#transpose, #to_long, #to_wide. (#110)
+
+  - Add Vector#dictionary? method. (#113)
+
+  - Add display mode 'Plain' and 'Minimum'. (#113)
+
+  - Refactor code
+
+    - Refine test_vector_selectable. (#92)
+    - Refine test_vector_updatable. (#92)
+    - Refine Vector.new. (#113)
+    - Refine DataFrame#pick, #drop. (#113)
+
+  - Documents
+
+    - Update images. (#90, #105, #113)
+
+    - Update README to use simpler examples. (#112)
+      - Update README with a new screenshot example. (#113)
+
+  - GitHub site
+
+    - Update Jupyter notebooks in Binder (#88, #115)
+      - Move binder support to heronshoes/docker-stacks repository.
+      - Update README notebook on binder.
+      - Add examples_of_RedAmber notebook on binder.
+    
+    - Start to use discussions.
+
+- Thanks
+  
+  - Kenta Murata
+
 ## [0.2.1] - 2022-09-07
 
 - Bug fixes
@@ -49,12 +106,15 @@
 
     - Add binary function `Vector#logb`
 
-  - Docker image and Jupyter Notebook (Thanks to @mrkn)
+  - Docker image and Jupyter Notebook [Thanks to Kenta Murata]
     - Add link to RubyData in README
     - Add link to interactive README by Binder
 
   - Update Jupyter Notebook `71 examples of RedAmber`
 
+- Thanks
+  
+  - Kenta Murata
 
 ## [0.2.0] - 2022-08-15
 
@@ -293,6 +353,13 @@
 
   - Documentation
     - Fix typo in DataFrame.md
+
+  - Github site
+    - Add gem and status badges in README. (#42) [Patch by kojix2]
+
+- Thanks
+  
+  - kojix2
 
 ## [0.1.5] - 2022-06-12 (experimental)
 

@@ -61,7 +61,7 @@ gem install red_amber
 [RubyData Docker Stacks](https://github.com/RubyData/docker-stacks) is available as a ready-to-run Docker image containing Jupyter and useful data tools as well as RedAmber (Thanks to @mrkn).
 
 Also you can try the contents of this README interactively by [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=README.ipynb). 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=README.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb)
 
 
 ## Data frame in `RedAmber`
@@ -70,6 +70,8 @@ Class `RedAmber::DataFrame` represents a set of data in 2D-shape.
 The entity is a Red Arrow's Table object. 
 
 ![dataframe model of RedAmber](doc/image/dataframe_model.png)
+
+Load the library.
 
 ```ruby
 require 'red_amber' # require 'red-amber' is also OK.
@@ -179,7 +181,7 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## Jupyter notebook
 
-[71 Examples of Red Amber](binder/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
+[73 Examples of Red Amber](binder/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
 
 You can try this notebook on [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb). 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb)
