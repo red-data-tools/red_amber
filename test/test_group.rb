@@ -12,12 +12,10 @@ class GroupTest < Test::Unit::TestCase
 
     setup do
       @df = DataFrame.new(
-        {
-          i: [0, 0, 1, 2, 2, nil],
-          f: [0.0, 1.1, 2.2, 3.3, Float::NAN, nil],
-          s: ['A', 'B', nil, 'A', 'B', 'A'],
-          b: [true, false, true, false, true, nil],
-        }
+        i: [0, 0, 1, 2, 2, nil],
+        f: [0.0, 1.1, 2.2, 3.3, Float::NAN, nil],
+        s: ['A', 'B', nil, 'A', 'B', 'A'],
+        b: [true, false, true, false, true, nil]
       )
     end
 
@@ -173,6 +171,39 @@ class GroupTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, @df.group(:i) { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
       assert_equal str, @df.group(:i).summarize { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
+    end
+  end
+
+  sub_test_case('group by filters') do
+    setup do
+      @df = DataFrame.new(
+        i: [0, 0, 1, 2, 2, nil],
+        f: [0.0, 1.1, 2.2, 3.3, Float::NAN, nil],
+        s: ['A', 'B', nil, 'A', 'B', 'A'],
+        b: [true, false, true, false, true, nil]
+      )
+    end
+
+    test 'filters' do
+      expect = [
+        [true,  true,  false, false, false, nil],
+        [false, false, true,  false, false, nil],
+        [false, false, false, true,  true,  nil],
+        [false, false, false, false, false, true],
+      ]
+      assert_equal expect, @df.group(:i).filters.map(&:to_a)
+      assert_true @df.group(:i).filters.all?(Vector)
+    end
+
+    test 'group_count' do
+      str = <<~STR
+        RedAmber::DataFrame : 4 x 2 Vectors
+        Vectors : 2 numeric
+        # key          type  level data_preview
+        0 :i           uint8     4 [0, 1, 2, nil], 1 nil
+        1 :group_count uint8     2 {2=>2, 1=>2}
+      STR
+      assert_equal str, @df.group(:i).group_count.tdr_str
     end
   end
 end

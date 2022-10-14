@@ -9,7 +9,6 @@ module RedAmber
     # @param group_keys [Array<>] keys for grouping.
     def initialize(dataframe, *group_keys)
       @dataframe = dataframe
-      @table = @dataframe.table
       @group_keys = group_keys.flatten
 
       raise GroupArgumentError, 'group_keys are empty.' if @group_keys.empty?
@@ -17,8 +16,11 @@ module RedAmber
       d = @group_keys - @dataframe.keys
       raise GroupArgumentError, "#{d} is not a key of\n #{@dataframe}." unless d.empty?
 
-      @group = @table.group(*@group_keys)
+      @filters = @group_counts = @base_table = nil
+      @group = @dataframe.table.group(*@group_keys)
     end
+
+    attr_reader :dataframe, :group_keys
 
     functions = %i[count sum product mean min max stddev variance]
     functions.each do |function|
@@ -44,6 +46,25 @@ module RedAmber
       else
         df
       end
+    end
+
+    def filters
+      @filters ||= begin
+        first, *others = @group_keys.map do |key|
+          vector = @dataframe[key]
+          vector.uniq.each.map { |u| u.nil? ? vector.is_nil : vector == u }
+        end
+
+        if others.empty?
+          first.select(&:any?)
+        else
+          first.product(*others).map { |a| a.reduce(&:&) }.select(&:any?)
+        end
+      end
+    end
+
+    def group_count
+      DataFrame.new(add_columns_to_table(base_table, [:group_count], [group_counts]))
     end
 
     def inspect
@@ -73,6 +94,31 @@ module RedAmber
       else
         summary_keys.map { |key| "#{function_name}(#{key})" }
       end
+    end
+
+    # @group_counts.sum == @dataframe.size
+    def group_counts
+      @group_counts ||= filters.map(&:sum)
+    end
+
+    def base_table
+      @base_table ||= begin
+        indexes = filters.map { |filter| filter.index(true) }
+        @dataframe.table[@group_keys].take(indexes)
+      end
+    end
+
+    def add_columns_to_table(table, keys, data_arrays)
+      fields = table.schema.fields
+      arrays = table.columns.map(&:data)
+
+      keys.zip(data_arrays).each do |key, array|
+        data = Arrow::ChunkedArray.new([array])
+        fields << Arrow::Field.new(key, data.value_data_type)
+        arrays << data
+      end
+
+      Arrow::Table.new(Arrow::Schema.new(fields), arrays)
     end
   end
 end
