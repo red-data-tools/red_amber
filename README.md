@@ -44,17 +44,7 @@ Add this line to your Gemfile:
 gem 'red_amber'
 ```
 
-And then execute:
-
-```shell
-bundle install
-```
-
-Or install it yourself as:
-
-```shell
-gem install red_amber
-```
+And then execute `bundle install` or install it yourself as `gem install red_amber`.
 
 ## Docker image and Jupyter Notebook
 
@@ -71,7 +61,7 @@ The entity is a Red Arrow's Table object.
 
 ![dataframe model of RedAmber](doc/image/dataframe_model.png)
 
-Load the library.
+Let's load the library and try some examples.
 
 ```ruby
 require 'red_amber' # require 'red-amber' is also OK.
@@ -101,7 +91,7 @@ diamonds = DataFrame.new(dataset) # from v0.2.2, should be `dataset.to_arrow` if
 53939     0.75 Ideal     D        SI2          62.2     55.0     2757     5.83 ...     3.64
 ```
 
-For example, we can compute mean prices per 'cut' for the data larger than 1 carat.
+For example, we can compute mean prices per cut for the data larger than 1 carat.
 
 ```ruby
 df = diamonds
@@ -125,7 +115,7 @@ Arrow data is immutable, so these methods always return new objects.
 Next example will rename a column and create a new column by simple calcuration.
 
 ```ruby
-usdjpy = 110.0
+usdjpy = 110.0 # when the yen was stronger
 
 df.rename('mean(price)': :mean_price_USD)
   .assign(:mean_price_JPY) { mean_price_USD * usdjpy }
