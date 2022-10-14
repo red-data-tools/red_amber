@@ -205,5 +205,55 @@ class GroupTest < Test::Unit::TestCase
       STR
       assert_equal str, @df.group(:i).group_count.tdr_str
     end
+
+    test 'each' do
+      assert_true @df.group(:i).each.is_a?(Enumerator)
+      expect = <<~STR
+        RedAmber::DataFrame : 2 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key type    level data_preview
+        0 :i  uint8       1 {0=>2}
+        1 :f  double      2 [0.0, 1.1]
+        2 :s  string      2 ["A", "B"]
+        3 :b  boolean     2 [true, false]
+        RedAmber::DataFrame : 1 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key type    level data_preview
+        0 :i  uint8       1 [1]
+        1 :f  double      1 [2.2]
+        2 :s  string      1 [nil], 1 nil
+        3 :b  boolean     1 [true]
+        RedAmber::DataFrame : 2 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key type    level data_preview
+        0 :i  uint8       1 {2=>2}
+        1 :f  double      2 [3.3, NaN], 1 NaN
+        2 :s  string      2 ["A", "B"]
+        3 :b  boolean     2 [false, true]
+        RedAmber::DataFrame : 1 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key type    level data_preview
+        0 :i  uint8       1 [nil], 1 nil
+        1 :f  double      1 [nil], 1 nil
+        2 :s  string      1 ["A"]
+        3 :b  boolean     1 [nil], 1 nil
+      STR
+      assert_equal expect,
+                   @df.group(:i).each.with_object(StringIO.new) { |df, accum| accum << df.tdr_str }.string
+    end
+
+    test 'inspect' do
+      group = @df.group(:i)
+      str = <<~STR
+        #<RedAmber::Group : #{format('0x%016x', group.object_id)}>
+                i group_count
+          <uint8>     <uint8>
+        0       0           2
+        1       1           1
+        2       2           2
+        3   (nil)           1
+      STR
+      assert_equal str, group.inspect
+    end
   end
 end

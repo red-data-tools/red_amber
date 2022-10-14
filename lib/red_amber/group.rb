@@ -63,15 +63,22 @@ module RedAmber
       end
     end
 
+    def each
+      filters
+      return enum_for(:each) unless block_given?
+
+      @filters.each do |filter|
+        yield @dataframe[filter]
+      end
+      @filters.size
+    end
+
     def group_count
       DataFrame.new(add_columns_to_table(base_table, [:group_count], [group_counts]))
     end
 
     def inspect
-      tallys = @dataframe.pick(@group_keys).vectors.map.with_object({}) do |v, h|
-        h[v.key] = v.tally
-      end
-      "#<#{self.class}:#{format('0x%016x', object_id)}\n#{tallys}>"
+      "#<#{self.class} : #{format('0x%016x', object_id)}>\n#{group_count}"
     end
 
     def summarize(&block)
@@ -119,6 +126,19 @@ module RedAmber
       end
 
       Arrow::Table.new(Arrow::Schema.new(fields), arrays)
+    end
+
+    # Call Vector aggregating function and return an array of arrays:
+    #   [keys, data_arrays]
+    #   (Experimental feature)
+    def call_aggregating_function(func, summary_keys, _options)
+      summary_keys.each.with_object([[], []]) do |key, (keys, arrays)|
+        vector = @dataframe[key]
+        arrays << filters.map { |filter| vector.filter(filter).send(func) }
+        keys << "#{func}(#{key})".to_sym
+      rescue Arrow::Error::NotImplemented
+        # next
+      end
     end
   end
 end
