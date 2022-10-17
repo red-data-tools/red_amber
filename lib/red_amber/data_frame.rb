@@ -5,6 +5,7 @@ module RedAmber
   # Variable @table holds an Arrow::Table object.
   class DataFrame
     # mix-in
+    include DataFrameCombinable
     include DataFrameDisplayable
     include DataFrameIndexable
     include DataFrameLoadSave

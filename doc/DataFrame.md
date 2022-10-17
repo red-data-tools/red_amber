@@ -1293,7 +1293,41 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ## Combine
 
-- [ ] Combining dataframes
+### `concatenate(other)`
+
+  Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
+
+  The alias is `concat`.
+
+  An array of DataFrames or Tables is also acceptable as other.
+
+  ```ruby
+  df
+  #=>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000022cb8>
+          x y                             
+    <uint8> <string>                      
+  0       1 A                             
+  1       2 B
+  
+  other
+  #=>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x000000000001f6d0>
+          x y               
+    <uint8> <string>        
+  0       3 C
+  1       4 D
+
+  df.concatenate(other)
+  #=>
+  #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000022574>
+          x y
+    <uint8> <string>
+  0       1 A
+  1       2 B
+  2       3 C
+  3       4 D
+  ```
 
 - [ ] Join
 
