@@ -144,6 +144,17 @@ module RedAmber
       join(right, join_keys, type: :left_anti)
     end
 
+    # Set operations
+
+    # Select rows appearing in both self and other.
+    #   keys in self and other myst be same.
+    def intersect(other)
+      other = DataFrame.new(other) if other.is_a?(Arrow::Table)
+      raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
+
+      join(other, keys, type: :inner)
+    end
+
     # Undocumented
 
     # Join other dataframe

@@ -295,5 +295,26 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal expected, @df2.anti_join(@right2, %w[KEY1 KEY2])
       assert_equal expected, @df2.anti_join(@right2.table, %i[KEY1 KEY2])
     end
+
+    setup do
+      @df3 = DataFrame.new(
+        KEY1: %w[A B C],
+        KEY2: %w[s t u]
+      )
+
+      @right3 = DataFrame.new(
+        KEY1: %w[A B D],
+        KEY2: %w[s u v]
+      )
+    end
+
+    test '#intersect' do
+      expected = DataFrame.new(
+        KEY1: %w[A],
+        KEY2: %w[s]
+      )
+      assert_equal expected, @df3.intersect(@right3)
+      assert_equal expected, @df3.intersect(@right3.table)
+    end
   end
 end

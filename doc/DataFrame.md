@@ -1481,6 +1481,49 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   0 C              3
   ```
 
+#### Set operations
+
+  Keys in self and other must be same in set operations.
+
+  ```ruby
+  df = DataFrame.new(
+    KEY1: %w[A B C],
+    KEY2: [1, 2, 3]
+  )
+  #=>
+  #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000012a70>
+    KEY1        KEY2
+    <string> <uint8>
+  0 A              1
+  1 B              2
+  2 C              3
+
+  other = DataFrame.new(
+    KEY1: %w[A B D],
+    KEY2: [1, 4, 5]
+  )
+  #=>
+  #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000017034>
+    KEY1        KEY2
+    <string> <uint8>
+  0 A              1
+  1 B              4
+  2 D              5
+  ```
+
+##### `intersect(other)`
+
+  Select rows appearing in both self and other.
+
+  ```ruby
+  df.intersect(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
+    KEY1        KEY2
+    <string> <uint8>
+  0 A              1
+  ```
+
 ## Encoding
 
 - [ ] One-hot encoding
