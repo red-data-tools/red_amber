@@ -112,6 +112,16 @@ module RedAmber
       join(right, join_keys, type: :left_outer)
     end
 
+    # Join matching values from self to right.
+    #
+    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
+    # @return [DataFrame] Joined dataframe.
+    #
+    def right_join(right, join_keys)
+      join(right, join_keys, type: :right_outer)
+    end
+
     # Undocumented
 
     # Join other dataframe

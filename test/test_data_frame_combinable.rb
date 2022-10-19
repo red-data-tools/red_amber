@@ -172,6 +172,18 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal expected, @df1.left_join(@right1.table, :KEY)
     end
 
+    test '#right_join with a join_key)' do
+      expected = DataFrame.new(
+        KEY: %w[A B D],
+        X: [1, 2, nil],
+        Y: [3, 2, 1]
+      )
+      assert_equal expected, @df1.right_join(@right1, :KEY)
+      assert_equal expected, @df1.right_join(@right1, 'KEY')
+      assert_equal expected, @df1.right_join(@right1, [:KEY])
+      assert_equal expected, @df1.right_join(@right1.table, :KEY)
+    end
+
     setup do
       @df2 = DataFrame.new(
         KEY1: %w[A B C],
@@ -223,6 +235,19 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal expected, @df2.left_join(@right2, %i[KEY1 KEY2])
       assert_equal expected, @df2.left_join(@right2, %w[KEY1 KEY2])
       assert_equal expected, @df2.left_join(@right2.table, %i[KEY1 KEY2])
+    end
+
+    test '#right_join with join_keys' do
+      assert_raise(DataFrameArgumentError) { @df2.right_join(@right2, :KEY1) }
+      expected = DataFrame.new(
+        KEY1: %w[A B D],
+        KEY2: %w[s u v],
+        X: [1, nil, nil],
+        Y: [3, 2, 1]
+      )
+      assert_equal expected, @df2.right_join(@right2, %i[KEY1 KEY2])
+      assert_equal expected, @df2.right_join(@right2, %w[KEY1 KEY2])
+      assert_equal expected, @df2.right_join(@right2.table, %i[KEY1 KEY2])
     end
   end
 end

@@ -1390,7 +1390,9 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   2 D        (nil)
   ```
 
-#### `inner_join(other, join_keys)`
+#### Mutating joins
+
+##### `inner_join(other, join_keys)`
 
   Join data, leaving only the matching rows.
 
@@ -1404,7 +1406,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   1 B              2 false
   ```
 
-#### `full_join(other, join_keys)`
+##### `full_join(other, join_keys)`
 
   Join data, leaving all rows.
 
@@ -1420,9 +1422,9 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   3 D          (nil) (nil)
   ```
 
-#### `left_join(other, join_keys)`
+##### `left_join(other, join_keys)`
 
-  Join data, leaving all rows.
+  Join matching values from right to self.
 
   ```ruby
   df.left_join(other, :KEY)
@@ -1433,6 +1435,21 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   0 A              1 true
   1 B              2 false
   2 C              3 (nil)
+  ```
+
+##### `right_join(other, join_keys)`
+
+  Join matching values from self to right.
+
+  ```ruby
+  df.right_join(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 4 x 3 Vectors, 0x0000000000029fcc>
+    KEY           X1 X2
+    <string> <uint8> <boolean>
+  0 A              1 true
+  1 B              2 false
+  3 D          (nil) (nil)
   ```
 
 ## Encoding
