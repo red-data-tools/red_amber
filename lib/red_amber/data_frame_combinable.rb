@@ -122,6 +122,18 @@ module RedAmber
       join(right, join_keys, type: :right_outer)
     end
 
+    # Filtering joins
+
+    # Return rows of self that have a match in right.
+    #
+    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
+    # @return [DataFrame] Joined dataframe.
+    #
+    def semi_join(right, join_keys)
+      join(right, join_keys, type: :left_semi)
+    end
+
     # Undocumented
 
     # Join other dataframe
