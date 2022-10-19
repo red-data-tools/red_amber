@@ -1362,7 +1362,8 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 ### `join`
 
   - other is a DataFrame or a Arrow::Table.
-  - join_keys is keys shared by self and other to match with them.
+  - join_keys are keys shared by self and other to match with them.
+    if join_keys is empty, common keys in self and other are chosen (natural join).
 
   ```ruby
   df = DataFrame.new(

@@ -86,7 +86,7 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def inner_join(right, join_keys)
+    def inner_join(right, join_keys = nil)
       join(right, join_keys, type: :inner)
     end
 
@@ -96,7 +96,7 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def full_join(right, join_keys)
+    def full_join(right, join_keys = nil)
       join(right, join_keys, type: :full_outer)
     end
 
@@ -108,7 +108,7 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def left_join(right, join_keys)
+    def left_join(right, join_keys = nil)
       join(right, join_keys, type: :left_outer)
     end
 
@@ -118,7 +118,7 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def right_join(right, join_keys)
+    def right_join(right, join_keys = nil)
       join(right, join_keys, type: :right_outer)
     end
 
@@ -130,7 +130,7 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def semi_join(right, join_keys)
+    def semi_join(right, join_keys = nil)
       join(right, join_keys, type: :left_semi)
     end
 
@@ -140,7 +140,7 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def anti_join(right, join_keys)
+    def anti_join(right, join_keys = nil)
       join(right, join_keys, type: :left_anti)
     end
 
@@ -191,15 +191,28 @@ module RedAmber
     # @return [DataFrame] Joined dataframe.
     #
     #   :type is one of %i[left_semi right_semi left_anti right_anti inner left_outer right_outer full_outer]
-    def join(right, join_keys, type: :inner, left_outputs: nil, right_outputs: nil)
-      right = right.table if right.is_a?(DataFrame)
+    def join(right, join_keys = nil, type: :inner, left_outputs: nil, right_outputs: nil)
+      case right
+      when DataFrame
+        # Nop
+      when Arrow::Table
+        right = DataFrame.new(right)
+      else
+        raise DataFrameArgumentError, 'right must be a DataFrame or an Arrow::Table'
+      end
 
-      join_keys = Array(join_keys).map(&:to_sym)
+      join_keys =
+        if join_keys
+          Array(join_keys).map(&:to_sym)
+        else
+          keys.intersection(right.keys)
+        end
+      return self if join_keys.empty?
 
       # Red Arrow's #join returns duplicated join_keys from self and right as of v9.0.0 .
       # Temprally merge key vectors here to workaround.
       table_output =
-        table.join(right, join_keys, type: type, left_outputs: left_outputs, right_outputs: right_outputs)
+        table.join(right.table, join_keys, type: type, left_outputs: left_outputs, right_outputs: right_outputs)
       selected_indexes =
         [*0...n_keys, *((n_keys + join_keys.size)...table_output.n_columns)]
       merged_columns = join_keys.map.with_index do |_key, i|

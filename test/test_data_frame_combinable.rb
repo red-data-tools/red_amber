@@ -142,6 +142,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         X: [1, 2],
         Y: [3, 2]
       )
+      assert_equal expected, @df1.inner_join(@right1) # natural join
       assert_equal expected, @df1.inner_join(@right1, :KEY)
       assert_equal expected, @df1.inner_join(@right1, 'KEY')
       assert_equal expected, @df1.inner_join(@right1, [:KEY])
@@ -154,6 +155,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         X: [1, 2, 3, nil],
         Y: [3, 2, nil, 1]
       )
+      assert_equal expected, @df1.full_join(@right1) # natural join
       assert_equal expected, @df1.full_join(@right1, :KEY)
       assert_equal expected, @df1.full_join(@right1, 'KEY')
       assert_equal expected, @df1.full_join(@right1, [:KEY])
@@ -166,6 +168,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         X: [1, 2, 3],
         Y: [3, 2, nil]
       )
+      assert_equal expected, @df1.left_join(@right1) # natural join
       assert_equal expected, @df1.left_join(@right1, :KEY)
       assert_equal expected, @df1.left_join(@right1, 'KEY')
       assert_equal expected, @df1.left_join(@right1, [:KEY])
@@ -178,6 +181,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         X: [1, 2, nil],
         Y: [3, 2, 1]
       )
+      assert_equal expected, @df1.right_join(@right1) # natural join
       assert_equal expected, @df1.right_join(@right1, :KEY)
       assert_equal expected, @df1.right_join(@right1, 'KEY')
       assert_equal expected, @df1.right_join(@right1, [:KEY])
@@ -189,6 +193,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         KEY: %w[A B],
         X: [1, 2]
       )
+      assert_equal expected, @df1.semi_join(@right1) # natural join
       assert_equal expected, @df1.semi_join(@right1, :KEY)
       assert_equal expected, @df1.semi_join(@right1, 'KEY')
       assert_equal expected, @df1.semi_join(@right1, [:KEY])
@@ -200,6 +205,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         KEY: %w[C],
         X: [3]
       )
+      assert_equal expected, @df1.anti_join(@right1) # natural join
       assert_equal expected, @df1.anti_join(@right1, :KEY)
       assert_equal expected, @df1.anti_join(@right1, 'KEY')
       assert_equal expected, @df1.anti_join(@right1, [:KEY])
@@ -221,52 +227,56 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
 
     test '#inner_join with join_keys' do
-      assert_raise(DataFrameArgumentError) { @df2.inner_join(@right2, :KEY1) }
+      # assert_raise(DataFrameArgumentError) { @df2.inner_join(@right2, :KEY1) }
       expected = DataFrame.new(
         KEY1: %w[A],
         KEY2: %w[s],
         X: [1],
         Y: [3]
       )
+      assert_equal expected, @df2.inner_join(@right2) # natural join
       assert_equal expected, @df2.inner_join(@right2, %i[KEY1 KEY2])
       assert_equal expected, @df2.inner_join(@right2, %w[KEY1 KEY2])
       assert_equal expected, @df2.inner_join(@right2.table, %i[KEY1 KEY2])
     end
 
     test '#full_join with join_keys' do
-      assert_raise(DataFrameArgumentError) { @df2.full_join(@right2, :KEY1) }
+      # assert_raise(DataFrameArgumentError) { @df2.full_join(@right2, :KEY1) }
       expected = DataFrame.new(
         KEY1: %w[A B C B D],
         KEY2: %w[s t u u v],
         X: [1, 2, 3, nil, nil],
         Y: [3, nil, nil, 2, 1]
       )
+      assert_equal expected, @df2.full_join(@right2) # natural join
       assert_equal expected, @df2.full_join(@right2, %i[KEY1 KEY2])
       assert_equal expected, @df2.full_join(@right2, %w[KEY1 KEY2])
       assert_equal expected, @df2.full_join(@right2.table, %i[KEY1 KEY2])
     end
 
     test '#left_join with join_keys' do
-      assert_raise(DataFrameArgumentError) { @df2.left_join(@right2, :KEY1) }
+      # assert_raise(DataFrameArgumentError) { @df2.left_join(@right2, :KEY1) }
       expected = DataFrame.new(
         KEY1: %w[A B C],
         KEY2: %w[s t u],
         X: [1, 2, 3],
         Y: [3, nil, nil]
       )
+      assert_equal expected, @df2.left_join(@right2) # natural join
       assert_equal expected, @df2.left_join(@right2, %i[KEY1 KEY2])
       assert_equal expected, @df2.left_join(@right2, %w[KEY1 KEY2])
       assert_equal expected, @df2.left_join(@right2.table, %i[KEY1 KEY2])
     end
 
     test '#right_join with join_keys' do
-      assert_raise(DataFrameArgumentError) { @df2.right_join(@right2, :KEY1) }
+      # assert_raise(DataFrameArgumentError) { @df2.right_join(@right2, :KEY1) }
       expected = DataFrame.new(
         KEY1: %w[A B D],
         KEY2: %w[s u v],
         X: [1, nil, nil],
         Y: [3, 2, 1]
       )
+      assert_equal expected, @df2.right_join(@right2) # natural join
       assert_equal expected, @df2.right_join(@right2, %i[KEY1 KEY2])
       assert_equal expected, @df2.right_join(@right2, %w[KEY1 KEY2])
       assert_equal expected, @df2.right_join(@right2.table, %i[KEY1 KEY2])
@@ -279,6 +289,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         KEY2: %w[s],
         X: [1]
       )
+      assert_equal expected, @df2.semi_join(@right2) # natural join
       assert_equal expected, @df2.semi_join(@right2, %i[KEY1 KEY2])
       assert_equal expected, @df2.semi_join(@right2, %w[KEY1 KEY2])
       assert_equal expected, @df2.semi_join(@right2.table, %i[KEY1 KEY2])
@@ -291,6 +302,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         KEY2: %w[t u],
         X: [2, 3]
       )
+      assert_equal expected, @df2.anti_join(@right2) # natural join
       assert_equal expected, @df2.anti_join(@right2, %i[KEY1 KEY2])
       assert_equal expected, @df2.anti_join(@right2, %w[KEY1 KEY2])
       assert_equal expected, @df2.anti_join(@right2.table, %i[KEY1 KEY2])
