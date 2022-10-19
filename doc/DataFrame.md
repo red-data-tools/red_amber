@@ -1531,7 +1531,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   ```ruby
   df.union(other, :KEY)
   #=>
-  #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
+  #<RedAmber::DataFrame : 5 x 2 Vectors, 0x0000000000029fcc>
     KEY1        KEY2
     <string> <uint8>
   0 A              1
@@ -1539,6 +1539,20 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   2 C              3
   3 B              4
   4 D              5
+  ```
+
+##### `setdiff(other)`
+
+  Select rows appearing in self but not in other.
+
+  ```ruby
+  df.setdiff(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
+    KEY1        KEY2
+    <string> <uint8>
+  1 B              2
+  2 C              3
   ```
 
 ## Encoding

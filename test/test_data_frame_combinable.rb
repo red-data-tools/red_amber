@@ -325,5 +325,14 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal expected, @df3.union(@right3)
       assert_equal expected, @df3.union(@right3.table)
     end
+
+    test '#setdiff' do
+      expected = DataFrame.new(
+        KEY1: %w[B C],
+        KEY2: %w[t u]
+      )
+      assert_equal expected, @df3.setdiff(@right3)
+      assert_equal expected, @df3.setdiff(@right3.table)
+    end
   end
 end

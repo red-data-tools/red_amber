@@ -170,6 +170,18 @@ module RedAmber
       join(other, keys, type: :full_outer)
     end
 
+    # Select rows appearing in self but not in other.
+    #
+    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @return [DataFrame] Joined dataframe.
+    #
+    def setdiff(other)
+      other = DataFrame.new(other) if other.is_a?(Arrow::Table)
+      raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
+
+      join(other, keys, type: :left_anti)
+    end
+
     # Undocumented
 
     # Join other dataframe
