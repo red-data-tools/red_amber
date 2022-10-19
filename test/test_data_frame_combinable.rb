@@ -136,7 +136,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       )
     end
 
-    test '#inner_join with a join_key)' do
+    test '#inner_join with a join_key' do
       expected = DataFrame.new(
         KEY: %w[A B],
         X: [1, 2],
@@ -146,6 +146,18 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal expected, @df1.inner_join(@right1, 'KEY')
       assert_equal expected, @df1.inner_join(@right1, [:KEY])
       assert_equal expected, @df1.inner_join(@right1.table, :KEY)
+    end
+
+    test '#full_join with a join_key)' do
+      expected = DataFrame.new(
+        KEY: %w[A B C D],
+        X: [1, 2, 3, nil],
+        Y: [3, 2, nil, 1]
+      )
+      assert_equal expected, @df1.full_join(@right1, :KEY)
+      assert_equal expected, @df1.full_join(@right1, 'KEY')
+      assert_equal expected, @df1.full_join(@right1, [:KEY])
+      assert_equal expected, @df1.full_join(@right1.table, :KEY)
     end
 
     setup do
@@ -173,6 +185,19 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal expected, @df2.inner_join(@right2, %i[KEY1 KEY2])
       assert_equal expected, @df2.inner_join(@right2, %w[KEY1 KEY2])
       assert_equal expected, @df2.inner_join(@right2.table, %i[KEY1 KEY2])
+    end
+
+    test '#full_join with join_keys' do
+      assert_raise(DataFrameArgumentError) { @df2.inner_join(@right2, :KEY1) }
+      expected = DataFrame.new(
+        KEY1: %w[A B C B D],
+        KEY2: %w[s t u u v],
+        X: [1, 2, 3, nil, nil],
+        Y: [3, nil, nil, 2, 1]
+      )
+      assert_equal expected, @df2.full_join(@right2, %i[KEY1 KEY2])
+      assert_equal expected, @df2.full_join(@right2, %w[KEY1 KEY2])
+      assert_equal expected, @df2.full_join(@right2.table, %i[KEY1 KEY2])
     end
   end
 end

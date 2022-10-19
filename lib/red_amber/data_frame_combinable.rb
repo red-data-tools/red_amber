@@ -88,6 +88,18 @@ module RedAmber
       join(right, join_keys, type: :inner)
     end
 
+    # Join data, leaving all rows.
+    #
+    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
+    # @return [DataFrame] Joined dataframe.
+    #
+    def full_join(right, join_keys)
+      join(right, join_keys, type: :full_outer)
+    end
+
+    alias_method :outer_join, :full_join
+
     # Undocumented
 
     # Join other dataframe
