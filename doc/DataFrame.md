@@ -1305,16 +1305,16 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   df
   #=>
   #<RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000022cb8>
-          x y                             
-    <uint8> <string>                      
-  0       1 A                             
+          x y
+    <uint8> <string>
+  0       1 A
   1       2 B
   
   other
   #=>
   #<RedAmber::DataFrame : 2 x 2 Vectors, 0x000000000001f6d0>
-          x y               
-    <uint8> <string>        
+          x y
+    <uint8> <string>
   0       3 C
   1       4 D
 
@@ -1329,7 +1329,35 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   3       4 D
   ```
 
-- [ ] Join
+### `merge(other)`
+
+  Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
+
+  ```ruby
+  df
+  #=>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000009150>
+          x       y
+    <uint8> <uint8>
+  0       1       3
+  1       2       4
+
+  other
+  #=>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000008a0c>
+    a        b
+    <string> <string>
+  0 A        C
+  1 B        D
+
+  df.merge(other)
+  #=>
+  #<RedAmber::DataFrame : 2 x 4 Vectors, 0x000000000000cb70>
+          x       y a        b
+    <uint8> <uint8> <string> <string>
+  0       1       3 A        C
+  1       2       4 B        D
+  ```
 
 ## Encoding
 

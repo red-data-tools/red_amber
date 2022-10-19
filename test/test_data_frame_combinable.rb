@@ -68,4 +68,58 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::Invalid) { @df.concatenate(@other.assign(:x) { x.map(&:to_f) }) } # type mismatch
     end
   end
+
+  sub_test_case '#merge' do
+    setup do
+      @df = DataFrame.new(
+        x: [1, 2],
+        y: [3, 4]
+      )
+
+      @other = DataFrame.new(
+        a: %w[A B],
+        b: %w[C D]
+      )
+    end
+
+    test 'empty argument' do
+      assert_equal @df, @df.merge
+      assert_equal @df, @df.merge(nil)
+      assert_equal @df, @df.merge([]) # empty Array returns self
+    end
+
+    test 'not a Table or a DataFrame' do
+      assert_raise(DataFrameArgumentError) { @df.merge(@df.to_h) } # Hash
+      assert_raise(DataFrameArgumentError) { @df.merge(@df.to_a) } # Array
+    end
+
+    test 'concatenate single Table/DataFrame' do
+      expected = <<~STR
+                x       y a        b
+          <uint8> <uint8> <string> <string>
+        0       1       3 A        C
+        1       2       4 B        D
+      STR
+      assert_equal expected, @df.merge(@other.table).to_s
+      assert_equal expected, @df.merge(@other).to_s
+    end
+
+    test 'concatenate a Array of Tables/DataFrames' do
+      array = [@other.pick(0), @other.pick(1)]
+      expected = <<~STR
+                x       y a        b
+          <uint8> <uint8> <string> <string>
+        0       1       3 A        C
+        1       2       4 B        D
+      STR
+      assert_equal expected, @df.merge(array.map(&:table)).to_s
+      assert_equal expected, @df.merge(*array).to_s
+      assert_equal expected, @df.merge(array).to_s
+    end
+
+    test 'illegal dataframe shape' do
+      assert_raise(DataFrameArgumentError) { @df.merge(@df) } # key mismatch
+      assert_raise(DataFrameArgumentError) { @df.merge(DataFrame.new(z: [0, 0, 0])) } # shape mismatch
+    end
+  end
 end
