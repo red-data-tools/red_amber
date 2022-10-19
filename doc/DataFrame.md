@@ -1429,7 +1429,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   ```ruby
   df.left_join(other, :KEY)
   #=>
-  #<RedAmber::DataFrame : 4 x 3 Vectors, 0x0000000000029fcc>
+  #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000029fcc>
     KEY           X1 X2
     <string> <uint8> <boolean>
   0 A              1 true
@@ -1444,7 +1444,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   ```ruby
   df.right_join(other, :KEY)
   #=>
-  #<RedAmber::DataFrame : 4 x 3 Vectors, 0x0000000000029fcc>
+  #<RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000029fcc>
     KEY           X1 X2
     <string> <uint8> <boolean>
   0 A              1 true
@@ -1459,13 +1459,26 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   Return rows of self that have a match in right.
 
   ```ruby
-  df.emi_join(other, :KEY)
+  df.semi_join(other, :KEY)
   #=>
-  #<RedAmber::DataFrame : 4 x 3 Vectors, 0x0000000000029fcc>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000029fcc>
     KEY           X1
     <string> <uint8>
   0 A              1
   1 B              2
+  ```
+
+##### `anti_join(other, join_keys)`
+
+  Return rows of self that do not have a match in right.
+
+  ```ruby
+  df.anti_join(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
+    KEY           X1
+    <string> <uint8>
+  0 C              3
   ```
 
 ## Encoding

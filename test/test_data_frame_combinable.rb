@@ -195,6 +195,17 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal expected, @df1.semi_join(@right1.table, :KEY)
     end
 
+    test '#anti_join with a join_key' do
+      expected = DataFrame.new(
+        KEY: %w[C],
+        X: [3]
+      )
+      assert_equal expected, @df1.anti_join(@right1, :KEY)
+      assert_equal expected, @df1.anti_join(@right1, 'KEY')
+      assert_equal expected, @df1.anti_join(@right1, [:KEY])
+      assert_equal expected, @df1.anti_join(@right1.table, :KEY)
+    end
+
     setup do
       @df2 = DataFrame.new(
         KEY1: %w[A B C],
@@ -271,6 +282,18 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal expected, @df2.semi_join(@right2, %i[KEY1 KEY2])
       assert_equal expected, @df2.semi_join(@right2, %w[KEY1 KEY2])
       assert_equal expected, @df2.semi_join(@right2.table, %i[KEY1 KEY2])
+    end
+
+    test '#anti_join with join_keys' do
+      # assert_raise(DataFrameArgumentError) { @df2.anti_join(@right2, :KEY1) }
+      expected = DataFrame.new(
+        KEY1: %w[B C],
+        KEY2: %w[t u],
+        X: [2, 3]
+      )
+      assert_equal expected, @df2.anti_join(@right2, %i[KEY1 KEY2])
+      assert_equal expected, @df2.anti_join(@right2, %w[KEY1 KEY2])
+      assert_equal expected, @df2.anti_join(@right2.table, %i[KEY1 KEY2])
     end
   end
 end

@@ -134,6 +134,16 @@ module RedAmber
       join(right, join_keys, type: :left_semi)
     end
 
+    # Return rows of self that do not have a match in right.
+    #
+    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
+    # @return [DataFrame] Joined dataframe.
+    #
+    def anti_join(right, join_keys)
+      join(right, join_keys, type: :left_anti)
+    end
+
     # Undocumented
 
     # Join other dataframe
