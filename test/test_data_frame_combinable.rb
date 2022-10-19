@@ -122,4 +122,57 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { @df.merge(DataFrame.new(z: [0, 0, 0])) } # shape mismatch
     end
   end
+
+  sub_test_case '#join' do
+    setup do
+      @df1 = DataFrame.new(
+        KEY: %w[A B C],
+        X: [1, 2, 3]
+      )
+
+      @right1 = DataFrame.new(
+        KEY: %w[A B D],
+        Y: [3, 2, 1]
+      )
+    end
+
+    test '#inner_join with a join_key)' do
+      expected = DataFrame.new(
+        KEY: %w[A B],
+        X: [1, 2],
+        Y: [3, 2]
+      )
+      assert_equal expected, @df1.inner_join(@right1, :KEY)
+      assert_equal expected, @df1.inner_join(@right1, 'KEY')
+      assert_equal expected, @df1.inner_join(@right1, [:KEY])
+      assert_equal expected, @df1.inner_join(@right1.table, :KEY)
+    end
+
+    setup do
+      @df2 = DataFrame.new(
+        KEY1: %w[A B C],
+        KEY2: %w[s t u],
+        X: [1, 2, 3]
+      )
+
+      @right2 = DataFrame.new(
+        KEY1: %w[A B D],
+        KEY2: %w[s u v],
+        Y: [3, 2, 1]
+      )
+    end
+
+    test '#inner_join with join_keys' do
+      assert_raise(DataFrameArgumentError) { @df2.inner_join(@right2, :KEY1) }
+      expected = DataFrame.new(
+        KEY1: %w[A],
+        KEY2: %w[s],
+        X: [1],
+        Y: [3]
+      )
+      assert_equal expected, @df2.inner_join(@right2, %i[KEY1 KEY2])
+      assert_equal expected, @df2.inner_join(@right2, %w[KEY1 KEY2])
+      assert_equal expected, @df2.inner_join(@right2.table, %i[KEY1 KEY2])
+    end
+  end
 end

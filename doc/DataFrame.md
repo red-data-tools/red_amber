@@ -1359,6 +1359,51 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   1       2       4 B        D
   ```
 
+### `join`
+
+  - other is a DataFrame or a Arrow::Table.
+  - join_keys is keys shared by self and other to match with them.
+
+  ```ruby
+  df = DataFrame.new(
+    KEY: %w[A B C],
+    X1: [1, 2, 3]
+  )
+  #=>
+  #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000012a70>
+    KEY           X1
+    <string> <uint8>
+  0 A              1
+  1 B              2
+  2 C              3
+
+  other = DataFrame.new(
+    KEY: %w[A B D],
+    X2: [true, false, nil]
+  )
+  #=>
+  #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000017034>
+    KEY      X2
+    <string> <boolean>
+  0 A        true
+  1 B        false
+  2 D        (nil)
+  ```
+
+#### `inner_join(other, join_keys)`
+
+  Join data, leaving only the matching rows.
+
+  ```ruby
+  df.inner_join(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000001e2bc>     
+    KEY           X1 X2
+    <string> <uint8> <boolean>
+  0 A              1 true
+  1 B              2 false
+  ```
+
 ## Encoding
 
 - [ ] One-hot encoding

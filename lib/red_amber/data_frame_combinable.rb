@@ -78,6 +78,16 @@ module RedAmber
 
     alias_method :bind_cols, :merge
 
+    # Join data, leaving only the matching rows.
+    #
+    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
+    # @return [DataFrame] Joined dataframe.
+    #
+    def inner_join(right, join_keys)
+      join(right, join_keys, type: :inner)
+    end
+
     # Undocumented
 
     # Join other dataframe
