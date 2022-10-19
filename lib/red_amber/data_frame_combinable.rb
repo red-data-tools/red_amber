@@ -78,6 +78,8 @@ module RedAmber
 
     alias_method :bind_cols, :merge
 
+    # Mutating joins
+
     # Join data, leaving only the matching rows.
     #
     # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
@@ -99,6 +101,16 @@ module RedAmber
     end
 
     alias_method :outer_join, :full_join
+
+    # Join matching values from right to self.
+    #
+    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
+    # @return [DataFrame] Joined dataframe.
+    #
+    def left_join(right, join_keys)
+      join(right, join_keys, type: :left_outer)
+    end
 
     # Undocumented
 

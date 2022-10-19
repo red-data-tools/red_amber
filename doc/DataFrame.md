@@ -1420,6 +1420,21 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   3 D          (nil) (nil)
   ```
 
+#### `left_join(other, join_keys)`
+
+  Join data, leaving all rows.
+
+  ```ruby
+  df.left_join(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 4 x 3 Vectors, 0x0000000000029fcc>
+    KEY           X1 X2
+    <string> <uint8> <boolean>
+  0 A              1 true
+  1 B              2 false
+  2 C              3 (nil)
+  ```
+
 ## Encoding
 
 - [ ] One-hot encoding
