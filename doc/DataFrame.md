@@ -1524,6 +1524,23 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   0 A              1
   ```
 
+##### `union(other)`
+
+  Select rows appearing in self or other.
+
+  ```ruby
+  df.union(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
+    KEY1        KEY2
+    <string> <uint8>
+  0 A              1
+  1 B              2
+  2 C              3
+  3 B              4
+  4 D              5
+  ```
+
 ## Encoding
 
 - [ ] One-hot encoding

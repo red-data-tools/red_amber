@@ -316,5 +316,14 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal expected, @df3.intersect(@right3)
       assert_equal expected, @df3.intersect(@right3.table)
     end
+
+    test '#union' do
+      expected = DataFrame.new(
+        KEY1: %w[A B C B D],
+        KEY2: %w[s t u u v]
+      )
+      assert_equal expected, @df3.union(@right3)
+      assert_equal expected, @df3.union(@right3.table)
+    end
   end
 end

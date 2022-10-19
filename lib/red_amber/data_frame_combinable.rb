@@ -147,12 +147,27 @@ module RedAmber
     # Set operations
 
     # Select rows appearing in both self and other.
-    #   keys in self and other myst be same.
+    #
+    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @return [DataFrame] Joined dataframe.
+    #
     def intersect(other)
       other = DataFrame.new(other) if other.is_a?(Arrow::Table)
       raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
 
       join(other, keys, type: :inner)
+    end
+
+    # Select rows appearing in self or other.
+    #
+    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @return [DataFrame] Joined dataframe.
+    #
+    def union(other)
+      other = DataFrame.new(other) if other.is_a?(Arrow::Table)
+      raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
+
+      join(other, keys, type: :full_outer)
     end
 
     # Undocumented
