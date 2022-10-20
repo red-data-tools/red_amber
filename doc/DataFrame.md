@@ -1361,9 +1361,12 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ### `join`
 
-  - other is a DataFrame or a Arrow::Table.
-  - join_keys are keys shared by self and other to match with them.
-    if join_keys is empty, common keys in self and other are chosen (natural join).
+  You should use specific `*_join` methods below.
+
+  - `other` is a DataFrame or a Arrow::Table.
+  - `join_keys` are keys shared by self and other to match with them.
+  - If `join_keys` are empty, common keys in self and other are chosen (natural join).
+  - If (common keys) > `join_keys`, duplicated keys are renamed by `suffix`. 
 
   ```ruby
   df = DataFrame.new(
@@ -1393,7 +1396,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 #### Mutating joins
 
-##### `inner_join(other, join_keys)`
+##### `inner_join(other, join_keys = nil, suffix: '.1')`
 
   Join data, leaving only the matching rows.
 
@@ -1407,7 +1410,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   1 B              2 false
   ```
 
-##### `full_join(other, join_keys)`
+##### `full_join(other, join_keys = nil, suffix: '.1')`
 
   Join data, leaving all rows.
 
@@ -1423,7 +1426,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   3 D          (nil) (nil)
   ```
 
-##### `left_join(other, join_keys)`
+##### `left_join(other, join_keys = nil, suffix: '.1')`
 
   Join matching values from right to self.
 
@@ -1438,7 +1441,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   2 C              3 (nil)
   ```
 
-##### `right_join(other, join_keys)`
+##### `right_join(other, join_keys = nil, suffix: '.1')`
 
   Join matching values from self to right.
 
@@ -1455,7 +1458,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 #### Filtering join
 
-##### `semi_join(other, join_keys)`
+##### `semi_join(other, join_keys = nil, suffix: '.1')`
 
   Return rows of self that have a match in right.
 
@@ -1469,7 +1472,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   1 B              2
   ```
 
-##### `anti_join(other, join_keys)`
+##### `anti_join(other, join_keys = nil, suffix: '.1')`
 
   Return rows of self that do not have a match in right.
 

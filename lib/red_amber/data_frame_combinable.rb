@@ -86,8 +86,8 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def inner_join(right, join_keys = nil)
-      join(right, join_keys, type: :inner)
+    def inner_join(right, join_keys = nil, suffix: '.1')
+      join(right, join_keys, type: :inner, suffix: suffix)
     end
 
     # Join data, leaving all rows.
@@ -96,8 +96,8 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def full_join(right, join_keys = nil)
-      join(right, join_keys, type: :full_outer)
+    def full_join(right, join_keys = nil, suffix: '.1')
+      join(right, join_keys, type: :full_outer, suffix: suffix)
     end
 
     alias_method :outer_join, :full_join
@@ -108,8 +108,8 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def left_join(right, join_keys = nil)
-      join(right, join_keys, type: :left_outer)
+    def left_join(right, join_keys = nil, suffix: '.1')
+      join(right, join_keys, type: :left_outer, suffix: suffix)
     end
 
     # Join matching values from self to right.
@@ -118,8 +118,8 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def right_join(right, join_keys = nil)
-      join(right, join_keys, type: :right_outer)
+    def right_join(right, join_keys = nil, suffix: '.1')
+      join(right, join_keys, type: :right_outer, suffix: suffix)
     end
 
     # Filtering joins
@@ -130,8 +130,8 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def semi_join(right, join_keys = nil)
-      join(right, join_keys, type: :left_semi)
+    def semi_join(right, join_keys = nil, suffix: '.1')
+      join(right, join_keys, type: :left_semi, suffix: suffix)
     end
 
     # Return rows of self that do not have a match in right.
@@ -140,8 +140,8 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def anti_join(right, join_keys = nil)
-      join(right, join_keys, type: :left_anti)
+    def anti_join(right, join_keys = nil, suffix: '.1')
+      join(right, join_keys, type: :left_anti, suffix: suffix)
     end
 
     # Set operations
@@ -191,7 +191,7 @@ module RedAmber
     # @return [DataFrame] Joined dataframe.
     #
     #   :type is one of %i[left_semi right_semi left_anti right_anti inner left_outer right_outer full_outer]
-    def join(right, join_keys = nil, type: :inner, left_outputs: nil, right_outputs: nil)
+    def join(right, join_keys = nil, type: :inner, suffix: '.1', left_outputs: nil, right_outputs: nil)
       case right
       when DataFrame
         # Nop
@@ -201,24 +201,56 @@ module RedAmber
         raise DataFrameArgumentError, 'right must be a DataFrame or an Arrow::Table'
       end
 
+      # Support natural keys
+      natural_keys = keys.intersection(right.keys)
+      raise DataFrameArgumentError, "#{join_keys} are not common keys" if natural_keys.empty?
+
       join_keys =
         if join_keys
           Array(join_keys).map(&:to_sym)
         else
-          keys.intersection(right.keys)
+          natural_keys
         end
       return self if join_keys.empty?
+
+      # Support partial join_keys (common key other than join_key will be renamed with suffix)
+      remainer_keys = natural_keys - join_keys
+      unless remainer_keys.empty?
+        renamer = remainer_keys.each_with_object({}) do |key, hash|
+          new_key = nil
+          loop do
+            new_key = "#{key}#{suffix}".to_sym
+            break unless keys.include?(new_key)
+
+            s = suffix.succ
+            raise DataFrameArgumentError, "suffix #{suffix} is invalid" if s == suffix
+
+            suffix = s
+          end
+          hash[key] = new_key
+        end
+        right = right.rename(renamer)
+      end
 
       # Red Arrow's #join returns duplicated join_keys from self and right as of v9.0.0 .
       # Temprally merge key vectors here to workaround.
       table_output =
         table.join(right.table, join_keys, type: type, left_outputs: left_outputs, right_outputs: right_outputs)
+      left_indexes = [*0...n_keys]
+      right_indexes = [*((right.keys - join_keys).map { |key| right.keys.index(key) + n_keys })]
       selected_indexes =
-        [*0...n_keys, *((n_keys + join_keys.size)...table_output.n_columns)]
-      merged_columns = join_keys.map.with_index do |_key, i|
+        case type
+        when :left_semi, :left_anti
+          left_indexes
+        when :right_semi, :right_anti
+          right_indexes
+        else
+          left_indexes.concat(right_indexes)
+        end
+      merged_columns = join_keys.map do |key|
+        i = keys.index(key)
         merge_column(table_output[i], table_output[n_keys + i], type)
       end
-
       DataFrame.new(table_output[selected_indexes])
                .assign(*join_keys) { merged_columns }
     end

@@ -124,227 +124,353 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
   end
 
   sub_test_case '#join' do
-    setup do
-      @df1 = DataFrame.new(
-        KEY: %w[A B C],
-        X: [1, 2, 3]
-      )
+    sub_test_case 'with a join_key' do
+      setup do
+        @df1 = DataFrame.new(
+          KEY: %w[A B C],
+          X: [1, 2, 3]
+        )
 
-      @right1 = DataFrame.new(
-        KEY: %w[A B D],
-        Y: [3, 2, 1]
-      )
+        @right1 = DataFrame.new(
+          KEY: %w[A B D],
+          Y: [3, 2, 1]
+        )
+      end
+
+      test '#inner_join with a join_key' do
+        expected = DataFrame.new(
+          KEY: %w[A B],
+          X: [1, 2],
+          Y: [3, 2]
+        )
+        assert_equal expected, @df1.inner_join(@right1) # natural join
+        assert_equal expected, @df1.inner_join(@right1, :KEY)
+        assert_equal expected, @df1.inner_join(@right1, 'KEY')
+        assert_equal expected, @df1.inner_join(@right1, [:KEY])
+        assert_equal expected, @df1.inner_join(@right1.table, :KEY)
+      end
+
+      test '#full_join with a join_key)' do
+        expected = DataFrame.new(
+          KEY: %w[A B C D],
+          X: [1, 2, 3, nil],
+          Y: [3, 2, nil, 1]
+        )
+        assert_equal expected, @df1.full_join(@right1) # natural join
+        assert_equal expected, @df1.full_join(@right1, :KEY)
+        assert_equal expected, @df1.full_join(@right1, 'KEY')
+        assert_equal expected, @df1.full_join(@right1, [:KEY])
+        assert_equal expected, @df1.full_join(@right1.table, :KEY)
+      end
+
+      test '#left_join with a join_key)' do
+        expected = DataFrame.new(
+          KEY: %w[A B C],
+          X: [1, 2, 3],
+          Y: [3, 2, nil]
+        )
+        assert_equal expected, @df1.left_join(@right1) # natural join
+        assert_equal expected, @df1.left_join(@right1, :KEY)
+        assert_equal expected, @df1.left_join(@right1, 'KEY')
+        assert_equal expected, @df1.left_join(@right1, [:KEY])
+        assert_equal expected, @df1.left_join(@right1.table, :KEY)
+      end
+
+      test '#right_join with a join_key)' do
+        expected = DataFrame.new(
+          KEY: %w[A B D],
+          X: [1, 2, nil],
+          Y: [3, 2, 1]
+        )
+        assert_equal expected, @df1.right_join(@right1) # natural join
+        assert_equal expected, @df1.right_join(@right1, :KEY)
+        assert_equal expected, @df1.right_join(@right1, 'KEY')
+        assert_equal expected, @df1.right_join(@right1, [:KEY])
+        assert_equal expected, @df1.right_join(@right1.table, :KEY)
+      end
+
+      test '#semi_join with a join_key' do
+        expected = DataFrame.new(
+          KEY: %w[A B],
+          X: [1, 2]
+        )
+        assert_equal expected, @df1.semi_join(@right1) # natural join
+        assert_equal expected, @df1.semi_join(@right1, :KEY)
+        assert_equal expected, @df1.semi_join(@right1, 'KEY')
+        assert_equal expected, @df1.semi_join(@right1, [:KEY])
+        assert_equal expected, @df1.semi_join(@right1.table, :KEY)
+      end
+
+      test '#anti_join with a join_key' do
+        expected = DataFrame.new(
+          KEY: %w[C],
+          X: [3]
+        )
+        assert_equal expected, @df1.anti_join(@right1) # natural join
+        assert_equal expected, @df1.anti_join(@right1, :KEY)
+        assert_equal expected, @df1.anti_join(@right1, 'KEY')
+        assert_equal expected, @df1.anti_join(@right1, [:KEY])
+        assert_equal expected, @df1.anti_join(@right1.table, :KEY)
+      end
     end
 
-    test '#inner_join with a join_key' do
-      expected = DataFrame.new(
-        KEY: %w[A B],
-        X: [1, 2],
-        Y: [3, 2]
-      )
-      assert_equal expected, @df1.inner_join(@right1) # natural join
-      assert_equal expected, @df1.inner_join(@right1, :KEY)
-      assert_equal expected, @df1.inner_join(@right1, 'KEY')
-      assert_equal expected, @df1.inner_join(@right1, [:KEY])
-      assert_equal expected, @df1.inner_join(@right1.table, :KEY)
+    sub_test_case 'with join_keys' do
+      setup do
+        @df2 = DataFrame.new(
+          KEY1: %w[A B C],
+          KEY2: %w[s t u],
+          X: [1, 2, 3]
+        )
+
+        @right2 = DataFrame.new(
+          KEY1: %w[A B D],
+          KEY2: %w[s u v],
+          Y: [3, 2, 1]
+        )
+      end
+
+      test '#inner_join with join_keys' do
+        expected = DataFrame.new(
+          KEY1: %w[A],
+          KEY2: %w[s],
+          X: [1],
+          Y: [3]
+        )
+        assert_equal expected, @df2.inner_join(@right2) # natural join
+        assert_equal expected, @df2.inner_join(@right2, %i[KEY1 KEY2])
+        assert_equal expected, @df2.inner_join(@right2, %w[KEY1 KEY2])
+        assert_equal expected, @df2.inner_join(@right2.table, %i[KEY1 KEY2])
+      end
+
+      test '#inner_join with join_keys, partial join_key/rename' do
+        expected = DataFrame.new(
+          KEY1: %w[A C],
+          KEY2: %w[s u],
+          X: [1, 3],
+          'KEY1.1': %w[A B],
+          Y: [3, 2]
+        )
+        assert_equal expected, @df2.inner_join(@right2, :KEY2)
+      end
+
+      test '#full_join with join_keys' do
+        expected = DataFrame.new(
+          KEY1: %w[A B C B D],
+          KEY2: %w[s t u u v],
+          X: [1, 2, 3, nil, nil],
+          Y: [3, nil, nil, 2, 1]
+        )
+        assert_equal expected, @df2.full_join(@right2) # natural join
+        assert_equal expected, @df2.full_join(@right2, %i[KEY1 KEY2])
+        assert_equal expected, @df2.full_join(@right2, %w[KEY1 KEY2])
+        assert_equal expected, @df2.full_join(@right2.table, %i[KEY1 KEY2])
+      end
+
+      test '#full_join with join_keys, partial join_key/rename' do
+        expected = DataFrame.new(
+          KEY1: ['A', 'C', 'B', nil],
+          KEY2: %w[s u t v],
+          X: [1, 3, 2, nil],
+          'KEY1.1': ['A', 'B', nil, 'D'],
+          Y: [3, 2, nil, 1]
+        )
+        assert_equal expected, @df2.full_join(@right2, :KEY2)
+      end
+
+      test '#left_join with join_keys' do
+        expected = DataFrame.new(
+          KEY1: %w[A B C],
+          KEY2: %w[s t u],
+          X: [1, 2, 3],
+          Y: [3, nil, nil]
+        )
+        assert_equal expected, @df2.left_join(@right2) # natural join
+        assert_equal expected, @df2.left_join(@right2, %i[KEY1 KEY2])
+        assert_equal expected, @df2.left_join(@right2, %w[KEY1 KEY2])
+        assert_equal expected, @df2.left_join(@right2.table, %i[KEY1 KEY2])
+      end
+
+      test '#left_join with join_keys, partial join_key/rename' do
+        expected = DataFrame.new(
+          KEY1: %w[A C B],
+          KEY2: %w[s u t],
+          X: [1, 3, 2],
+          'KEY1.1': ['A', 'B', nil],
+          Y: [3, 2, nil]
+        )
+        assert_equal expected, @df2.left_join(@right2, :KEY2)
+      end
+
+      test '#right_join with join_keys' do
+        expected = DataFrame.new(
+          KEY1: %w[A B D],
+          KEY2: %w[s u v],
+          X: [1, nil, nil],
+          Y: [3, 2, 1]
+        )
+        assert_equal expected, @df2.right_join(@right2) # natural join
+        assert_equal expected, @df2.right_join(@right2, %i[KEY1 KEY2])
+        assert_equal expected, @df2.right_join(@right2, %w[KEY1 KEY2])
+        assert_equal expected, @df2.right_join(@right2.table, %i[KEY1 KEY2])
+      end
+
+      test '#right_join with join_keys, partial join_key/rename' do
+        expected = DataFrame.new(
+          KEY1: ['A', 'C', nil],
+          KEY2: %w[s u v],
+          X: [1, 3, nil],
+          'KEY1.1': %w[A B D],
+          Y: [3, 2, 1]
+        )
+        assert_equal expected, @df2.right_join(@right2, :KEY2)
+      end
+
+      test '#semi_join with join_keys' do
+        expected = DataFrame.new(
+          KEY1: %w[A],
+          KEY2: %w[s],
+          X: [1]
+        )
+        assert_equal expected, @df2.semi_join(@right2) # natural join
+        assert_equal expected, @df2.semi_join(@right2, %i[KEY1 KEY2])
+        assert_equal expected, @df2.semi_join(@right2, %w[KEY1 KEY2])
+        assert_equal expected, @df2.semi_join(@right2.table, %i[KEY1 KEY2])
+      end
+
+      test '#semi_join with join_keys, partial join_key' do
+        expected = DataFrame.new(
+          KEY1: %w[A C],
+          KEY2: %w[s u],
+          X: [1, 3]
+        )
+        assert_equal expected, @df2.semi_join(@right2, :KEY2)
+      end
+
+      test '#anti_join with join_keys' do
+        expected = DataFrame.new(
+          KEY1: %w[B C],
+          KEY2: %w[t u],
+          X: [2, 3]
+        )
+        assert_equal expected, @df2.anti_join(@right2) # natural join
+        assert_equal expected, @df2.anti_join(@right2, %i[KEY1 KEY2])
+        assert_equal expected, @df2.anti_join(@right2, %w[KEY1 KEY2])
+        assert_equal expected, @df2.anti_join(@right2.table, %i[KEY1 KEY2])
+      end
+
+      test '#anti_join with join_keys, partial join_key' do
+        expected = DataFrame.new(
+          KEY1: %w[B],
+          KEY2: %w[t],
+          X: [2]
+        )
+        assert_equal expected, @df2.anti_join(@right2, :KEY2)
+      end
     end
 
-    test '#full_join with a join_key)' do
-      expected = DataFrame.new(
-        KEY: %w[A B C D],
-        X: [1, 2, 3, nil],
-        Y: [3, 2, nil, 1]
-      )
-      assert_equal expected, @df1.full_join(@right1) # natural join
-      assert_equal expected, @df1.full_join(@right1, :KEY)
-      assert_equal expected, @df1.full_join(@right1, 'KEY')
-      assert_equal expected, @df1.full_join(@right1, [:KEY])
-      assert_equal expected, @df1.full_join(@right1.table, :KEY)
+    sub_test_case 'renaming duplicate keys by suffix' do
+      setup do
+        @df3 = DataFrame.new(
+          'KEY.1': %w[A B C],
+          KEY: %w[s t u],
+          X: [1, 2, 3]
+        )
+
+        @right3 = DataFrame.new(
+          'KEY.1': %w[A B D],
+          KEY: %w[s u v],
+          Y: [3, 2, 1]
+        )
+      end
+
+      test '#inner_join with rename and collision' do
+        expected = DataFrame.new(
+          'KEY.1': %w[A B],
+          KEY: %w[s t],
+          X: [1, 2],
+          'KEY.2': %w[s u],
+          Y: [3, 2]
+        )
+        assert_equal expected, @df3.inner_join(@right3, :'KEY.1')
+      end
+
+      test '#full_join with rename and collision' do
+        expected = DataFrame.new(
+          'KEY.1': %w[A B C D],
+          KEY: ['s', 't', 'u', nil],
+          X: [1, 2, 3, nil],
+          'KEY.2': ['s', 'u', nil, 'v'],
+          Y: [3, 2, nil, 1]
+        )
+        assert_equal expected, @df3.full_join(@right3, :'KEY.1')
+      end
+
+      test '#left_join with rename and collision' do
+        expected = DataFrame.new(
+          'KEY.1': %w[A B C],
+          KEY: %w[s t u],
+          X: [1, 2, 3],
+          'KEY.2': ['s', 'u', nil],
+          Y: [3, 2, nil]
+        )
+        assert_equal expected, @df3.left_join(@right3, :'KEY.1')
+      end
+
+      test '#right_join with rename and collision' do
+        expected = DataFrame.new(
+          'KEY.1': %w[A B D],
+          KEY: ['s', 't', nil],
+          X: [1, 2, nil],
+          'KEY.2': %w[s u v],
+          Y: [3, 2, 1]
+        )
+        assert_equal expected, @df3.right_join(@right3, :'KEY.1')
+      end
+
+      test 'invalid suffix' do
+        assert_raise(DataFrameArgumentError) { @df3.inner_join(@right3, :KEY, suffix: '') }
+      end
     end
 
-    test '#left_join with a join_key)' do
-      expected = DataFrame.new(
-        KEY: %w[A B C],
-        X: [1, 2, 3],
-        Y: [3, 2, nil]
-      )
-      assert_equal expected, @df1.left_join(@right1) # natural join
-      assert_equal expected, @df1.left_join(@right1, :KEY)
-      assert_equal expected, @df1.left_join(@right1, 'KEY')
-      assert_equal expected, @df1.left_join(@right1, [:KEY])
-      assert_equal expected, @df1.left_join(@right1.table, :KEY)
-    end
+    sub_test_case 'set operations' do
+      setup do
+        @df4 = DataFrame.new(
+          KEY1: %w[A B C],
+          KEY2: %w[s t u]
+        )
 
-    test '#right_join with a join_key)' do
-      expected = DataFrame.new(
-        KEY: %w[A B D],
-        X: [1, 2, nil],
-        Y: [3, 2, 1]
-      )
-      assert_equal expected, @df1.right_join(@right1) # natural join
-      assert_equal expected, @df1.right_join(@right1, :KEY)
-      assert_equal expected, @df1.right_join(@right1, 'KEY')
-      assert_equal expected, @df1.right_join(@right1, [:KEY])
-      assert_equal expected, @df1.right_join(@right1.table, :KEY)
-    end
+        @right4 = DataFrame.new(
+          KEY1: %w[A B D],
+          KEY2: %w[s u v]
+        )
+      end
 
-    test '#semi_join with a join_key' do
-      expected = DataFrame.new(
-        KEY: %w[A B],
-        X: [1, 2]
-      )
-      assert_equal expected, @df1.semi_join(@right1) # natural join
-      assert_equal expected, @df1.semi_join(@right1, :KEY)
-      assert_equal expected, @df1.semi_join(@right1, 'KEY')
-      assert_equal expected, @df1.semi_join(@right1, [:KEY])
-      assert_equal expected, @df1.semi_join(@right1.table, :KEY)
-    end
+      test '#intersect' do
+        expected = DataFrame.new(
+          KEY1: %w[A],
+          KEY2: %w[s]
+        )
+        assert_equal expected, @df4.intersect(@right4)
+        assert_equal expected, @df4.intersect(@right4.table)
+      end
 
-    test '#anti_join with a join_key' do
-      expected = DataFrame.new(
-        KEY: %w[C],
-        X: [3]
-      )
-      assert_equal expected, @df1.anti_join(@right1) # natural join
-      assert_equal expected, @df1.anti_join(@right1, :KEY)
-      assert_equal expected, @df1.anti_join(@right1, 'KEY')
-      assert_equal expected, @df1.anti_join(@right1, [:KEY])
-      assert_equal expected, @df1.anti_join(@right1.table, :KEY)
-    end
+      test '#union' do
+        expected = DataFrame.new(
+          KEY1: %w[A B C B D],
+          KEY2: %w[s t u u v]
+        )
+        assert_equal expected, @df4.union(@right4)
+        assert_equal expected, @df4.union(@right4.table)
+      end
 
-    setup do
-      @df2 = DataFrame.new(
-        KEY1: %w[A B C],
-        KEY2: %w[s t u],
-        X: [1, 2, 3]
-      )
-
-      @right2 = DataFrame.new(
-        KEY1: %w[A B D],
-        KEY2: %w[s u v],
-        Y: [3, 2, 1]
-      )
-    end
-
-    test '#inner_join with join_keys' do
-      # assert_raise(DataFrameArgumentError) { @df2.inner_join(@right2, :KEY1) }
-      expected = DataFrame.new(
-        KEY1: %w[A],
-        KEY2: %w[s],
-        X: [1],
-        Y: [3]
-      )
-      assert_equal expected, @df2.inner_join(@right2) # natural join
-      assert_equal expected, @df2.inner_join(@right2, %i[KEY1 KEY2])
-      assert_equal expected, @df2.inner_join(@right2, %w[KEY1 KEY2])
-      assert_equal expected, @df2.inner_join(@right2.table, %i[KEY1 KEY2])
-    end
-
-    test '#full_join with join_keys' do
-      # assert_raise(DataFrameArgumentError) { @df2.full_join(@right2, :KEY1) }
-      expected = DataFrame.new(
-        KEY1: %w[A B C B D],
-        KEY2: %w[s t u u v],
-        X: [1, 2, 3, nil, nil],
-        Y: [3, nil, nil, 2, 1]
-      )
-      assert_equal expected, @df2.full_join(@right2) # natural join
-      assert_equal expected, @df2.full_join(@right2, %i[KEY1 KEY2])
-      assert_equal expected, @df2.full_join(@right2, %w[KEY1 KEY2])
-      assert_equal expected, @df2.full_join(@right2.table, %i[KEY1 KEY2])
-    end
-
-    test '#left_join with join_keys' do
-      # assert_raise(DataFrameArgumentError) { @df2.left_join(@right2, :KEY1) }
-      expected = DataFrame.new(
-        KEY1: %w[A B C],
-        KEY2: %w[s t u],
-        X: [1, 2, 3],
-        Y: [3, nil, nil]
-      )
-      assert_equal expected, @df2.left_join(@right2) # natural join
-      assert_equal expected, @df2.left_join(@right2, %i[KEY1 KEY2])
-      assert_equal expected, @df2.left_join(@right2, %w[KEY1 KEY2])
-      assert_equal expected, @df2.left_join(@right2.table, %i[KEY1 KEY2])
-    end
-
-    test '#right_join with join_keys' do
-      # assert_raise(DataFrameArgumentError) { @df2.right_join(@right2, :KEY1) }
-      expected = DataFrame.new(
-        KEY1: %w[A B D],
-        KEY2: %w[s u v],
-        X: [1, nil, nil],
-        Y: [3, 2, 1]
-      )
-      assert_equal expected, @df2.right_join(@right2) # natural join
-      assert_equal expected, @df2.right_join(@right2, %i[KEY1 KEY2])
-      assert_equal expected, @df2.right_join(@right2, %w[KEY1 KEY2])
-      assert_equal expected, @df2.right_join(@right2.table, %i[KEY1 KEY2])
-    end
-
-    test '#semi_join with join_keys' do
-      # assert_raise(DataFrameArgumentError) { @df2.semi_join(@right2, :KEY1) }
-      expected = DataFrame.new(
-        KEY1: %w[A],
-        KEY2: %w[s],
-        X: [1]
-      )
-      assert_equal expected, @df2.semi_join(@right2) # natural join
-      assert_equal expected, @df2.semi_join(@right2, %i[KEY1 KEY2])
-      assert_equal expected, @df2.semi_join(@right2, %w[KEY1 KEY2])
-      assert_equal expected, @df2.semi_join(@right2.table, %i[KEY1 KEY2])
-    end
-
-    test '#anti_join with join_keys' do
-      # assert_raise(DataFrameArgumentError) { @df2.anti_join(@right2, :KEY1) }
-      expected = DataFrame.new(
-        KEY1: %w[B C],
-        KEY2: %w[t u],
-        X: [2, 3]
-      )
-      assert_equal expected, @df2.anti_join(@right2) # natural join
-      assert_equal expected, @df2.anti_join(@right2, %i[KEY1 KEY2])
-      assert_equal expected, @df2.anti_join(@right2, %w[KEY1 KEY2])
-      assert_equal expected, @df2.anti_join(@right2.table, %i[KEY1 KEY2])
-    end
-
-    setup do
-      @df3 = DataFrame.new(
-        KEY1: %w[A B C],
-        KEY2: %w[s t u]
-      )
-
-      @right3 = DataFrame.new(
-        KEY1: %w[A B D],
-        KEY2: %w[s u v]
-      )
-    end
-
-    test '#intersect' do
-      expected = DataFrame.new(
-        KEY1: %w[A],
-        KEY2: %w[s]
-      )
-      assert_equal expected, @df3.intersect(@right3)
-      assert_equal expected, @df3.intersect(@right3.table)
-    end
-
-    test '#union' do
-      expected = DataFrame.new(
-        KEY1: %w[A B C B D],
-        KEY2: %w[s t u u v]
-      )
-      assert_equal expected, @df3.union(@right3)
-      assert_equal expected, @df3.union(@right3.table)
-    end
-
-    test '#setdiff' do
-      expected = DataFrame.new(
-        KEY1: %w[B C],
-        KEY2: %w[t u]
-      )
-      assert_equal expected, @df3.setdiff(@right3)
-      assert_equal expected, @df3.setdiff(@right3.table)
+      test '#setdiff' do
+        expected = DataFrame.new(
+          KEY1: %w[B C],
+          KEY2: %w[t u]
+        )
+        assert_equal expected, @df4.setdiff(@right4)
+        assert_equal expected, @df4.setdiff(@right4.table)
+      end
     end
   end
 end
