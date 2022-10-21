@@ -175,12 +175,14 @@ module RedAmber
     # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @return [DataFrame] Joined dataframe.
     #
-    def setdiff(other)
+    def difference(other)
       other = DataFrame.new(other) if other.is_a?(Arrow::Table)
       raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
 
       join(other, keys, type: :left_anti)
     end
+
+    alias_method :setdiff, :difference
 
     # Undocumented
 

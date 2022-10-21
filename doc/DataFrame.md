@@ -1545,12 +1545,14 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   4 D              5
   ```
 
-##### `setdiff(other)`
+##### `difference(other)`
 
   Select rows appearing in self but not in other.
 
+  It has an alias `setdiff`.
+
   ```ruby
-  df.setdiff(other, :KEY)
+  df.difference(other, :KEY)
   #=>
   #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
     KEY1        KEY2
