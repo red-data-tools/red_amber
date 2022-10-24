@@ -77,8 +77,9 @@ module RedAmber
     def size
       @table.n_rows
     end
-    alias_method :n_rows, :size
+    alias_method :n_records, :size
     alias_method :n_obs, :size
+    alias_method :n_rows, :size
 
     # Returns the number of columns.
     #
@@ -86,8 +87,9 @@ module RedAmber
     def n_keys
       @table.n_columns
     end
-    alias_method :n_cols, :n_keys
+    alias_method :n_variables, :n_keys
     alias_method :n_vars, :n_keys
+    alias_method :n_cols, :n_keys
 
     # Returns the numbers of rows and columns.
     #
