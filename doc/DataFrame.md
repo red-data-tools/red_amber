@@ -5,7 +5,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 - A label is attached to `Vector`. We call it `key`.
 - A `Vector` and associated `key` is grouped as a `variable`.
 - `variable`s with same vector length are aligned and arranged to be a `DataFrame`.
-- Each `Vector` in a `DataFrame` contains a set of relating data at same position. We call it `observation`.
+- Each `Vector` in a `DataFrame` contains a set of relating data at same position. We call it `record` or `observation`.
 
 ![dataframe model image](doc/../image/dataframe_model.png)
 
@@ -94,13 +94,13 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 ### `table`, `to_arrow`
 
-- Reader of Arrow::Table object inside.
+- Returns Arrow::Table object in the DataFrame.
 
-### `size`, `n_obs`, `n_rows`
+### `size`, `n_records`, `n_obs`, `n_rows`
   
-- Returns size of Vector (num of observations).
- 
-### `n_keys`, `n_vars`, `n_cols`,
+- Returns size of Vector (num of records).
+
+### `n_keys`, `n_variables`, `n_vars`, `n_cols`,
   
 - Returns num of keys (num of variables).
  
@@ -138,16 +138,6 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   
 - Returns key names in an Array.
 
-  When we use it with vectors, Vector#key is useful to get the key inside of DataFrame.
-
-  ```ruby
-    # update numeric variables, another solution
-    df.assign do
-      vectors.each_with_object({}) do |vector, assigner|
-        assigner[vector.key] = vector * -1 if vector.numeric?
-      end
-    end
-  ```
 
 ### `types`
   
@@ -160,6 +150,17 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 ### `vectors`
 
 - Returns an Array of Vectors.
+
+  When we use it, Vector#key is useful to get the key in the DataFrame.
+
+  ```ruby
+    # update numeric variables, another solution
+    df.assign do
+      vectors.each_with_object({}) do |vector, assigner|
+        assigner[vector.key] = vector * -1 if vector.numeric?
+      end
+    end
+  ```
 
 ### `indices`, `indexes`
 
@@ -275,6 +276,7 @@ penguins.to_rover
 
   dataset = Datasets::Penguins.new
   # (From 0.2.2) responsible to the object which has `to_arrow` method.
+  # If older, it should be `dataset.to_arrow` in the parentheses.
   RedAmber::DataFrame.new(dataset).tdr
 
   # =>
@@ -290,10 +292,11 @@ penguins.to_rover
   6 :sex               string     3 {"male"=>168, "female"=>165, nil=>11}
   7 :year              uint16     3 {2007=>110, 2008=>114, 2009=>120}
   ```
-
+  
+  Options:
   - limit: limit of variables to show. Default value is 10.
-  - tally: max level to use tally mode.
-  - elements: max num of element to show values in each observations.
+  - tally: max level to use tally mode. Default value is 5.
+  - elements: max num of element to show values in each records. Default value is 5.
 
 ## Selecting
 
@@ -303,13 +306,13 @@ penguins.to_rover
 - Keys in an Array: `df[:symbol1, "string", :symbol2]`
 - Keys by indeces: `df[df.keys[0]`, `df[df.keys[1,2]]`, `df[df.keys[1..]]`
 
-  Key indeces can be used via `keys[i]` because numbers are used to select observations (rows).
+  Key indeces should be used via `keys[i]` because numbers are used to select records (rows). See next section.
 
 - Keys by a Range:
 
-  If keys are able to represent by Range, it can be included in the arguments. See a example below.
+  If keys are able to represent by a Range, it can be included in the arguments. See a example below.
 
-- You can exchange the order of variables (columns).
+- You can also exchange the order of variables (columns).
  
   ```ruby
   hash = {a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3]}
@@ -325,7 +328,7 @@ penguins.to_rover
   2 C             3.0       3
   ```
 
-  If `#[]` represents single variable (column), it returns a Vector object.
+  If `#[]` represents a single variable (column), it returns a Vector object.
 
   ```ruby
   df[:a]
@@ -334,6 +337,7 @@ penguins.to_rover
   #<RedAmber::Vector(:uint8, size=3):0x000000000000f140>
   [1, 2, 3]
   ```
+
   Or `#v` method also returns a Vector for a key.
 
   ```ruby
@@ -344,18 +348,19 @@ penguins.to_rover
   [1, 2, 3]
   ```
 
-  This may be useful to use in a block of DataFrame manipulation verbs. We can write `v(:a)` rather than `self[:a]` or `df[:a]`
+  This method may be useful to use in a block of DataFrame manipulation verbs. We can write `v(:a)` rather than `self[:a]` or `df[:a]`
 
-### Select observations (rows in a table) by `[]` as `[index]`, `[range]`, `[array]`
+### Select records (rows in a table) by `[]` as `[index]`, `[range]`, `[array]`
 
-- Select a obs. by index: `df[0]`
-- Select obs. by indeces in a Range: `df[1..2]`
+- Select a record by index: `df[0]`
+
+- Select records by indeces in an Array: `df[1, 2]`
+
+- Select records by indeces in a Range: `df[1..2]`
 
   An end-less or a begin-less Range can be used to represent indeces.
 
-- Select obs. by indeces in an Array: `df[1, 2]`
-
-- You can use float indices.
+- You can use indices in Float.
 
 - Mixed case: `df[2, 0..]`
 
@@ -374,9 +379,9 @@ penguins.to_rover
   3       3 C             3.0
   ```
 
-- Select obs. by a boolean Array or a boolean RedAmber::Vector at same size as self.
+- Select records by a boolean Array or a boolean RedAmber::Vector at same size as self.
 
-  It returns a sub dataframe with observations at boolean is true.
+  It returns a sub dataframe with records at boolean is true.
 
     ```ruby
     # with the same dataframe `df` above
@@ -391,15 +396,15 @@ penguins.to_rover
     1       1 A             1.0
     ```
 
-### Select rows from top or from bottom
+### Select records (rows) from top or from bottom
 
   `head(n=5)`, `tail(n=5)`, `first(n=1)`, `last(n=1)`
 
 ## Sub DataFrame manipulations
 
-### `pick  ` - pick up variables by key label -
+### `pick  ` - pick up variables -
 
-  Pick up some columns (variables) to create a sub DataFrame.
+  Pick up some variables (columns) to create a sub DataFrame.
 
   ![pick method image](doc/../image/dataframe/pick.png)
 
@@ -491,9 +496,9 @@ penguins.to_rover
     343           49.9          16.1               213
     ```
 
-### `drop  ` - pick and drop -
+### `drop  ` - counterpart of pick -
 
-  Drop some columns (variables) to create a remainer DataFrame.
+  Drop some variables (columns) to create a remainer DataFrame.
 
   ![drop method image](doc/../image/dataframe/drop.png)
 
@@ -557,9 +562,9 @@ penguins.to_rover
   [1, 2, 3]
   ```
 
-### `slice  `  - to cut vertically is slice -
+### `slice  `  - slice and select records -
 
-  Slice and select rows (observations) to create a sub DataFrame.
+  Slice and select records (rows) to create a sub DataFrame.
 
   ![slice method image](doc/../image/dataframe/slice.png)
 
@@ -570,7 +575,7 @@ penguins.to_rover
     Negative index from the tail like Ruby's Array is also acceptable.
 
     ```ruby
-    # returns 5 obs. at start and 5 obs. from end
+    # returns 5 records at start and 5 records from end
     penguins.slice(0...5, -5..-1)
 
     # =>
@@ -665,9 +670,9 @@ penguins.to_rover
     0	1	A	  1.000000
     ``` 
 
-### `remove`
+### `remove` - counterpart of slice -
 
-  Slice and reject rows (observations) to create a remainer DataFrame.
+  Slice and reject records (rows) to create a remainer DataFrame.
 
   ![remove method image](doc/../image/dataframe/remove.png)
 
@@ -676,7 +681,7 @@ penguins.to_rover
     `remove(indeces)` accepts indeces as arguments. Indeces should be an Integer or a Range of Integer.
 
     ```ruby
-    # returns 6th to 339th obs.
+    # returns 6th to 339th records
     penguins.remove(0...5, -5..-1)
 
     # =>
@@ -699,7 +704,7 @@ penguins.to_rover
   `remove(booleans)` accepts booleans as an argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `size`.
 
     ```ruby
-    # remove all observation contains nil
+    # remove all records contains nil
     removed = penguins.remove { vectors.map(&:is_nil).reduce(&:|) }
     removed
 
@@ -785,7 +790,7 @@ penguins.to_rover
 
 ### `rename`
 
-  Rename keys (column names) to create a updated DataFrame.
+  Rename keys (variable/column names) to create a updated DataFrame.
 
   ![rename method image](doc/../image/dataframe/rename.png)
 
@@ -820,7 +825,7 @@ penguins.to_rover
 
 ### `assign`
 
-  Assign new or updated columns (variables) and create a updated DataFrame.
+  Assign new or updated variables (columns) and create an updated DataFrame.
 
   - Variables with new keys will append new columns from the right.
   - Variables with exisiting keys will update corresponding vectors.
@@ -1009,7 +1014,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ### `sort`
 
-  `sort` accepts parameters as sort_keys thanks to the amazing Red Arrow feature。
+  `sort` accepts parameters as sort_keys thanks to the Red Arrow's feature。
     - :key, "key" or "+key" denotes ascending order
     - "-key" denotes descending order
 
@@ -1040,7 +1045,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ### `remove_nil`
 
-  Remove any observations containing nil.
+  Remove any records containing nil.
 
 ## Grouping
 
@@ -1210,7 +1215,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ### `to_long(*keep_keys)`
 
-  Creates a 'long' (tidy) DataFrame from a 'wide' DataFrame.
+  Creates a 'long' (may be tidy) DataFrame from a 'wide' DataFrame.
 
   - Parameter `keep_keys` specifies the key names to keep.
 
@@ -1257,7 +1262,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ### `to_wide`
 
-  Creates a 'wide' (messy) DataFrame from a 'long' DataFrame.
+  Creates a 'wide' (may be messy) DataFrame from a 'long' DataFrame.
 
   - Option `:name` is the key of the column which will be expanded **to key names**.
     The default value is `:NAME` if it is not specified.
