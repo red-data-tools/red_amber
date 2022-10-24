@@ -5,6 +5,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 - A label is attached to `Vector`. We call it `key`.
 - A `Vector` and associated `key` is grouped as a `variable`.
 - `variable`s with same vector length are aligned and arranged to be a `DataFrame`.
+  - Each `key` in a `DataFrame` must be unique.
 - Each `Vector` in a `DataFrame` contains a set of relating data at same position. We call it `record` or `observation`.
 
 ![dataframe model image](doc/../image/dataframe_model.png)
@@ -138,6 +139,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   
 - Returns key names in an Array.
 
+  Each key must be unique in the DataFrame.
 
 ### `types`
   
