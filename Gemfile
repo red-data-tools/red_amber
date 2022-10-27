@@ -23,4 +23,5 @@ group :test do
   gem 'benchmark_driver'
   gem 'red-arrow-numo-narray'
   gem 'red-datasets-arrow'
+  gem 'simplecov'
 end
