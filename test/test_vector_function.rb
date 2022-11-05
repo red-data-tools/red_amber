@@ -983,7 +983,7 @@ class VectorFunctionTest < Test::Unit::TestCase
         add(x, y): Add the arguments element-wise
         ---
         Results will wrap around on integer overflow.
-        Use function \"add_checked\" if you want overflow
+        Use function "add_checked" if you want overflow
         to return an error.
       OUT
       assert_equal expected.chomp, VectorFunctions.arrow_doc(:add).to_s
