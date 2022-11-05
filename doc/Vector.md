@@ -24,6 +24,9 @@ Class `RedAmber::Vector` represents a series of data in the DataFrame.
   vector = Vector.new(1..3)
   # or
   vector = Vector.new(Arrow::Array.new([1, 2, 3])
+  # or
+  require 'arrow-numo-narray'
+  vector = Vector.new(Numo::Int8[1, 2, 3])
 
   # =>
   #<RedAmber::Vector(:uint8, size=3):0x000000000000f514>
