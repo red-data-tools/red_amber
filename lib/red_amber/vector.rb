@@ -39,6 +39,11 @@ module RedAmber
     end
 
     attr_reader :data
+
+    def to_arrow_array
+      @data
+    end
+
     attr_accessor :key
 
     def to_s

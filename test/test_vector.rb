@@ -39,6 +39,11 @@ class VectorTest < Test::Unit::TestCase
       assert_equal [-1, 0, 1], Vector.new(numo).to_a
     end
 
+    test '#to_arrow_array' do
+      _, _, _, array = data
+      assert_true(Vector.new(array).to_arrow_array.any? { [is_a?(Arrow::Array), is_a?(Arrow::ChunkedArray)] })
+    end
+
     test '#size' do
       expect, _, _, array = data
       actual = Vector.new(array)
