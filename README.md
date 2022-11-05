@@ -13,8 +13,6 @@ A simple dataframe library for Ruby.
 
 ## Requirements
 
-**(26 October 2022) [Arrow 10.0.0 has released](https://arrow.apache.org/release/10.0.0.html) but [red-arrow gem](https://rubygems.org/gems/red-arrow?locale=ja) is not released yet. I will show the temporary procedure for 9.0.0 here.**
-
 Supported Ruby version is >= 2.7.
 
 Since v0.2.0, this library uses pattern matching which is an experimental feature in 2.7 . It is usable but a warning message will be shown in 2.7 .
@@ -22,9 +20,9 @@ I recommend Ruby 3 for performance.
 
 ```ruby
 # Libraries required
-gem 'red-arrow',   '~> 9.0.0' # Requires Apache Arrow (see installation below)
+gem 'red-arrow',   '~> 10.0.0' # Requires Apache Arrow (see installation below)
 
-gem 'red-parquet', '~> 9.0.0' # Optional, if you use IO from/to parquet
+gem 'red-parquet', '~> 10.0.0' # Optional, if you use IO from/to parquet
 gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 ```
 
@@ -32,36 +30,40 @@ gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 
 Install requirements before you install Red Amber.
 
-- Apache Arrow GLib (~> 9.0.0)
-- Apache Parquet GLib (~> 9.0.0)  # If you use IO from/to parquet
+- Apache Arrow GLib (~> 10.0.0)
+- Apache Parquet GLib (~> 10.0.0)  # If you use IO from/to parquet
 
   See [Apache Arrow install document](https://arrow.apache.org/install/).
   
-  Minimum installation example for the latest Ubuntu is in the ['Prepare the Apache Arrow' section in ci test](https://github.com/heronshoes/red_amber/blob/master/.github/workflows/test.yml) of Red Amber.
+  - Minimum installation example for the latest Ubuntu:
+    ```
+    sudo apt update
+    sudo apt install -y -V ca-certificates lsb-release wget
+    wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+    sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+    sudo apt update
+    sudo apt install -y -V libarrow-dev
+    sudo apt install -y -V libarrow-glib-dev
+    ```
+  - On macOS, you can install Apache Arrow C++ library using Homebrew:
+    
+    ```
+    brew install apache-arrow
+    ```
 
-  ```
-        sudo apt update
-        sudo apt install -y -V ca-certificates lsb-release wget
-        wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-        sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-        sudo apt update
-        sudo apt install -y -V libarrow-dev=9.0.0-1
-        sudo apt install -y -V gir1.2-arrow-1.0=9.0.0-1
-        sudo apt install -y -V libarrow-glib-dev=9.0.0-1
-  ```
+    and GLib (C) package with:
 
-  Homebrew is now on Arrow 9.0.0 . 
+    ```
+    brew install apache-arrow-glib
+    ```
 
-  ```
-  $ brew info apache-arrow
-  ==> apache-arrow: stable 9.0.0 (bottled), HEAD
-  ```
-  See [Apache Arrow install document](https://arrow.apache.org/install/).
-
-Add this line to your Gemfile:
+If you prepared Apache Arrow, add this line to your Gemfile:
 
 ```ruby
+gem 'red-arrow',   '~> 10.0.0'
 gem 'red_amber'
+gem 'red-parquet', '~> 10.0.0' # Optional, if you use IO from/to parquet
+gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 ```
 
 And then execute `bundle install` or install it yourself as `gem install red_amber`.
