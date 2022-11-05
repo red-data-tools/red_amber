@@ -57,13 +57,15 @@ Install requirements before you install Red Amber.
     brew install apache-arrow-glib
     ```
 
-If you prepared Apache Arrow, add this line to your Gemfile:
+If you prepared Apache Arrow, add these lines to your Gemfile:
 
 ```ruby
 gem 'red-arrow',   '~> 10.0.0'
 gem 'red_amber'
 gem 'red-parquet', '~> 10.0.0' # Optional, if you use IO from/to parquet
-gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
+gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFrame
+gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
+gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
 ```
 
 And then execute `bundle install` or install it yourself as `gem install red_amber`.

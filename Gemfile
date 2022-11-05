@@ -21,5 +21,6 @@ group :test do
   gem 'yard'
 
   gem 'benchmark_driver'
+  gem 'red-arrow-numo-narray'
   gem 'red-datasets-arrow'
 end
