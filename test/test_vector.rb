@@ -4,6 +4,7 @@ require 'test_helper'
 
 class VectorTest < Test::Unit::TestCase
   include RedAmber
+  include Helper
 
   sub_test_case('Basic properties') do
     data(keep: true) do
@@ -22,15 +23,25 @@ class VectorTest < Test::Unit::TestCase
       h
     end
 
-    test '.initialize' do
+    test 'initialize' do
       expect, _, _, array = data
       actual = Vector.new(array).to_a
       assert_equal expect, actual
     end
 
-    test '.initialize by an expanded Array' do
+    test 'initialize by an expanded Array' do
       array = [1, 2, 3]
       assert_equal array, Vector.new(*array).to_a
+    end
+
+    test 'initialize by Numo::NArray' do
+      numo = Numo::Int8.new(3).seq(-1)
+      assert_equal [-1, 0, 1], Vector.new(numo).to_a
+    end
+
+    test '#to_arrow_array' do
+      _, _, _, array = data
+      assert_true(Vector.new(array).to_arrow_array.any? { [is_a?(Arrow::Array), is_a?(Arrow::ChunkedArray)] })
     end
 
     test '#size' do

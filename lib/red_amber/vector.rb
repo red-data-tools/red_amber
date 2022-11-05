@@ -24,6 +24,8 @@ module RedAmber
             a
           in [Arrow::ChunkedArray => ca]
             ca
+          in [arrow_array_like] if arrow_array_like.respond_to?(:to_arrow_array)
+            arrow_array_like.to_arrow_array
           in [Range => r]
             Arrow::Array.new(Array(r))
           else
@@ -37,6 +39,11 @@ module RedAmber
     end
 
     attr_reader :data
+
+    def to_arrow_array
+      @data
+    end
+
     attr_accessor :key
 
     def to_s

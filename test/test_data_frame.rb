@@ -206,6 +206,22 @@ class DataFrameTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case 'red-arrow-numo-narray' do
+    setup do
+      require 'arrow-numo-narray'
+      Numo::NArray.srand(42)
+    end
+
+    test 'new from numo-narray' do
+      assert_equal <<~EXPECTED, DataFrame.new(numo: Numo::DFloat.new(3).rand).tdr_str
+        RedAmber::DataFrame : 3 x 1 Vector
+        Vector : 1 numeric
+        # key   type   level data_preview
+        0 :numo double     3 [0.3206787829442638, 0.2756491628580763, 0.1659554879682396]
+      EXPECTED
+    end
+  end
+
   sub_test_case 'method_missing' do
     setup do
       @df = DataFrame.new(number: [1, 2, 3], 'string.1': %w[Aa Bb Cc])

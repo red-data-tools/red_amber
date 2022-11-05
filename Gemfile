@@ -7,7 +7,7 @@ gemspec
 group :test do
   gem 'rake'
 
-  gem 'red-parquet', '~> 9.0.0'
+  gem 'red-parquet', '~> 10.0.0'
   gem 'rover-df', '~> 0.3.0'
 
   gem 'rubocop'
@@ -21,5 +21,6 @@ group :test do
   gem 'yard'
 
   gem 'benchmark_driver'
+  gem 'red-arrow-numo-narray'
   gem 'red-datasets-arrow'
 end
