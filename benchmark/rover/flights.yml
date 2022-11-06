@@ -1,0 +1,23 @@
+contexts:
+  - gems:
+      red_amber: 0.2.2
+  - name: HEAD
+    prelude: |
+      $LOAD_PATH.unshift(File.expand_path('lib'))
+      require 'red_amber'
+
+prelude: |
+  require 'rover'
+  require 'datasets-arrow'
+  ds = Datasets::Rdatasets.new('nycflights13', 'flights')
+  df = RedAmber::DataFrame.new(ds)
+  rover = Rover::DataFrame.new(df.to_h)
+  group_keys = [:month, :origin]
+  summary_key = :air_time
+
+benchmark:
+  'penguins Group by Rover': |
+    rover.group(group_keys).count
+
+  'penguins Group by RedAmber': |
+    df.group(group_keys).count

@@ -166,7 +166,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
 
 ### `indices`, `indexes`
 
-- Returns indexes in an Array.
+- Returns indexes in a Vector.
   Accepts an option `start` as the first of indexes.
 
   ```ruby
@@ -174,15 +174,19 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   df.indices
 
   # =>
+  #<RedAmber::Vector(:uint8, size=5):0x0000000000013ed4>
   [0, 1, 2, 3, 4]
 
   df.indices(1)
 
   # =>
+  #<RedAmber::Vector(:uint8, size=5):0x0000000000018fd8>
   [1, 2, 3, 4, 5]
 
   df.indices(:a)
+
   # =>
+  #<RedAmber::Vector(:dictionary, size=5):0x000000000001bd50>
   [:a, :b, :c, :d, :e]
   ```
 

@@ -118,10 +118,10 @@ module RedAmber
         end
 
         normalized_indices = normalized_indices.floor.to_a.map(&:to_i) # round to integer array
-        return remove_all_values if normalized_indices == indices
+        return remove_all_values if normalized_indices == indices.to_a
         return self if normalized_indices.empty?
 
-        index_array = indices - normalized_indices
+        index_array = indices.to_a - normalized_indices
 
         datum = Arrow::Function.find(:take).execute([table, index_array])
         return DataFrame.new(datum.value)
@@ -168,14 +168,14 @@ module RedAmber
 
     # Undocumented
     # TODO: support for option {boundscheck: true}
-    def take(*indices)
-      indices.flatten!
-      return remove_all_values if indices.empty?
+    def take(*arg_indices)
+      arg_indices.flatten!
+      return remove_all_values if arg_indices.empty?
 
-      indices = indices[0] if indices.one? && !indices[0].is_a?(Numeric)
-      indices = Vector.new(indices) unless indices.is_a?(Vector)
+      arg_indices = arg_indices[0] if arg_indices.one? && !arg_indices[0].is_a?(Numeric)
+      arg_indices = Vector.new(arg_indices) unless arg_indices.is_a?(Vector)
 
-      take_by_array(indices)
+      take_by_array(arg_indices)
     end
 
     # Undocumented

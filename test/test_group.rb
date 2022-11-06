@@ -12,12 +12,10 @@ class GroupTest < Test::Unit::TestCase
 
     setup do
       @df = DataFrame.new(
-        {
-          i: [0, 0, 1, 2, 2, nil],
-          f: [0.0, 1.1, 2.2, 3.3, Float::NAN, nil],
-          s: ['A', 'B', nil, 'A', 'B', 'A'],
-          b: [true, false, true, false, true, nil],
-        }
+        i: [0, 0, 1, 2, 2, nil],
+        f: [0.0, 1.1, 2.2, 3.3, Float::NAN, nil],
+        s: ['A', 'B', nil, 'A', 'B', 'A'],
+        b: [true, false, true, false, true, nil]
       )
     end
 
@@ -173,6 +171,89 @@ class GroupTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, @df.group(:i) { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
       assert_equal str, @df.group(:i).summarize { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
+    end
+  end
+
+  sub_test_case('group by filters') do
+    setup do
+      @df = DataFrame.new(
+        i: [0, 0, 1, 2, 2, nil],
+        f: [0.0, 1.1, 2.2, 3.3, Float::NAN, nil],
+        s: ['A', 'B', nil, 'A', 'B', 'A'],
+        b: [true, false, true, false, true, nil]
+      )
+    end
+
+    test 'filters' do
+      expect = [
+        [true,  true,  false, false, false, nil],
+        [false, false, true,  false, false, nil],
+        [false, false, false, true,  true,  nil],
+        [false, false, false, false, false, true],
+      ]
+      assert_equal expect, @df.group(:i).filters.map(&:to_a)
+      assert_true @df.group(:i).filters.all?(Vector)
+    end
+
+    test 'group_count' do
+      str = <<~STR
+        RedAmber::DataFrame : 4 x 2 Vectors
+        Vectors : 2 numeric
+        # key          type  level data_preview
+        0 :i           uint8     4 [0, 1, 2, nil], 1 nil
+        1 :group_count uint8     2 {2=>2, 1=>2}
+      STR
+      assert_equal str, @df.group(:i).group_count.tdr_str
+    end
+
+    test 'each' do
+      assert_true @df.group(:i).each.is_a?(Enumerator)
+      expect = <<~STR
+        RedAmber::DataFrame : 2 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key type    level data_preview
+        0 :i  uint8       1 {0=>2}
+        1 :f  double      2 [0.0, 1.1]
+        2 :s  string      2 ["A", "B"]
+        3 :b  boolean     2 [true, false]
+        RedAmber::DataFrame : 1 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key type    level data_preview
+        0 :i  uint8       1 [1]
+        1 :f  double      1 [2.2]
+        2 :s  string      1 [nil], 1 nil
+        3 :b  boolean     1 [true]
+        RedAmber::DataFrame : 2 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key type    level data_preview
+        0 :i  uint8       1 {2=>2}
+        1 :f  double      2 [3.3, NaN], 1 NaN
+        2 :s  string      2 ["A", "B"]
+        3 :b  boolean     2 [false, true]
+        RedAmber::DataFrame : 1 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key type    level data_preview
+        0 :i  uint8       1 [nil], 1 nil
+        1 :f  double      1 [nil], 1 nil
+        2 :s  string      1 ["A"]
+        3 :b  boolean     1 [nil], 1 nil
+      STR
+      assert_equal expect,
+                   @df.group(:i).each.with_object(StringIO.new) { |df, accum| accum << df.tdr_str }.string
+    end
+
+    test 'inspect' do
+      group = @df.group(:i)
+      str = <<~STR
+        #<RedAmber::Group : #{format('0x%016x', group.object_id)}>
+                i group_count
+          <uint8>     <uint8>
+        0       0           2
+        1       1           1
+        2       2           2
+        3   (nil)           1
+      STR
+      assert_equal str, group.inspect
     end
   end
 end
