@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / Ruby ${{ matrix.ruby }}
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        os: [ubuntu, macos] # windows, if: runner.os == 'Windows'
+        ruby: ['2.7', '3.0', '3.1']
+    runs-on: ${{ matrix.os }}-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Prepare Apache Arrow on Linux
+        if: |
+          runner.os == 'Linux'
+        run: |
+          sudo apt update
+          sudo apt install -y -V ca-certificates lsb-release wget
+          wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+          sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+          sudo apt update
+          sudo apt install -y -V libarrow-dev
+          sudo apt install -y -V gir1.2-arrow-1.0
+          sudo apt install -y -V libarrow-glib-dev
+      - name: Prepare Apache Arrow on macOS
+        if: |
+          runner.os == 'macOS'
+        run: |
+          brew update
+          brew install apache-arrow
+          brew install apache-arrow-glib
+      - name: Set up Ruby ${{ matrix.ruby }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Install dependencies
+        run: bundle install
+      - name: Run test
+        run: TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
