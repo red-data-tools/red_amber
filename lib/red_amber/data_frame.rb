@@ -176,7 +176,7 @@ module RedAmber
     #   - indices(1) #=> [1, 2, 3, 4, 5]
     #   - indices('a') #=> ['a', 'b', 'c', 'd', 'e']
     def indices(start = 0)
-      (start..).take(size)
+      Vector.new((start..).take(size))
     end
     alias_method :indexes, :indices
 
