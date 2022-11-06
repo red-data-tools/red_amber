@@ -3,6 +3,8 @@
 module RedAmber
   # group class
   class Group
+    include Enumerable # This feature is experimental
+
     # Creates a new Group object.
     #
     # @param dataframe [DataFrame] dataframe to be grouped.
