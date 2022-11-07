@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # mix-ins for the class DataFrame
+  # mix-in for the class DataFrame
   module DataFrameCombinable
-    # Concatenate other dataframe at the bottom.
+    # Concatenate other dataframe onto the bottom.
     #
     # @param other [DataFrame, Arrow::Table, Array<DataFrame, Arrow::Table>]
-    #   dataframe/table to concatenate onto the bottom of self.
+    #   DataFrame/Table to concatenate onto the bottom of self.
     # @return [DataFrame]
-    #   concatenated dataframe.
+    #   Concatenated dataframe.
     def concatenate(*other)
       case other
       in [] | [nil] | [[]]
@@ -146,9 +146,19 @@ module RedAmber
 
     # Set operations
 
+    # Check if set operation with self and other is possible.
+    #
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be checked with self.
+    # @return [Boolean] true if set operation is possible.
+    #
+    def set_operable?(other) # rubocop:disable Naming/AccessorMethodName
+      other = DataFrame.new(other) if other.is_a?(Arrow::Table)
+      keys == other.keys
+    end
+
     # Select rows appearing in both self and other.
     #
-    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @return [DataFrame] Joined dataframe.
     #
     def intersect(other)
@@ -160,7 +170,7 @@ module RedAmber
 
     # Select rows appearing in self or other.
     #
-    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @return [DataFrame] Joined dataframe.
     #
     def union(other)
@@ -172,7 +182,7 @@ module RedAmber
 
     # Select rows appearing in self but not in other.
     #
-    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @return [DataFrame] Joined dataframe.
     #
     def difference(other)
@@ -184,7 +194,7 @@ module RedAmber
 
     alias_method :setdiff, :difference
 
-    # Undocumented
+    # Undocumented. It is preferable to call specific methods.
 
     # Join other dataframe
     #
@@ -192,7 +202,7 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    #   :type is one of %i[left_semi right_semi left_anti right_anti inner left_outer right_outer full_outer]
+    #   :type is one of :left_semi, :right_semi, :left_anti, :right_anti inner, :left_outer, :right_outer, :full_outer.
     def join(right, join_keys = nil, type: :inner, suffix: '.1', left_outputs: nil, right_outputs: nil)
       case right
       when DataFrame
@@ -203,7 +213,7 @@ module RedAmber
         raise DataFrameArgumentError, 'right must be a DataFrame or an Arrow::Table'
       end
 
-      # Support natural keys
+      # Support natural keys (implicit common keys)
       natural_keys = keys.intersection(right.keys)
       raise DataFrameArgumentError, "#{join_keys} are not common keys" if natural_keys.empty?
 
@@ -235,7 +245,7 @@ module RedAmber
       end
 
       # Red Arrow's #join returns duplicated join_keys from self and right as of v9.0.0 .
-      # Temprally merge key vectors here to workaround.
+      # Temporally merge key vectors here to workaround.
       table_output =
         table.join(right.table, join_keys, type: type, left_outputs: left_outputs, right_outputs: right_outputs)
       left_indexes = [*0...n_keys]

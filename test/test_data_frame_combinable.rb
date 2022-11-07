@@ -445,6 +445,10 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         )
       end
 
+      test '#set_operable?' do
+        assert_true @df4.set_operable?(@right4)
+      end
+
       test '#intersect' do
         expected = DataFrame.new(
           KEY1: %w[A],
