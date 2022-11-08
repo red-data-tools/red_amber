@@ -1293,9 +1293,277 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ## Combine
 
-- [ ] Combining dataframes
+### `join`
+![dataframe joining image](doc/../image/dataframe/join.png)
 
-- [ ] Join
+  You should use specific `*_join` methods below.
+
+  - `other` is a DataFrame or a Arrow::Table.
+  - `join_keys` are keys shared by self and other to match with them.
+  - If `join_keys` are empty, common keys in self and other are chosen (natural join).
+  - If (common keys) > `join_keys`, duplicated keys are renamed by `suffix`. 
+
+  ```ruby
+  df = DataFrame.new(
+    KEY: %w[A B C],
+    X1: [1, 2, 3]
+  )
+  #=>
+  #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000012a70>
+    KEY           X1
+    <string> <uint8>
+  0 A              1
+  1 B              2
+  2 C              3
+
+  other = DataFrame.new(
+    KEY: %w[A B D],
+    X2: [true, false, nil]
+  )
+  #=>
+  #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000017034>
+    KEY      X2
+    <string> <boolean>
+  0 A        true
+  1 B        false
+  2 D        (nil)
+  ```
+
+#### Mutating joins
+
+##### `inner_join(other, join_keys = nil, suffix: '.1')`
+
+  Join data, leaving only the matching rows.
+
+  ```ruby
+  df.inner_join(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000001e2bc>     
+    KEY           X1 X2
+    <string> <uint8> <boolean>
+  0 A              1 true
+  1 B              2 false
+  ```
+
+##### `full_join(other, join_keys = nil, suffix: '.1')`
+
+  Join data, leaving all rows.
+
+  ```ruby
+  df.full_join(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 4 x 3 Vectors, 0x0000000000029fcc>
+    KEY           X1 X2
+    <string> <uint8> <boolean>
+  0 A              1 true
+  1 B              2 false
+  2 C              3 (nil)
+  3 D          (nil) (nil)
+  ```
+
+##### `left_join(other, join_keys = nil, suffix: '.1')`
+
+  Join matching values from right to self.
+
+  ```ruby
+  df.left_join(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000029fcc>
+    KEY           X1 X2
+    <string> <uint8> <boolean>
+  0 A              1 true
+  1 B              2 false
+  2 C              3 (nil)
+  ```
+
+##### `right_join(other, join_keys = nil, suffix: '.1')`
+
+  Join matching values from self to right.
+
+  ```ruby
+  df.right_join(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000029fcc>
+    KEY           X1 X2
+    <string> <uint8> <boolean>
+  0 A              1 true
+  1 B              2 false
+  2 D          (nil) (nil)
+  ```
+
+#### Filtering join
+
+##### `semi_join(other, join_keys = nil, suffix: '.1')`
+
+  Return rows of self that have a match in right.
+
+  ```ruby
+  df.semi_join(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000029fcc>
+    KEY           X1
+    <string> <uint8>
+  0 A              1
+  1 B              2
+  ```
+
+##### `anti_join(other, join_keys = nil, suffix: '.1')`
+
+  Return rows of self that do not have a match in right.
+
+  ```ruby
+  df.anti_join(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
+    KEY           X1
+    <string> <uint8>
+  0 C              3
+  ```
+
+## Set operations
+![dataframe set and binding image](doc/../image/dataframe/set_and_bind.png)
+
+  Keys in self and other must be same in set operations.
+
+  ```ruby
+  df = DataFrame.new(
+    KEY1: %w[A B C],
+    KEY2: [1, 2, 3]
+  )
+  #=>
+  #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000012a70>
+    KEY1        KEY2
+    <string> <uint8>
+  0 A              1
+  1 B              2
+  2 C              3
+
+  other = DataFrame.new(
+    KEY1: %w[A B D],
+    KEY2: [1, 4, 5]
+  )
+  #=>
+  #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000017034>
+    KEY1        KEY2
+    <string> <uint8>
+  0 A              1
+  1 B              4
+  2 D              5
+  ```
+
+##### `intersect(other)`
+
+  Select rows appearing in both self and other.
+
+  ```ruby
+  df.intersect(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
+    KEY1        KEY2
+    <string> <uint8>
+  0 A              1
+  ```
+
+##### `union(other)`
+
+  Select rows appearing in self or other.
+
+  ```ruby
+  df.union(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 5 x 2 Vectors, 0x0000000000029fcc>
+    KEY1        KEY2
+    <string> <uint8>
+  0 A              1
+  1 B              2
+  2 C              3
+  3 B              4
+  4 D              5
+  ```
+
+##### `difference(other)`
+
+  Select rows appearing in self but not in other.
+
+  It has an alias `setdiff`.
+
+  ```ruby
+  df.difference(other, :KEY)
+  #=>
+  #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
+    KEY1        KEY2
+    <string> <uint8>
+  1 B              2
+  2 C              3
+  ```
+
+## Binding
+
+### `concatenate(other)`
+
+  Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
+
+  The alias is `concat`.
+
+  An array of DataFrames or Tables is also acceptable as other.
+
+  ```ruby
+  df
+  #=>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000022cb8>
+          x y
+    <uint8> <string>
+  0       1 A
+  1       2 B
+  
+  other
+  #=>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x000000000001f6d0>
+          x y
+    <uint8> <string>
+  0       3 C
+  1       4 D
+
+  df.concatenate(other)
+  #=>
+  #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000022574>
+          x y
+    <uint8> <string>
+  0       1 A
+  1       2 B
+  2       3 C
+  3       4 D
+  ```
+
+### `merge(other)`
+
+  Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
+
+  ```ruby
+  df
+  #=>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000009150>
+          x       y
+    <uint8> <uint8>
+  0       1       3
+  1       2       4
+
+  other
+  #=>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000008a0c>
+    a        b
+    <string> <string>
+  0 A        C
+  1 B        D
+
+  df.merge(other)
+  #=>
+  #<RedAmber::DataFrame : 2 x 4 Vectors, 0x000000000000cb70>
+          x       y a        b
+    <uint8> <uint8> <string> <string>
+  0       1       3 A        C
+  1       2       4 B        D
+  ```
 
 ## Encoding
 

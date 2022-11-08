@@ -60,6 +60,7 @@ Layout/LineLength:
 Metrics/AbcSize:
   Max: 30
   Exclude:
+    - 'lib/red_amber/data_frame_combinable.rb' # Max: 43
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 55
     - 'lib/red_amber/data_frame_reshaping.rb' # Max 40.91
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 51
@@ -86,6 +87,7 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Max: 12
   Exclude:
+    - 'lib/red_amber/data_frame_combinable.rb' # Max: 15
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 18
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 14
     - 'lib/red_amber/helper.rb' # Max: 15
@@ -96,6 +98,7 @@ Metrics/CyclomaticComplexity:
 Metrics/MethodLength:
   Max: 30
   Exclude:
+    - 'lib/red_amber/data_frame_combinable.rb' # Max: 38
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 33
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 38
     - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 35
@@ -104,15 +107,23 @@ Metrics/MethodLength:
 Metrics/ModuleLength:
   Max: 100
   Exclude:
+    - 'lib/red_amber/data_frame_combinable.rb' # Max: 108
     - 'lib/red_amber/data_frame_displayable.rb' # Max: 132
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 141
     - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 110
     - 'lib/red_amber/vector_functions.rb' # Max: 114
 
+# Max: 5
+Metrics/ParameterLists:
+  Max: 6
+  # Exclude:
+  #   - 'lib/red_amber/data_frame_combinable.rb' # Max: 6
+
 # Max: 8
 Metrics/PerceivedComplexity:
   Max: 13
   Exclude:
+    - 'lib/red_amber/data_frame_combinable.rb' # Max: 14
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 14
     - 'lib/red_amber/helper.rb' # Max: 15
     - 'lib/red_amber/vector_updatable.rb' # Max: 15

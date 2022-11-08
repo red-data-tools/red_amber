@@ -174,6 +174,8 @@ module RedAmber
     end
 
     def format_table(width: 80, head: 5, tail: 3, n_digit: 2)
+      return "  #{keys.join(' ')}\n  (Empty Vectors)\n" if size.zero?
+
       original = self
       indices = size > head + tail ? [*0..head, *(size - tail)...size] : [*0...size]
       df = slice(indices).assign do

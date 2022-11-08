@@ -35,6 +35,16 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal str, df.inspect
     end
 
+    test 'zero size dataframe' do
+      df = DataFrame.new(x: [])
+      str = <<~STR
+        #<RedAmber::DataFrame : 0 x 1 Vector, #{format('0x%016x', df.object_id)}>
+          x
+          (Empty Vectors)
+      STR
+      assert_equal str, df.inspect
+    end
+
     setup do
       hash = { integer: [1, 2, 3, 4, 5, 6],
                double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
@@ -140,6 +150,17 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal str, df.inspect
     end
 
+    test 'zero size dataframe' do
+      df = DataFrame.new(x: [])
+      str = <<~STR
+        #<RedAmber::DataFrame : 0 x 1 Vector, #{format('0x%016x', df.object_id)}>
+        Vector : 1 string
+        # key type   level data_preview
+        0 :x  string     0 []
+      STR
+      assert_equal str, df.inspect
+    end
+
     setup do
       hash = { integer: [1, 2, 3, 4, 5, 6],
                double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
@@ -170,6 +191,11 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     test 'empty dataframe' do
       df = DataFrame.new
       assert_equal 'RedAmber::DataFrame : (empty)', df.inspect
+    end
+
+    test 'zero size dataframe' do
+      df = DataFrame.new(x: [])
+      assert_equal 'RedAmber::DataFrame : 0 x 1 Vector', df.inspect
     end
 
     setup do
