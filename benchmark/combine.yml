@@ -1,0 +1,27 @@
+# --repeat-count 3
+
+contexts:
+  - name: HEAD
+    prelude: |
+      $LOAD_PATH.unshift(File.expand_path('lib'))
+  # - gems:
+  #     red_amber: 0.2.3
+
+prelude: |
+  require 'red_amber'
+  require 'datasets-arrow'
+
+  ds = Datasets::Rdatasets.new('tidyr', 'billboard')
+  df = RedAmber::DataFrame.new(ds.to_arrow)
+  sub_df = df.pick(:track, df.keys.select{ |k| k.start_with? 'wk' })
+  long_df = df.to_long(:artist, :track, :'date.entered', name: :week, value: :rank)
+
+benchmark:
+  'C1: Combine': |
+    
+
+  'C2: Combine': |
+    
+
+  'C3: Combine': |
+    
