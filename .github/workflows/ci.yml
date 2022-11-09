@@ -38,17 +38,14 @@ jobs:
         run: |
           brew update
           brew install apache-arrow
+          brew install gobject-introspection
           brew install apache-arrow-glib
 
       - name: Set up Ruby ${{ matrix.ruby }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-          # bundler-cache does not work with macOS. gobject-intorospection is outside of chache path?
-
-      - name: Install dependencies
-        run: bundle install
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: Run test
         run: TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
