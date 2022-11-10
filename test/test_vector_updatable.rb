@@ -141,5 +141,10 @@ class VectorTest < Test::Unit::TestCase
       assert_equal [3, 4, 5, nil, nil], vector.shift(-2)
       assert_equal [0, 0, 1, 2, 3], vector.shift(2, fill: 0)
     end
+
+    test '#shift, amount == 0' do
+      vector = Vector.new([1, 2, 3, 4, 5])
+      assert_equal vector.to_a, vector.shift(0)
+    end
   end
 end
