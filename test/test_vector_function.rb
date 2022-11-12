@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class VectorFunctionTest < Test::Unit::TestCase
-  include Helper
+  include TestHelper
   include RedAmber
 
   sub_test_case('unary aggregations') do

@@ -3,14 +3,15 @@
 require 'test_helper'
 
 class DataFrameSelectableTest < Test::Unit::TestCase
+  include TestHelper
   include RedAmber
 
   sub_test_case '#[]' do
     df = DataFrame.new(x: [1, 2, 3], y: %w[A B C])
 
     test 'Select variables' do
-      assert_equal [1, 2, 3], df[:x].to_a
-      assert_equal %w[A B C], df['y'].to_a
+      assert_equal_array [1, 2, 3], df[:x]
+      assert_equal_array %w[A B C], df['y']
       assert_equal Hash(y: %w[A B C], x: [1, 2, 3]), df[:y, :x].to_h
       assert_raise(DataFrameArgumentError) { df[:x, :x] }
       assert_raise(DataFrameArgumentError) { df[:z] }
@@ -30,7 +31,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal Hash(x: [2, 1, 3], y: %w[B A C]), df[1, 0, 2].to_h
       assert_equal Hash(x: [3, 2], y: %w[C B]), df[-1, -2].to_h
       assert_equal Hash(x: [2, 2, 2], y: %w[B B B]), df[1, 1, 1].to_h
-      assert_equal 3, df[:x].to_a[2]
+      assert_equal_array 3, df[:x][2]
     end
 
     test 'Select observations by Range' do
@@ -268,7 +269,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
 
     test 'slice by Enumerator' do
       df = DataFrame.new(x: [*0..10])
-      assert_equal [1, 4, 7, 10], df.slice(1.step(by: 3, to: 10))[:x].to_a
+      assert_equal_array [1, 4, 7, 10], df.slice(1.step(by: 3, to: 10))[:x]
     end
   end
 
@@ -562,8 +563,8 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     df = DataFrame.new(x: [1, 2, 3], y: %w[A B C])
 
     test 'v method' do
-      assert_equal [1, 2, 3], df.v(:x).to_a
-      assert_equal %w[A B C], df.v('y').to_a
+      assert_equal_array [1, 2, 3], df.v(:x)
+      assert_equal_array %w[A B C], df.v('y')
       assert_raise(DataFrameArgumentError) { df.v(:z) }
       assert_raise(DataFrameArgumentError) { df.v('') }
     end

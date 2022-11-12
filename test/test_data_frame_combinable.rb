@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class DataFrameDisplayableTest < Test::Unit::TestCase
+  include TestHelper
   include RedAmber
 
   sub_test_case '#concatenate' do

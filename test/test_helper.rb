@@ -14,7 +14,7 @@ require 'zlib'
 
 require 'test-unit'
 
-module Helper
+module TestHelper
   def entity_path
     (Pathname.new(__dir__) / 'entity').expand_path
   end

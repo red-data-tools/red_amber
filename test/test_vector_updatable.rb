@@ -3,8 +3,8 @@
 require 'test_helper'
 
 class VectorTest < Test::Unit::TestCase
+  include TestHelper
   include RedAmber
-  include Helper
 
   sub_test_case('replace') do
     test 'empty vector' do
@@ -19,85 +19,85 @@ class VectorTest < Test::Unit::TestCase
     end
 
     test 'empty specifier' do
-      assert_equal @vec.to_a, @vec.replace([], [0])
+      assert_equal_array @vec, @vec.replace([], [0])
     end
 
     test 'empty replacer' do
-      assert_equal @vec.to_a, @vec.replace([0], [])
+      assert_equal_array @vec, @vec.replace([0], [])
     end
 
     test 'replace UInt argument' do
-      assert_equal [0, 2, 0], @vec.replace([0, 2], 0).to_a
-      assert_raise(VectorArgumentError) { @vec.replace([2, 0], [0]) } # Replacements size unmatch
-      assert_equal [0, 2, 4], @vec.replace([0, 2], [0, 4]).to_a
-      assert_raise(VectorArgumentError) { @vec.replace([0, 2], [0, 0, 0]) } # size mismatch
-      assert_raise(VectorArgumentError) { @vec.replace([0, 1, 2], [0, 0]) } # size mismatch
-      assert_equal [5, 2, 4], @vec.replace([0, 2, nil], [5, 4]).to_a
-      assert_equal [0, 2, nil], @vec.replace([0, 2], [0, nil]).to_a
+      assert_equal_array [0, 2, 0], @vec.replace([0, 2], 0) # Broadcasted
+      assert_raise(VectorArgumentError) { @vec.replace([2, 0], [0]) } # Size unmatch. Not broadcasted.
+      assert_equal_array [0, 2, 4], @vec.replace([0, 2], [0, 4])
+      assert_raise(VectorArgumentError) { @vec.replace([0, 2], [0, 0, 0]) } # Size unmatch
+      assert_raise(VectorArgumentError) { @vec.replace([0, 1, 2], [0, 0]) } # Size unmatch
+      assert_equal_array [5, 2, 4], @vec.replace([0, 2, nil], [5, 4])
+      assert_equal_array [0, 2, nil], @vec.replace([0, 2], [0, nil])
     end
 
     test 'replace Int/Range argument mixture' do
-      assert_equal [0, 0, 0], @vec.replace([0..1, 2], 0).to_a
+      assert_equal_array [0, 0, 0], @vec.replace([0..1, 2], 0)
     end
 
     test 'reduced index' do
-      assert_equal [1, 2, 0], @vec.replace([2, 2], 0).to_a # equals to replace([2], [0])
-      assert_equal [1, 2, 0], @vec.replace([2, -1], 0).to_a # ibid.
-      assert_equal [1, 3, 4], @vec.replace([2, 1, -1], [3, 4]).to_a # equals to replace([1, 2], [3, 4])
+      assert_equal_array [1, 2, 0], @vec.replace([2, 2], 0) # equals to replace([2], [0])
+      assert_equal_array [1, 2, 0], @vec.replace([2, -1], 0) # ibid.
+      assert_equal_array [1, 3, 4], @vec.replace([2, 1, -1], [3, 4]) # equals to replace([1, 2], [3, 4])
     end
 
     test 'replace Range' do
       expected = [0, 0, 3]
-      assert_equal expected, @vec.replace([0..1], 0).to_a
-      assert_equal expected, @vec.replace([0...-1], 0).to_a
+      assert_equal_array expected, @vec.replace([0..1], 0)
+      assert_equal_array expected, @vec.replace([0...-1], 0)
     end
 
     test 'replace UInt single' do
-      assert_equal [1, 2, 0], @vec.replace([false, false, true], 0).to_a
-      assert_equal [1, 2, 0], @vec.replace([false, false, true], [0]).to_a
+      assert_equal_array [1, 2, 0], @vec.replace([false, false, true], 0)
+      assert_equal_array [1, 2, 0], @vec.replace([false, false, true], [0])
       assert_raise(VectorArgumentError) { @vec.replace([true], 0) } # boolean size mismatch
-      assert_equal @vec.to_a, @vec.replace([false, false, nil], 0).to_a # no true in boolean, return self
-      assert_equal @vec.to_a, @vec.replace(Vector.new([false, false, nil]), 0).to_a # no true in boolean, return self
+      assert_equal_array @vec, @vec.replace([false, false, nil], 0) # no true in boolean, return self
+      assert_equal_array @vec, @vec.replace(Vector.new([false, false, nil]), 0) # no true in boolean, return self
       assert_raise(VectorArgumentError) { @vec.replace([true, false, nil], [0, 0]) } # replacement size mismatch
     end
 
     test 'replace multi/broadcast' do
-      assert_equal [0, 2, 0], @vec.replace([true, false, true], [0, 0]).to_a
+      assert_equal_array [0, 2, 0], @vec.replace([true, false, true], [0, 0])
       assert_raise(VectorArgumentError) { @vec.replace([true, false, true], [0]) } # Replacements size unmatch
-      assert_equal [0, 2, 0], @vec.replace([true, false, true], 0).to_a
+      assert_equal_array [0, 2, 0], @vec.replace([true, false, true], 0)
     end
 
     test 'replace multi/upcast' do
-      assert_equal [0, 2, -1], @vec.replace([true, false, true], [0, -1]).to_a
+      assert_equal_array [0, 2, -1], @vec.replace([true, false, true], [0, -1])
       assert_equal :int8, @vec.replace([true, false, true], [0, -1]).type
     end
 
     test 'replace containing nil' do
-      assert_equal [0, 2, nil], @vec.replace([true, false, nil], [0]).to_a
+      assert_equal_array [0, 2, nil], @vec.replace([true, false, nil], [0])
     end
 
     test 'replace Arrow::Array' do
       booleans = Arrow::Array.new([true, false, nil])
-      assert_equal [0, 2, nil], @vec.replace(booleans, [0]).to_a
+      assert_equal_array [0, 2, nil], @vec.replace(booleans, [0])
     end
 
     test 'replace with nil' do
-      assert_equal [0, 2, nil], @vec.replace([true, false, true], [0, nil]).to_a # 1 nil
-      assert_equal [nil, 2, nil], @vec.replace([true, false, true], [nil]).to_a # broadcast with nil
-      assert_equal [nil, 2, nil], @vec.replace([true, false, true], nil).to_a # broadcast with nil
+      assert_equal_array [0, 2, nil], @vec.replace([true, false, true], [0, nil]) # 1 nil
+      assert_equal_array [nil, 2, nil], @vec.replace([true, false, true], [nil]) # broadcast with nil
+      assert_equal_array [nil, 2, nil], @vec.replace([true, false, true], nil) # broadcast with nil
       assert_raise(ArgumentError) { @vec.replace([true, false, true]) } # w/o replacer
     end
 
     test 'not align order of replacer to arg' do
-      assert_equal [1, 4, 5], @vec.replace([2, 1], [4, 5]).to_a
+      assert_equal_array [1, 4, 5], @vec.replace([2, 1], [4, 5])
     end
 
     test 'replace with Arrow::BooleanArray' do
-      assert_equal [1, 2, 0], @vec.replace(Arrow::Array.new([false, false, true]), 0).to_a
+      assert_equal_array [1, 2, 0], @vec.replace(Arrow::Array.new([false, false, true]), 0)
     end
 
     test 'replace with Vector' do
-      assert_equal [4, 2, 5], @vec.replace(Arrow::Array.new([true, false, true]), Vector.new(4, 5)).to_a
+      assert_equal_array [4, 2, 5], @vec.replace(Arrow::Array.new([true, false, true]), Vector.new(4, 5))
     end
 
     test 'invalid specifier' do
@@ -124,27 +124,27 @@ class VectorTest < Test::Unit::TestCase
     end
 
     test 'scalar or scalar' do
-      assert_equal [1, 1, 0, nil], @boolean.if_else(1, 0).to_a
+      assert_equal_array [1, 1, 0, nil], @boolean.if_else(1, 0)
       assert_raise(ArgumentError) { @boolean.if_else(1, nil) }
       assert_raise(Arrow::Error::NotImplemented) { @boolean.if_else(1, 'A') }
     end
 
     test 'array or scalar' do
-      assert_equal [1, 2, 0, nil], @boolean.if_else([1, 2, 3, 4], 0).to_a
+      assert_equal_array [1, 2, 0, nil], @boolean.if_else([1, 2, 3, 4], 0)
     end
 
     test 'array or array' do
-      assert_equal [1, 2, 0, nil], @boolean.if_else([1, 2, 3, 4], [0, 0, 0, nil]).to_a
+      assert_equal_array [1, 2, 0, nil], @boolean.if_else([1, 2, 3, 4], [0, 0, 0, nil])
       assert_raise(Arrow::Error::NotImplemented) { @boolean.if_else([1, 2, 3, 4], [nil, nil, nil, nil]) }
-      assert_equal [1, 2, nil, nil], @boolean.if_else([1, 2, 3, 4], Arrow::UInt8Array.new([nil, nil, nil, nil])).to_a
+      assert_equal_array [1, 2, nil, nil], @boolean.if_else([1, 2, 3, 4], Arrow::UInt8Array.new([nil, nil, nil, nil]))
     end
 
     test 'vector or scalar' do
-      assert_equal [1, 2, 0, nil], @boolean.if_else(@integer, 0).to_a
+      assert_equal_array [1, 2, 0, nil], @boolean.if_else(@integer, 0)
     end
 
     test 'vector(integer) or vector(double)' do
-      assert_equal [1.0, 2.0, Float::INFINITY, nil], @boolean.if_else(@integer, @double).to_a
+      assert_equal_array [1.0, 2.0, Float::INFINITY, nil], @boolean.if_else(@integer, @double)
     end
 
     test 'vector(integer) or vector(string)' do
@@ -155,7 +155,7 @@ class VectorTest < Test::Unit::TestCase
   sub_test_case '#primitive_invert' do
     test '#primitive_invert' do
       assert_raise(VectorTypeError) { Vector.new([1]).primitive_invert }
-      assert_equal [false, true, true], Vector.new([true, false, nil]).primitive_invert.to_a
+      assert_equal_array [false, true, true], Vector.new([true, false, nil]).primitive_invert
     end
   end
 
@@ -169,7 +169,7 @@ class VectorTest < Test::Unit::TestCase
 
     test '#shift, amount == 0' do
       vector = Vector.new([1, 2, 3, 4, 5])
-      assert_equal vector.to_a, vector.shift(0)
+      assert_equal_array vector, vector.shift(0)
     end
   end
 end

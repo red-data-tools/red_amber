@@ -3,7 +3,7 @@
 require 'test_helper'
 
 class DataFrameLoadSaveTest < Test::Unit::TestCase
-  include Helper
+  include TestHelper
 
   module SaveLoadFormatTests
     def test_default
