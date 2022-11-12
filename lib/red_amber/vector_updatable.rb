@@ -4,41 +4,47 @@
 # reference: https://arrow.apache.org/docs/cpp/compute.html
 
 module RedAmber
-  # mix-ins for class Vector
+  # mix-in for class Vector
   # Functions to make up some data (especially missing) for new data.
   module VectorUpdatable
     # Replace data
-    # @param arg [Array, Vector, Arrow::Array] index specifier or boolean
-    # @param replacer [Array, Vector, Arrow::Array] new data to replace for.
+    # @param specifier [Array, Vector, Arrow::Array] index or booleans.
+    # @param replacer [Scalar, Array, Vector, Arrow::Array] new data to replace for.
     # @return [Vector] Replaced new Vector.
-    #   If arg has no true, return self.
-    def replace(args, replacer)
-      args =
-        case args
-        when Array
-          args
-        when Range
-          normalize_element(args)
-        else
-          Array(args)
-        end
-      replacer = Array(replacer)
-      return self if args.empty? || args[0].nil?
+    #   If specifier has no true, return self.
+    #
+    def replace(specifier, replacer)
+      vector = parse_to_vector(Array(specifier))
+      return self if vector.empty? || empty?
 
-      vector = parse_to_vector(args)
-      replacer = nil if replacer.empty?
       booleans =
         if vector.boolean?
-          return self unless vector.any
-
           vector
         elsif vector.numeric?
-          replacer.sort_by! { |x| args[replacer.index(x)] } if replacer # rubocop:disable Style/SafeNavigation
           Vector.new(indices).is_in(vector)
         else
-          raise VectorArgumentError, "Invalid data type #{args}"
+          raise VectorArgumentError, "Invalid data type #{specifier}"
         end
-      replace_with(booleans, replacer)
+      return self if booleans.sum.zero?
+
+      replacer_array =
+        case replacer
+        in []
+          return self
+        in nil | [nil]
+          return replace_to_nil(booleans.data)
+        in Arrow::Array
+        # nop
+        in Vector
+          replacer.data
+        in Array
+          Arrow::Array.new(replacer)
+        else # Broadcast scalar to Array
+          Arrow::Array.new(Array(replacer) * booleans.to_a.count(true))
+        end
+      raise VectorArgumentError, 'Replacements size unmatch' if booleans.sum != replacer_array.length
+
+      replace_with(booleans.data, replacer_array)
     end
 
     # (related functions)
@@ -76,52 +82,41 @@ module RedAmber
 
     private
 
-    # [Ternary]: replace_with(booleans, replacements) => vector
-    # Replace items selected with a boolean mask
+    # Replace elements selected with a boolean mask
     #
-    # (from Arrow C++ inline doc.)
-    # Given an array and a boolean mask (either scalar or of equal length),
-    # along with replacement values (either scalar or array),
-    # each element of the array for which the corresponding mask element is
-    # true will be replaced by the next value from the replacements,
-    # or with null if the mask is null.
-    # Hence, for replacement arrays, len(replacements) == sum(mask == true).
+    # @param boolean_mask [Arrow::BooleanArray] Boolean mask which indicates the position to be replaced.
+    #   - Position with true will be replaced.
+    #   - Position with nil will be nil.
+    #
+    # @param replacer [Arrow::Array] Values after replaced
+    #   (either scalar or array). If Array is given, original values are replaced by
+    #   each element of the array at the corresponding position of mask element.
+    #   - `replacer.size` must be equal to `mask.count(true)`.
+    #   - Types of self and replacer must be same
+    #
+    # @return [Vector] Replaced vector.
+    #   Type of returned Vector is upcasted if needed.
+    #
+    def replace_with(boolean_mask, replacer)
+      raise VectorArgumentError, 'Booleans size unmatch' if boolean_mask.length != size
+      raise VectorArgumentError, 'Booleans not have any `true`' unless boolean_mask.any?
 
-    def replace_with(booleans, replacer = nil)
-      specifier =
-        if booleans.is_a?(Arrow::BooleanArray)
-          booleans
-        elsif booleans.is_a?(Vector) && booleans.boolean?
-          booleans.data
-        elsif booleans.is_a?(Array) && booleans?(booleans)
-          Arrow::BooleanArray.new(booleans)
-        else
-          raise VectorTypeError, 'Not a valid type'
-        end
-      raise VectorArgumentError, 'Booleans size unmatch' if specifier.length != size
-      raise VectorArgumentError, 'Booleans not have any `true`' unless specifier.any?
+      values = replacer.class.new(data) # Upcast
 
-      r = Array(replacer) # scalar to [scalar]
-      r = [nil] if r.empty?
+      datum = find(:replace_with_mask).execute([values, boolean_mask, replacer])
+      Vector.new(datum.value)
+    end
 
-      replacer =
-        if r.size == 1
-          case replacer
-          when Arrow::Array then replacer
-          when Vector then replacer.data
-          else
-            Arrow::Array.new(r * specifier.to_a.count(true)) # broadcast
-          end
-        else
-          Arrow::Array.new(r)
-        end
-      replacer = data.class.new(replacer) if replacer.uniq == [nil]
-
-      raise VectorArgumentError, 'Replacements size unmatch' if Array(specifier).count(true) != replacer.length
-
-      values = replacer.class.new(data)
-
-      datum = find('replace_with_mask').execute([values, specifier, replacer])
+    # Replace elements selected with a boolean mask by nil
+    #
+    # @param boolean_mask [Arrow::BooleanArray] Boolean mask which indicates the position to be replaced.
+    #   - Position with true will be replaced by nil
+    #   - Position with nil will remain as nil.
+    # @return [Vector] Replaced vector.
+    #
+    def replace_to_nil(boolean_mask)
+      nil_array = data.class.new([nil] * size) # Casted nil Array
+      datum = find(:if_else).execute([boolean_mask, nil_array, data])
       Vector.new(datum.value)
     end
   end

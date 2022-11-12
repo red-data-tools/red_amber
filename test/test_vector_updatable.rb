@@ -18,9 +18,17 @@ class VectorTest < Test::Unit::TestCase
       @vec = Vector.new([1, 2, 3])
     end
 
+    test 'empty specifier' do
+      assert_equal @vec.to_a, @vec.replace([], [0])
+    end
+
+    test 'empty replacer' do
+      assert_equal @vec.to_a, @vec.replace([0], [])
+    end
+
     test 'replace UInt argument' do
       assert_equal [0, 2, 0], @vec.replace([0, 2], 0).to_a
-      assert_equal [0, 2, 0], @vec.replace([2, 0], [0]).to_a
+      assert_raise(VectorArgumentError) { @vec.replace([2, 0], [0]) } # Replacements size unmatch
       assert_equal [0, 2, 4], @vec.replace([0, 2], [0, 4]).to_a
       assert_raise(VectorArgumentError) { @vec.replace([0, 2], [0, 0, 0]) } # size mismatch
       assert_raise(VectorArgumentError) { @vec.replace([0, 1, 2], [0, 0]) } # size mismatch
@@ -30,7 +38,12 @@ class VectorTest < Test::Unit::TestCase
 
     test 'replace Int/Range argument mixture' do
       assert_equal [0, 0, 0], @vec.replace([0..1, 2], 0).to_a
-      assert_equal [1, 2, 0], @vec.replace([2, -1], 0).to_a
+    end
+
+    test 'reduced index' do
+      assert_equal [1, 2, 0], @vec.replace([2, 2], 0).to_a # equals to replace([2], [0])
+      assert_equal [1, 2, 0], @vec.replace([2, -1], 0).to_a # ibid.
+      assert_equal [1, 3, 4], @vec.replace([2, 1, -1], [3, 4]).to_a # equals to replace([1, 2], [3, 4])
     end
 
     test 'replace Range' do
@@ -50,7 +63,7 @@ class VectorTest < Test::Unit::TestCase
 
     test 'replace multi/broadcast' do
       assert_equal [0, 2, 0], @vec.replace([true, false, true], [0, 0]).to_a
-      assert_equal [0, 2, 0], @vec.replace([true, false, true], [0]).to_a
+      assert_raise(VectorArgumentError) { @vec.replace([true, false, true], [0]) } # Replacements size unmatch
       assert_equal [0, 2, 0], @vec.replace([true, false, true], 0).to_a
     end
 
@@ -75,8 +88,20 @@ class VectorTest < Test::Unit::TestCase
       assert_raise(ArgumentError) { @vec.replace([true, false, true]) } # w/o replacer
     end
 
-    test 'align order of replacer to arg' do
-      assert_equal [1, 5, 4], @vec.replace([2, 1], [4, 5]).to_a
+    test 'not align order of replacer to arg' do
+      assert_equal [1, 4, 5], @vec.replace([2, 1], [4, 5]).to_a
+    end
+
+    test 'replace with Arrow::BooleanArray' do
+      assert_equal [1, 2, 0], @vec.replace(Arrow::Array.new([false, false, true]), 0).to_a
+    end
+
+    test 'replace with Vector' do
+      assert_equal [4, 2, 5], @vec.replace(Arrow::Array.new([true, false, true]), Vector.new(4, 5)).to_a
+    end
+
+    test 'invalid specifier' do
+      assert_raise(VectorArgumentError) { @vec.replace(%w[A B C], 0) }
     end
   end
 
