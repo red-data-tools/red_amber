@@ -202,7 +202,8 @@ module RedAmber
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    #   :type is one of :left_semi, :right_semi, :left_anti, :right_anti inner, :left_outer, :right_outer, :full_outer.
+    #   :type is one of
+    #     :left_semi, :right_semi, :left_anti, :right_anti inner, :left_outer, :right_outer, :full_outer.
     def join(right, join_keys = nil, type: :inner, suffix: '.1', left_outputs: nil, right_outputs: nil)
       case right
       when DataFrame
@@ -250,15 +251,13 @@ module RedAmber
         table.join(right.table, join_keys, type: type, left_outputs: left_outputs, right_outputs: right_outputs)
       left_indexes = [*0...n_keys]
       right_indexes = [*((right.keys - join_keys).map { |key| right.keys.index(key) + n_keys })]
-      selected_indexes =
-        case type
-        when :left_semi, :left_anti
-          left_indexes
-        when :right_semi, :right_anti
-          right_indexes
-        else
-          left_indexes.concat(right_indexes)
-        end
+
+      case type
+      when :left_semi, :left_anti, :right_semi, :right_anti
+        return DataFrame.new(table_output)
+      else
+        selected_indexes = left_indexes.concat(right_indexes)
+      end
       merged_columns = join_keys.map do |key|
         i = keys.index(key)
         merge_column(table_output[i], table_output[n_keys + i], type)

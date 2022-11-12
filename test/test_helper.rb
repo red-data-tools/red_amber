@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'simplecov'
+SimpleCov.start
+
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 require 'red_amber'
 
@@ -11,7 +14,7 @@ require 'zlib'
 
 require 'test-unit'
 
-module Helper
+module TestHelper
   def entity_path
     (Pathname.new(__dir__) / 'entity').expand_path
   end

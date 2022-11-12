@@ -3,8 +3,8 @@
 require 'test_helper'
 
 class VectorTest < Test::Unit::TestCase
+  include TestHelper
   include RedAmber
-  include Helper
 
   sub_test_case('Basic properties') do
     data(keep: true) do
@@ -25,18 +25,18 @@ class VectorTest < Test::Unit::TestCase
 
     test 'initialize' do
       expect, _, _, array = data
-      actual = Vector.new(array).to_a
-      assert_equal expect, actual
+      actual = Vector.new(array)
+      assert_equal_array expect, actual
     end
 
     test 'initialize by an expanded Array' do
       array = [1, 2, 3]
-      assert_equal array, Vector.new(*array).to_a
+      assert_equal_array array, Vector.new(*array)
     end
 
     test 'initialize by Numo::NArray' do
       numo = Numo::Int8.new(3).seq(-1)
-      assert_equal [-1, 0, 1], Vector.new(numo).to_a
+      assert_equal_array [-1, 0, 1], Vector.new(numo)
     end
 
     test '#to_arrow_array' do
@@ -51,7 +51,7 @@ class VectorTest < Test::Unit::TestCase
     end
 
     test '#indices' do
-      assert_equal [0, 1, 2], Vector.new(%w[A B C]).indices
+      assert_equal_array [0, 1, 2], Vector.new(%w[A B C]).indices
     end
 
     test '#to_ary' do
@@ -93,7 +93,7 @@ class VectorTest < Test::Unit::TestCase
       vector = Vector.new(array)
       assert_kind_of Enumerator, vector.map
       assert_kind_of Vector, vector.map(&:to_s)
-      assert_equal expect.map(&:to_s), vector.map(&:to_s).to_a
+      assert_equal_array expect.map(&:to_s), vector.map(&:to_s)
     end
   end
 

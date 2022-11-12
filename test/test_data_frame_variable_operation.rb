@@ -3,7 +3,9 @@
 require 'test_helper'
 
 class DataFrameVariableOperationTest < Test::Unit::TestCase
+  include TestHelper
   include RedAmber
+
   setup do
     @df = DataFrame.new(
       index: [0, 1, 2, 3, nil],

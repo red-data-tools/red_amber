@@ -20,9 +20,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Prepare Apache Arrow on Linux
-        if: |
-          runner.os == 'Linux'
+        if: runner.os == 'Linux'
         run: |
           sudo apt update
           sudo apt install -y -V ca-certificates lsb-release wget
@@ -32,19 +32,28 @@ jobs:
           sudo apt install -y -V libarrow-dev
           sudo apt install -y -V gir1.2-arrow-1.0
           sudo apt install -y -V libarrow-glib-dev
+
       - name: Prepare Apache Arrow on macOS
-        if: |
-          runner.os == 'macOS'
+        if: runner.os == 'macOS'
         run: |
           brew update
           brew install apache-arrow
+          brew install gobject-introspection
           brew install apache-arrow-glib
+
       - name: Set up Ruby ${{ matrix.ruby }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          # bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - name: Install dependencies
-        run: bundle install
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
       - name: Run test
         run: TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
+
+      - name: Check test coverage
+        if: runner.os == 'Linux' && matrix.ruby == '3.1'
+        uses: joshmfrankel/simplecov-check-action@main
+        with:
+          minimum_suite_coverage: 98
+          minimum_file_coverage: 90
+          github_token: ${{ secrets.GITHUB_TOKEN }}

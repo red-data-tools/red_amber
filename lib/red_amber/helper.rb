@@ -9,20 +9,8 @@ module RedAmber
       num > 1 ? 's' : ''
     end
 
-    def out_of_range?(indeces)
-      indeces.max >= size || indeces.min < -size
-    end
-
-    def integers?(enum)
-      enum.all?(Integer)
-    end
-
     def booleans?(enum)
       enum.all? { |e| e.is_a?(TrueClass) || e.is_a?(FalseClass) || e.is_a?(NilClass) }
-    end
-
-    def create_dataframe_from_vector(key, vector)
-      DataFrame.new(key => vector.data)
     end
 
     def parse_to_vector(args, vsize: size)

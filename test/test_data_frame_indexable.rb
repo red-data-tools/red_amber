@@ -3,7 +3,9 @@
 require 'test_helper'
 
 class DataFrameIndexableTest < Test::Unit::TestCase
+  include TestHelper
   include RedAmber
+
   setup do
     @df = RedAmber::DataFrame.new(
       {
@@ -27,17 +29,17 @@ class DataFrameIndexableTest < Test::Unit::TestCase
     end
 
     test 'single key' do
-      assert_equal [2, 4, 0, 1, 3], @df.sort_indices(:index).to_a
-      assert_equal [3, 0, 4, 2, 1], @df.sort_indices('float').to_a
-      assert_equal [3, 1, 4, 0, 2], @df.sort_indices('+string').to_a
-      assert_equal [1, 3, 2, 4, 0], @df.sort_indices('-bool').to_a
+      assert_equal_array [2, 4, 0, 1, 3], @df.sort_indices(:index)
+      assert_equal_array [3, 0, 4, 2, 1], @df.sort_indices('float')
+      assert_equal_array [3, 1, 4, 0, 2], @df.sort_indices('+string')
+      assert_equal_array [1, 3, 2, 4, 0], @df.sort_indices('-bool')
     end
 
     test 'multiple key' do
-      assert_equal [4, 2, 0, 1, 3], @df.sort_indices(:index, 'float').to_a
-      assert_equal [3, 0, 4, 2, 1], @df.sort_indices('+float', '-string').to_a
-      assert_equal [0, 1, 4, 3, 2], @df.sort_indices('-string', '-bool').to_a
-      assert_equal [1, 3, 2, 4, 0], @df.sort_indices('-bool', '-index').to_a
+      assert_equal_array [4, 2, 0, 1, 3], @df.sort_indices(:index, 'float')
+      assert_equal_array [3, 0, 4, 2, 1], @df.sort_indices('+float', '-string')
+      assert_equal_array [0, 1, 4, 3, 2], @df.sort_indices('-string', '-bool')
+      assert_equal_array [1, 3, 2, 4, 0], @df.sort_indices('-bool', '-index')
     end
   end
 

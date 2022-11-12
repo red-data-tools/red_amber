@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class DataFrameTest < Test::Unit::TestCase
+  include TestHelper
   include RedAmber
 
   sub_test_case 'Constructor' do
@@ -45,6 +46,10 @@ class DataFrameTest < Test::Unit::TestCase
       require 'rover'
       rover = Rover::DataFrame.new(h)
       assert_equal d, DataFrame.new(rover)
+    end
+
+    test 'invalid argument' do
+      assert_raise(DataFrameTypeError) { DataFrame.new(Object.new) }
     end
 
     test 'Select observations by invalid type' do
@@ -91,8 +96,8 @@ class DataFrameTest < Test::Unit::TestCase
       hash, df, = data
       size = hash.empty? ? 0 : hash.values.first.size
       assert_true df.indices.is_a?(Vector)
-      assert_equal (0...size).to_a, df.indices
-      assert_equal (1..size).to_a, df.indices(1)
+      assert_equal [*0...size], df.indices
+      assert_equal [*1..size], df.indices(1)
       assert_equal ('a'..).take(size), df.indices('a')
     end
 
@@ -230,7 +235,7 @@ class DataFrameTest < Test::Unit::TestCase
 
     test 'key as a method' do
       assert_raise(DataFrameArgumentError) { @df.key_not_exist }
-      assert_equal [1, 2, 3], @df.number.to_a
+      assert_equal_array [1, 2, 3], @df.number
     end
 
     test 'key as a method in block' do

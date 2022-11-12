@@ -3,6 +3,7 @@
 require 'test_helper'
 
 class DataFrameDisplayableTest < Test::Unit::TestCase
+  include TestHelper
   include RedAmber
 
   sub_test_case '#concatenate' do
@@ -137,6 +138,10 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         )
       end
 
+      test 'illegal right object' do
+        assert_raise(DataFrameArgumentError) { @df1.join(@right1.to_h) }
+      end
+
       test '#inner_join with a join_key' do
         expected = DataFrame.new(
           KEY: %w[A B],
@@ -211,6 +216,22 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         assert_equal expected, @df1.anti_join(@right1, 'KEY')
         assert_equal expected, @df1.anti_join(@right1, [:KEY])
         assert_equal expected, @df1.anti_join(@right1.table, :KEY)
+      end
+
+      test 'right_semi' do
+        expected = DataFrame.new(
+          KEY: %w[A B],
+          Y: [3, 2]
+        )
+        assert_equal expected, @df1.join(@right1, :KEY, type: :right_semi)
+      end
+
+      test 'right_anti' do
+        expected = DataFrame.new(
+          KEY: %w[D],
+          Y: [1]
+        )
+        assert_equal expected, @df1.join(@right1, :KEY, type: :right_anti)
       end
     end
 

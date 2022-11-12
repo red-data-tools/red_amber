@@ -1,8 +1,9 @@
 /.bundle/
 /.yardoc/
+/benchmark/cache
+/coverage/
 /doc/yard/
 /pkg/
 /spec/reports/
 /tmp/
-/benchmark/cache
 Gemfile.lock

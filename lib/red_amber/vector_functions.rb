@@ -187,12 +187,6 @@ module RedAmber
     alias_method :ne, :not_equal
 
     def coerce(other)
-      case other
-      when Vector, Array, Arrow::Array
-        raise VectorArgumentError, "Size unmatch: #{size} != #{other.length}" unless size == other.length
-
-        [Vector.new(Array(other)), self]
-      end
       [Vector.new(Array(other) * size), self]
     end
 
@@ -271,8 +265,6 @@ module RedAmber
         find(function).execute([data, other.data], options)
       when Arrow::Array, Arrow::ChunkedArray, Arrow::Scalar, Array, Numeric, String, TrueClass, FalseClass
         find(function).execute([data, other], options)
-      else
-        raise VectorArgumentError, "Operand is not supported: #{other.class}"
       end
     end
 
