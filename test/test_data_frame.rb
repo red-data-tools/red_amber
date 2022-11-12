@@ -48,6 +48,10 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal d, DataFrame.new(rover)
     end
 
+    test 'invalid argument' do
+      assert_raise(DataFrameTypeError) { DataFrame.new(Object.new) }
+    end
+
     test 'Select observations by invalid type' do
       int32_array = Arrow::Int32Array.new([1, 2])
       assert_raise(DataFrameTypeError) { DataFrame.new(int32_array) }

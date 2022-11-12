@@ -48,8 +48,6 @@ module RedAmber
         @table = table
       in [Arrow::Table => table]
         @table = table
-      in [DataFrame => dataframe]
-        @table = dataframe.table
       in [rover_or_hash]
         begin
           # Accepts Rover::DataFrame or Hash
