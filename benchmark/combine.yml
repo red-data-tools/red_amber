@@ -1,5 +1,7 @@
 # --repeat-count 3
 
+loop_count: 3
+
 contexts:
   - name: HEAD
     prelude: |
@@ -9,19 +11,53 @@ contexts:
 
 prelude: |
   require 'red_amber'
+  include RedAmber
   require 'datasets-arrow'
 
-  ds = Datasets::Rdatasets.new('tidyr', 'billboard')
-  df = RedAmber::DataFrame.new(ds.to_arrow)
-  sub_df = df.pick(:track, df.keys.select{ |k| k.start_with? 'wk' })
-  long_df = df.to_long(:artist, :track, :'date.entered', name: :week, value: :rank)
+  package = 'nycflights13'
+  airlines = DataFrame.new(Datasets::Rdatasets.new(package, 'airlines'))
+  airports = DataFrame.new(Datasets::Rdatasets.new(package, 'airports'))
+  flights  = DataFrame.new(Datasets::Rdatasets.new(package, 'flights'))
+    .pick(%i[month day carrier flight tailnum origin dest air_time distance])
+  planes   = DataFrame.new(Datasets::Rdatasets.new(package, 'planes'))
+  weather  = DataFrame.new(Datasets::Rdatasets.new(package, 'weather'))
+
+  flights_Q1 = flights.slice { month <= 3 }
+  flights_Q2 = flights.slice { month > 3 }
+
+  flights_1_2 = flights_Q1.slice { month.is_in(1, 2) }
+  flights_1_3 = flights_Q1.slice { month.is_in(1, 3) }
+
+  flights_left = flights_Q1.pick(...5)
+  flights_right = flights_Q1.pick(5..)
 
 benchmark:
-  'C1: Combine': |
-    
+  'C01: Inner join on flights_Q1 by carrier': |
+    flights_Q1.inner_join(airlines, :carrier)
 
-  'C2: Combine': |
-    
+  'C02: Full join on flights_Q1 by planes': |
+    flights_Q1.full_join(planes, :tailnum)
 
-  'C3: Combine': |
-    
+  'C03: Left join on flights_Q1 by planes': |
+    flights_Q1.left_join(planes, :tailnum)
+
+  'C04: Semi join on flights_Q1 by planes': |
+    flights_Q1.semi_join(planes, :tailnum)
+
+  'C05: Anti join on flights_Q1 by planes': |
+    flights_Q1.anti_join(planes, :tailnum)
+
+  'C06: Intersection of flights_1_2 and flights_1_3': |
+    flights_1_2.intersect(flights_1_3)
+
+  'C07: Union of flights_1_2 and flights_1_3': |
+    flights_1_2.union(flights_1_3)
+
+  'C08: Difference between flights_1_2 and flights_1_3': |
+    flights_1_2.difference(flights_1_3)
+
+  'C09: Concatenate flight_Q1 on flight_Q2': |
+    flights_Q1.concatenate(flights_Q2)
+
+  'C10: Merge flights_Q1_right on flights_Q1_left': |
+    flights_left.merge(flights_right)
