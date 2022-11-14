@@ -30,6 +30,7 @@ gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 
 Install requirements before you install Red Amber.
 
+- Apache Arrow (~> 10.0.0)
 - Apache Arrow GLib (~> 10.0.0)
 - Apache Parquet GLib (~> 10.0.0)  # If you use IO from/to parquet
 
@@ -195,7 +196,8 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## Jupyter notebook
 
-[73 Examples of Red Amber](binder/examples_of_red_amber.ipynb) shows more examples in jupyter notebook.
+[83 Examples of Red Amber](https://github.com/heronshoes/docker-stacks/blob/RedAmber-binder/binder/examples_of_red_amber.ipynb)
+([raw file](https://raw.githubusercontent.com/heronshoes/docker-stacks/RedAmber-binder/binder/examples_of_red_amber.ipynb)) shows more examples in jupyter notebook.
 
 You can try this notebook on [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb). 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb)
