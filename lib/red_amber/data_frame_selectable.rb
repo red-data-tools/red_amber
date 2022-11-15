@@ -17,7 +17,7 @@ module RedAmber
         raise DataFrameArgumentError, "Size is not match in booleans: #{args}"
       end
       return take_by_array(vector) if vector.numeric?
-      return select_vars_by_keys(vector.to_a.map(&:to_sym)) if vector.string? || vector.type == :dictionary
+      return select_vars_by_keys(vector.to_a.map(&:to_sym)) if vector.string? || vector.dictionary?
 
       raise DataFrameArgumentError, "Invalid argument: #{args}"
     end

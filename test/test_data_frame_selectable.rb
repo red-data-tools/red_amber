@@ -21,6 +21,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       hash = { a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3] }
       df_range = DataFrame.new(hash)
       assert_equal hash, df_range[:a..:c].to_h
+      assert_equal hash, df_range[:a..:b, :c].to_h
       hash.delete(:c)
       assert_equal hash, df_range[:a...:c].to_h
       assert_raise(RangeError) { df_range[:a..] }
