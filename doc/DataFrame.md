@@ -1333,7 +1333,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ##### `inner_join(other, join_keys = nil, suffix: '.1')`
 
-  Join data, leaving only the matching rows.
+  Join data, leaving only the matching records.
 
   ```ruby
   df.inner_join(other, :KEY)
@@ -1347,7 +1347,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ##### `full_join(other, join_keys = nil, suffix: '.1')`
 
-  Join data, leaving all rows.
+  Join data, leaving all records.
 
   ```ruby
   df.full_join(other, :KEY)
@@ -1363,7 +1363,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ##### `left_join(other, join_keys = nil, suffix: '.1')`
 
-  Join matching values from right to self.
+  Join matching values to self from other.
 
   ```ruby
   df.left_join(other, :KEY)
@@ -1378,7 +1378,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ##### `right_join(other, join_keys = nil, suffix: '.1')`
 
-  Join matching values from self to right.
+  Join matching values from self to other.
 
   ```ruby
   df.right_join(other, :KEY)
@@ -1395,7 +1395,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ##### `semi_join(other, join_keys = nil, suffix: '.1')`
 
-  Return rows of self that have a match in right.
+  Return records of self that have a match in other.
 
   ```ruby
   df.semi_join(other, :KEY)
@@ -1409,7 +1409,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ##### `anti_join(other, join_keys = nil, suffix: '.1')`
 
-  Return rows of self that do not have a match in right.
+  Return records of self that do not have a match in other.
 
   ```ruby
   df.anti_join(other, :KEY)
@@ -1453,7 +1453,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ##### `intersect(other)`
 
-  Select rows appearing in both self and other.
+  Select records appearing in both self and other.
 
   ```ruby
   df.intersect(other, :KEY)
@@ -1466,7 +1466,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ##### `union(other)`
 
-  Select rows appearing in self or other.
+  Select records appearing in self or other.
 
   ```ruby
   df.union(other, :KEY)
@@ -1483,7 +1483,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
 
 ##### `difference(other)`
 
-  Select rows appearing in self but not in other.
+  Select records appearing in self but not in other.
 
   It has an alias `setdiff`.
 

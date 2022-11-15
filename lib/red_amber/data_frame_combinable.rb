@@ -36,12 +36,12 @@ module RedAmber
     alias_method :concat, :concatenate
     alias_method :bind_rows, :concatenate
 
-    # Merge other DataFrame or Table from right.
+    # Merge other DataFrame or Table from other.
     # - Self and other must have same size.
     # - Self and other do not share the same key.
     #   - If they share any keys, raise Error.
     # @param other [DataFrame, Arrow::Table, Array<DataFrame, Arrow::Table>]
-    #   DataFrame/Table to concatenate from the right of self.
+    #   DataFrame/Table to concatenate.
     # @return [DataFrame]
     #   Merged dataframe.
     def merge(*other)
@@ -80,68 +80,68 @@ module RedAmber
 
     # Mutating joins
 
-    # Join data, leaving only the matching rows.
+    # Join data, leaving only the matching records.
     #
-    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def inner_join(right, join_keys = nil, suffix: '.1')
-      join(right, join_keys, type: :inner, suffix: suffix)
+    def inner_join(other, join_keys = nil, suffix: '.1')
+      join(other, join_keys, type: :inner, suffix: suffix)
     end
 
-    # Join data, leaving all rows.
+    # Join data, leaving all records.
     #
-    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def full_join(right, join_keys = nil, suffix: '.1')
-      join(right, join_keys, type: :full_outer, suffix: suffix)
+    def full_join(other, join_keys = nil, suffix: '.1')
+      join(other, join_keys, type: :full_outer, suffix: suffix)
     end
 
     alias_method :outer_join, :full_join
 
-    # Join matching values from right to self.
+    # Join matching values to self from other.
     #
-    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def left_join(right, join_keys = nil, suffix: '.1')
-      join(right, join_keys, type: :left_outer, suffix: suffix)
+    def left_join(other, join_keys = nil, suffix: '.1')
+      join(other, join_keys, type: :left_outer, suffix: suffix)
     end
 
-    # Join matching values from self to right.
+    # Join matching values from self to other.
     #
-    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def right_join(right, join_keys = nil, suffix: '.1')
-      join(right, join_keys, type: :right_outer, suffix: suffix)
+    def right_join(other, join_keys = nil, suffix: '.1')
+      join(other, join_keys, type: :right_outer, suffix: suffix)
     end
 
     # Filtering joins
 
-    # Return rows of self that have a match in right.
+    # Return records of self that have a match in other.
     #
-    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def semi_join(right, join_keys = nil, suffix: '.1')
-      join(right, join_keys, type: :left_semi, suffix: suffix)
+    def semi_join(other, join_keys = nil, suffix: '.1')
+      join(other, join_keys, type: :left_semi, suffix: suffix)
     end
 
-    # Return rows of self that do not have a match in right.
+    # Return records of self that do not have a match in other.
     #
-    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
-    def anti_join(right, join_keys = nil, suffix: '.1')
-      join(right, join_keys, type: :left_anti, suffix: suffix)
+    def anti_join(other, join_keys = nil, suffix: '.1')
+      join(other, join_keys, type: :left_anti, suffix: suffix)
     end
 
     # Set operations
@@ -156,7 +156,7 @@ module RedAmber
       keys == other.keys
     end
 
-    # Select rows appearing in both self and other.
+    # Select records appearing in both self and other.
     #
     # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @return [DataFrame] Joined dataframe.
@@ -168,7 +168,7 @@ module RedAmber
       join(other, keys, type: :inner)
     end
 
-    # Select rows appearing in self or other.
+    # Select records appearing in self or other.
     #
     # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @return [DataFrame] Joined dataframe.
@@ -180,7 +180,7 @@ module RedAmber
       join(other, keys, type: :full_outer)
     end
 
-    # Select rows appearing in self but not in other.
+    # Select records appearing in self but not in other.
     #
     # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @return [DataFrame] Joined dataframe.
@@ -198,24 +198,24 @@ module RedAmber
 
     # Join other dataframe
     #
-    # @param right [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
     # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
     # @return [DataFrame] Joined dataframe.
     #
     #   :type is one of
     #     :left_semi, :right_semi, :left_anti, :right_anti inner, :left_outer, :right_outer, :full_outer.
-    def join(right, join_keys = nil, type: :inner, suffix: '.1', left_outputs: nil, right_outputs: nil)
-      case right
+    def join(other, join_keys = nil, type: :inner, suffix: '.1', left_outputs: nil, right_outputs: nil)
+      case other
       when DataFrame
         # Nop
       when Arrow::Table
-        right = DataFrame.new(right)
+        other = DataFrame.new(other)
       else
-        raise DataFrameArgumentError, 'right must be a DataFrame or an Arrow::Table'
+        raise DataFrameArgumentError, 'other must be a DataFrame or an Arrow::Table'
       end
 
       # Support natural keys (implicit common keys)
-      natural_keys = keys.intersection(right.keys)
+      natural_keys = keys.intersection(other.keys)
       raise DataFrameArgumentError, "#{join_keys} are not common keys" if natural_keys.empty?
 
       join_keys =
@@ -242,15 +242,15 @@ module RedAmber
           end
           hash[key] = new_key
         end
-        right = right.rename(renamer)
+        other = other.rename(renamer)
       end
 
-      # Red Arrow's #join returns duplicated join_keys from self and right as of v9.0.0 .
+      # Red Arrow's #join returns duplicated join_keys from self and other as of v9.0.0 .
       # Temporally merge key vectors here to workaround.
       table_output =
-        table.join(right.table, join_keys, type: type, left_outputs: left_outputs, right_outputs: right_outputs)
+        table.join(other.table, join_keys, type: type, left_outputs: left_outputs, right_outputs: right_outputs)
       left_indexes = [*0...n_keys]
-      right_indexes = [*((right.keys - join_keys).map { |key| right.keys.index(key) + n_keys })]
+      right_indexes = [*((other.keys - join_keys).map { |key| other.keys.index(key) + n_keys })]
 
       case type
       when :left_semi, :left_anti, :right_semi, :right_anti
