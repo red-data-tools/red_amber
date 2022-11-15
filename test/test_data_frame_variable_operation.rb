@@ -8,6 +8,12 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
 
   setup do
     @df = DataFrame.new(
+      a: [1, 2, 3],
+      b: [0.0, Float::NAN, nil],
+      c: %w[A B C],
+      d: [true, false, nil]
+    )
+    @df2 = DataFrame.new(
       index: [0, 1, 2, 3, nil],
       float: [0.0, 1.1,  2.2, Float::NAN, nil],
       string: ['A', 'B', 'C', 'D', nil],
@@ -28,87 +34,94 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_true @df.pick.empty? # pick nothing
       assert_equal @df.tdr_str, @df.pick(@df.keys).tdr_str # pick all
 
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 1 Vector
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 1 Vector
         Vector : 1 numeric
-        # key    type  level data_preview
-        0 :index uint8     5 [0, 1, 2, 3, nil], 1 nil
-      OUTPUT
-      assert_equal str, @df.pick(:index).tdr_str
+        # key type  level data_preview
+        0 :a  uint8     3 [1, 2, 3]
+      STR
+      assert_equal str, @df.pick(:a).tdr_str
       assert_equal str, @df.pick(0).tdr_str
 
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 2 Vectors
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
         Vectors : 2 numeric
-        # key    type   level data_preview
-        0 :index uint8      5 [0, 1, 2, 3, nil], 1 nil
-        1 :float double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-      OUTPUT
-      assert_equal str, @df.pick(:index, :float).tdr_str
-      assert_equal str, @df.pick(%i[index float]).tdr_str
+        # key type   level data_preview
+        0 :a  uint8      3 [1, 2, 3]
+        1 :b  double     3 [0.0, NaN, nil], 1 NaN, 1 nil
+      STR
+      assert_equal str, @df.pick(:a, :b).tdr_str
+      assert_equal str, @df.pick(%i[a b]).tdr_str
       assert_equal str, @df.pick(0, 1).tdr_str
       assert_equal str, @df.pick([0, 1]).tdr_str
       assert_equal str, @df.pick([0, -3]).tdr_str
       assert_equal str, @df.pick(0..1).tdr_str
+      assert_equal str, @df.pick(:a..:b).tdr_str
       assert_equal str, @df.pick(0...2).tdr_str
       assert_equal str, @df.pick(..1).tdr_str
+      # assert_equal str, @df.pick(..:b).tdr_str
       assert_raise(DataFrameArgumentError) { @df.pick(0..5) }
     end
 
     test 'pick by endless Range' do
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 2 Vectors
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
         Vectors : 1 string, 1 boolean
-        # key     type    level data_preview
-        0 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        1 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-      OUTPUT
+        # key type    level data_preview
+        0 :c  string      3 ["A", "B", "C"]
+        1 :d  boolean     3 [true, false, nil], 1 nil
+      STR
       assert_equal str, @df.pick(2..).tdr_str
       assert_equal str, @df.pick(-2..).tdr_str
       assert_equal str, @df.pick(2...).tdr_str
       assert_equal str, @df.pick(2..-1).tdr_str
+      # assert_equal str, @df.pick(:c..).tdr_str
     end
 
     test 'pick by block' do
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 1 Vector
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 1 Vector
         Vector : 1 boolean
-        # key   type    level data_preview
-        0 :bool boolean     3 {true=>2, false=>2, nil=>1}
-      OUTPUT
+        # key type    level data_preview
+        0 :d  boolean     3 [true, false, nil], 1 nil
+      STR
       assert_true @df.pick {}.empty? # pick nothing
-      assert_equal str, @df.pick { :bool }.tdr_str
+      assert_equal str, @df.pick { :d }.tdr_str
+      assert_equal str, @df.pick { [:d] }.tdr_str
       assert_equal str, @df.pick { 3 }.tdr_str
+      assert_equal str, @df.pick { [3] }.tdr_str
       assert_equal str, @df.pick { vectors.map(&:boolean?) }.tdr_str
 
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 2 Vectors
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
         Vectors : 2 numeric
-        # key    type   level data_preview
-        0 :index uint8      5 [0, 1, 2, 3, nil], 1 nil
-        1 :float double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-      OUTPUT
-      assert_equal str, @df.pick { %i[index float] }.tdr_str
+        # key type   level data_preview
+        0 :a  uint8      3 [1, 2, 3]
+        1 :b  double     3 [0.0, NaN, nil], 1 NaN, 1 nil
+      STR
+      assert_equal str, @df.pick { %i[a b] }.tdr_str
       assert_equal str, @df.pick { vectors.map(&:numeric?) }.tdr_str
       assert_equal str, @df.pick { [0, 1] }.tdr_str
     end
 
     test 'pick by mixed args' do
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 3 Vectors
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 3 Vectors
         Vectors : 1 numeric, 1 string, 1 boolean
-        # key     type    level data_preview
-        0 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        1 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-        2 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
-      OUTPUT
+        # key type    level data_preview
+        0 :c  string      3 ["A", "B", "C"]
+        1 :d  boolean     3 [true, false, nil], 1 nil
+        2 :a  uint8       3 [1, 2, 3]
+      STR
       assert_equal str, @df.pick(2..-1, 0).tdr_str
+      assert_equal str, @df.pick(:c..:d, :a).tdr_str
       assert_equal str, @df.pick { [2..-1, 0] }.tdr_str
+      assert_equal str, @df.pick { [:c..:d, :a] }.tdr_str
     end
 
     test 'pick duplicate keys' do
       assert_raise(DataFrameArgumentError) { @df.pick(0, 1, 0) }
-      assert_raise(DataFrameArgumentError) { @df.pick { %i[index index] } }
+      assert_raise(DataFrameArgumentError) { @df.pick { %i[a a] } }
     end
   end
 
@@ -120,11 +133,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'drop by arguments' do
-      assert_raise(DataFrameArgumentError) { @df.drop(:index) { :block } }
+      assert_raise(DataFrameArgumentError) { @df2.drop(:index) { :block } }
 
-      assert_equal @df, @df.drop # drop nothing
-      assert_equal @df, @df.drop([]) # drop nothing
-      assert_true @df.drop(@df.keys).empty? # drop all
+      assert_equal @df2, @df2.drop # drop nothing
+      assert_equal @df2, @df2.drop([]) # drop nothing
+      assert_true @df2.drop(@df2.keys).empty? # drop all
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 2 Vectors
@@ -133,13 +146,13 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         0 :index uint8       5 [0, 1, 2, 3, nil], 1 nil
         1 :bool  boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
-      assert_equal str, @df.drop(:float, :string).tdr_str
-      assert_equal str, @df.drop(%i[float string]).tdr_str
-      assert_equal str, @df.drop(1, -2).tdr_str
-      assert_equal str, @df.drop(1..2).tdr_str
-      assert_equal str, @df.drop(1...3).tdr_str
-      assert_true @df.drop(..3).empty?
-      assert_raise(DataFrameArgumentError) { @df.drop(0..5) }
+      assert_equal str, @df2.drop(:float, :string).tdr_str
+      assert_equal str, @df2.drop(%i[float string]).tdr_str
+      assert_equal str, @df2.drop(1, -2).tdr_str
+      assert_equal str, @df2.drop(1..2).tdr_str
+      assert_equal str, @df2.drop(1...3).tdr_str
+      assert_true @df2.drop(..3).empty?
+      assert_raise(DataFrameArgumentError) { @df2.drop(0..5) }
     end
 
     test 'drop by endless Range' do
@@ -150,10 +163,10 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         0 :index uint8      5 [0, 1, 2, 3, nil], 1 nil
         1 :float double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
       OUTPUT
-      assert_equal str, @df.drop(2..).tdr_str
-      assert_equal str, @df.drop(-2..).tdr_str
-      assert_equal str, @df.drop(2...).tdr_str
-      assert_equal str, @df.drop(2..-1).tdr_str
+      assert_equal str, @df2.drop(2..).tdr_str
+      assert_equal str, @df2.drop(-2..).tdr_str
+      assert_equal str, @df2.drop(2...).tdr_str
+      assert_equal str, @df2.drop(2..-1).tdr_str
     end
 
     test 'drop by block' do
@@ -165,10 +178,10 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         1 :float  double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
         2 :string string     5 ["A", "B", "C", "D", nil], 1 nil
       OUTPUT
-      assert_equal(@df, @df.drop { nil }) # drop nothing
-      assert_equal str, @df.drop { :bool }.tdr_str
-      assert_equal str, @df.drop { vectors.map(&:boolean?) }.tdr_str
-      assert_equal str, @df.drop { -1 }.tdr_str
+      assert_equal(@df2, @df2.drop { nil }) # drop nothing
+      assert_equal str, @df2.drop { :bool }.tdr_str
+      assert_equal str, @df2.drop { vectors.map(&:boolean?) }.tdr_str
+      assert_equal str, @df2.drop { -1 }.tdr_str
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 2 Vectors
@@ -177,9 +190,9 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         0 :string string      5 ["A", "B", "C", "D", nil], 1 nil
         1 :bool   boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
-      assert_equal str, @df.drop { %i[index float] }.tdr_str
-      assert_equal str, @df.drop { vectors.map(&:numeric?) }.tdr_str
-      assert_equal str, @df.drop { [0, 1] }.tdr_str
+      assert_equal str, @df2.drop { %i[index float] }.tdr_str
+      assert_equal str, @df2.drop { vectors.map(&:numeric?) }.tdr_str
+      assert_equal str, @df2.drop { [0, 1] }.tdr_str
     end
 
     test 'drop by mixed args' do
@@ -189,8 +202,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         # key    type  level data_preview
         0 :index uint8     5 [0, 1, 2, 3, nil], 1 nil
       OUTPUT
-      assert_equal str, @df.drop(2..-1, 1).tdr_str
-      assert_equal str, @df.drop { [2..-1, 1] }.tdr_str
+      assert_equal str, @df2.drop(2..-1, 1).tdr_str
+      assert_equal str, @df2.drop { [2..-1, 1] }.tdr_str
     end
   end
 
@@ -202,14 +215,14 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'rename by arguments' do
-      assert_raise(DataFrameArgumentError) { @df.rename(:key) { :block } }
-      assert_raise(DataFrameArgumentError) { @df.rename(:key) }
+      assert_raise(DataFrameArgumentError) { @df2.rename(:key) { :block } }
+      assert_raise(DataFrameArgumentError) { @df2.rename(:key) }
 
-      assert_equal @df, @df.rename # rename nothing
-      assert_equal @df, @df.rename([])
+      assert_equal @df2, @df2.rename # rename nothing
+      assert_equal @df2, @df2.rename([])
 
-      unchanged_key_pair = @df.keys.each_with_object({}) { |k, h| h[k] = k }
-      assert_equal @df, @df.rename(unchanged_key_pair)
+      unchanged_key_pair = @df2.keys.each_with_object({}) { |k, h| h[k] = k }
+      assert_equal @df2, @df2.rename(unchanged_key_pair)
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 4 Vectors
@@ -220,16 +233,16 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         2 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
         3 :bool    boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
-      assert_equal str, @df.rename(:index, :integer).tdr_str
-      assert_equal str, @df.rename({ index: :integer }).tdr_str
+      assert_equal str, @df2.rename(:index, :integer).tdr_str
+      assert_equal str, @df2.rename({ index: :integer }).tdr_str
     end
 
     test 'rename by block' do
-      assert_equal(@df, @df.rename {}) # empty block
-      assert_equal(@df, @df.rename { nil }) # empty block
-      assert_raise(DataFrameArgumentError) { @df.rename { :key } }
-      assert_equal(@df, @df.rename { {} }) # rename nothing
-      assert_raise(DataFrameArgumentError) { @df.rename { { key_not_exist: :new_key } } }
+      assert_equal(@df2, @df2.rename {}) # empty block
+      assert_equal(@df2, @df2.rename { nil }) # empty block
+      assert_raise(DataFrameArgumentError) { @df2.rename { :key } }
+      assert_equal(@df2, @df2.rename { {} }) # rename nothing
+      assert_raise(DataFrameArgumentError) { @df2.rename { { key_not_exist: :new_key } } }
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 4 Vectors
@@ -240,7 +253,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         2 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
         3 :bool    boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
-      assert_equal str, @df.rename {
+      assert_equal str, @df2.rename {
         { keys.detect { |key| self[key].type == :uint8 } => :integer }
       }.tdr_str
     end
@@ -255,8 +268,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         2 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
         3 :bool    boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
-      assert_equal str, @df.rename(%i[index integer]).tdr_str
-      assert_equal str, @df.rename { %i[index integer] }.tdr_str
+      assert_equal str, @df2.rename(%i[index integer]).tdr_str
+      assert_equal str, @df2.rename { %i[index integer] }.tdr_str
 
       str2 = <<~OUTPUT
         RedAmber::DataFrame : 5 x 4 Vectors
@@ -267,9 +280,9 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         2 :string  string      5 ["A", "B", "C", "D", nil], 1 nil
         3 :bool    boolean     3 {true=>2, false=>2, nil=>1}
       OUTPUT
-      assert_equal str2, @df.rename(%i[index integer], %i[float double]).tdr_str
-      assert_equal str2, @df.rename([%i[index integer], %i[float double]]).tdr_str
-      assert_equal str2, @df.rename { [%i[index integer], %i[float double]] }.tdr_str
+      assert_equal str2, @df2.rename(%i[index integer], %i[float double]).tdr_str
+      assert_equal str2, @df2.rename([%i[index integer], %i[float double]]).tdr_str
+      assert_equal str2, @df2.rename { [%i[index integer], %i[float double]] }.tdr_str
     end
 
     test 'rename blank key' do
@@ -300,15 +313,15 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'assign by arguments' do
-      assert_raise(DataFrameArgumentError) { @df.assign(:key) } # key only
+      assert_raise(DataFrameArgumentError) { @df2.assign(:key) } # key only
 
-      assert_equal @df, @df.assign # assign nothing
-      assert_equal @df, @df.assign(nil) # assign nil
-      assert_equal @df, @df.assign([]) # assign empty array
-      assert_equal @df, @df.assign({}) # assign empty hash
+      assert_equal @df2, @df2.assign # assign nothing
+      assert_equal @df2, @df2.assign(nil) # assign nil
+      assert_equal @df2, @df2.assign([]) # assign empty array
+      assert_equal @df2, @df2.assign({}) # assign empty hash
 
-      unchanged_pair = @df.keys.each_with_object({}) { |k, h| h[k] = @df[k].to_a }
-      assert_equal @df.tdr_str, @df.assign(unchanged_pair).tdr_str
+      unchanged_pair = @df2.keys.each_with_object({}) { |k, h| h[k] = @df2[k].to_a }
+      assert_equal @df2.tdr_str, @df2.assign(unchanged_pair).tdr_str
 
       assigner = { new: %w[a a b b c] }
       assigner_vector = { new: Vector.new(assigner[:new]) }
@@ -322,11 +335,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
         4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
-      assert_equal str, @df.assign(assigner).tdr_str
-      assert_equal str, @df.assign(new: %w[a a b b c]).tdr_str # directly write assigner
-      assert_equal str, @df.assign(assigner.to_a).tdr_str
-      assert_equal str, @df.assign(*assigner.to_a).tdr_str # assign(:x, ary) style
-      assert_equal str, @df.assign(assigner_vector).tdr_str
+      assert_equal str, @df2.assign(assigner).tdr_str
+      assert_equal str, @df2.assign(new: %w[a a b b c]).tdr_str # directly write assigner
+      assert_equal str, @df2.assign(assigner.to_a).tdr_str
+      assert_equal str, @df2.assign(*assigner.to_a).tdr_str # assign(:x, ary) style
+      assert_equal str, @df2.assign(assigner_vector).tdr_str
 
       assigner2 = { index: [-1, -2, -3, -4, -5], new: %w[a a b b c] }
       str2 = <<~OUTPUT
@@ -339,17 +352,17 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
         4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
-      assert_equal str2, @df.assign(assigner2).tdr_str
-      assert_equal str2, @df.assign(assigner2.to_a).tdr_str
-      assert_equal str2, @df.assign(*assigner2.to_a).tdr_str # assign([:x, ary1], [:y, ary2]) style
+      assert_equal str2, @df2.assign(assigner2).tdr_str
+      assert_equal str2, @df2.assign(assigner2.to_a).tdr_str
+      assert_equal str2, @df2.assign(*assigner2.to_a).tdr_str # assign([:x, ary1], [:y, ary2]) style
     end
 
     test 'assign by block' do
-      assert_raise(DataFrameArgumentError) { @df.assign { :key } } # key only
-      assert_equal(@df, @df.assign {}) # assign nothing
-      assert_equal(@df, @df.assign { nil }) # assign nothing
-      assert_equal(@df, @df.assign { {} }) # assign nothing
-      assert_equal(@df, @df.assign { [] }) # assign nothing
+      assert_raise(DataFrameArgumentError) { @df2.assign { :key } } # key only
+      assert_equal(@df2, @df2.assign {}) # assign nothing
+      assert_equal(@df2, @df2.assign { nil }) # assign nothing
+      assert_equal(@df2, @df2.assign { {} }) # assign nothing
+      assert_equal(@df2, @df2.assign { [] }) # assign nothing
 
       assigner = { new: %w[a a b b c] }
       str = <<~OUTPUT
@@ -362,8 +375,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
         4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
-      assert_equal str, @df.assign { assigner }.tdr_str
-      assert_equal str, @df.assign { assigner.to_a }.tdr_str
+      assert_equal str, @df2.assign { assigner }.tdr_str
+      assert_equal str, @df2.assign { assigner.to_a }.tdr_str
 
       assigner2 = { index: [-1, -2, -3, -4, -5], new: %w[a a b b c] }
       str2 = <<~OUTPUT
@@ -376,12 +389,12 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
         4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
-      assert_equal str2, @df.assign { assigner2 }.tdr_str
-      assert_equal str2, @df.assign { assigner2.to_a }.tdr_str
+      assert_equal str2, @df2.assign { assigner2 }.tdr_str
+      assert_equal str2, @df2.assign { assigner2.to_a }.tdr_str
     end
 
     test 'assign by both args and block' do
-      assert_raise(DataFrameArgumentError) { @df.assign(:key) {} } # rubocop:disable Lint/EmptyBlock
+      assert_raise(DataFrameArgumentError) { @df2.assign(:key) {} } # rubocop:disable Lint/EmptyBlock
 
       str = <<~STR
         RedAmber::DataFrame : 5 x 5 Vectors
@@ -393,7 +406,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
         4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       STR
-      assert_equal str, @df.assign(:new) { %w[a a b b c] }.tdr_str
+      assert_equal str, @df2.assign(:new) { %w[a a b b c] }.tdr_str
 
       str2 = <<~STR
         RedAmber::DataFrame : 5 x 5 Vectors
@@ -405,13 +418,13 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
         4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       STR
-      assert_equal str2, @df.assign(:index, :new) { [[-1, -2, -3, -4, -5], %w[a a b b c]] }.tdr_str
-      assert_equal str2, @df.assign(:index, :new) { [Vector.new([-1, -2, -3, -4, -5]), %w[a a b b c]] }.tdr_str
+      assert_equal str2, @df2.assign(:index, :new) { [[-1, -2, -3, -4, -5], %w[a a b b c]] }.tdr_str
+      assert_equal str2, @df2.assign(:index, :new) { [Vector.new([-1, -2, -3, -4, -5]), %w[a a b b c]] }.tdr_str
     end
 
     test 'assign_left by param' do
       assigner = { index: [-1, -2, -3, -4, -5], new: %w[a a b b c] }
-      assert_equal <<~OUTPUT, @df.assign_left(assigner).tdr_str
+      assert_equal <<~OUTPUT, @df2.assign_left(assigner).tdr_str
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview
@@ -425,7 +438,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
 
     test 'assign_left by block' do
       assigner = { index: [-1, -2, -3, -4, -5], new: %w[a a b b c] }
-      assert_equal <<~OUTPUT, @df.assign_left { assigner }.tdr_str
+      assert_equal <<~OUTPUT, @df2.assign_left { assigner }.tdr_str
         RedAmber::DataFrame : 5 x 5 Vectors
         Vectors : 2 numeric, 2 strings, 1 boolean
         # key     type    level data_preview

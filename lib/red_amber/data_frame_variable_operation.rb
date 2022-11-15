@@ -23,12 +23,12 @@ module RedAmber
         elsif vec.numeric?
           key_vector.take(*vec).to_a
         elsif vec.string? || vec.dictionary?
-          picker
+          vec.to_a
         else
           raise DataFrameArgumentError, "Invalid argument #{args}"
         end
 
-      # DataFrame#[] creates a Vector with single key is specified.
+      # DataFrame#[] creates a Vector if single key is specified.
       # DataFrame#pick creates a DataFrame with single key.
       DataFrame.new(@table[ary])
     end
