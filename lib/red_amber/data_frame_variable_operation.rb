@@ -52,14 +52,14 @@ module RedAmber
         elsif vec.numeric?
           keys - key_vector.take(*vec).each.map(&:to_sym) # Array
         elsif vec.string? || vec.dictionary?
-          keys - dropper
+          keys - vec.to_a.map { _1&.to_sym } # Array
         else
           raise DataFrameArgumentError, "Invalid argument #{args}"
         end
 
       return DataFrame.new if ary.empty?
 
-      # DataFrame#[] creates a Vector with single key is specified.
+      # DataFrame#[] creates a Vector if single key is specified.
       # DataFrame#drop creates a DataFrame with single key.
       DataFrame.new(@table[ary])
     end
