@@ -133,77 +133,87 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'drop by arguments' do
-      assert_raise(DataFrameArgumentError) { @df2.drop(:index) { :block } }
+      assert_raise(DataFrameArgumentError) { @df.drop(:a) { :block } }
 
-      assert_equal @df2, @df2.drop # drop nothing
-      assert_equal @df2, @df2.drop([]) # drop nothing
-      assert_true @df2.drop(@df2.keys).empty? # drop all
+      assert_equal @df, @df.drop # drop nothing
+      assert_equal @df, @df.drop([]) # drop nothing
+      assert_true @df.drop(@df.keys).empty? # drop all
 
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 2 Vectors
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
         Vectors : 1 numeric, 1 boolean
-        # key    type    level data_preview
-        0 :index uint8       5 [0, 1, 2, 3, nil], 1 nil
-        1 :bool  boolean     3 {true=>2, false=>2, nil=>1}
-      OUTPUT
-      assert_equal str, @df2.drop(:float, :string).tdr_str
-      assert_equal str, @df2.drop(%i[float string]).tdr_str
-      assert_equal str, @df2.drop(1, -2).tdr_str
-      assert_equal str, @df2.drop(1..2).tdr_str
-      assert_equal str, @df2.drop(1...3).tdr_str
-      assert_true @df2.drop(..3).empty?
-      assert_raise(DataFrameArgumentError) { @df2.drop(0..5) }
+        # key type    level data_preview
+        0 :a  uint8       3 [1, 2, 3]
+        1 :d  boolean     3 [true, false, nil], 1 nil
+      STR
+      assert_equal str, @df.drop(:b, :c).tdr_str
+      assert_equal str, @df.drop(%i[b c]).tdr_str
+      assert_equal str, @df.drop(1, -2).tdr_str
+      assert_equal str, @df.drop(1..2).tdr_str
+      assert_equal str, @df.drop(:b..:c).tdr_str
+      assert_equal str, @df.drop(1...3).tdr_str
+      assert_true @df.drop(..3).empty?
+      # assert_true @df.drop(..:d).empty?
+      assert_raise(DataFrameArgumentError) { @df.drop(0..5) }
     end
 
     test 'drop by endless Range' do
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 2 Vectors
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
         Vectors : 2 numeric
-        # key    type   level data_preview
-        0 :index uint8      5 [0, 1, 2, 3, nil], 1 nil
-        1 :float double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-      OUTPUT
-      assert_equal str, @df2.drop(2..).tdr_str
-      assert_equal str, @df2.drop(-2..).tdr_str
-      assert_equal str, @df2.drop(2...).tdr_str
-      assert_equal str, @df2.drop(2..-1).tdr_str
+        # key type   level data_preview
+        0 :a  uint8      3 [1, 2, 3]
+        1 :b  double     3 [0.0, NaN, nil], 1 NaN, 1 nil
+      STR
+      assert_equal str, @df.drop(2..).tdr_str
+      # assert_equal str, @df.drop(:c..).tdr_str
+      assert_equal str, @df.drop(-2..).tdr_str
+      assert_equal str, @df.drop(2...).tdr_str
+      assert_equal str, @df.drop(2..-1).tdr_str
     end
 
     test 'drop by block' do
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 3 Vectors
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 3 Vectors
         Vectors : 2 numeric, 1 string
-        # key     type   level data_preview
-        0 :index  uint8      5 [0, 1, 2, 3, nil], 1 nil
-        1 :float  double     5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
-        2 :string string     5 ["A", "B", "C", "D", nil], 1 nil
-      OUTPUT
-      assert_equal(@df2, @df2.drop { nil }) # drop nothing
-      assert_equal str, @df2.drop { :bool }.tdr_str
-      assert_equal str, @df2.drop { vectors.map(&:boolean?) }.tdr_str
-      assert_equal str, @df2.drop { -1 }.tdr_str
+        # key type   level data_preview
+        0 :a  uint8      3 [1, 2, 3]
+        1 :b  double     3 [0.0, NaN, nil], 1 NaN, 1 nil
+        2 :c  string     3 ["A", "B", "C"]
+      STR
+      assert_equal(@df, @df.drop { nil }) # drop nothing
+      assert_equal str, @df.drop { 3 }.tdr_str
+      assert_equal str, @df.drop { [3] }.tdr_str
+      assert_equal str, @df.drop { :d }.tdr_str
+      assert_equal str, @df.drop { [:d] }.tdr_str
+      assert_equal str, @df.drop { vectors.map(&:boolean?) }.tdr_str
+      assert_equal str, @df.drop { -1 }.tdr_str
 
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 2 Vectors
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
         Vectors : 1 string, 1 boolean
-        # key     type    level data_preview
-        0 :string string      5 ["A", "B", "C", "D", nil], 1 nil
-        1 :bool   boolean     3 {true=>2, false=>2, nil=>1}
-      OUTPUT
-      assert_equal str, @df2.drop { %i[index float] }.tdr_str
-      assert_equal str, @df2.drop { vectors.map(&:numeric?) }.tdr_str
-      assert_equal str, @df2.drop { [0, 1] }.tdr_str
+        # key type    level data_preview
+        0 :c  string      3 ["A", "B", "C"]
+        1 :d  boolean     3 [true, false, nil], 1 nil
+      STR
+      assert_equal str, @df.drop { [0, 1] }.tdr_str
+      assert_equal str, @df.drop { vectors.map(&:numeric?) }.tdr_str
+      assert_equal str, @df.drop { [1, 0] }.tdr_str
+      assert_equal str, @df.drop { %i[b a] }.tdr_str
+      assert_equal str, @df.drop { [:a..:b] }.tdr_str
     end
 
     test 'drop by mixed args' do
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 1 Vector
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 1 Vector
         Vector : 1 numeric
-        # key    type  level data_preview
-        0 :index uint8     5 [0, 1, 2, 3, nil], 1 nil
-      OUTPUT
-      assert_equal str, @df2.drop(2..-1, 1).tdr_str
-      assert_equal str, @df2.drop { [2..-1, 1] }.tdr_str
+        # key type  level data_preview
+        0 :a  uint8     3 [1, 2, 3]
+      STR
+      assert_equal str, @df.drop(2..-1, 1).tdr_str
+      assert_equal str, @df.drop(:c..:d, :b).tdr_str
+      assert_equal str, @df.drop { [2..-1, 1] }.tdr_str
+      assert_equal str, @df.drop { [:b, :c..:d] }.tdr_str
     end
   end
 
