@@ -18,62 +18,62 @@ prelude: |
   distance_km = df[:distance] * 1.852
 
 benchmark:
-  '01: Pick by a key name': |
+  'B01: Pick([]) by a key name': |
     df[:flight]
 
-  '02: Pick by index': |
+  'B02: Pick by index': |
     df[df.keys[9]]
 
-  '03: Pick by key names': |
+  'B03: Pick by key names': |
     df.pick(:carrier, :flight)
 
-  '04: Drop by key names': |
+  'B04: Drop by key names': |
     df.drop(:year, :month, :day)
 
-  '05: Pick by booleans': |
+  'B05: Pick by booleans': |
     df.pick(df.vectors.map(&:string?))
 
-  '06: Pick by a block': |
+  'B06: Pick by a block': |
     df.pick { keys.map { |key| key.end_with?('time') } }
 
-  '07: Slice by a index': |
+  'B07: Slice([]) by a index': |
     df[877]
 
-  '08: Slice by indeces': |
+  'B08: Slice by indeces': |
     df.slice(0...5, -5..-1)
 
-  '09: Slice by booleans': |
+  'B09: Slice([]) by booleans': |
     df[slicer]
 
-  '10: Slice by booleans': |
+  'B10: Slice by booleans': |
     df.slice(slicer)
 
-  '11: Remove by booleans': |
+  'B11: Remove by booleans': |
     df.remove(slicer)
 
-  '12: Slice by a block': |
+  'B12: Slice by a block': |
     df.slice { slicer }
 
-  '13: Rename by Hash': |
+  'B13: Rename by Hash': |
     df.rename(distance: :distance_mile)
 
-  '14: Assign an existing variable': |
+  'B14: Assign an existing variable': |
     df.assign(distance: distance_km)
 
-  '15: Assign a new variable': |
+  'B15: Assign a new variable': |
     df.assign(distance_km: distance_km)
 
-  '16: Sort by a key': |
+  'B16: Sort by a key': |
     df.sort(:distance)
 
-  '17: Sort by keys': |
+  'B17: Sort by keys': |
     df.sort(:origin, '-distance')
 
-  '18: Convert to a Hash': |
+  'B18: Convert to a Hash': |
     df.to_h
 
-  '19: Output in TDR style': |
+  'B19: Output in TDR style': |
     df.tdr
 
-  '20: Inspect': |
+  'B20: Inspect': |
     df.inspect

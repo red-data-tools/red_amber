@@ -17,11 +17,11 @@ prelude: |
   long_df = df.to_long(:artist, :track, :'date.entered', name: :week, value: :rank)
 
 benchmark:
-  'R1: Transpose a DataFrame': |
+  'R01: Transpose a DataFrame': |
     sub_df.transpose(name: :week)
 
-  'R2: Reshape to longer DataFrame': |
+  'R02: Reshape to longer DataFrame': |
     df.to_long(:artist, :track, :'date.entered', name: :week, value: :rank)
 
-  'R3: Reshape to wider DataFrame': |
+  'R03: Reshape to wider DataFrame': |
     long_df.to_wide(name: :week, value: :rank)

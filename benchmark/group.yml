@@ -17,17 +17,17 @@ prelude: |
   distance_km = df[:distance] * 1.852
 
 benchmark:
-  'G1: sum distance by destination': |
+  'G01: sum distance by destination': |
     df.group(:dest).sum(:distance)
 
-  'G2: sum arr_delay by month and day': |
+  'G02: sum arr_delay by month and day': |
     df.group(:month, :day).sum(:arr_delay)
 
-  'G3: sum arr_delay, mean distance by flight': |
+  'G03: sum arr_delay, mean distance by flight': |
     df.group(:flight) { [sum(:arr_delay), mean(:distance)] }
 
-  'G4: mean air_time, distance by flight': |
+  'G04: mean air_time, distance by flight': |
     df.group(:flight).mean(:air_time, :distance)
 
-  'G5: sum dep_delay, arr_delay by carrer': |
+  'G05: sum dep_delay, arr_delay by carrer': |
     df.group(:carrier).sum(:dep_delay, :arr_delay)
