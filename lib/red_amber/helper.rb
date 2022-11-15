@@ -39,7 +39,7 @@ module RedAmber
         elsif bg.nil? && en.nil?
           Array(0...vsize)
         else
-          Array[elem]
+          Array(elem)
         end
       when Enumerator
         elem.to_a
