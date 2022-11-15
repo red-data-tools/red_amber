@@ -1456,7 +1456,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   Select records appearing in both self and other.
 
   ```ruby
-  df.intersect(other, :KEY)
+  df.intersect(other)
   #=>
   #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
     KEY1        KEY2
@@ -1469,7 +1469,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   Select records appearing in self or other.
 
   ```ruby
-  df.union(other, :KEY)
+  df.union(other)
   #=>
   #<RedAmber::DataFrame : 5 x 2 Vectors, 0x0000000000029fcc>
     KEY1        KEY2
@@ -1488,7 +1488,7 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   It has an alias `setdiff`.
 
   ```ruby
-  df.difference(other, :KEY)
+  df.difference(other)
   #=>
   #<RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc>
     KEY1        KEY2
