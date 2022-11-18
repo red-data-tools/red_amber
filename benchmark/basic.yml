@@ -3,6 +3,8 @@ contexts:
     prelude: |
       $LOAD_PATH.unshift(File.expand_path('lib'))
   - gems:
+      red_amber: 0.2.3
+  - gems:
       red_amber: 0.2.0
   - gems:
       red_amber: 0.1.5
