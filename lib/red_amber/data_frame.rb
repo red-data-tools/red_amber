@@ -108,6 +108,10 @@ module RedAmber
       check_duplicate_keys(keys)
     end
 
+    # Returns the table having within.
+    #
+    # @return [Arrow::Table] The table within.
+    #
     attr_reader :table
 
     alias_method :to_arrow, :table
@@ -115,6 +119,7 @@ module RedAmber
     # Returns the number of rows.
     #
     # @return [Integer] Number of rows.
+    #
     def size
       @table.n_rows
     end
@@ -125,6 +130,7 @@ module RedAmber
     # Returns the number of columns.
     #
     # @return [Integer] Number of columns.
+    #
     def n_keys
       @table.n_columns
     end
@@ -137,6 +143,7 @@ module RedAmber
     # @return [Array]
     #   Number of rows and number of columns in an array.
     #   Same as [size, n_keys].
+    #
     def shape
       [size, n_keys]
     end
@@ -144,7 +151,8 @@ module RedAmber
     # Returns a Hash of key and Vector pairs in the columns.
     #
     # @return [Hash]
-    #   key => Vector pairs for each columns.
+    #   {key => Vector} pairs for each columns.
+    #
     def variables
       @variables || @variables = init_instance_vars(:variables)
     end
@@ -154,6 +162,7 @@ module RedAmber
     #
     # @return [Array]
     #   Keys in an Array.
+    #
     def keys
       @keys || @keys = init_instance_vars(:keys)
     end
@@ -165,6 +174,7 @@ module RedAmber
     # @param key [Symbol, String] Key to test.
     # @return [Boolean]
     #   Returns true if self has key in Symbol.
+    #
     def key?(key)
       keys.include?(key.to_sym)
     end
@@ -175,6 +185,7 @@ module RedAmber
     # @param key [Symbol, String] key to know.
     # @return [Integer]
     #   Index of key in the Array keys.
+    #
     def key_index(key)
       keys.find_index(key.to_sym)
     end
@@ -185,6 +196,7 @@ module RedAmber
     #
     # @return [Array]
     #   Abbreviated Red Arrow data type names.
+    #
     def types
       @types || @types = @table.columns.map { |column| column.data.value_type.nick.to_sym }
     end
@@ -193,6 +205,7 @@ module RedAmber
     #
     # @return [Array]
     #   An Array of Red Arrow data type Classes.
+    #
     def type_classes
       @data_types || @data_types = @table.columns.map { |column| column.data_type.class }
     end
@@ -200,50 +213,94 @@ module RedAmber
     # Returns Vectors in an Array.
     #
     # @return [Array]
-    #   An Array of RedAmber::Vector s.
+    #   An Array of `RedAmber::Vector`s.
+    #
     def vectors
       @vectors || @vectors = init_instance_vars(:vectors)
     end
 
-    # Returns row indices (start...(size+start)) in an Array.
+    # Returns row indices (start...(size+start)) in a Vector.
     #
     # @param start [Object]
-    #   Object which have #succ method.
+    #   Object which have `#succ` method.
+    #
     # @return [Array]
-    #   An Array of indices of the row.
+    #   A Vector of row indices.
+    #
     # @example
     #   (when self.size == 5)
-    #   - indices #=> [0, 1, 2, 3, 4]
-    #   - indices(1) #=> [1, 2, 3, 4, 5]
-    #   - indices('a') #=> ['a', 'b', 'c', 'd', 'e']
+    #   - indices #=> Vector[0, 1, 2, 3, 4]
+    #   - indices(1) #=> Vector[1, 2, 3, 4, 5]
+    #   - indices('a') #=> Vector['a', 'b', 'c', 'd', 'e']
+    #
     def indices(start = 0)
       Vector.new((start..).take(size))
     end
     alias_method :indexes, :indices
 
+    # Returns column-oriented data in a Hash.
+    #
+    # @return [Hash] A Hash of {key => column_in_an_array}.
+    #
     def to_h
       variables.transform_values(&:to_a)
     end
 
+    # Returns a row-oriented array without header.
+    #
+    # @return [Array] Row-oriented data without header.
+    #
+    # @note If you need column-oriented array, use `.to_h.to_a`.
+    #
     def to_a
-      # output an array of row-oriented data without header
-      # if you need column-oriented array, use `.to_h.to_a`
       @table.raw_records
     end
     alias_method :raw_records, :to_a
 
+    # Returns column name and data type in a Hash.
+    #
+    # @return [Hash] Column name and data type.
+    #
+    # @example
+    #   RedAmber::DataFrame.new(x: [1, 2, 3], y: %w[A B C]).schema
+    #   # => {:x=>:uint8, :y=>:string}
+    #
     def schema
       keys.zip(types).to_h
     end
 
+    # Compare DataFrames.
+    #
+    # @return [true, false]
+    #   True if other is a DataFrame and table is same.
+    #   Otherwise return false.
+    #
     def ==(other)
       other.is_a?(DataFrame) && @table == other.table
     end
 
+    # Check if it is a empty DataFrame.
+    #
+    # @return [true, false] True if it has no columns.
+    #
     def empty?
       variables.empty?
     end
 
+    # Enumerate for each row.
+    #
+    # @overload each_row
+    #   Returns Enumerator when no block given.
+    #
+    #   @return [Enumerator] Enumerator of each rows.
+    #
+    # @overload each_row(&block)
+    #   Yields with key and row pairs.
+    #
+    #   @yield [key_row_pairs] Yields with key and row pairs.
+    #   @yieldparam [Hash] Key and row pairs.
+    #   @yieldreturn [Integer] Size of the DataFrame.
+    #
     def each_row
       return enum_for(:each_row) unless block_given?
 
@@ -256,6 +313,10 @@ module RedAmber
       end
     end
 
+    # Returns self in a `Rover::DataFrame`.
+    #
+    # @return [Rover::DataFrame] A `Rover::DataFrame`.
+    #
     def to_rover
       require 'rover'
       Rover::DataFrame.new(to_h)
