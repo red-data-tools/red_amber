@@ -268,7 +268,7 @@ module RedAmber
     end
 
     def method_missing(name, *args, &block)
-      return v(name) if args.empty?
+      return v(name) if args.empty? && key?(name)
 
       super
     end

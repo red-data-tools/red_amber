@@ -239,7 +239,7 @@ class DataFrameTest < Test::Unit::TestCase
     end
 
     test 'key as a method' do
-      assert_raise(DataFrameArgumentError) { @df.key_not_exist }
+      assert_raise(NoMethodError) { @df.key_not_exist }
       assert_equal_array [1, 2, 3], @df.number
     end
 
