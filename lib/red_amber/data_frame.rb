@@ -14,79 +14,103 @@ module RedAmber
     include DataFrameVariableOperation
     include Helper
 
-    # Quicker DataFrame construction from a Arrow::Table.
+    using RefineHash
+
+    # Quicker DataFrame construction from a `Arrow::Table`.
     #
-    # @params table [Arrow::Table] A table to have.
-    # @return [DataFrame] Initialized DataFrame
+    # @params table [Arrow::Table] A table to have in the DataFrame.
+    # @return [DataFrame] Initialized DataFrame.
     #
-    #   This method will be used in the method.
-    #   table must have unique keys.
+    # @note This method will allocate table directly and may be used in the method.
+    # @note `table` must have unique keys.
     def self.create(table)
       instance = allocate
       instance.instance_variable_set(:@table, table)
-
-      unless instance.keys == instance.keys.uniq
-        duplicated_keys = instance.keys.tally.select { |_k, v| v > 1 }.keys
-        raise DataFrameArgumentError, "duplicate keys: #{duplicated_keys}"
-      end
+      instance.check_duplicate_keys(instance.keys)
       instance
     end
 
-    # Creates a new RedAmber::DataFrame.
-    #
-    # @overload initialize(hash)
-    #
-    #   @params hash [Hash]
+    # Creates a new DataFrame.
     #
     # @overload initialize(table)
+    #   Initialize DataFrame by an `Arrow::Table`
     #
-    #   @params table [Arrow::Table]
+    #   @param table [Arrow::Table]
+    #     A table to have in the DataFrame.
     #
-    # @overload initialize(dataframe)
+    # @overload initialize(arrowable)
+    #   Initialize DataFrame by a `#to_arrow` responsible object.
     #
-    #   @params dataframe [RedAmber::DataFrame, Rover::DataFrame]
+    #   @param arrowable [#to_arrow]
+    #     Any object which responds to `#to_arrow`.
+    #     `#to_arrow` must return `Arrow::Table`.
     #
-    # @overload initialize(null)
+    #   @note `RedAmber::DataFrame` itself is readable by this.
+    #   @note Hash is refined to respond to `#to_arrow` in this class.
     #
-    #   @params null [NilClass] No arguments.
+    # @overload initialize(rover_like)
+    #   Initialize DataFrame by a `Rover::DataFrame`-like `#to_h` responsible object.
+    #
+    #   @param rover_like [#to_h]
+    #     Any object which responds to `#to_h`.
+    #     `#to_h` must return a Hash which is convertable by `Arrow::Table.new`.
+    #
+    #   @note `Rover::DataFrame` is readable by this.
+    #
+    # @overload initialize()
+    #   Create empty DataFrame
+    #
+    #   @example DataFrame.new
+    #
+    # @overload initialize(empty)
+    #   Create empty DataFrame
+    #
+    #   @param empty [nil, [], {}]
+    #
+    #   @example DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
+    #
+    # @overload initialize(args)
+    #
+    #   @param args [values]
+    #     Accepts any argments which is valid for `Arrow::Table.new(args)`.
+    #     See {https://github.com/apache/arrow/blob/master/ruby/red-arrow/lib/arrow/table.rb table.rb in Red Arrow}.
     #
     def initialize(*args)
-      @variables = @keys = @vectors = @types = @data_types = nil
       case args
       in nil | [nil] | [] | {} | [[]] | [{}]
-        # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
-        #   returns empty DataFrame
         @table = Arrow::Table.new({}, [])
-      in [->(x) { x.respond_to?(:to_arrow) } => arrowable]
+      in [Arrow::Table => table]
+        @table = table
+      in [arrowable] if arrowable.respond_to?(:to_arrow)
         table = arrowable.to_arrow
         unless table.is_a?(Arrow::Table)
           raise DataFrameTypeError,
                 "to_arrow must return an Arrow::Table but #{table.class}: #{arrowable}"
         end
         @table = table
-      in [Arrow::Table => table]
-        @table = table
-      in [rover_or_hash]
+      in [rover_like] if rover_like.respond_to?(:to_h)
         begin
-          # Accepts Rover::DataFrame or Hash
-          @table = Arrow::Table.new(rover_or_hash.to_h)
+          # Accepts Rover::DataFrame
+          @table = Arrow::Table.new(rover_like.to_h)
         rescue StandardError
-          raise DataFrameTypeError, "invalid argument: #{rover_or_hash}"
+          raise DataFrameTypeError, "to_h must return Arrowable object: #{rover_like}"
         end
       else
-        @table = Arrow::Table.new(*args)
+        begin
+          @table = Arrow::Table.new(*args)
+        rescue StandardError
+          raise DataFrameTypeError, "invalid argument to create Arrow::Table: #{args}"
+        end
       end
+
       name_unnamed_keys
 
-      duplicated_keys = keys.tally.select { |_k, v| v > 1 }.keys
-      raise DataFrameArgumentError, "duplicate keys: #{duplicated_keys}" unless duplicated_keys.empty?
+      check_duplicate_keys(keys)
     end
 
     attr_reader :table
 
-    def to_arrow
-      @table
-    end
+    alias_method :to_arrow, :table
 
     # Returns the number of rows.
     #
@@ -253,6 +277,13 @@ module RedAmber
       return true if key?(name)
 
       super
+    end
+
+    # For internal use
+    def check_duplicate_keys(keys)
+      return if keys == keys.uniq
+
+      raise DataFrameArgumentError, "duplicate keys: #{keys.tally.select { |_k, v| v > 1 }.keys}"
     end
 
     private

@@ -74,6 +74,11 @@ class DataFrameTest < Test::Unit::TestCase
       (o = Object.new).define_singleton_method(:to_arrow) { d }
       assert_raise(DataFrameTypeError) { DataFrame.new(o) }
     end
+
+    test 'new from a to_h-resposible object but does not return valid table' do |(_, d)|
+      (o = Object.new).define_singleton_method(:to_h) { d }
+      assert_raise(DataFrameTypeError) { DataFrame.new(o) }
+    end
   end
 
   sub_test_case 'Properties' do
