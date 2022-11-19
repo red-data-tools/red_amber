@@ -61,7 +61,7 @@ module RedAmber
 
       # DataFrame#[] creates a Vector if single key is specified.
       # DataFrame#drop creates a DataFrame with single key.
-      DataFrame.new(@table[ary])
+      DataFrame.create(@table[ary])
     end
 
     # rename variables to create a new DataFrame
@@ -95,7 +95,7 @@ module RedAmber
 
       append_to_fields_and_arrays(appender, fields, arrays, append_to_left: false) unless appender.empty?
 
-      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
+      DataFrame.create(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
     end
 
     def assign_left(*assigner, &block)
@@ -104,7 +104,7 @@ module RedAmber
 
       append_to_fields_and_arrays(appender, fields, arrays, append_to_left: true) unless appender.empty?
 
-      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
+      DataFrame.create(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
     end
 
     private
@@ -175,7 +175,7 @@ module RedAmber
             @table.schema[key]
           end
         end
-      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), @table.columns))
+      DataFrame.create(Arrow::Table.new(Arrow::Schema.new(fields), @table.columns))
     end
 
     def update_fields_and_arrays(updater)

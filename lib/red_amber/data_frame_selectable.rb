@@ -132,7 +132,7 @@ module RedAmber
 
     def remove_nil
       func = Arrow::Function.find(:drop_null)
-      DataFrame.new(func.execute([table]).value)
+      DataFrame.create(func.execute([table]).value)
     end
     alias_method :drop_nil, :remove_nil
 
@@ -223,7 +223,7 @@ module RedAmber
       index_array = Arrow::UInt64ArrayBuilder.build(normalized_indices.data) # round to integer array
 
       datum = Arrow::Function.find(:take).execute([table, index_array])
-      DataFrame.new(datum.value)
+      DataFrame.create(datum.value)
     end
 
     # Accepts booleans by Arrow::BooleanArray
@@ -231,7 +231,7 @@ module RedAmber
       raise DataFrameArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 
       datum = Arrow::Function.find(:filter).execute([table, boolean_array])
-      DataFrame.new(datum.value)
+      DataFrame.create(datum.value)
     end
 
     # return a DataFrame with same keys as self without values

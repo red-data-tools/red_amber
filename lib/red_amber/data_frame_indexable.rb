@@ -32,7 +32,7 @@ module RedAmber
 
     def new_dataframe_by(index_array)
       t = Arrow::Function.find(:take).execute([@table, index_array]).value
-      RedAmber::DataFrame.new(t)
+      DataFrame.create(t)
     end
   end
 end

@@ -30,7 +30,7 @@ module RedAmber
         end
       end
 
-      DataFrame.new(table.concatenate(table_array))
+      DataFrame.create(table.concatenate(table_array))
     end
 
     alias_method :concat, :concatenate
@@ -58,7 +58,7 @@ module RedAmber
         df =
           case e
           when Arrow::Table
-            DataFrame.new(e)
+            DataFrame.create(e)
           when DataFrame
             e
           else
@@ -152,7 +152,7 @@ module RedAmber
     # @return [Boolean] true if set operation is possible.
     #
     def set_operable?(other) # rubocop:disable Naming/AccessorMethodName
-      other = DataFrame.new(other) if other.is_a?(Arrow::Table)
+      other = DataFrame.create(other) if other.is_a?(Arrow::Table)
       keys == other.keys
     end
 
@@ -162,7 +162,7 @@ module RedAmber
     # @return [DataFrame] Joined dataframe.
     #
     def intersect(other)
-      other = DataFrame.new(other) if other.is_a?(Arrow::Table)
+      other = DataFrame.create(other) if other.is_a?(Arrow::Table)
       raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
 
       join(other, keys, type: :inner)
@@ -174,7 +174,7 @@ module RedAmber
     # @return [DataFrame] Joined dataframe.
     #
     def union(other)
-      other = DataFrame.new(other) if other.is_a?(Arrow::Table)
+      other = DataFrame.create(other) if other.is_a?(Arrow::Table)
       raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
 
       join(other, keys, type: :full_outer)
@@ -186,7 +186,7 @@ module RedAmber
     # @return [DataFrame] Joined dataframe.
     #
     def difference(other)
-      other = DataFrame.new(other) if other.is_a?(Arrow::Table)
+      other = DataFrame.create(other) if other.is_a?(Arrow::Table)
       raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
 
       join(other, keys, type: :left_anti)
@@ -209,7 +209,7 @@ module RedAmber
       when DataFrame
         # Nop
       when Arrow::Table
-        other = DataFrame.new(other)
+        other = DataFrame.create(other)
       else
         raise DataFrameArgumentError, 'other must be a DataFrame or an Arrow::Table'
       end
@@ -254,7 +254,7 @@ module RedAmber
 
       case type
       when :left_semi, :left_anti, :right_semi, :right_anti
-        return DataFrame.new(table_output)
+        return DataFrame.create(table_output)
       else
         selected_indexes = left_indexes.concat(right_indexes)
       end
@@ -262,7 +262,7 @@ module RedAmber
         i = keys.index(key)
         merge_column(table_output[i], table_output[n_keys + i], type)
       end
-      DataFrame.new(table_output[selected_indexes])
+      DataFrame.create(table_output[selected_indexes])
                .assign(*join_keys) { merged_columns }
     end
 

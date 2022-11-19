@@ -32,7 +32,7 @@ module RedAmber
         raise GroupArgumentError, "#{d} is not a key of\n #{@dataframe}." unless summary_keys.empty? || d.empty?
 
         table = @group.aggregate(*build_aggregation_keys("hash_#{function}", summary_keys))
-        df = DataFrame.new(table)
+        df = DataFrame.create(table)
         df.pick(@group_keys, df.keys - @group_keys)
       end
     end
@@ -76,7 +76,7 @@ module RedAmber
     end
 
     def group_count
-      DataFrame.new(add_columns_to_table(base_table, [:group_count], [group_counts]))
+      DataFrame.create(add_columns_to_table(base_table, [:group_count], [group_counts]))
     end
 
     def inspect

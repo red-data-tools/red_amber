@@ -14,6 +14,24 @@ module RedAmber
     include DataFrameVariableOperation
     include Helper
 
+    # Quicker DataFrame construction from a Arrow::Table.
+    #
+    # @params table [Arrow::Table] A table to have.
+    # @return [DataFrame] Initialized DataFrame
+    #
+    #   This method will be used in the method.
+    #   table must have unique keys.
+    def self.create(table)
+      instance = allocate
+      instance.instance_variable_set(:@table, table)
+
+      unless instance.keys == instance.keys.uniq
+        duplicated_keys = instance.keys.tally.select { |_k, v| v > 1 }.keys
+        raise DataFrameArgumentError, "duplicate keys: #{duplicated_keys}"
+      end
+      instance
+    end
+
     # Creates a new RedAmber::DataFrame.
     #
     # @overload initialize(hash)
