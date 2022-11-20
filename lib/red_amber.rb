@@ -2,8 +2,8 @@
 
 require 'arrow'
 
-require_relative 'red_amber/helper'
 require_relative 'red_amber/refinements'
+require_relative 'red_amber/helper'
 
 require_relative 'red_amber/data_frame_combinable'
 require_relative 'red_amber/data_frame_displayable'
