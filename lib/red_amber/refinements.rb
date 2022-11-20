@@ -37,4 +37,13 @@ module RedAmber
       end
     end
   end
+
+  # Add additional capabilities to Arrow::Table
+  module RefineArrowTable
+    refine Arrow::Table do
+      def keys
+        columns.map(&:name)
+      end
+    end
+  end
 end

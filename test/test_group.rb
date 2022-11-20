@@ -4,6 +4,8 @@ require 'test_helper'
 
 class GroupTest < Test::Unit::TestCase
   include RedAmber
+  include TestHelper
+
   sub_test_case 'group' do
     test 'Empty dataframe' do
       df = DataFrame.new
@@ -184,7 +186,7 @@ class GroupTest < Test::Unit::TestCase
       )
     end
 
-    test 'filters' do
+    test 'filters by a key' do
       expect = [
         [true,  true,  false, false, false, nil],
         [false, false, true,  false, false, nil],
@@ -193,6 +195,19 @@ class GroupTest < Test::Unit::TestCase
       ]
       assert_equal expect, @df.group(:i).filters.map(&:to_a)
       assert_true @df.group(:i).filters.all?(Vector)
+    end
+
+    test 'filters by multiple keys' do
+      expect = [
+        [true, false, false, false, false, nil],
+        [false, true, false, false, false, false],
+        [false, false, true, false, false, false],
+        [false, false, false, true, false, nil],
+        [false, false, false, false, true, false],
+        [false, false, false, false, false, true],
+      ]
+      assert_equal expect, @df.group(:i, :s).filters.map(&:to_a)
+      assert_true @df.group(:i, :s).filters.all?(Vector)
     end
 
     test 'group_count' do
@@ -254,6 +269,23 @@ class GroupTest < Test::Unit::TestCase
         3   (nil)           1
       STR
       assert_equal str, group.inspect
+    end
+  end
+
+  sub_test_case 'call Vector\'s aggregating function' do
+    setup do
+      @df = DataFrame.new(
+        i: [0, 0, 1, 2, 2, 2],
+        f: [0.0, 1.1, 2.2, 3.3, 4.4, 5.5]
+      )
+    end
+
+    test 'filters by a key' do
+      expect = [
+        [:'sum(f)'],
+        [[1.1, 2.2, 13.2]],
+      ]
+      assert_equal expect, @df.group(:i).agg_sum(:f)
     end
   end
 end
