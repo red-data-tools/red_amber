@@ -4,12 +4,12 @@
 # reference: https://arrow.apache.org/docs/cpp/compute.html
 
 module RedAmber
-  # mix-ins for class Vector
+  # mix-in for class Vector
   # Functions to select some data.
   module VectorSelectable
     def drop_nil
       datum = find(:drop_null).execute([data])
-      Vector.new(datum.value)
+      Vector.create(datum.value)
     end
 
     # vector calculation version of selection by indices
@@ -100,7 +100,7 @@ module RedAmber
           Array(values).flatten
         end
 
-      Vector.new(self_data.is_in(array))
+      Vector.create(self_data.is_in(array))
     end
 
     # Arrow's support required
@@ -121,7 +121,7 @@ module RedAmber
       index_array = Arrow::UInt64ArrayBuilder.build(normalized_indices.data) # round to integer array
 
       datum = find(:take).execute([data, index_array]) # :array_take will fail with ChunkedArray
-      Vector.new(datum.value)
+      Vector.create(datum.value)
     end
 
     # Accepts booleans by Arrow::BooleanArray
@@ -129,7 +129,7 @@ module RedAmber
       raise VectorArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 
       datum = find(:array_filter).execute([data, boolean_array])
-      Vector.new(datum.value)
+      Vector.create(datum.value)
     end
   end
 end

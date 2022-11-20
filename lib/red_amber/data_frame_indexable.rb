@@ -18,7 +18,7 @@ module RedAmber
     # @return [RedAmber::Vector] Sorted indices in Vector
     def sort_indices(*sort_keys)
       indices = @table.sort_indices(sort_keys.flatten)
-      Vector.new(indices)
+      Vector.create(indices)
     end
 
     # @return [RedAmber::DataFrame] Sorted DataFrame

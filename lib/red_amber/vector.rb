@@ -12,6 +12,14 @@ module RedAmber
 
     using RefineArrayLike
 
+    # Quicker constructor of Vector.
+    #
+    def self.create(arrow_array)
+      instance = allocate
+      instance.instance_variable_set(:@data, arrow_array)
+      instance
+    end
+
     # Create Vector.
     #
     def initialize(*array)

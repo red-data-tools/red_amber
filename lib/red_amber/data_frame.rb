@@ -352,7 +352,7 @@ module RedAmber
     # initialize @variable, @keys, @vectors and return one of them
     def init_instance_vars(var)
       ary = @table.columns.each_with_object([{}, [], []]) do |column, (variables, keys, vectors)|
-        v = Vector.new(column.data)
+        v = Vector.create(column.data)
         k = column.name.to_sym
         v.key = k
         variables[k] = v

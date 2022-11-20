@@ -87,7 +87,7 @@ module RedAmber
     unary_element_wise.each do |function|
       define_method(function) do |**options|
         datum = exec_func_unary(function, options)
-        Vector.new(datum.value)
+        Vector.create(datum.value)
       end
     end
     alias_method :is_nil, :is_null
@@ -113,12 +113,12 @@ module RedAmber
     unary_element_wise_op.each do |function, operator|
       define_method(function) do |**options|
         datum = exec_func_unary(function, options)
-        Vector.new(datum.value)
+        Vector.create(datum.value)
       end
 
       define_method(operator) do |**options|
         datum = exec_func_unary(function, options)
-        Vector.new(datum.value)
+        Vector.create(datum.value)
       end
     end
     alias_method :not, :invert
@@ -129,7 +129,7 @@ module RedAmber
     binary_element_wise.each do |function|
       define_method(function) do |other, **options|
         datum = exec_func_binary(function, other, options)
-        Vector.new(datum.value)
+        Vector.create(datum.value)
       end
     end
 
@@ -145,7 +145,7 @@ module RedAmber
     logical_binary_element_wise.each do |method, function|
       define_method(method) do |other, **options|
         datum = exec_func_binary(function, other, options)
-        Vector.new(datum.value)
+        Vector.create(datum.value)
       end
     end
 
@@ -171,12 +171,12 @@ module RedAmber
     binary_element_wise_op.each do |function, operator|
       define_method(function) do |other, **options|
         datum = exec_func_binary(function, other, options)
-        Vector.new(datum.value)
+        Vector.create(datum.value)
       end
 
       define_method(operator) do |other, **options|
         datum = exec_func_binary(function, other, options)
-        Vector.new(datum.value)
+        Vector.create(datum.value)
       end
     end
     alias_method :eq, :equal
