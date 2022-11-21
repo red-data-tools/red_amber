@@ -46,4 +46,40 @@ module RedAmber
       end
     end
   end
+
+  # Add additional capabilities to Array
+  module RefineArray
+    refine Array do
+      def integers?
+        all?(Integer)
+      end
+
+      def booleans?
+        all? { |e| e.is_a?(TrueClass) || e.is_a?(FalseClass) || e.is_a?(NilClass) }
+      end
+
+      def symbols?
+        all?(Symbol)
+      end
+
+      def symbols_or_strings?
+        all? { |e| e.is_a?(String) || e.is_a?(Symbol) }
+      end
+
+      # Convert booleans to indices
+      def to_indices
+        (0...size).select.with_index { |_, i| self[i] }
+      end
+
+      # take elements by indices
+      def take_by(indices)
+        indices.map { |i| self[i] }
+      end
+
+      # filter elements by booleans
+      def filter_by(booleans)
+        select.with_index { |_, i| booleans[i] }
+      end
+    end
+  end
 end

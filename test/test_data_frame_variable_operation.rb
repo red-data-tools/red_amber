@@ -25,7 +25,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     test 'Empty dataframe' do
       df = DataFrame.new
       assert_true df.pick.empty?
-      assert_raise(VectorArgumentError) { df.pick(1) }
+      assert_raise(IndexError) { df.pick(1) }
     end
 
     test 'pick by arguments' do
@@ -60,7 +60,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.pick(0...2).tdr_str
       assert_equal str, @df.pick(..1).tdr_str
       # assert_equal str, @df.pick(..:b).tdr_str
-      assert_raise(DataFrameArgumentError) { @df.pick(0..5) }
+      assert_raise(IndexError) { @df.pick(0..5) }
     end
 
     test 'pick by endless Range' do
@@ -153,8 +153,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.drop(:b..:c).tdr_str
       assert_equal str, @df.drop(1...3).tdr_str
       assert_true @df.drop(..3).empty?
-      # assert_true @df.drop(..:d).empty?
-      assert_raise(DataFrameArgumentError) { @df.drop(0..5) }
+      assert_raise(DataFrameArgumentError) { @df.drop(..:d) }
+      assert_raise(IndexError) { @df.drop(0..5) }
     end
 
     test 'drop by endless Range' do
@@ -166,7 +166,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         1 :b  double     3 [0.0, NaN, nil], 1 NaN, 1 nil
       STR
       assert_equal str, @df.drop(2..).tdr_str
-      # assert_equal str, @df.drop(:c..).tdr_str
+      assert_raise(DataFrameArgumentError) { @df.drop(:c..) }
       assert_equal str, @df.drop(-2..).tdr_str
       assert_equal str, @df.drop(2...).tdr_str
       assert_equal str, @df.drop(2..-1).tdr_str

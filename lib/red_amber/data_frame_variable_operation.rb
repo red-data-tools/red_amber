@@ -3,6 +3,9 @@
 module RedAmber
   # mix-ins for the class DataFrame
   module DataFrameVariableOperation
+    # Array is refined
+    using RefineArray
+
     # pick up some variables to create sub DataFrame
     def pick(*args, &block)
       picker = args
@@ -12,25 +15,20 @@ module RedAmber
         picker = [instance_eval(&block)]
       end
       picker.flatten!
-      return DataFrame.new if picker.empty? || picker == [nil]
+      return DataFrame.new if picker.empty? || picker[0].nil?
 
-      key_vector = Vector.new(keys)
-      vec = parse_to_vector(picker, vsize: n_keys)
-
-      ary =
-        if vec.boolean?
-          key_vector.filter(*vec).to_a
-        elsif vec.numeric?
-          key_vector.take(*vec).to_a
-        elsif vec.string? || vec.dictionary?
-          vec.to_a
+      picked =
+        if picker.integers? || picker.symbols?
+          picker
+        elsif picker.booleans?
+          picker.to_indices
         else
-          raise DataFrameArgumentError, "Invalid argument #{args}"
+          parse_to_array(picker, n_keys)
         end
 
       # DataFrame#[] creates a Vector if single key is specified.
       # DataFrame#pick creates a DataFrame with single key.
-      DataFrame.new(@table[ary])
+      DataFrame.create(@table[picked])
     end
 
     # drop some variables to create remainer sub DataFrame
@@ -43,25 +41,28 @@ module RedAmber
       end
       dropper.flatten!
 
-      key_vector = Vector.new(keys)
-      vec = parse_to_vector(dropper, vsize: n_keys)
-
-      ary =
-        if vec.boolean?
-          key_vector.filter(*vec.primitive_invert).each.map(&:to_sym) # Array
-        elsif vec.numeric?
-          keys - key_vector.take(*vec).each.map(&:to_sym) # Array
-        elsif vec.string? || vec.dictionary?
-          keys - vec.to_a.map { _1&.to_sym } # Array
+      drops =
+        if dropper.symbols?
+          dropper
+        elsif dropper.integers?
+          keys.take_by(dropper)
+        elsif dropper.booleans?
+          keys.filter_by(dropper)
         else
-          raise DataFrameArgumentError, "Invalid argument #{args}"
+          d = parse_to_array(dropper, n_keys)
+          if d.symbols?
+            d
+          elsif d.integers?
+            keys.take_by(d)
+          end
         end
+      picked = keys - drops
 
-      return DataFrame.new if ary.empty?
+      return DataFrame.new if picked.empty?
 
       # DataFrame#[] creates a Vector if single key is specified.
       # DataFrame#drop creates a DataFrame with single key.
-      DataFrame.create(@table[ary])
+      DataFrame.create(@table[picked])
     end
 
     # rename variables to create a new DataFrame
