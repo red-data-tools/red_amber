@@ -18,7 +18,7 @@ module RedAmber
       return DataFrame.new if picker.empty? || picker[0].nil?
 
       picked =
-        if picker.integers? || picker.symbols?
+        if picker.symbols_or_strings? || picker.integers?
           picker
         elsif picker.booleans?
           picker.to_indices
@@ -28,7 +28,7 @@ module RedAmber
 
       # DataFrame#[] creates a Vector if single key is specified.
       # DataFrame#pick creates a DataFrame with single key.
-      DataFrame.create(@table[picked])
+      DataFrame.create(@table.select_columns(*picked))
     end
 
     # drop some variables to create remainer sub DataFrame
@@ -41,28 +41,25 @@ module RedAmber
       end
       dropper.flatten!
 
-      drops =
+      picked =
         if dropper.symbols?
-          dropper
-        elsif dropper.integers?
-          keys.take_by(dropper)
+          keys - dropper
+        elsif dropper.strings?
+          keys - dropper.map(&:to_sym)
         elsif dropper.booleans?
-          keys.filter_by(dropper)
+          keys.reject_by_booleans(dropper)
         else
-          d = parse_to_array(dropper, n_keys)
-          if d.symbols?
-            d
-          elsif d.integers?
-            keys.take_by(d)
+          drops = parse_to_array(dropper, n_keys)
+          keys.reject.with_index do |k, i|
+            drops.include?(k) || drops.include?(i)
           end
         end
-      picked = keys - drops
 
       return DataFrame.new if picked.empty?
 
       # DataFrame#[] creates a Vector if single key is specified.
       # DataFrame#drop creates a DataFrame with single key.
-      DataFrame.create(@table[picked])
+      DataFrame.create(@table.select_columns(*picked))
     end
 
     # rename variables to create a new DataFrame

@@ -62,23 +62,37 @@ module RedAmber
         all?(Symbol)
       end
 
+      def strings?
+        all?(String)
+      end
+
       def symbols_or_strings?
         all? { |e| e.is_a?(String) || e.is_a?(Symbol) }
       end
 
-      # Convert booleans to indices
+      # convert booleans to indices
       def to_indices
         (0...size).select.with_index { |_, i| self[i] }
       end
 
-      # take elements by indices
-      def take_by(indices)
-        indices.map { |i| self[i] }
+      # select elements by booleans
+      def select_by_booleans(booleans)
+        select.with_index { |_, i| booleans[i] }
       end
 
-      # filter elements by booleans
-      def filter_by(booleans)
-        select.with_index { |_, i| booleans[i] }
+      # reject elements by booleans
+      def reject_by_booleans(booleans)
+        reject.with_index { |_, i| booleans[i] }
+      end
+
+      # select elements by indices
+      def select_by_indices(indices)
+        select.with_index { |_, i| indices.include?(i) }
+      end
+
+      # reject elements by indices
+      def reject_by_indices(indices)
+        reject.with_index { |_, i| indices.include?(i) }
       end
     end
   end
