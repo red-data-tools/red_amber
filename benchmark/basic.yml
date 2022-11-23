@@ -1,11 +1,11 @@
 contexts:
+  - gems:
+      red_amber: 0.2.0 # as a standard of loop_count
   - name: HEAD
     prelude: |
       $LOAD_PATH.unshift(File.expand_path('lib'))
   - gems:
       red_amber: 0.2.3
-  - gems:
-      red_amber: 0.2.0
   - gems:
       red_amber: 0.1.5
 
@@ -15,6 +15,7 @@ prelude: |
 
   ds = Datasets::Rdatasets.new('nycflights13', 'flights')
   df = RedAmber::DataFrame.new(ds.to_arrow)
+  df.keys # initialize instance variables
 
   slicer = df[:distance] > 1000
   distance_km = df[:distance] * 1.852
@@ -23,8 +24,8 @@ benchmark:
   'B01: Pick([]) by a key name': |
     df[:flight]
 
-  'B02: Pick by index': |
-    df[df.keys[9]]
+  'B02a: Pick([]) by key names': | 
+    df[:carrier, :flight]
 
   'B03: Pick by key names': |
     df.pick(:carrier, :flight)
