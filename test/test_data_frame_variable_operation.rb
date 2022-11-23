@@ -104,6 +104,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       STR
       assert_equal str, @df.pick { %i[a b] }.tdr_str
       assert_equal str, @df.pick { vectors.map(&:numeric?) }.tdr_str
+      assert_equal str, @df.pick { Vector.new(true, true, false, nil) }.tdr_str # Vector
       assert_equal str, @df.pick { [0, 1] }.tdr_str
     end
 
@@ -120,8 +121,10 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.pick(:c..:d, :a).tdr_str
       assert_equal str, @df.pick { [2..-1, 0] }.tdr_str
       assert_equal str, @df.pick { [:c..:d, :a] }.tdr_str
-      assert_equal str, @df.pick((:c..:d).each, 0.1).tdr_str # Enumerator and float
-      assert_equal str, @df.pick(Vector.new(2, 3, 0), nil).tdr_str # Vector and nil
+      assert_equal str, @df.pick((:c..:d).each, 0).tdr_str # Enumerator
+      assert_equal str, @df.pick(2.5, -0.2, 0.1).tdr_str # float
+      assert_equal str, @df.pick(Vector.new(2, 3, 0)).tdr_str # Vector
+      assert_equal str, @df.pick(2, 3, nil, 0).tdr_str # nil is ignored
       assert_equal str, @df.pick(Arrow::Array.new([2, 3, 0])).tdr_str # else clause in _parse_element
     end
 
@@ -195,6 +198,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.drop { :d }.tdr_str
       assert_equal str, @df.drop { [:d] }.tdr_str
       assert_equal str, @df.drop { vectors.map(&:boolean?) }.tdr_str
+      assert_equal str, @df.drop { Vector.new(false, false, nil, true) }.tdr_str # Vector
       assert_equal str, @df.drop { -1 }.tdr_str
 
       str = <<~STR
@@ -222,8 +226,10 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.drop(:c..:d, :b).tdr_str
       assert_equal str, @df.drop { [2..-1, 1] }.tdr_str
       assert_equal str, @df.drop { [:b, :c..:d] }.tdr_str
-      assert_equal str, @df.drop((:c..:d).each, 1.1).tdr_str # Enumerator and float
-      assert_equal str, @df.drop(Vector.new(2, 3, 1), nil).tdr_str # Vector and nil
+      assert_equal str, @df.drop((:c..:d).each, 1).tdr_str # Enumerator
+      assert_equal str, @df.drop(2.5, -0.2, 1.1).tdr_str # float
+      assert_equal str, @df.drop(Vector.new(2, 3, 1)).tdr_str # Vector
+      assert_equal str, @df.drop(2, 3, nil, 1).tdr_str # nil is ignored
       assert_equal str, @df.drop(Arrow::Array.new([2, 3, 1])).tdr_str # else clause in _parse_element
     end
   end

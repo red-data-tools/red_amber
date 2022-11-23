@@ -6,7 +6,18 @@ module RedAmber
     # Array is refined
     using RefineArray
 
-    # pick up some variables to create sub DataFrame
+    # Pick up variables (columns) to create a new DataFrame
+    #
+    # @overload pick(keys)
+    #   Pick by Symbols or Strings.
+    #
+    #   @param keys [Symbol, String, <Symbol, String>]
+    #     key name(s) of variables to pick.
+    #   @return DataFrame
+    #     Picked DataFrame.
+    #
+    # @todo this document is under construction.
+    #
     def pick(*args, &block)
       picker = args
       if block
@@ -23,7 +34,7 @@ module RedAmber
         elsif picker.booleans?
           picker.to_indices
         else
-          parse_to_array(picker, n_keys)
+          parse_to_array(picker, n_keys).compact
         end
 
       # DataFrame#[] creates a Vector if single key is specified.
@@ -49,7 +60,7 @@ module RedAmber
         elsif dropper.booleans?
           keys.reject_by_booleans(dropper)
         else
-          drops = parse_to_array(dropper, n_keys)
+          drops = parse_to_array(dropper, n_keys).compact
           keys.reject.with_index do |k, i|
             drops.include?(k) || drops.include?(i)
           end

@@ -45,9 +45,9 @@ module RedAmber
       when Enumerator
         parse_to_array(Array(elem), array_size)
       when Float
-        Array(_normalize_index(elem.to_i, array_size))
+        Array(_normalize_index(elem.floor, array_size))
       when NilClass
-        []
+        [nil]
       else # rubocop:disable Lint/DuplicateBranch
         # ignore cop above to process Symbol quickly
         Array(elem)
