@@ -70,6 +70,10 @@ module RedAmber
         all? { |e| e.is_a?(String) } # rubocop:disable Performance/RedundantEqualityComparisonBlock
       end
 
+      def symbols_or_strings?
+        all? { |e| e.is_a?(Symbol) || e.is_a?(String) }
+      end
+
       # convert booleans to indices
       def booleans_to_indices
         (0...size).select.with_index { |_, i| self[i] }
@@ -85,12 +89,8 @@ module RedAmber
         reject.with_index { |_, i| booleans[i] }
       end
 
-      # select elements by indices
-      def select_by_indices(indices)
-        select.with_index { |_, i| indices.include?(i) || indices.include?(i - size) }
-      end
-
       # reject elements by indices
+      # notice: order by indices is not considered.
       def reject_by_indices(indices)
         reject.with_index { |_, i| indices.include?(i) || indices.include?(i - size) }
       end
