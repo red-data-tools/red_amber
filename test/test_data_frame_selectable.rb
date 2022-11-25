@@ -24,7 +24,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal hash, df_range[:a..:b, :c].to_h
       hash.delete(:c)
       assert_equal hash, df_range[:a...:c].to_h
-      assert_raise(RangeError) { df_range[:a..] }
+      assert_raise(DataFrameArgumentError) { df_range[:a..] }
     end
 
     test 'Select observations by indeces' do
@@ -42,7 +42,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal Hash(x: [2, 3], y: %w[B C]), df[-2..].to_h
       assert_equal Hash(x: [1, 2], y: %w[A B]), df[..1].to_h
       assert_equal Hash(x: [1, 2], y: %w[A B]), df[nil...-1].to_h
-      assert_equal Hash(x: [1, 2, 3], y: %w[A B C]), df[nil..].to_h
+      assert_raise(DataFrameArgumentError) { df[nil..] }
     end
 
     test 'Select observations by Array with Range' do
@@ -54,9 +54,9 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     test 'Select observations over range' do
       assert_raise(DataFrameArgumentError) { df[3] }
       assert_raise(DataFrameArgumentError) { df[-4] }
-      assert_raise(DataFrameArgumentError) { df[2..3, 0] }
-      assert_raise(DataFrameArgumentError) { df[3..4, 0] }
-      assert_raise(DataFrameArgumentError) { df[-4..-1] }
+      assert_raise(IndexError) { df[2..3, 0] }
+      assert_raise(IndexError) { df[3..4, 0] }
+      assert_raise(IndexError) { df[-4..-1] }
     end
 
     test 'Select observations by float index' do
@@ -271,6 +271,20 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     test 'slice by Enumerator' do
       df = DataFrame.new(x: [*0..10])
       assert_equal_array [1, 4, 7, 10], df.slice(1.step(by: 3, to: 10))[:x]
+    end
+  end
+
+  sub_test_case 'error in []' do
+    setup do
+      @df = DataFrame.new(x: [1, 2, 3], y: %w[A B C])
+    end
+
+    test 'error by mixed args' do
+      assert_raise(DataFrameArgumentError) { @df[Date.today] }
+    end
+
+    test 'error by invalid args' do
+      assert_raise(ArgumentError) { @df[:x, -1] }
     end
   end
 

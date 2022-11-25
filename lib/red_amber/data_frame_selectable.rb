@@ -3,23 +3,30 @@
 module RedAmber
   # mix-in for the class DataFrame
   module DataFrameSelectable
-    # select columns: [symbol] or [string]
-    # select rows: [array of index], [range]
+    # Array is refined
+    using RefineArray
+
+    # select variables (columns): [symbols] or [strings]
+    # select records (rows): [indices], [range]
     def [](*args)
-      args.flatten!
-      raise DataFrameArgumentError, 'Empty dataframe' if empty?
+      raise DataFrameArgumentError, 'self is an empty dataframe' if empty?
+
       return remove_all_values if args.empty? || args[0].nil?
+      return select_vars_by_keys(args) if args.symbols_or_strings?
 
-      vector = parse_to_vector(args)
+      array = parse_args(args, size)
+      vector = Vector.new(array)
       if vector.boolean?
-        return filter_by_vector(vector.data) if vector.size == size
+        raise DataFrameArgumentError, "Size (#{size}) is not match in booleans: #{args}" unless vector.size == size
 
-        raise DataFrameArgumentError, "Size is not match in booleans: #{args}"
+        filter_by_vector(vector.data)
+      elsif vector.numeric?
+        take_by_array(vector)
+      elsif vector.string? || vector.dictionary?
+        select_vars_by_keys(array)
+      else
+        raise DataFrameArgumentError, "Invalid argument: #{args}"
       end
-      return take_by_array(vector) if vector.numeric?
-      return select_vars_by_keys(vector.to_a.map(&:to_sym)) if vector.string? || vector.dictionary?
-
-      raise DataFrameArgumentError, "Invalid argument: #{args}"
     end
 
     # slice and select rows to create sub DataFrame
@@ -202,13 +209,16 @@ module RedAmber
     private
 
     def select_vars_by_keys(keys)
+      org = keys.dup
       if keys.one?
         key = keys[0].to_sym
-        raise DataFrameArgumentError, "Key does not exist #{keys}" unless key? key
+        raise DataFrameArgumentError, "Key does not exist: #{key} in #{org}" unless key? key
 
         variables[key]
+        # Vector.new(@table.find_column(*key).data)
       else
-        DataFrame.new(@table[keys])
+        check_duplicate_keys(keys)
+        DataFrame.create(@table.select_columns(*keys))
       end
     end
 
