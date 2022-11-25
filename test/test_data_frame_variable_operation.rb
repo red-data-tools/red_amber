@@ -226,11 +226,13 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.drop(:c..:d, :b).tdr_str
       assert_equal str, @df.drop { [2..-1, 1] }.tdr_str
       assert_equal str, @df.drop { [:b, :c..:d] }.tdr_str
-      assert_equal str, @df.drop((:c..:d).each, 1).tdr_str # Enumerator
+      assert_equal str, @df.drop((:c..:d).each, :b).tdr_str # Enumerator
       assert_equal str, @df.drop(2.5, -0.2, 1.1).tdr_str # float
       assert_equal str, @df.drop(Vector.new(2, 3, 1)).tdr_str # Vector
       assert_equal str, @df.drop(2, 3, nil, 1).tdr_str # nil is ignored
       assert_equal str, @df.drop(Arrow::Array.new([2, 3, 1])).tdr_str # else clause in _parse_element
+
+      assert_raise(DataFrameArgumentError) { @df.drop((:c..:d).each, 1) }
     end
   end
 

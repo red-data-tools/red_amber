@@ -19,58 +19,67 @@ module RedAmber
     # @todo this document is under construction.
     #
     def pick(*args, &block)
-      picker = args
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        picker = [instance_eval(&block)]
+        args = [instance_eval(&block)]
       end
-      picker.flatten!
-      return DataFrame.new if picker.empty? || picker[0].nil?
+      return DataFrame.new if args.empty?
 
-      picked =
-        if picker.symbols_or_strings? || picker.integers?
-          picker
-        elsif picker.booleans?
-          picker.to_indices
+      return DataFrame.create(@table.select_columns(*args)) if args.symbols?
+
+      picker = parse_args(args, n_keys)
+      picker =
+        if picker.booleans?
+          picker.booleans_to_indices
         else
-          parse_to_array(picker, n_keys).compact
+          picker.compact
         end
+
+      return DataFrame.new if picker.empty?
 
       # DataFrame#[] creates a Vector if single key is specified.
       # DataFrame#pick creates a DataFrame with single key.
-      DataFrame.create(@table.select_columns(*picked))
+
+      raise DataFrameArgumentError, "some keys are duplicated: #{args}" if picker.uniq!
+
+      DataFrame.create(@table.select_columns(*picker))
     end
 
     # drop some variables to create remainer sub DataFrame
     def drop(*args, &block)
-      dropper = args
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        dropper = [instance_eval(&block)]
+        args = [instance_eval(&block)]
       end
-      dropper.flatten!
+      return self if args.empty? || empty?
+      return DataFrame.create(@table.select_columns(*(keys - args))) if args.symbols?
 
-      picked =
-        if dropper.symbols?
-          keys - dropper
-        elsif dropper.strings?
-          keys - dropper.map(&:to_sym)
-        elsif dropper.booleans?
-          keys.reject_by_booleans(dropper)
+      picker =
+        if args.booleans?
+          keys.reject_by_booleans(args)
+        elsif args.integers?
+          keys.reject_by_indices(args)
         else
-          drops = parse_to_array(dropper, n_keys).compact
-          keys.reject.with_index do |k, i|
-            drops.include?(k) || drops.include?(i)
+          dropper = parse_args(args, n_keys)
+          if dropper.booleans?
+            keys.reject_by_booleans(dropper)
+          elsif dropper.symbols?
+            keys - dropper
+          else
+            dropper.compact!
+            raise DataFrameArgumentError, "Invalid argument #{args}" unless dropper.integers?
+
+            keys.reject_by_indices(dropper)
           end
         end
 
-      return DataFrame.new if picked.empty?
+      return DataFrame.new if picker.empty?
 
       # DataFrame#[] creates a Vector if single key is specified.
       # DataFrame#drop creates a DataFrame with single key.
-      DataFrame.create(@table.select_columns(*picked))
+      DataFrame.create(@table.select_columns(*picker))
     end
 
     # rename variables to create a new DataFrame

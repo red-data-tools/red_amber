@@ -82,7 +82,7 @@ Metrics/AbcSize:
     'slice_by', # 38.29
     'remove', # 44.42
     'drop', # 31.42
-    '_parse_element', # 35.96
+    'parse_args', # 33.11
   ]
 
 # Max: 25
@@ -93,6 +93,7 @@ Metrics/BlockLength:
   Max: 25
   Exclude:
     - 'test/**/*'
+    - 'lib/red_amber/helper.rb' # 32
 
 # It's ok if class is big
 # Max: 100
@@ -118,7 +119,7 @@ Metrics/CyclomaticComplexity:
     'remove', # 14
     'normalize_element', # 17
     '[]', # 13
-    '_parse_element', # 21
+    'parse_args', # 21
   ]
 
 # Max: 10
@@ -132,7 +133,7 @@ Metrics/MethodLength:
     'format_table', # 53
     'slice_by', # 38
     'assign_update', # 35
-    '_parse_element', # 34
+    'parse_args', # 34
   ]
 
 # Max: 100
@@ -169,7 +170,7 @@ Metrics/PerceivedComplexity:
     'filters', # 11
     'normalize_element', # 17
     '[]', # 11
-    '_parse_element', # 17
+    'parse_args', # 18
   ]
 
 # Offense count: 1

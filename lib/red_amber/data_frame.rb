@@ -14,6 +14,7 @@ module RedAmber
     include DataFrameVariableOperation
     include Helper
 
+    using RefineArrowTable
     using RefineHash
 
     # Quicker DataFrame construction from a `Arrow::Table`.
@@ -26,7 +27,6 @@ module RedAmber
     def self.create(table)
       instance = allocate
       instance.instance_variable_set(:@table, table)
-      instance.check_duplicate_keys(instance.keys)
       instance
     end
 
@@ -104,7 +104,6 @@ module RedAmber
       end
 
       name_unnamed_keys
-
       check_duplicate_keys(keys)
     end
 
@@ -340,13 +339,6 @@ module RedAmber
       super
     end
 
-    # For internal use
-    def check_duplicate_keys(keys)
-      return if keys == keys.uniq
-
-      raise DataFrameArgumentError, "duplicate keys: #{keys.tally.select { |_k, v| v > 1 }.keys}"
-    end
-
     private
 
     # initialize @variable, @keys, @vectors and return one of them
@@ -363,8 +355,15 @@ module RedAmber
       ary[%i[variables keys vectors].index(var)]
     end
 
+    def check_duplicate_keys(array)
+      org = array.dup
+      return unless array.uniq!
+
+      raise DataFrameArgumentError, "duplicate keys: #{org.tally.select { |_k, v| v > 1 }.keys}"
+    end
+
     def name_unnamed_keys
-      return unless @table[:'']
+      return unless @table.key?('')
 
       # We can't use #keys because it causes mismatch of @table and @keys
       keys = @table.schema.fields.map { |f| f.name.to_sym }

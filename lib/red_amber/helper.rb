@@ -9,56 +9,42 @@ module RedAmber
       num > 1 ? 's' : ''
     end
 
-    def parse_to_array(args, array_size)
-      args.reduce([]) do |accum, elem|
-        accum.concat(_parse_element(elem, array_size))
-      end
-    end
+    def parse_args(args, array_size)
+      args.flat_map do |elem|
+        case elem
+        when Integer, Symbol, NilClass, TrueClass, FalseClass
+          elem
+        when String
+          elem.to_sym
+        when Range
+          bg = elem.begin
+          en = elem.end
+          if [bg, en].any?(Integer)
+            bg += array_size if bg&.negative?
+            en += array_size if en&.negative?
+            en -= 1 if en.is_a?(Integer) && elem.exclude_end?
+            if bg&.negative? || (en && en >= array_size)
+              raise IndexError, "Index out of range: #{elem} for 0..#{array_size - 1}"
+            end
 
-    def _parse_element(elem, array_size)
-      case elem
-      when Integer
-        Array(_normalize_index(elem, array_size))
-      when Symbol # to process Symbol quickly
-        Array(elem)
-      # when String
-      #   Array(elem.to_sym)
-      when Range
-        bg = elem.begin
-        en = elem.end
-        if [bg, en].any?(Integer)
-          bg += array_size if bg&.negative?
-          en += array_size if en&.negative?
-          en -= 1 if en.is_a?(Integer) && elem.exclude_end?
-          if bg&.negative? || (en && en >= array_size)
-            raise IndexError, "Index out of range: #{elem} for 0..#{array_size - 1}"
+            Array(0...array_size)[elem]
+          elsif bg.nil?
+            raise DataFrameArgumentError, "Cannot use beginless Range: #{elem}"
+          elsif en.nil?
+            raise DataFrameArgumentError, "Cannot use endless Range: #{elem}"
+          else
+            Array(elem)
           end
-
-          Array(0...array_size)[elem]
-        elsif bg.nil?
-          raise DataFrameArgumentError, "Cannot use beginless Range: #{elem}"
-        elsif en.nil?
-          raise DataFrameArgumentError, "Cannot use endless Range: #{elem}"
+        when Array
+          parse_args(elem, array_size)
+        when Enumerator
+          parse_args(Array(elem), array_size)
+        when Float
+          elem.floor
         else
           Array(elem)
         end
-      when Enumerator
-        parse_to_array(Array(elem), array_size)
-      when Float
-        Array(_normalize_index(elem.floor, array_size))
-      when NilClass
-        [nil]
-      else # rubocop:disable Lint/DuplicateBranch
-        # ignore cop above to process Symbol quickly
-        Array(elem)
       end
-    end
-
-    def _normalize_index(index, array_size)
-      idx = index.negative? ? index + array_size : index
-      raise IndexError, "Index out of range: #{index} for 0..#{array_size - 1}" if idx.negative? || idx >= array_size
-
-      idx
     end
 
     def booleans?(enum)

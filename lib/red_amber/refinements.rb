@@ -44,6 +44,10 @@ module RedAmber
       def keys
         columns.map(&:name)
       end
+
+      def key?(key)
+        keys.include?(key)
+      end
     end
   end
 
@@ -51,7 +55,7 @@ module RedAmber
   module RefineArray
     refine Array do
       def integers?
-        all?(Integer)
+        all? { |e| e.is_a?(Integer) } # rubocop:disable Performance/RedundantEqualityComparisonBlock
       end
 
       def booleans?
@@ -59,19 +63,15 @@ module RedAmber
       end
 
       def symbols?
-        all?(Symbol)
+        all? { |e| e.is_a?(Symbol) } # rubocop:disable Performance/RedundantEqualityComparisonBlock
       end
 
       def strings?
-        all?(String)
-      end
-
-      def symbols_or_strings?
-        all? { |e| e.is_a?(String) || e.is_a?(Symbol) }
+        all? { |e| e.is_a?(String) } # rubocop:disable Performance/RedundantEqualityComparisonBlock
       end
 
       # convert booleans to indices
-      def to_indices
+      def booleans_to_indices
         (0...size).select.with_index { |_, i| self[i] }
       end
 
@@ -87,12 +87,12 @@ module RedAmber
 
       # select elements by indices
       def select_by_indices(indices)
-        select.with_index { |_, i| indices.include?(i) }
+        select.with_index { |_, i| indices.include?(i) || indices.include?(i - size) }
       end
 
       # reject elements by indices
       def reject_by_indices(indices)
-        reject.with_index { |_, i| indices.include?(i) }
+        reject.with_index { |_, i| indices.include?(i) || indices.include?(i - size) }
       end
     end
   end
