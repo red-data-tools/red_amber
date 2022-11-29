@@ -5,7 +5,7 @@
 
 module RedAmber
   # mix-in for class Vector
-  # Functions to select some data.
+  #   Functions to select some data.
   module VectorSelectable
     using RefineArray
 
@@ -15,7 +15,7 @@ module RedAmber
     end
 
     # vector version of selection by indices
-    # TODO: support for the option {boundscheck: true}
+    # TODO: support for the option `boundscheck: true``
     def take(*indices)
       case indices
       in [Vector => v] if v.numeric?
@@ -30,7 +30,7 @@ module RedAmber
       end
     end
 
-    # TODO: support for the option {null_selection_behavior: :drop}
+    # TODO: support for the option `null_selection_behavior: :drop``
     def filter(*booleans, &block)
       if block
         raise VectorArgumentError, 'Must not specify both arguments and block.' unless booleans.empty?

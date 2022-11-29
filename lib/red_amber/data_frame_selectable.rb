@@ -4,6 +4,7 @@ module RedAmber
   # mix-in for the class DataFrame
   module DataFrameSelectable
     # Array is refined
+    #
     using RefineArray
 
     # select variables (columns): [symbols] or [strings]
@@ -174,7 +175,7 @@ module RedAmber
     end
 
     # Undocumented
-    # TODO: support for option {boundscheck: true}
+    #   TODO: support for option `boundscheck: true``
     def take(*arg_indices)
       arg_indices.flatten!
       return remove_all_values if arg_indices.empty?
@@ -186,7 +187,7 @@ module RedAmber
     end
 
     # Undocumented
-    # TODO: support for option {null_selection_behavior: :drop}
+    #   TODO: support for option `null_selection_behavior: :drop``
     def filter(*booleans)
       booleans.flatten!
       return remove_all_values if booleans.empty?
@@ -236,7 +237,7 @@ module RedAmber
       DataFrame.create(datum.value)
     end
 
-    # Accepts booleans by Arrow::BooleanArray
+    # Accepts booleans by `Arrow::BooleanArray``
     def filter_by_vector(boolean_array)
       raise DataFrameArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 

@@ -8,7 +8,7 @@ module RedAmber
     # @param key [Symbol] key of the index column
     #   to transepose into keys.
     #   If it is not specified, keys[0] is used.
-    # @param new_key [Symbol] key name of transposed index column.
+    # @param name [Symbol] key name of transposed index column.
     #   If it is not specified, :NAME is used. If it already exists, :NAME1 or :NAME1.succ is used.
     # @return [DataFrame] trnsposed DataFrame
     def transpose(key: keys.first, name: :NAME)

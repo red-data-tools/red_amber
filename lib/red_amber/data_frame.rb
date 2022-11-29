@@ -19,7 +19,7 @@ module RedAmber
 
     # Quicker DataFrame construction from a `Arrow::Table`.
     #
-    # @params table [Arrow::Table] A table to have in the DataFrame.
+    # @param table [Arrow::Table] A table to have in the DataFrame.
     # @return [DataFrame] Initialized DataFrame.
     #
     # @note This method will allocate table directly and may be used in the method.
@@ -150,7 +150,7 @@ module RedAmber
     # Returns a Hash of key and Vector pairs in the columns.
     #
     # @return [Hash]
-    #   {key => Vector} pairs for each columns.
+    #   `key => Vector` pairs for each columns.
     #
     def variables
       @variables || @variables = init_instance_vars(:variables)
@@ -239,7 +239,7 @@ module RedAmber
 
     # Returns column-oriented data in a Hash.
     #
-    # @return [Hash] A Hash of {key => column_in_an_array}.
+    # @return [Hash] A Hash of 'key => column_in_an_array'.
     #
     def to_h
       variables.transform_values(&:to_a)

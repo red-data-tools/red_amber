@@ -111,7 +111,7 @@ module RedAmber
       end
     end
 
-    # @group_counts.sum == @dataframe.size
+    # @note `@group_counts.sum == @dataframe.size``
     def group_counts
       @group_counts ||= filters.map(&:sum)
     end

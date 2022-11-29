@@ -5,10 +5,23 @@ module RedAmber
   module Helper
     private
 
+    # If num is larger than 1 return 's' to be plural.
+    #
+    # @param num [Numeric] some number.
+    # @return ['s', ''] return 's' if num is larger than 1.
+    #   Otherwise return ''.
     def pl(num)
       num > 1 ? 's' : ''
     end
 
+    # Parse the argments in an Array
+    #   and returns a parsed Array.
+    #
+    # @param args [<Integer, Symbol, NilClass, TrueClass, FalseClass,
+    #   Array, Range, Enumerator, String, Float>] arguments.
+    # @param array_size [Integer] size of target Array to use in a endless Range.
+    # @return [<Integer, Symbol, NilClass, TrueClass, FalseClass>] parsed flat Array.
+    # @note This method is recursively called to parse.
     def parse_args(args, array_size)
       args.flat_map do |elem|
         case elem
@@ -30,6 +43,11 @@ module RedAmber
       end
     end
 
+    # Parse a Range to an Array
+    #
+    # @param range [Range] Range to parse.
+    # @param array_size [Integer] size of target Array to use in a endless Range.
+    # @return [Array<Integer, Symbol, String>] parsed Array.
     def parse_range(range, array_size)
       bg = range.begin
       en = range.end
