@@ -28,7 +28,7 @@ module RedAmber
 
       return DataFrame.create(@table.select_columns(*args)) if args.symbols?
 
-      picker = parse_args(args, n_keys)
+      picker = parse_args(args, n_keys, for_keys: true)
       picker =
         if picker.booleans?
           picker.booleans_to_indices
@@ -62,7 +62,7 @@ module RedAmber
         elsif args.integers?
           keys.reject_by_indices(args)
         else
-          dropper = parse_args(args, n_keys)
+          dropper = parse_args(args, n_keys, for_keys: true)
           if dropper.booleans?
             keys.reject_by_booleans(dropper)
           elsif dropper.symbols?

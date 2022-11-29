@@ -17,12 +17,14 @@ module RedAmber
     # Parse the argments in an Array
     #   and returns a parsed Array.
     #
-    # @param args [<Integer, Symbol, NilClass, TrueClass, FalseClass,
-    #   Array, Range, Enumerator, String, Float>] arguments.
+    # @param args
+    #   [<Integer, Symbol, true, false, nil, Array, Range, Enumerator, String, Float>]
+    #   arguments.
     # @param array_size [Integer] size of target Array to use in a endless Range.
-    # @return [<Integer, Symbol, NilClass, TrueClass, FalseClass>] parsed flat Array.
+    # @param for_keys [true, false] true if args are applied for keys, otherwise false.
+    # @return [<Integer, Symbol, true, false, nil>] parsed flat Array.
     # @note This method is recursively called to parse.
-    def parse_args(args, array_size)
+    def parse_args(args, array_size, for_keys: false)
       args.flat_map do |elem|
         case elem
         when Integer, Symbol, NilClass, TrueClass, FalseClass
@@ -36,7 +38,7 @@ module RedAmber
         when String
           elem.to_sym
         when Float
-          elem.floor
+          for_keys ? elem.floor : elem
         else
           Array(elem)
         end
