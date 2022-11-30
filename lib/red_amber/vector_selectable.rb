@@ -7,24 +7,30 @@ module RedAmber
   # mix-in for class Vector
   # Functions to select some data.
   module VectorSelectable
+    using RefineArray
+
     def drop_nil
       datum = find(:drop_null).execute([data])
       Vector.create(datum.value)
     end
 
-    # vector calculation version of selection by indices
-    # TODO: support for option {boundscheck: true}
+    # vector version of selection by indices
+    # TODO: support for the option {boundscheck: true}
     def take(*indices)
-      indices.flatten!
-      return Vector.new([]) if indices.empty?
+      case indices
+      in [Vector => v] if v.numeric?
+        take_by_vector(v)
+      in []
+        Vector.new
+      else
+        v = Vector.new(indices.flatten)
+        raise VectorArgumentError, "argument must be a integers: #{indices}" unless v.numeric?
 
-      indices = indices[0] if indices.one? && !indices[0].is_a?(Numeric)
-      indices = Vector.new(indices) unless indices.is_a?(Vector)
-
-      take_by_vector(indices) # returns sub Vector
+        take_by_vector(v)
+      end
     end
 
-    # TODO: support for option {null_selection_behavior: :drop}
+    # TODO: support for the option {null_selection_behavior: :drop}
     def filter(*booleans, &block)
       if block
         raise VectorArgumentError, 'Must not specify both arguments and block.' unless booleans.empty?
@@ -32,25 +38,21 @@ module RedAmber
         booleans = [yield]
       end
 
-      booleans.flatten!
-      return Vector.new([]) if booleans.empty?
+      case booleans
+      in [Vector => v]
+        return filter_by_array(v.data) if v.boolean?
 
-      b = booleans[0]
-      boolean_array =
-        case b
-        when Vector
-          raise VectorTypeError, 'Argument is not a boolean.' unless b.boolean?
+        raise VectorTypeError, 'Argument is not a boolean.'
+      in [Arrow::BooleanArray => ba]
+        filter_by_array(ba)
+      in []
+        Vector.new
+      else
+        booleans.flatten!
+        return filter_by_array(Arrow::BooleanArray.new(booleans)) if booleans.booleans?
 
-          b.data
-        when Arrow::BooleanArray
-          b
-        else
-          raise VectorTypeError, 'Argument is not a boolean.' unless booleans?(booleans)
-
-          Arrow::BooleanArray.new(booleans)
-        end
-
-      filter_by_array(boolean_array) # returns sub Vector
+        raise VectorTypeError, 'Argument is not a boolean.'
+      end
     end
     alias_method :select, :filter
     alias_method :find_all, :filter
@@ -58,28 +60,24 @@ module RedAmber
     #   @param indices
     #   @param booleans
     def [](*args)
-      args.flatten!
-      return Vector.new([]) if args.empty?
+      case args
+      in [Vector => v]
+        return take_by_vector(v) if v.numeric?
+        return filter_by_array(v.data) if v.boolean?
 
-      arg = args[0]
-      case arg
-      when Vector
-        return take_by_vector(arg) if arg.numeric?
-        return filter_by_array(arg.data) if arg.boolean?
-
-        raise VectorTypeError, "Argument must be numeric or boolean: #{arg}"
-      when Arrow::BooleanArray
-        return filter_by_array(arg)
-      when Arrow::Array
-        array = arg
-      when Range
-        array = normalize_element(arg)
+        raise VectorTypeError, "Argument must be numeric or boolean: #{args}"
+      in [Arrow::BooleanArray => ba]
+        return filter_by_array(ba)
+      in []
+        return Vector.new
+      in [Arrow::Array => aa]
+        array = aa
+      in [Range => r]
+        array = parse_range(r, size)
       else
-        unless arg.is_a?(Numeric) || booleans?([arg])
-          raise VectorArgumentError, "Argument must be numeric or boolean: #{args}"
-        end
+        array = Arrow::Array.new(args.flatten)
       end
-      array ||= Arrow::Array.new(args)
+
       return filter_by_array(array) if array.is_a?(Arrow::BooleanArray)
 
       vector = Vector.new(array)
@@ -112,13 +110,18 @@ module RedAmber
 
     # Accepts indices by numeric Vector
     def take_by_vector(indices)
-      raise VectorTypeError, "Indices must be numeric Vector: #{indices}" unless indices.numeric?
-      raise VectorArgumentError, "Index out of range: #{indices.min}" if indices.min <= -size - 1
+      indices = (indices < 0).if_else(indices + size, indices) if (indices < 0).any?
 
-      normalized_indices = (indices < 0).if_else(indices + size, indices) # normalize index from tail
-      raise VectorArgumentError, "Index out of range: #{normalized_indices.max}" if normalized_indices.max >= size
+      min, max = indices.min_max
+      raise VectorArgumentError, "Index out of range: #{min}" if min < 0
+      raise VectorArgumentError, "Index out of range: #{max}" if max >= size
 
-      index_array = Arrow::UInt64ArrayBuilder.build(normalized_indices.data) # round to integer array
+      index_array =
+        if indices.float?
+          Arrow::UInt64ArrayBuilder.build(indices.data)
+        else
+          indices.data
+        end
 
       datum = find(:take).execute([data, index_array]) # :array_take will fail with ChunkedArray
       Vector.create(datum.value)

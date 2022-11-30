@@ -20,19 +20,22 @@ module RedAmber
       instance
     end
 
-    # Create Vector.
+    # Create a Vector.
     #
+    # @note default is headless Vector and '@key == nil'
     def initialize(*array)
-      @key = nil # default is 'headless' Vector
-      array.flatten!
       @data =
         case array
+        in [Vector => v]
+          v.data
+        in [Range => r]
+          Arrow::Array.new(Array(r))
+        in [Arrow::Array | Arrow::ChunkedArray]
+          array[0]
         in [arrow_array_like] if arrow_array_like.respond_to?(:to_arrow_array)
           arrow_array_like.to_arrow_array
-        in []
-          Arrow::Array.new([])
         else
-          Arrow::Array.new(Array(array))
+          Arrow::Array.new(array.flatten)
         end
     end
 

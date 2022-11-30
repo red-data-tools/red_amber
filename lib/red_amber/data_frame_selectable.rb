@@ -42,7 +42,7 @@ module RedAmber
       raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
       return remove_all_values if slicer.empty? || slicer[0].nil?
 
-      vector = parse_to_vector(slicer)
+      vector = Vector.new(parse_args(slicer, size))
       if vector.boolean?
         return filter_by_vector(vector.data) if vector.size == size
 
@@ -110,7 +110,7 @@ module RedAmber
       raise DataFrameArgumentError, 'Empty dataframe' if empty?
       return self if remover.empty? || remover[0].nil?
 
-      vector = parse_to_vector(remover)
+      vector = Vector.new(parse_args(remover, size))
       if vector.boolean?
         return filter_by_vector(vector.primitive_invert.data) if vector.size == size
 
@@ -200,7 +200,7 @@ module RedAmber
       when Arrow::BooleanArray
         filter_by_vector(b)
       else
-        raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans?(booleans)
+        raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans.booleans?
 
         filter_by_vector(Arrow::BooleanArray.new(booleans))
       end

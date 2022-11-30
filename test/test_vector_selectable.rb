@@ -41,6 +41,10 @@ class VectorTest < Test::Unit::TestCase
       assert_raise(VectorArgumentError) { @string.take(-6) } # out of lower limit
       assert_raise(VectorArgumentError) { @string.take(5) } # out of upper limit
     end
+
+    test '#take invalid args' do
+      assert_raise(VectorArgumentError) { @string.take('A') }
+    end
   end
 
   sub_test_case('#filter(booleans)') do
@@ -60,6 +64,7 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array %w[A E], @string.filter(Arrow::BooleanArray.new(@booleans)) # Arrow::BooleanArray
       assert_equal_array %w[A E], @string.filter(Vector.new(@booleans)) # Vector
       assert_equal_array %w[A E], @string.filter([Vector.new(@booleans)]) # Vector
+      assert_raise(VectorTypeError) { @string.filter(Vector.new(@string)) } # Not a boolean Vector
       assert_equal_array [], @string.filter([nil] * 5) # nil array
     end
 
@@ -87,7 +92,7 @@ class VectorTest < Test::Unit::TestCase
     end
 
     test 'empty vector' do
-      assert_equal_array [], Vector.new([])[]
+      assert_equal_array [], Vector.new[]
     end
 
     test '#[indices]' do
@@ -111,6 +116,7 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array %w[A E], @string[@booleans] # primitive Array
       assert_equal_array %w[A E], @string[Arrow::BooleanArray.new(@booleans)] # Arrow::BooleanArray
       assert_equal_array %w[A E], @string[Vector.new(@booleans)] # Vector
+      assert_raise(VectorTypeError) { @string[Vector.new(@string)] } # Not a boolean Vector
       assert_raise(VectorArgumentError) { @string[nil] } # nil array
       assert_raise(VectorArgumentError) { @string[[nil] * 5] } # nil array
     end
@@ -120,7 +126,11 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array %w[B C D E], @string[1..] # Endless Range
       assert_equal_array %w[A B C], @string[..2] # Beginless Range
       assert_equal_array %w[B C D], @string[1..-2] # Range to index from tail
-      assert_raise(RedAmber::DataFrameArgumentError) { @string[1..6] }
+      assert_raise(IndexError) { @string[1..6] }
+    end
+
+    test 'invalid argument' do
+      assert_raise(VectorArgumentError) { @string[Object.new] }
     end
   end
 

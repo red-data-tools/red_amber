@@ -14,7 +14,7 @@ module RedAmber
     #   If specifier has no true, return self.
     #
     def replace(specifier, replacer)
-      vector = parse_to_vector(Array(specifier))
+      vector = Vector.new(parse_args(Array(specifier), size))
       return self if vector.empty? || empty?
 
       booleans =
