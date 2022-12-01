@@ -202,7 +202,8 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal str, @df.slice(*boolean).tdr_str
       assert_equal str, @df.slice(boolean).tdr_str
       assert_equal str, @df.slice(Arrow::BooleanArray.new(boolean)).tdr_str
-      assert_equal str, @df.slice(RedAmber::Vector.new(boolean)).tdr_str
+      assert_equal str, @df.slice(Vector.new(boolean)).tdr_str
+      assert_raise(DataFrameArgumentError) { @df.slice(Vector.new(boolean << true)) } # size not match
       assert_equal str, @df.slice(@df[:index] < 3).tdr_str
       assert_equal str, @df.slice(!@df[:float].is_na).tdr_str
     end
@@ -414,6 +415,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal str, @df.remove([3.5, -0.1]).tdr_str
       assert_equal str, @df.remove(Arrow::Array.new([3, 4])).tdr_str
       assert_equal str, @df.remove(Vector.new([3, 4])).tdr_str
+      assert_raise(DataFrameArgumentError) { @df.remove(5) }
     end
 
     test 'remove by booleans' do
@@ -432,6 +434,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal str, @df.remove(Arrow::BooleanArray.new(boolean)).tdr_str
       assert_equal str, @df.remove(RedAmber::Vector.new(boolean)).tdr_str
       assert_equal str, @df.remove(@df[:float].is_na).tdr_str
+      assert_raise(DataFrameArgumentError) { @df.remove(boolean << true) }
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 4 x 4 Vectors
@@ -526,21 +529,25 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
 
     test 'empty dataframe' do
-      assert_true DataFrame.new({}, []).take.empty?
+      assert_raise(ArgumentError) { DataFrame.new({}, []).take }
     end
 
     test '#take' do
-      assert_equal(Hash(x: [], y: []), @df.take.to_h) # nothing to get
-      assert_equal({ x: [2], y: ['B'] }, @df.take(1).to_h) # single value
-      assert_equal({ x: [2, 4], y: %w[B D] }, @df.take(1, 3).to_h) # array without bracket
-      assert_equal({ x: [4, 1, 4], y: %w[D A D] }, @df.take([3, 0, -2]).to_h) # array, negative index
-      assert_equal({ x: [4, 1, 4], y: %w[D A D] }, @df.take(Vector.new([3, 0, -2])).to_h) # array, negative index
-      assert_equal({ x: [4, nil, 3], y: ['D', nil, 'C'] }, @df.take([3.1, -0.5, -2.5]).to_h) # float index
+      assert_raise(ArgumentError) { @df.take }
+      assert_raise(Arrow::Error::NotImplemented) { @df.take(1) } # Not accept scalar
+      assert_raise(ArgumentError) { @df.take(1, 3) } # Not accept scalars
+      assert_equal({ x: [2, 4], y: %w[B D] }, @df.take([1, 3]).to_h)
+      assert_equal({ x: [4, 1, 4], y: %w[D A D] }, @df.take([3, 0, 3]).to_h) # array
+      assert_raise(ArgumentError) { @df.take(3, 0, -2) } # Not accept negative index
+      assert_raise(ArgumentError) { @df.take(Vector.new(3, 0, -2)) } # Not accept Vector
+      assert_raise(Arrow::Error::NotImplemented) { @df.take([3.0, 0, -2.0]) } # Not accept float index
     end
 
     test '#take out of range' do
-      assert_raise(DataFrameArgumentError) { @df.take(-6) } # out of lower limit
-      assert_raise(DataFrameArgumentError) { @df.take(5) } # out of upper limit
+      assert_raise(Arrow::Error::NotImplemented) { @df.take(-6) } # Not accept scalar
+      assert_raise(Arrow::Error::Index) { @df.take([-6]) } # out of lower limit
+      assert_raise(Arrow::Error::NotImplemented) { @df.take(5) } # Not accept scalar
+      assert_raise(Arrow::Error::Index) { @df.take([5]) } # out of upper limit
     end
   end
 
@@ -582,6 +589,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal_array %w[A B C], df.v('y')
       assert_raise(DataFrameArgumentError) { df.v(:z) }
       assert_raise(DataFrameArgumentError) { df.v('') }
+      assert_raise(DataFrameArgumentError) { df.v(0) }
     end
 
     test 'head/first' do

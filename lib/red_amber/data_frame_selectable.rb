@@ -12,52 +12,49 @@ module RedAmber
     def [](*args)
       raise DataFrameArgumentError, 'self is an empty dataframe' if empty?
 
-      return remove_all_values if args.empty? || args[0].nil?
-      return select_vars_by_keys(args) if args.symbols_or_strings?
-
-      array = parse_args(args, size)
-      vector = Vector.new(array)
-      if vector.boolean?
-        raise DataFrameArgumentError, "Size (#{size}) is not match in booleans: #{args}" unless vector.size == size
-
-        filter_by_vector(vector.data)
-      elsif vector.numeric?
-        take_by_array(vector)
-      elsif vector.string? || vector.dictionary?
-        select_vars_by_keys(array)
+      case args
+      in [] | [nil]
+        remove_all_values
+      in [*integers] if integers.all?(Integer)
+        take(normalize_index(Vector.new(args)))
+      in [*symbols] if symbols.all?(Symbol)
+        select_vars_by_keys(args)
       else
-        raise DataFrameArgumentError, "Invalid argument: #{args}"
+        array = parse_args(args, size)
+        if array.symbols?
+          select_vars_by_keys(array)
+        else
+          vector = Vector.new(array)
+          select_records_by_vector(vector, args)
+        end
       end
     end
 
-    # slice and select rows to create sub DataFrame
+    # slice and select records to create a sub DataFrame
     def slice(*args, &block)
-      slicer = args
+      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
+
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        slicer = [instance_eval(&block)]
+        args = [instance_eval(&block)]
       end
-      slicer.flatten!
 
-      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
-      return remove_all_values if slicer.empty? || slicer[0].nil?
-
-      vector = Vector.new(parse_args(slicer, size))
-      if vector.boolean?
-        return filter_by_vector(vector.data) if vector.size == size
-
-        raise DataFrameArgumentError, "Size is not match in booleans: #{slicer}"
+      case args
+      in [] | [[]] | [nil]
+        remove_all_values
+      in [Vector => v]
+        select_records_by_vector(v, args)
+      else
+        vector = Vector.new(parse_args(args, size))
+        select_records_by_vector(vector, args)
       end
-      return take_by_array(vector) if vector.numeric?
-
-      raise DataFrameArgumentError, "Invalid argument #{slicer}"
     end
 
     def slice_by(key, keep_key: false, &block)
       raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
       raise DataFrameArgumentError, 'No block given' unless block
-      raise DataFrameArgumentError, "#{key} is no a key of self" unless key?(key)
+      raise DataFrameArgumentError, "#{key} is not a key of self" unless key?(key)
       return self if key.nil?
 
       slicer = instance_eval(&block)
@@ -91,51 +88,45 @@ module RedAmber
         slicer = slicer.map { |x| x.is_a?(String) ? self[key].index(x) : x }
       end
 
-      if keep_key
-        take(slicer)
-      else
-        take(slicer).drop(key)
-      end
+      taken = take(normalize_index(Vector.new(slicer)))
+      keep_key ? taken : taken.drop(key)
     end
 
-    # remove selected rows to create remainer DataFrame
+    # remove selected records to create a remainer DataFrame
     def remove(*args, &block)
-      remover = args
+      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
+
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        remover = [instance_eval(&block)]
+        args = [instance_eval(&block)]
       end
-      remover.flatten!
 
-      raise DataFrameArgumentError, 'Empty dataframe' if empty?
-      return self if remover.empty? || remover[0].nil?
-
-      vector = Vector.new(parse_args(remover, size))
-      if vector.boolean?
-        return filter_by_vector(vector.primitive_invert.data) if vector.size == size
-
-        raise DataFrameArgumentError, "Size is not match in booleans: #{remover}"
-      end
-      if vector.numeric?
-        raise DataFrameArgumentError, "Index out of range: #{vector.min}" if vector.min <= -size - 1
-
-        normalized_indices = (vector < 0).if_else(vector + size, vector) # normalize index from tail
-        if normalized_indices.max >= size
-          raise DataFrameArgumentError, "Index out of range: #{normalized_indices.max}"
+      vector =
+        case args
+        in [] | [[]] | [nil]
+          return self
+        in [Vector => v]
+          v
+        else
+          Vector.new(parse_args(args, size))
         end
 
-        normalized_indices = normalized_indices.floor.to_a.map(&:to_i) # round to integer array
-        return remove_all_values if normalized_indices == indices.to_a
-        return self if normalized_indices.empty?
+      if vector.boolean?
+        raise DataFrameArgumentError, "Size is not match in booleans: #{args}" unless vector.size == size
 
-        index_array = indices.to_a - normalized_indices
+        filter_by_array(vector.primitive_invert.data)
+      elsif vector.numeric?
+        remover = normalize_index(vector).to_a
+        return self if remover.empty?
 
-        datum = Arrow::Function.find(:take).execute([table, index_array])
-        return DataFrame.new(datum.value)
+        slicer = indices.to_a - remover
+        return remove_all_values if slicer.empty?
+
+        take(slicer)
+      else
+        raise DataFrameArgumentError, "Invalid argument #{args}"
       end
-
-      raise DataFrameArgumentError, "Invalid argument #{remover}"
     end
 
     def remove_nil
@@ -175,15 +166,12 @@ module RedAmber
     end
 
     # Undocumented
-    #   TODO: support for option `boundscheck: true``
-    def take(*arg_indices)
-      arg_indices.flatten!
-      return remove_all_values if arg_indices.empty?
-
-      arg_indices = arg_indices[0] if arg_indices.one? && !arg_indices[0].is_a?(Numeric)
-      arg_indices = Vector.new(arg_indices) unless arg_indices.is_a?(Vector)
-
-      take_by_array(arg_indices)
+    #  TODO: support for option `boundscheck: true`
+    #  Supports indices in an Arrow::UInt{8, 16, 32, 64} or an Array
+    #  Negative index is not supported.
+    def take(index_array)
+      datum = Arrow::Function.find(:take).execute([table, index_array])
+      DataFrame.create(datum.value)
     end
 
     # Undocumented
@@ -197,23 +185,22 @@ module RedAmber
       when Vector
         raise DataFrameArgumentError, 'Argument is not a boolean.' unless b.boolean?
 
-        filter_by_vector(b.data)
+        filter_by_array(b.data)
       when Arrow::BooleanArray
-        filter_by_vector(b)
+        filter_by_array(b)
       else
         raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans.booleans?
 
-        filter_by_vector(Arrow::BooleanArray.new(booleans))
+        filter_by_array(Arrow::BooleanArray.new(booleans))
       end
     end
 
     private
 
     def select_vars_by_keys(keys)
-      org = keys.dup
       if keys.one?
         key = keys[0].to_sym
-        raise DataFrameArgumentError, "Key does not exist: #{key} in #{org}" unless key? key
+        raise DataFrameArgumentError, "Key does not exist: #{key}" unless key? key
 
         variables[key]
         # Vector.new(@table.find_column(*key).data)
@@ -223,22 +210,37 @@ module RedAmber
       end
     end
 
-    # Accepts indices by numeric Vector
-    def take_by_array(indices)
-      raise DataFrameArgumentError, "Indices must be a numeric Vector: #{indices}" unless indices.numeric?
-      raise DataFrameArgumentError, "Index out of range: #{indices.min}" if indices.min <= -size - 1
+    def select_records_by_vector(vector, org_args)
+      if vector.boolean?
+        raise DataFrameArgumentError, "Size is not match in booleans: #{org_args}" unless vector.size == size
 
-      normalized_indices = (indices < 0).if_else(indices + size, indices) # normalize index from tail
-      raise DataFrameArgumentError, "Index out of range: #{normalized_indices.max}" if normalized_indices.max >= size
-
-      index_array = Arrow::UInt64ArrayBuilder.build(normalized_indices.data) # round to integer array
-
-      datum = Arrow::Function.find(:take).execute([table, index_array])
-      DataFrame.create(datum.value)
+        filter_by_array(vector.data)
+      elsif vector.numeric?
+        take(normalize_index(vector))
+      elsif vector.to_a.compact.empty?
+        remove_all_values
+      else
+        raise DataFrameArgumentError, "Invalid argument #{org_args}"
+      end
     end
 
-    # Accepts booleans by `Arrow::BooleanArray``
-    def filter_by_vector(boolean_array)
+    # Accepts indices by numeric Vector and returns normalized indices.
+    def normalize_index(vector)
+      vector = (vector < 0).if_else(vector + size, vector) if (vector < 0).any?
+
+      min, max = vector.min_max
+      raise DataFrameArgumentError, "Index out of range: #{min}" if min < 0
+      raise DataFrameArgumentError, "Index out of range: #{max}" if max >= size
+
+      if vector.float?
+        Arrow::UInt64ArrayBuilder.build(vector.data)
+      else
+        vector.data
+      end
+    end
+
+    # Accepts booleans by a Arrow::BooleanArray or an Array
+    def filter_by_array(boolean_array)
       raise DataFrameArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 
       datum = Arrow::Function.find(:filter).execute([table, boolean_array])
@@ -247,7 +249,7 @@ module RedAmber
 
     # return a DataFrame with same keys as self without values
     def remove_all_values
-      filter_by_vector(Arrow::BooleanArray.new([false] * size))
+      filter_by_array(Arrow::BooleanArray.new([false] * size))
     end
   end
 end
