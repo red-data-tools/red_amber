@@ -20,7 +20,6 @@ prelude: |
 
   ds = Datasets::Rdatasets.new('nycflights13', 'flights')
   df = RedAmber::DataFrame.new(ds.to_arrow)
-  df.keys # initialize instance variables
 
   slicer = df[:distance] > 1000
   distance_km = df[:distance] * 1.852

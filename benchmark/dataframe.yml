@@ -1,0 +1,62 @@
+loop_count: 3
+
+contexts:
+  - name: HEAD
+    prelude: |
+      $LOAD_PATH.unshift(File.expand_path('lib'))
+  - name: 0.2.3
+    gems:
+      red_amber: 0.2.3
+  - name: 0.2.0
+    gems:
+      red_amber: 0.2.0
+
+prelude: |
+  require 'red_amber'
+  require 'datasets-arrow'
+
+  diamonds = RedAmber::DataFrame.new(Datasets::Diamonds.new.to_arrow)
+
+  starwars = RedAmber::DataFrame.new(Datasets::Rdataset.new('dplyr', 'starwars').to_arrow)
+
+  uri = URI("https://raw.githubusercontent.com/heronshoes/red_amber/master/test/entity/import_cars.tsv")
+  import_cars = RedAmber::DataFrame.load(uri)
+
+  ds = Datasets::Rdataset.new('openintro', 'simpsons_paradox_covid')
+  simpsons_paradox_covid = RedAmber::DataFrame.new(ds.to_arrow)
+
+benchmark:
+  'D01: Diamonds test': |
+    diamonds
+      .slice { v(:carat) > 1 }
+      .pick(:cut, :price)
+      .group(:cut)
+      .mean
+      .sort('-mean(price)')
+      .rename('mean(price)': :mean_price_USD)
+      .assign { [:mean_price_JPY, v(:mean_price_USD) * 110.0] }
+
+  'D02: Starwars test': |
+    starwars
+      .drop { keys.select { |key| key.end_with?('color') } }
+      .remove { v(:species) == 'NA' }
+      .group(:species) { [count(:species), mean(:height, :mass)] }
+      .slice { v(:count) > 1 }
+
+  'D03: Inport cars test': |
+    import_cars
+      .to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
+      .to_wide(name: :Manufacturer, value: :Num_of_imported)
+      .transpose
+
+  'D04: Simpsons paradox test': |
+    simpsons_paradox_covid[simpsons_paradox_covid[:age_group] == 'under 50']
+      .group(:vaccine_status, :outcome)
+      .count
+      .then { |df| df.to_wide(name: :vaccine_status, value: df.keys[-1]) }
+      .assign do
+        [
+          [:'vaccinated_%', (100.0 * v(:vaccinated) / v(:vaccinated).sum)],
+          [:'unvaccinated_%', (100.0 * v(:unvaccinated) / v(:unvaccinated).sum)]
+        ]
+      end
