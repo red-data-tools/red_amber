@@ -81,8 +81,8 @@ module RedAmber
 
     # [Unary element-wise]: vector.func => vector
     unary_element_wise =
-      %i[abs acos asin array_sort_indices atan bit_wise_not ceil cos fill_null_backward \
-         fill_null_forward floor is_finite is_inf is_nan is_null is_valid ln log10 log1p log2 \
+      %i[abs acos asin array_sort_indices atan bit_wise_not ceil cos fill_null_backward
+         fill_null_forward floor is_finite is_inf is_nan is_null is_valid ln log10 log1p log2
          round round_to_multiple sign sin tan trunc unique]
     unary_element_wise.each do |function|
       define_method(function) do |**options|
