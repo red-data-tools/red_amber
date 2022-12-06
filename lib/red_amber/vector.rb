@@ -102,35 +102,35 @@ module RedAmber
     end
 
     def boolean?
-      type_class == Arrow::BooleanDataType
+      @data.boolean?
     end
 
     def numeric?
-      type_class < Arrow::NumericDataType
+      @data.numeric?
     end
 
     def float?
-      type_class < Arrow::FloatingPointDataType
+      @data.float?
     end
 
     def integer?
-      type_class < Arrow::IntegerDataType
+      @data.integer?
     end
 
     def string?
-      type_class == Arrow::StringDataType
+      @data.string?
     end
 
     def dictionary?
-      type_class == Arrow::DictionaryDataType
+      @data.dictionary?
     end
 
     def temporal?
-      type_class < Arrow::TemporalDataType
+      @data.temporal?
     end
 
     def type_class
-      @data.value_data_type.class
+      @data.type_class
     end
 
     def each

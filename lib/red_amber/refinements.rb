@@ -25,15 +25,107 @@ module RedAmber
       end
     end
 
+    # common methods for Arrow::Array and Arrow::ChunkedArray
+    # Refinement#include is deprecated and will be removed in Ruby 3.2
     refine Arrow::Array do
       def to_arrow_array
         self
+      end
+
+      def type_class
+        value_data_type.class
+      end
+
+      def boolean?
+        value_data_type.instance_of?(Arrow::BooleanDataType)
+      end
+
+      def numeric?
+        value_data_type.class < Arrow::NumericDataType
+      end
+
+      def float?
+        value_data_type.class < Arrow::FloatingPointDataType
+      end
+
+      def integer?
+        value_data_type.class < Arrow::IntegerDataType
+      end
+
+      def unsigned_integer?
+        value_data_type.instance_of?(Arrow::UInt8DataType) ||
+          value_data_type.instance_of?(Arrow::UInt16DataType) ||
+          value_data_type.instance_of?(Arrow::UInt32DataType) ||
+          value_data_type.instance_of?(Arrow::UInt64DataType)
+      end
+
+      def string?
+        value_data_type.instance_of?(Arrow::StringDataType)
+      end
+
+      def dictionary?
+        value_data_type.instance_of?(Arrow::DictionaryDataType)
+      end
+
+      def temporal?
+        value_data_type.class < Arrow::TemporalDataType
+      end
+
+      def primitive_invert
+        n = Arrow::Function.find(:is_null).execute([self])
+        i = Arrow::Function.find(:if_else).execute([n, false, self])
+        Arrow::Function.find(:invert).execute([i]).value
       end
     end
 
     refine Arrow::ChunkedArray do
       def to_arrow_array
         self
+      end
+
+      def type_class
+        value_data_type.class
+      end
+
+      def boolean?
+        value_data_type.instance_of?(Arrow::BooleanDataType)
+      end
+
+      def numeric?
+        value_data_type.class < Arrow::NumericDataType
+      end
+
+      def float?
+        value_data_type.class < Arrow::FloatingPointDataType
+      end
+
+      def integer?
+        value_data_type.class < Arrow::IntegerDataType
+      end
+
+      def unsigned_integer?
+        value_data_type.instance_of?(Arrow::UInt8DataType) ||
+          value_data_type.instance_of?(Arrow::UInt16DataType) ||
+          value_data_type.instance_of?(Arrow::UInt32DataType) ||
+          value_data_type.instance_of?(Arrow::UInt64DataType)
+      end
+
+      def string?
+        value_data_type.instance_of?(Arrow::StringDataType)
+      end
+
+      def dictionary?
+        value_data_type.instance_of?(Arrow::DictionaryDataType)
+      end
+
+      def temporal?
+        value_data_type.class < Arrow::TemporalDataType
+      end
+
+      def primitive_invert
+        n = Arrow::Function.find(:is_null).execute([self])
+        i = Arrow::Function.find(:if_else).execute([n, false, self])
+        Arrow::Function.find(:invert).execute([i]).value
       end
     end
   end
