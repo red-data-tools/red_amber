@@ -131,35 +131,23 @@ module RedAmber
 
     # assign variables to create a new DataFrame
     def assign(*assigner, &block)
-      appender, fields, arrays = assign_update(*assigner, &block)
-      return self if appender.is_a?(DataFrame)
-
-      append_to_fields_and_arrays(appender, fields, arrays, append_to_left: false) unless appender.empty?
-
-      DataFrame.create(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
+      assign_update(*assigner, append_to_left: false, &block)
     end
 
     def assign_left(*assigner, &block)
-      appender, fields, arrays = assign_update(*assigner, &block)
-      return self if appender.is_a?(DataFrame)
-
-      append_to_fields_and_arrays(appender, fields, arrays, append_to_left: true) unless appender.empty?
-
-      DataFrame.create(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
+      assign_update(*assigner, append_to_left: true, &block)
     end
 
     private
 
-    def assign_update(*assigner, &block)
+    def assign_update(*assigner, append_to_left: false, &block)
       if block
         assigner_from_block = instance_eval(&block)
         assigner =
-          if assigner.empty?
-            # block only
+          case assigner_from_block
+          in _ if assigner.empty? # block only
             [assigner_from_block]
-          # If Ruby >= 3.0, one line pattern match can be used
-          # assigner_from_block in [Array, *]
-          elsif multiple_assigner?(assigner_from_block)
+          in [Vector, *] | [Array, *] | [Arrow::Array, *]
             assigner.zip(assigner_from_block)
           else
             assigner.zip([assigner_from_block])
@@ -169,10 +157,10 @@ module RedAmber
       case assigner
       in [] | [nil] | [{}] | [[]]
         return self
-      in [Hash => key_array_pairs]
-      # noop
       in [(Symbol | String) => key, (Vector | Array | Arrow::Array) => array]
         key_array_pairs = { key => array }
+      in [Hash => key_array_pairs]
+      # noop
       in [Array => array_in_array]
         key_array_pairs = try_convert_to_hash(array_in_array)
       in [Array, *] => array_in_array1
@@ -192,15 +180,18 @@ module RedAmber
           appender[key] = array
         end
       end
-      [appender, *update_fields_and_arrays(updater)]
+      fields, arrays = *update_fields_and_arrays(updater)
+      return self if appender.is_a?(DataFrame)
+
+      append_to_fields_and_arrays(appender, fields, arrays, append_to_left) unless appender.empty?
+
+      DataFrame.create(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
     end
 
     def try_convert_to_hash(array)
       array.to_h
     rescue TypeError
       [array].to_h
-    rescue TypeError # rubocop:disable Lint/DuplicateRescueException
-      raise DataFrameArgumentError, "Invalid argument in Array #{array}"
     end
 
     def rename_by_hash(key_pairs)
@@ -235,7 +226,7 @@ module RedAmber
       [fields, arrays]
     end
 
-    def append_to_fields_and_arrays(appender, fields, arrays, append_to_left: false)
+    def append_to_fields_and_arrays(appender, fields, arrays, append_to_left)
       enum = append_to_left ? appender.reverse_each : appender.each
       enum.each do |key, data|
         raise DataFrameArgumentError, "Data size mismatch (#{data.size} != #{size})" if data.size != size
@@ -249,15 +240,6 @@ module RedAmber
           fields << Arrow::Field.new(key.to_sym, a.value_data_type)
           arrays << Arrow::ChunkedArray.new([a])
         end
-      end
-    end
-
-    def multiple_assigner?(assigner)
-      case assigner
-      in [Vector, *] | [Array, *] | [Arrow::Array, *]
-        true
-      else
-        false
       end
     end
   end

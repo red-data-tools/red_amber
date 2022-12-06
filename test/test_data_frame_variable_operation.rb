@@ -365,7 +365,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
       assert_equal str, @df2.assign(assigner).tdr_str
-      assert_equal str, @df2.assign(new: %w[a a b b c]).tdr_str # directly write assigner
+      assert_equal str, @df2.assign(:new, %w[a a b b c]).tdr_str # directly write assigner
+      assert_equal str, @df2.assign(new: %w[a a b b c]).tdr_str # write assigner by hash
       assert_equal str, @df2.assign(assigner.to_a).tdr_str
       assert_equal str, @df2.assign(*assigner.to_a).tdr_str # assign(:x, ary) style
       assert_equal str, @df2.assign(assigner_vector).tdr_str
