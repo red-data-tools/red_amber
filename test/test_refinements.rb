@@ -94,6 +94,67 @@ class RefinementsTest < Test::Unit::TestCase
       assert_kind_of Arrow::ChunkedArray, ca.to_arrow_array
       assert_equal_array [1, 2, 3], ca.to_arrow_array
     end
+
+    test 'Arrow::Array/ChunkedArray#type_class' do
+      a = [1, 2, 3]
+      assert_equal Arrow::UInt8DataType, Arrow::Array.new(a).type_class
+      assert_equal Arrow::UInt8DataType, Arrow::ChunkedArray.new([a]).type_class
+    end
+
+    test 'Arrow::Array/ChunkedArray#boolean?' do
+      a = [true, false, nil]
+      assert_true Arrow::Array.new(a).boolean?
+      assert_true Arrow::ChunkedArray.new([a]).boolean?
+    end
+
+    test 'Arrow::Array/ChunkedArray#numeric?' do
+      a = [1, 2, 3]
+      assert_true Arrow::Array.new(a).numeric?
+      assert_true Arrow::ChunkedArray.new([a]).numeric?
+    end
+
+    test 'Arrow::Array/ChunkedArray#float?' do
+      a = [1.0, 2.0, 3.0]
+      assert_true Arrow::Array.new(a).float?
+      assert_true Arrow::ChunkedArray.new([a]).float?
+    end
+
+    test 'Arrow::Array/ChunkedArray#integer?' do
+      a = [1, 2, 3]
+      assert_true Arrow::Array.new(a).integer?
+      assert_true Arrow::ChunkedArray.new([a]).integer?
+    end
+
+    test 'Arrow::Array/ChunkedArray#unsigned_integer?' do
+      a = [1, 2, 3]
+      assert_true Arrow::Array.new(a).unsigned_integer?
+      assert_true Arrow::ChunkedArray.new([a]).unsigned_integer?
+    end
+
+    test 'Arrow::Array/ChunkedArray#string?' do
+      a = %w[a b c]
+      assert_true Arrow::Array.new(a).string?
+      assert_true Arrow::ChunkedArray.new([a]).string?
+    end
+
+    test 'Arrow::Array/ChunkedArray#dictionary?' do
+      a = %i[a b c]
+      assert_true Arrow::Array.new(a).dictionary?
+      assert_true Arrow::ChunkedArray.new([a]).dictionary?
+    end
+
+    test 'Arrow::Array/ChunkedArray#temporal?' do
+      a = [Date.today]
+      assert_true Arrow::Array.new(a).temporal?
+      assert_true Arrow::ChunkedArray.new([a]).temporal?
+    end
+
+    test 'Arrow::Array/ChunkedArray#primitive_invert?' do
+      a = [true, false, nil]
+      inv = a.map(&:!)
+      assert_equal_array inv, Arrow::Array.new(a).primitive_invert
+      assert_equal_array inv, Arrow::ChunkedArray.new([a]).primitive_invert
+    end
   end
 
   using RefineArrowTable

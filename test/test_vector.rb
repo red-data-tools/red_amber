@@ -175,6 +175,10 @@ class VectorTest < Test::Unit::TestCase
     test '#temporal?' do
       assert_true Vector.new(Arrow::Date32Array.new([19_186])).temporal?
     end
+
+    test '#dictionary?' do
+      assert_true Vector.new(Arrow::Array.new(%i[a b c])).dictionary?
+    end
   end
 
   sub_test_case '#inspect' do

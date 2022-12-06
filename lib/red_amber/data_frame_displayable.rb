@@ -265,8 +265,6 @@ module RedAmber
               format('%g', element)
             in Integer
               format('%d', element)
-            else
-              element
             end
           end
         end
