@@ -12,6 +12,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     test 'Select variables' do
       assert_equal_array [1, 2, 3], df[:x]
       assert_equal_array %w[A B C], df['y']
+      assert_equal_array %w[A B C], df[Arrow::Array.new(['y'])]
       assert_equal Hash(y: %w[A B C], x: [1, 2, 3]), df[:y, :x].to_h
       assert_raise(DataFrameArgumentError) { df[:x, :x] }
       assert_raise(DataFrameArgumentError) { df[:z] }
@@ -27,15 +28,15 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { df_range[:a..] }
     end
 
-    test 'Select observations by indeces' do
+    test 'Select records by indeces' do
       assert_equal Hash(x: [2], y: ['B']), df[1].to_h
       assert_equal Hash(x: [2, 1, 3], y: %w[B A C]), df[1, 0, 2].to_h
       assert_equal Hash(x: [3, 2], y: %w[C B]), df[-1, -2].to_h
       assert_equal Hash(x: [2, 2, 2], y: %w[B B B]), df[1, 1, 1].to_h
-      assert_equal_array 3, df[:x][2]
+      assert_equal 3, df[:x][2]
     end
 
-    test 'Select observations by Range' do
+    test 'Select records by Range' do
       assert_equal Hash(x: [2, 3], y: %w[B C]), df[1..2].to_h
       assert_equal Hash(x: [2, 3], y: %w[B C]), df[1...3].to_h
       assert_equal Hash(x: [2, 3], y: %w[B C]), df[-2..-1].to_h
@@ -45,34 +46,34 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { df[nil..] }
     end
 
-    test 'Select observations by Array with Range' do
+    test 'Select records by Array with Range' do
       assert_equal Hash(x: [2, 3, 1], y: %w[B C A]), df[1..2, 0].to_h
       assert_equal Hash(x: [2, 3, 1], y: %w[B C A]), df[-2..-1, 0].to_h
       assert_equal Hash(x: [2, 3, 1], y: %w[B C A]), df[1..-1, 0..0].to_h
     end
 
-    test 'Select observations over range' do
-      assert_raise(DataFrameArgumentError) { df[3] }
-      assert_raise(DataFrameArgumentError) { df[-4] }
+    test 'Select records over range' do
+      assert_raise(Arrow::Error::Index) { df[3] }
+      assert_raise(Arrow::Error::Index) { df[-4] }
       assert_raise(IndexError) { df[2..3, 0] }
       assert_raise(IndexError) { df[3..4, 0] }
       assert_raise(IndexError) { df[-4..-1] }
     end
 
-    test 'Select observations by float index' do
+    test 'Select records by float index' do
       assert_equal Hash(x: [1], y: ['A']), df[0.5].to_h
       assert_equal Hash(x: [3], y: ['C']), df[-0.5].to_h
     end
 
-    test 'Select observations by invalid data type' do
+    test 'Select records by invalid data type' do
       assert_raise(DataFrameArgumentError) { df[Time.new] }
     end
 
-    test 'Select observations by invalid length' do
+    test 'Select records by invalid length' do
       assert_raise(DataFrameArgumentError) { df[Arrow::BooleanArray.new([true, false])] }
     end
 
-    test 'Select observations by a boolean' do
+    test 'Select records by a boolean' do
       hash = { x: [1, 2], y: %w[A B] }
       assert_equal hash, df[true, true, false].to_h
       assert_equal hash, df[true, true, nil].to_h
@@ -80,16 +81,16 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal hash, df[Arrow::BooleanArray.new([true, true, false])].to_h
     end
 
-    test 'Select observations by a Vector' do
+    test 'Select records by a Vector' do
       hash = { x: [1, 2], y: %w[A B] }
       assert_equal hash, df[Vector.new([true, true, false])].to_h
       assert_equal hash, df[Vector.new([true, true, nil])].to_h
       assert_equal hash, df[df[:x] < 3].to_h
     end
 
-    test 'Select observations by Array or Vector with nil' do
+    test 'Select records by Array or Vector with nil' do
       hash = { x: [2, 3, nil], y: %w[B C] << nil }
-      assert_equal hash, df[1, 2, nil].to_h
+      assert_raise(DataFrameArgumentError) { df[1, 2, nil] } # Array can't have nil
       assert_equal hash, df[Arrow::Int32Array.new([1, 2, nil])].to_h
       assert_equal hash, df[Vector.new([1, 2, nil])].to_h
     end
@@ -142,15 +143,6 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, @df.slice.tdr_str
       assert_equal str, @df.slice([]).tdr_str
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 0 x 4 Vectors
-        Vectors : 2 numeric, 1 string, 1 boolean
-        # key     type    level data_preview
-        0 :index  uint8       0 []
-        1 :float  double      0 []
-        2 :string string      0 []
-        3 :bool   boolean     0 []
-      OUTPUT
       assert_equal str, @df.slice([false] * @df.size).tdr_str
     end
 
@@ -285,7 +277,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
 
     test 'error by invalid args' do
-      assert_raise(ArgumentError) { @df[:x, -1] }
+      assert_raise(DataFrameArgumentError) { @df[:x, -1] }
     end
   end
 
@@ -294,7 +286,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_raise(ArgumentError) { @df.slice_by {} } # no key
       assert_raise(DataFrameArgumentError) { @df.slice_by(:string) } # no block
       assert_raise(DataFrameArgumentError) { @df.slice_by(:key_not_exist) { [1, 2] } }
-      assert_raise(DataFrameArgumentError) { @df.slice_by(:string) { [1, 5] } }
+      assert_raise(Arrow::Error::Index) { @df.slice_by(:string) { [1, 5] } }
     end
 
     test 'by Range' do
@@ -320,6 +312,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         2 :bool  boolean     3 [true, false, nil], 1 nil
       OUTPUT
       assert_equal str, @df.slice_by(:string) { 2..-1 }.tdr_str
+      assert_equal str, @df.slice_by(:string) { -3..-1 }.tdr_str
       assert_equal str, @df.slice_by(:string) { 2.. }.tdr_str
       assert_equal str, @df.slice_by(:string) { 'C'..nil }.tdr_str
       assert_equal str, @df.slice_by(:string) { 'C'.. }.tdr_str
@@ -413,9 +406,11 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal str, @df.remove([3...4, 4]).tdr_str
       assert_equal str, @df.remove([-2, -1]).tdr_str
       assert_equal str, @df.remove([3.5, -0.1]).tdr_str
+      assert_equal str, @df.remove(Arrow::Array.new([3.5, -0.1])).tdr_str
       assert_equal str, @df.remove(Arrow::Array.new([3, 4])).tdr_str
       assert_equal str, @df.remove(Vector.new([3, 4])).tdr_str
-      assert_raise(DataFrameArgumentError) { @df.remove(5) }
+      assert_equal str, @df.remove(Vector.new([3, 4, 5])).tdr_str
+      assert_equal @df.tdr_str, @df.remove(Vector.new([5])).tdr_str
     end
 
     test 'remove by booleans' do
@@ -534,19 +529,19 @@ class DataFrameSelectableTest < Test::Unit::TestCase
 
     test '#take' do
       assert_raise(ArgumentError) { @df.take }
-      assert_raise(Arrow::Error::NotImplemented) { @df.take(1) } # Not accept scalar
+      assert_raise(TypeError) { @df.take(1) } # Not accept scalar
       assert_raise(ArgumentError) { @df.take(1, 3) } # Not accept scalars
       assert_equal({ x: [2, 4], y: %w[B D] }, @df.take([1, 3]).to_h)
       assert_equal({ x: [4, 1, 4], y: %w[D A D] }, @df.take([3, 0, 3]).to_h) # array
       assert_raise(ArgumentError) { @df.take(3, 0, -2) } # Not accept negative index
-      assert_raise(ArgumentError) { @df.take(Vector.new(3, 0, -2)) } # Not accept Vector
-      assert_raise(Arrow::Error::NotImplemented) { @df.take([3.0, 0, -2.0]) } # Not accept float index
+      assert_raise(Arrow::Error::Index) { @df.take(Vector.new(3, 0, -2)) } # Not accept Vector
+      assert_raise(Arrow::Error::Index) { @df.take([3.0, 0, -2.0]) } # Not accept float index
     end
 
     test '#take out of range' do
-      assert_raise(Arrow::Error::NotImplemented) { @df.take(-6) } # Not accept scalar
+      assert_raise(TypeError) { @df.take(-6) } # Not accept scalar
       assert_raise(Arrow::Error::Index) { @df.take([-6]) } # out of lower limit
-      assert_raise(Arrow::Error::NotImplemented) { @df.take(5) } # Not accept scalar
+      assert_raise(TypeError) { @df.take(5) } # Not accept scalar
       assert_raise(Arrow::Error::Index) { @df.take([5]) } # out of upper limit
     end
   end

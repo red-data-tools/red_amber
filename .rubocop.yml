@@ -82,6 +82,7 @@ Metrics/AbcSize:
     'slice_by', # 38.29
     'remove', # 44.42
     'drop', # 31.42
+    '[]', # 33.76
   ]
 
 # Max: 25

@@ -8,15 +8,32 @@ module RedAmber
 
     # Pick up variables (columns) to create a new DataFrame
     #
+    # @note DataFrame#pick creates a DataFrame with single key.
+    #   DataFrame#[] creates a Vector if single key is specified.
+    #
     # @overload pick(keys)
-    #   Pick by Symbols or Strings.
+    #   Pick variables by Symbols or Strings.
     #
     #   @param keys [Symbol, String, <Symbol, String>]
     #     key name(s) of variables to pick.
-    #   @return DataFrame
+    #   @return [DataFrame]
     #     Picked DataFrame.
     #
-    # @todo this document is under construction.
+    # @overload pick(booleans)
+    #   Pick variables by booleans.
+    #
+    #   @param booleans [<true, false, nil>]
+    #     boolean array to pick columns at true.
+    #   @return [DataFrame]
+    #     Picked DataFrame.
+    #
+    # @overload pick(indices)
+    #   Pick variables by column indices.
+    #
+    #   @param indices [Integer, Float, Range<Integer>, Vector, Arrow::Array]
+    #     numeric array to pick columns by column index.
+    #   @return [DataFrame]
+    #     Picked DataFrame.
     #
     def pick(*args, &block)
       if block
@@ -24,23 +41,28 @@ module RedAmber
 
         args = [instance_eval(&block)]
       end
-      return DataFrame.new if args.empty?
 
-      return DataFrame.create(@table.select_columns(*args)) if args.symbols?
+      case args
+      in [] | [nil]
+        return DataFrame.new
+      in [*] if args.symbols?
+        return DataFrame.create(@table.select_columns(*args))
+      in [*] if args.booleans?
+        picker = keys.select_by_booleans(args)
+        return DataFrame.create(@table.select_columns(*picker))
+      in [(Vector | Arrow::Array | Arrow::ChunkedArray) => a]
+        picker = a.to_a
+      else
+        picker = parse_args(args, n_keys)
+      end
 
-      picker = parse_args(args, n_keys, for_keys: true)
-      picker =
-        if picker.booleans?
-          picker.booleans_to_indices
-        else
-          picker.compact
-        end
+      return DataFrame.new if picker.compact.empty?
 
-      return DataFrame.new if picker.empty?
-
-      # DataFrame#[] creates a Vector if single key is specified.
-      # DataFrame#pick creates a DataFrame with single key.
-
+      if picker.booleans?
+        picker = keys.select_by_booleans(picker)
+        return DataFrame.create(@table.select_columns(*picker))
+      end
+      picker.compact!
       raise DataFrameArgumentError, "some keys are duplicated: #{args}" if picker.uniq!
 
       DataFrame.create(@table.select_columns(*picker))
@@ -54,15 +76,16 @@ module RedAmber
         args = [instance_eval(&block)]
       end
       return self if args.empty? || empty?
-      return DataFrame.create(@table.select_columns(*(keys - args))) if args.symbols?
 
       picker =
-        if args.booleans?
+        if args.symbols?
+          keys - args
+        elsif args.booleans?
           keys.reject_by_booleans(args)
         elsif args.integers?
           keys.reject_by_indices(args)
         else
-          dropper = parse_args(args, n_keys, for_keys: true)
+          dropper = parse_args(args, n_keys)
           if dropper.booleans?
             keys.reject_by_booleans(dropper)
           elsif dropper.symbols?
