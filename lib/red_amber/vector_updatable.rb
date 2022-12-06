@@ -14,7 +14,7 @@ module RedAmber
     #   If specifier has no true, return self.
     #
     def replace(specifier, replacer)
-      vector = parse_to_vector(Array(specifier))
+      vector = Vector.new(parse_args(Array(specifier), size))
       return self if vector.empty? || empty?
 
       booleans =
@@ -57,7 +57,7 @@ module RedAmber
       raise VectorTypeError, 'Reciever must be a boolean' unless boolean?
 
       datum = find(:if_else).execute([data, true_choice, false_choice])
-      Vector.new(datum.value)
+      Vector.create(datum.value)
     end
 
     # same behavior as Ruby's invert
@@ -104,7 +104,7 @@ module RedAmber
       values = replacer.class.new(data) # Upcast
 
       datum = find(:replace_with_mask).execute([values, boolean_mask, replacer])
-      Vector.new(datum.value)
+      Vector.create(datum.value)
     end
 
     # Replace elements selected with a boolean mask by nil
@@ -117,7 +117,7 @@ module RedAmber
     def replace_to_nil(boolean_mask)
       nil_array = data.class.new([nil] * size) # Casted nil Array
       datum = find(:if_else).execute([boolean_mask, nil_array, data])
-      Vector.new(datum.value)
+      Vector.create(datum.value)
     end
   end
 end

@@ -316,6 +316,22 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         2 :datetime timestamp     3 [2022-06-03 19:11:16 +0900, 2022-06-03 19:15:35 +0900, ... ]
       STR
     end
+
+    test '#tdr' do
+      $stdout = StringIO.new
+      assert_nil @df.tdr
+      assert_equal <<~STR, $stdout.string
+        RedAmber::DataFrame : 6 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key      type    level data_preview
+        0 :integer uint8       6 [1, 2, 3, 4, 5, ... ]
+        1 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
+        2 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
+        3 :boolean boolean     3 {true=>2, false=>2, nil=>2}
+      STR
+    ensure
+      $stdout = STDOUT
+    end
   end
 
   sub_test_case 'summary' do
@@ -380,6 +396,12 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       df = DataFrame.new(str: ['', ' ', 'two words'])
       html = 'RedAmber::DataFrame <3 x 1 vector> <table><tr><th>str</th></tr><tr><td>""</td></tr><tr><td>" "</td></tr><tr><td>two words</td></tr></table>'
       assert_equal html, df.to_iruby[1]
+    end
+
+    test 'else' do
+      obj = []
+      html = "RedAmber::DataFrame <1 x 1 vector> <table><tr><th>other</th></tr><tr><td>#{obj.inspect}</td></tr></table>"
+      assert_equal html, DataFrame.new(other: [obj]).to_iruby[1]
     end
   end
 

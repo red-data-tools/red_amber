@@ -3,65 +3,106 @@
 module RedAmber
   # mix-ins for the class DataFrame
   module DataFrameVariableOperation
-    # pick up some variables to create sub DataFrame
+    # Array is refined
+    using RefineArray
+
+    # Pick up variables (columns) to create a new DataFrame
+    #
+    # @note DataFrame#pick creates a DataFrame with single key.
+    #   DataFrame#[] creates a Vector if single key is specified.
+    #
+    # @overload pick(keys)
+    #   Pick variables by Symbols or Strings.
+    #
+    #   @param keys [Symbol, String, <Symbol, String>]
+    #     key name(s) of variables to pick.
+    #   @return [DataFrame]
+    #     Picked DataFrame.
+    #
+    # @overload pick(booleans)
+    #   Pick variables by booleans.
+    #
+    #   @param booleans [<true, false, nil>]
+    #     boolean array to pick columns at true.
+    #   @return [DataFrame]
+    #     Picked DataFrame.
+    #
+    # @overload pick(indices)
+    #   Pick variables by column indices.
+    #
+    #   @param indices [Integer, Float, Range<Integer>, Vector, Arrow::Array]
+    #     numeric array to pick columns by column index.
+    #   @return [DataFrame]
+    #     Picked DataFrame.
+    #
     def pick(*args, &block)
-      picker = args
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        picker = [instance_eval(&block)]
+        args = [instance_eval(&block)]
       end
-      picker.flatten!
-      return DataFrame.new if picker.empty? || picker == [nil]
 
-      key_vector = Vector.new(keys)
-      vec = parse_to_vector(picker, vsize: n_keys)
+      case args
+      in [] | [nil]
+        return DataFrame.new
+      in [*] if args.symbols?
+        return DataFrame.create(@table.select_columns(*args))
+      in [*] if args.booleans?
+        picker = keys.select_by_booleans(args)
+        return DataFrame.create(@table.select_columns(*picker))
+      in [(Vector | Arrow::Array | Arrow::ChunkedArray) => a]
+        picker = a.to_a
+      else
+        picker = parse_args(args, n_keys)
+      end
 
-      ary =
-        if vec.boolean?
-          key_vector.filter(*vec).to_a
-        elsif vec.numeric?
-          key_vector.take(*vec).to_a
-        elsif vec.string? || vec.dictionary?
-          vec.to_a
-        else
-          raise DataFrameArgumentError, "Invalid argument #{args}"
-        end
+      return DataFrame.new if picker.compact.empty?
 
-      # DataFrame#[] creates a Vector if single key is specified.
-      # DataFrame#pick creates a DataFrame with single key.
-      DataFrame.new(@table[ary])
+      if picker.booleans?
+        picker = keys.select_by_booleans(picker)
+        return DataFrame.create(@table.select_columns(*picker))
+      end
+      picker.compact!
+      raise DataFrameArgumentError, "some keys are duplicated: #{args}" if picker.uniq!
+
+      DataFrame.create(@table.select_columns(*picker))
     end
 
     # drop some variables to create remainer sub DataFrame
     def drop(*args, &block)
-      dropper = args
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        dropper = [instance_eval(&block)]
+        args = [instance_eval(&block)]
       end
-      dropper.flatten!
+      return self if args.empty? || empty?
 
-      key_vector = Vector.new(keys)
-      vec = parse_to_vector(dropper, vsize: n_keys)
-
-      ary =
-        if vec.boolean?
-          key_vector.filter(*vec.primitive_invert).each.map(&:to_sym) # Array
-        elsif vec.numeric?
-          keys - key_vector.take(*vec).each.map(&:to_sym) # Array
-        elsif vec.string? || vec.dictionary?
-          keys - vec.to_a.map { _1&.to_sym } # Array
+      picker =
+        if args.symbols?
+          keys - args
+        elsif args.booleans?
+          keys.reject_by_booleans(args)
+        elsif args.integers?
+          keys.reject_by_indices(args)
         else
-          raise DataFrameArgumentError, "Invalid argument #{args}"
+          dropper = parse_args(args, n_keys)
+          if dropper.booleans?
+            keys.reject_by_booleans(dropper)
+          elsif dropper.symbols?
+            keys - dropper
+          else
+            dropper.compact!
+            raise DataFrameArgumentError, "Invalid argument #{args}" unless dropper.integers?
+
+            keys.reject_by_indices(dropper)
+          end
         end
 
-      return DataFrame.new if ary.empty?
+      return DataFrame.new if picker.empty?
 
       # DataFrame#[] creates a Vector if single key is specified.
       # DataFrame#drop creates a DataFrame with single key.
-      DataFrame.new(@table[ary])
+      DataFrame.create(@table.select_columns(*picker))
     end
 
     # rename variables to create a new DataFrame
@@ -90,35 +131,23 @@ module RedAmber
 
     # assign variables to create a new DataFrame
     def assign(*assigner, &block)
-      appender, fields, arrays = assign_update(*assigner, &block)
-      return self if appender.is_a?(DataFrame)
-
-      append_to_fields_and_arrays(appender, fields, arrays, append_to_left: false) unless appender.empty?
-
-      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
+      assign_update(*assigner, append_to_left: false, &block)
     end
 
     def assign_left(*assigner, &block)
-      appender, fields, arrays = assign_update(*assigner, &block)
-      return self if appender.is_a?(DataFrame)
-
-      append_to_fields_and_arrays(appender, fields, arrays, append_to_left: true) unless appender.empty?
-
-      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
+      assign_update(*assigner, append_to_left: true, &block)
     end
 
     private
 
-    def assign_update(*assigner, &block)
+    def assign_update(*assigner, append_to_left: false, &block)
       if block
         assigner_from_block = instance_eval(&block)
         assigner =
-          if assigner.empty?
-            # block only
+          case assigner_from_block
+          in _ if assigner.empty? # block only
             [assigner_from_block]
-          # If Ruby >= 3.0, one line pattern match can be used
-          # assigner_from_block in [Array, *]
-          elsif multiple_assigner?(assigner_from_block)
+          in [Vector, *] | [Array, *] | [Arrow::Array, *]
             assigner.zip(assigner_from_block)
           else
             assigner.zip([assigner_from_block])
@@ -128,10 +157,10 @@ module RedAmber
       case assigner
       in [] | [nil] | [{}] | [[]]
         return self
-      in [Hash => key_array_pairs]
-      # noop
       in [(Symbol | String) => key, (Vector | Array | Arrow::Array) => array]
         key_array_pairs = { key => array }
+      in [Hash => key_array_pairs]
+      # noop
       in [Array => array_in_array]
         key_array_pairs = try_convert_to_hash(array_in_array)
       in [Array, *] => array_in_array1
@@ -151,15 +180,18 @@ module RedAmber
           appender[key] = array
         end
       end
-      [appender, *update_fields_and_arrays(updater)]
+      fields, arrays = *update_fields_and_arrays(updater)
+      return self if appender.is_a?(DataFrame)
+
+      append_to_fields_and_arrays(appender, fields, arrays, append_to_left) unless appender.empty?
+
+      DataFrame.create(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
     end
 
     def try_convert_to_hash(array)
       array.to_h
     rescue TypeError
       [array].to_h
-    rescue TypeError # rubocop:disable Lint/DuplicateRescueException
-      raise DataFrameArgumentError, "Invalid argument in Array #{array}"
     end
 
     def rename_by_hash(key_pairs)
@@ -175,7 +207,7 @@ module RedAmber
             @table.schema[key]
           end
         end
-      DataFrame.new(Arrow::Table.new(Arrow::Schema.new(fields), @table.columns))
+      DataFrame.create(Arrow::Table.new(Arrow::Schema.new(fields), @table.columns))
     end
 
     def update_fields_and_arrays(updater)
@@ -194,7 +226,7 @@ module RedAmber
       [fields, arrays]
     end
 
-    def append_to_fields_and_arrays(appender, fields, arrays, append_to_left: false)
+    def append_to_fields_and_arrays(appender, fields, arrays, append_to_left)
       enum = append_to_left ? appender.reverse_each : appender.each
       enum.each do |key, data|
         raise DataFrameArgumentError, "Data size mismatch (#{data.size} != #{size})" if data.size != size
@@ -208,15 +240,6 @@ module RedAmber
           fields << Arrow::Field.new(key.to_sym, a.value_data_type)
           arrays << Arrow::ChunkedArray.new([a])
         end
-      end
-    end
-
-    def multiple_assigner?(assigner)
-      case assigner
-      in [Vector, *] | [Array, *] | [Arrow::Array, *]
-        true
-      else
-        false
       end
     end
   end

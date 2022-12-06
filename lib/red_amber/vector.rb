@@ -10,39 +10,37 @@ module RedAmber
     include VectorSelectable
     include Helper
 
+    using RefineArrayLike
+
+    # Quicker constructor of Vector.
+    #
+    def self.create(arrow_array)
+      instance = allocate
+      instance.instance_variable_set(:@data, arrow_array)
+      instance
+    end
+
+    # Create a Vector.
+    #
+    # @note default is headless Vector and '@key == nil'
     def initialize(*array)
-      @key = nil # default is 'headless' Vector
-      if array.empty? || array.first.nil?
-        Vector.new([])
-      else
-        array.flatten!
-        @data =
-          case array
-          in [Vector => v]
-            v.data
-          in [Arrow::Array => a]
-            a
-          in [Arrow::ChunkedArray => ca]
-            ca
-          in [arrow_array_like] if arrow_array_like.respond_to?(:to_arrow_array)
-            arrow_array_like.to_arrow_array
-          in [Range => r]
-            Arrow::Array.new(Array(r))
-          else
-            begin
-              Arrow::Array.new(Array(array))
-            rescue Error
-              raise VectorArgumentError, "Invalid argument: #{array}"
-            end
-          end
-      end
+      @data =
+        case array
+        in [Vector => v]
+          v.data
+        in [Range => r]
+          Arrow::Array.new(Array(r))
+        in [Arrow::Array | Arrow::ChunkedArray]
+          array[0]
+        in [arrow_array_like] if arrow_array_like.respond_to?(:to_arrow_array)
+          arrow_array_like.to_arrow_array
+        else
+          Arrow::Array.new(array.flatten)
+        end
     end
 
     attr_reader :data
-
-    def to_arrow_array
-      @data
-    end
+    alias_method :to_arrow_array, :data
 
     attr_accessor :key
 
@@ -52,16 +50,16 @@ module RedAmber
 
     def inspect(limit: 80)
       if ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table').casecmp('MINIMUM').zero?
-        # Better performance than `.upcase == 'MINIMUM'``
+        # Better performance than `.upcase == 'MINIMUM'`
         "#{self.class}(:#{type}, size=#{size})"
       else
         sio = StringIO.new << '['
-        to_a.each_with_object(sio).with_index do |(e, s), i|
-          next_str = "#{s.size > 1 ? ', ' : ''}#{e.inspect}"
-          if (s.size + next_str.size) < limit
-            s << next_str
+        each.with_index do |e, i|
+          next_str = "#{sio.size > 1 ? ', ' : ''}#{e.inspect}"
+          if (sio.size + next_str.size) < limit
+            sio << next_str
           else
-            s << ', ... ' if i < size
+            sio << ', ... ' if i < size
             break
           end
         end
@@ -71,26 +69,26 @@ module RedAmber
       end
     end
 
-    def values
+    def to_ary
       @data.values
     end
-    alias_method :to_a, :values
-    alias_method :entries, :values
+
+    alias_method :to_a, :to_ary
+    alias_method :values, :to_ary
+    alias_method :entries, :to_ary
 
     def indices
       (0...size).to_a
     end
+
     alias_method :indexes, :indices
     alias_method :indeces, :indices
-
-    def to_ary
-      values
-    end
 
     def size
       # only defined :length in Arrow?
       @data.length
     end
+
     alias_method :length, :size
     alias_method :n_rows, :size
     alias_method :nrow, :size
@@ -104,35 +102,35 @@ module RedAmber
     end
 
     def boolean?
-      type_class == Arrow::BooleanDataType
+      @data.boolean?
     end
 
     def numeric?
-      type_class < Arrow::NumericDataType
+      @data.numeric?
     end
 
     def float?
-      type_class < Arrow::FloatingPointDataType
+      @data.float?
     end
 
     def integer?
-      type_class < Arrow::IntegerDataType
+      @data.integer?
     end
 
     def string?
-      type_class == Arrow::StringDataType
+      @data.string?
     end
 
     def dictionary?
-      type_class == Arrow::DictionaryDataType
+      @data.dictionary?
     end
 
     def temporal?
-      type_class < Arrow::TemporalDataType
+      @data.temporal?
     end
 
     def type_class
-      @data.value_data_type.class
+      @data.type_class
     end
 
     def each

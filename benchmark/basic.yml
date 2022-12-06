@@ -1,12 +1,17 @@
+loop_count: 3
+
 contexts:
   - name: HEAD
     prelude: |
       $LOAD_PATH.unshift(File.expand_path('lib'))
-  - gems:
+  - name: 0.2.3
+    gems:
       red_amber: 0.2.3
-  - gems:
+  - name: 0.2.0
+    gems:
       red_amber: 0.2.0
-  - gems:
+  - name: 0.1.5
+    gems:
       red_amber: 0.1.5
 
 prelude: |
@@ -23,8 +28,8 @@ benchmark:
   'B01: Pick([]) by a key name': |
     df[:flight]
 
-  'B02: Pick by index': |
-    df[df.keys[9]]
+  'B02a: Pick([]) by key names': | 
+    df[:carrier, :flight]
 
   'B03: Pick by key names': |
     df.pick(:carrier, :flight)

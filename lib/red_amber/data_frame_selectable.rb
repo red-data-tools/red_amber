@@ -3,53 +3,150 @@
 module RedAmber
   # mix-in for the class DataFrame
   module DataFrameSelectable
-    # select columns: [symbol] or [string]
-    # select rows: [array of index], [range]
+    # Array, Arrow::Array and Arrow::ChunkedArray are refined
+    using RefineArray
+    using RefineArrayLike
+
+    # Select variables or records.
+    #
+    # @overload [](key)
+    #   select single variable and return as a Vetor.
+    #
+    #   @param key [Symbol, String] key name to select.
+    #   @return [Vector] selected variable as a Vector.
+    #   @note DataFrame.v(key) is faster to create Vector from a variable.
+    #
+    # @overload [](keys)
+    #   select variables and return a DataFrame.
+    #
+    #   @param keys [<Symbol, String>] key names to select.
+    #   @return [DataFrame] selected variables as a DataFrame.
+    #
+    # @overload [](index)
+    #   select records and return a DataFrame.
+    #
+    #   @param index [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
+    #     index of a row to select.
+    #   @return [DataFrame] selected variables as a DataFrame.
+    #
+    # @overload [](indices)
+    #   select records and return a DataFrame.
+    #
+    #   @param indices [<Indeger, Float, Range<Integer>, Vector, Arrow::Array>]
+    #     indices of rows to select.
+    #   @return [DataFrame] selected variables as a DataFrame.
+    #
     def [](*args)
-      args.flatten!
-      raise DataFrameArgumentError, 'Empty dataframe' if empty?
-      return remove_all_values if args.empty? || args[0].nil?
+      raise DataFrameArgumentError, 'self is an empty dataframe' if empty?
 
-      vector = parse_to_vector(args)
-      if vector.boolean?
-        return filter_by_vector(vector.data) if vector.size == size
+      case args
+      in [] | [nil]
+        return remove_all_values
+      in [(Symbol | String) => k] if key? k
+        return variables[k.to_sym]
+      in [Integer => i]
+        return take([i.negative? ? i + size : i])
+      in [Vector => v]
+        arrow_array = v.data
+      in [(Arrow::Array | Arrow::ChunkedArray) => aa]
+        arrow_array = aa
+      else
+        a = parse_args(args, size)
+        return select_variables_by_keys(a) if a.symbols?
+        return take(normalize_indices(Arrow::Array.new(a))) if a.integers?
+        return remove_all_values if a.compact.empty?
+        return filter_by_array(Arrow::BooleanArray.new(a)) if a.booleans?
 
-        raise DataFrameArgumentError, "Size is not match in booleans: #{args}"
+        raise DataFrameArgumentError, "invalid arguments: #{args}"
       end
-      return take_by_array(vector) if vector.numeric?
-      return select_vars_by_keys(vector.to_a.map(&:to_sym)) if vector.string? || vector.dictionary?
 
-      raise DataFrameArgumentError, "Invalid argument: #{args}"
+      if arrow_array.numeric?
+        take(normalize_indices(arrow_array))
+      elsif arrow_array.boolean?
+        filter_by_array(arrow_array)
+      else
+        a = arrow_array.to_a
+        raise DataFrameArgumentError, "invalid arguments: #{args}" unless a.symbols_or_strings?
+
+        select_variables_by_keys(a)
+      end
     end
 
-    # slice and select rows to create sub DataFrame
+    # Select a variable by a key in String or Symbol
+    def v(key)
+      unless key.is_a?(Symbol) || key.is_a?(String)
+        raise DataFrameArgumentError, "Key is not a Symbol or a String: [#{key}]"
+      end
+      raise DataFrameArgumentError, "Key does not exist: [#{key}]" unless key? key
+
+      variables[key.to_sym]
+    end
+
+    # Select records to create a DataFrame.
+    #
+    # @overload slice(row)
+    #   select a record and return a DataFrame.
+    #
+    #   @param row [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
+    #     a row index to select.
+    #   @yield [self] gives self to the block.
+    #     @note The block is evaluated within the context of self.
+    #       It is accessable to self's instance variables and private methods.
+    #   @yieldreturn [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
+    #     a row index to select.
+    #   @return [DataFrame] selected variables as a DataFrame.
+    #
+    # @overload slice(rows)
+    #   select records and return a DataFrame.
+    #   - Duplicated selection is acceptable. The same record will be returned.
+    #   - The order of records will be the same as specified indices.
+    #
+    #   @param rows [Integer, Float, Range<Integer>, Vector, Arrow::Array]
+    #     row indeces to select.
+    #   @yield [self] gives self to the block.
+    #     @note The block is evaluated within the context of self.
+    #       It is accessable to self's instance variables and private methods.
+    #   @yieldreturn [<Integer, Float, Range<Integer>, Vector, Arrow::Array>]
+    #     row indeces to select.
+    #   @return [DataFrame] selected variables as a DataFrame.
+    #
     def slice(*args, &block)
-      slicer = args
+      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
+
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        slicer = [instance_eval(&block)]
+        args = [instance_eval(&block)]
       end
-      slicer.flatten!
 
-      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
-      return remove_all_values if slicer.empty? || slicer[0].nil?
+      arrow_array =
+        case args
+        in [] | [[]]
+          return remove_all_values
+        in [Vector => v]
+          v.data
+        in [(Arrow::Array | Arrow::ChunkedArray) => aa]
+          aa
+        else
+          Arrow::Array.new(parse_args(args, size))
+        end
 
-      vector = parse_to_vector(slicer)
-      if vector.boolean?
-        return filter_by_vector(vector.data) if vector.size == size
-
-        raise DataFrameArgumentError, "Size is not match in booleans: #{slicer}"
+      if arrow_array.numeric?
+        take(normalize_indices(arrow_array))
+      elsif arrow_array.boolean?
+        filter_by_array(arrow_array)
+      elsif arrow_array.to_a.compact.empty?
+        # Ruby 3.0.4 does not accept Arrow::Array#compact here. 2.7.6 and 3.1.2 is OK.
+        remove_all_values
+      else
+        raise DataFrameArgumentError, "invalid arguments: #{args}"
       end
-      return take_by_array(vector) if vector.numeric?
-
-      raise DataFrameArgumentError, "Invalid argument #{slicer}"
     end
 
     def slice_by(key, keep_key: false, &block)
       raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
       raise DataFrameArgumentError, 'No block given' unless block
-      raise DataFrameArgumentError, "#{key} is no a key of self" unless key?(key)
+      raise DataFrameArgumentError, "#{key} is not a key of self" unless key?(key)
       return self if key.nil?
 
       slicer = instance_eval(&block)
@@ -83,68 +180,79 @@ module RedAmber
         slicer = slicer.map { |x| x.is_a?(String) ? self[key].index(x) : x }
       end
 
-      if keep_key
-        take(slicer)
-      else
-        take(slicer).drop(key)
-      end
+      taken = take(normalize_indices(Arrow::Array.new(slicer)))
+      keep_key ? taken : taken.drop(key)
     end
 
-    # remove selected rows to create remainer DataFrame
+    # Select records and remove them to create a remainer DataFrame.
+    #
+    # @overload remove(row)
+    #   select a record and remove it to create a remainer DataFrame.
+    #   - The order of records in self will be preserved.
+    #
+    #   @param row [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
+    #     a row index to remove.
+    #   @yield [self] gives self to the block.
+    #     @note The block is evaluated within the context of self.
+    #       It is accessable to self's instance variables and private methods.
+    #   @yieldreturn [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
+    #     a row index to remove.
+    #   @return [DataFrame] remainer variables as a DataFrame.
+    #
+    # @overload remove(rows)
+    #   select records and remove them to create a remainer DataFrame.
+    #   - The order of records in self will be preserved.
+    #
+    #   @param rows [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
+    #     row indeces to remove.
+    #   @yield [self] gives self to the block.
+    #     @note The block is evaluated within the context of self.
+    #       It is accessable to self's instance variables and private methods.
+    #   @yieldreturn [<Indeger, Float, Range<Integer>, Vector, Arrow::Array>]
+    #     row indeces to remove.
+    #   @return [DataFrame] remainer variables as a DataFrame.
+    #
     def remove(*args, &block)
-      remover = args
+      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
+
       if block
         raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
 
-        remover = [instance_eval(&block)]
+        args = [instance_eval(&block)]
       end
-      remover.flatten!
 
-      raise DataFrameArgumentError, 'Empty dataframe' if empty?
-      return self if remover.empty? || remover[0].nil?
-
-      vector = parse_to_vector(remover)
-      if vector.boolean?
-        return filter_by_vector(vector.primitive_invert.data) if vector.size == size
-
-        raise DataFrameArgumentError, "Size is not match in booleans: #{remover}"
-      end
-      if vector.numeric?
-        raise DataFrameArgumentError, "Index out of range: #{vector.min}" if vector.min <= -size - 1
-
-        normalized_indices = (vector < 0).if_else(vector + size, vector) # normalize index from tail
-        if normalized_indices.max >= size
-          raise DataFrameArgumentError, "Index out of range: #{normalized_indices.max}"
+      arrow_array =
+        case args
+        in [] | [[]] | [nil]
+          return self
+        in [Vector => v]
+          v.data
+        in [(Arrow::Array | Arrow::ChunkedArray) => aa]
+          aa
+        else
+          Arrow::Array.new(parse_args(args, size))
         end
 
-        normalized_indices = normalized_indices.floor.to_a.map(&:to_i) # round to integer array
-        return remove_all_values if normalized_indices == indices.to_a
-        return self if normalized_indices.empty?
+      if arrow_array.boolean?
+        filter_by_array(arrow_array.primitive_invert)
+      elsif arrow_array.numeric?
+        remover = normalize_indices(arrow_array).to_a
+        return self if remover.empty?
 
-        index_array = indices.to_a - normalized_indices
+        slicer = indices.to_a - remover.map(&:to_i)
+        return remove_all_values if slicer.empty?
 
-        datum = Arrow::Function.find(:take).execute([table, index_array])
-        return DataFrame.new(datum.value)
+        take(slicer)
+      else
+        raise DataFrameArgumentError, "Invalid argument #{args}"
       end
-
-      raise DataFrameArgumentError, "Invalid argument #{remover}"
     end
 
     def remove_nil
       func = Arrow::Function.find(:drop_null)
-      DataFrame.new(func.execute([table]).value)
+      DataFrame.create(func.execute([table]).value)
     end
     alias_method :drop_nil, :remove_nil
-
-    # Select a variable by a key in String or Symbol
-    def v(key)
-      unless key.is_a?(Symbol) || key.is_a?(String)
-        raise DataFrameArgumentError, "Key is not a Symbol or String [#{key}]"
-      end
-      raise DataFrameArgumentError, "Key not exist [#{key}]" unless key?(key)
-
-      variables[key.to_sym]
-    end
 
     def head(n_obs = 5)
       raise DataFrameArgumentError, "Index is out of range #{n_obs}" if n_obs.negative?
@@ -166,77 +274,69 @@ module RedAmber
       tail(n_obs)
     end
 
-    # Undocumented
-    # TODO: support for option {boundscheck: true}
-    def take(*arg_indices)
-      arg_indices.flatten!
-      return remove_all_values if arg_indices.empty?
-
-      arg_indices = arg_indices[0] if arg_indices.one? && !arg_indices[0].is_a?(Numeric)
-      arg_indices = Vector.new(arg_indices) unless arg_indices.is_a?(Vector)
-
-      take_by_array(arg_indices)
+    # @api private
+    #  TODO: support for option `boundscheck: true`
+    #  Supports indices in an Arrow::UInt{8, 16, 32, 64} or an Array
+    #  Negative index is not supported.
+    def take(index_array)
+      DataFrame.create(@table.take(index_array))
     end
 
-    # Undocumented
-    # TODO: support for option {null_selection_behavior: :drop}
+    # @api private
+    #   TODO: support for option `null_selection_behavior: :drop``
     def filter(*booleans)
       booleans.flatten!
-      return remove_all_values if booleans.empty?
-
-      b = booleans[0]
-      case b
-      when Vector
-        raise DataFrameArgumentError, 'Argument is not a boolean.' unless b.boolean?
-
-        filter_by_vector(b.data)
-      when Arrow::BooleanArray
-        filter_by_vector(b)
+      case booleans
+      in []
+        return remove_all_values
+      in [Arrow::BooleanArray => b]
+        filter_by_array(b)
       else
-        raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans?(booleans)
+        raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans.booleans?
 
-        filter_by_vector(Arrow::BooleanArray.new(booleans))
+        filter_by_array(Arrow::BooleanArray.new(booleans))
       end
     end
 
     private
 
-    def select_vars_by_keys(keys)
+    def select_variables_by_keys(keys)
       if keys.one?
         key = keys[0].to_sym
-        raise DataFrameArgumentError, "Key does not exist #{keys}" unless key? key
+        raise DataFrameArgumentError, "Key does not exist: #{key}" unless key? key
 
         variables[key]
+        # Vector.new(@table.find_column(*key).data)
       else
-        DataFrame.new(@table[keys])
+        check_duplicate_keys(keys)
+        DataFrame.create(@table.select_columns(*keys))
       end
     end
 
-    # Accepts indices by numeric Vector
-    def take_by_array(indices)
-      raise DataFrameArgumentError, "Indices must be a numeric Vector: #{indices}" unless indices.numeric?
-      raise DataFrameArgumentError, "Index out of range: #{indices.min}" if indices.min <= -size - 1
-
-      normalized_indices = (indices < 0).if_else(indices + size, indices) # normalize index from tail
-      raise DataFrameArgumentError, "Index out of range: #{normalized_indices.max}" if normalized_indices.max >= size
-
-      index_array = Arrow::UInt64ArrayBuilder.build(normalized_indices.data) # round to integer array
-
-      datum = Arrow::Function.find(:take).execute([table, index_array])
-      DataFrame.new(datum.value)
+    # Accepts indices by numeric arrow array and returns positive indices.
+    def normalize_indices(arrow_array)
+      b = Arrow::Function.find(:less).execute([arrow_array, 0])
+      a = Arrow::Function.find(:add).execute([arrow_array, size])
+      r = Arrow::Function.find(:if_else).execute([b, a, arrow_array]).value
+      if r.float?
+        r = Arrow::Function.find(:floor).execute([r]).value
+        Arrow::UInt64ArrayBuilder.build(r)
+      else
+        r
+      end
     end
 
-    # Accepts booleans by Arrow::BooleanArray
-    def filter_by_vector(boolean_array)
+    # Accepts booleans by a Arrow::BooleanArray or an Array
+    def filter_by_array(boolean_array)
       raise DataFrameArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 
       datum = Arrow::Function.find(:filter).execute([table, boolean_array])
-      DataFrame.new(datum.value)
+      DataFrame.create(datum.value)
     end
 
     # return a DataFrame with same keys as self without values
     def remove_all_values
-      filter_by_vector(Arrow::BooleanArray.new([false] * size))
+      filter_by_array(Arrow::BooleanArray.new([false] * size))
     end
   end
 end

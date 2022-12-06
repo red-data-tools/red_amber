@@ -6,7 +6,56 @@ class VectorTest < Test::Unit::TestCase
   include TestHelper
   include RedAmber
 
-  sub_test_case('Basic properties') do
+  sub_test_case '#initialize' do
+    test 'initialize by empty array' do
+      assert_equal_array [], Vector.new([])
+    end
+
+    test 'initialize by arrays including nils' do
+      assert_equal_array [nil], Vector.new([nil])
+      assert_equal_array [nil, nil], Vector.new([nil, nil])
+    end
+
+    test 'initialize by an Array' do
+      array = [1, 2, 3]
+      assert_equal_array array, Vector.new(array)
+    end
+
+    test 'initialize by an expanded Array' do
+      array = [1, 2, 3]
+      assert_equal_array array, Vector.new(*array)
+    end
+
+    test 'initialize by an Arrow::Array' do
+      a = [1, 2, 3]
+      ary = Arrow::Array.new(a)
+      assert_equal_array a, Vector.new(ary)
+    end
+
+    test 'initialize by an Arrow::ChunkedArray' do
+      a = [[1, 2, 3]]
+      ary = Arrow::ChunkedArray.new(a)
+      assert_equal_array a.flatten, Vector.new(ary)
+    end
+
+    test 'initialize by a Vector' do
+      array = [1, 2, 3]
+      vector = Vector.new(array)
+      assert_equal_array array, Vector.new(vector)
+    end
+
+    test 'initialize by a Range' do
+      range = 1..3
+      assert_equal_array [*range], Vector.new(range)
+    end
+
+    test 'initialize by Numo::NArray' do
+      numo = Numo::Int8.new(3).seq(-1)
+      assert_equal_array [-1, 0, 1], Vector.new(numo)
+    end
+  end
+
+  sub_test_case 'Basic properties' do
     data(keep: true) do
       a = [0, 1, nil, 4]
       # h in [expect, type, type_class, array]
@@ -27,16 +76,6 @@ class VectorTest < Test::Unit::TestCase
       expect, _, _, array = data
       actual = Vector.new(array)
       assert_equal_array expect, actual
-    end
-
-    test 'initialize by an expanded Array' do
-      array = [1, 2, 3]
-      assert_equal_array array, Vector.new(*array)
-    end
-
-    test 'initialize by Numo::NArray' do
-      numo = Numo::Int8.new(3).seq(-1)
-      assert_equal_array [-1, 0, 1], Vector.new(numo)
     end
 
     test '#to_arrow_array' do
@@ -97,7 +136,22 @@ class VectorTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('type check') do
+  sub_test_case 'chunked arrays' do
+    setup do
+      chunks = [[*0..1], [*2..3]]
+      @chunked_array = Arrow::ChunkedArray.new(chunks)
+    end
+
+    test '#chunked?' do
+      assert_true Vector.new(@chunked_array).chunked?
+    end
+
+    test '#n_chunks' do
+      assert_equal 2, Vector.new(@chunked_array).n_chunks
+    end
+  end
+
+  sub_test_case 'type check' do
     test '#boolean?' do
       assert_true Vector.new([true, false, nil]).boolean?
     end
@@ -121,9 +175,13 @@ class VectorTest < Test::Unit::TestCase
     test '#temporal?' do
       assert_true Vector.new(Arrow::Date32Array.new([19_186])).temporal?
     end
+
+    test '#dictionary?' do
+      assert_true Vector.new(Arrow::Array.new(%i[a b c])).dictionary?
+    end
   end
 
-  sub_test_case('#inspect') do
+  sub_test_case '#inspect' do
     setup do
       ENV['RED_AMBER_OUTPUT_MODE'] = nil
       @double = Vector.new([0.3841307461261749, 0.6028782725334167, 0.3752671480178833, 0.9437413811683655])

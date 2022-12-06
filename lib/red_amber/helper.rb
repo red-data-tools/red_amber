@@ -5,46 +5,68 @@ module RedAmber
   module Helper
     private
 
+    # If num is larger than 1 return 's' to be plural.
+    #
+    # @param num [Numeric] some number.
+    # @return ['s', ''] return 's' if num is larger than 1.
+    #   Otherwise return ''.
     def pl(num)
       num > 1 ? 's' : ''
     end
 
-    def booleans?(enum)
-      enum.all? { |e| e.is_a?(TrueClass) || e.is_a?(FalseClass) || e.is_a?(NilClass) }
-    end
-
-    def parse_to_vector(args, vsize: size)
-      a = args.reduce([]) do |accum, elem|
-        accum.concat(normalize_element(elem, vsize: vsize))
-      end
-      Vector.new(a)
-    end
-
-    def normalize_element(elem, vsize: size)
-      case elem
-      when NilClass
-        [nil]
-      when Range
-        bg = elem.begin
-        en = elem.end
-        if [bg, en].any?(Integer)
-          bg += vsize if bg&.negative?
-          en += vsize if en&.negative?
-          en -= 1 if en.is_a?(Integer) && elem.exclude_end?
-          if bg&.negative? || (en && en >= vsize)
-            raise DataFrameArgumentError, "Index out of range: #{elem} for 0..#{vsize - 1}"
-          end
-
-          Array(0...vsize)[elem]
-        elsif bg.nil? && en.nil?
-          Array(0...vsize)
+    # Parse the argments in an Array
+    #   and returns a parsed Array.
+    #
+    # @param args
+    #   [<Integer, Symbol, true, false, nil, Array, Range, Enumerator, String, Float>]
+    #   arguments.
+    # @param array_size [Integer] size of target Array to use in a endless Range.
+    # @return [<Integer, Symbol, true, false, nil>] parsed flat Array.
+    # @note This method is recursively called to parse.
+    def parse_args(args, array_size)
+      args.flat_map do |elem|
+        case elem
+        when Integer, Symbol, NilClass, TrueClass, FalseClass
+          elem
+        when Array
+          parse_args(elem, array_size)
+        when Range
+          parse_range(elem, array_size)
+        when Enumerator
+          parse_args(Array(elem), array_size)
+        when String
+          elem.to_sym
+        when Float
+          elem.floor.to_i
         else
           Array(elem)
         end
-      when Enumerator
-        elem.to_a
+      end
+    end
+
+    # Parse a Range to an Array
+    #
+    # @param range [Range] Range to parse.
+    # @param array_size [Integer] size of target Array to use in a endless Range.
+    # @return [Array<Integer, Symbol, String>] parsed Array.
+    def parse_range(range, array_size)
+      bg = range.begin
+      en = range.end
+      if [bg, en].any?(Integer)
+        bg += array_size if bg&.negative?
+        en += array_size if en&.negative?
+        en -= 1 if en.is_a?(Integer) && range.exclude_end?
+        if bg&.negative? || (en && en >= array_size)
+          raise IndexError, "Index out of range: #{range} for 0..#{array_size - 1}"
+        end
+
+        Array(0...array_size)[range]
+      elsif bg.nil?
+        raise DataFrameArgumentError, "Cannot use beginless Range: #{range}"
+      elsif en.nil?
+        raise DataFrameArgumentError, "Cannot use endless Range: #{range}"
       else
-        Array[elem]
+        Array(range)
       end
     end
   end

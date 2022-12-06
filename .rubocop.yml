@@ -82,6 +82,7 @@ Metrics/AbcSize:
     'slice_by', # 38.29
     'remove', # 44.42
     'drop', # 31.42
+    '[]', # 33.76
   ]
 
 # Max: 25
@@ -92,6 +93,7 @@ Metrics/BlockLength:
   Max: 25
   Exclude:
     - 'test/**/*'
+    - 'lib/red_amber/helper.rb' # 32
 
 # It's ok if class is big
 # Max: 100
@@ -117,6 +119,7 @@ Metrics/CyclomaticComplexity:
     'remove', # 14
     'normalize_element', # 17
     '[]', # 13
+    'parse_range', # 14
   ]
 
 # Max: 10
@@ -166,6 +169,7 @@ Metrics/PerceivedComplexity:
     'filters', # 11
     'normalize_element', # 17
     '[]', # 11
+    'parse_range', # 15
   ]
 
 # Offense count: 1

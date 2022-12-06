@@ -18,7 +18,7 @@ module RedAmber
     # @return [RedAmber::Vector] Sorted indices in Vector
     def sort_indices(*sort_keys)
       indices = @table.sort_indices(sort_keys.flatten)
-      Vector.new(indices)
+      Vector.create(indices)
     end
 
     # @return [RedAmber::DataFrame] Sorted DataFrame
@@ -32,7 +32,7 @@ module RedAmber
 
     def new_dataframe_by(index_array)
       t = Arrow::Function.find(:take).execute([@table, index_array]).value
-      RedAmber::DataFrame.new(t)
+      DataFrame.create(t)
     end
   end
 end

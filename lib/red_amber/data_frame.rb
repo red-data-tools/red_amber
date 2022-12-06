@@ -14,65 +14,111 @@ module RedAmber
     include DataFrameVariableOperation
     include Helper
 
-    # Creates a new RedAmber::DataFrame.
+    using RefineArrowTable
+    using RefineHash
+
+    # Quicker DataFrame construction from a `Arrow::Table`.
     #
-    # @overload initialize(hash)
+    # @param table [Arrow::Table] A table to have in the DataFrame.
+    # @return [DataFrame] Initialized DataFrame.
     #
-    #   @params hash [Hash]
+    # @note This method will allocate table directly and may be used in the method.
+    # @note `table` must have unique keys.
+    def self.create(table)
+      instance = allocate
+      instance.instance_variable_set(:@table, table)
+      instance
+    end
+
+    # Creates a new DataFrame.
     #
     # @overload initialize(table)
+    #   Initialize DataFrame by an `Arrow::Table`
     #
-    #   @params table [Arrow::Table]
+    #   @param table [Arrow::Table]
+    #     A table to have in the DataFrame.
     #
-    # @overload initialize(dataframe)
+    # @overload initialize(arrowable)
+    #   Initialize DataFrame by a `#to_arrow` responsible object.
     #
-    #   @params dataframe [RedAmber::DataFrame, Rover::DataFrame]
+    #   @param arrowable [#to_arrow]
+    #     Any object which responds to `#to_arrow`.
+    #     `#to_arrow` must return `Arrow::Table`.
     #
-    # @overload initialize(null)
+    #   @note `RedAmber::DataFrame` itself is readable by this.
+    #   @note Hash is refined to respond to `#to_arrow` in this class.
     #
-    #   @params null [NilClass] No arguments.
+    # @overload initialize(rover_like)
+    #   Initialize DataFrame by a `Rover::DataFrame`-like `#to_h` responsible object.
+    #
+    #   @param rover_like [#to_h]
+    #     Any object which responds to `#to_h`.
+    #     `#to_h` must return a Hash which is convertable by `Arrow::Table.new`.
+    #
+    #   @note `Rover::DataFrame` is readable by this.
+    #
+    # @overload initialize()
+    #   Create empty DataFrame
+    #
+    #   @example DataFrame.new
+    #
+    # @overload initialize(empty)
+    #   Create empty DataFrame
+    #
+    #   @param empty [nil, [], {}]
+    #
+    #   @example DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
+    #
+    # @overload initialize(args)
+    #
+    #   @param args [values]
+    #     Accepts any argments which is valid for `Arrow::Table.new(args)`.
+    #     See {https://github.com/apache/arrow/blob/master/ruby/red-arrow/lib/arrow/table.rb table.rb in Red Arrow}.
     #
     def initialize(*args)
-      @variables = @keys = @vectors = @types = @data_types = nil
       case args
       in nil | [nil] | [] | {} | [[]] | [{}]
-        # DataFrame.new, DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
-        #   returns empty DataFrame
         @table = Arrow::Table.new({}, [])
-      in [->(x) { x.respond_to?(:to_arrow) } => arrowable]
+      in [Arrow::Table => table]
+        @table = table
+      in [arrowable] if arrowable.respond_to?(:to_arrow)
         table = arrowable.to_arrow
         unless table.is_a?(Arrow::Table)
           raise DataFrameTypeError,
                 "to_arrow must return an Arrow::Table but #{table.class}: #{arrowable}"
         end
         @table = table
-      in [Arrow::Table => table]
-        @table = table
-      in [rover_or_hash]
+      in [rover_like] if rover_like.respond_to?(:to_h)
         begin
-          # Accepts Rover::DataFrame or Hash
-          @table = Arrow::Table.new(rover_or_hash.to_h)
+          # Accepts Rover::DataFrame
+          @table = Arrow::Table.new(rover_like.to_h)
         rescue StandardError
-          raise DataFrameTypeError, "invalid argument: #{rover_or_hash}"
+          raise DataFrameTypeError, "to_h must return Arrowable object: #{rover_like}"
         end
       else
-        @table = Arrow::Table.new(*args)
+        begin
+          @table = Arrow::Table.new(*args)
+        rescue StandardError
+          raise DataFrameTypeError, "invalid argument to create Arrow::Table: #{args}"
+        end
       end
-      name_unnamed_keys
 
-      duplicated_keys = keys.tally.select { |_k, v| v > 1 }.keys
-      raise DataFrameArgumentError, "duplicate keys: #{duplicated_keys}" unless duplicated_keys.empty?
+      name_unnamed_keys
+      check_duplicate_keys(keys)
     end
 
+    # Returns the table having within.
+    #
+    # @return [Arrow::Table] The table within.
+    #
     attr_reader :table
 
-    def to_arrow
-      @table
-    end
+    alias_method :to_arrow, :table
 
     # Returns the number of rows.
     #
     # @return [Integer] Number of rows.
+    #
     def size
       @table.n_rows
     end
@@ -83,6 +129,7 @@ module RedAmber
     # Returns the number of columns.
     #
     # @return [Integer] Number of columns.
+    #
     def n_keys
       @table.n_columns
     end
@@ -95,6 +142,7 @@ module RedAmber
     # @return [Array]
     #   Number of rows and number of columns in an array.
     #   Same as [size, n_keys].
+    #
     def shape
       [size, n_keys]
     end
@@ -102,7 +150,8 @@ module RedAmber
     # Returns a Hash of key and Vector pairs in the columns.
     #
     # @return [Hash]
-    #   key => Vector pairs for each columns.
+    #   `key => Vector` pairs for each columns.
+    #
     def variables
       @variables || @variables = init_instance_vars(:variables)
     end
@@ -112,6 +161,7 @@ module RedAmber
     #
     # @return [Array]
     #   Keys in an Array.
+    #
     def keys
       @keys || @keys = init_instance_vars(:keys)
     end
@@ -123,6 +173,7 @@ module RedAmber
     # @param key [Symbol, String] Key to test.
     # @return [Boolean]
     #   Returns true if self has key in Symbol.
+    #
     def key?(key)
       keys.include?(key.to_sym)
     end
@@ -133,6 +184,7 @@ module RedAmber
     # @param key [Symbol, String] key to know.
     # @return [Integer]
     #   Index of key in the Array keys.
+    #
     def key_index(key)
       keys.find_index(key.to_sym)
     end
@@ -143,6 +195,7 @@ module RedAmber
     #
     # @return [Array]
     #   Abbreviated Red Arrow data type names.
+    #
     def types
       @types || @types = @table.columns.map { |column| column.data.value_type.nick.to_sym }
     end
@@ -151,6 +204,7 @@ module RedAmber
     #
     # @return [Array]
     #   An Array of Red Arrow data type Classes.
+    #
     def type_classes
       @data_types || @data_types = @table.columns.map { |column| column.data_type.class }
     end
@@ -158,50 +212,94 @@ module RedAmber
     # Returns Vectors in an Array.
     #
     # @return [Array]
-    #   An Array of RedAmber::Vector s.
+    #   An Array of `RedAmber::Vector`s.
+    #
     def vectors
       @vectors || @vectors = init_instance_vars(:vectors)
     end
 
-    # Returns row indices (start...(size+start)) in an Array.
+    # Returns row indices (start...(size+start)) in a Vector.
     #
     # @param start [Object]
-    #   Object which have #succ method.
+    #   Object which have `#succ` method.
+    #
     # @return [Array]
-    #   An Array of indices of the row.
+    #   A Vector of row indices.
+    #
     # @example
     #   (when self.size == 5)
-    #   - indices #=> [0, 1, 2, 3, 4]
-    #   - indices(1) #=> [1, 2, 3, 4, 5]
-    #   - indices('a') #=> ['a', 'b', 'c', 'd', 'e']
+    #   - indices #=> Vector[0, 1, 2, 3, 4]
+    #   - indices(1) #=> Vector[1, 2, 3, 4, 5]
+    #   - indices('a') #=> Vector['a', 'b', 'c', 'd', 'e']
+    #
     def indices(start = 0)
       Vector.new((start..).take(size))
     end
     alias_method :indexes, :indices
 
+    # Returns column-oriented data in a Hash.
+    #
+    # @return [Hash] A Hash of 'key => column_in_an_array'.
+    #
     def to_h
       variables.transform_values(&:to_a)
     end
 
+    # Returns a row-oriented array without header.
+    #
+    # @return [Array] Row-oriented data without header.
+    #
+    # @note If you need column-oriented array, use `.to_h.to_a`.
+    #
     def to_a
-      # output an array of row-oriented data without header
-      # if you need column-oriented array, use `.to_h.to_a`
       @table.raw_records
     end
     alias_method :raw_records, :to_a
 
+    # Returns column name and data type in a Hash.
+    #
+    # @return [Hash] Column name and data type.
+    #
+    # @example
+    #   RedAmber::DataFrame.new(x: [1, 2, 3], y: %w[A B C]).schema
+    #   # => {:x=>:uint8, :y=>:string}
+    #
     def schema
       keys.zip(types).to_h
     end
 
+    # Compare DataFrames.
+    #
+    # @return [true, false]
+    #   True if other is a DataFrame and table is same.
+    #   Otherwise return false.
+    #
     def ==(other)
       other.is_a?(DataFrame) && @table == other.table
     end
 
+    # Check if it is a empty DataFrame.
+    #
+    # @return [true, false] True if it has no columns.
+    #
     def empty?
       variables.empty?
     end
 
+    # Enumerate for each row.
+    #
+    # @overload each_row
+    #   Returns Enumerator when no block given.
+    #
+    #   @return [Enumerator] Enumerator of each rows.
+    #
+    # @overload each_row(&block)
+    #   Yields with key and row pairs.
+    #
+    #   @yield [key_row_pairs] Yields with key and row pairs.
+    #   @yieldparam [Hash] Key and row pairs.
+    #   @yieldreturn [Integer] Size of the DataFrame.
+    #
     def each_row
       return enum_for(:each_row) unless block_given?
 
@@ -214,6 +312,10 @@ module RedAmber
       end
     end
 
+    # Returns self in a `Rover::DataFrame`.
+    #
+    # @return [Rover::DataFrame] A `Rover::DataFrame`.
+    #
     def to_rover
       require 'rover'
       Rover::DataFrame.new(to_h)
@@ -226,7 +328,7 @@ module RedAmber
     end
 
     def method_missing(name, *args, &block)
-      return v(name) if args.empty?
+      return v(name) if args.empty? && key?(name)
 
       super
     end
@@ -242,7 +344,7 @@ module RedAmber
     # initialize @variable, @keys, @vectors and return one of them
     def init_instance_vars(var)
       ary = @table.columns.each_with_object([{}, [], []]) do |column, (variables, keys, vectors)|
-        v = Vector.new(column.data)
+        v = Vector.create(column.data)
         k = column.name.to_sym
         v.key = k
         variables[k] = v
@@ -253,8 +355,15 @@ module RedAmber
       ary[%i[variables keys vectors].index(var)]
     end
 
+    def check_duplicate_keys(array)
+      org = array.dup
+      return unless array.uniq!
+
+      raise DataFrameArgumentError, "duplicate keys: #{org.tally.select { |_k, v| v > 1 }.keys}"
+    end
+
     def name_unnamed_keys
-      return unless @table[:'']
+      return unless @table.key?('')
 
       # We can't use #keys because it causes mismatch of @table and @keys
       keys = @table.schema.fields.map { |f| f.name.to_sym }

@@ -25,7 +25,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     test 'Empty dataframe' do
       df = DataFrame.new
       assert_true df.pick.empty?
-      assert_raise(VectorArgumentError) { df.pick(1) }
+      assert_true df.pick(nil).empty?
+      assert_raise(IndexError) { df.pick(1) }
     end
 
     test 'pick by arguments' do
@@ -52,6 +53,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       STR
       assert_equal str, @df.pick(:a, :b).tdr_str
       assert_equal str, @df.pick(%i[a b]).tdr_str
+      assert_equal str, @df.pick(%w[a b]).tdr_str
       assert_equal str, @df.pick(0, 1).tdr_str
       assert_equal str, @df.pick([0, 1]).tdr_str
       assert_equal str, @df.pick([0, -3]).tdr_str
@@ -59,8 +61,9 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.pick(:a..:b).tdr_str
       assert_equal str, @df.pick(0...2).tdr_str
       assert_equal str, @df.pick(..1).tdr_str
-      # assert_equal str, @df.pick(..:b).tdr_str
-      assert_raise(DataFrameArgumentError) { @df.pick(0..5) }
+      assert_equal str, @df.pick(true, true, false, nil).tdr_str
+      assert_raise(DataFrameArgumentError) { @df.pick(..:b) }
+      assert_raise(IndexError) { @df.pick(0..5) }
     end
 
     test 'pick by endless Range' do
@@ -75,7 +78,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.pick(-2..).tdr_str
       assert_equal str, @df.pick(2...).tdr_str
       assert_equal str, @df.pick(2..-1).tdr_str
-      # assert_equal str, @df.pick(:c..).tdr_str
+      assert_raise(DataFrameArgumentError) { @df.pick(:c..) }
     end
 
     test 'pick by block' do
@@ -101,6 +104,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       STR
       assert_equal str, @df.pick { %i[a b] }.tdr_str
       assert_equal str, @df.pick { vectors.map(&:numeric?) }.tdr_str
+      assert_equal str, @df.pick { Vector.new(true, true, false, nil) }.tdr_str # Vector
       assert_equal str, @df.pick { [0, 1] }.tdr_str
     end
 
@@ -117,6 +121,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.pick(:c..:d, :a).tdr_str
       assert_equal str, @df.pick { [2..-1, 0] }.tdr_str
       assert_equal str, @df.pick { [:c..:d, :a] }.tdr_str
+      assert_equal str, @df.pick((:c..:d).each, 0).tdr_str # Enumerator
+      assert_equal str, @df.pick(2.5, -0.2, 0.1).tdr_str # float
+      assert_equal str, @df.pick(Vector.new(2, 3, 0)).tdr_str # Vector
+      assert_equal str, @df.pick(2, 3, nil, 0).tdr_str # nil is ignored
+      assert_equal str, @df.pick(Arrow::Array.new([2, 3, 0])).tdr_str # else clause in _parse_element
     end
 
     test 'pick duplicate keys' do
@@ -148,13 +157,15 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       STR
       assert_equal str, @df.drop(:b, :c).tdr_str
       assert_equal str, @df.drop(%i[b c]).tdr_str
+      assert_equal str, @df.drop(%w[b c]).tdr_str
       assert_equal str, @df.drop(1, -2).tdr_str
       assert_equal str, @df.drop(1..2).tdr_str
       assert_equal str, @df.drop(:b..:c).tdr_str
       assert_equal str, @df.drop(1...3).tdr_str
+      assert_equal str, @df.drop(false, true, true, nil).tdr_str
       assert_true @df.drop(..3).empty?
-      # assert_true @df.drop(..:d).empty?
-      assert_raise(DataFrameArgumentError) { @df.drop(0..5) }
+      assert_raise(DataFrameArgumentError) { @df.drop(..:d) }
+      assert_raise(IndexError) { @df.drop(0..5) }
     end
 
     test 'drop by endless Range' do
@@ -166,7 +177,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         1 :b  double     3 [0.0, NaN, nil], 1 NaN, 1 nil
       STR
       assert_equal str, @df.drop(2..).tdr_str
-      # assert_equal str, @df.drop(:c..).tdr_str
+      assert_raise(DataFrameArgumentError) { @df.drop(:c..) }
       assert_equal str, @df.drop(-2..).tdr_str
       assert_equal str, @df.drop(2...).tdr_str
       assert_equal str, @df.drop(2..-1).tdr_str
@@ -187,6 +198,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.drop { :d }.tdr_str
       assert_equal str, @df.drop { [:d] }.tdr_str
       assert_equal str, @df.drop { vectors.map(&:boolean?) }.tdr_str
+      assert_equal str, @df.drop { Vector.new(false, false, nil, true) }.tdr_str # Vector
       assert_equal str, @df.drop { -1 }.tdr_str
 
       str = <<~STR
@@ -214,6 +226,13 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str, @df.drop(:c..:d, :b).tdr_str
       assert_equal str, @df.drop { [2..-1, 1] }.tdr_str
       assert_equal str, @df.drop { [:b, :c..:d] }.tdr_str
+      assert_equal str, @df.drop((:c..:d).each, :b).tdr_str # Enumerator
+      assert_equal str, @df.drop(2.5, -0.2, 1.1).tdr_str # float
+      assert_equal str, @df.drop(Vector.new(2, 3, 1)).tdr_str # Vector
+      assert_equal str, @df.drop(2, 3, nil, 1).tdr_str # nil is ignored
+      assert_equal str, @df.drop(Arrow::Array.new([2, 3, 1])).tdr_str # else clause in _parse_element
+
+      assert_raise(DataFrameArgumentError) { @df.drop((:c..:d).each, 1) }
     end
   end
 
@@ -346,7 +365,8 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         4 :new    string      3 {"a"=>2, "b"=>2, "c"=>1}
       OUTPUT
       assert_equal str, @df2.assign(assigner).tdr_str
-      assert_equal str, @df2.assign(new: %w[a a b b c]).tdr_str # directly write assigner
+      assert_equal str, @df2.assign(:new, %w[a a b b c]).tdr_str # directly write assigner
+      assert_equal str, @df2.assign(new: %w[a a b b c]).tdr_str # write assigner by hash
       assert_equal str, @df2.assign(assigner.to_a).tdr_str
       assert_equal str, @df2.assign(*assigner.to_a).tdr_str # assign(:x, ary) style
       assert_equal str, @df2.assign(assigner_vector).tdr_str

@@ -5,6 +5,8 @@ module RedAmber
   class Group
     include Enumerable # This feature is experimental
 
+    using RefineArrowTable
+
     # Creates a new Group object.
     #
     # @param dataframe [DataFrame] dataframe to be grouped.
@@ -18,7 +20,6 @@ module RedAmber
       d = @group_keys - @dataframe.keys
       raise GroupArgumentError, "#{d} is not a key of\n #{@dataframe}." unless d.empty?
 
-      @filters = @group_counts = @base_table = nil
       @group = @dataframe.table.group(*@group_keys)
     end
 
@@ -32,8 +33,8 @@ module RedAmber
         raise GroupArgumentError, "#{d} is not a key of\n #{@dataframe}." unless summary_keys.empty? || d.empty?
 
         table = @group.aggregate(*build_aggregation_keys("hash_#{function}", summary_keys))
-        df = DataFrame.new(table)
-        df.pick(@group_keys, df.keys - @group_keys)
+        g = @group_keys.map(&:to_s)
+        DataFrame.new(table[g + (table.keys - g)])
       end
     end
 
@@ -76,7 +77,7 @@ module RedAmber
     end
 
     def group_count
-      DataFrame.new(add_columns_to_table(base_table, [:group_count], [group_counts]))
+      DataFrame.create(add_columns_to_table(base_table, [:group_count], [group_counts]))
     end
 
     def inspect
@@ -95,6 +96,11 @@ module RedAmber
       end
     end
 
+    # experimental
+    def agg_sum(*summary_keys)
+      call_aggregating_function(:sum, summary_keys, _options = nil)
+    end
+
     private
 
     def build_aggregation_keys(function_name, summary_keys)
@@ -105,7 +111,7 @@ module RedAmber
       end
     end
 
-    # @group_counts.sum == @dataframe.size
+    # @note `@group_counts.sum == @dataframe.size``
     def group_counts
       @group_counts ||= filters.map(&:sum)
     end
