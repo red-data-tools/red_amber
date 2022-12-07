@@ -35,14 +35,20 @@ module RedAmber
     # @param value [Symbol, String] key of the column which is come **from values**.
     # @return [DataFrame] long DataFrame.
     def to_long(*keep_keys, name: :NAME, value: :VALUE)
+      warn('[Info] No key to keep is specified.') if keep_keys.empty?
+
       not_included = keep_keys - keys
       raise DataFrameArgumentError, "Not have keys #{not_included}" unless not_included.empty?
 
       name = name.to_sym
-      raise DataFrameArgumentError, "Invalid key: #{name}" if keep_keys.include?(name)
+      if keep_keys.include?(name)
+        raise DataFrameArgumentError, "Can't specify the key: #{name} for the column from keys."
+      end
 
       value = value.to_sym
-      raise DataFrameArgumentError, "Invalid key: #{value}" if keep_keys.include?(value)
+      if keep_keys.include?(value)
+        raise DataFrameArgumentError, "Can't specify the key: #{value} for the column from values."
+      end
 
       hash = Hash.new { |h, k| h[k] = [] }
       l = keys.size - keep_keys.size
@@ -67,10 +73,18 @@ module RedAmber
     # @return [DataFrame] wide DataFrame.
     def to_wide(name: :NAME, value: :VALUE)
       name = name.to_sym
-      raise DataFrameArgumentError, "Invalid key: #{name}" unless keys.include?(name)
+      unless keys.include?(name)
+        raise DataFrameArgumentError,
+              "You are going to keep the key: #{name}. " \
+              'You may need to specify the column name that gives the new keys by `:name` option.'
+      end
 
       value = value.to_sym
-      raise DataFrameArgumentError, "Invalid key: #{value}" unless keys.include?(value)
+      unless keys.include?(value)
+        raise DataFrameArgumentError,
+              "You are going to keep the key: #{value}. " \
+              'You may need to specify the column name that gives the new values by `:value` option.'
+      end
 
       hash = Hash.new { |h, k| h[k] = {} }
       keep_keys = keys - [name, value]

@@ -87,6 +87,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
         8 name3    Three         3.3
       STR
 
+      $stderr = StringIO.new
       assert_equal <<~STR, @df.to_long.to_s
            NAME     VALUE
            <string> <string>
@@ -100,6 +101,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
         10 Two      2.3
         11 Three    3.3
       STR
+      $stderr = STDERR
     end
   end
 
