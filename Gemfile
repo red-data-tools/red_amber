@@ -24,4 +24,5 @@ group :test do
   gem 'red-arrow-numo-narray'
   gem 'red-datasets-arrow'
   gem 'simplecov'
+  gem 'simplecov-json'
 end
