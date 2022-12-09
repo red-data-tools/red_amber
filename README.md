@@ -47,6 +47,11 @@ Install requirements before you install Red Amber.
     sudo apt install -y -V libarrow-dev
     sudo apt install -y -V libarrow-glib-dev
     ```
+  - On Fedora 38 (Rawhide):
+    ```
+    sudo dnf update
+    sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel
+    ```
   - On macOS, you can install Apache Arrow C++ library using Homebrew:
     
     ```
@@ -96,6 +101,11 @@ include RedAmber
 
 ### Example: diamonds dataset
 
+First do
+    ```
+    gem install red-datasets-arrow
+    ```
+then
 ```ruby
 require 'datasets-arrow' # to load sample data
 
