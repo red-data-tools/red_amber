@@ -2,7 +2,8 @@
 
 [![Gem Version](https://badge.fury.io/rb/red_amber.svg)](https://badge.fury.io/rb/red_amber)
 [![Ruby](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml/badge.svg)](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml)
-[![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/heronshoes/red_amber/discussions)
+<a href="https://codeclimate.com/github/heronshoes/red_amber/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/maintainability" /></a>
+<a href="https://codeclimate.com/github/heronshoes/red_amber/test_coverage"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/test_coverage" /></a>[![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/heronshoes/red_amber/discussions)
 
 A simple dataframe library for Ruby.
 
