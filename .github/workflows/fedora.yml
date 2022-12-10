@@ -1,0 +1,23 @@
+name: Test on Fedora
+on:
+  - push
+
+jobs:
+  test:
+    name: fedora
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Setup Podman
+        run: |
+          sudo apt update
+          sudo apt-get -y install podman
+      - name: Create and run container
+        run: |
+          echo 'FROM fedora:38' >> Dockerfile
+          echo 'RUN dnf -y update' >> Dockerfile
+          echo 'RUN dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel' >> Dockerfile
+          echo 'RUN dnf clean all' >> Dockerfile
+          echo 'RUN TZ=Asia/Tokyo bundle exec rake test' >> Dockerfile # set TZ to ensure the test using timestamp
+          sudo podman build --tag fedora:38 -f ./Dockerfile
+          sudo podman run -it --name fedora38-test localhost/fedora:38 /bin/bash
