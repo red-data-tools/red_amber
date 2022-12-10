@@ -1,7 +1,10 @@
 name: Test on Fedora
 on:
-  - push
-
+  push:
+    branches:
+      - main
+  pull_request:
+  
 jobs:
   test:
     name: fedora
@@ -13,15 +16,21 @@ jobs:
           sudo apt update
           sudo apt-get -y install podman
           podman pull fedora:38
+      - name: Get source
+        uses: actions/checkout@v3
       - name: Create container and run tests
         run: |
+          ls
+          echo "Hello"
+          ls ..
           echo 'FROM fedora:38' >> podmanfile
+          echo 'ENV TZ=Asia/Tokyo' >> podmanfile  # set TZ to ensure the test using timestamp
           echo 'RUN dnf -y update' >> podmanfile
           echo 'WORKDIR /' >> podmanfile
-          echo 'RUN dnf -y install git gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel' >> podmanfile
+          echo 'RUN dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel' >> podmanfile
           echo 'RUN dnf clean all' >> podmanfile
-          echo 'RUN git clone https://github.com/heronshoes/red_amber.git' >> podmanfile
+          echo 'COPY red_amber red_amber' >> podmanfile
           echo 'WORKDIR /red_amber' >> podmanfile
           echo 'RUN bundle install' >> podmanfile
-          echo 'RUN TZ=Asia/Tokyo bundle exec rake test' >> podmanfile # set TZ to ensure the test using timestamp
+          echo 'RUN bundle exec rake test' >> podmanfile
           podman build --tag fedora38test -f ./podmanfile
