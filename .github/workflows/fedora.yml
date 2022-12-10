@@ -17,11 +17,8 @@ jobs:
         run: |
           podman images
           podman --version
-          podman run fedora:38 \
-            #dnf -y update && \
+          podman run --privileged fedora:38 \
             dnf -y install git && \
-            #gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel && \
-            #dnf clean all && \
             git clone https://github.com/heronshoes/red_amber.git && \
             cd red_amber #&& \
             #bundle install && \
