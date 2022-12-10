@@ -1,0 +1,35 @@
+name: CI
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  
+jobs:
+  test:
+    name: fedora
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Setup Podman
+        run: |
+          sudo apt update
+          sudo apt-get -y install podman
+          podman pull fedora:38
+      - name: Get source
+        uses: actions/checkout@v3
+        with:
+          path: 'red_amber'
+      - name: Create container and run tests
+        run: |
+          echo 'FROM fedora:38' >> podmanfile
+          echo 'ENV TZ=Asia/Tokyo' >> podmanfile  # set TZ to ensure the test using timestamp
+          echo 'RUN dnf -y update' >> podmanfile
+          echo 'RUN dnf -y install gcc-c++ git libarrow-devel libarrow-glib-devel ruby-devel' >> podmanfile
+          echo 'RUN dnf clean all' >> podmanfile
+          echo 'COPY red_amber red_amber' >> podmanfile
+          echo 'WORKDIR /red_amber' >> podmanfile
+          echo 'RUN ls' >> podmanfile
+          echo 'RUN bundle install' >> podmanfile
+          echo 'RUN bundle exec rake test' >> podmanfile
+          podman build --tag fedora38test -f ./podmanfile
