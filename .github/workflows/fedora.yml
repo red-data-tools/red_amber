@@ -12,10 +12,12 @@ jobs:
         run: |
           sudo apt update
           sudo apt-get -y install podman
+          podman pull fedora:38
       - name: Create and run container
         run: |
-          echo 'FROM fedora:38' >> Dockerfile
-          echo 'RUN echo $PWD' >> Dockerfile
+          podman images
+          #echo 'FROM fedora:38' >> Dockerfile
+          #echo 'RUN echo $PWD' >> Dockerfile
           #echo 'RUN sudo dnf -y update' >> Dockerfile
           #echo 'WORKDIR /' >> Dockerfile
           #echo 'RUN sudo dnf -y install git gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel' >> Dockerfile
@@ -24,5 +26,5 @@ jobs:
           #echo 'RUN cd red_amber' >> Dockerfile
           #echo 'RUN bundle install' >> Dockerfile
           #echo 'RUN TZ=Asia/Tokyo bundle exec rake test' >> Dockerfile # set TZ to ensure the test using timestamp
-          sudo podman build --tag fedora:38test -f ./Dockerfile
-          sudo podman run --name fedora38-test -rm fedora:38test
+          #sudo podman build --tag fedora:38test -f ./Dockerfile
+          #sudo podman run --name fedora38-test -rm fedora:38test
