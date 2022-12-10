@@ -17,7 +17,7 @@ jobs:
         run: |
           podman images
           podman --version
-          podman run fedora:38 echo "hello"
+          podman run fedora:38 dnf -y update
           #echo 'FROM fedora:38' >> Dockerfile
           #echo 'RUN echo $PWD' >> Dockerfile
           #echo 'RUN sudo dnf -y update' >> Dockerfile
