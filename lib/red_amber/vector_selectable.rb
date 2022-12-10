@@ -8,6 +8,7 @@ module RedAmber
   #   Functions to select some data.
   module VectorSelectable
     using RefineArray
+    using RefineArrayLike
 
     def drop_nil
       datum = find(:drop_null).execute([data])
@@ -19,14 +20,14 @@ module RedAmber
     def take(*indices)
       case indices
       in [Vector => v] if v.numeric?
-        take_by_vector(v)
+        Vector.create(take_by_vector(v))
       in []
         Vector.new
       else
         v = Vector.new(indices.flatten)
         raise VectorArgumentError, "argument must be a integers: #{indices}" unless v.numeric?
 
-        take_by_vector(v)
+        Vector.create(take_by_vector(v))
       end
     end
 
@@ -40,30 +41,35 @@ module RedAmber
 
       case booleans
       in [Vector => v]
-        return filter_by_array(v.data) if v.boolean?
+        raise VectorTypeError, 'Argument is not a boolean.' unless v.boolean?
 
-        raise VectorTypeError, 'Argument is not a boolean.'
+        Vector.create(filter_by_array(v.data))
       in [Arrow::BooleanArray => ba]
-        filter_by_array(ba)
+        Vector.create(filter_by_array(ba))
       in []
         Vector.new
       else
         booleans.flatten!
-        return filter_by_array(Arrow::BooleanArray.new(booleans)) if booleans.booleans?
-
-        raise VectorTypeError, 'Argument is not a boolean.'
+        a = Arrow::Array.new(booleans)
+        if a.boolean?
+          Vector.create(filter_by_array(a))
+        elsif booleans.compact.empty? # [nil, nil] becomes string array
+          Vector.new
+        else
+          raise VectorTypeError, "Argument is not a boolean: #{booleans}"
+        end
       end
     end
     alias_method :select, :filter
     alias_method :find_all, :filter
 
-    #   @param indices
-    #   @param booleans
+    # @param indices
+    # @param booleans
     def [](*args)
       case args
       in [Vector => v]
-        return take_by_vector(v) if v.numeric?
-        return filter_by_array(v.data) if v.boolean?
+        return Vector.create(take_by_vector(v)) if v.numeric?
+        return Vector.create(filter_by_array(v.data)) if v.boolean?
 
         raise VectorTypeError, "Argument must be numeric or boolean: #{args}"
       in [Arrow::BooleanArray => ba]
@@ -78,15 +84,15 @@ module RedAmber
         array = Arrow::Array.new(args.flatten)
       end
 
-      return filter_by_array(array) if array.is_a?(Arrow::BooleanArray)
+      return Vector.create(filter_by_array(array)) if array.is_a?(Arrow::BooleanArray)
 
       vector = Vector.new(array)
-      return take_by_vector(vector) if vector.numeric?
+      return Vector.create(take_by_vector(vector)) if vector.numeric?
 
       raise VectorArgumentError, "Invalid argument: #{args}"
     end
 
-    #   @param values [Array, Arrow::Array, Vector]
+    # @param values [Array, Arrow::Array, Vector]
     def is_in(*values)
       self_data = chunked? ? data.pack : data
 
@@ -123,16 +129,14 @@ module RedAmber
           indices.data
         end
 
-      datum = find(:take).execute([data, index_array]) # :array_take will fail with ChunkedArray
-      Vector.create(datum.value)
+      find(:take).execute([data, index_array]).value # :array_take will fail with ChunkedArray
     end
 
     # Accepts booleans by Arrow::BooleanArray
     def filter_by_array(boolean_array)
       raise VectorArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 
-      datum = find(:array_filter).execute([data, boolean_array])
-      Vector.create(datum.value)
+      find(:array_filter).execute([data, boolean_array]).value
     end
   end
 end

@@ -65,7 +65,7 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array %w[A E], @string.filter(Vector.new(@booleans)) # Vector
       assert_equal_array %w[A E], @string.filter([Vector.new(@booleans)]) # Vector
       assert_raise(VectorTypeError) { @string.filter(Vector.new(@string)) } # Not a boolean Vector
-      assert_equal_array [], @string.filter([nil] * 5) # nil array
+      assert_equal_array [], @string.filter([nil] * 5) # nil array is string type
     end
 
     test '#filter not booleans' do
