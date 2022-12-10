@@ -13,7 +13,7 @@ jobs:
           sudo apt update
           sudo apt-get -y install podman
           podman pull fedora:38
-      - name: Create container
+      - name: Create container and run tests
         run: |
           echo 'FROM fedora:38' >> podmanfile
           echo 'RUN dnf -y update' >> podmanfile
@@ -23,8 +23,5 @@ jobs:
           echo 'RUN git clone https://github.com/heronshoes/red_amber.git' >> podmanfile
           echo 'WORKDIR /red_amber' >> podmanfile
           echo 'RUN bundle install' >> podmanfile
+          echo 'RUN TZ=Asia/Tokyo bundle exec rake test' >> podmanfile # set TZ to ensure the test using timestamp
           podman build --tag fedora38test -f ./podmanfile
-      - name: Run tests
-        run: |        
-          podman run --name fedora38-test -w red_amber fedora38test \
-          TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
