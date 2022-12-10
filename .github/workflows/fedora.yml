@@ -33,8 +33,9 @@ jobs:
           echo 'RUN dnf clean all' >> Dockerfile
           echo 'RUN git clone https://github.com/heronshoes/red_amber.git' >> Dockerfile
           echo 'WORKDIR /red_amber' >> Dockerfile
-          echo 'RUN ls' >> Dockerfile
           echo 'RUN bundle install' >> Dockerfile
-          #echo 'RUN TZ=Asia/Tokyo bundle exec rake test' >> Dockerfile # set TZ to ensure the test using timestamp
+          echo 'RUN TZ=Asia/Tokyo bundle exec rake test' >> Dockerfile # set TZ to ensure the test using timestamp
           podman build --tag fedora38test -f ./Dockerfile
-          #podman run --name fedora38-test -rm fedora38test
+          podman run --name fedora38-test -rm fedora38test \
+          cd red_amber && \
+          TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
