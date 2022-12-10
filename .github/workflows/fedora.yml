@@ -13,29 +13,19 @@ jobs:
           sudo apt update
           sudo apt-get -y install podman
           podman pull fedora:38
-      - name: Create and run container
+      - name: Create container
         run: |
-          podman images
-          podman --version
-          #podman run --privileged fedora:38 \
-          #  dnf -y install git gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel rubygem-bundler && \
-          #  git clone https://github.com/heronshoes/red_amber.git && \
-          #  cd red_amber && \
-          #  ls /usr/local/bin && \
-          #  bundle --version && \
-          #  bundle install --local #&& \
-          # TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
           echo 'FROM fedora:38' >> Dockerfile
-          #echo 'RUN echo $PWD' >> Dockerfile
-          #echo 'RUN sudo dnf -y update' >> Dockerfile
+          echo 'RUN dnf -y update' >> Dockerfile
           echo 'WORKDIR /' >> Dockerfile
           echo 'RUN dnf -y install git gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel' >> Dockerfile
           echo 'RUN dnf clean all' >> Dockerfile
           echo 'RUN git clone https://github.com/heronshoes/red_amber.git' >> Dockerfile
           echo 'WORKDIR /red_amber' >> Dockerfile
           echo 'RUN bundle install' >> Dockerfile
-          echo 'RUN TZ=Asia/Tokyo bundle exec rake test' >> Dockerfile # set TZ to ensure the test using timestamp
           podman build --tag fedora38test -f ./Dockerfile
-          podman run --name fedora38-test -rm fedora38test \
+      - name: Run tests
+        run: |        
+          podman run --name fedora38-test fedora38test \
           cd red_amber && \
           TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
