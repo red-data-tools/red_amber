@@ -50,10 +50,10 @@ jobs:
       - name: Run test
         run: TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
 
-      - name: Check test coverage
-        if: runner.os == 'Linux' && matrix.ruby == '3.1'
-        uses: joshmfrankel/simplecov-check-action@main
-        with:
-          minimum_suite_coverage: 98
-          minimum_file_coverage: 90
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Check test coverage
+      #   if: runner.os == 'Linux' && matrix.ruby == '3.1'
+      #   uses: joshmfrankel/simplecov-check-action@main
+      #   with:
+      #     minimum_suite_coverage: 98
+      #     minimum_file_coverage: 90
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
