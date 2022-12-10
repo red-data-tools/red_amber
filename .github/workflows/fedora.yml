@@ -20,9 +20,9 @@ jobs:
           podman run --privileged fedora:38 \
             dnf -y install git gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel && \
             git clone https://github.com/heronshoes/red_amber.git && \
-            gem install bundler && \
+            gem install --local bundler && \
             cd red_amber && \
-            bundle install #&& \
+            bundle install --local #&& \
             #TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
           #echo 'FROM fedora:38' >> Dockerfile
           #echo 'RUN echo $PWD' >> Dockerfile
