@@ -92,15 +92,15 @@ class VectorTest < Test::Unit::TestCase
     end
 
     test 'empty vector' do
-      assert_equal_array [], Vector.new[]
+      assert_nil Vector.new[]
     end
 
     test '#[indices]' do
-      assert_equal_array %w[B], @string[1] # single value
-      assert_equal_array %w[D A D], @string[[3, 0, -2]] # array, negative index
-      assert_equal_array %w[D A D], @string[Vector.new([3, 0, -2])] # array, negative index
-      assert_equal_array %w[D E C], @string[3.1, -0.5, -2.5] # float index
-      assert_equal_array %w[D A D], @string[Arrow::Array.new([3, 0, -2])] # Arrow
+      assert_equal 'B', @string[1] # single value
+      assert_equal %w[D A D], @string[[3, 0, -2]] # array, negative index
+      assert_equal %w[D A D], @string[Vector.new([3, 0, -2])] # array, negative index
+      assert_equal %w[D E C], @string[3.1, -0.5, -2.5] # float index
+      assert_equal %w[D A D], @string[Arrow::Array.new([3, 0, -2])] # Arrow
     end
 
     test '#[indices] with ChunkedArray' do
@@ -111,21 +111,21 @@ class VectorTest < Test::Unit::TestCase
     end
 
     test '#[booleans]' do
-      assert_equal_array %w[B], @string[1] # single value
-      assert_equal_array %w[A E], @string[*@booleans] # arguments
-      assert_equal_array %w[A E], @string[@booleans] # primitive Array
-      assert_equal_array %w[A E], @string[Arrow::BooleanArray.new(@booleans)] # Arrow::BooleanArray
-      assert_equal_array %w[A E], @string[Vector.new(@booleans)] # Vector
+      assert_equal 'B', @string[1] # single value
+      assert_equal %w[A E], @string[*@booleans] # arguments
+      assert_equal %w[A E], @string[@booleans] # primitive Array
+      assert_equal %w[A E], @string[Arrow::BooleanArray.new(@booleans)] # Arrow::BooleanArray
+      assert_equal %w[A E], @string[Vector.new(@booleans)] # Vector
       assert_raise(VectorTypeError) { @string[Vector.new(@string)] } # Not a boolean Vector
       assert_raise(VectorArgumentError) { @string[nil] } # nil array
       assert_raise(VectorArgumentError) { @string[[nil] * 5] } # nil array
     end
 
     test '#[Range]' do
-      assert_equal_array %w[B C D], @string[1..3] # Normal Range
-      assert_equal_array %w[B C D E], @string[1..] # Endless Range
-      assert_equal_array %w[A B C], @string[..2] # Beginless Range
-      assert_equal_array %w[B C D], @string[1..-2] # Range to index from tail
+      assert_equal %w[B C D], @string[1..3] # Normal Range
+      assert_equal %w[B C D E], @string[1..] # Endless Range
+      assert_equal %w[A B C], @string[..2] # Beginless Range
+      assert_equal %w[B C D], @string[1..-2] # Range to index from tail
       assert_raise(IndexError) { @string[1..6] }
     end
 

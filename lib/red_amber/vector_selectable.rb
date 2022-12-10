@@ -66,28 +66,29 @@ module RedAmber
     # @param indices
     # @param booleans
     def [](*args)
-      case args
-      in [Vector => v]
-        return Vector.create(take_by_vector(v)) if v.numeric?
-        return Vector.create(filter_by_array(v.data)) if v.boolean?
+      array =
+        case args
+        in [Vector => v]
+          return scalar_or_array(take_by_vector(v)) if v.numeric?
+          return scalar_or_array(filter_by_array(v.data)) if v.boolean?
 
-        raise VectorTypeError, "Argument must be numeric or boolean: #{args}"
-      in [Arrow::BooleanArray => ba]
-        return filter_by_array(ba)
-      in []
-        return Vector.new
-      in [Arrow::Array => aa]
-        array = aa
-      in [Range => r]
-        array = parse_range(r, size)
-      else
-        array = Arrow::Array.new(args.flatten)
-      end
+          raise VectorTypeError, "Argument must be numeric or boolean: #{args}"
+        in [Arrow::BooleanArray => ba]
+          return scalar_or_array(filter_by_array(ba))
+        in []
+          return nil
+        in [Arrow::Array => arrow_array]
+          arrow_array
+        in [Range => r]
+          Arrow::Array.new(parse_range(r, size))
+        else
+          Arrow::Array.new(args.flatten)
+        end
 
-      return Vector.create(filter_by_array(array)) if array.is_a?(Arrow::BooleanArray)
+      return scalar_or_array(filter_by_array(array)) if array.boolean?
 
       vector = Vector.new(array)
-      return Vector.create(take_by_vector(vector)) if vector.numeric?
+      return scalar_or_array(take_by_vector(vector)) if vector.numeric?
 
       raise VectorArgumentError, "Invalid argument: #{args}"
     end
@@ -137,6 +138,11 @@ module RedAmber
       raise VectorArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 
       find(:array_filter).execute([data, boolean_array]).value
+    end
+
+    def scalar_or_array(arrow_array)
+      a = arrow_array.to_a
+      a.size > 1 ? a : a[0]
     end
   end
 end

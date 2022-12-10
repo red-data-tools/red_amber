@@ -146,6 +146,7 @@ Metrics/ModuleLength:
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 175
     - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 171
     - 'lib/red_amber/vector_functions.rb' # Max: 165
+    - 'lib/red_amber/vector_selectable.rb' # Max: 104
 
 # Max: 5
 # Offense count: 1
