@@ -16,6 +16,8 @@ jobs:
       - name: Create and run container
         run: |
           podman images
+          podman --runtime runc
+          podman run --name:fedora-rawhide-test fedora:38 /bin/bash echo $PWD
           #echo 'FROM fedora:38' >> Dockerfile
           #echo 'RUN echo $PWD' >> Dockerfile
           #echo 'RUN sudo dnf -y update' >> Dockerfile
