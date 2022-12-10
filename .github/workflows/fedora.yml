@@ -22,14 +22,16 @@ jobs:
           path: 'red_amber'
       - name: Create container and run tests
         run: |
-          echo 'FROM fedora:38' >> podmanfile
-          echo 'ENV TZ=Asia/Tokyo' >> podmanfile  # set TZ to ensure the test using timestamp
-          echo 'RUN dnf -y update' >> podmanfile
-          echo 'RUN dnf -y install gcc-c++ git libarrow-devel libarrow-glib-devel ruby-devel' >> podmanfile
-          echo 'RUN dnf clean all' >> podmanfile
-          echo 'COPY red_amber red_amber' >> podmanfile
-          echo 'WORKDIR /red_amber' >> podmanfile
-          echo 'RUN ls' >> podmanfile
-          echo 'RUN bundle install' >> podmanfile
+          {
+              echo 'FROM fedora:38'
+              echo '# set TZ to ensure the test using timestamp'
+              echo 'ENV TZ=Asia/Tokyo'
+              echo 'RUN dnf -y update'
+              echo 'RUN dnf -y install gcc-c++ git libarrow-devel libarrow-glib-devel ruby-devel'
+              echo 'RUN dnf clean all'
+              echo 'COPY red_amber red_amber'
+              echo 'WORKDIR /red_amber'
+              echo 'RUN bundle install'
+          } > podmanfile
           echo 'RUN bundle exec rake test' >> podmanfile
           podman build --tag fedora38test -f ./podmanfile
