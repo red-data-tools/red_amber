@@ -15,17 +15,16 @@ jobs:
           podman pull fedora:38
       - name: Create container
         run: |
-          echo 'FROM fedora:38' >> Dockerfile
-          echo 'RUN dnf -y update' >> Dockerfile
-          echo 'WORKDIR /' >> Dockerfile
+          echo 'FROM fedora:38' >> podmanfile
+          echo 'RUN dnf -y update' >> podmanfile
+          echo 'WORKDIR /' >> podmanfile
           echo 'RUN dnf -y install git gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel' >> Dockerfile
-          echo 'RUN dnf clean all' >> Dockerfile
-          echo 'RUN git clone https://github.com/heronshoes/red_amber.git' >> Dockerfile
-          echo 'WORKDIR /red_amber' >> Dockerfile
-          echo 'RUN bundle install' >> Dockerfile
-          podman build --tag fedora38test -f ./Dockerfile
+          echo 'RUN dnf clean all' >> podmanfile
+          echo 'RUN git clone https://github.com/heronshoes/red_amber.git' >> podmanfile
+          echo 'WORKDIR /red_amber' >> podmanfile
+          echo 'RUN bundle install' >> podmanfile
+          podman build --tag fedora38test -f ./podmanfile
       - name: Run tests
         run: |        
-          podman run --name fedora38-test fedora38test \
-          cd red_amber && \
+          podman run --name fedora38-test -w red_amber fedora38test \
           TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
