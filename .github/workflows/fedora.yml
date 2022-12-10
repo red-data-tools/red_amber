@@ -20,4 +20,4 @@ jobs:
           echo 'RUN dnf clean all' >> Dockerfile
           echo 'RUN TZ=Asia/Tokyo bundle exec rake test' >> Dockerfile # set TZ to ensure the test using timestamp
           sudo podman build --tag fedora:38 -f ./Dockerfile
-          sudo podman run -it --name fedora38-test localhost/fedora:38 /bin/bash
+          sudo podman run --privileged --name fedora38-test localhost/fedora:38 /bin/bash
