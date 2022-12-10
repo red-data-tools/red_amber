@@ -1,4 +1,4 @@
-name: Test on Fedora
+name: CI
 on:
   push:
     branches:
@@ -18,11 +18,11 @@ jobs:
           podman pull fedora:38
       - name: Get source
         uses: actions/checkout@v3
+        with:
+          path: 'red_amber'
       - name: Create container and run tests
         run: |
           ls
-          echo "Hello"
-          ls ..
           echo 'FROM fedora:38' >> podmanfile
           echo 'ENV TZ=Asia/Tokyo' >> podmanfile  # set TZ to ensure the test using timestamp
           echo 'RUN dnf -y update' >> podmanfile
