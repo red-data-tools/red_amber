@@ -98,7 +98,7 @@ module RedAmber
     end
 
     def type
-      @data.value_type.nick.to_sym
+      list? ? :list : @data.value_type.nick.to_sym
     end
 
     def boolean?
@@ -127,6 +127,10 @@ module RedAmber
 
     def temporal?
       @data.temporal?
+    end
+
+    def list?
+      @data.list?
     end
 
     def type_class

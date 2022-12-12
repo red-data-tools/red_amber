@@ -24,7 +24,7 @@ prelude: |
   arrow_array = tailnum_vector.data
   integers = df[:dep_delay].to_a
   boolean_vector = df[:air_time].is_nil
-  index_vector = Vector.new(0...boolean_vector.size)[boolean_vector]
+  index_vector = Vector.new(0...boolean_vector.size).filter(boolean_vector)
   replacer = index_vector.data.map(&:to_s)
   booleans = boolean_vector.to_a
 

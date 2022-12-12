@@ -58,24 +58,27 @@ class VectorTest < Test::Unit::TestCase
   sub_test_case 'Basic properties' do
     data(keep: true) do
       a = [0, 1, nil, 4]
-      # h in [expect, type, type_class, array]
-      h = {
+      s = [%w[a b]]
+      chunks = [Arrow::UInt32Array.new(a[0..1]),
+                Arrow::UInt32Array.new(a[2..3])]
+
+      # [expect, type, type_class, array]
+      {
         array: [a, :uint8, Arrow::UInt8DataType, a],
         'Arrow::Array': [a, :uint8, Arrow::UInt8DataType, Arrow::UInt8Array.new(a)],
         vector: [a, :uint8, Arrow::UInt8DataType, Vector.new(a)],
         Range: [[1, 2, 3], :uint8, Arrow::UInt8DataType, 1..3],
         Float: [[1.0], :double, Arrow::DoubleDataType, 1.0],
+        list: [s, :list, Arrow::ListDataType, s],
+        'chunked array': [a, :uint32, Arrow::UInt32DataType, Arrow::ChunkedArray.new(chunks)],
+        'list chunked array': [[s], :list, Arrow::ListDataType, [s]],
       }
-      chunks = [Arrow::UInt32Array.new(a[0..1]),
-                Arrow::UInt32Array.new(a[2..3])]
-      h['chunked array'] = [a, :uint32, Arrow::UInt32DataType, Arrow::ChunkedArray.new(chunks)]
-      h
     end
 
     test 'initialize' do
       expect, _, _, array = data
       actual = Vector.new(array)
-      assert_equal_array expect, actual
+      assert_equal expect, actual.to_a
     end
 
     test '#to_arrow_array' do
@@ -122,17 +125,15 @@ class VectorTest < Test::Unit::TestCase
       expect, _, _, array = data
       vector = Vector.new(array)
       assert_kind_of Enumerator, vector.each
-      a = []
-      vector.each { |x| a << x }
-      assert_equal expect, a
+      assert_equal_array expect.first, vector.each.next
     end
 
     test '#map' do
       expect, _, _, array = data
       vector = Vector.new(array)
       assert_kind_of Enumerator, vector.map
-      assert_kind_of Vector, vector.map(&:to_s)
-      assert_equal_array expect.map(&:to_s), vector.map(&:to_s)
+      assert_kind_of Vector, vector.map { _1 }
+      assert_equal_array expect, vector.map { _1 }
     end
   end
 
@@ -178,6 +179,11 @@ class VectorTest < Test::Unit::TestCase
 
     test '#dictionary?' do
       assert_true Vector.new(Arrow::Array.new(%i[a b c])).dictionary?
+    end
+
+    test '#list?' do
+      assert_true Vector.new(Arrow::Array.new([%i[a b c]])).list?
+      assert_true Vector.new(Arrow::ChunkedArray.new([[%i[a b c]]])).list?
     end
   end
 

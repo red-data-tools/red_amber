@@ -8,29 +8,46 @@ module RedAmber
   #   Functions to select some data.
   module VectorSelectable
     using RefineArray
+    using RefineArrayLike
 
-    def drop_nil
-      datum = find(:drop_null).execute([data])
-      Vector.create(datum.value)
-    end
+    # Select elements in the self by indices.
+    #
+    # @param indices [Array<Numeric>, Vector] indices.
+    # @yield [Array<Numeric>, Vector] indices.
+    # @return [Vector] Vector by selected elements.
+    #
+    #   TODO: support for the option `boundscheck: true`
+    def take(*indices, &block)
+      if block
+        raise VectorArgumentError, 'Must not specify both arguments and block.' unless indices.empty?
 
-    # vector version of selection by indices
-    # TODO: support for the option `boundscheck: true``
-    def take(*indices)
-      case indices
-      in [Vector => v] if v.numeric?
-        take_by_vector(v)
-      in []
-        Vector.new
-      else
-        v = Vector.new(indices.flatten)
-        raise VectorArgumentError, "argument must be a integers: #{indices}" unless v.numeric?
-
-        take_by_vector(v)
+        indices = [yield]
       end
+
+      vector =
+        case indices
+        in [Vector => v] if v.numeric?
+          return Vector.create(take_by_vector(v))
+        in []
+          return Vector.new
+        in [(Arrow::Array | Arrow::ChunkedArray) => aa]
+          Vector.create(aa)
+        else
+          Vector.new(indices.flatten)
+        end
+
+      raise VectorArgumentError, "argument must be a integers: #{indices}" unless vector.numeric?
+
+      Vector.create(take_by_vector(vector))
     end
 
-    # TODO: support for the option `null_selection_behavior: :drop``
+    # Select elements in the self by booleans.
+    #
+    # @param booleans [Array<true, false, nil>, Vector] booleans.
+    # @yield [Array<true, false, nil>, Vector] booleans.
+    # @return [Vector] Vector by selected elements.
+    #
+    #   TODO: support for the option `null_selection_behavior: :drop`
     def filter(*booleans, &block)
       if block
         raise VectorArgumentError, 'Must not specify both arguments and block.' unless booleans.empty?
@@ -40,53 +57,63 @@ module RedAmber
 
       case booleans
       in [Vector => v]
-        return filter_by_array(v.data) if v.boolean?
+        raise VectorTypeError, 'Argument is not a boolean.' unless v.boolean?
 
-        raise VectorTypeError, 'Argument is not a boolean.'
+        Vector.create(filter_by_array(v.data))
       in [Arrow::BooleanArray => ba]
-        filter_by_array(ba)
+        Vector.create(filter_by_array(ba))
       in []
         Vector.new
       else
         booleans.flatten!
-        return filter_by_array(Arrow::BooleanArray.new(booleans)) if booleans.booleans?
-
-        raise VectorTypeError, 'Argument is not a boolean.'
+        a = Arrow::Array.new(booleans)
+        if a.boolean?
+          Vector.create(filter_by_array(a))
+        elsif booleans.compact.empty? # [nil, nil] becomes string array
+          Vector.new
+        else
+          raise VectorTypeError, "Argument is not a boolean: #{booleans}"
+        end
       end
     end
     alias_method :select, :filter
     alias_method :find_all, :filter
 
-    #   @param indices
-    #   @param booleans
+    # Select elements in the self by indices or booleans.
+    #
+    # @param args [Array<Numeric, true, false, nil>, Vector] specifier.
+    # @yield [Array<Numeric, true, false, nil>, Vector] specifier.
+    # @return [scalar, Array] returns scalar or array.
+    #
     def [](*args)
-      case args
-      in [Vector => v]
-        return take_by_vector(v) if v.numeric?
-        return filter_by_array(v.data) if v.boolean?
+      array =
+        case args
+        in [Vector => v]
+          return scalar_or_array(take_by_vector(v)) if v.numeric?
+          return scalar_or_array(filter_by_array(v.data)) if v.boolean?
 
-        raise VectorTypeError, "Argument must be numeric or boolean: #{args}"
-      in [Arrow::BooleanArray => ba]
-        return filter_by_array(ba)
-      in []
-        return Vector.new
-      in [Arrow::Array => aa]
-        array = aa
-      in [Range => r]
-        array = parse_range(r, size)
-      else
-        array = Arrow::Array.new(args.flatten)
-      end
+          raise VectorTypeError, "Argument must be numeric or boolean: #{args}"
+        in [Arrow::BooleanArray => ba]
+          return scalar_or_array(filter_by_array(ba))
+        in []
+          return nil
+        in [Arrow::Array => arrow_array]
+          arrow_array
+        in [Range => r]
+          Arrow::Array.new(parse_range(r, size))
+        else
+          Arrow::Array.new(args.flatten)
+        end
 
-      return filter_by_array(array) if array.is_a?(Arrow::BooleanArray)
+      return scalar_or_array(filter_by_array(array)) if array.boolean?
 
       vector = Vector.new(array)
-      return take_by_vector(vector) if vector.numeric?
+      return scalar_or_array(take_by_vector(vector)) if vector.numeric?
 
       raise VectorArgumentError, "Invalid argument: #{args}"
     end
 
-    #   @param values [Array, Arrow::Array, Vector]
+    # @param values [Array, Arrow::Array, Vector]
     def is_in(*values)
       self_data = chunked? ? data.pack : data
 
@@ -106,6 +133,11 @@ module RedAmber
       to_a.index(element)
     end
 
+    def drop_nil
+      datum = find(:drop_null).execute([data])
+      Vector.create(datum.value)
+    end
+
     private
 
     # Accepts indices by numeric Vector
@@ -123,16 +155,19 @@ module RedAmber
           indices.data
         end
 
-      datum = find(:take).execute([data, index_array]) # :array_take will fail with ChunkedArray
-      Vector.create(datum.value)
+      find(:take).execute([data, index_array]).value # :array_take will fail with ChunkedArray
     end
 
     # Accepts booleans by Arrow::BooleanArray
     def filter_by_array(boolean_array)
       raise VectorArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
 
-      datum = find(:array_filter).execute([data, boolean_array])
-      Vector.create(datum.value)
+      find(:array_filter).execute([data, boolean_array]).value
+    end
+
+    def scalar_or_array(arrow_array)
+      a = arrow_array.to_a
+      a.size > 1 ? a : a[0]
     end
   end
 end

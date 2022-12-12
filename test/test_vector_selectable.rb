@@ -19,9 +19,10 @@ class VectorTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('#take(indices), #[](indices)') do
+  sub_test_case('#take(indices)') do
     setup do
       @string = Vector.new(%w[A B C D E])
+      @indices = [3, 0, -2]
     end
 
     test 'empty vector' do
@@ -32,8 +33,8 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array [], @string.take
       assert_equal_array %w[B], @string.take(1) # single value
       assert_equal_array %w[B D], @string.take(1, 3) # array without bracket
-      assert_equal_array %w[D A D], @string.take([3, 0, -2]) # array, negative index
-      assert_equal_array %w[D A D], @string.take(Vector.new([3, 0, -2])) # array, negative index
+      assert_equal_array %w[D A D], @string.take(@indices) # array, negative index
+      assert_equal_array %w[D A D], @string.take(Vector.new(@indices)) # array, negative index
       assert_equal_array %w[D E C], @string.take([3.1, -0.5, -2.5]) # float index
     end
 
@@ -44,6 +45,13 @@ class VectorTest < Test::Unit::TestCase
 
     test '#take invalid args' do
       assert_raise(VectorArgumentError) { @string.take('A') }
+    end
+
+    test '#take with a block' do
+      assert_raise(VectorArgumentError) { @string.take(@booleans) { @indices } } # with both args and a block
+      assert_equal_array(%w[D A D], @string.take { @indices }) # primitive Array
+      assert_equal_array(%w[D A D], @string.take { Arrow::Array.new([3, 0, 3]) }) # Arrow::BooleanArray
+      assert_equal_array(%w[D A D], @string.take { Vector.new(@indices) }) # Vector
     end
   end
 
@@ -65,7 +73,7 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array %w[A E], @string.filter(Vector.new(@booleans)) # Vector
       assert_equal_array %w[A E], @string.filter([Vector.new(@booleans)]) # Vector
       assert_raise(VectorTypeError) { @string.filter(Vector.new(@string)) } # Not a boolean Vector
-      assert_equal_array [], @string.filter([nil] * 5) # nil array
+      assert_equal_array [], @string.filter([nil] * 5) # nil array is string type
     end
 
     test '#filter not booleans' do
@@ -79,9 +87,9 @@ class VectorTest < Test::Unit::TestCase
 
     test '#filter with a block' do
       assert_raise(VectorArgumentError) { @string.filter(@booleans) { @booleans } } # with both args and a block
-      assert_equal %w[A E], @string.filter { @booleans }.to_a # primitive Array
-      assert_equal %w[A E], @string.filter { Arrow::BooleanArray.new(@booleans) }.to_a # Arrow::BooleanArray
-      assert_equal %w[A E], @string.filter { Vector.new(@booleans) }.to_a # Vector
+      assert_equal_array(%w[A E], @string.filter { @booleans }) # primitive Array
+      assert_equal_array(%w[A E], @string.filter { Arrow::BooleanArray.new(@booleans) }) # Arrow::BooleanArray
+      assert_equal_array(%w[A E], @string.filter { Vector.new(@booleans) }) # Vector
     end
   end
 
@@ -89,18 +97,19 @@ class VectorTest < Test::Unit::TestCase
     setup do
       @string = Vector.new(%w[A B C D E])
       @booleans = [true, false, nil, false, true]
+      @indices = [3, 0, -2]
     end
 
     test 'empty vector' do
-      assert_equal_array [], Vector.new[]
+      assert_nil Vector.new[]
     end
 
     test '#[indices]' do
-      assert_equal_array %w[B], @string[1] # single value
-      assert_equal_array %w[D A D], @string[[3, 0, -2]] # array, negative index
-      assert_equal_array %w[D A D], @string[Vector.new([3, 0, -2])] # array, negative index
-      assert_equal_array %w[D E C], @string[3.1, -0.5, -2.5] # float index
-      assert_equal_array %w[D A D], @string[Arrow::Array.new([3, 0, -2])] # Arrow
+      assert_equal 'B', @string[1] # single value
+      assert_equal %w[D A D], @string[@indices] # array, negative index
+      assert_equal %w[D A D], @string[Vector.new(@indices)] # array, negative index
+      assert_equal %w[D E C], @string[3.1, -0.5, -2.5] # float index
+      assert_equal %w[D A D], @string[Arrow::Array.new(@indices)] # Arrow
     end
 
     test '#[indices] with ChunkedArray' do
@@ -111,21 +120,21 @@ class VectorTest < Test::Unit::TestCase
     end
 
     test '#[booleans]' do
-      assert_equal_array %w[B], @string[1] # single value
-      assert_equal_array %w[A E], @string[*@booleans] # arguments
-      assert_equal_array %w[A E], @string[@booleans] # primitive Array
-      assert_equal_array %w[A E], @string[Arrow::BooleanArray.new(@booleans)] # Arrow::BooleanArray
-      assert_equal_array %w[A E], @string[Vector.new(@booleans)] # Vector
+      assert_equal 'B', @string[1] # single value
+      assert_equal %w[A E], @string[*@booleans] # arguments
+      assert_equal %w[A E], @string[@booleans] # primitive Array
+      assert_equal %w[A E], @string[Arrow::BooleanArray.new(@booleans)] # Arrow::BooleanArray
+      assert_equal %w[A E], @string[Vector.new(@booleans)] # Vector
       assert_raise(VectorTypeError) { @string[Vector.new(@string)] } # Not a boolean Vector
       assert_raise(VectorArgumentError) { @string[nil] } # nil array
       assert_raise(VectorArgumentError) { @string[[nil] * 5] } # nil array
     end
 
     test '#[Range]' do
-      assert_equal_array %w[B C D], @string[1..3] # Normal Range
-      assert_equal_array %w[B C D E], @string[1..] # Endless Range
-      assert_equal_array %w[A B C], @string[..2] # Beginless Range
-      assert_equal_array %w[B C D], @string[1..-2] # Range to index from tail
+      assert_equal %w[B C D], @string[1..3] # Normal Range
+      assert_equal %w[B C D E], @string[1..] # Endless Range
+      assert_equal %w[A B C], @string[..2] # Beginless Range
+      assert_equal %w[B C D], @string[1..-2] # Range to index from tail
       assert_raise(IndexError) { @string[1..6] }
     end
 

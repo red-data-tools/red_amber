@@ -83,6 +83,7 @@ Metrics/AbcSize:
     'remove', # 44.42
     'drop', # 31.42
     '[]', # 33.76
+    'split', # 37.35
   ]
 
 # Max: 25
@@ -120,6 +121,7 @@ Metrics/CyclomaticComplexity:
     'normalize_element', # 17
     '[]', # 13
     'parse_range', # 14
+    'split', # 33
   ]
 
 # Max: 10
@@ -146,6 +148,8 @@ Metrics/ModuleLength:
     - 'lib/red_amber/data_frame_selectable.rb' # Max: 175
     - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 171
     - 'lib/red_amber/vector_functions.rb' # Max: 165
+    - 'lib/red_amber/vector_selectable.rb' # Max: 104
+    - 'lib/red_amber/vector_updatable.rb' # Max: 103
 
 # Max: 5
 # Offense count: 1
@@ -170,6 +174,7 @@ Metrics/PerceivedComplexity:
     'normalize_element', # 17
     '[]', # 11
     'parse_range', # 15
+    'split', # 14
   ]
 
 # Offense count: 1

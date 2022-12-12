@@ -172,4 +172,147 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array vector, vector.shift(0)
     end
   end
+
+  sub_test_case '#split_to_columns' do
+    test '#split a invalid Vector' do
+      assert_raise(VectorTypeError) { Vector.new.split_to_columns } # Empty Vector is string type
+      assert_raise(VectorTypeError) { Vector.new(1, 2, 3).split_to_columns }
+    end
+
+    test '#split_to_columns' do
+      array = ['a b', 'c d', 'e f']
+      expect = array.map(&:split).transpose
+      assert_equal expect, Vector.new(array).split_to_columns
+    end
+
+    test '#split_to_columns tab separator' do
+      array = ['a\tb', 'c\td', 'e\tf']
+      expect = array.map(&:split).transpose
+      assert_equal expect, Vector.new(array).split_to_columns
+    end
+
+    test '#split_to_columns using separator' do
+      array = %w[a_b c_d e_f]
+      expect = array.map { |e| e.split('_') }.transpose
+      assert_equal expect, Vector.new(array).split_to_columns('_')
+    end
+
+    test '#split_to_columns with nil' do
+      array = [nil, 'c d', 'e f']
+      expect = [[nil, 'c', 'e'], [nil, 'd', 'f']]
+      assert_equal expect, Vector.new(array).split_to_columns
+    end
+
+    test '#split_to_columns only nil' do
+      assert_raise(VectorTypeError) { Vector.new(nil).split_to_columns }
+      assert_raise(VectorTypeError) { Vector.new(nil, nil).split_to_columns }
+    end
+
+    test '#split_to_columns no separator' do
+      array = %w[ab cd ef]
+      assert_equal [array], Vector.new(array).split_to_columns
+      assert_equal [%w[a c e], %w[b d f]], Vector.new(array).split_to_columns('')
+    end
+
+    test '#split_to_columns different str length' do
+      array = ['a', 'a b', 'a b c', nil]
+      expect = [['a', 'a', 'a', nil], [nil, 'b', 'b', nil], [nil, nil, 'c', nil]]
+      assert_equal expect, Vector.new(array).split_to_columns
+    end
+
+    test '#split_to_columns different stlength with limit' do
+      array = ['a', 'a b', 'a b c', nil]
+      expect = [['a', 'a', 'a', nil], [nil, 'b', 'b c', nil]]
+      assert_equal expect, Vector.new(array).split_to_columns(' ', 2)
+    end
+  end
+
+  sub_test_case '#split_to_rows' do
+    test '#split a invalid Vector' do
+      assert_raise(VectorTypeError) { Vector.new.split_to_rows } # Empty Vector is string type
+      assert_raise(VectorTypeError) { Vector.new(1, 2, 3).split_to_rows }
+    end
+
+    test '#split_to_rows' do
+      array = ['a b', 'c d', 'e f']
+      expect = array.map(&:split).flatten
+      assert_equal expect, Vector.new(array).split_to_rows
+    end
+
+    test '#split_to_rows tab separator' do
+      array = ['a\tb', 'c\td', 'e\tf']
+      expect = array.map(&:split).flatten
+      assert_equal expect, Vector.new(array).split_to_rows
+    end
+
+    test '#split_to_rows using separator' do
+      array = %w[a_b c_d e_f]
+      expect = array.map { |e| e.split('_') }.flatten
+      assert_equal expect, Vector.new(array).split_to_rows('_')
+    end
+
+    test '#split_to_rows with nil' do
+      array = [nil, 'c d', 'e f']
+      expect = %w[c e d f]
+      assert_equal expect, Vector.new(array).split_to_rows
+    end
+
+    test '#split_to_rows only nil' do
+      assert_raise(VectorTypeError) { Vector.new(nil).split_to_rows }
+      assert_raise(VectorTypeError) { Vector.new(nil, nil).split_to_rows }
+    end
+
+    test '#split_to_rows no separator' do
+      array = %w[ab cd ef]
+      assert_equal array, Vector.new(array).split_to_rows
+      assert_equal %w[a b c d e f], Vector.new(array).split_to_rows('')
+    end
+
+    test '#split_to_rows different str length' do
+      array = ['a', 'a b', 'a b c', nil]
+      expect = %w[a a a b b c]
+      assert_equal expect, Vector.new(array).split_to_rows
+    end
+
+    test '#split_to_rows different stlength with limit' do
+      array = ['a', 'a b', 'a b c', nil]
+      expect = ['a', 'a', 'a', 'b', 'b c']
+      assert_equal expect, Vector.new(array).split_to_rows(' ', 2)
+    end
+  end
+
+  sub_test_case '#merge' do
+    test '#merge for a invalid Vector' do
+      assert_raise(VectorTypeError) { Vector.new.merge('x') } # Empty Vector is string type
+      assert_raise(VectorTypeError) { Vector.new(1, 2, 3).merge('x') }
+    end
+
+    test '#merge' do
+      vector = Vector.new(%w[a c e])
+      other = Vector.new(%w[b d f])
+      assert_equal ['a b', 'c d', 'e f'], vector.merge(other)
+      assert_equal ['a b', 'c d', 'e f'], vector.merge(other.data)
+    end
+
+    test '#merge with scalar' do
+      vector = Vector.new(%w[a c e])
+      assert_equal ['a x', 'c x', 'e x'], vector.merge('x')
+      assert_raise(VectorArgumentError) { vector.merge(0) }
+    end
+
+    test '#merge with a separator' do
+      vector = Vector.new(%w[a c e])
+      other = Vector.new(%w[b d f])
+      assert_equal %w[a-b c-d e-f], vector.merge(other, sep: '-')
+      assert_equal %w[ab cd ef], vector.merge(other, sep: '')
+      assert_equal ['a\nb', 'c\nd', 'e\nf'], vector.merge(other, sep: '\n')
+      assert_raise(VectorArgumentError) { vector.merge(other, sep: 0) }
+    end
+
+    test '#merge invalid merge' do
+      vector = Vector.new(%w[a c e])
+      other = Vector.new(%w[b d f x])
+      assert_raise(NameError) { Vector.new(array).merge(other) }
+    end
+  end
 end
