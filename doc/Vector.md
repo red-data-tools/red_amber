@@ -513,3 +513,91 @@ vector.shift(fill: Float::NAN)
 #<RedAmber::Vector(:double, size=5):0x0000000000011d3c>                    
 [NaN, 1.0, 2.0, 3.0, 4.0]
 ```
+
+### `split_to_columns(sep = ' ', limit = 0)`
+
+Split string type Vector with any ASCII whitespace as separator.
+Returns an Array of Vectors.
+
+```ruby
+vector = Vector.new(['a b', 'c d', 'e f'])
+vector.split_to_columns
+
+#=> 
+[#<RedAmber::Vector(:string, size=3):0x00000000000363a8>                                
+["a", "c", "e"]                                    
+,                                                  
+ #<RedAmber::Vector(:string, size=3):0x00000000000363bc>
+["b", "d", "f"]                                    
+]
+```
+It will be used for column splitting in DataFrame.
+
+```ruby
+df = DataFrame.new(year_month: %w[2022-01 2022-02 2022-03])
+  .assign(:year, :month) { year_month.split_to_columns('-') }
+  .drop(:year_month)
+
+#=>
+#<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000f974>
+  year     month
+  <string> <string>
+0 2022     01
+1 2022     02
+2 2022     03
+```
+
+### `split_to_rows(sep = ' ', limit = 0)`
+
+Split string type Vector with any ASCII whitespace as separator.
+Returns an flattend into rows by Vector.
+
+```ruby
+vector = Vector.new(['a b', 'c d', 'e f'])
+vector.split_to_rows
+
+#=>
+#<RedAmber::Vector(:string, size=6):0x000000000002ccf4>
+["a", "b", "c", "d", "e", "f"]
+```
+
+### `merge(other, sep: ' ')`
+
+Merge String or other string Vector to self using aseparator.
+Self must be a string Vector.
+Returns merged string Vector.
+
+```ruby
+# with vector
+vector = Vector.new(%w[a c e])
+other = Vector.new(%w[b d f])
+vector.merge(other)
+
+#=>
+#<RedAmber::Vector(:string, size=3):0x0000000000038b80>
+["a b", "c d", "e f"]
+```
+
+If other is a String it will be broadcasted.
+
+```ruby
+# with vector
+vector = Vector.new(%w[a c e])
+
+#=>
+#<RedAmber::Vector(:string, size=3):0x00000000000446b0>
+["a x", "c x", "e x"]
+```
+
+You can specify separator string by :sep.
+
+```ruby
+# with vector
+vector = Vector.new(%w[a c e])
+other = Vector.new(%w[b d f])
+vector.merge(other, sep: '')
+
+#=>
+#<RedAmber::Vector(:string, size=3):0x0000000000038b80>
+["ab", "cd", "ef"]
+```
