@@ -7,6 +7,9 @@ module RedAmber
   # mix-in for class Vector
   # Functions to make up some data (especially missing) for new data.
   module VectorUpdatable
+    # Add properties to Arrow::Array and Arrow::ChunkedArray
+    using RefineArrayLike
+
     # Replace data
     # @param specifier [Array, Vector, Arrow::Array] index or booleans.
     # @param replacer [Scalar, Array, Vector, Arrow::Array] new data to replace for.
@@ -78,6 +81,91 @@ module RedAmber
       else # amount == 0
         self
       end
+    end
+
+    # Split string Vector and returns Array of columns.
+    #
+    # @param sep [nil, String, Regexp] separater.
+    #   If separator is nil (or no argeument given), the column will be splitted by
+    #   Arrow's split function using any ASCII whitespace.
+    #   Otherwise sep will passed to String#split.
+    # @param limit [Integer] maximum number to limit separation. Passed to String#split.
+    # @return [Array<Vector>] an Array of Vectors.
+    # @note nil will separated as nil's at same row. ex) `nil => [nil, nil]`
+    #
+    def split_to_columns(sep = nil, limit = 0)
+      l = split(sep, limit)
+      l.list_separate
+    end
+
+    # Split string Vector and flatten into rows.
+    #
+    # @param sep [nil, String, Regexp] separater.
+    #   If separator is nil (or no argeument given), the column will be splitted by
+    #   Arrow's split function using any ASCII whitespace.
+    #   Otherwise sep will passed to String#split.
+    # @param limit [Integer] maximum number to limit separation. Passed to String#split.
+    # @return [Vector] a flatten Vector.
+    # @note nil will separated as nil's at same row. ex) `nil => [nil, nil]`
+    #
+    def split_to_rows(sep = nil, limit = 0)
+      l = split(sep, limit)
+      l.list_flatten
+    end
+
+    # return element size Array for list Vector.
+    #
+    # @api private
+    #
+    def list_sizes
+      Vector.create find(:list_value_length).execute([data]).value
+    end
+
+    # Separate list Vector by columns.
+    #
+    # @api private
+    #
+    def list_separate
+      len = list_sizes.data
+      min, max = Arrow::Function.find(:min_max).execute([len]).value.value.map(&:value)
+
+      result = []
+      (0...min).each do |i|
+        result << Vector.create(find(:list_element).execute([data, i]).value)
+      end
+      return result if min == max
+
+      (min...max).each do |i|
+        result << Vector.new(data.map { |e| e&.[](i) })
+      end
+      result
+    end
+
+    # Flatten list Vector for rows.
+    #
+    # @api private
+    #
+    def list_flatten
+      Vector.create find(:list_flatten).execute([data]).value
+    end
+
+    # Split string Vector by each element with separator and returns list Array.
+    #
+    # @note if sep is not specified, use Arrow's ascii_split_whitespace.
+    #   It will separate string by ascii whitespaces.
+    # @note if sep specified, sep and limit will passed to String#split.
+    #
+    def split(sep = nil, limit = 0)
+      raise VectorTypeError, "self is not a valid string Vector: #{self}" if empty? || !string?
+      raise VectorTypeError, 'self contains only nil' unless self[0] || uniq.to_a != [nil]
+
+      list =
+        if sep
+          Arrow::Array.new(to_a.map { |e| e&.split(sep, limit) })
+        else
+          find(:ascii_split_whitespace).execute([data]).value
+        end
+      Vector.create(list)
     end
 
     private
