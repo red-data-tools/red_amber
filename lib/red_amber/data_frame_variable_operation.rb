@@ -23,7 +23,7 @@ module RedAmber
     #   Pick variables by booleans.
     #
     #   @param booleans [<true, false, nil>]
-    #     boolean array to pick columns at true.
+    #     boolean array to pick variables at true.
     #   @return [DataFrame]
     #     Picked DataFrame.
     #
@@ -31,13 +31,15 @@ module RedAmber
     #   Pick variables by column indices.
     #
     #   @param indices [Integer, Float, Range<Integer>, Vector, Arrow::Array]
-    #     numeric array to pick columns by column index.
+    #     numeric array to pick variables by column index.
     #   @return [DataFrame]
     #     Picked DataFrame.
     #
     def pick(*args, &block)
       if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
+        unless args.empty?
+          raise DataFrameArgumentError, 'Must not specify both arguments and block.'
+        end
 
         args = [instance_eval(&block)]
       end
@@ -68,10 +70,39 @@ module RedAmber
       DataFrame.create(@table.select_columns(*picker))
     end
 
-    # drop some variables to create remainer sub DataFrame
+    # Drop some variables (columns) to create a remainer DataFrame
+    #
+    # @note DataFrame#drop creates a DataFrame even if it is a single column.
+    #
+    # @overload drop(keys)
+    #   Drop variables by Symbols or Strings.
+    #
+    #   @param keys [Symbol, String, <Symbol, String>]
+    #     key name(s) of variables to drop.
+    #   @return [DataFrame]
+    #     Remainer DataFrame.
+    #
+    # @overload drop(booleans)
+    #   Drop variables by booleans.
+    #
+    #   @param booleans [<true, false, nil>]
+    #     boolean array of variables to drop at true.
+    #   @return [DataFrame]
+    #     Remainer DataFrame.
+    #
+    # @overload drop(indices)
+    #   Pick variables by column indices.
+    #
+    #   @param indices [Integer, Float, Range<Integer>, Vector, Arrow::Array]
+    #     numeric array of variables to drop by column index.
+    #   @return [DataFrame]
+    #     Remainer DataFrame.
+    #
     def drop(*args, &block)
       if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
+        unless args.empty?
+          raise DataFrameArgumentError, 'Must not specify both arguments and block.'
+        end
 
         args = [instance_eval(&block)]
       end
@@ -92,7 +123,9 @@ module RedAmber
             keys - dropper
           else
             dropper.compact!
-            raise DataFrameArgumentError, "Invalid argument #{args}" unless dropper.integers?
+            unless dropper.integers?
+              raise DataFrameArgumentError, "Invalid argument #{args}"
+            end
 
             keys.reject_by_indices(dropper)
           end
@@ -100,15 +133,15 @@ module RedAmber
 
       return DataFrame.new if picker.empty?
 
-      # DataFrame#[] creates a Vector if single key is specified.
-      # DataFrame#drop creates a DataFrame with single key.
       DataFrame.create(@table.select_columns(*picker))
     end
 
     # rename variables to create a new DataFrame
     def rename(*renamer, &block)
       if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and a block' unless renamer.empty?
+        unless renamer.empty?
+          raise DataFrameArgumentError, 'Must not specify both arguments and a block'
+        end
 
         renamer = [instance_eval(&block)]
       end
@@ -183,7 +216,9 @@ module RedAmber
       fields, arrays = *update_fields_and_arrays(updater)
       return self if appender.is_a?(DataFrame)
 
-      append_to_fields_and_arrays(appender, fields, arrays, append_to_left) unless appender.empty?
+      unless appender.empty?
+        append_to_fields_and_arrays(appender, fields, arrays, append_to_left)
+      end
 
       DataFrame.create(Arrow::Table.new(Arrow::Schema.new(fields), arrays))
     end
@@ -196,7 +231,9 @@ module RedAmber
 
     def rename_by_hash(key_pairs)
       not_existing_keys = key_pairs.keys - keys
-      raise DataFrameArgumentError, "Not existing: #{not_existing_keys}" unless not_existing_keys.empty?
+      unless not_existing_keys.empty?
+        raise DataFrameArgumentError, "Not existing: #{not_existing_keys}"
+      end
 
       fields =
         keys.map do |key|
@@ -217,7 +254,9 @@ module RedAmber
         data = updater[key]
         next unless data
 
-        raise DataFrameArgumentError, "Data size mismatch (#{data.size} != #{size})" if data.nil? || data.size != size
+        if data.size != size
+          raise DataFrameArgumentError, "Data size mismatch (#{data.size} != #{size})"
+        end
 
         a = Arrow::Array.new(data.is_a?(Vector) ? data.to_a : data)
         fields[i] = Arrow::Field.new(key, a.value_data_type)
@@ -229,7 +268,9 @@ module RedAmber
     def append_to_fields_and_arrays(appender, fields, arrays, append_to_left)
       enum = append_to_left ? appender.reverse_each : appender.each
       enum.each do |key, data|
-        raise DataFrameArgumentError, "Data size mismatch (#{data.size} != #{size})" if data.size != size
+        if data.size != size
+          raise DataFrameArgumentError, "Data size mismatch (#{data.size} != #{size})"
+        end
 
         a = Arrow::Array.new(data.is_a?(Vector) ? data.to_a : data)
 
