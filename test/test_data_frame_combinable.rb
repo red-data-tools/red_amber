@@ -142,6 +142,16 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         assert_raise(DataFrameArgumentError) { @df1.join(@right1.to_h) }
       end
 
+      test 'natural join' do
+        expected = DataFrame.new(
+          KEY: %w[A B],
+          X: [1, 2],
+          Y: [3, 2]
+        )
+        assert_equal expected, @df1.join(@right1) # natural join
+        assert_raise(DataFrameArgumentError) { @df1.join(@right1.rename(KEY: :KEY1)) }
+      end
+
       test '#inner_join with a join_key' do
         expected = DataFrame.new(
           KEY: %w[A B],
@@ -464,6 +474,8 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
           KEY1: %w[A B D],
           KEY2: %w[s u v]
         )
+
+        @foreign = @right4.rename(KEY2: :KEY3)
       end
 
       test '#set_operable?' do
@@ -477,6 +489,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         )
         assert_equal expected, @df4.intersect(@right4)
         assert_equal expected, @df4.intersect(@right4.table)
+        assert_raise(DataFrameArgumentError) { @df4.intersect(@foreign) }
       end
 
       test '#union' do
@@ -486,6 +499,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         )
         assert_equal expected, @df4.union(@right4)
         assert_equal expected, @df4.union(@right4.table)
+        assert_raise(DataFrameArgumentError) { @df4.union(@foreign) }
       end
 
       test '#difference' do
@@ -495,6 +509,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         )
         assert_equal expected, @df4.difference(@right4)
         assert_equal expected, @df4.difference(@right4.table)
+        assert_raise(DataFrameArgumentError) { @df4.difference(@foreign) }
       end
     end
   end

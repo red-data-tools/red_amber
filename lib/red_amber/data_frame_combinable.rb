@@ -65,7 +65,9 @@ module RedAmber
             raise DataFrameArgumentError, "#{e} is not a Table or a DataFrame"
           end
 
-        raise DataFrameArgumentError, "#{e} do not have same size as self" if size != df.size
+        if size != df.size
+          raise DataFrameArgumentError, "#{e} do not have same size as self"
+        end
 
         k = keys.intersection(df.keys).any?
         raise DataFrameArgumentError, "There are some shared keys: #{k}" if k
@@ -163,7 +165,9 @@ module RedAmber
     #
     def intersect(other)
       other = DataFrame.create(other) if other.is_a?(Arrow::Table)
-      raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
+      unless keys == other.keys
+        raise DataFrameArgumentError, 'keys are not same with self and other'
+      end
 
       join(other, keys, type: :inner)
     end
@@ -175,7 +179,9 @@ module RedAmber
     #
     def union(other)
       other = DataFrame.create(other) if other.is_a?(Arrow::Table)
-      raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
+      unless keys == other.keys
+        raise DataFrameArgumentError, 'keys are not same with self and other'
+      end
 
       join(other, keys, type: :full_outer)
     end
@@ -187,7 +193,9 @@ module RedAmber
     #
     def difference(other)
       other = DataFrame.create(other) if other.is_a?(Arrow::Table)
-      raise DataFrameArgumentError, 'keys are not same with self and other' unless keys == other.keys
+      unless keys == other.keys
+        raise DataFrameArgumentError, 'keys are not same with self and other'
+      end
 
       join(other, keys, type: :left_anti)
     end
@@ -203,8 +211,10 @@ module RedAmber
     # @return [DataFrame] Joined dataframe.
     #
     #   :type is one of
-    #     :left_semi, :right_semi, :left_anti, :right_anti inner, :left_outer, :right_outer, :full_outer.
-    def join(other, join_keys = nil, type: :inner, suffix: '.1', left_outputs: nil, right_outputs: nil)
+    #     :left_semi, :right_semi, :left_anti, :right_anti, :inner,
+    #     :left_outer, :right_outer, :full_outer.
+    def join(other, join_keys = nil,
+             type: :inner, suffix: '.1', left_outputs: nil, right_outputs: nil)
       case other
       when DataFrame
         # Nop
@@ -216,7 +226,9 @@ module RedAmber
 
       # Support natural keys (implicit common keys)
       natural_keys = keys.intersection(other.keys)
-      raise DataFrameArgumentError, "#{join_keys} are not common keys" if natural_keys.empty?
+      if natural_keys.empty?
+        raise DataFrameArgumentError, "#{join_keys} are not common keys"
+      end
 
       join_keys =
         if join_keys
@@ -226,7 +238,8 @@ module RedAmber
         end
       return self if join_keys.empty?
 
-      # Support partial join_keys (common key other than join_key will be renamed with suffix)
+      # Support partial join_keys
+      #   (common key other than join_key will be renamed with suffix)
       remainer_keys = natural_keys - join_keys
       unless remainer_keys.empty?
         renamer = remainer_keys.each_with_object({}) do |key, hash|
@@ -248,9 +261,11 @@ module RedAmber
       # Red Arrow's #join returns duplicated join_keys from self and other as of v9.0.0 .
       # Temporally merge key vectors here to workaround.
       table_output =
-        table.join(other.table, join_keys, type: type, left_outputs: left_outputs, right_outputs: right_outputs)
+        table.join(other.table, join_keys, type: type, left_outputs: left_outputs,
+                                           right_outputs: right_outputs)
       left_indexes = [*0...n_keys]
-      right_indexes = [*((other.keys - join_keys).map { |key| other.keys.index(key) + n_keys })]
+      right_indexes =
+        [*((other.keys - join_keys).map { |key| other.keys.index(key) + n_keys })]
 
       case type
       when :left_semi, :left_anti, :right_semi, :right_anti
