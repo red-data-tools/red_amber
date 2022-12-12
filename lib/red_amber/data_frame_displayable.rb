@@ -93,7 +93,8 @@ module RedAmber
       levels = tallys.map(&:size)
       type_groups = @table.columns.map { |column| type_group(column.data_type) }
       quoted_keys = keys.map(&:inspect)
-      headers = { idx: '#', key: 'key', type: 'type', levels: 'level', data: 'data_preview' }
+      headers = { idx: '#', key: 'key', type: 'type', levels: 'level',
+                  data: 'data_preview' }
       header_format = make_header_format(levels, headers, quoted_keys)
 
       sio = StringIO.new # output string buffer
@@ -201,7 +202,8 @@ module RedAmber
         vectors.each_with_object({}) do |v, assigner|
           vec = v.replace(0, v.key == INDEX_KEY ? '' : v.key.to_s)
                  .replace(1, v.key == INDEX_KEY ? '' : "<#{original[v.key].type}>")
-          assigner[v.key] = original.size > head + tail + 1 ? vec.replace(head + 2, ':') : vec
+          assigner[v.key] =
+            original.size > head + tail + 1 ? vec.replace(head + 2, ':') : vec
         end
       end
 

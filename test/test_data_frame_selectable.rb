@@ -103,6 +103,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     test 'Select for empty dataframe' do
       assert_raise(DataFrameArgumentError) { DataFrame.new[0] }
     end
+
+    test 'Select by illegal array' do
+      assert_raise(DataFrameArgumentError) { df[Arrow::Array.new([%w[x y]])] } # by list Array
+    end
   end
 
   setup do

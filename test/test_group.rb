@@ -174,6 +174,11 @@ class GroupTest < Test::Unit::TestCase
       assert_equal str, @df.group(:i) { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
       assert_equal str, @df.group(:i).summarize { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
     end
+
+    test 'count with not a key of self' do
+      assert_raise(GroupArgumentError) { @df.group(:i).count(:x) }
+      assert_raise(GroupArgumentError) { @df.group(:i).count(:i, :x) }
+    end
   end
 
   sub_test_case('group by filters') do

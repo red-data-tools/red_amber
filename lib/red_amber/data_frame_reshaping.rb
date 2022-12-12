@@ -9,10 +9,13 @@ module RedAmber
     #   to transepose into keys.
     #   If it is not specified, keys[0] is used.
     # @param name [Symbol] key name of transposed index column.
-    #   If it is not specified, :NAME is used. If it already exists, :NAME1 or :NAME1.succ is used.
+    #   If it is not specified, :NAME is used.
+    #   If it already exists, :NAME1 or :NAME1.succ is used.
     # @return [DataFrame] trnsposed DataFrame
     def transpose(key: keys.first, name: :NAME)
-      raise DataFrameArgumentError, "Self does not include: #{key}" unless keys.include?(key)
+      unless keys.include?(key)
+        raise DataFrameArgumentError, "Self does not include: #{key}"
+      end
 
       # Find unused name
       new_keys = self[key].to_a.map { |e| e.to_s.to_sym }
@@ -38,16 +41,20 @@ module RedAmber
       warn('[Info] No key to keep is specified.') if keep_keys.empty?
 
       not_included = keep_keys - keys
-      raise DataFrameArgumentError, "Not have keys #{not_included}" unless not_included.empty?
+      unless not_included.empty?
+        raise DataFrameArgumentError, "Not have keys #{not_included}"
+      end
 
       name = name.to_sym
       if keep_keys.include?(name)
-        raise DataFrameArgumentError, "Can't specify the key: #{name} for the column from keys."
+        raise DataFrameArgumentError,
+              "Can't specify the key: #{name} for the column from keys."
       end
 
       value = value.to_sym
       if keep_keys.include?(value)
-        raise DataFrameArgumentError, "Can't specify the key: #{value} for the column from values."
+        raise DataFrameArgumentError,
+              "Can't specify the key: #{value} for the column from values."
       end
 
       hash = Hash.new { |h, k| h[k] = [] }
@@ -68,22 +75,26 @@ module RedAmber
 
     # Reshape long DataFrame to a wide DataFrame.
     #
-    # @param name [Symbol, String] key of the column which will be expanded **to key names**.
-    # @param value [Symbol, String] key of the column which will be expanded **to values**.
+    # @param name [Symbol, String]
+    #   key of the column which will be expanded **to key names**.
+    # @param value [Symbol, String]
+    #   key of the column which will be expanded **to values**.
     # @return [DataFrame] wide DataFrame.
     def to_wide(name: :NAME, value: :VALUE)
       name = name.to_sym
       unless keys.include?(name)
         raise DataFrameArgumentError,
               "You are going to keep the key: #{name}. " \
-              'You may need to specify the column name that gives the new keys by `:name` option.'
+              'You may need to specify the column name ' \
+              'that gives the new keys by `:name` option.'
       end
 
       value = value.to_sym
       unless keys.include?(value)
         raise DataFrameArgumentError,
               "You are going to keep the key: #{value}. " \
-              'You may need to specify the column name that gives the new values by `:value` option.'
+              'You may need to specify the column name ' \
+              'that gives the new values by `:value` option.'
       end
 
       hash = Hash.new { |h, k| h[k] = {} }

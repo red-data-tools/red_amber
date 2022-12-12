@@ -60,16 +60,13 @@ module RedAmber
         raise DataFrameArgumentError, "invalid arguments: #{args}"
       end
 
-      if arrow_array.numeric?
-        take(normalize_indices(arrow_array))
-      elsif arrow_array.boolean?
-        filter_by_array(arrow_array)
-      else
-        a = arrow_array.to_a
-        raise DataFrameArgumentError, "invalid arguments: #{args}" unless a.symbols_or_strings?
+      return take(normalize_indices(arrow_array)) if arrow_array.numeric?
+      return filter_by_array(arrow_array) if arrow_array.boolean?
 
-        select_variables_by_keys(a)
-      end
+      a = arrow_array.to_a
+      return select_variables_by_keys(a) if a.symbols_or_strings?
+
+      raise DataFrameArgumentError, "invalid arguments: #{args}"
     end
 
     # Select a variable by a key in String or Symbol
@@ -114,7 +111,9 @@ module RedAmber
       raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
 
       if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
+        unless args.empty?
+          raise DataFrameArgumentError, 'Must not specify both arguments and block.'
+        end
 
         args = [instance_eval(&block)]
       end
@@ -216,7 +215,9 @@ module RedAmber
       raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
 
       if block
-        raise DataFrameArgumentError, 'Must not specify both arguments and block.' unless args.empty?
+        unless args.empty?
+          raise DataFrameArgumentError, 'Must not specify both arguments and block.'
+        end
 
         args = [instance_eval(&block)]
       end
@@ -292,7 +293,9 @@ module RedAmber
       in [Arrow::BooleanArray => b]
         filter_by_array(b)
       else
-        raise DataFrameArgumentError, 'Argument is not a boolean.' unless booleans.booleans?
+        unless booleans.booleans?
+          raise DataFrameArgumentError, 'Argument is not a boolean.'
+        end
 
         filter_by_array(Arrow::BooleanArray.new(booleans))
       end
@@ -328,7 +331,9 @@ module RedAmber
 
     # Accepts booleans by a Arrow::BooleanArray or an Array
     def filter_by_array(boolean_array)
-      raise DataFrameArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
+      unless boolean_array.length == size
+        raise DataFrameArgumentError, 'Booleans must be same size as self.'
+      end
 
       datum = Arrow::Function.find(:filter).execute([table, boolean_array])
       DataFrame.create(datum.value)

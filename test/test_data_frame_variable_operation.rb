@@ -341,6 +341,11 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       OUTPUT
     end
 
+    test 'assigner size mismatch' do
+      assert_raise(DataFrameArgumentError) { @df2.assign(string: %w[a b c d]) }
+      assert_raise(DataFrameArgumentError) { @df2.assign(append: %w[a b c d]) }
+    end
+
     test 'assign by arguments' do
       assert_raise(DataFrameArgumentError) { @df2.assign(:key) } # key only
 

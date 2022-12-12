@@ -30,9 +30,12 @@ module RedAmber
       define_method(function) do |*summary_keys|
         summary_keys = Array(summary_keys).flatten
         d = summary_keys - @dataframe.keys
-        raise GroupArgumentError, "#{d} is not a key of\n #{@dataframe}." unless summary_keys.empty? || d.empty?
+        unless summary_keys.empty? || d.empty?
+          raise GroupArgumentError, "#{d} is not a key of\n #{@dataframe}."
+        end
 
-        table = @group.aggregate(*build_aggregation_keys("hash_#{function}", summary_keys))
+        table = @group.aggregate(*build_aggregation_keys("hash_#{function}",
+                                                         summary_keys))
         g = @group_keys.map(&:to_s)
         DataFrame.new(table[g + (table.keys - g)])
       end

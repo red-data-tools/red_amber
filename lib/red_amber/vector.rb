@@ -65,7 +65,8 @@ module RedAmber
         end
         sio << ']'
 
-        format "#<#{self.class}(:#{type}, size=#{size}):0x%016x>\n%s\n", object_id, sio.string
+        format "#<#{self.class}(:#{type}, size=#{size}):0x%016x>\n%s\n",
+               object_id, sio.string
       end
     end
 

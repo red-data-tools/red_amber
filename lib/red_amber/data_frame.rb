@@ -72,8 +72,8 @@ module RedAmber
     # @overload initialize(args)
     #
     #   @param args [values]
-    #     Accepts any argments which is valid for `Arrow::Table.new(args)`.
-    #     See {https://github.com/apache/arrow/blob/master/ruby/red-arrow/lib/arrow/table.rb table.rb in Red Arrow}.
+    #     Accepts any argments which is valid for `Arrow::Table.new(args)`. See
+    #     {https://github.com/apache/arrow/blob/master/ruby/red-arrow/lib/arrow/table.rb
     #
     def initialize(*args)
       case args
@@ -197,7 +197,9 @@ module RedAmber
     #   Abbreviated Red Arrow data type names.
     #
     def types
-      @types || @types = @table.columns.map { |column| column.data.value_type.nick.to_sym }
+      @types || @types = @table.columns.map do |column|
+        column.data.value_type.nick.to_sym
+      end
     end
 
     # Returns an Array of Classes of data type.
@@ -343,14 +345,17 @@ module RedAmber
 
     # initialize @variable, @keys, @vectors and return one of them
     def init_instance_vars(var)
-      ary = @table.columns.each_with_object([{}, [], []]) do |column, (variables, keys, vectors)|
-        v = Vector.create(column.data)
-        k = column.name.to_sym
-        v.key = k
-        variables[k] = v
-        keys << k
-        vectors << v
-      end
+      ary =
+        @table.columns
+              .each_with_object([{}, [], []]) do |column, (variables, keys, vectors)|
+          v = Vector.create(column.data)
+          k = column.name.to_sym
+          v.key = k
+          variables[k] = v
+          keys << k
+          vectors << v
+        end
+
       @variables, @keys, @vectors = ary
       ary[%i[variables keys vectors].index(var)]
     end
@@ -359,7 +364,8 @@ module RedAmber
       org = array.dup
       return unless array.uniq!
 
-      raise DataFrameArgumentError, "duplicate keys: #{org.tally.select { |_k, v| v > 1 }.keys}"
+      raise DataFrameArgumentError,
+            "duplicate keys: #{org.tally.select { |_k, v| v > 1 }.keys}"
     end
 
     def name_unnamed_keys

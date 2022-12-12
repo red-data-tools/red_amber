@@ -56,12 +56,11 @@ Lint/UselessAssignment:
     - 'test/**/*'
 
 # Max: 120
-# Offense count: 13
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, AllowedPatterns, IgnoredPatterns.
 # URISchemes: http, https
 Layout/LineLength:
-  Max: 118
+  Max: 90
   Exclude:
     - 'test/**/*'
 
