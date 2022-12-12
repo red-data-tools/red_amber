@@ -52,6 +52,10 @@ module RedAmber
         value_data_type.class < Arrow::IntegerDataType
       end
 
+      def list?
+        is_a? Arrow::ListArray
+      end
+
       def unsigned_integer?
         value_data_type.instance_of?(Arrow::UInt8DataType) ||
           value_data_type.instance_of?(Arrow::UInt16DataType) ||
@@ -120,6 +124,10 @@ module RedAmber
 
       def temporal?
         value_data_type.class < Arrow::TemporalDataType
+      end
+
+      def list?
+        value_type.nick == 'list'
       end
 
       def primitive_invert
