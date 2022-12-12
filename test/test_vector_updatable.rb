@@ -280,4 +280,39 @@ class VectorTest < Test::Unit::TestCase
       assert_equal expect, Vector.new(array).split_to_rows(' ', 2)
     end
   end
+
+  sub_test_case '#merge' do
+    test '#merge for a invalid Vector' do
+      assert_raise(VectorTypeError) { Vector.new.merge('x') } # Empty Vector is string type
+      assert_raise(VectorTypeError) { Vector.new(1, 2, 3).merge('x') }
+    end
+
+    test '#merge' do
+      vector = Vector.new(%w[a c e])
+      other = Vector.new(%w[b d f])
+      assert_equal ['a b', 'c d', 'e f'], vector.merge(other)
+      assert_equal ['a b', 'c d', 'e f'], vector.merge(other.data)
+    end
+
+    test '#merge with scalar' do
+      vector = Vector.new(%w[a c e])
+      assert_equal ['a x', 'c x', 'e x'], vector.merge('x')
+      assert_raise(VectorArgumentError) { vector.merge(0) }
+    end
+
+    test '#merge with a separator' do
+      vector = Vector.new(%w[a c e])
+      other = Vector.new(%w[b d f])
+      assert_equal %w[a-b c-d e-f], vector.merge(other, sep: '-')
+      assert_equal %w[ab cd ef], vector.merge(other, sep: '')
+      assert_equal ['a\nb', 'c\nd', 'e\nf'], vector.merge(other, sep: '\n')
+      assert_raise(VectorArgumentError) { vector.merge(other, sep: 0) }
+    end
+
+    test '#merge invalid merge' do
+      vector = Vector.new(%w[a c e])
+      other = Vector.new(%w[b d f x])
+      assert_raise(NameError) { Vector.new(array).merge(other) }
+    end
+  end
 end

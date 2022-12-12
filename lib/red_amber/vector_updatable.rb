@@ -168,6 +168,33 @@ module RedAmber
       Vector.create(list)
     end
 
+    # Merge String or other string Vector to self.
+    #   Self must be a string Vector.
+    #
+    # @param other [String, Vector]
+    #   merger from right. It will be broadcasted if it is a scalar String.
+    # @param sep [String] separator.
+    # @return [Vector] merged Vector
+    #
+    def merge(other, sep: ' ')
+      raise VectorTypeError, "self is not a string Vector: #{self}" if empty? || !string?
+      raise VectorArgumentError, "separator is not a String: #{sep}" unless sep.is_a?(String)
+
+      other_array =
+        case other
+        in String => s
+          [s] * size
+        in (Vector | Arrow::Array | Arrow::ChunkedArray) => x if x.string?
+          x.to_a
+        else
+          raise VectorArgumentError, "other is not a String or a string Vector: #{self}"
+        end
+
+      list = Arrow::Array.new(to_a.zip(other_array))
+      datum = find(:binary_join).execute([list, sep])
+      Vector.create(datum.value)
+    end
+
     private
 
     # Replace elements selected with a boolean mask
