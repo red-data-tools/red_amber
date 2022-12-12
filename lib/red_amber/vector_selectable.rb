@@ -19,7 +19,9 @@ module RedAmber
     #   TODO: support for the option `boundscheck: true`
     def take(*indices, &block)
       if block
-        raise VectorArgumentError, 'Must not specify both arguments and block.' unless indices.empty?
+        unless indices.empty?
+          raise VectorArgumentError, 'Must not specify both arguments and block.'
+        end
 
         indices = [yield]
       end
@@ -36,7 +38,9 @@ module RedAmber
           Vector.new(indices.flatten)
         end
 
-      raise VectorArgumentError, "argument must be a integers: #{indices}" unless vector.numeric?
+      unless vector.numeric?
+        raise VectorArgumentError, "argument must be a integers: #{indices}"
+      end
 
       Vector.create(take_by_vector(vector))
     end
@@ -50,7 +54,9 @@ module RedAmber
     #   TODO: support for the option `null_selection_behavior: :drop`
     def filter(*booleans, &block)
       if block
-        raise VectorArgumentError, 'Must not specify both arguments and block.' unless booleans.empty?
+        unless booleans.empty?
+          raise VectorArgumentError, 'Must not specify both arguments and block.'
+        end
 
         booleans = [yield]
       end
@@ -155,12 +161,15 @@ module RedAmber
           indices.data
         end
 
-      find(:take).execute([data, index_array]).value # :array_take will fail with ChunkedArray
+      # :array_take will fail with ChunkedArray
+      find(:take).execute([data, index_array]).value
     end
 
     # Accepts booleans by Arrow::BooleanArray
     def filter_by_array(boolean_array)
-      raise VectorArgumentError, 'Booleans must be same size as self.' unless boolean_array.length == size
+      unless boolean_array.length == size
+        raise VectorArgumentError, 'Booleans must be same size as self.'
+      end
 
       find(:array_filter).execute([data, boolean_array]).value
     end

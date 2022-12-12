@@ -45,7 +45,9 @@ module RedAmber
         else # Broadcast scalar to Array
           Arrow::Array.new(Array(replacer) * booleans.to_a.count(true))
         end
-      raise VectorArgumentError, 'Replacements size unmatch' if booleans.sum != replacer_array.length
+      if booleans.sum != replacer_array.length
+        raise VectorArgumentError, 'Replacements size unmatch'
+      end
 
       replace_with(booleans.data, replacer_array)
     end
@@ -156,8 +158,12 @@ module RedAmber
     # @note if sep specified, sep and limit will passed to String#split.
     #
     def split(sep = nil, limit = 0)
-      raise VectorTypeError, "self is not a valid string Vector: #{self}" if empty? || !string?
-      raise VectorTypeError, 'self contains only nil' unless self[0] || uniq.to_a != [nil]
+      if empty? || !string?
+        raise VectorTypeError, "self is not a valid string Vector: #{self}"
+      end
+      if self[0].nil? && uniq.to_a == [nil] # Avoid heavy check to be activated always.
+        raise VectorTypeError, 'self contains only nil'
+      end
 
       list =
         if sep
@@ -177,8 +183,13 @@ module RedAmber
     # @return [Vector] merged Vector
     #
     def merge(other, sep: ' ')
-      raise VectorTypeError, "self is not a string Vector: #{self}" if empty? || !string?
-      raise VectorArgumentError, "separator is not a String: #{sep}" unless sep.is_a?(String)
+      if empty? || !string?
+        raise VectorTypeError,
+              "self is not a string Vector: #{self}"
+      end
+      unless sep.is_a?(String)
+        raise VectorArgumentError, "separator is not a String: #{sep}"
+      end
 
       other_array =
         case other
@@ -187,7 +198,8 @@ module RedAmber
         in (Vector | Arrow::Array | Arrow::ChunkedArray) => x if x.string?
           x.to_a
         else
-          raise VectorArgumentError, "other is not a String or a string Vector: #{self}"
+          raise VectorArgumentError,
+                "other is not a String or a string Vector: #{self}"
         end
 
       list = Arrow::Array.new(to_a.zip(other_array))
@@ -199,7 +211,8 @@ module RedAmber
 
     # Replace elements selected with a boolean mask
     #
-    # @param boolean_mask [Arrow::BooleanArray] Boolean mask which indicates the position to be replaced.
+    # @param boolean_mask [Arrow::BooleanArray]
+    #   Boolean mask which indicates the position to be replaced.
     #   - Position with true will be replaced.
     #   - Position with nil will be nil.
     #
@@ -224,7 +237,8 @@ module RedAmber
 
     # Replace elements selected with a boolean mask by nil
     #
-    # @param boolean_mask [Arrow::BooleanArray] Boolean mask which indicates the position to be replaced.
+    # @param boolean_mask [Arrow::BooleanArray]
+    #   Boolean mask which indicates the position to be replaced.
     #   - Position with true will be replaced by nil
     #   - Position with nil will remain as nil.
     # @return [Vector] Replaced vector.
