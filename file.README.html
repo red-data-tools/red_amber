@@ -64,7 +64,7 @@
 
 <p>A simple dataframe library for Ruby.</p>
 <ul><li>
-<p>Powered by <a href="https://gitter.im/red-data-tools/en">Red Arrow}[https://github.com/apache/arrow/tree/master/ruby/red-arrow]{rdoc-image:https://badges.gitter.im/red-data-tools/en.svg</a></p>
+<p>Powered by <a href="https://github.com/apache/arrow/tree/master/ruby/red-arrow">Red Arrow</a> <a href="https://gitter.im/red-data-tools/en"><img src="https://badges.gitter.im/red-data-tools/en.svg"></a></p>
 </li><li>
 <p>Inspired by the dataframe library <a href="https://github.com/ankane/rover">Rover-df</a></p>
 </li></ul>
@@ -97,11 +97,21 @@
 
 <p>See <a href="https://arrow.apache.org/install/">Apache Arrow install document</a>.</p>
 <ul><li>
-<p>Minimum installation example for the latest Ubuntu:  <code>   sudo apt update   sudo apt install -y -V ca-certificates lsb-release wget   wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr &#39;A-Z&#39; &#39;a-z&#39;)/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt update   sudo apt install -y -V libarrow-dev   sudo apt install -y -V libarrow-glib-dev </code></p>
+<p>Minimum installation example for the latest Ubuntu:</p>
+
+<p> <code>   sudo apt update   sudo apt install -y -V ca-certificates lsb-release wget   wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr &#39;A-Z&#39; &#39;a-z&#39;)/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt update   sudo apt install -y -V libarrow-dev   sudo apt install -y -V libarrow-glib-dev </code></p>
 </li><li>
-<p>On Fedora 38 (Rawhide):  <code>   sudo dnf update   sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel </code></p>
+<p>On Fedora 38 (Rawhide):</p>
+
+<p> <code>   sudo dnf update   sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel </code></p>
 </li><li>
-<p>On macOS, you can install Apache Arrow C++ library using Homebrew:<br>  <code>   brew install apache-arrow </code> and GLib © package with:  <code>   brew install apache-arrow-glib </code></p>
+<p>On macOS, you can install Apache Arrow C++ library using Homebrew:</p>
+
+<p><code>   brew install apache-arrow </code></p>
+
+<p>and GLib (c) package with:</p>
+
+<p> <code>   brew install apache-arrow-glib </code></p>
 </li></ul>
 
 <p>If you prepared Apache Arrow, add these lines to your Gemfile:</p>
@@ -270,7 +280,7 @@ bundle exec rake test
 </div></div>
 
       <div id="footer">
-  Generated on Wed Dec 14 10:50:48 2022 by
+  Generated on Wed Dec 14 11:05:45 2022 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.1.3).
 </div>
