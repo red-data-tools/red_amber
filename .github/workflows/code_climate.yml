@@ -1,0 +1,49 @@
+name: Code Climate
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test_coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Prepare Apache Arrow on Linux
+        run: |
+          sudo apt update
+          sudo apt install -y -V ca-certificates lsb-release wget
+          wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+          sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+          sudo apt update
+          sudo apt install -y -V libarrow-dev
+          # sudo apt install -y -V gir1.2-arrow-1.0
+          sudo apt install -y -V libarrow-glib-dev
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 'ruby' # use latest stable version
+          bundler-cache: true
+
+      - name: Run test
+        run: bundle exec rake test
+        env:
+          TZ: Asia/Tokyo
+
+      - name: Workaround for coverage report to CodeClimate with jq
+        run: |
+          jq 'map_values(. | map_values(if type=="object" then map_values(.lines) else . end))' coverage/.resultset.json > coverage/.resultset_workaround.json
+          diff -uw coverage/.resultset.json coverage/.resultset_workaround.json || true
+
+      - name: Send coverage report to CodeClimate
+        uses: paambaati/codeclimate-action@v3.2.0
+        with:
+          coverageLocations: ${{ github.workspace }}/coverage/.resultset_workaround.json:simplecov
+        env:
+          # GitHub secrets does not work.
+          # Code Climate does not accept other than the actions pushed for the branch main.
+          CC_TEST_REPORTER_ID: 72b601ce192952a9b41d66de09e73de6cef1e1b81cb4c6b56e5732761a7f8015
