@@ -1,0 +1,31 @@
+loop_count: 3
+
+contexts:
+  - name: HEAD
+    prelude: |
+      $LOAD_PATH.unshift(File.expand_path('lib'))
+  - name: 0.2.3
+    gems:
+      red_amber: 0.2.3
+  - name: 0.2.2
+    gems:
+      red_amber: 0.2.2
+
+prelude: |
+  require 'red_amber'
+  require 'datasets-arrow'
+
+  ds = Datasets::Rdatasets.new('tidyr', 'billboard')
+  df = RedAmber::DataFrame.new(ds.to_arrow)
+  sub_df = df.pick(:track, df.keys.select{ |k| k.start_with? 'wk' })
+  long_df = df.to_long(:artist, :track, :'date.entered', name: :week, value: :rank)
+
+benchmark:
+  'R01: Transpose a DataFrame': |
+    sub_df.transpose(name: :week)
+
+  'R02: Reshape to longer DataFrame': |
+    df.to_long(:artist, :track, :'date.entered', name: :week, value: :rank)
+
+  'R03: Reshape to wider DataFrame': |
+    long_df.to_wide(name: :week, value: :rank)

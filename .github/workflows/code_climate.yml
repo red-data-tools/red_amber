@@ -1,0 +1,42 @@
+name: Code Climate
+
+on:
+  pull_request: # temporary test on draft
+  push:
+    branches:
+      - main
+    types: [closed]
+
+jobs:
+  test_coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Prepare Apache Arrow on Linux
+        run: |
+          sudo apt update
+          sudo apt install -y -V ca-certificates lsb-release wget
+          wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+          sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+          sudo apt update
+          sudo apt install -y -V libarrow-dev
+          # sudo apt install -y -V gir1.2-arrow-1.0
+          sudo apt install -y -V libarrow-glib-dev
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 'ruby' # use latest stable version
+          bundler-cache: true
+
+      - name: Upload test coverage to Code Climate
+        uses: paambaati/codeclimate-action@v3.2.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          TZ: Asia/Tokyo # set TZ to ensure the test using timestamp
+        with:
+          coverageCommand: bundle exec rake test
+          coverageLocations: |
+            ${{github.workspace}}/coverage.json:simplecov

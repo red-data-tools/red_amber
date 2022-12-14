@@ -1,0 +1,60 @@
+loop_count: 10
+
+contexts:
+  - name: HEAD
+    prelude: |
+      $LOAD_PATH.unshift(File.expand_path('lib'))
+  - name: 0.2.0
+    gems:
+      red_amber: 0.2.0
+
+prelude: |
+  require 'red_amber'
+  include RedAmber
+  require 'datasets-arrow'
+
+  ds = Datasets::Rdatasets.new('nycflights13', 'flights')
+  flights = RedAmber::DataFrame.new(ds.to_arrow)
+  df = flights.slice { flights[:month] <= 6 }
+
+  tailnum_vector = df[:tailnum]
+  distance_vector = df[:distance]
+
+  strings = tailnum_vector.to_a
+  arrow_array = tailnum_vector.data
+  integers = df[:dep_delay].to_a
+  boolean_vector = df[:air_time].is_nil
+  index_vector = Vector.new(0...boolean_vector.size).filter(boolean_vector)
+  replacer = index_vector.data.map(&:to_s)
+  booleans = boolean_vector.to_a
+
+benchmark:
+  'V01: Vector.new from integer Array': |
+    Vector.new(integers)
+
+  'V02: Vector.new from string Array': |
+    Vector.new(strings)
+
+  'V03: Vector.new from boolean Vector': |
+    Vector.new(boolean_vector)
+
+  'V04: Vector#sum': |
+    distance_vector.mean
+
+  'V05: Vector#*': |
+    distance_vector * 1.852
+
+  'V06: Vector#[booleans]': |
+    tailnum_vector[booleans]
+
+  'V07: Vector#[boolean_vector]': |
+    tailnum_vector[boolean_vector]
+
+  'V08: Vector#[index_vector]': |
+    tailnum_vector[index_vector]
+
+  'V09: Vector#replace': |
+    tailnum_vector.replace(booleans, replacer)
+
+  'V10: Vector#replace with broad casting': |
+    tailnum_vector.replace(booleans, 'x')

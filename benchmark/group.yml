@@ -1,0 +1,39 @@
+loop_count: 3
+
+contexts:
+  - name: HEAD
+    prelude: |
+      $LOAD_PATH.unshift(File.expand_path('lib'))
+  - name: 0.2.3
+    gems:
+      red_amber: 0.2.3
+  - name: 0.2.2
+    gems:
+      red_amber: 0.2.2
+
+prelude: |
+  require 'red_amber'
+  require 'datasets-arrow'
+
+  ds = Datasets::Rdatasets.new('nycflights13', 'flights')
+  df = RedAmber::DataFrame.new(ds.to_arrow)
+    .assign(:flight) { flight.map(&:to_s) }
+
+  slicer = df[:distance] > 1000
+  distance_km = df[:distance] * 1.852
+
+benchmark:
+  'G01: sum distance by destination': |
+    df.group(:dest).sum(:distance)
+
+  'G02: sum arr_delay by month and day': |
+    df.group(:month, :day).sum(:arr_delay)
+
+  'G03: sum arr_delay, mean distance by flight': |
+    df.group(:flight) { [sum(:arr_delay), mean(:distance)] }
+
+  'G04: mean air_time, distance by flight': |
+    df.group(:flight).mean(:air_time, :distance)
+
+  'G05: sum dep_delay, arr_delay by carrer': |
+    df.group(:carrier).sum(:dep_delay, :arr_delay)

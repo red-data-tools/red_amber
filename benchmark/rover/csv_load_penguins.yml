@@ -1,0 +1,15 @@
+prelude: |
+  require 'rover'
+  require 'red_amber'
+
+  penguins_csv = 'tmp/penguins.csv'
+
+  unless File.exist?(penguins_csv)
+    require 'datasets-arrow'
+    ds = Datasets::Penguins.new
+    RedAmber::DataFrame.new(ds).save(penguins_csv)
+  end
+
+benchmark:
+  'penguins by Rover': Rover.read_csv(penguins_csv)
+  'penguins by RedAmber': RedAmber::DataFrame.load(penguins_csv)

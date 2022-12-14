@@ -1,0 +1,215 @@
+# We will use cops to detect bugs in an early stage
+# Feel free to use .rubocop_todo.yml by --auto-gen-config
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-performance
+  - rubocop-rubycw
+  - rubocop-rake
+
+AllCops:
+  # drop support for < 2.7
+  TargetRubyVersion: 2.7
+  # accept new cops if any
+  NewCops: enable
+
+# ===
+# Globally I change these 3 cops from default
+
+# alias is hard to see separately 
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+
+# For consistency and portability
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+# Should not set for Style/TrailingCommaInArguments
+
+# ===
+
+# To let you know the possibility of refactoring ===
+
+# avoid unused variable asignment
+Rubycw/Rubycw:
+  Exclude:
+    - 'test/**/*'
+
+# Disabled to define Vector operators
+# Offense count: 38
+Lint/BinaryOperatorWithIdenticalOperands:
+  Exclude:
+    - 'test/test_vector_function.rb'
+
+# Need for test with empty block
+# Offense count: 1
+# Configuration parameters: AllowComments, AllowEmptyLambdas.
+Lint/EmptyBlock:
+  Exclude:
+    - 'test/test_group.rb'
+
+# avoid unused variable asignment
+# Offense count: 6
+Lint/UselessAssignment:
+  Exclude:
+    - 'test/**/*'
+
+# Max: 120
+# This cop supports safe autocorrection (--autocorrect).
+# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, AllowedPatterns, IgnoredPatterns.
+# URISchemes: http, https
+Layout/LineLength:
+  Max: 90
+  Exclude:
+    - 'test/**/*'
+
+# <= 17 satisfactory
+# 18..30 unsatisfactory
+# > 30 dangerous
+# Offense count: 28
+# Configuration parameters: AllowedMethods, AllowedPatterns, IgnoredMethods, CountRepeatedAttributes.
+Metrics/AbcSize:
+  Max: 30
+  CountRepeatedAttributes: false
+  AllowedMethods: [
+    'join', # 51.87
+    'dataframe_info', # 46.5
+    'format_table', # 84.62
+    'to_long', # 33.66
+    'to_wide', #38.22
+    'slice_by', # 38.29
+    'remove', # 44.42
+    'drop', # 31.42
+    '[]', # 33.76
+    'split', # 37.35
+  ]
+
+# Max: 25
+# Offense count: 57
+# Configuration parameters: CountComments, CountAsOne, ExcludedMethods, AllowedMethods, AllowedPatterns, IgnoredMethods.
+# AllowedMethods: refine
+Metrics/BlockLength:
+  Max: 25
+  Exclude:
+    - 'test/**/*'
+    - 'lib/red_amber/helper.rb' # 32
+
+# It's ok if class is big
+# Max: 100
+# Offense count: 15
+# Configuration parameters: CountComments, CountAsOne.
+Metrics/ClassLength:
+  Exclude:
+    - 'test/**/*'
+    - 'lib/red_amber/data_frame.rb' # 162
+    - 'lib/red_amber/group.rb' # 105
+    - 'lib/red_amber/vector.rb' # 152
+
+# Only for monitoring. I will measure by PerceivedComplexity.
+# Max: 7
+# Offense count: 16
+# Configuration parameters: AllowedMethods, AllowedPatterns, IgnoredMethods.
+Metrics/CyclomaticComplexity:
+  Max: 12
+  AllowedMethods: [
+    'join', # 14
+    'format_table', # 21
+    'slice_by', # 16
+    'remove', # 14
+    'normalize_element', # 17
+    '[]', # 13
+    'parse_range', # 14
+    'split', # 33
+  ]
+
+# Max: 10
+# Offense count: 34
+# Configuration parameters: CountComments, CountAsOne, ExcludedMethods, AllowedMethods, AllowedPatterns, IgnoredMethods.
+Metrics/MethodLength:
+  Max: 30
+  AllowedMethods: [
+    'join', # 47
+    'dataframe_info', # 33
+    'format_table', # 53
+    'slice_by', # 38
+    'assign_update', # 35
+  ]
+
+# Max: 100
+# Offense count: 5
+# Configuration parameters: CountComments, CountAsOne.
+Metrics/ModuleLength:
+  Max: 100
+  Exclude:
+    - 'lib/red_amber/data_frame_combinable.rb' # Max: 149
+    - 'lib/red_amber/data_frame_displayable.rb' # Max: 226
+    - 'lib/red_amber/data_frame_selectable.rb' # Max: 175
+    - 'lib/red_amber/data_frame_variable_operation.rb' # Max: 171
+    - 'lib/red_amber/vector_functions.rb' # Max: 165
+    - 'lib/red_amber/vector_selectable.rb' # Max: 104
+    - 'lib/red_amber/vector_updatable.rb' # Max: 103
+
+# Max: 5
+# Offense count: 1
+# Configuration parameters: CountKeywordArgs, MaxOptionalParameters.
+Metrics/ParameterLists:
+  Exclude:
+    - 'lib/red_amber/data_frame_combinable.rb' # Max: 6, at 'join'
+
+# Max: 8
+# Offense count: 15
+# Configuration parameters: AllowedMethods, AllowedPatterns, IgnoredMethods.
+Metrics/PerceivedComplexity:
+  Max: 10
+  AllowedMethods: [
+    'join', # 14
+    'dataframe_info', # 13
+    'format_table', # 22
+    'slice_by', # 20
+    'remove', # 14
+    'drop', # 12
+    'filters', # 11
+    'normalize_element', # 17
+    '[]', # 11
+    'parse_range', # 15
+    'split', # 14
+  ]
+
+# Offense count: 1
+# Configuration parameters: ExpectMatchingDefinition, CheckDefinitionPathHierarchy, CheckDefinitionPathHierarchyRoots, Regex, IgnoreExecutableScripts, AllowedAcronyms.
+# CheckDefinitionPathHierarchyRoots: lib, spec, test, src
+# AllowedAcronyms: CLI, DSL, ACL, API, ASCII, CPU, CSS, DNS, EOF, GUID, HTML, HTTP, HTTPS, ID, IP, JSON, LHS, QPS, RAM, RHS, RPC, SLA, SMTP, SQL, SSH, TCP, TLS, TTL, UDP, UI, UID, UUID, URI, URL, UTF8, VM, XML, XMPP, XSRF, XSS
+Naming/FileName:
+  Exclude:
+    - 'lib/red-amber.rb'
+
+# Necessary to define is_na, is_in, etc.
+# Offense count: 3
+# Configuration parameters: NamePrefix, ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
+# NamePrefix: is_, has_, have_
+# ForbiddenPrefixes: is_, has_, have_
+# AllowedMethods: is_a?
+# MethodDefinitionMacros: define_method, define_singleton_method
+Naming/PredicateName:
+  Exclude:
+    - 'lib/red_amber/vector.rb'
+    - 'lib/red_amber/vector_functions.rb'
+    - 'lib/red_amber/vector_selectable.rb'
+
+# Necessary to test when range.end == -1
+# Offense count: 2
+# This cop supports unsafe autocorrection (--autocorrect-all).
+Style/SlicingWithRange:
+  Exclude:
+    - 'test/test_data_frame_selectable.rb'
+
+# Necessary to Vector < 0 element-wise comparison
+# Offense count: 5
+# This cop supports unsafe autocorrection (--autocorrect-all).
+# Configuration parameters: EnforcedStyle, AllowedMethods, AllowedPatterns, IgnoredMethods.
+# SupportedStyles: predicate, comparison
+Style/NumericPredicate:
+  Exclude:
+    - 'lib/red_amber/data_frame_selectable.rb'
+    - 'lib/red_amber/vector_selectable.rb'

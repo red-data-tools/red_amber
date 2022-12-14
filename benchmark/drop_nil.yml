@@ -1,0 +1,23 @@
+contexts:
+  - gems:
+      red_amber: 0.1.8
+  - gems:
+      red_amber: 0.2.2
+  - name: HEAD
+    prelude: |
+      $LOAD_PATH.unshift(File.expand_path('lib'))
+      require 'red_amber'
+
+prelude: |
+  require 'datasets-arrow'
+  require 'red_amber'
+
+  penguins = RedAmber::DataFrame.new(Datasets::Penguins.new.to_arrow)
+
+  def remove_nil(penguins)
+    penguins.remove { vectors.map(&:is_nil).reduce(&:|) }
+  end
+
+benchmark:
+  'Remove and reduce': remove_nil(penguins)
+  'remove_nil method': penguins.remove_nil

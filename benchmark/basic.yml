@@ -1,0 +1,86 @@
+loop_count: 3
+
+contexts:
+  - name: HEAD
+    prelude: |
+      $LOAD_PATH.unshift(File.expand_path('lib'))
+  - name: 0.2.3
+    gems:
+      red_amber: 0.2.3
+  - name: 0.2.0
+    gems:
+      red_amber: 0.2.0
+  - name: 0.1.5
+    gems:
+      red_amber: 0.1.5
+
+prelude: |
+  require 'red_amber'
+  require 'datasets-arrow'
+
+  ds = Datasets::Rdatasets.new('nycflights13', 'flights')
+  df = RedAmber::DataFrame.new(ds.to_arrow)
+
+  slicer = df[:distance] > 1000
+  distance_km = df[:distance] * 1.852
+
+benchmark:
+  'B01: Pick([]) by a key name': |
+    df[:flight]
+
+  'B02a: Pick([]) by key names': | 
+    df[:carrier, :flight]
+
+  'B03: Pick by key names': |
+    df.pick(:carrier, :flight)
+
+  'B04: Drop by key names': |
+    df.drop(:year, :month, :day)
+
+  'B05: Pick by booleans': |
+    df.pick(df.vectors.map(&:string?))
+
+  'B06: Pick by a block': |
+    df.pick { keys.map { |key| key.end_with?('time') } }
+
+  'B07: Slice([]) by a index': |
+    df[877]
+
+  'B08: Slice by indeces': |
+    df.slice(0...5, -5..-1)
+
+  'B09: Slice([]) by booleans': |
+    df[slicer]
+
+  'B10: Slice by booleans': |
+    df.slice(slicer)
+
+  'B11: Remove by booleans': |
+    df.remove(slicer)
+
+  'B12: Slice by a block': |
+    df.slice { slicer }
+
+  'B13: Rename by Hash': |
+    df.rename(distance: :distance_mile)
+
+  'B14: Assign an existing variable': |
+    df.assign(distance: distance_km)
+
+  'B15: Assign a new variable': |
+    df.assign(distance_km: distance_km)
+
+  'B16: Sort by a key': |
+    df.sort(:distance)
+
+  'B17: Sort by keys': |
+    df.sort(:origin, '-distance')
+
+  'B18: Convert to a Hash': |
+    df.to_h
+
+  'B19: Output in TDR style': |
+    df.tdr
+
+  'B20: Inspect': |
+    df.inspect
