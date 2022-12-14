@@ -1,16 +1,19 @@
 # RedAmber
 
 [![Gem Version](https://badge.fury.io/rb/red_amber.svg)](https://badge.fury.io/rb/red_amber)
-[![Ruby](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml/badge.svg)](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml)
-<a href="https://codeclimate.com/github/heronshoes/red_amber/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/maintainability" /></a>
-<a href="https://codeclimate.com/github/heronshoes/red_amber/test_coverage"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/test_coverage" /></a>[![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/heronshoes/red_amber/discussions)
+[![CI](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml/badge.svg)](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/maintainability)](https://codeclimate.com/github/heronshoes/red_amber/maintainability)
+[![Test coverage](https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/test_coverage)](https://codeclimate.com/github/heronshoes/red_amber/test_coverage)
+[![Doc](https://img.shields.io/badge/docs-latest-blue)](https://heronshoes.github.io/red_amber/)
+[![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/heronshoes/red_amber/discussions)
 
 A simple dataframe library for Ruby.
 
-- Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow) [![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en)
+- Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow)
+[![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en)
 - Inspired by the dataframe library [Rover-df](https://github.com/ankane/rover)
 
-![screenshot from jupyterlab](doc/image/screenshot.png)
+![screenshot from jupyterlab](https://raw.githubusercontent.com/heronshoes/red_amber/main/doc/image/screenshot.png)
 
 ## Requirements
 
@@ -38,31 +41,35 @@ Install requirements before you install Red Amber.
   See [Apache Arrow install document](https://arrow.apache.org/install/).
   
   - Minimum installation example for the latest Ubuntu:
-    ```
-    sudo apt update
-    sudo apt install -y -V ca-certificates lsb-release wget
-    wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-    sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-    sudo apt update
-    sudo apt install -y -V libarrow-dev
-    sudo apt install -y -V libarrow-glib-dev
-    ```
+
+      ```
+      sudo apt update
+      sudo apt install -y -V ca-certificates lsb-release wget
+      wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+      sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+      sudo apt update
+      sudo apt install -y -V libarrow-dev
+      sudo apt install -y -V libarrow-glib-dev
+      ```
+
   - On Fedora 38 (Rawhide):
-    ```
-    sudo dnf update
-    sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel
-    ```
-  - On macOS, you can install Apache Arrow C++ library using Homebrew:
-    
-    ```
-    brew install apache-arrow
-    ```
+
+      ```
+      sudo dnf update
+      sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel
+      ```
+
+  - On macOS, you can install Apache Arrow C++ library using Homebrew:    
+
+      ```
+      brew install apache-arrow
+      ```
 
     and GLib (C) package with:
 
-    ```
-    brew install apache-arrow-glib
-    ```
+      ```
+      brew install apache-arrow-glib
+      ```
 
 If you prepared Apache Arrow, add these lines to your Gemfile:
 
@@ -90,7 +97,7 @@ Also you can try the contents of this README interactively by [Binder](https://m
 Class `RedAmber::DataFrame` represents a set of data in 2D-shape.
 The entity is a Red Arrow's Table object. 
 
-![dataframe model of RedAmber](doc/image/dataframe_model.png)
+![dataframe model of RedAmber](https://raw.githubusercontent.com/heronshoes/red_amber/main/doc/image/dataframe_model.png)
 
 Let's load the library and try some examples.
 
@@ -106,6 +113,7 @@ First do
     gem install red-datasets-arrow
     ```
 then
+
 ```ruby
 require 'datasets-arrow' # to load sample data
 
