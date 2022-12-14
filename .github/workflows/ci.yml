@@ -48,7 +48,9 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: Run test
-        run: TZ=Asia/Tokyo bundle exec rake test # set TZ to ensure the test using timestamp
+        env:
+          TZ: Asia/Tokyo # set TZ to ensure the test using timestamp
+        run: bundle exec rake test
 
       # - name: Check test coverage
       #   if: runner.os == 'Linux' && matrix.ruby == '3.1'
