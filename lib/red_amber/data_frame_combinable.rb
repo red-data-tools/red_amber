@@ -243,8 +243,16 @@ module RedAmber
       # natural keys (implicit common keys)
       join_keys ||= table_keys.intersection(other_keys)
 
-      left_keys = Array(join_keys).map(&:to_s)
-      right_keys = Array(join_keys).map(&:to_s)
+      # This is not necessary if additional procedure is contributed to Red Arrow.
+      if join_keys.is_a?(Hash)
+        left_keys = join_keys[:left]
+        right_keys = join_keys[:right]
+      else
+        left_keys = join_keys
+        right_keys = join_keys
+      end
+      left_keys = Array(left_keys).map(&:to_s)
+      right_keys = Array(right_keys).map(&:to_s)
 
       case type
       when :full_outer, :left_semi, :left_anti, :right_semi, :right_anti
@@ -289,8 +297,8 @@ module RedAmber
           DataFrame.create(rename_table(joined_table, left_outputs.size, suffix))
         else
           DataFrame.create(joined_table)
-        end.pick do |df|
-          [table_keys, df.keys[-right_outputs.size..].map(&:to_s) - right_keys]
+        end.pick do
+          [right_keys, keys.map(&:to_s) - right_keys]
         end
       end
     end
