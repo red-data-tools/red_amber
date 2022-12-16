@@ -3,6 +3,9 @@
 module RedAmber
   # mix-in for the class DataFrame
   module DataFrameCombinable
+    # Refinements for Arrow::Table
+    using RefineArrowTable
+
     # Concatenate other dataframe onto the bottom.
     #
     # @param other [DataFrame, Arrow::Table, Array<DataFrame, Arrow::Table>]
@@ -203,96 +206,133 @@ module RedAmber
     alias_method :setdiff, :difference
 
     # Undocumented. It is preferable to call specific methods.
-
-    # Join other dataframe
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
-    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
+    # Join another DataFrame or Table.
+    #
+    # @overload join(other, key, type: :inner, suffix: '.1',
+    #                left_outputs: nil, right_outputs: nil)
+    #
+    #   @!macro join_other
+    #   @param other [DataFrame, Arrow::Table] DataFrame or Table to be joined with self.
+    # @param join_keys [String, Symbol, ::Array<String, Symbol>] keys to match.
     # @return [DataFrame] Joined dataframe.
     #
     #   :type is one of
     #     :left_semi, :right_semi, :left_anti, :right_anti, :inner,
     #     :left_outer, :right_outer, :full_outer.
-    def join(other, join_keys = nil,
-             type: :inner, suffix: '.1', left_outputs: nil, right_outputs: nil)
+    #
+    # @overload join(other, join_keys, )
+    #
+    #   @param join_keys [Hash] key assignments to join.
+    #   @option join_keys [Symbol, String]
+    #
+    def join(other, join_keys = nil, type: :inner, suffix: '.1')
       case other
       when DataFrame
-        # Nop
+        other = other.table
       when Arrow::Table
-        other = DataFrame.create(other)
+        # Nop
       else
         raise DataFrameArgumentError, 'other must be a DataFrame or an Arrow::Table'
       end
 
-      # Support natural keys (implicit common keys)
-      natural_keys = keys.intersection(other.keys)
-      if natural_keys.empty?
-        raise DataFrameArgumentError, "#{join_keys} are not common keys"
-      end
+      table_keys = table.keys
+      other_keys = other.keys
+      type = type.to_sym
 
-      join_keys =
-        if join_keys
-          Array(join_keys).map(&:to_sym)
-        else
-          natural_keys
-        end
-      return self if join_keys.empty?
+      # natural keys (implicit common keys)
+      join_keys ||= table_keys.intersection(other_keys)
 
-      # Support partial join_keys
-      #   (common key other than join_key will be renamed with suffix)
-      remainer_keys = natural_keys - join_keys
-      unless remainer_keys.empty?
-        renamer = remainer_keys.each_with_object({}) do |key, hash|
-          new_key = nil
-          loop do
-            new_key = "#{key}#{suffix}".to_sym
-            break unless keys.include?(new_key)
-
-            s = suffix.succ
-            raise DataFrameArgumentError, "suffix #{suffix} is invalid" if s == suffix
-
-            suffix = s
-          end
-          hash[key] = new_key
-        end
-        other = other.rename(renamer)
-      end
-
-      # Red Arrow's #join returns duplicated join_keys from self and other as of v9.0.0 .
-      # Temporally merge key vectors here to workaround.
-      table_output =
-        table.join(other.table, join_keys, type: type, left_outputs: left_outputs,
-                                           right_outputs: right_outputs)
-      left_indexes = [*0...n_keys]
-      right_indexes =
-        [*((other.keys - join_keys).map { |key| other.keys.index(key) + n_keys })]
+      left_keys = Array(join_keys).map(&:to_s)
+      right_keys = Array(join_keys).map(&:to_s)
 
       case type
-      when :left_semi, :left_anti, :right_semi, :right_anti
-        return DataFrame.create(table_output)
-      else
-        selected_indexes = left_indexes.concat(right_indexes)
+      when :full_outer, :left_semi, :left_anti, :right_semi, :right_anti
+        left_outputs = nil
+        right_outputs = nil
+      when :inner, :left_outer
+        left_outputs = table_keys
+        right_outputs = other_keys - right_keys
+      when :right_outer
+        left_outputs = table_keys - left_keys
+        right_outputs = other_keys
       end
-      merged_columns = join_keys.map do |key|
-        i = keys.index(key)
-        merge_column(table_output[i], table_output[n_keys + i], type)
+
+      # Should we rescue errors in Arrow::Table#join for usability ?
+      joined_table =
+        table.join(other, join_keys,
+                   type: type,
+                   left_outputs: left_outputs,
+                   right_outputs: right_outputs)
+
+      case type
+      when :inner, :left_outer, :left_semi, :left_anti, :right_semi, :right_anti
+        if joined_table.keys.uniq!
+          DataFrame.create(rename_table(joined_table, n_keys, suffix))
+        else
+          DataFrame.create(joined_table)
+        end
+      when :full_outer
+        renamed_table = rename_table(joined_table, n_keys, suffix)
+        renamed_keys = renamed_table.keys
+        dropper = []
+        DataFrame.create(renamed_table).assign do |df|
+          left_keys.map do |left_key|
+            i_left_key = renamed_keys.index(left_key)
+            right_key = renamed_keys[i_left_key + table_keys.size]
+            dropper << right_key
+            [left_key.to_sym, merge_array(df[left_key].data, df[right_key].data)]
+          end
+        end.drop(dropper)
+      when :right_outer
+        if joined_table.keys.uniq!
+          DataFrame.create(rename_table(joined_table, left_outputs.size, suffix))
+        else
+          DataFrame.create(joined_table)
+        end.pick do |df|
+          [table_keys, df.keys[-right_outputs.size..].map(&:to_s) - right_keys]
+        end
       end
-      DataFrame.create(table_output[selected_indexes])
-               .assign(*join_keys) { merged_columns }
     end
 
     private
 
-    def merge_column(column1, column2, type)
-      a1 = column1.to_a
-      a2 = column2.to_a
-      if type == :full_outer
-        a1.zip(a2).map { |x, y| x || y }
-      elsif type.start_with?('right')
-        a2
-      else # :inner or :left-*
-        a1
-      end
+    # Rename duplicate keys by suffix
+    def rename_table(joined_table, n_keys, suffix)
+      joined_keys = joined_table.keys
+      other_keys = joined_keys[n_keys..]
+
+      dup_keys = joined_keys.tally.select { |_, v| v > 1 }.keys
+      renamed_right_keys =
+        other_keys.map do |key|
+          if dup_keys.include?(key)
+            new_key = nil
+            loop do
+              new_key = "#{key}#{suffix}"
+              break unless joined_keys.include?(new_key)
+
+              s = suffix.succ
+              raise DataFrameArgumentError, "suffix #{suffix} is invalid" if s == suffix
+
+              suffix = s
+            end
+            new_key
+          else
+            key
+          end
+        end
+      joined_keys[n_keys..] = renamed_right_keys
+
+      fields =
+        joined_keys.map.with_index do |k, i|
+          Arrow::Field.new(k, joined_table[i].data_type)
+        end
+      Arrow::Table.new(Arrow::Schema.new(fields), joined_table.columns)
+    end
+
+    def merge_array(array1, array2)
+      t = Arrow::Function.find(:is_null).execute([array1])
+      Arrow::Function.find(:if_else).execute([t, array2, array1]).value
     end
   end
 end

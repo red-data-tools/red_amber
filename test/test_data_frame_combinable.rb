@@ -149,7 +149,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
           Y: [3, 2]
         )
         assert_equal expected, @df1.join(@right1) # natural join
-        assert_raise(DataFrameArgumentError) { @df1.join(@right1.rename(KEY: :KEY1)) }
+        assert_raise(Arrow::Error::Invalid) { @df1.join(@right1.rename(KEY: :KEY1)) }
       end
 
       test '#inner_join with a join_key' do
