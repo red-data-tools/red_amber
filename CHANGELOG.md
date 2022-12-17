@@ -1,4 +1,93 @@
-## [0.2.4] - 2022-12-25 (unleleased)
+## [0.3.0] - 2022-12-18
+
+- Breaking change
+  - Supported Ruby version has changed from 2.7 to 3.0
+    - Upgrade minimum supported/required version of Ruby from 2.7 to 3.0 (#159, #160)
+
+- Bug fixes
+  - Add check with #key? in DataFrame#method_missing (#140)
+  - Delete unnecessary backslash to supress warning in unary functions (#140)
+  - Fix syntax in code_climate.yml (144)
+  - Temporary disable simplecov test report (#149)
+  - Change Vector#[] to return Array or scalar (#148)
+  - Add missing simplecov HTML formatter (#148)
+  - Change return value of DataFrame#save to self (#160)
+    - Originally reported by kojix2.
+
+- New features and improvements
+  - Update Vector#take to accept block (#148)
+  - Add properties of list Vectors (#148)
+  - Add Vector#split, #split_to_column, #split_to_row (#148)
+  - Add Vector#merge (#148)
+
+- Refactoring
+  - Refactor code (#140)
+    - Add DataFrame.create as a faster constructor
+    - Refactor DataFrame.new using refinements and duck typing
+    - Refactor Vector.new using refinements and duck typing
+    - Add Vector.create as a faster constructor
+    - Refactor Group
+    - Refactor DataFrame#pick/#drop by refininig Array
+    - Refactor DataFrame#pick/#drop
+    - Refactor nil treatment in pick/drop
+    - Refactor DataFrame#pick/#drop using new parser
+    - Refactor DataFrame#[]
+    - Refactor Vector#[], #take, #filter by updating parser
+    - Add for_keys option to parse_args
+    - Refactor Vector properties by refinements for Arrow::Array
+    - Refactor DataFrame selectable using Arrow::Array refinements instead of Vector methods
+    - Refactor DataFrame#assign
+  - Refine error message in DataFrame#to_long/to_wide #143)
+  - Refactor Vector#take/filter returns arrow array (#148)
+  - Change LineLength in cop from 120 to 90 (#152)
+  - Refine DataFrame combinable (join) operations (#159)
+    - Refine DataFrame#join effectively using outputs options
+    - Simplify DataFrame set operations
+
+- Improve in tests/CI
+  - Tests
+    - Update benchmark using 0.2.3 (#138)
+    - Update benchmark basic#02/pick by [] (#140)
+    - Update benchmark contexts and loop_count (#140)
+    - Add benchmark for vector (#140)
+    - Add tests for refinements (#140)
+    - Add benchmark for the series of DataFrame operations (#140)
+    - Add missing test for tdr and dictionary (#140)
+    - Add missing test for group#method with foreign key (#152)
+    - Add missing test for set operations and natural join (#152)
+    - Add missing test for DataFrame#[] with selecting by Array of illegal type' (#152)
+    - Add missing test for DataFrame#assign when assigner size is mismatch (#152)
+    - Accept Hash as join keys in DataFrame join methods (#159)
+
+  - Cops
+    - Refactor/clean rubocop.yml (#138)
+
+  - CI
+    - Support Ruby 3.2 in CI test (#141)
+    - Send test coverage report to Code Climate (#144)
+    - Add test on Fedora (#151)
+      - Thanks to Benson Muite.
+
+    - Add workflow to generate document (#153)
+      - Thanks to kojix2.
+
+    - Support Code Climate test coverage report in CI (#155)
+
+- Documentation
+  - Add YARD in data_frame.rb (#140)
+  - Fix YARD document in the code (#140)
+  - Add Code Climate badges of maintainability and coverage (#144)
+  - Add installation for Fedora in README (#147)
+    - Thanks to Benson Muite.
+
+  - Add Vector#split/merge in Vector.md (#148)
+  - Fix codeclimate badges in README (#155)
+  - Update YARD in DataFrame join methods (#159)
+  - Update jupyter notebook '89 examples of Redamber' (#160)
+
+- Thanks
+  - Benson Muite
+  - kojix2
 
 ## [0.2.3] - 2022-11-16
 
