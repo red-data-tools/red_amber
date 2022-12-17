@@ -17,10 +17,15 @@ A simple dataframe library for Ruby.
 
 ## Requirements
 
-Supported Ruby version is >= 2.7.
+Supported Ruby version is >= 3.0 (since RedAmber 0.3.0).
 
-Since v0.2.0, this library uses pattern matching which is an experimental feature in 2.7 . It is usable but a warning message will be shown in 2.7 .
-I recommend Ruby 3 for performance.
+I dropped support for Ruby 2.7 because
+- 3.0 has a lot of performance improvements.
+- EOL of 2.7 will coming soon. There are no positive reason to use 2.7 especially for data processing.
+- 2.7 shows warning for pattern matching used frequently in RedAmber.
+- 2.7 can't deal Hash and keyword arguments in join.
+  - API of join is `#join(other, join_key = nil, type: :inner, suffix: '.1')`. While `join_key` may be a Hash of `{ left: :left_key, right: :right_key }`. Also `join_key` may be nil (implicit common key is used).
+  I can't run 2.7 as same manner as over 3.0 in this case, so I decided to drop 2.7 .
 
 ```ruby
 # Libraries required
@@ -108,10 +113,9 @@ include RedAmber
 
 ### Example: diamonds dataset
 
-First do
-    ```
-    gem install red-datasets-arrow
-    ```
+First do (if you do not installed) `
+gem install red-datasets-arrow
+`
 then
 
 ```ruby
