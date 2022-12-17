@@ -283,8 +283,7 @@ module RedAmber
     # @return [Boolean] true if set operation is possible.
     #
     def set_operable?(other) # rubocop:disable Naming/AccessorMethodName
-      other = DataFrame.create(other) if other.is_a?(Arrow::Table)
-      keys == other.keys
+      keys == other.keys.map(&:to_sym)
     end
 
     # Select records appearing in both self and other.
@@ -296,8 +295,7 @@ module RedAmber
     # @return [DataFrame] Joined dataframe.
     #
     def intersect(other)
-      other = DataFrame.create(other) if other.is_a?(Arrow::Table)
-      unless keys == other.keys
+      unless keys == other.keys.map(&:to_sym)
         raise DataFrameArgumentError, 'keys are not same with self and other'
       end
 
@@ -313,8 +311,7 @@ module RedAmber
     # @return [DataFrame] Joined dataframe.
     #
     def union(other)
-      other = DataFrame.create(other) if other.is_a?(Arrow::Table)
-      unless keys == other.keys
+      unless keys == other.keys.map(&:to_sym)
         raise DataFrameArgumentError, 'keys are not same with self and other'
       end
 
@@ -330,8 +327,7 @@ module RedAmber
     # @return [DataFrame] Joined dataframe.
     #
     def difference(other)
-      other = DataFrame.create(other) if other.is_a?(Arrow::Table)
-      unless keys == other.keys
+      unless keys == other.keys.map(&:to_sym)
         raise DataFrameArgumentError, 'keys are not same with self and other'
       end
 
