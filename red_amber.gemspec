@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
                      'inspired by Rover-df and powered by Red Arrow.'
   spec.homepage = 'https://github.com/heronshoes/red_amber'
   spec.license = 'MIT'
-  spec.required_ruby_version = '>= 2.7'
+  spec.required_ruby_version = '>= 3.0'
 
   spec.metadata['homepage_uri'] = spec.homepage
   spec.metadata['source_code_uri'] = 'https://github.com/heronshoes/red_amber'
