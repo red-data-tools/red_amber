@@ -117,7 +117,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#anti_join-instance_method" title="#anti_join (instance method)">#<strong>anti_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; DataFrame </a>
+      <a href="#anti_join-instance_method" title="#anti_join (instance method)">#<strong>anti_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; Object </a>
     
 
     
@@ -193,7 +193,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#full_join-instance_method" title="#full_join (instance method)">#<strong>full_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; DataFrame </a>
+      <a href="#full_join-instance_method" title="#full_join (instance method)">#<strong>full_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; Object </a>
     
 
     
@@ -210,7 +210,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Join data, leaving all records.</p>
+<p>Join another DataFrame or Table, leaving all records.</p>
 </div></span>
   
 </li>
@@ -234,7 +234,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Join data, leaving only the matching records.</p>
+<p>Join another DataFrame or Table, leaving only the matching records.</p>
 </div></span>
   
 </li>
@@ -267,7 +267,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#join-instance_method" title="#join (instance method)">#<strong>join</strong>(other, join_keys = nil, type: :inner, suffix: &#39;.1&#39;, left_outputs: nil, right_outputs: nil)  &#x21d2; DataFrame </a>
+      <a href="#join-instance_method" title="#join (instance method)">#<strong>join</strong>(other, join_keys = nil, type: :inner, suffix: &#39;.1&#39;)  &#x21d2; Object </a>
     
 
     
@@ -282,7 +282,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Join other dataframe.</p>
+<p>Join another DataFrame or Table to self.</p>
 </div></span>
   
 </li>
@@ -291,7 +291,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#left_join-instance_method" title="#left_join (instance method)">#<strong>left_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; DataFrame </a>
+      <a href="#left_join-instance_method" title="#left_join (instance method)">#<strong>left_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; Object </a>
     
 
     
@@ -341,7 +341,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#right_join-instance_method" title="#right_join (instance method)">#<strong>right_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; DataFrame </a>
+      <a href="#right_join-instance_method" title="#right_join (instance method)">#<strong>right_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; Object </a>
     
 
     
@@ -365,7 +365,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#semi_join-instance_method" title="#semi_join (instance method)">#<strong>semi_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; DataFrame </a>
+      <a href="#semi_join-instance_method" title="#semi_join (instance method)">#<strong>semi_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; Object </a>
     
 
     
@@ -446,7 +446,13 @@
       <div class="method_details first">
   <h3 class="signature first" id="anti_join-instance_method">
   
-    #<strong>anti_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
+    
+      <span class="overload">#<strong>anti_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>anti_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>anti_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -456,6 +462,27 @@
   <div class="discussion">
     
 <p>Return records of self that do not have a match in other.</p>
+<ul><li>
+<p>Same as ‘#join` with `type: :left_anti`</p>
+</li><li>
+<p>A kind of filtering join.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>anti_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>If ‘join_key` is not specified, common keys in self and other are used (natural keys). Returns joined dataframe.</p>
 
 
   </div>
@@ -475,25 +502,25 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be joined with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>join_keys</span>
+        <span class='name'>suffix</span>
       
       
-        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>::Array&lt;String, Symbol&gt;</tt>)</span>
+        <span class='type'>(<tt>#succ</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
       
       
         &mdash;
         <div class='inline'>
-<p>Keys to match.</p>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
 </div>
       
     </li>
@@ -519,18 +546,241 @@
   
 </ul>
 
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>anti_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_keys</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A key or keys to match.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>anti_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_key_pairs</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Pairs of a key name or key names to match in left and right.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>join_key_pairs</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:left</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘self`.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:right</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘other`.</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+    
+    
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
+
 </div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-145
-146
-147</pre>
+273
+274
+275</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 145</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 273</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_anti_join'>anti_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_anti</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
@@ -608,9 +858,6 @@
       <pre class="lines">
 
 
-12
-13
-14
 15
 16
 17
@@ -630,10 +877,13 @@
 31
 32
 33
-34</pre>
+34
+35
+36
+37</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 12</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 15</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_concatenate'>concatenate</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_other'>other</span>
@@ -680,6 +930,11 @@
   <div class="discussion">
     
 <p>Select records appearing in self but not in other.</p>
+<ul><li>
+<p>Same as ‘#join` with `type: :left_anti` when keys in self are same with other.</p>
+</li><li>
+<p>A kind of set operations.</p>
+</li></ul>
 
 
   </div>
@@ -699,7 +954,7 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be joined with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
@@ -731,21 +986,19 @@
       <pre class="lines">
 
 
-194
-195
-196
-197
-198
-199
-200
-201</pre>
+329
+330
+331
+332
+333
+334
+335</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 194</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 329</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_difference'>difference</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Table</span><span class='rparen'>)</span>
-  <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>keys are not same with self and other</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>end</span>
 
@@ -759,7 +1012,13 @@
       <div class="method_details ">
   <h3 class="signature " id="full_join-instance_method">
   
-    #<strong>full_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
+    
+      <span class="overload">#<strong>full_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>full_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>full_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -772,7 +1031,28 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Join data, leaving all records.</p>
+<p>Join another DataFrame or Table, leaving all records.</p>
+<ul><li>
+<p>Same as ‘#join` with `type: :full_outer`</p>
+</li><li>
+<p>A kind of mutating join.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>full_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>If ‘join_key` is not specified, common keys in self and other are used (natural keys). Returns joined dataframe.</p>
 
 
   </div>
@@ -792,25 +1072,25 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be joined with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>join_keys</span>
+        <span class='name'>suffix</span>
       
       
-        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>::Array&lt;String, Symbol&gt;</tt>)</span>
+        <span class='type'>(<tt>#succ</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
       
       
         &mdash;
         <div class='inline'>
-<p>Keys to match.</p>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
 </div>
       
     </li>
@@ -836,18 +1116,241 @@
   
 </ul>
 
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>full_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_keys</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A key or keys to match.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>full_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_key_pairs</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Pairs of a key name or key names to match in left and right.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>join_key_pairs</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:left</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘self`.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:right</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘other`.</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+    
+    
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
+
 </div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-101
-102
-103</pre>
+161
+162
+163</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 101</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 161</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_full_join'>full_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:full_outer</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
@@ -860,7 +1363,13 @@
       <div class="method_details ">
   <h3 class="signature " id="inner_join-instance_method">
   
-    #<strong>inner_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
+    
+      <span class="overload">#<strong>inner_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>inner_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>inner_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -869,7 +1378,28 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Join data, leaving only the matching records.</p>
+<p>Join another DataFrame or Table, leaving only the matching records.</p>
+<ul><li>
+<p>Same as ‘#join` with `type: :inner`</p>
+</li><li>
+<p>A kind of mutating join.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>inner_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>If ‘join_key` is not specified, common keys in self and other are used (natural keys). Returns joined dataframe.</p>
 
 
   </div>
@@ -889,7 +1419,80 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be joined with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>inner_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
@@ -899,7 +1502,231 @@
         <span class='name'>join_keys</span>
       
       
-        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>::Array&lt;String, Symbol&gt;</tt>)</span>
+        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A key or keys to match.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>inner_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_key_pairs</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Pairs of a key name or key names to match in left and right.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>join_key_pairs</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:left</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘self`.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:right</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘other`.</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+    
+    
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_keys</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
       
       
         <em class="default">(defaults to: <tt>nil</tt>)</em>
@@ -907,12 +1734,36 @@
       
         &mdash;
         <div class='inline'>
-<p>Keys to match.</p>
+<p>A key or keys to match.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_key_pairs</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Pairs of a key name or key names to match in left and right.</p>
 </div>
       
     </li>
   
 </ul>
+
+  
+    
+    
+    
+    
+    
+    
 
 <p class="tag_title">Returns:</p>
 <ul class="return">
@@ -939,12 +1790,12 @@
       <pre class="lines">
 
 
-91
-92
-93</pre>
+134
+135
+136</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 91</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 134</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inner_join'>inner_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
@@ -967,6 +1818,11 @@
   <div class="discussion">
     
 <p>Select records appearing in both self and other.</p>
+<ul><li>
+<p>Same as ‘#join` with `type: :inner` when keys in self are same with other.</p>
+</li><li>
+<p>A kind of set operations.</p>
+</li></ul>
 
 
   </div>
@@ -986,7 +1842,7 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be joined with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
@@ -1018,21 +1874,19 @@
       <pre class="lines">
 
 
-166
-167
-168
-169
-170
-171
-172
-173</pre>
+297
+298
+299
+300
+301
+302
+303</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 166</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 297</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_intersect'>intersect</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Table</span><span class='rparen'>)</span>
-  <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>keys are not same with self and other</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>end</span>
 
@@ -1046,7 +1900,13 @@
       <div class="method_details ">
   <h3 class="signature " id="join-instance_method">
   
-    #<strong>join</strong>(other, join_keys = nil, type: :inner, suffix: &#39;.1&#39;, left_outputs: nil, right_outputs: nil)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
+    
+      <span class="overload">#<strong>join</strong>(other, type: :inner, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>join</strong>(other, join_keys, type: :inner, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>join</strong>(other, join_key_pairs, type: :inner, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -1055,7 +1915,23 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Join other dataframe</p>
+<p>Join another DataFrame or Table to self.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>join</strong>(other, type: :inner, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>If ‘join_key` is not specified, common keys in self and other are used (natural keys). Returns joined dataframe.</p>
 
 
   </div>
@@ -1075,25 +1951,43 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be joined with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>join_keys</span>
+        <span class='name'>type</span>
       
       
-        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>::Array&lt;String, Symbol&gt;</tt>)</span>
+        <span class='type'>(<tt>:left_semi</tt>, <tt>:right_semi</tt>, <tt>:left_anti</tt>, <tt>:right_anti</tt>, <tt>:inner</tt>, <tt>left_outer</tt>, <tt>:right_outer</tt>, <tt>:full_outer</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
+        <em class="default">(defaults to: <tt>:inner</tt>)</em>
       
       
         &mdash;
         <div class='inline'>
-<p>Keys to match.</p>
+<p>type of join.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
 </div>
       
     </li>
@@ -1113,17 +2007,272 @@
         &mdash;
         <div class='inline'>
 <p>Joined dataframe.</p>
-
-<p>:type is one of</p>
-
-<pre class="code ruby"><code class="ruby">:left_semi, :right_semi, :left_anti, :right_anti, :inner,
-:left_outer, :right_outer, :full_outer.
-</code></pre>
 </div>
       
     </li>
   
 </ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>join</strong>(other, join_keys, type: :inner, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_keys</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A key or keys to match.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>type</span>
+      
+      
+        <span class='type'>(<tt>:left_semi</tt>, <tt>:right_semi</tt>, <tt>:left_anti</tt>, <tt>:right_anti</tt>, <tt>:inner</tt>, <tt>left_outer</tt>, <tt>:right_outer</tt>, <tt>:full_outer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>:inner</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>type of join.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>join</strong>(other, join_key_pairs, type: :inner, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_key_pairs</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Pairs of a key name or key names to match in left and right.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>type</span>
+      
+      
+        <span class='type'>(<tt>:left_semi</tt>, <tt>:right_semi</tt>, <tt>:left_anti</tt>, <tt>:right_anti</tt>, <tt>:inner</tt>, <tt>left_outer</tt>, <tt>:right_outer</tt>, <tt>:full_outer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>:inner</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>type of join.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>join_key_pairs</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:left</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘self`.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:right</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘other`.</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+    
+    
+    
+    
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -1131,143 +2280,161 @@
       <pre class="lines">
 
 
-216
-217
-218
-219
-220
-221
-222
-223
-224
-225
-226
-227
-228
-229
-230
-231
-232
-233
-234
-235
-236
-237
-238
-239
-240
-241
-242
-243
-244
-245
-246
-247
-248
-249
-250
-251
-252
-253
-254
-255
-256
-257
-258
-259
-260
-261
-262
-263
-264
-265
-266
-267
-268
-269
-270
-271
-272
-273
-274
-275
-276
-277
-278
-279
-280
-281
-282</pre>
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 216</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 368</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span>
-         <span class='label'>type:</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>left_outputs:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>right_outputs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_other'>other</span>
   <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span>
+    <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_table'>table</span>
+  <span class='kw'>when</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Table</span>
     <span class='comment'># Nop
-</span>  <span class='kw'>when</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Table</span>
-    <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-  <span class='kw'>else</span>
+</span>  <span class='kw'>else</span>
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>other must be a DataFrame or an Arrow::Table</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>end</span>
 
-  <span class='comment'># Support natural keys (implicit common keys)
-</span>  <span class='id identifier rubyid_natural_keys'>natural_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_intersection'>intersection</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_natural_keys'>natural_keys</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_join_keys'>join_keys</span><span class='embexpr_end'>}</span><span class='tstring_content'> are not common keys</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_table_keys'>table_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
+  <span class='id identifier rubyid_other_keys'>other_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
+  <span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
+
+  <span class='comment'># natural keys (implicit common keys)
+</span>  <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>||=</span> <span class='id identifier rubyid_table_keys'>table_keys</span><span class='period'>.</span><span class='id identifier rubyid_intersection'>intersection</span><span class='lparen'>(</span><span class='id identifier rubyid_other_keys'>other_keys</span><span class='rparen'>)</span>
+
+  <span class='comment'># This is not necessary if additional procedure is contributed to Red Arrow.
+</span>  <span class='kw'>if</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_left_keys'>left_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='lbracket'>[</span><span class='symbol'>:left</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_right_keys'>right_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='lbracket'>[</span><span class='symbol'>:right</span><span class='rbracket'>]</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_left_keys'>left_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_join_keys'>join_keys</span>
+    <span class='id identifier rubyid_right_keys'>right_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_join_keys'>join_keys</span>
   <span class='kw'>end</span>
-
-  <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span>
-    <span class='kw'>if</span> <span class='id identifier rubyid_join_keys'>join_keys</span>
-      <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_join_keys'>join_keys</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
-    <span class='kw'>else</span>
-      <span class='id identifier rubyid_natural_keys'>natural_keys</span>
-    <span class='kw'>end</span>
-  <span class='kw'>return</span> <span class='kw'>self</span> <span class='kw'>if</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-
-  <span class='comment'># Support partial join_keys
-</span>  <span class='comment'>#   (common key other than join_key will be renamed with suffix)
-</span>  <span class='id identifier rubyid_remainer_keys'>remainer_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_natural_keys'>natural_keys</span> <span class='op'>-</span> <span class='id identifier rubyid_join_keys'>join_keys</span>
-  <span class='kw'>unless</span> <span class='id identifier rubyid_remainer_keys'>remainer_keys</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-    <span class='id identifier rubyid_renamer'>renamer</span> <span class='op'>=</span> <span class='id identifier rubyid_remainer_keys'>remainer_keys</span><span class='period'>.</span><span class='id identifier rubyid_each_with_object'>each_with_object</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_hash'>hash</span><span class='op'>|</span>
-      <span class='id identifier rubyid_new_key'>new_key</span> <span class='op'>=</span> <span class='kw'>nil</span>
-      <span class='id identifier rubyid_loop'>loop</span> <span class='kw'>do</span>
-        <span class='id identifier rubyid_new_key'>new_key</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_suffix'>suffix</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
-        <span class='kw'>break</span> <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_new_key'>new_key</span><span class='rparen'>)</span>
-
-        <span class='id identifier rubyid_s'>s</span> <span class='op'>=</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='period'>.</span><span class='id identifier rubyid_succ'>succ</span>
-        <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>suffix </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_suffix'>suffix</span><span class='embexpr_end'>}</span><span class='tstring_content'> is invalid</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_s'>s</span> <span class='op'>==</span> <span class='id identifier rubyid_suffix'>suffix</span>
-
-        <span class='id identifier rubyid_suffix'>suffix</span> <span class='op'>=</span> <span class='id identifier rubyid_s'>s</span>
-      <span class='kw'>end</span>
-      <span class='id identifier rubyid_hash'>hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_new_key'>new_key</span>
-    <span class='kw'>end</span>
-    <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_rename'>rename</span><span class='lparen'>(</span><span class='id identifier rubyid_renamer'>renamer</span><span class='rparen'>)</span>
-  <span class='kw'>end</span>
-
-  <span class='comment'># Red Arrow&#39;s #join returns duplicated join_keys from self and other as of v9.0.0 .
-</span>  <span class='comment'># Temporally merge key vectors here to workaround.
-</span>  <span class='id identifier rubyid_table_output'>table_output</span> <span class='op'>=</span>
-    <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_table'>table</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='label'>left_outputs:</span> <span class='id identifier rubyid_left_outputs'>left_outputs</span><span class='comma'>,</span>
-                                       <span class='label'>right_outputs:</span> <span class='id identifier rubyid_right_outputs'>right_outputs</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_left_indexes'>left_indexes</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='op'>*</span><span class='int'>0</span><span class='op'>...</span><span class='id identifier rubyid_n_keys'>n_keys</span><span class='rbracket'>]</span>
-  <span class='id identifier rubyid_right_indexes'>right_indexes</span> <span class='op'>=</span>
-    <span class='lbracket'>[</span><span class='op'>*</span><span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span> <span class='op'>-</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span> <span class='op'>+</span> <span class='id identifier rubyid_n_keys'>n_keys</span> <span class='rbrace'>}</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_left_keys'>left_keys</span> <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_left_keys'>left_keys</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_right_keys'>right_keys</span> <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_right_keys'>right_keys</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
 
   <span class='kw'>case</span> <span class='id identifier rubyid_type'>type</span>
-  <span class='kw'>when</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='symbol'>:left_anti</span><span class='comma'>,</span> <span class='symbol'>:right_semi</span><span class='comma'>,</span> <span class='symbol'>:right_anti</span>
-    <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_table_output'>table_output</span><span class='rparen'>)</span>
-  <span class='kw'>else</span>
-    <span class='id identifier rubyid_selected_indexes'>selected_indexes</span> <span class='op'>=</span> <span class='id identifier rubyid_left_indexes'>left_indexes</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span><span class='lparen'>(</span><span class='id identifier rubyid_right_indexes'>right_indexes</span><span class='rparen'>)</span>
+  <span class='kw'>when</span> <span class='symbol'>:full_outer</span><span class='comma'>,</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='symbol'>:left_anti</span><span class='comma'>,</span> <span class='symbol'>:right_semi</span><span class='comma'>,</span> <span class='symbol'>:right_anti</span>
+    <span class='id identifier rubyid_left_outputs'>left_outputs</span> <span class='op'>=</span> <span class='kw'>nil</span>
+    <span class='id identifier rubyid_right_outputs'>right_outputs</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='kw'>when</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='symbol'>:left_outer</span>
+    <span class='id identifier rubyid_left_outputs'>left_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_table_keys'>table_keys</span>
+    <span class='id identifier rubyid_right_outputs'>right_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_other_keys'>other_keys</span> <span class='op'>-</span> <span class='id identifier rubyid_right_keys'>right_keys</span>
+  <span class='kw'>when</span> <span class='symbol'>:right_outer</span>
+    <span class='id identifier rubyid_left_outputs'>left_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_table_keys'>table_keys</span> <span class='op'>-</span> <span class='id identifier rubyid_left_keys'>left_keys</span>
+    <span class='id identifier rubyid_right_outputs'>right_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_other_keys'>other_keys</span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_merged_columns'>merged_columns</span> <span class='op'>=</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span>
-    <span class='id identifier rubyid_i'>i</span> <span class='op'>=</span> <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_merge_column'>merge_column</span><span class='lparen'>(</span><span class='id identifier rubyid_table_output'>table_output</span><span class='lbracket'>[</span><span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_table_output'>table_output</span><span class='lbracket'>[</span><span class='id identifier rubyid_n_keys'>n_keys</span> <span class='op'>+</span> <span class='id identifier rubyid_i'>i</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_type'>type</span><span class='rparen'>)</span>
+
+  <span class='comment'># Should we rescue errors in Arrow::Table#join for usability ?
+</span>  <span class='id identifier rubyid_joined_table'>joined_table</span> <span class='op'>=</span>
+    <span class='id identifier rubyid_table'>table</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span>
+               <span class='label'>type:</span> <span class='id identifier rubyid_type'>type</span><span class='comma'>,</span>
+               <span class='label'>left_outputs:</span> <span class='id identifier rubyid_left_outputs'>left_outputs</span><span class='comma'>,</span>
+               <span class='label'>right_outputs:</span> <span class='id identifier rubyid_right_outputs'>right_outputs</span><span class='rparen'>)</span>
+
+  <span class='kw'>case</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='kw'>when</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='symbol'>:left_outer</span><span class='comma'>,</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='symbol'>:left_anti</span><span class='comma'>,</span> <span class='symbol'>:right_semi</span><span class='comma'>,</span> <span class='symbol'>:right_anti</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_joined_table'>joined_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_uniq!'>uniq!</span>
+      <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_rename_table'>rename_table</span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='comma'>,</span> <span class='id identifier rubyid_n_keys'>n_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>when</span> <span class='symbol'>:full_outer</span>
+    <span class='id identifier rubyid_renamed_table'>renamed_table</span> <span class='op'>=</span> <span class='id identifier rubyid_rename_table'>rename_table</span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='comma'>,</span> <span class='id identifier rubyid_n_keys'>n_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_renamed_keys'>renamed_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_renamed_table'>renamed_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
+    <span class='id identifier rubyid_dropper'>dropper</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+    <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_renamed_table'>renamed_table</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_assign'><span class='object_link'><a href="DataFrameVariableOperation.html#assign-instance_method" title="RedAmber::DataFrameVariableOperation#assign (method)">assign</a></span></span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_df'>df</span><span class='op'>|</span>
+      <span class='id identifier rubyid_left_keys'>left_keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_left_key'>left_key</span><span class='op'>|</span>
+        <span class='id identifier rubyid_i_left_key'>i_left_key</span> <span class='op'>=</span> <span class='id identifier rubyid_renamed_keys'>renamed_keys</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid_left_key'>left_key</span><span class='rparen'>)</span>
+        <span class='id identifier rubyid_right_key'>right_key</span> <span class='op'>=</span> <span class='id identifier rubyid_renamed_keys'>renamed_keys</span><span class='lbracket'>[</span><span class='id identifier rubyid_i_left_key'>i_left_key</span> <span class='op'>+</span> <span class='id identifier rubyid_table_keys'>table_keys</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='rbracket'>]</span>
+        <span class='id identifier rubyid_dropper'>dropper</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_right_key'>right_key</span>
+        <span class='lbracket'>[</span><span class='id identifier rubyid_left_key'>left_key</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='comma'>,</span> <span class='id identifier rubyid_merge_array'>merge_array</span><span class='lparen'>(</span><span class='id identifier rubyid_df'>df</span><span class='lbracket'>[</span><span class='id identifier rubyid_left_key'>left_key</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_df'>df</span><span class='lbracket'>[</span><span class='id identifier rubyid_right_key'>right_key</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+      <span class='kw'>end</span>
+    <span class='kw'>end</span><span class='period'>.</span><span class='id identifier rubyid_drop'>drop</span><span class='lparen'>(</span><span class='id identifier rubyid_dropper'>dropper</span><span class='rparen'>)</span>
+  <span class='kw'>when</span> <span class='symbol'>:right_outer</span>
+    <span class='kw'>if</span> <span class='id identifier rubyid_joined_table'>joined_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_uniq!'>uniq!</span>
+      <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_rename_table'>rename_table</span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='comma'>,</span> <span class='id identifier rubyid_left_outputs'>left_outputs</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='comma'>,</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>else</span>
+      <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='rparen'>)</span>
+    <span class='kw'>end</span><span class='period'>.</span><span class='id identifier rubyid_pick'>pick</span> <span class='kw'>do</span>
+      <span class='lbracket'>[</span><span class='id identifier rubyid_right_keys'>right_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span> <span class='op'>-</span> <span class='id identifier rubyid_right_keys'>right_keys</span><span class='rbracket'>]</span>
+    <span class='kw'>end</span>
   <span class='kw'>end</span>
-  <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_table_output'>table_output</span><span class='lbracket'>[</span><span class='id identifier rubyid_selected_indexes'>selected_indexes</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-           <span class='period'>.</span><span class='id identifier rubyid_assign'>assign</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_join_keys'>join_keys</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_merged_columns'>merged_columns</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1277,7 +2444,13 @@
       <div class="method_details ">
   <h3 class="signature " id="left_join-instance_method">
   
-    #<strong>left_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
+    
+      <span class="overload">#<strong>left_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>left_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>left_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -1287,6 +2460,27 @@
   <div class="discussion">
     
 <p>Join matching values to self from other.</p>
+<ul><li>
+<p>Same as ‘#join` with `type: :left_outer`</p>
+</li><li>
+<p>A kind of mutating join.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>left_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>If ‘join_key` is not specified, common keys in self and other are used (natural keys). Returns joined dataframe.</p>
 
 
   </div>
@@ -1306,25 +2500,25 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be joined with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>join_keys</span>
+        <span class='name'>suffix</span>
       
       
-        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>::Array&lt;String, Symbol&gt;</tt>)</span>
+        <span class='type'>(<tt>#succ</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
       
       
         &mdash;
         <div class='inline'>
-<p>Keys to match.</p>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
 </div>
       
     </li>
@@ -1350,18 +2544,241 @@
   
 </ul>
 
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>left_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_keys</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A key or keys to match.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>left_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_key_pairs</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Pairs of a key name or key names to match in left and right.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>join_key_pairs</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:left</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘self`.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:right</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘other`.</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+    
+    
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
+
 </div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-113
-114
-115</pre>
+190
+191
+192</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 113</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 190</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_left_join'>left_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_outer</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
@@ -1447,9 +2864,6 @@
       <pre class="lines">
 
 
-47
-48
-49
 50
 51
 52
@@ -1479,10 +2893,13 @@
 76
 77
 78
-79</pre>
+79
+80
+81
+82</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_other'>other</span>
@@ -1525,7 +2942,13 @@
       <div class="method_details ">
   <h3 class="signature " id="right_join-instance_method">
   
-    #<strong>right_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
+    
+      <span class="overload">#<strong>right_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>right_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>right_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -1535,6 +2958,27 @@
   <div class="discussion">
     
 <p>Join matching values from self to other.</p>
+<ul><li>
+<p>Same as ‘#join` with `type: :right_outer`</p>
+</li><li>
+<p>A kind of mutating join.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>right_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>If ‘join_key` is not specified, common keys in self and other are used (natural keys). Returns joined dataframe.</p>
 
 
   </div>
@@ -1554,25 +2998,25 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be joined with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>join_keys</span>
+        <span class='name'>suffix</span>
       
       
-        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>::Array&lt;String, Symbol&gt;</tt>)</span>
+        <span class='type'>(<tt>#succ</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
       
       
         &mdash;
         <div class='inline'>
-<p>Keys to match.</p>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
 </div>
       
     </li>
@@ -1598,18 +3042,241 @@
   
 </ul>
 
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>right_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_keys</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A key or keys to match.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>right_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_key_pairs</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Pairs of a key name or key names to match in left and right.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>join_key_pairs</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:left</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘self`.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:right</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘other`.</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+    
+    
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
+
 </div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-123
-124
-125</pre>
+217
+218
+219</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 123</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 217</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_right_join'>right_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:right_outer</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
@@ -1622,7 +3289,13 @@
       <div class="method_details ">
   <h3 class="signature " id="semi_join-instance_method">
   
-    #<strong>semi_join</strong>(other, join_keys = nil, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
+    
+      <span class="overload">#<strong>semi_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>semi_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>semi_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -1632,6 +3305,27 @@
   <div class="discussion">
     
 <p>Return records of self that have a match in other.</p>
+<ul><li>
+<p>Same as ‘#join` with `type: :left_semi`</p>
+</li><li>
+<p>A kind of filtering join.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>semi_join</strong>(other, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>If ‘join_key` is not specified, common keys in self and other are used (natural keys). Returns joined dataframe.</p>
 
 
   </div>
@@ -1651,25 +3345,25 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be joined with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>join_keys</span>
+        <span class='name'>suffix</span>
       
       
-        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>::Array&lt;String, Symbol&gt;</tt>)</span>
+        <span class='type'>(<tt>#succ</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
       
       
         &mdash;
         <div class='inline'>
-<p>Keys to match.</p>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
 </div>
       
     </li>
@@ -1695,18 +3389,241 @@
   
 </ul>
 
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>semi_join</strong>(other, join_keys, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_keys</span>
+      
+      
+        <span class='type'>(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A key or keys to match.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>semi_join</strong>(other, join_key_pairs, suffix: &#39;.1&#39;)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Returns Joined dataframe.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>, <tt>Arrow::Table</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A DataFrame or a Table to be joined with self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>join_key_pairs</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Pairs of a key name or key names to match in left and right.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>suffix</span>
+      
+      
+        <span class='type'>(<tt>#succ</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a suffix to rename keys when key names conflict as a result of join. ‘suffix` must be responsible to `#succ`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    
+    
+    <p class="tag_title">Options Hash (<tt>join_key_pairs</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:left</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘self`.</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:right</span>
+          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
+          <span class="default">
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Join keys in ‘other`.</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+    
+    
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Joined dataframe.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
+
 </div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-135
-136
-137</pre>
+246
+247
+248</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 135</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 246</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_semi_join'>semi_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
@@ -1748,7 +3665,7 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be checked with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
@@ -1780,17 +3697,15 @@
       <pre class="lines">
 
 
-156
-157
-158
-159</pre>
+285
+286
+287</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 156</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 285</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_operable?'>set_operable?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='comment'># rubocop:disable Naming/AccessorMethodName
-</span>  <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Table</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
+</span>  <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1810,6 +3725,11 @@
   <div class="discussion">
     
 <p>Select records appearing in self or other.</p>
+<ul><li>
+<p>Same as ‘#join` with `type: :full_outer` when keys in self are same with other.</p>
+</li><li>
+<p>A kind of set operations.</p>
+</li></ul>
 
 
   </div>
@@ -1829,7 +3749,7 @@
       
         &mdash;
         <div class='inline'>
-<p>DataFrame/Table to be joined with self.</p>
+<p>A DataFrame or a Table to be joined with self.</p>
 </div>
       
     </li>
@@ -1861,21 +3781,19 @@
       <pre class="lines">
 
 
-180
-181
-182
-183
-184
-185
-186
-187</pre>
+313
+314
+315
+316
+317
+318
+319</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 180</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 313</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Table</span><span class='rparen'>)</span>
-  <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>keys are not same with self and other</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>end</span>
 
@@ -1891,7 +3809,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Dec 14 11:05:45 2022 by
+  Generated on Sat Dec 17 12:39:12 2022 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.1.3).
 </div>
