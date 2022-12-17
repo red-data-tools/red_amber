@@ -19,13 +19,7 @@ A simple dataframe library for Ruby.
 
 Supported Ruby version is >= 3.0 (since RedAmber 0.3.0).
 
-I dropped support for Ruby 2.7 because
-- 3.0 has a lot of performance improvements.
-- EOL of 2.7 will coming soon. There are no positive reason to use 2.7 especially for data processing.
-- 2.7 shows warning for pattern matching used frequently in RedAmber.
-- 2.7 can't deal Hash and keyword arguments in join.
-  - API of join is `#join(other, join_key = nil, type: :inner, suffix: '.1')`. While `join_key` may be a Hash of `{ left: :left_key, right: :right_key }`. Also `join_key` may be nil (implicit common key is used).
-  I can't run 2.7 as same manner as over 3.0 in this case, so I decided to drop 2.7 .
+- I decided to remove Ruby 2.7 without waiting for EOL because it cannot solve the problem of simultaneous use of Hash and keyword arguments when implementing DataFrame#join.
 
 ```ruby
 # Libraries required

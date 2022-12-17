@@ -8,8 +8,8 @@ require:
   - rubocop-rake
 
 AllCops:
-  # drop support for < 2.7
-  TargetRubyVersion: 2.7
+  # drop support for 2.7 (since 0.3.0)
+  TargetRubyVersion: 3.0
   # accept new cops if any
   NewCops: enable
 
