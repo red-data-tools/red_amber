@@ -83,23 +83,80 @@ module RedAmber
 
     alias_method :bind_cols, :merge
 
-    # Mutating joins
+    # Mutating joins (#inner_join, #full_join, #left_join, #right_join)
 
-    # Join data, leaving only the matching records.
+    # Join another DataFrame or Table, leaving only the matching records.
+    # - Same as `#join` with `type: :inner`
+    # - A kind of mutating join.
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
-    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
-    # @return [DataFrame] Joined dataframe.
+    # @!macro join_before
+    #   @param other [DataFrame, Arrow::Table]
+    #     A DataFrame or a Table to be joined with self.
+    #
+    # @!macro join_after
+    #   @param suffix [#succ]
+    #     a suffix to rename keys when key names conflict as a result of join.
+    #     `suffix` must be responsible to `#succ`.
+    #   @return [DataFrame]
+    #     Joined dataframe.
+    #
+    # @!macro join_key_in_array
+    #   @param join_keys [String, Symbol, Array<String, Symbol>]
+    #     A key or keys to match.
+    #
+    # @!macro join_key_in_hash
+    #   @param join_key_pairs [Hash]
+    #     Pairs of a key name or key names to match in left and right.
+    #   @option join_key_pairs [String, Symbol, Array<String, Symbol>] :left
+    #     Join keys in `self`.
+    #   @option join_key_pairs [String, Symbol, Array<String, Symbol>] :right
+    #     Join keys in `other`.
+    #
+    # @overload inner_join(other, suffix: '.1')
+    #   If `join_key` is not specified, common keys in self and other are used
+    #   (natural keys). Returns joined dataframe.
+    #
+    #   @macro join_before
+    #   @macro join_after
+    #
+    # @overload inner_join(other, join_keys, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_array
+    #   @macro join_after
+    #
+    # @overload inner_join(other, join_key_pairs, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_hash
+    #   @macro join_after
     #
     def inner_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :inner, suffix: suffix)
     end
 
-    # Join data, leaving all records.
+    # Join another DataFrame or Table, leaving all records.
+    # - Same as `#join` with `type: :full_outer`
+    # - A kind of mutating join.
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
-    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
-    # @return [DataFrame] Joined dataframe.
+    # @overload full_join(other, suffix: '.1')
+    #   If `join_key` is not specified, common keys in self and other are used
+    #   (natural keys). Returns joined dataframe.
+    #
+    #   @macro join_before
+    #   @macro join_after
+    #
+    # @overload full_join(other, join_keys, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_array
+    #   @macro join_after
+    #
+    # @overload full_join(other, join_key_pairs, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_hash
+    #   @macro join_after
     #
     def full_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :full_outer, suffix: suffix)
@@ -108,52 +165,121 @@ module RedAmber
     alias_method :outer_join, :full_join
 
     # Join matching values to self from other.
+    # - Same as `#join` with `type: :left_outer`
+    # - A kind of mutating join.
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
-    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
-    # @return [DataFrame] Joined dataframe.
+    # @overload left_join(other, suffix: '.1')
+    #   If `join_key` is not specified, common keys in self and other are used
+    #   (natural keys). Returns joined dataframe.
+    #
+    #   @macro join_before
+    #   @macro join_after
+    #
+    # @overload left_join(other, join_keys, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_array
+    #   @macro join_after
+    #
+    # @overload left_join(other, join_key_pairs, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_hash
+    #   @macro join_after
     #
     def left_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :left_outer, suffix: suffix)
     end
 
     # Join matching values from self to other.
+    # - Same as `#join` with `type: :right_outer`
+    # - A kind of mutating join.
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
-    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
-    # @return [DataFrame] Joined dataframe.
+    # @overload right_join(other, suffix: '.1')
+    #   If `join_key` is not specified, common keys in self and other are used
+    #   (natural keys). Returns joined dataframe.
+    #
+    #   @macro join_before
+    #   @macro join_after
+    #
+    # @overload right_join(other, join_keys, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_array
+    #   @macro join_after
+    #
+    # @overload right_join(other, join_key_pairs, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_hash
+    #   @macro join_after
     #
     def right_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :right_outer, suffix: suffix)
     end
 
-    # Filtering joins
+    # Filtering joins (#semi_join, #anti_join)
 
     # Return records of self that have a match in other.
+    # - Same as `#join` with `type: :left_semi`
+    # - A kind of filtering join.
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
-    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
-    # @return [DataFrame] Joined dataframe.
+    # @overload semi_join(other, suffix: '.1')
+    #   If `join_key` is not specified, common keys in self and other are used
+    #   (natural keys). Returns joined dataframe.
+    #
+    #   @macro join_before
+    #   @macro join_after
+    #
+    # @overload semi_join(other, join_keys, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_array
+    #   @macro join_after
+    #
+    # @overload semi_join(other, join_key_pairs, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_hash
+    #   @macro join_after
     #
     def semi_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :left_semi, suffix: suffix)
     end
 
     # Return records of self that do not have a match in other.
+    # - Same as `#join` with `type: :left_anti`
+    # - A kind of filtering join.
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
-    # @param join_keys [String, Symbol, ::Array<String, Symbol>] Keys to match.
-    # @return [DataFrame] Joined dataframe.
+    # @overload anti_join(other, suffix: '.1')
+    #   If `join_key` is not specified, common keys in self and other are used
+    #   (natural keys). Returns joined dataframe.
+    #
+    #   @macro join_before
+    #   @macro join_after
+    #
+    # @overload anti_join(other, join_keys, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_array
+    #   @macro join_after
+    #
+    # @overload anti_join(other, join_key_pairs, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_hash
+    #   @macro join_after
     #
     def anti_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :left_anti, suffix: suffix)
     end
 
-    # Set operations
+    # Set operations (#intersect, #union, #difference, #set_operable?)
 
     # Check if set operation with self and other is possible.
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be checked with self.
+    # @macro join_before
+    #
     # @return [Boolean] true if set operation is possible.
     #
     def set_operable?(other) # rubocop:disable Naming/AccessorMethodName
@@ -162,8 +288,11 @@ module RedAmber
     end
 
     # Select records appearing in both self and other.
+    # - Same as `#join` with `type: :inner` when keys in self are same with other.
+    # - A kind of set operations.
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @macro join_before
+    #
     # @return [DataFrame] Joined dataframe.
     #
     def intersect(other)
@@ -176,8 +305,11 @@ module RedAmber
     end
 
     # Select records appearing in self or other.
+    # - Same as `#join` with `type: :full_outer` when keys in self are same with other.
+    # - A kind of set operations.
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @macro join_before
+    #
     # @return [DataFrame] Joined dataframe.
     #
     def union(other)
@@ -190,8 +322,11 @@ module RedAmber
     end
 
     # Select records appearing in self but not in other.
+    # - Same as `#join` with `type: :left_anti` when keys in self are same with other.
+    # - A kind of set operations.
     #
-    # @param other [DataFrame, Arrow::Table] DataFrame/Table to be joined with self.
+    # @macro join_before
+    #
     # @return [DataFrame] Joined dataframe.
     #
     def difference(other)
@@ -205,26 +340,34 @@ module RedAmber
 
     alias_method :setdiff, :difference
 
-    # Undocumented. It is preferable to call specific methods.
+    # Join another DataFrame or Table to self.
     #
-    # Join another DataFrame or Table.
+    # @overload join(other, type: :inner, suffix: '.1')
     #
-    # @overload join(other, key, type: :inner, suffix: '.1',
-    #                left_outputs: nil, right_outputs: nil)
+    #   If `join_key` is not specified, common keys in self and other are used
+    #   (natural keys). Returns joined dataframe.
     #
-    #   @!macro join_other
-    #   @param other [DataFrame, Arrow::Table] DataFrame or Table to be joined with self.
-    # @param join_keys [String, Symbol, ::Array<String, Symbol>] keys to match.
-    # @return [DataFrame] Joined dataframe.
+    #   @!macro join_common_type
+    #     @param type [:left_semi, :right_semi, :left_anti, :right_anti, :inner,
+    #                  left_outer, :right_outer, :full_outer] type of join.
     #
-    #   :type is one of
-    #     :left_semi, :right_semi, :left_anti, :right_anti, :inner,
-    #     :left_outer, :right_outer, :full_outer.
+    #   @macro join_before
+    #   @macro join_common_type
+    #   @macro join_after
     #
-    # @overload join(other, join_keys, )
+    # @overload join(other, join_keys, type: :inner, suffix: '.1')
     #
-    #   @param join_keys [Hash] key assignments to join.
-    #   @option join_keys [Symbol, String]
+    #   @macro join_before
+    #   @macro join_key_in_array
+    #   @macro join_common_type
+    #   @macro join_after
+    #
+    # @overload join(other, join_key_pairs, type: :inner, suffix: '.1')
+    #
+    #   @macro join_before
+    #   @macro join_key_in_hash
+    #   @macro join_common_type
+    #   @macro join_after
     #
     def join(other, join_keys = nil, type: :inner, suffix: '.1')
       case other
@@ -338,6 +481,7 @@ module RedAmber
       Arrow::Table.new(Arrow::Schema.new(fields), joined_table.columns)
     end
 
+    # Merge two Arrow::Arrays
     def merge_array(array1, array2)
       t = Arrow::Function.find(:is_null).execute([array1])
       Arrow::Function.find(:if_else).execute([t, array2, array1]).value
