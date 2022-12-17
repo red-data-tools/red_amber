@@ -17,14 +17,17 @@ module RedAmber
     end
 
     # Save DataFrame
+    #
+    # @return [DataFrame] self.
     def save(output, options = {})
       @table.save(output, options)
+      self
     end
 
     # Save and reload to cast automatically
     #   Via tsv format file temporally as default
     #
-    #   experimental feature
+    # @note experimental feature
     def auto_cast(format: :tsv)
       return self if empty?
 
