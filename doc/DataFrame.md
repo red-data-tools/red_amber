@@ -1302,7 +1302,10 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   - `join_keys` are keys shared by self and other to match with them.
   - If `join_keys` are empty, common keys in self and other are chosen (natural join).
   - If (common keys) > `join_keys`, duplicated keys are renamed by `suffix`. 
+  - If you want to match the columns with different names,
+    use Hash for `join_keys` such as `{ left: :KEY1, right: KEY2}`.
 
+  These are dataframes to use in the examples of joins.
   ```ruby
   df = DataFrame.new(
     KEY: %w[A B C],

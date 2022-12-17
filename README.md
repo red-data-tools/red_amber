@@ -213,7 +213,7 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## Jupyter notebook
 
-[83 Examples of Red Amber](https://github.com/heronshoes/docker-stacks/blob/RedAmber-binder/binder/examples_of_red_amber.ipynb)
+[89 Examples of Red Amber](https://github.com/heronshoes/docker-stacks/blob/RedAmber-binder/binder/examples_of_red_amber.ipynb)
 ([raw file](https://raw.githubusercontent.com/heronshoes/docker-stacks/RedAmber-binder/binder/examples_of_red_amber.ipynb)) shows more examples in jupyter notebook.
 
 You can try this notebook on [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb). 
