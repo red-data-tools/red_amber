@@ -1453,6 +1453,8 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   1 B              4
   2 D              5
   ```
+##### `set_operable?(other)`
+  Check if `types` of self and other are same.
 
 ##### `intersect(other)`
 
@@ -1498,15 +1500,23 @@ When the option `keep_key: true` used, the column `key` will be preserved.
     <string> <uint8>
   1 B              2
   2 C              3
+
+  other.differencr(df)
+  #=>
+  #<RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000040e0c>
+    KEY1        KEY2                                    
+    <string> <uint8>                                    
+  0 B              4                      
+  1 D              5
   ```
 
 ## Binding
 
 ### `concatenate(other)`
 
-  Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
+  Concatenate another DataFrame or Table onto the bottom of self. The types  of other must be the same as self.
 
-  The alias is `concat`.
+  The alias is `concat` and `bind_rows`.
 
   An array of DataFrames or Tables is also acceptable as other.
 
@@ -1538,9 +1548,11 @@ When the option `keep_key: true` used, the column `key` will be preserved.
   3       4 D
   ```
 
-### `merge(other)`
+### `merge(*other)`
 
-  Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
+  Concatenate another DataFrame or Table onto the bottom of self. The size of other must be the same as self. Self and other must not share the same key.
+
+  The alias is `bind_cols`.
 
   ```ruby
   df

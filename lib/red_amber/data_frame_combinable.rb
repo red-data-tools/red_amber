@@ -6,12 +6,29 @@ module RedAmber
     # Refinements for Arrow::Table
     using RefineArrowTable
 
-    # Concatenate other dataframe onto the bottom.
+    # Concatenate other dataframes or tables onto the bottom of self.
     #
+    # @note the `#types` must be same as `other#types`.
     # @param other [DataFrame, Arrow::Table, Array<DataFrame, Arrow::Table>]
-    #   DataFrame/Table to concatenate onto the bottom of self.
+    #   DataFrames or Tables to concatenate.
     # @return [DataFrame]
     #   Concatenated dataframe.
+    # @example
+    #   df    = DataFrame.new(x: [1, 2], y: ['A', 'B'])
+    #   other = DataFrame.new(x: [3, 4], y: ['C', 'D'])
+    #   [df.types, other.types]
+    #   #=>
+    #   [[:uint8, :string], [:uint8, :string]]
+    #
+    #   df.concatenate(other)
+    #   #=>
+    #           x y
+    #     <uint8> <string>
+    #   0       1 A
+    #   1       2 B
+    #   2       3 C
+    #   3       4 D
+    #
     def concatenate(*other)
       case other
       in [] | [nil] | [[]]
@@ -39,14 +56,26 @@ module RedAmber
     alias_method :concat, :concatenate
     alias_method :bind_rows, :concatenate
 
-    # Merge other DataFrame or Table from other.
-    # - Self and other must have same size.
-    # - Self and other do not share the same key.
-    #   - If they share any keys, raise Error.
+    # Merge other DataFrames or Tables.
+    #
+    # @note the `#size` must be same as `other#size`.
+    # @note self and other must not share the same key.
     # @param other [DataFrame, Arrow::Table, Array<DataFrame, Arrow::Table>]
-    #   DataFrame/Table to concatenate.
+    #   DataFrames or Tables to merge.
+    # @raise [DataFrameArgumentError]
+    #   if size is not same or self and other shares the same key.
     # @return [DataFrame]
     #   Merged dataframe.
+    # @example
+    #   df    = DataFrame.new(x: [1, 2], y: [3, 4])
+    #   other = DataFrame.new(a: ['A', 'B'], b: ['C', 'D'])
+    #   df.merge(other)
+    #   #=>
+    #           x       y a        b
+    #     <uint8> <uint8> <string> <string>
+    #   0       1       3 A        C
+    #   1       2       4 B        D
+    #
     def merge(*other)
       case other
       in [] | [nil] | [[]]
@@ -85,10 +114,6 @@ module RedAmber
 
     # Mutating joins (#inner_join, #full_join, #left_join, #right_join)
 
-    # Join another DataFrame or Table, leaving only the matching records.
-    # - Same as `#join` with `type: :inner`
-    # - A kind of mutating join.
-    #
     # @!macro join_before
     #   @param other [DataFrame, Arrow::Table]
     #     A DataFrame or a Table to be joined with self.
@@ -112,24 +137,112 @@ module RedAmber
     #   @option join_key_pairs [String, Symbol, Array<String, Symbol>] :right
     #     Join keys in `other`.
     #
+    # @!macro join_common_example_1
+    #   @example
+    #     df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
+    #     #=>
+    #       KEY           X1
+    #       <string> <uint8>
+    #     0 A              1
+    #     1 B              2
+    #     2 C              3
+    #
+    #     other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
+    #     #=>
+    #       KEY      X2
+    #       <string> <boolean>
+    #     0 A        true
+    #     1 B        false
+    #     2 D        (nil)
+    #
+    # @!macro join_common_example_2
+    #   @example
+    #     df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
+    #     #=>
+    #       KEY1          X1
+    #       <string> <uint8>
+    #     0 A              1
+    #     1 B              2
+    #     2 C              3
+    #
+    #     other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
+    #     #=>
+    #       KEY2     X2
+    #       <string> <boolean>
+    #     0 A        true
+    #     1 B        false
+    #     2 D        (nil)
+    #
+    # @!macro join_common_example_3
+    #   @example
+    #     df3 = DataFrame.new(
+    #       KEY1: %w[A B C],
+    #       KEY2: [1, 2, 3]
+    #     )
+    #     #=>
+    #       KEY1        KEY2
+    #       <string> <uint8>
+    #     0 A              1
+    #     1 B              2
+    #     2 C              3
+    #
+    #     other3 = DataFrame.new(
+    #       KEY1: %w[A B D],
+    #       KEY2: [1, 4, 5]
+    #     )
+    #     #=>
+    #       KEY1        KEY2
+    #       <string> <uint8>
+    #     0 A              1
+    #     1 B              4
+    #     2 D              5
+
+    # Join another DataFrame or Table, leaving only the matching records.
+    # - Same as `#join` with `type: :inner`
+    # - A kind of mutating join.
+    #
     # @overload inner_join(other, suffix: '.1')
     #   If `join_key` is not specified, common keys in self and other are used
     #   (natural keys). Returns joined dataframe.
     #
     #   @macro join_before
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example without key (use implicit common key)
+    #     df.inner_join(other)
+    #     #=>
+    #       KEY           X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
     #
     # @overload inner_join(other, join_keys, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_array
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example with a key
+    #     df.inner_join(other, :KEY)
+    #     #=>
+    #       KEY           X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
     #
     # @overload inner_join(other, join_key_pairs, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_hash
     #   @macro join_after
+    #   @macro join_common_example_2
+    #   @example with key pairs
+    #     df2.inner_join(other2, { left: :KEY1, right: :KEY2 })
+    #     #=>
+    #       KEY1          X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
     #
     def inner_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :inner, suffix: suffix)
@@ -145,18 +258,48 @@ module RedAmber
     #
     #   @macro join_before
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example without key (use implicit common key)
+    #     df.full_join(other)
+    #     #=>
+    #       KEY           X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #     2 C              3 (nil)
+    #     3 D          (nil) (nil)
     #
     # @overload full_join(other, join_keys, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_array
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example with a key
+    #     df.full_join(other, :KEY)
+    #     #=>
+    #       KEY           X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #     2 C              3 (nil)
+    #     3 D          (nil) (nil)
     #
     # @overload full_join(other, join_key_pairs, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_hash
     #   @macro join_after
+    #   @macro join_common_example_2
+    #   @example with key pairs
+    #     df2.full_join(other2, { left: :KEY1, right: :KEY2 })
+    #     #=>
+    #       KEY1          X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #     2 C              3 (nil)
+    #     3 D          (nil) (nil)
     #
     def full_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :full_outer, suffix: suffix)
@@ -174,18 +317,45 @@ module RedAmber
     #
     #   @macro join_before
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example without key (use implicit common key)
+    #     df.left_join(other)
+    #     #=>
+    #       KEY           X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #     2 C              3 (nil)
     #
     # @overload left_join(other, join_keys, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_array
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example with a key
+    #     df.left_join(other, :KEY)
+    #     #=>
+    #       KEY           X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #     2 C              3 (nil)
     #
     # @overload left_join(other, join_key_pairs, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_hash
     #   @macro join_after
+    #   @macro join_common_example_2
+    #   @example with key pairs
+    #     df2.left_join(other2, { left: :KEY1, right: :KEY2 })
+    #     #=>
+    #       KEY1          X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #     2 C              3 (nil)
     #
     def left_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :left_outer, suffix: suffix)
@@ -201,18 +371,45 @@ module RedAmber
     #
     #   @macro join_before
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example without key (use implicit common key)
+    #     df.right_join(other)
+    #     #=>
+    #       KEY           X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #     2 D          (nil) (nil)
     #
     # @overload right_join(other, join_keys, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_array
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example with a key
+    #     df.right_join(other, :KEY)
+    #     #=>
+    #       KEY           X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #     2 D          (nil) (nil)
     #
     # @overload right_join(other, join_key_pairs, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_hash
     #   @macro join_after
+    #   @macro join_common_example_2
+    #   @example with key pairs
+    #     df2.right_join(other2, { left: :KEY1, right: :KEY2 })
+    #     #=>
+    #       KEY1          X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #     2 D          (nil) (nil)
     #
     def right_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :right_outer, suffix: suffix)
@@ -230,18 +427,42 @@ module RedAmber
     #
     #   @macro join_before
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example without key (use implicit common key)
+    #     df.semi_join(other)
+    #     #=>
+    #       KEY           X1
+    #       <string> <uint8>
+    #     0 A              1
+    #     1 B              2
     #
     # @overload semi_join(other, join_keys, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_array
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example with a key
+    #     df.semi_join(other, :KEY)
+    #     #=>
+    #       KEY           X1
+    #       <string> <uint8>
+    #     0 A              1
+    #     1 B              2
     #
     # @overload semi_join(other, join_key_pairs, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_hash
     #   @macro join_after
+    #   @macro join_common_example_2
+    #   @example with key pairs
+    #     df2.semi_join(other2, { left: :KEY1, right: :KEY2 })
+    #     #=>
+    #       KEY1          X1
+    #       <string> <uint8>
+    #     0 A              1
+    #     1 B              2
     #
     def semi_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :left_semi, suffix: suffix)
@@ -257,18 +478,39 @@ module RedAmber
     #
     #   @macro join_before
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example without key (use implicit common key)
+    #     df.anti_join(other)
+    #     #=>
+    #       KEY           X1
+    #       <string> <uint8>
+    #     0 C              3
     #
     # @overload anti_join(other, join_keys, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_array
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example with a key
+    #     df.anti_join(other, :KEY)
+    #     #=>
+    #       KEY           X1
+    #       <string> <uint8>
+    #     0 C              3
     #
     # @overload anti_join(other, join_key_pairs, suffix: '.1')
     #
     #   @macro join_before
     #   @macro join_key_in_hash
     #   @macro join_after
+    #   @macro join_common_example_2
+    #   @example with key pairs
+    #     df2.anti_join(other2, { left: :KEY1, right: :KEY2 })
+    #     #=>
+    #       KEY1          X1
+    #       <string> <uint8>
+    #     0 C              3
     #
     def anti_join(other, join_keys = nil, suffix: '.1')
       join(other, join_keys, type: :left_anti, suffix: suffix)
@@ -279,8 +521,10 @@ module RedAmber
     # Check if set operation with self and other is possible.
     #
     # @macro join_before
-    #
     # @return [Boolean] true if set operation is possible.
+    # @macro join_common_example_3
+    # @example
+    #   df3.set_operable?(other3) #=> true
     #
     def set_operable?(other) # rubocop:disable Naming/AccessorMethodName
       keys == other.keys.map(&:to_sym)
@@ -291,8 +535,14 @@ module RedAmber
     # - A kind of set operations.
     #
     # @macro join_before
-    #
     # @return [DataFrame] Joined dataframe.
+    # @macro join_common_example_3
+    # @example
+    #   df3.intersect(other3)
+    #   #=>
+    #     KEY1        KEY2
+    #     <string> <uint8>
+    #   0 A              1
     #
     def intersect(other)
       unless keys == other.keys.map(&:to_sym)
@@ -307,8 +557,18 @@ module RedAmber
     # - A kind of set operations.
     #
     # @macro join_before
-    #
     # @return [DataFrame] Joined dataframe.
+    # @macro join_common_example_3
+    # @example
+    #   df3.intersect(other3)
+    #   #=>
+    #     KEY1        KEY2
+    #     <string> <uint8>
+    #   0 A              1
+    #   1 B              2
+    #   2 C              3
+    #   3 B              4
+    #   4 D              5
     #
     def union(other)
       unless keys == other.keys.map(&:to_sym)
@@ -323,8 +583,22 @@ module RedAmber
     # - A kind of set operations.
     #
     # @macro join_before
-    #
     # @return [DataFrame] Joined dataframe.
+    # @macro join_common_example_3
+    # @example
+    #   df3.intersect(other3)
+    #   #=>
+    #     KEY1        KEY2
+    #     <string> <uint8>
+    #   0 B              2
+    #   1 C              3
+    #
+    #   other.intersect(df)
+    #   #=>
+    #     KEY1        KEY2
+    #     <string> <uint8>
+    #   0 B              4
+    #   1 D              5
     #
     def difference(other)
       unless keys == other.keys.map(&:to_sym)
@@ -338,18 +612,62 @@ module RedAmber
 
     # Join another DataFrame or Table to self.
     #
+    # @!macro join_common_type
+    #   @param type [:left_semi, :right_semi, :left_anti, :right_anti, :inner,
+    #                left_outer, :right_outer, :full_outer] type of join.
+    #
+    # @!macro join_common_example_4
+    #   @example
+    #     df4 = DataFrame.new(
+    #       X1: %w[A B C],
+    #       Y: %w[D E F]
+    #     )
+    #     #=>
+    #       X1       Y1
+    #       <string> <string>
+    #     0 A        D
+    #     1 B        E
+    #     2 C        F
+    #
+    #     other4 = DataFrame.new(
+    #       X2: %w[A B D],
+    #       Y:  %w[e E E]
+    #     )
+    #     #=>
+    #       X1       Y1
+    #       <string> <string>
+    #     0 A        D
+    #     1 B        E
+    #     2 C        F
+
+    # @note the order of joined results may not preserved.
+    #   Use additional index column to sort after joining.
+    #
     # @overload join(other, type: :inner, suffix: '.1')
     #
     #   If `join_key` is not specified, common keys in self and other are used
     #   (natural keys). Returns joined dataframe.
     #
-    #   @!macro join_common_type
-    #     @param type [:left_semi, :right_semi, :left_anti, :right_anti, :inner,
-    #                  left_outer, :right_outer, :full_outer] type of join.
-    #
     #   @macro join_before
     #   @macro join_common_type
     #   @macro join_after
+    #   @macro join_common_example_1
+    #   @example
+    #     df.join(other)
+    #     #=>
+    #       KEY           X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #
+    #     df.join(other, type: :full_outer)
+    #     #=>
+    #       KEY           X1 X2
+    #       <string> <uint8> <boolean>
+    #     0 A              1 true
+    #     1 B              2 false
+    #     2 C              3 (nil)
+    #     3 D          (nil) (nil)
     #
     # @overload join(other, join_keys, type: :inner, suffix: '.1')
     #
@@ -357,6 +675,21 @@ module RedAmber
     #   @macro join_key_in_array
     #   @macro join_common_type
     #   @macro join_after
+    #   @macro join_common_example_3
+    #   @example join keys in an Array
+    #     df3.join(other3, [:KEY1, :KEY2])
+    #     #=>
+    #       KEY1        KEY2
+    #       <string> <uint8>
+    #     0 A              1
+    #
+    #   @example partial join key and suffix
+    #     df3.join(other3, :KEY1, suffix: '.a')
+    #     #=>
+    #       KEY1        KEY2  KEY2.a
+    #       <string> <uint8> <uint8>
+    #     0 A              1       1
+    #     1 B              2       4
     #
     # @overload join(other, join_key_pairs, type: :inner, suffix: '.1')
     #
@@ -364,6 +697,29 @@ module RedAmber
     #   @macro join_key_in_hash
     #   @macro join_common_type
     #   @macro join_after
+    #   @macro join_common_example_4
+    #   @example without options
+    #     df4.join(other4)
+    #     #=>
+    #       X1       Y        X2
+    #       <string> <string> <string>
+    #     0 B        E        D
+    #     1 B        E        B
+    #
+    #   @example join by key pairs
+    #     df4.join(other4, { left: [:X1, :Y], right: [:X2, :Y] })
+    #     #=>
+    #       X1       Y
+    #       <string> <string>
+    #     0 B        E
+    #
+    #   @example join by key pairs, using renaming by suffix
+    #     df4.join(other4, { left: :X1, right: :X2 })
+    #     #=>
+    #       X1       Y        Y.1
+    #       <string> <string> <string>
+    #     0 A        D        e
+    #     1 B        E        E
     #
     def join(other, join_keys = nil, type: :inner, suffix: '.1')
       case other
