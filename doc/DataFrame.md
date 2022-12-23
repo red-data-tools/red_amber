@@ -59,7 +59,7 @@ Class `RedAmber::DataFrame` represents 2D-data. A `DataFrame` consists with:
   ```
   
   ```ruby
-  RedAmber::DataFrame.load("test/entity/without_header.csv", headers: ["a", "b", "c"])
+  RedAmber::DataFrame.load("test/entity/without_header.csv", headers: [:x, :y, :z])
   ```
 
 - from a string buffer
