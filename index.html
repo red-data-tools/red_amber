@@ -73,15 +73,14 @@
 
 <h2 id="label-Requirements">Requirements</h2>
 
-<p>Supported Ruby version is &gt;= 3.0 (since RedAmber 0.3.0).</p>
-<ul><li>
-<p>I decided to remove Ruby 2.7 without waiting for EOL because it cannot solve the problem of simultaneous use of Hash and keyword arguments when implementing DataFrame#join.</p>
-</li></ul>
+<h3 id="label-Ruby">Ruby</h3>
 
-<pre class="code ruby"><code class="ruby"><span class='comment'># Libraries required
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 10.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Requires Apache Arrow (see installation below)
-</span>
-<span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-parquet</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 10.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to parquet
+<p>Supported Ruby version is &gt;= 3.0 (since RedAmber 0.3.0). - I decided to remove Ruby 2.7 without waiting for EOL. See <a href="https://github.com/heronshoes/red_amber/discussions/162">Release note for v0.3.0</a> for details.</p>
+
+<h3 id="label-Libraries">Libraries</h3>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 10.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Requires Apache Arrow (see installation below)
+</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-parquet</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 10.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to parquet
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rover-df</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 0.3.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to Rover::DataFrame
 </span></code></pre>
 
@@ -106,13 +105,9 @@
 
 <p> <code>   sudo dnf update   sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel </code></p>
 </li><li>
-<p>On macOS, you can install Apache Arrow C++ library using Homebrew:</p>
+<p>On macOS, using Homebrew:</p>
 
-<p><code>   brew install apache-arrow </code></p>
-
-<p>and GLib (c) package with:</p>
-
-<p> <code>   brew install apache-arrow-glib </code></p>
+<p> <code>   brew install apache-arrow   brew install apache-arrow-glib </code></p>
 </li></ul>
 
 <p>If you prepared Apache Arrow, add these lines to your Gemfile:</p>
@@ -125,7 +120,7 @@
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-numo-narray</span><span class='tstring_end'>&#39;</span></span>    <span class='comment'># Optional, recommended if you use inputs from Numo::NArray
 </span></code></pre>
 
-<p>And then execute <code>bundle install</code> or install it yourself as <code>gem install red_amber</code>.</p>
+<p>And then execute <code>bundle install</code> or install them yourself such as <code>gem install red_amber</code>.</p>
 
 <h2 id="label-Docker+image+and+Jupyter+Notebook">Docker image and Jupyter Notebook</h2>
 
@@ -281,7 +276,7 @@ bundle exec rake test
 </div></div>
 
       <div id="footer">
-  Generated on Mon Dec 26 01:17:25 2022 by
+  Generated on Sat Dec 31 01:58:04 2022 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>
