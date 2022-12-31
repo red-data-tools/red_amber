@@ -16,15 +16,13 @@ A simple dataframe library for Ruby.
 ![screenshot from jupyterlab](https://raw.githubusercontent.com/heronshoes/red_amber/main/doc/image/screenshot.png)
 
 ## Requirements
-
+### Ruby
 Supported Ruby version is >= 3.0 (since RedAmber 0.3.0).
+- I decided to remove Ruby 2.7 without waiting for EOL. See [Release note for v0.3.0](https://github.com/heronshoes/red_amber/discussions/162) for details.
 
-- I decided to remove Ruby 2.7 without waiting for EOL because it cannot solve the problem of simultaneous use of Hash and keyword arguments when implementing DataFrame#join.
-
+### Libraries
 ```ruby
-# Libraries required
 gem 'red-arrow',   '~> 10.0.0' # Requires Apache Arrow (see installation below)
-
 gem 'red-parquet', '~> 10.0.0' # Optional, if you use IO from/to parquet
 gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 ```
@@ -37,7 +35,7 @@ Install requirements before you install Red Amber.
 - Apache Arrow GLib (~> 10.0.0)
 - Apache Parquet GLib (~> 10.0.0)  # If you use IO from/to parquet
 
-  See [Apache Arrow install document](https://arrow.apache.org/install/).
+See [Apache Arrow install document](https://arrow.apache.org/install/).
   
   - Minimum installation example for the latest Ubuntu:
 
@@ -58,15 +56,10 @@ Install requirements before you install Red Amber.
       sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel
       ```
 
-  - On macOS, you can install Apache Arrow C++ library using Homebrew:    
+  - On macOS, using Homebrew:
 
       ```
       brew install apache-arrow
-      ```
-
-    and GLib (C) package with:
-
-      ```
       brew install apache-arrow-glib
       ```
 
@@ -81,7 +74,7 @@ gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
 gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
 ```
 
-And then execute `bundle install` or install it yourself as `gem install red_amber`.
+And then execute `bundle install` or install them yourself such as `gem install red_amber`.
 
 ## Docker image and Jupyter Notebook
 
