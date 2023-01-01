@@ -6,34 +6,106 @@ module RedAmber
     # Array is refined
     using RefineArray
 
-    # Pick up variables (columns) to create a new DataFrame
+    # Select variables (columns) to create a new DataFrame.
     #
-    # @note DataFrame#pick creates a DataFrame with single key.
-    #   DataFrame#[] creates a Vector if single key is specified.
+    # @note if a single key is specified, DataFrame#pick generates a DataFrame.
+    #   On the other hand, DataFrame#[] generates a Vector.
     #
     # @overload pick(keys)
-    #   Pick variables by Symbols or Strings.
+    #   Pick up variables by Symbol(s) or String(s).
     #
     #   @param keys [Symbol, String, <Symbol, String>]
     #     key name(s) of variables to pick.
     #   @return [DataFrame]
     #     Picked DataFrame.
+    #   @example Pick up by a key
+    #     languages
+    #     # =>
+    #     #<RedAmber::DataFrame : 4 x 3 Vectors, 0x00000000000cfd8c>
+    #       Language Creator                         Released
+    #       <string> <string>                        <uint16>
+    #     0 Ruby     Yukihiro Matsumoto                  1995
+    #     1 Python   Guido van Rossum                    1991
+    #     2 R        Ross Ihaka and Robert Gentleman     1993
+    #     3 Rust     Graydon Hoare                       2001
+    #
+    #     languages.pick(:Language)
+    #     # =>
+    #     #<RedAmber::DataFrame : 4 x 1 Vector, 0x0000000000113d20>
+    #       Language
+    #       <string>
+    #     0 Ruby
+    #     1 Python
+    #     2 R
+    #     3 Rust
+    #
+    #     languages[:Language]
+    #     # =>
+    #     #<RedAmber::Vector(:string, size=4):0x000000000010359c>
+    #     ["Ruby", "Python", "R", "Rust"]
     #
     # @overload pick(booleans)
-    #   Pick variables by booleans.
+    #   Pick up variables by booleans.
     #
-    #   @param booleans [<true, false, nil>]
-    #     boolean array to pick variables at true.
+    #   @param booleans [<Booleans, nil>, Vector]
+    #     boolean array or vecctor to pick up variables at true.
     #   @return [DataFrame]
     #     Picked DataFrame.
+    #   @example Pick up by booleans
+    #     languages.pick(true, true, false)
+    #     # =>
+    #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000066a1c>
+    #     Language Creator
+    #     <string> <string>
+    #     0 Ruby     Yukihiro Matsumoto
+    #     1 Python   Guido van Rossum
+    #     2 R        Ross Ihaka and Robert Gentleman
+    #     3 Rust     Graydon Hoare
+    #
+    #     is_string = languages.vectors.map(&:string?) # [true, true, false]
+    #     languages.pick(is_string)
+    #     # =>
+    #     (same as above)
     #
     # @overload pick(indices)
-    #   Pick variables by column indices.
+    #   Pick up variables by column indices.
     #
     #   @param indices [Integer, Float, Range<Integer>, Vector, Arrow::Array]
-    #     numeric array to pick variables by column index.
+    #     numeric array to pick up variables by column index.
     #   @return [DataFrame]
     #     Picked DataFrame.
+    #   @example Pick up by indices
+    #     languages.pick(0, 2, 1)
+    #     # =>
+    #     #<RedAmber::DataFrame : 4 x 3 Vectors, 0x000000000011cfb0>
+    #       Language Released Creator
+    #       <string> <uint16> <string>
+    #     0 Ruby         1995 Yukihiro Matsumoto
+    #     1 Python       1991 Guido van Rossum
+    #     2 R            1993 Ross Ihaka and Robert Gentleman
+    #     3 Rust         2001 Graydon Hoare
+    #
+    # @overload pick
+    #   Pick up variables by the yielded value from the block.
+    #   @note Arguments and a block cannot be used simultaneously.
+    #
+    #   @yield [self] the block is called within the context of self.
+    #     (Block is called by instance_eval(&block). )
+    #   @yieldreturn [keys, booleans, indices]
+    #     returns keys, booleans or indices just same as arguments.
+    #   @return [DataFrame]
+    #     Picked DataFrame.
+    #   @example Pick up by a block.
+    #     # same as languages.pick { |df| df.languages.vectors.map(&:string?) }
+    #     languages.pick { languages.vectors.map(&:string?) }
+    #     # =>
+    #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000154104>
+    #       Language Creator
+    #       <string> <string>
+    #     0 Ruby     Yukihiro Matsumoto
+    #     1 Python   Guido van Rossum
+    #     2 R        Ross Ihaka and Robert Gentleman
+    #     3 Rust     Graydon Hoare
     #
     def pick(*args, &block)
       if block
@@ -70,33 +142,97 @@ module RedAmber
       DataFrame.create(@table.select_columns(*picker))
     end
 
-    # Drop some variables (columns) to create a remainer DataFrame
+    # Drop off some variables (columns) to create a remainer DataFrame.
     #
-    # @note DataFrame#drop creates a DataFrame even if it is a single column.
+    # @note DataFrame#drop creates a DataFrame even if it is a single column
+    #   (not a Vector).
     #
     # @overload drop(keys)
-    #   Drop variables by Symbols or Strings.
+    #   Drop off variables by Symbol(s) or String(s).
     #
     #   @param keys [Symbol, String, <Symbol, String>]
     #     key name(s) of variables to drop.
     #   @return [DataFrame]
     #     Remainer DataFrame.
+    #   @example Drop off by a key
+    #     languages
+    #     # =>
+    #     #<RedAmber::DataFrame : 4 x 3 Vectors, 0x00000000000cfd8c>
+    #       Language Creator                         Released
+    #       <string> <string>                        <uint16>
+    #     0 Ruby     Yukihiro Matsumoto                  1995
+    #     1 Python   Guido van Rossum                    1991
+    #     2 R        Ross Ihaka and Robert Gentleman     1993
+    #     3 Rust     Graydon Hoare                       2001
+    #
+    #     languages.drop(:Language)
+    #     # =>
+    #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x000000000005805c>
+    #       Creator                         Released
+    #       <string>                        <uint16>
+    #     0 Yukihiro Matsumoto                  1995
+    #     1 Guido van Rossum                    1991
+    #     2 Ross Ihaka and Robert Gentleman     1993
+    #     3 Graydon Hoare                       2001
     #
     # @overload drop(booleans)
-    #   Drop variables by booleans.
+    #   Drop off variables by booleans.
     #
-    #   @param booleans [<true, false, nil>]
-    #     boolean array of variables to drop at true.
+    #   @param booleans [<Booleans, nil>, Vector]
+    #     boolean array or vector of variables to drop at true.
     #   @return [DataFrame]
     #     Remainer DataFrame.
+    #   @example Drop off by booleans
+    #     is_numeric = languages.vectors.map(&:numeric?) # [nil, nil, true]
+    #     languages.drop(is_numeric)
+    #     # =>
+    #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000066a1c>
+    #     Language Creator
+    #     <string> <string>
+    #     0 Ruby     Yukihiro Matsumoto
+    #     1 Python   Guido van Rossum
+    #     2 R        Ross Ihaka and Robert Gentleman
+    #     3 Rust     Graydon Hoare
     #
     # @overload drop(indices)
-    #   Pick variables by column indices.
+    #   Drop off variables by column indices.
     #
     #   @param indices [Integer, Float, Range<Integer>, Vector, Arrow::Array]
     #     numeric array of variables to drop by column index.
     #   @return [DataFrame]
     #     Remainer DataFrame.
+    #   @example Drop off by indices
+    #     languages.drop(2)
+    #     # =>
+    #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000066a1c>
+    #     Language Creator
+    #     <string> <string>
+    #     0 Ruby     Yukihiro Matsumoto
+    #     1 Python   Guido van Rossum
+    #     2 R        Ross Ihaka and Robert Gentleman
+    #     3 Rust     Graydon Hoare
+    #
+    # @overload drop
+    #   Drop off variables by the yielded value from the block.
+    #   @note Arguments and a block cannot be used simultaneously.
+    #
+    #   @yield [self] the block is called within the context of self.
+    #     (Block is called by instance_eval(&block). )
+    #   @yieldreturn [keys, booleans, indices]
+    #     returns keys, booleans or indices just same as arguments.
+    #   @return [DataFrame]
+    #     Remainer DataFrame.
+    #   @example Drop off by a block.
+    #     # same as languages.drop { |df| df.vectors.map(&:numeric?) }
+    #     languages.drop { vectors.map(&:numeric?) }
+    #     # =>
+    #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000154104>
+    #       Language Creator
+    #       <string> <string>
+    #     0 Ruby     Yukihiro Matsumoto
+    #     1 Python   Guido van Rossum
+    #     2 R        Ross Ihaka and Robert Gentleman
+    #     3 Rust     Graydon Hoare
     #
     def drop(*args, &block)
       if block
