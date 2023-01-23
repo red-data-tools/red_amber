@@ -286,6 +286,8 @@ module RedAmber
     # @api private
     #   TODO: support for option `null_selection_behavior: :drop``
     def filter(*booleans)
+      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
+
       booleans.flatten!
       case booleans
       in []

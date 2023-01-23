@@ -557,8 +557,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       @hash = { x: [1, nil], y: ['A', nil] }
     end
 
-    test 'empty dataframe' do
-      assert_true DataFrame.new({}, []).filter.empty?
+    test 'Empty dataframe' do
+      df = DataFrame.new
+      assert_raise(DataFrameArgumentError) { df.filter }
+      assert_raise(DataFrameArgumentError) { df.filter(true) }
     end
 
     test '#filter' do
