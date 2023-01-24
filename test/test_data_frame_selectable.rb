@@ -568,6 +568,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal @hash, @df.filter(*@booleans).to_h # arguments
       assert_equal @hash, @df.filter(@booleans).to_h # primitive Array
       assert_equal @hash, @df.filter(Arrow::BooleanArray.new(@booleans)).to_h # Arrow::BooleanArray
+      assert_equal @hash, @df.filter(Arrow::ChunkedArray.new([@booleans])).to_h
       assert_equal @hash, @df.filter(Vector.new(@booleans)).to_h # Vector
       assert_equal({ x: [], y: [] }, @df.filter([nil] * 5).to_h) # head only dataframe
     end
@@ -578,7 +579,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
 
     test '#filter size unmatch' do
-      assert_raise(DataFrameArgumentError) { @df.filter([true]) } # out of lower limit
+      assert_raise(DataFrameArgumentError) { @df.filter([true]) }
     end
   end
 

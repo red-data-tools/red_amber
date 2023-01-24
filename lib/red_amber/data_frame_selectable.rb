@@ -292,14 +292,16 @@ module RedAmber
       case booleans
       in []
         return remove_all_values
+      in [Vector => v] if v.boolean?
+        filter_by_array(v.data)
+      in [Arrow::ChunkedArray => ca] if ca.boolean?
+        filter_by_array(ca)
       in [Arrow::BooleanArray => b]
         filter_by_array(b)
-      else
-        unless booleans.booleans?
-          raise DataFrameArgumentError, 'Argument is not a boolean.'
-        end
-
+      in Array if booleans.booleans?
         filter_by_array(Arrow::BooleanArray.new(booleans))
+      else
+        raise DataFrameArgumentError, 'Argument is not a boolean.'
       end
     end
 
