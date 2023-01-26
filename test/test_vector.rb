@@ -249,4 +249,28 @@ class VectorTest < Test::Unit::TestCase
       assert_equal 'RedAmber::Vector(:string, size=16)', @string.inspect
     end
   end
+
+  sub_test_case '#propagate' do
+    setup do
+      @vector = Vector.new(1, 2, 3, 4)
+      @expected = [2.5, 2.5, 2.5, 2.5]
+    end
+
+    test 'propagate mean' do
+      assert_equal_array @expected, @vector.propagate(:mean)
+    end
+
+    test 'propagate by block' do
+      # same as @vector.propagate { |v| v.mean }
+      assert_equal_array @expected, @vector.propagate(&:mean)
+    end
+
+    test 'propagate with element-wise method' do
+      assert_raise(VectorArgumentError) { @vector.propagate(:round) }
+    end
+
+    test 'propagate with argument and block' do
+      assert_raise(VectorArgumentError) { @vector.propagate(:mean) { 2.5 } }
+    end
+  end
 end

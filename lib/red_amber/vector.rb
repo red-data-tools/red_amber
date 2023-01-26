@@ -29,7 +29,7 @@ module RedAmber
     #   Vector.aggregate?(:mean) # => true
     #
     #   Vector.aggregate?(:round) # => false
-    #   
+    #
     # @since 0.3.1
     #
     def self.aggregate?(function)
@@ -220,6 +220,46 @@ module RedAmber
 
     def coerce(other)
       [Vector.new(Array(other) * size), self]
+    end
+
+    # Spread the return value of an aggregate function as if
+    #   it is a element-wise function.
+    #
+    # @param function [Symbol] a name of aggregation function for self.
+    #   Return value of the function must be a scalar.
+    # @return [Vector] Returns a Vector that is the same size as self
+    #   and such that all elements are the same as the result of aggregation `function`.
+    #
+    # @example method name
+    #   vec = Vector.new(1, 2, 3, 4)
+    #   vec.propagate(:mean)
+    #   # =>
+    #   #<RedAmber::Vector(:double, size=4):0x000000000001985c>
+    #   [2.5, 2.5, 2.5, 2.5]
+    #
+    # @example with a block
+    #   vec.propagate { |v| v.mean }
+    #   # =>
+    #   #<RedAmber::Vector(:double, size=4):0x000000000001985c>
+    #   [2.5, 2.5, 2.5, 2.5]
+    #
+    # @since 0.3.1
+    #
+    def propagate(function = nil, &block)
+      value =
+        if block
+          raise VectorArgumentError, "can't specify both function and block" if function
+
+          yield self
+        else
+          function = function&.to_sym
+          unless function && respond_to?(function) && Vector.aggregate?(function)
+            raise VectorArgumentError, "illegal function: #{function.inspect}"
+          end
+
+          send(function)
+        end
+      Vector.new([value] * size)
     end
 
     private # =======
