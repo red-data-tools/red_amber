@@ -6,6 +6,16 @@ class VectorTest < Test::Unit::TestCase
   include TestHelper
   include RedAmber
 
+  sub_test_case 'self.aggregate?' do
+    test 'self.aggregate?(:mean)' do
+      assert_true Vector.aggregate?(:mean)
+    end
+
+    test 'self.aggregate?(:round)' do
+      assert_false Vector.aggregate?(:round)
+    end
+  end
+
   sub_test_case '#initialize' do
     test 'initialize by empty array' do
       assert_equal_array [], Vector.new([])

@@ -20,6 +20,26 @@ module RedAmber
       instance
     end
 
+    # Return true if it is an aggregation function.
+    #
+    # @param function [Symbol] function name to test.
+    # @return [Booleans] true if function is a aggregation function, otherwise false.
+    #
+    # @example
+    #   Vector.aggregate?(:mean) # => true
+    #
+    #   Vector.aggregate?(:round) # => false
+    #   
+    # @since 0.3.1
+    #
+    def self.aggregate?(function)
+      %i[
+        all all? any any? approximate_median count count_distinct count_uniq
+        max mean median min min_max product quantile sd std stddev sum
+        unbiased_variance var variance
+      ].include?(function.to_sym)
+    end
+
     # Create a Vector.
     #
     # @note default is headless Vector and '@key == nil'
