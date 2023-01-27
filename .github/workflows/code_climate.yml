@@ -28,6 +28,7 @@ jobs:
         with:
           ruby-version: 'ruby' # use latest stable version
           bundler-cache: true
+          cache-version: 1
 
       - name: Run test
         run: bundle exec rake test

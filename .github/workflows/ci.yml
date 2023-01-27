@@ -30,7 +30,6 @@ jobs:
           sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
           sudo apt update
           sudo apt install -y -V libarrow-dev
-          # sudo apt install -y -V gir1.2-arrow-1.0
           sudo apt install -y -V libarrow-glib-dev
 
       - name: Prepare Apache Arrow on macOS
@@ -52,6 +51,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          cache-version: 1 # ignore contents of the cache and get and build all the gems anew
 
       - name: Run test
         env:
