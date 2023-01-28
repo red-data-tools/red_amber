@@ -113,14 +113,15 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Max: 12
   AllowedMethods: [
-    'join', # 14
-    'format_table', # 21
-    'slice_by', # 16
-    'remove', # 14
-    'normalize_element', # 17
-    '[]', # 13
-    'parse_range', # 14
     'split', # 33
+    'format_table', # 21
+    'normalize_element', # 17
+    'slice_by', # 16
+    'assign_update', # 14
+    'join', # 14
+    'parse_range', # 14
+    'remove', # 14
+    '[]', # 13
   ]
 
 # Max: 10
@@ -163,17 +164,21 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 10
   AllowedMethods: [
-    'join', # 14
-    'dataframe_info', # 13
     'format_table', # 22
     'slice_by', # 20
-    'remove', # 14
-    'drop', # 12
-    'filters', # 11
     'normalize_element', # 17
-    '[]', # 11
+    'assign_update', # 15
     'parse_range', # 15
+    'join', # 14
+    'remove', # 14
     'split', # 14
+    'dataframe_info', # 13
+    'replace', # 13
+    'drop', # 12
+    '[]', # 11
+    'filters', # 11
+    'html_table', # 11
+    'slice', # 11
   ]
 
 # Offense count: 1
@@ -196,6 +201,12 @@ Naming/PredicateName:
     - 'lib/red_amber/vector.rb'
     - 'lib/red_amber/vector_functions.rb'
     - 'lib/red_amber/vector_selectable.rb'
+
+# Offense count: 16
+# This cop supports safe autocorrection (--autocorrect).
+Style/OperatorMethodCall:
+  Exclude:
+    - 'test/test_vector_function.rb'
 
 # Necessary to test when range.end == -1
 # Offense count: 2
