@@ -344,11 +344,11 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
 
       test '#full_join with join_keys, partial join_key/rename' do
         expected = DataFrame.new(
-          KEY1: ['A', 'C', 'B', nil],
-          KEY2: %w[s u t v],
-          X: [1, 3, 2, nil],
-          'KEY1.1': ['A', 'B', nil, 'D'],
-          Y: [3, 2, nil, 1]
+          KEY1: ['A', 'B', 'C', nil],
+          KEY2: %w[s t u v],
+          X: [1, 2, 3, nil],
+          'KEY1.1': ['A', nil, 'B', 'D'],
+          Y: [3, nil, 2, 1]
         )
         assert_equal expected, @df2.full_join(@right2, :KEY2)
         assert_equal expected, @df2.full_join(@right2,
