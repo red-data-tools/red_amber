@@ -1,6 +1,6 @@
 # RedAmber
 
-[![Gem Version](https://badge.fury.io/rb/red_amber.svg)](https://badge.fury.io/rb/red_amber)
+[![Gem Version](https://img.shields.io/gem/v/red_amber?color=brightgreen)](https://rubygems.org/gems/red_amber)
 [![CI](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml/badge.svg)](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/maintainability)](https://codeclimate.com/github/heronshoes/red_amber/maintainability)
 [![Test coverage](https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/test_coverage)](https://codeclimate.com/github/heronshoes/red_amber/test_coverage)
@@ -10,7 +10,7 @@
 A simple dataframe library for Ruby.
 
 - Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow)
-[![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en)
+[![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en) [![Gem Version](https://img.shields.io/gem/v/red-arrow?color=brightgreen)](https://rubygems.org/gems/red-arrow)
 - Inspired by the dataframe library [Rover-df](https://github.com/ankane/rover)
 
 ![screenshot from jupyterlab](https://raw.githubusercontent.com/heronshoes/red_amber/main/doc/image/screenshot.png)
@@ -130,7 +130,7 @@ For example, we can compute mean prices per cut for the data larger than 1 carat
 
 ```ruby
 df = diamonds
-  .slice { carat > 1 }
+  .slice { carat > 1 } # or use #filter instead of #slice
   .group(:cut)
   .mean(:price) # `pick` prior to `group` is not required if `:price` is specified here.
   .sort('-mean(price)')
@@ -179,7 +179,7 @@ starwars
   .drop(0) # delete unnecessary index column
   .remove { species == "NA" } # delete unnecessary rows
   .group(:species) { [count(:species), mean(:height, :mass)] }
-  .slice { count > 1 }
+  .slice { count > 1 } # or use #filter instead of slice
 
 # =>
 #<RedAmber::DataFrame : 8 x 4 Vectors, 0x000000000000f848>
