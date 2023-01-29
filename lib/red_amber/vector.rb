@@ -225,23 +225,33 @@ module RedAmber
     # Spread the return value of an aggregate function as if
     #   it is a element-wise function.
     #
-    # @param function [Symbol] a name of aggregation function for self.
-    #   Return value of the function must be a scalar.
-    # @return [Vector] Returns a Vector that is the same size as self
-    #   and such that all elements are the same as the result of aggregation `function`.
+    # @overload propagate(function)
+    #   Returns a Vector of same size as self spreading the value from function.
     #
-    # @example method name
-    #   vec = Vector.new(1, 2, 3, 4)
-    #   vec.propagate(:mean)
-    #   # =>
-    #   #<RedAmber::Vector(:double, size=4):0x000000000001985c>
-    #   [2.5, 2.5, 2.5, 2.5]
+    #   @param function [Symbol] a name of aggregation function for self.
+    #     Return value of the function must be a scalar.
+    #   @return [Vector] Returns a Vector that is the same size as self
+    #     and such that all elements are the same as the result of aggregation `function`.
+    #   @example propagate by an aggragation function name
+    #     vec = Vector.new(1, 2, 3, 4)
+    #     vec.propagate(:mean)
+    #     # =>
+    #     #<RedAmber::Vector(:double, size=4):0x000000000001985c>
+    #     [2.5, 2.5, 2.5, 2.5]
     #
-    # @example with a block
-    #   vec.propagate { |v| v.mean }
-    #   # =>
-    #   #<RedAmber::Vector(:double, size=4):0x000000000001985c>
-    #   [2.5, 2.5, 2.5, 2.5]
+    # @overload propagate
+    #   Returns a Vector of same size as self spreading the value from block.
+    #
+    #   @yield [self] gives self to the block.
+    #   @yieldparam self [Vector] self.
+    #   @yieldreturn [scalar] a scalar value.
+    #   @return [Vector] Returns a Vector that is the same size as self
+    #     and such that all elements are the same as the yielded value from the block.
+    #   @example propagate by a block
+    #     vec.propagate { |v| v.mean.round }
+    #     # =>
+    #     #<RedAmber::Vector(:uint8, size=4):0x000000000000cb98>                     
+    #     [3, 3, 3, 3]
     #
     # @since 0.3.1
     #
