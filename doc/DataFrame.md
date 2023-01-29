@@ -572,7 +572,7 @@ penguins.to_rover
   [1, 2, 3]
   ```
 
-### `slice  `  - slice and select records -
+### `slice  `  - cut into slices of records -
 
   Slice and select records (rows) to create a sub DataFrame.
 
@@ -605,11 +605,14 @@ penguins.to_rover
 
 - Booleans as an argument
 
-  `slice(booleans)` accepts booleans as an argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `size`.
+  `filter(booleans)` or `slice(booleans)` accepts booleans as an argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `size`.
+
+  note: `slice(booleans)` is acceptable for orthogonality of `slice`/`remove`.
 
     ```ruby
     vector = penguins[:bill_length_mm]
-    penguins.slice(vector >= 40)
+    penguins.filter(vector >= 40)
+    # penguins.slice(vector >= 40) is also acceptable
 
     # =>
     #<RedAmber::DataFrame : 242 x 8 Vectors, 0x0000000000043d3c>
