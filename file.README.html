@@ -60,11 +60,11 @@
       <div id="content"><div id='filecontents'>
 <h1 id="label-RedAmber">RedAmber</h1>
 
-<p><a href="https://badge.fury.io/rb/red_amber"><img src="https://badge.fury.io/rb/red_amber.svg"></a> <a href="https://github.com/heronshoes/red_amber/actions/workflows/ci.yml"><img src="https://github.com/heronshoes/red_amber/actions/workflows/ci.yml/badge.svg"></a> <a href="https://codeclimate.com/github/heronshoes/red_amber/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/maintainability"></a> <a href="https://codeclimate.com/github/heronshoes/red_amber/test_coverage"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/test_coverage"></a> <a href="https://heronshoes.github.io/red_amber/"><img src="https://img.shields.io/badge/docs-latest-blue"></a> <a href="https://github.com/heronshoes/red_amber/discussions"><img src="https://img.shields.io/github/discussions/heronshoes/red_amber"></a></p>
+<p><a href="https://rubygems.org/gems/red_amber"><img src="https://img.shields.io/gem/v/red_amber?color=brightgreen"></a> <a href="https://github.com/heronshoes/red_amber/actions/workflows/ci.yml"><img src="https://github.com/heronshoes/red_amber/actions/workflows/ci.yml/badge.svg"></a> <a href="https://codeclimate.com/github/heronshoes/red_amber/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/maintainability"></a> <a href="https://codeclimate.com/github/heronshoes/red_amber/test_coverage"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/test_coverage"></a> <a href="https://heronshoes.github.io/red_amber/"><img src="https://img.shields.io/badge/docs-latest-blue"></a> <a href="https://github.com/heronshoes/red_amber/discussions"><img src="https://img.shields.io/github/discussions/heronshoes/red_amber"></a></p>
 
 <p>A simple dataframe library for Ruby.</p>
 <ul><li>
-<p>Powered by <a href="https://github.com/apache/arrow/tree/master/ruby/red-arrow">Red Arrow</a> <a href="https://gitter.im/red-data-tools/en"><img src="https://badges.gitter.im/red-data-tools/en.svg"></a></p>
+<p>Powered by <a href="https://github.com/apache/arrow/tree/master/ruby/red-arrow">Red Arrow</a> <a href="https://gitter.im/red-data-tools/en"><img src="https://badges.gitter.im/red-data-tools/en.svg"></a> <a href="https://rubygems.org/gems/red-arrow"><img src="https://img.shields.io/gem/v/red-arrow?color=brightgreen"></a></p>
 </li><li>
 <p>Inspired by the dataframe library <a href="https://github.com/ankane/rover">Rover-df</a></p>
 </li></ul>
@@ -167,7 +167,7 @@ diamonds = DataFrame.new(dataset) # from v0.2.2, should be `dataset.to_arrow` if
 <p>For example, we can compute mean prices per cut for the data larger than 1 carat.</p>
 
 <pre class="code ruby"><code class="ruby">df = diamonds
-  .slice { carat &gt; 1 }
+  .slice { carat &gt; 1 } # or use #filter instead of #slice
   .group(:cut)
   .mean(:price) # `pick` prior to `group` is not required if `:price` is specified here.
   .sort(&#39;-mean(price)&#39;)
@@ -213,7 +213,7 @@ starwars
   .drop(0) # delete unnecessary index column
   .remove { species == &quot;NA&quot; } # delete unnecessary rows
   .group(:species) { [count(:species), mean(:height, :mass)] }
-  .slice { count &gt; 1 }
+  .slice { count &gt; 1 } # or use #filter instead of slice
 
 # =&gt;
 #&lt;RedAmber::DataFrame : 8 x 4 Vectors, 0x000000000000f848&gt;
@@ -276,7 +276,7 @@ bundle exec rake test
 </div></div>
 
       <div id="footer">
-  Generated on Sun Jan 29 03:22:33 2023 by
+  Generated on Sun Jan 29 21:05:50 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>
