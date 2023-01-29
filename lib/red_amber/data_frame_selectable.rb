@@ -84,12 +84,7 @@ module RedAmber
     # @overload slice(row)
     #   select a record and return a DataFrame.
     #
-    #   @param row [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
-    #     a row index to select.
-    #   @yield [self] gives self to the block.
-    #     @note The block is evaluated within the context of self.
-    #       It is accessable to self's instance variables and private methods.
-    #   @yieldreturn [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
+    #   @param row [Indeger, Float]
     #     a row index to select.
     #   @return [DataFrame] selected variables as a DataFrame.
     #
@@ -100,12 +95,35 @@ module RedAmber
     #
     #   @param rows [Integer, Float, Range<Integer>, Vector, Arrow::Array]
     #     row indeces to select.
-    #   @yield [self] gives self to the block.
-    #     @note The block is evaluated within the context of self.
-    #       It is accessable to self's instance variables and private methods.
-    #   @yieldreturn [<Integer, Float, Range<Integer>, Vector, Arrow::Array>]
-    #     row indeces to select.
     #   @return [DataFrame] selected variables as a DataFrame.
+    #
+    # @overload slice
+    #   select records by indices with block and return a DataFrame.
+    #   - Duplicated selection is acceptable. The same record will be returned.
+    #   - The order of records will be the same as specified indices.
+    #
+    #   @yield [self] gives self to the block.
+    #     The block is evaluated within the context of self.
+    #   @yieldparam self [DataFrame] self. Usually, it can be omitted.
+    #   @yieldreturn [<Integer, Float>, Range<Integer>, Vector, Arrow::Array]
+    #     row indeces to select.
+    #   @return [DataFrame] selected records as a DataFrame.
+    #
+    # @overload slice(booleans)
+    #   select records by filtering with booleans and return a DataFrame.
+    #   @param booleans [<Boolean, nil>, Vector, Arrow::Array]
+    #     a boolean filter.
+    #   @return [DataFrame] filtered records as a DataFrame.
+    #
+    # @overload slice
+    #   select records by filtering with block and return a DataFrame.
+    #
+    #   @yield [self] gives self to the block.
+    #     The block is evaluated within the context of self.
+    #   @yieldparam self [DataFrame] self. Usually, it can be omitted.
+    #   @yieldreturn [<Boolean, nil>, Vector, Arrow::Array]
+    #     a boolean filter. `Vector` or `Arrow::Array` must be boolean type.
+    #   @return [DataFrame] filtered records as a DataFrame.
     #
     def slice(*args, &block)
       raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
@@ -181,6 +199,57 @@ module RedAmber
 
       taken = take(normalize_indices(Arrow::Array.new(slicer)))
       keep_key ? taken : taken.drop(key)
+    end
+
+    # Select records by filtering with booleans to create a DataFrame.
+    #
+    # @overload filter(booleans)
+    #   select records by filtering with booleans and return a DataFrame.
+    #
+    #   @param booleans [<Boolean, nil>, Vector, Arrow::Array]
+    #     a boolean filter.
+    #   @return [DataFrame] filtered records as a DataFrame.
+    #   @example filter by boolean Vector
+    #
+    # @overload filter
+    #   select records by filtering with block and return a DataFrame.
+    #
+    #   @yield [self] gives self to the block.
+    #     The block is evaluated within the context of self.
+    #   @yieldparam self [DataFrame] self. Usually, it can be omitted.
+    #   @yieldreturn [<Boolean, nil>, Vector, Arrow::Array]
+    #     a boolean filter. `Vector` or `Arrow::Array` must be boolean type.
+    #   @return [DataFrame] filtered records as a DataFrame.
+    #
+    def filter(*booleans, &block)
+      booleans.flatten!
+      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
+
+      if block
+        unless booleans.empty?
+          raise DataFrameArgumentError, 'Must not specify both arguments and block.'
+        end
+
+        booleans = [instance_eval(&block)]
+      end
+
+      case booleans
+      in [] | [[]]
+        return remove_all_values
+      in [Vector => v] if v.boolean?
+        filter_by_array(v.data)
+      in [Arrow::ChunkedArray => ca] if ca.boolean?
+        filter_by_array(ca)
+      in [Arrow::BooleanArray => b]
+        filter_by_array(b)
+      else
+        a = Arrow::Array.new(parse_args(booleans, size))
+        unless a.boolean?
+          raise DataFrameArgumentError, "not a boolean filter: #{booleans}"
+        end
+
+        filter_by_array(a)
+      end
     end
 
     # Select records and remove them to create a remainer DataFrame.
@@ -281,28 +350,6 @@ module RedAmber
     #  Negative index is not supported.
     def take(index_array)
       DataFrame.create(@table.take(index_array))
-    end
-
-    # @api private
-    #   TODO: support for option `null_selection_behavior: :drop``
-    def filter(*booleans)
-      raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
-
-      booleans.flatten!
-      case booleans
-      in []
-        return remove_all_values
-      in [Vector => v] if v.boolean?
-        filter_by_array(v.data)
-      in [Arrow::ChunkedArray => ca] if ca.boolean?
-        filter_by_array(ca)
-      in [Arrow::BooleanArray => b]
-        filter_by_array(b)
-      in Array if booleans.booleans?
-        filter_by_array(Arrow::BooleanArray.new(booleans))
-      else
-        raise DataFrameArgumentError, 'Argument is not a boolean.'
-      end
     end
 
     private

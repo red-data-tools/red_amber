@@ -109,6 +109,20 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case 'error in []' do
+    setup do
+      @df = DataFrame.new(x: [1, 2, 3], y: %w[A B C])
+    end
+
+    test 'error by mixed args' do
+      assert_raise(DataFrameArgumentError) { @df[Date.today] }
+    end
+
+    test 'error by invalid args' do
+      assert_raise(DataFrameArgumentError) { @df[:x, -1] }
+    end
+  end
+
   setup do
     @df = DataFrame.new(
       {
@@ -261,27 +275,16 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         2 :string string      2 ["B", "D"]
         3 :bool   boolean     1 {false=>2}
       OUTPUT
-      assert_equal str, @df.slice { [false, true, false, true, false] }.tdr_str
+      booleans = [false, true, false, true, false]
+      assert_equal str, @df.slice { booleans }.tdr_str
+      assert_equal str, @df.slice { Vector.new(booleans) }.tdr_str
+      assert_equal str, @df.slice { Arrow::Array.new(booleans) }.tdr_str
       assert_equal str, @df.slice { indexes.map(&:odd?) }.tdr_str
     end
 
     test 'slice by Enumerator' do
       df = DataFrame.new(x: [*0..10])
       assert_equal_array [1, 4, 7, 10], df.slice(1.step(by: 3, to: 10))[:x]
-    end
-  end
-
-  sub_test_case 'error in []' do
-    setup do
-      @df = DataFrame.new(x: [1, 2, 3], y: %w[A B C])
-    end
-
-    test 'error by mixed args' do
-      assert_raise(DataFrameArgumentError) { @df[Date.today] }
-    end
-
-    test 'error by invalid args' do
-      assert_raise(DataFrameArgumentError) { @df[:x, -1] }
     end
   end
 
@@ -347,6 +350,61 @@ class DataFrameSelectableTest < Test::Unit::TestCase
         3 :bool   boolean     2 {true=>2, false=>1}
       OUTPUT
       assert_equal str, @df.slice_by(:string, keep_key: true) { 0..2 }.tdr_str
+    end
+  end
+
+  sub_test_case '#filter(booleans)' do
+    setup do
+      @df = RedAmber::DataFrame.new(x: [1, 2, 3, 4, nil], y: %w[A B C D] << nil)
+      @booleans = [true, false, nil, false, true]
+      @hash = { x: [1, nil], y: ['A', nil] }
+    end
+
+    test '#filter for an empty dataframe' do
+      df = DataFrame.new
+      assert_raise(DataFrameArgumentError) { df.filter }
+      assert_raise(DataFrameArgumentError) { df.filter(true) }
+    end
+
+    test '#filter with both arguments and a block' do
+      assert_raise(DataFrameArgumentError) { @df.filter(1) { 2 } }
+    end
+
+    test '#filter(booleans)' do
+      assert_equal({ x: [], y: [] }, @df.filter.to_h) # nothing to get
+      assert_equal @hash, @df.filter(*@booleans).to_h # arguments
+      assert_equal @hash, @df.filter(@booleans).to_h # primitive Array
+      assert_equal @hash, @df.filter(Arrow::BooleanArray.new(@booleans)).to_h # Arrow::BooleanArray
+      assert_equal @hash, @df.filter(Arrow::ChunkedArray.new([@booleans])).to_h
+      assert_equal @hash, @df.filter(Vector.new(@booleans)).to_h # Vector
+    end
+
+    test '#filter resulting head only dataframe' do
+      booleans = [false] * 5
+      assert_equal({ x: [], y: [] }, @df.filter(booleans).to_h)
+    end
+
+    test '#filter { booleans }' do
+      booleans = @booleans
+      assert_equal({ x: [], y: [] }, @df.filter { [] }.to_h) # nothing to get
+      assert_equal @hash, @df.filter { booleans }.to_h # boolean Array
+      assert_equal @hash, @df.filter { Arrow::BooleanArray.new(booleans) }.to_h # Arrow::BooleanArray
+      assert_equal @hash, @df.filter { Arrow::ChunkedArray.new([booleans]) }.to_h
+      assert_equal @hash, @df.filter { Vector.new(booleans) }.to_h # Vector
+    end
+
+    test '#filter resulting head only dataframe by block' do
+      booleans = [false] * 5
+      assert_equal({ x: [], y: [] }, @df.filter { booleans }.to_h)
+    end
+
+    test '#filter not booleans' do
+      assert_raise(DataFrameArgumentError) { @df.filter(1) }
+      assert_raise(DataFrameArgumentError) { @df.filter([*1..5]) }
+    end
+
+    test '#filter size unmatch' do
+      assert_raise(DataFrameArgumentError) { @df.filter([true]) }
     end
   end
 
@@ -547,39 +605,6 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::Index) { @df.take([-6]) } # out of lower limit
       assert_raise(TypeError) { @df.take(5) } # Not accept scalar
       assert_raise(Arrow::Error::Index) { @df.take([5]) } # out of upper limit
-    end
-  end
-
-  sub_test_case '#filter(booleans)' do
-    setup do
-      @df = RedAmber::DataFrame.new(x: [1, 2, 3, 4, nil], y: %w[A B C D] << nil)
-      @booleans = [true, false, nil, false, true]
-      @hash = { x: [1, nil], y: ['A', nil] }
-    end
-
-    test 'Empty dataframe' do
-      df = DataFrame.new
-      assert_raise(DataFrameArgumentError) { df.filter }
-      assert_raise(DataFrameArgumentError) { df.filter(true) }
-    end
-
-    test '#filter' do
-      assert_equal({ x: [], y: [] }, @df.filter.to_h) # nothing to get
-      assert_equal @hash, @df.filter(*@booleans).to_h # arguments
-      assert_equal @hash, @df.filter(@booleans).to_h # primitive Array
-      assert_equal @hash, @df.filter(Arrow::BooleanArray.new(@booleans)).to_h # Arrow::BooleanArray
-      assert_equal @hash, @df.filter(Arrow::ChunkedArray.new([@booleans])).to_h
-      assert_equal @hash, @df.filter(Vector.new(@booleans)).to_h # Vector
-      assert_equal({ x: [], y: [] }, @df.filter([nil] * 5).to_h) # head only dataframe
-    end
-
-    test '#filter not booleans' do
-      assert_raise(DataFrameArgumentError) { @df.filter(1) }
-      assert_raise(DataFrameArgumentError) { @df.filter([*1..5]) }
-    end
-
-    test '#filter size unmatch' do
-      assert_raise(DataFrameArgumentError) { @df.filter([true]) }
     end
   end
 
