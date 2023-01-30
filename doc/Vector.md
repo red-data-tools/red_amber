@@ -663,3 +663,89 @@ sv.rank
 #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
 [0, 2, 4, 1, 3]
 ```
+
+### `sample(integer_or_proportion)`
+
+Pick up elements at random.
+
+#### `sample` : without agrument
+
+Return a randomly selected element.
+This is one of an aggregation function.
+
+```ruby
+v = Vector.new('A'..'H'); v
+# =>
+#<RedAmber::Vector(:string, size=8):0x0000000000011b20>
+["A", "B", "C", "D", "E", "F", "G", "H"]
+
+v.sample
+# =>
+"C"
+```
+
+#### `sample(n)` : n as a Integer
+
+Pick up n elements at random.
+
+- Param `n` is number of elements to pick.
+- `n` is a positive Integer
+- If `n` is smaller or equal to size, elements are picked by non-repeating.
+- If `n` is greater than `size`, elements are picked repeatedly.
+@return [Vector] sampled elements.
+- If `n == 1` (in case of `sample(1)`), it returns a Vector of `size == 1` not a scalar.
+
+```ruby
+v.sample(1)
+# =>
+#<RedAmber::Vector(:string, size=1):0x000000000001a3b0>
+["H"]
+```
+
+Sample same size of self: every element is picked in random order.
+
+```ruby
+v.sample(8)
+# =>
+#<RedAmber::Vector(:string, size=8):0x000000000001bda0>
+["H", "D", "B", "F", "E", "A", "G", "C"]
+```
+
+Over sampling: "E" and "A" are sampled repeatedly.
+
+```ruby
+v.sample(9)
+# =>
+#<RedAmber::Vector(:string, size=9):0x000000000001d790>
+["E", "E", "A", "D", "H", "C", "A", "F", "H"]
+```
+
+#### `sample(prop)` : prop as a Float
+
+Pick up elements by proportion `prop` at random.
+
+- `prop` is proportion of elements to pick.
+- `prop` is a positive Float.
+- Absolute number of elements to pick:`prop*size` is rounded (by `half: :up`).
+- If `prop` is smaller or equal to 1.0, elements are picked by non-repeating.
+- If `prop` is greater than 1.0, some elements are picked repeatedly.
+- Returns sampled elements by a Vector.
+- If picked element is only one, it returns a Vector of `size == 1` not a scalar.
+
+Sample same size of self: every element is picked in random order.
+
+```ruby
+v.sample(1.0)
+# =>
+#<RedAmber::Vector(:string, size=8):0x000000000001bda0>
+["D", "H", "F", "C", "A", "B", "E", "G"]
+```
+
+2 times over sampling.
+
+```ruby
+v.sample(2.0)
+# =>
+#<RedAmber::Vector(:string, size=16):0x00000000000233e8>
+["H", "B", "C", "B", "C", "A", "F", "A", "E", "C", "H", "F", "F", "A", ... ]
+```

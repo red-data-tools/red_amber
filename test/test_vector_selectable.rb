@@ -219,4 +219,81 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array expect, Vector.new(string).rank
     end
   end
+
+  sub_test_case '#sample' do
+    setup do
+      @vector = Vector.new('A'..'H')
+    end
+
+    test '#sample empty Vector' do
+      assert_nil Vector.new([]).sample(1)
+    end
+
+    test '#sample negative number' do
+      assert_raise(VectorArgumentError) { @vector.sample(-1) }
+      assert_raise(VectorArgumentError) { @vector.sample(-1.0) }
+    end
+
+    test '#sample(0)' do
+      assert_equal_array [], @vector.sample(0)
+    end
+
+    test '#sample not a number' do
+      assert_raise(VectorArgumentError) { @vector.sample('1') }
+    end
+
+    test '#sample without argument' do
+      sampled = @vector.sample
+      assert_true @vector.to_a.include?(sampled)
+    end
+
+    test '#sample(1)' do
+      sampled = @vector.sample(1)
+      assert_kind_of Vector, sampled
+      assert_equal 1, sampled.size
+      assert_true sampled.is_in(@vector).all?
+    end
+
+    test '#sample by integer smaller than size' do
+      sampled = @vector.sample(3)
+      assert_equal 3, sampled.size
+      assert_equal 3, sampled.uniq.size
+      assert_true sampled.is_in(@vector).all?
+    end
+
+    test '#sample by integer equals to size' do
+      sampled = @vector.sample(8)
+      assert_equal 8, sampled.size
+      assert_equal 8, sampled.uniq.size
+      assert_true sampled.is_in(@vector).all?
+    end
+
+    test '#sample by integer oversampling' do
+      sampled = @vector.sample(10)
+      assert_equal 10, sampled.size
+      assert_true sampled.uniq.size <= 8
+      assert_true sampled.is_in(@vector).all?
+    end
+
+    test '#sample by float smaller than size' do
+      sampled = @vector.sample(0.7)
+      assert_equal 6, sampled.size
+      assert_equal 6, sampled.uniq.size
+      assert_true sampled.is_in(@vector).all?
+    end
+
+    test '#sample by float equals to size' do
+      sampled = @vector.sample(1.0)
+      assert_equal 8, sampled.size
+      assert_equal 8, sampled.uniq.size
+      assert_true sampled.is_in(@vector).all?
+    end
+
+    test '#sample by float oversampling' do
+      sampled = @vector.sample(2.0)
+      assert_equal 16, sampled.size
+      assert_true sampled.uniq.size <= 8
+      assert_true sampled.is_in(@vector).all?
+    end
+  end
 end
