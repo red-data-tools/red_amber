@@ -144,6 +144,43 @@ module RedAmber
       Vector.create(datum.value)
     end
 
+    # Returns numerical rank of self.
+    #   - Nil values are considered greater than any value.
+    #   - NaN values are considered greater than any value but smaller than nil values.
+    #   - Tiebreakers are ranked in order of appearance.
+    #   - `RankOptions` in C++ function is not implemented in C GLib yet.
+    #     This method is currently fixed to the default behavior.
+    #
+    # @return [Vector] 0-based rank of self (0...size in range).
+    # @example rank of float Vector
+    #   fv = Vector.new(0.1, nil, Float::NAN, 0.2, 0.1); fv
+    #   # =>
+    #   #<RedAmber::Vector(:double, size=5):0x000000000000c65c>
+    #   [0.1, nil, NaN, 0.2, 0.1]
+    #
+    #   fv.rank
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
+    #   [0, 4, 3, 2, 1]
+    #
+    # @example rank of string Vector
+    #   sv = Vector.new("A", "B", nil, "A", "C"); sv
+    #   # =>
+    #   #<RedAmber::Vector(:string, size=5):0x0000000000003854>
+    #   ["A", "B", nil, "A", "C"]
+    #
+    #   sv.rank
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
+    #   [0, 2, 4, 1, 3]
+    #
+    # @since 0.3.1
+    #
+    def rank
+      datum = Arrow::Function.find(:rank).execute([data])
+      Vector.create(datum.value) - 1
+    end
+
     private
 
     # Accepts indices by numeric Vector

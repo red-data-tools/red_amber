@@ -6,19 +6,6 @@ class VectorTest < Test::Unit::TestCase
   include TestHelper
   include RedAmber
 
-  sub_test_case('drop_nil') do
-    test 'empty vector' do
-      assert_equal_array [], Vector.new([]).drop_nil
-    end
-
-    test 'drop_nil' do
-      assert_equal_array [1, 2], Vector.new([1, 2, nil]).drop_nil
-      assert_equal_array %w[A B], Vector.new(['A', 'B', nil]).drop_nil
-      assert_equal_array [true, false], Vector.new([true, false, nil]).drop_nil
-      assert_equal_array [], Vector.new([nil, nil, nil]).drop_nil
-    end
-  end
-
   sub_test_case('#take(indices)') do
     setup do
       @string = Vector.new(%w[A B C D E])
@@ -207,6 +194,29 @@ class VectorTest < Test::Unit::TestCase
       assert_equal 3, vector.index(nil)
       assert_nil vector.index(0) # out of range
       assert_equal 1, vector.index(2.0) # types are ignored
+    end
+  end
+
+  sub_test_case '#drop_nil' do
+    test 'empty vector' do
+      assert_equal_array [], Vector.new([]).drop_nil
+    end
+
+    test '#drop_nil' do
+      assert_equal_array [1, 2], Vector.new([1, 2, nil]).drop_nil
+      assert_equal_array %w[A B], Vector.new(['A', 'B', nil]).drop_nil
+      assert_equal_array [true, false], Vector.new([true, false, nil]).drop_nil
+      assert_equal_array [], Vector.new([nil, nil, nil]).drop_nil
+    end
+  end
+
+  sub_test_case '#rank' do
+    test '#rank default option' do
+      float = [0.1, nil, Float::NAN, 0.2, 0.1]
+      string = ['A', nil, 'C', 'B', 'A']
+      expect = [0, 4, 3, 2, 1]
+      assert_equal_array expect, Vector.new(float).rank
+      assert_equal_array expect, Vector.new(string).rank
     end
   end
 end

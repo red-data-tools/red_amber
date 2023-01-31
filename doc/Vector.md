@@ -626,3 +626,40 @@ vector.merge(other, sep: '')
 #<RedAmber::Vector(:string, size=3):0x0000000000038b80>
 ["ab", "cd", "ef"]
 ```
+
+### `rank`
+
+Returns numerical rank of self.
+- Nil values are considered greater than any value.
+- NaN values are considered greater than any value but smaller than nil values.
+- Tiebreakers are ranked in order of appearance.
+- `RankOptions` in C++ function is not implemented in C GLib yet.
+  This method is currently fixed to the default behavior.
+
+Returns 0-based rank of self (0...size in range) as a Vector.
+
+Rank of float Vector
+```ruby
+fv = Vector.new(0.1, nil, Float::NAN, 0.2, 0.1); fv
+# =>
+#<RedAmber::Vector(:double, size=5):0x000000000000c65c>
+[0.1, nil, NaN, 0.2, 0.1]
+
+fv.rank
+# =>
+#<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
+[0, 4, 3, 2, 1]
+```
+
+Rank of string Vector
+```ruby
+sv = Vector.new("A", "B", nil, "A", "C"); sv
+# =>
+#<RedAmber::Vector(:string, size=5):0x0000000000003854>
+["A", "B", nil, "A", "C"]
+
+sv.rank
+# =>
+#<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
+[0, 2, 4, 1, 3]
+```
