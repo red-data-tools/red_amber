@@ -977,7 +977,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('module_function .arrow_doc') do
+  sub_test_case 'module_function .arrow_doc' do
     test 'add' do
       expected = <<~OUT
         add(x, y): Add the arguments element-wise
@@ -986,7 +986,7 @@ class VectorFunctionTest < Test::Unit::TestCase
         Use function "add_checked" if you want overflow
         to return an error.
       OUT
-      assert_equal expected.chomp, VectorFunctions.arrow_doc(:add).to_s
+      assert_equal expected.chomp, ArrowFunction.arrow_doc(:add).to_s
     end
   end
 end
