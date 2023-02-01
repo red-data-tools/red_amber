@@ -144,6 +144,42 @@ module RedAmber
       Vector.create(datum.value)
     end
 
+    # Arrange values in Vector.
+    #
+    # @param order [Symbol] sort order.
+    #   - `:+`, `:ascending` or without argument will sort in increasing order.
+    #   - `:-` or `:descending` will sort in decreasing order.
+    # @return [Vector] sorted Vector.
+    # @example sort in increasing order (default)
+    #   Vector.new(%w[B D A E C]).sort
+    #   # same as #sort(:+)
+    #   # same as #sort(:ascending)
+    #   # =>
+    #   #<RedAmber::Vector(:string, size=5):0x000000000000c134>
+    #   ["A", "B", "C", "D", "E"]
+    #
+    # @example sort in decreasing order
+    #   Vector.new(%w[B D A E C]).sort(:-)
+    #   # same as #sort(:descending)
+    #   # =>
+    #   #<RedAmber::Vector(:string, size=5):0x000000000000c148>
+    #   ["E", "D", "C", "B", "A"]
+    #
+    # @since 0.3.1
+    #
+    def sort(order = :ascending)
+      order =
+        case order.to_sym
+        when :+, :ascending, :increasing
+          :ascending
+        when :-, :descending, :decreasing
+          :descending
+        else
+          raise VectorArgumentError, "illegal order option: #{order}"
+        end
+      take(sort_indices(order: order))
+    end
+
     # Returns numerical rank of self.
     #   - Nil values are considered greater than any value.
     #   - NaN values are considered greater than any value but smaller than nil values.

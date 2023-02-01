@@ -210,6 +210,32 @@ class VectorTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#sort' do
+    setup do
+      @source = Vector.new(%w[B D A E C])
+      @ascending = [*'A'..'E']
+    end
+
+    test '#sort in ascending order' do
+      assert_equal_array @ascending, @source.sort
+      assert_equal_array @ascending, @source.sort(:+)
+      assert_equal_array @ascending, @source.sort('+')
+      assert_equal_array @ascending, @source.sort(:ascending)
+      assert_equal_array @ascending, @source.sort(:increasing)
+    end
+
+    test '#sort in descending order' do
+      assert_equal_array @ascending.reverse, @source.sort(:-)
+      assert_equal_array @ascending.reverse, @source.sort('-')
+      assert_equal_array @ascending.reverse, @source.sort(:descending)
+      assert_equal_array @ascending.reverse, @source.sort(:decreasing)
+    end
+
+    test '#sort with illegal argument' do
+      assert_raise(VectorArgumentError) { @source.sort :red_amber }
+    end
+  end
+
   sub_test_case '#rank' do
     test '#rank default option' do
       float = [0.1, nil, Float::NAN, 0.2, 0.1]

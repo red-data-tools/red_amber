@@ -749,3 +749,25 @@ v.sample(2.0)
 #<RedAmber::Vector(:string, size=16):0x00000000000233e8>
 ["H", "B", "C", "B", "C", "A", "F", "A", "E", "C", "H", "F", "F", "A", ... ]
 ```
+
+### `sort(integer_or_proportion)`
+
+Arrange values in Vector.
+
+- `:+`, `:ascending` or without argument will sort in increasing order.
+- `:-` or `:descending` will sort in decreasing order.
+
+```ruby
+Vector.new(%w[B D A E C]).sort
+# same as #sort(:+)
+# same as #sort(:ascending)
+# =>
+#<RedAmber::Vector(:string, size=5):0x000000000000c134>
+["A", "B", "C", "D", "E"]
+
+Vector.new(%w[B D A E C]).sort(:-)
+# same as #sort(:descending)
+# =>
+#<RedAmber::Vector(:string, size=5):0x000000000000c148>
+["E", "D", "C", "B", "A"]
+```
