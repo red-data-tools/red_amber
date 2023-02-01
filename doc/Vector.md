@@ -626,3 +626,148 @@ vector.merge(other, sep: '')
 #<RedAmber::Vector(:string, size=3):0x0000000000038b80>
 ["ab", "cd", "ef"]
 ```
+
+### `rank`
+
+Returns numerical rank of self.
+- Nil values are considered greater than any value.
+- NaN values are considered greater than any value but smaller than nil values.
+- Tiebreakers are ranked in order of appearance.
+- `RankOptions` in C++ function is not implemented in C GLib yet.
+  This method is currently fixed to the default behavior.
+
+Returns 0-based rank of self (0...size in range) as a Vector.
+
+Rank of float Vector
+```ruby
+fv = Vector.new(0.1, nil, Float::NAN, 0.2, 0.1); fv
+# =>
+#<RedAmber::Vector(:double, size=5):0x000000000000c65c>
+[0.1, nil, NaN, 0.2, 0.1]
+
+fv.rank
+# =>
+#<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
+[0, 4, 3, 2, 1]
+```
+
+Rank of string Vector
+```ruby
+sv = Vector.new("A", "B", nil, "A", "C"); sv
+# =>
+#<RedAmber::Vector(:string, size=5):0x0000000000003854>
+["A", "B", nil, "A", "C"]
+
+sv.rank
+# =>
+#<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
+[0, 2, 4, 1, 3]
+```
+
+### `sample(integer_or_proportion)`
+
+Pick up elements at random.
+
+#### `sample` : without agrument
+
+Return a randomly selected element.
+This is one of an aggregation function.
+
+```ruby
+v = Vector.new('A'..'H'); v
+# =>
+#<RedAmber::Vector(:string, size=8):0x0000000000011b20>
+["A", "B", "C", "D", "E", "F", "G", "H"]
+
+v.sample
+# =>
+"C"
+```
+
+#### `sample(n)` : n as a Integer
+
+Pick up n elements at random.
+
+- Param `n` is number of elements to pick.
+- `n` is a positive Integer
+- If `n` is smaller or equal to size, elements are picked by non-repeating.
+- If `n` is greater than `size`, elements are picked repeatedly.
+@return [Vector] sampled elements.
+- If `n == 1` (in case of `sample(1)`), it returns a Vector of `size == 1` not a scalar.
+
+```ruby
+v.sample(1)
+# =>
+#<RedAmber::Vector(:string, size=1):0x000000000001a3b0>
+["H"]
+```
+
+Sample same size of self: every element is picked in random order.
+
+```ruby
+v.sample(8)
+# =>
+#<RedAmber::Vector(:string, size=8):0x000000000001bda0>
+["H", "D", "B", "F", "E", "A", "G", "C"]
+```
+
+Over sampling: "E" and "A" are sampled repeatedly.
+
+```ruby
+v.sample(9)
+# =>
+#<RedAmber::Vector(:string, size=9):0x000000000001d790>
+["E", "E", "A", "D", "H", "C", "A", "F", "H"]
+```
+
+#### `sample(prop)` : prop as a Float
+
+Pick up elements by proportion `prop` at random.
+
+- `prop` is proportion of elements to pick.
+- `prop` is a positive Float.
+- Absolute number of elements to pick:`prop*size` is rounded (by `half: :up`).
+- If `prop` is smaller or equal to 1.0, elements are picked by non-repeating.
+- If `prop` is greater than 1.0, some elements are picked repeatedly.
+- Returns sampled elements by a Vector.
+- If picked element is only one, it returns a Vector of `size == 1` not a scalar.
+
+Sample same size of self: every element is picked in random order.
+
+```ruby
+v.sample(1.0)
+# =>
+#<RedAmber::Vector(:string, size=8):0x000000000001bda0>
+["D", "H", "F", "C", "A", "B", "E", "G"]
+```
+
+2 times over sampling.
+
+```ruby
+v.sample(2.0)
+# =>
+#<RedAmber::Vector(:string, size=16):0x00000000000233e8>
+["H", "B", "C", "B", "C", "A", "F", "A", "E", "C", "H", "F", "F", "A", ... ]
+```
+
+### `sort(integer_or_proportion)`
+
+Arrange values in Vector.
+
+- `:+`, `:ascending` or without argument will sort in increasing order.
+- `:-` or `:descending` will sort in decreasing order.
+
+```ruby
+Vector.new(%w[B D A E C]).sort
+# same as #sort(:+)
+# same as #sort(:ascending)
+# =>
+#<RedAmber::Vector(:string, size=5):0x000000000000c134>
+["A", "B", "C", "D", "E"]
+
+Vector.new(%w[B D A E C]).sort(:-)
+# same as #sort(:descending)
+# =>
+#<RedAmber::Vector(:string, size=5):0x000000000000c148>
+["E", "D", "C", "B", "A"]
+```

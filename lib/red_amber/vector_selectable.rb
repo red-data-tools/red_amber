@@ -144,6 +144,176 @@ module RedAmber
       Vector.create(datum.value)
     end
 
+    # Arrange values in Vector.
+    #
+    # @param order [Symbol] sort order.
+    #   - `:+`, `:ascending` or without argument will sort in increasing order.
+    #   - `:-` or `:descending` will sort in decreasing order.
+    # @return [Vector] sorted Vector.
+    # @example sort in increasing order (default)
+    #   Vector.new(%w[B D A E C]).sort
+    #   # same as #sort(:+)
+    #   # same as #sort(:ascending)
+    #   # =>
+    #   #<RedAmber::Vector(:string, size=5):0x000000000000c134>
+    #   ["A", "B", "C", "D", "E"]
+    #
+    # @example sort in decreasing order
+    #   Vector.new(%w[B D A E C]).sort(:-)
+    #   # same as #sort(:descending)
+    #   # =>
+    #   #<RedAmber::Vector(:string, size=5):0x000000000000c148>
+    #   ["E", "D", "C", "B", "A"]
+    #
+    # @since 0.3.1
+    #
+    def sort(order = :ascending)
+      order =
+        case order.to_sym
+        when :+, :ascending, :increasing
+          :ascending
+        when :-, :descending, :decreasing
+          :descending
+        else
+          raise VectorArgumentError, "illegal order option: #{order}"
+        end
+      take(sort_indices(order: order))
+    end
+
+    # Returns numerical rank of self.
+    #   - Nil values are considered greater than any value.
+    #   - NaN values are considered greater than any value but smaller than nil values.
+    #   - Tiebreakers are ranked in order of appearance.
+    #   - `RankOptions` in C++ function is not implemented in C GLib yet.
+    #     This method is currently fixed to the default behavior.
+    #
+    # @return [Vector] 0-based rank of self (0...size in range).
+    # @example rank of float Vector
+    #   fv = Vector.new(0.1, nil, Float::NAN, 0.2, 0.1); fv
+    #   # =>
+    #   #<RedAmber::Vector(:double, size=5):0x000000000000c65c>
+    #   [0.1, nil, NaN, 0.2, 0.1]
+    #
+    #   fv.rank
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
+    #   [0, 4, 3, 2, 1]
+    #
+    # @example rank of string Vector
+    #   sv = Vector.new("A", "B", nil, "A", "C"); sv
+    #   # =>
+    #   #<RedAmber::Vector(:string, size=5):0x0000000000003854>
+    #   ["A", "B", nil, "A", "C"]
+    #
+    #   sv.rank
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
+    #   [0, 2, 4, 1, 3]
+    #
+    # @since 0.3.1
+    #
+    def rank
+      datum = Arrow::Function.find(:rank).execute([data])
+      Vector.create(datum.value) - 1
+    end
+
+    # Pick up elements at random.
+    #
+    # @overload sample()
+    #   Return a randomly selected element.
+    #   This is one of an aggregation function.
+    #
+    #   @return [scalar] one of an element in self.
+    #   @example sample a element
+    #     v = Vector.new('A'..'H'); v
+    #     # =>
+    #     #<RedAmber::Vector(:string, size=8):0x0000000000011b20>
+    #     ["A", "B", "C", "D", "E", "F", "G", "H"]
+    #
+    #     v.sample
+    #     # =>
+    #     "C"
+    #
+    # @overload sample(n)
+    #   Pick up n elements at random.
+    #
+    #   @param n [Integer] positive number of elements to pick.
+    #     If n is smaller or equal to size, elements are picked by non-repeating.
+    #     If n is greater than `size`, elements are picked repeatedly.
+    #   @return [Vector] sampled elements.
+    #     If n == 1 (in case of `sample(1)`), it returns a Vector of size == 1
+    #     not a scalar.
+    #   @example sample Vector in size 1
+    #     v.sample(1)
+    #     # =>
+    #     #<RedAmber::Vector(:string, size=1):0x000000000001a3b0>
+    #     ["H"]
+    #
+    #   @example sample same size of self: every element is picked in random order
+    #     v.sample(8)
+    #     # =>
+    #     #<RedAmber::Vector(:string, size=8):0x000000000001bda0>
+    #     ["H", "D", "B", "F", "E", "A", "G", "C"]
+    #
+    #   @example over sampling: "E" and "A" are sampled repeatedly
+    #     v.sample(9)
+    #     # =>
+    #     #<RedAmber::Vector(:string, size=9):0x000000000001d790>
+    #     ["E", "E", "A", "D", "H", "C", "A", "F", "H"]
+    #
+    # @overload sample(prop)
+    #   Pick up elements by proportion `prop` at random.
+    #
+    #   @param prop [Float] positive proportion of elements to pick.
+    #     Absolute number of elements to pick:`prop*size` is rounded (by `half: :up``).
+    #     If prop is smaller or equal to 1.0, elements are picked by non-repeating.
+    #     If prop is greater than 1.0, some elements are picked repeatedly.
+    #   @return [Vector] sampled elements.
+    #     If picked element is only one, it returns a Vector of size == 1
+    #     not a scalar.
+    #   @example sample same size of self: every element is picked in random order
+    #     v.sample(1.0)
+    #     # =>
+    #     #<RedAmber::Vector(:string, size=8):0x000000000001bda0>
+    #     ["D", "H", "F", "C", "A", "B", "E", "G"]
+    #
+    #   @example 2 times over sampling
+    #     v.sample(2.0)
+    #     # =>
+    #     #<RedAmber::Vector(:string, size=16):0x00000000000233e8>
+    #     ["H", "B", "C", "B", "C", "A", "F", "A", "E", "C", "H", "F", "F", "A", ... ]
+    #
+    # @since 0.3.1
+    #
+    def sample(n_or_prop = nil)
+      require 'arrow-numo-narray'
+
+      return nil if size == 0
+
+      n_sample =
+        case n_or_prop
+        in Integer
+          n_or_prop
+        in Float
+          (n_or_prop * size).round
+        in nil
+          return to_a.sample
+        else
+          raise VectorArgumentError, "must specify Integer or Float but #{n_or_prop}"
+        end
+      if n_or_prop < 0
+        raise VectorArgumentError, '#sample does not accept negative number.'
+      end
+      return Vector.new([]) if n_sample == 0
+
+      over_sample = [8 * size, n_sample].max
+      over_size = n_sample > size ? n_sample / size * size * 2 : size
+      over_vector =
+        Vector.create(Numo::UInt32.new(over_size).rand(over_sample).to_arrow_array)
+      indices = over_vector.rank.take(*0...n_sample)
+      take(indices - ((indices / size) * size))
+    end
+
     private
 
     # Accepts indices by numeric Vector
