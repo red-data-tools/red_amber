@@ -70,4 +70,18 @@ module RedAmber
       end
     end
   end
+
+  # Helper for Arrow Functions
+  module ArrowFunction
+    module_function
+
+    def find(function_name)
+      Arrow::Function.find(function_name)
+    end
+
+    def arrow_doc(function_name)
+      f = find(function_name)
+      "#{f}\n#{'-' * function_name.size}\n#{f.doc.description}"
+    end
+  end
 end

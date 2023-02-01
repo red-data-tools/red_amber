@@ -5,10 +5,10 @@ module RedAmber
   #   @data : holds Arrow::ChunkedArray
   class Vector
     # mix-in
-    include VectorFunctions
+    include Helper
+    include ArrowFunction
     include VectorUpdatable
     include VectorSelectable
-    include Helper
 
     using RefineArrayLike
 
@@ -196,6 +196,39 @@ module RedAmber
 
     def has_nil?
       is_nil.any
+    end
+
+    def coerce(other)
+      [Vector.new(Array(other) * size), self]
+    end
+
+    private # =======
+
+    def exec_func_unary(function, options)
+      options = nil if options.empty?
+      find(function).execute([data], options)
+    end
+
+    def exec_func_binary(function, other, options)
+      options = nil if options.empty?
+      case other
+      when Vector
+        find(function).execute([data, other.data], options)
+      when Arrow::Array, Arrow::ChunkedArray, Arrow::Scalar,
+           Array, Numeric, String, TrueClass, FalseClass
+        find(function).execute([data, other], options)
+      end
+    end
+
+    def get_scalar(datum)
+      output = datum.value
+      case output
+      when Arrow::StringScalar then output.to_s
+      when Arrow::StructScalar
+        output.value.map { |s| s.is_a?(Arrow::StringScalar) ? s.to_s : s.value }
+      else
+        output.value
+      end
     end
   end
 end
