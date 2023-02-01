@@ -238,6 +238,78 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#rank-instance_method" title="#rank (instance method)">#<strong>rank</strong>  &#x21d2; Vector </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns numerical rank of self.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sample-instance_method" title="#sample (instance method)">#<strong>sample</strong>(n_or_prop = nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Pick up elements at random.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sort-instance_method" title="#sort (instance method)">#<strong>sort</strong>(order = :ascending)  &#x21d2; Vector </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Arrange values in Vector.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#take-instance_method" title="#take (instance method)">#<strong>take</strong>(*indices) {|Array&lt;Numeric&gt;, Vector| ... } &#x21d2; Vector </a>
     
 
@@ -731,6 +803,615 @@
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="rank-instance_method">
+  
+    #<strong>rank</strong>  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns numerical rank of self.</p>
+
+<pre class="code ruby"><code class="ruby">- Nil values are considered greater than any value.
+- NaN values are considered greater than any value but smaller than nil values.
+- Tiebreakers are ranked in order of appearance.
+- `RankOptions` in C++ function is not implemented in C GLib yet.
+  This method is currently fixed to the default behavior.
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>rank of float Vector</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='float'>0.1</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='const'>Float</span><span class='op'>::</span><span class='const'>NAN</span><span class='comma'>,</span> <span class='float'>0.2</span><span class='comma'>,</span> <span class='float'>0.1</span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='id identifier rubyid_fv'>fv</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:double, size=5):0x000000000000c65c&gt;
+</span><span class='lbracket'>[</span><span class='float'>0.1</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='const'>NaN</span><span class='comma'>,</span> <span class='float'>0.2</span><span class='comma'>,</span> <span class='float'>0.1</span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_rank'>rank</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint64, size=5):0x0000000000003868&gt;
+</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>rank of string Vector</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_sv'>sv</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='id identifier rubyid_sv'>sv</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=5):0x0000000000003854&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_sv'>sv</span><span class='period'>.</span><span class='id identifier rubyid_rank'>rank</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint64, size=5):0x0000000000003868&gt;
+</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span></code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>0-based rank of self (0…size in range).</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.3.1</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+215
+216
+217
+218</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_selectable.rb', line 215</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_rank'>rank</span>
+  <span class='id identifier rubyid_datum'>datum</span> <span class='op'>=</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Function</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:rank</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="Vector.html#create-class_method" title="RedAmber::Vector.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_datum'>datum</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span> <span class='op'>-</span> <span class='int'>1</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sample-instance_method">
+  
+    
+      <span class="overload">#<strong>sample</strong>  &#x21d2; <tt>scalar</tt> </span>
+    
+      <span class="overload">#<strong>sample</strong>(n)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+    
+      <span class="overload">#<strong>sample</strong>(prop)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+    
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Pick up elements at random.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>sample</strong>  &#x21d2; <tt>scalar</tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Return a randomly selected element. This is one of an aggregation function.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>sample a element</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_v'>v</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>A</span><span class='tstring_end'>&#39;</span></span><span class='op'>..</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>H</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='id identifier rubyid_v'>v</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=8):0x0000000000011b20&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>F</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>G</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span>
+<span class='comment'># =&gt;
+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span></code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>scalar</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>one of an element in self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>sample</strong>(n)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Pick up n elements at random.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>sample Vector in size 1</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=1):0x000000000001a3b0&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>sample same size of self: every element is picked in random order</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='int'>8</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=8):0x000000000001bda0&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>F</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>G</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>over sampling: “E” and “A” are sampled repeatedly</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='int'>9</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=9):0x000000000001d790&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>F</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>n</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>positive number of elements to pick. If n is smaller or equal to size, elements are picked by non-repeating. If n is greater than ‘size`, elements are picked repeatedly.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>sampled elements. If n == 1 (in case of ‘sample(1)`), it returns a Vector of size == 1 not a scalar.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>sample</strong>(prop)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Pick up elements by proportion ‘prop` at random.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>sample same size of self: every element is picked in random order</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='float'>1.0</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=8):0x000000000001bda0&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>F</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>G</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>2 times over sampling</p>
+</div></p>
+      
+      <pre class="example code"><code>v.sample(2.0)
+# =&gt;
+#&lt;RedAmber::Vector(:string, size=16):0x00000000000233e8&gt;
+[&quot;H&quot;, &quot;B&quot;, &quot;C&quot;, &quot;B&quot;, &quot;C&quot;, &quot;A&quot;, &quot;F&quot;, &quot;A&quot;, &quot;E&quot;, &quot;C&quot;, &quot;H&quot;, &quot;F&quot;, &quot;F&quot;, &quot;A&quot;, ... ]</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>prop</span>
+      
+      
+        <span class='type'>(<tt>Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>positive proportion of elements to pick. Absolute number of elements to pick:‘prop*size` is rounded (by `half: :up“). If prop is smaller or equal to 1.0, elements are picked by non-repeating. If prop is greater than 1.0, some elements are picked repeatedly.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>sampled elements. If picked element is only one, it returns a Vector of size == 1 not a scalar.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.3.1</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_selectable.rb', line 288</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='id identifier rubyid_n_or_prop'>n_or_prop</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>arrow-numo-narray</span><span class='tstring_end'>&#39;</span></span>
+
+  <span class='kw'>return</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='id identifier rubyid_size'>size</span> <span class='op'>==</span> <span class='int'>0</span>
+
+  <span class='id identifier rubyid_n_sample'>n_sample</span> <span class='op'>=</span>
+    <span class='kw'>case</span> <span class='id identifier rubyid_n_or_prop'>n_or_prop</span>
+    <span class='kw'>in</span> <span class='const'>Integer</span>
+      <span class='id identifier rubyid_n_or_prop'>n_or_prop</span>
+    <span class='kw'>in</span> <span class='const'>Float</span>
+      <span class='lparen'>(</span><span class='id identifier rubyid_n_or_prop'>n_or_prop</span> <span class='op'>*</span> <span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span>
+    <span class='kw'>in</span> <span class='kw'>nil</span>
+      <span class='kw'>return</span> <span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="VectorArgumentError.html" title="RedAmber::VectorArgumentError (class)">VectorArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>must specify Integer or Float but </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_n_or_prop'>n_or_prop</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_n_or_prop'>n_or_prop</span> <span class='op'>&lt;</span> <span class='int'>0</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="VectorArgumentError.html" title="RedAmber::VectorArgumentError (class)">VectorArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>#sample does not accept negative number.</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+  <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_n_sample'>n_sample</span> <span class='op'>==</span> <span class='int'>0</span>
+
+  <span class='id identifier rubyid_over_sample'>over_sample</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>8</span> <span class='op'>*</span> <span class='id identifier rubyid_size'>size</span><span class='comma'>,</span> <span class='id identifier rubyid_n_sample'>n_sample</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span>
+  <span class='id identifier rubyid_over_size'>over_size</span> <span class='op'>=</span> <span class='id identifier rubyid_n_sample'>n_sample</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_size'>size</span> <span class='op'>?</span> <span class='id identifier rubyid_n_sample'>n_sample</span> <span class='op'>/</span> <span class='id identifier rubyid_size'>size</span> <span class='op'>*</span> <span class='id identifier rubyid_size'>size</span> <span class='op'>*</span> <span class='int'>2</span> <span class='op'>:</span> <span class='id identifier rubyid_size'>size</span>
+  <span class='id identifier rubyid_over_vector'>over_vector</span> <span class='op'>=</span>
+    <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="Vector.html#create-class_method" title="RedAmber::Vector.create (method)">create</a></span></span><span class='lparen'>(</span><span class='const'>Numo</span><span class='op'>::</span><span class='const'>UInt32</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_over_size'>over_size</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_rand'>rand</span><span class='lparen'>(</span><span class='id identifier rubyid_over_sample'>over_sample</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_arrow_array'>to_arrow_array</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_indices'>indices</span> <span class='op'>=</span> <span class='id identifier rubyid_over_vector'>over_vector</span><span class='period'>.</span><span class='id identifier rubyid_rank'>rank</span><span class='period'>.</span><span class='id identifier rubyid_take'>take</span><span class='lparen'>(</span><span class='op'>*</span><span class='int'>0</span><span class='op'>...</span><span class='id identifier rubyid_n_sample'>n_sample</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_take'>take</span><span class='lparen'>(</span><span class='id identifier rubyid_indices'>indices</span> <span class='op'>-</span> <span class='lparen'>(</span><span class='lparen'>(</span><span class='id identifier rubyid_indices'>indices</span> <span class='op'>/</span> <span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sort-instance_method">
+  
+    #<strong>sort</strong>(order = :ascending)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Arrange values in Vector.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>sort in increasing order (default)</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>D</span><span class='words_sep'> </span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>E</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
+<span class='comment'># same as #sort(:+)
+</span><span class='comment'># same as #sort(:ascending)
+</span><span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=5):0x000000000000c134&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>sort in decreasing order</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>D</span><span class='words_sep'> </span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>E</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lparen'>(</span><span class='symbol'>:-</span><span class='rparen'>)</span>
+<span class='comment'># same as #sort(:descending)
+</span><span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=5):0x000000000000c148&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>order</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>:ascending</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>sort order.</p>
+<ul><li>
+<p>‘:+`, `:ascending` or without argument will sort in increasing order.</p>
+</li><li>
+<p>‘:-` or `:descending` will sort in decreasing order.</p>
+</li></ul>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>sorted Vector.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.3.1</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_selectable.rb', line 170</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sort'>sort</span><span class='lparen'>(</span><span class='id identifier rubyid_order'>order</span> <span class='op'>=</span> <span class='symbol'>:ascending</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_order'>order</span> <span class='op'>=</span>
+    <span class='kw'>case</span> <span class='id identifier rubyid_order'>order</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
+    <span class='kw'>when</span> <span class='symbol'>:+</span><span class='comma'>,</span> <span class='symbol'>:ascending</span><span class='comma'>,</span> <span class='symbol'>:increasing</span>
+      <span class='symbol'>:ascending</span>
+    <span class='kw'>when</span> <span class='symbol'>:-</span><span class='comma'>,</span> <span class='symbol'>:descending</span><span class='comma'>,</span> <span class='symbol'>:decreasing</span>
+      <span class='symbol'>:descending</span>
+    <span class='kw'>else</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="VectorArgumentError.html" title="RedAmber::VectorArgumentError (class)">VectorArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>illegal order option: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_order'>order</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>end</span>
+  <span class='id identifier rubyid_take'>take</span><span class='lparen'>(</span><span class='id identifier rubyid_sort_indices'>sort_indices</span><span class='lparen'>(</span><span class='label'>order:</span> <span class='id identifier rubyid_order'>order</span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="take-instance_method">
   
     #<strong>take</strong>(*indices) {|Array&lt;Numeric&gt;, Vector| ... } &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> 
@@ -882,7 +1563,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  1 12:05:05 2023 by
+  Generated on Wed Feb  1 22:02:45 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>
