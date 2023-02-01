@@ -6,6 +6,16 @@ class VectorTest < Test::Unit::TestCase
   include TestHelper
   include RedAmber
 
+  sub_test_case 'self.aggregate?' do
+    test 'self.aggregate?(:mean)' do
+      assert_true Vector.aggregate?(:mean)
+    end
+
+    test 'self.aggregate?(:round)' do
+      assert_false Vector.aggregate?(:round)
+    end
+  end
+
   sub_test_case '#initialize' do
     test 'initialize by empty array' do
       assert_equal_array [], Vector.new([])
@@ -237,6 +247,30 @@ class VectorTest < Test::Unit::TestCase
     test 'double default' do
       assert_equal 'RedAmber::Vector(:double, size=4)', @double.inspect
       assert_equal 'RedAmber::Vector(:string, size=16)', @string.inspect
+    end
+  end
+
+  sub_test_case '#propagate' do
+    setup do
+      @vector = Vector.new(1, 2, 3, 4)
+      @expected = [2.5, 2.5, 2.5, 2.5]
+    end
+
+    test 'propagate mean' do
+      assert_equal_array @expected, @vector.propagate(:mean)
+    end
+
+    test 'propagate by block' do
+      # same as @vector.propagate { |v| v.mean }
+      assert_equal_array @expected, @vector.propagate(&:mean)
+    end
+
+    test 'propagate with element-wise method' do
+      assert_raise(VectorArgumentError) { @vector.propagate(:round) }
+    end
+
+    test 'propagate with argument and block' do
+      assert_raise(VectorArgumentError) { @vector.propagate(:mean) { 2.5 } }
     end
   end
 end

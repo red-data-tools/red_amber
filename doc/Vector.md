@@ -182,6 +182,31 @@ boolean.all(skip_nulls: true) #=> true
 boolean.all(skip_nulls: false) #=> false
 ```
 
+### Check if `function` is an aggregation function: `Vector.aggregate?(function)`
+
+Return true if `function` is an unary aggregation function. Otherwise return false.
+
+### Treat aggregation function as an element-wise function: `propagate(function)`
+
+Spread the return value of an aggregate function as if it is a element-wise function.
+
+```ruby
+vec = Vector.new(1, 2, 3, 4)
+vec.propagate(:mean)
+# =>
+#<RedAmber::Vector(:double, size=4):0x000000000001985c>
+[2.5, 2.5, 2.5, 2.5]
+```
+
+`#propagate` also accepts a block to compute with a customized aggregation function yielding a scalar.
+
+```ruby
+vec.propagate { |v| v.mean.round }
+# =>
+#<RedAmber::Vector(:uint8, size=4):0x000000000000cb98>                     
+[3, 3, 3, 3]
+```
+
 ### Unary element-wise: `vector.func => vector`
 
   ![unary element-wise](doc/image/../../image/vector/unary_element_wise.png)

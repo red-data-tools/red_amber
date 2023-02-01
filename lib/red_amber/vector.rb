@@ -20,6 +20,26 @@ module RedAmber
       instance
     end
 
+    # Return true if it is an aggregation function.
+    #
+    # @param function [Symbol] function name to test.
+    # @return [Booleans] true if function is a aggregation function, otherwise false.
+    #
+    # @example
+    #   Vector.aggregate?(:mean) # => true
+    #
+    #   Vector.aggregate?(:round) # => false
+    #
+    # @since 0.3.1
+    #
+    def self.aggregate?(function)
+      %i[
+        all all? any any? approximate_median count count_distinct count_uniq
+        max mean median min min_max product quantile sd std stddev sum
+        unbiased_variance var variance
+      ].include?(function.to_sym)
+    end
+
     # Create a Vector.
     #
     # @note default is headless Vector and '@key == nil'
@@ -200,6 +220,56 @@ module RedAmber
 
     def coerce(other)
       [Vector.new(Array(other) * size), self]
+    end
+
+    # Spread the return value of an aggregate function as if
+    #   it is a element-wise function.
+    #
+    # @overload propagate(function)
+    #   Returns a Vector of same size as self spreading the value from function.
+    #
+    #   @param function [Symbol] a name of aggregation function for self.
+    #     Return value of the function must be a scalar.
+    #   @return [Vector] Returns a Vector that is the same size as self
+    #     and such that all elements are the same as the result of aggregation `function`.
+    #   @example propagate by an aggragation function name
+    #     vec = Vector.new(1, 2, 3, 4)
+    #     vec.propagate(:mean)
+    #     # =>
+    #     #<RedAmber::Vector(:double, size=4):0x000000000001985c>
+    #     [2.5, 2.5, 2.5, 2.5]
+    #
+    # @overload propagate
+    #   Returns a Vector of same size as self spreading the value from block.
+    #
+    #   @yield [self] gives self to the block.
+    #   @yieldparam self [Vector] self.
+    #   @yieldreturn [scalar] a scalar value.
+    #   @return [Vector] Returns a Vector that is the same size as self
+    #     and such that all elements are the same as the yielded value from the block.
+    #   @example propagate by a block
+    #     vec.propagate { |v| v.mean.round }
+    #     # =>
+    #     #<RedAmber::Vector(:uint8, size=4):0x000000000000cb98>                     
+    #     [3, 3, 3, 3]
+    #
+    # @since 0.3.1
+    #
+    def propagate(function = nil, &block)
+      value =
+        if block
+          raise VectorArgumentError, "can't specify both function and block" if function
+
+          yield self
+        else
+          function = function&.to_sym
+          unless function && respond_to?(function) && Vector.aggregate?(function)
+            raise VectorArgumentError, "illegal function: #{function.inspect}"
+          end
+
+          send(function)
+        end
+      Vector.new([value] * size)
     end
 
     private # =======
