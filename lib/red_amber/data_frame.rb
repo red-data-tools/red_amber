@@ -228,25 +228,6 @@ module RedAmber
       @vectors || @vectors = init_instance_vars(:vectors)
     end
 
-    # Returns row indices (start...(size+start)) in a Vector.
-    #
-    # @param start [Object]
-    #   Object which have `#succ` method.
-    #
-    # @return [Array]
-    #   A Vector of row indices.
-    #
-    # @example
-    #   (when self.size == 5)
-    #   - indices #=> Vector[0, 1, 2, 3, 4]
-    #   - indices(1) #=> Vector[1, 2, 3, 4, 5]
-    #   - indices('a') #=> Vector['a', 'b', 'c', 'd', 'e']
-    #
-    def indices(start = 0)
-      Vector.new((start..).take(size))
-    end
-    alias_method :indexes, :indices
-
     # Returns column-oriented data in a Hash.
     #
     # @return [Hash]
