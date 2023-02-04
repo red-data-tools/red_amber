@@ -250,6 +250,20 @@ class VectorTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case 'coerce' do
+    test '#add' do
+      array = [1, 2, 3, nil]
+      vector = Vector.new(array)
+      assert_equal array, (0 + vector).to_a
+    end
+
+    test '#multiply' do
+      vector = Vector.new([1, 2, 3, nil])
+      assert_equal [-1.0, -2.0, -3.0, nil], (-1.0 * vector).to_a
+      assert_equal :double, (-1.0 * vector).type
+    end
+  end
+
   sub_test_case '#propagate' do
     setup do
       @vector = Vector.new(1, 2, 3, 4)
@@ -271,6 +285,19 @@ class VectorTest < Test::Unit::TestCase
 
     test 'propagate with argument and block' do
       assert_raise(VectorArgumentError) { @vector.propagate(:mean) { 2.5 } }
+    end
+  end
+
+  sub_test_case 'module_function .arrow_doc' do
+    test 'add' do
+      expected = <<~OUT
+        add(x, y): Add the arguments element-wise
+        ---
+        Results will wrap around on integer overflow.
+        Use function "add_checked" if you want overflow
+        to return an error.
+      OUT
+      assert_equal expected.chomp, ArrowFunction.arrow_doc(:add).to_s
     end
   end
 end
