@@ -1,1 +1,3 @@
 --output-dir doc/yard
+--template-path doc/yard-templates
+--use-cache
