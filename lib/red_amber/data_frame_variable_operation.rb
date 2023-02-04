@@ -20,6 +20,7 @@ module RedAmber
     #     Picked DataFrame.
     #   @example Pick up by a key
     #     languages
+    #
     #     # =>
     #     #<RedAmber::DataFrame : 4 x 3 Vectors, 0x00000000000cfd8c>
     #       Language Creator                         Released
@@ -30,6 +31,7 @@ module RedAmber
     #     3 Rust     Graydon Hoare                       2001
     #
     #     languages.pick(:Language)
+    #
     #     # =>
     #     #<RedAmber::DataFrame : 4 x 1 Vector, 0x0000000000113d20>
     #       Language
@@ -40,6 +42,7 @@ module RedAmber
     #     3 Rust
     #
     #     languages[:Language]
+    #
     #     # =>
     #     #<RedAmber::Vector(:string, size=4):0x000000000010359c>
     #     ["Ruby", "Python", "R", "Rust"]
@@ -53,6 +56,7 @@ module RedAmber
     #     Picked DataFrame.
     #   @example Pick up by booleans
     #     languages.pick(true, true, false)
+    #
     #     # =>
     #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000066a1c>
     #     Language Creator
@@ -76,6 +80,7 @@ module RedAmber
     #     Picked DataFrame.
     #   @example Pick up by indices
     #     languages.pick(0, 2, 1)
+    #
     #     # =>
     #     #<RedAmber::DataFrame : 4 x 3 Vectors, 0x000000000011cfb0>
     #       Language Released Creator
@@ -98,6 +103,7 @@ module RedAmber
     #   @example Pick up by a block.
     #     # same as languages.pick { |df| df.languages.vectors.map(&:string?) }
     #     languages.pick { languages.vectors.map(&:string?) }
+    #
     #     # =>
     #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000154104>
     #       Language Creator
@@ -156,6 +162,7 @@ module RedAmber
     #     Remainer DataFrame.
     #   @example Drop off by a key
     #     languages
+    #
     #     # =>
     #     #<RedAmber::DataFrame : 4 x 3 Vectors, 0x00000000000cfd8c>
     #       Language Creator                         Released
@@ -166,6 +173,7 @@ module RedAmber
     #     3 Rust     Graydon Hoare                       2001
     #
     #     languages.drop(:Language)
+    #
     #     # =>
     #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x000000000005805c>
     #       Creator                         Released
@@ -185,6 +193,7 @@ module RedAmber
     #   @example Drop off by booleans
     #     is_numeric = languages.vectors.map(&:numeric?) # [nil, nil, true]
     #     languages.drop(is_numeric)
+    #
     #     # =>
     #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000066a1c>
     #     Language Creator
@@ -203,6 +212,7 @@ module RedAmber
     #     Remainer DataFrame.
     #   @example Drop off by indices
     #     languages.drop(2)
+    #
     #     # =>
     #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000066a1c>
     #     Language Creator
@@ -225,6 +235,7 @@ module RedAmber
     #   @example Drop off by a block.
     #     # same as languages.drop { |df| df.vectors.map(&:numeric?) }
     #     languages.drop { vectors.map(&:numeric?) }
+    #
     #     # =>
     #     #<RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000154104>
     #       Language Creator
@@ -272,7 +283,83 @@ module RedAmber
       DataFrame.create(@table.select_columns(*picker))
     end
 
-    # rename variables to create a new DataFrame
+    # rename keys (variable/column names) to create a updated DataFrame.
+    #
+    # @overload rename(key_pairs)
+    #   Rename by key pairs as a Hash.
+    #
+    #   @param key_pairs [Hash{existing_key => new_key}]
+    #     key pair(s) of existing name and new name.
+    #   @return [DataFrame] renamed DataFrame.
+    #   @example Rename by a Hash
+    #     comecome
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000000037b4>
+    #       name         age
+    #       <string> <uint8>
+    #     0 Yasuko        68
+    #     1 Rui           49
+    #     2 Hinata        28
+    #
+    #     comecome.rename(:age => :age_in_1993)
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000000037c8>
+    #       name     age_in_1993
+    #       <string>     <uint8>
+    #     0 Yasuko            68
+    #     1 Rui               49
+    #     2 Hinata            28
+    #
+    # @overload rename(key_pairs)
+    #   Rename by key pairs as an Array of Array.
+    #
+    #   @param key_pairs [<Array[existing_key, new_key]>]
+    #     key pair(s) of existing name and new name.
+    #   @return [DataFrame] renamed DataFrame.
+    #   @example Rename by an Array
+    #     renamer = [[:name, :heroine], [:age, :age_in_1993]]
+    #     comecome.rename(renamer)
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000000037dc>
+    #       heroine  age_in_1993
+    #       <string>     <uint8>
+    #     0 Yasuko            68
+    #     1 Rui               49
+    #     2 Hinata            28
+    #
+    # @overload rename
+    #   Rename by key pairs yielding from block.
+    #
+    #   @yield [self] the block is called within the context of self.
+    #     (Block is called by instance_eval(&block). )
+    #   @yieldreturn [<[existing_key, new_key]>, Hash]
+    #     returns an Array or a Hash just same as arguments.
+    #   @return [DataFrame]
+    #     Renamed DataFrame.
+    #   @example Rename by block.
+    #     df
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000c29c>
+    #             X       Y       Z
+    #       <uint8> <uint8> <uint8>
+    #     0       1       3       5
+    #     1       2       4       6
+    #
+    #     df.rename { keys.zip(keys.map(&:downcase)) }
+    #     # or
+    #     df.rename { [keys, keys.map(&:downcase)].transpose }
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000c364>
+    #             x       y       z
+    #       <uint8> <uint8> <uint8>
+    #     0       1       3       5
+    #     1       2       4       6
+    #
     def rename(*renamer, &block)
       if block
         unless renamer.empty?
@@ -298,11 +385,180 @@ module RedAmber
       rename_by_hash(key_pairs)
     end
 
-    # assign variables to create a new DataFrame
+    # Assign new or updated variables (columns) and create an updated DataFrame.
+    # - Array-like variables with new keys will append new columns from right.
+    # - Array-like variables with exisiting keys will update corresponding vectors.
+    # - Symbol key and String key are considered as the same key.
+    # - If assigner is empty or nil, returns self.
+    #
+    # @overload assign(key_value_pairs)
+    #   accepts pairs of key and values by an Array or a Hash.
+    #   @param key_value_pairs [Array<key, array_like>, Hash{key => array_like}]
+    #     `key` must be a Symbol or a String.
+    #     `array_like` is column data to be assigned.
+    #     It must be one of `Vector` or `Arrow::Array` or `Array`.
+    #   @return [DataFrame] assigned DataFrame.
+    #   @example Assign a new column
+    #     comecome
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000000280dc>
+    #       name         age
+    #       <string> <uint8>
+    #     0 Yasuko        68
+    #     1 Rui           49
+    #     2 Hinata        28
+    #
+    #     brothers = ['Santa', nil, 'Momotaro']
+    #     comecome.assign(brother: brothers)
+    #     # or
+    #     comecome.assign({ brother: brothers })
+    #     # or
+    #     comecome.assign(:brother, brothers)
+    #     # or
+    #     comecome.assign([:brother, brothers])
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000004077c>
+    #       name         age brother
+    #       <string> <uint8> <string>
+    #     0 Yasuko        68 Santa
+    #     1 Rui           49 (nil)
+    #     2 Hinata        28 Momotaro
+    #
+    #   @example Assign new data for a existing column
+    #     comecome.assign(age: comecome[:age] + 29)
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000065860>
+    #       name         age
+    #       <string> <uint8>
+    #     0 Yasuko        97
+    #     1 Rui           78
+    #     2 Hinata        57
+    #
+    # @overload assign
+    #   accepts block yielding pairs of key and values.
+    #   @yield [self] the block is called within the context of self.
+    #     (Block is called by instance_eval(&block). )
+    #   @yieldreturn [Array<key, array_like>, Hash(key => array_like)]
+    #     `key` must be a Symbol or a String.
+    #     `array_like` is column data to be assigned.
+    #     It must be one of `Vector` or `Arrow::Array` or `Array`.
+    #   @return [DataFrame] assigned DataFrame.
+    #   @example Assign new data for a existing column by block
+    #     comecome.assign { { age: age + 29 } }
+    #     # or
+    #     comecome.assign { [:age, age + 29] }
+    #     # or
+    #     comecome.assign { [[:age, age + 29]] }
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000007d640>
+    #       name         age
+    #       <string> <uint8>
+    #     0 Yasuko        97
+    #     1 Rui           78
+    #     2 Hinata        57
+    #
+    # @overload assign(keys)
+    #   accepts keys from argument and pairs of key and values from block.
+    #   @param keys [Symbol, String] keys of columns to create or update.
+    #   @yield [self] the block is called within the context of self.
+    #     (Block is called by instance_eval(&block).)
+    #   @yieldreturn [Array<array_like>]
+    #     column data to be assigned.
+    #     `array_like` must be one of `Vector` or `Arrow::Array` or `Array`.
+    #   @return [DataFrame] assigned DataFrame.
+    #   @example Assign new data for a existing column by block
+    #     comecome.assign(:age) { age + 29 }
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000007af94>
+    #       name         age
+    #       <string> <uint8>
+    #     0 Yasuko        97
+    #     1 Rui           78
+    #     2 Hinata        57
+    #
+    #   @example Assign multiple data
+    #     comecome.assign(:age_in_1993, :brother) do
+    #       [
+    #         age + 29,
+    #         ['Santa', nil, 'Momotaro'],
+    #       ]
+    #     end
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 4 Vectors, 0x00000000000b363c>
+    #       name         age age_in_1993 brother
+    #       <string> <uint8>     <uint8> <string>
+    #     0 Yasuko        68          97 Santa
+    #     1 Rui           49          78 (nil)
+    #     2 Hinata        28          57 Momotaro
+    #
     def assign(*assigner, &block)
       assign_update(*assigner, append_to_left: false, &block)
     end
 
+    # Assign new or updated variables (columns) and create an updated DataFrame.
+    # - Array-like variables with new keys will append new columns from left.
+    # - Array-like variables with exisiting keys will update corresponding vectors.
+    # - Symbol key and String key are considered as the same key.
+    # - If assigner is empty or nil, returns self.
+    #
+    # @overload assign_left(key_value_pairs)
+    #   accepts pairs of key and values by an Array or a Hash.
+    #   @param key_value_pairs [Array<key, array_like>, Hash{key => array_like}]
+    #     `key` must be a Symbol or a String.
+    #     `array_like` is column data to be assigned.
+    #     It must be one of `Vector` or `Arrow::Array` or `Array`.
+    #   @return [DataFrame] assigned DataFrame.
+    #   @example Assign a new column from left
+    #     df
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 5 x 3 Vectors, 0x000000000000c10c>
+    #         index    float string
+    #       <uint8> <double> <string>
+    #     0       0      0.0 A
+    #     1       1      1.1 B
+    #     2       2      2.2 C
+    #     3       3      NaN D
+    #     4   (nil)    (nil) (nil)
+    #
+    #     df.assign_left(new_index: df.indices(1))
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000001787c>
+    #       new_index   index    float string
+    #         <uint8> <uint8> <double> <string>
+    #     0         1       0      0.0 A
+    #     1         2       1      1.1 B
+    #     2         3       2      2.2 C
+    #     3         4       3      NaN D
+    #     4         5   (nil)    (nil) (nil)
+    #
+    # @overload assign_left
+    #   accepts block yielding pairs of key and values.
+    #   @yield [self] the block is called within the context of self.
+    #     (Block is called by instance_eval(&block). )
+    #   @yieldreturn [Array<key, array_like>, Hash(key => array_like)]
+    #     `key` must be a Symbol or a String.
+    #     `array_like` is column data to be assigned.
+    #     It must be one of `Vector` or `Arrow::Array` or `Array`.
+    #   @return [DataFrame] assigned DataFrame.
+    #
+    # @overload assign_left(keys)
+    #   accepts keys from argument and pairs of key and values from block.
+    #   @param keys [Symbol, String] keys of columns to create or update.
+    #   @yield [self] the block is called within the context of self.
+    #     (Block is called by instance_eval(&block).)
+    #   @yieldreturn [Array<array_like>]
+    #     column data to be assigned.
+    #     `array_like` must be one of `Vector` or `Arrow::Array` or `Array`.
+    #   @return [DataFrame] assigned DataFrame.
+    #
     def assign_left(*assigner, &block)
       assign_update(*assigner, append_to_left: true, &block)
     end

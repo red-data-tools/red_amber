@@ -840,14 +840,14 @@ penguins.to_rover
 
   Assign new or updated variables (columns) and create an updated DataFrame.
 
-  - Variables with new keys will append new columns from the right.
+  - Variables with new keys will append new columns from right.
   - Variables with exisiting keys will update corresponding vectors.
 
     ![assign method image](doc/../image/dataframe/assign.png)
 
 - Variables as arguments
 
-    `assign(key_pairs)` accepts pairs of key and values as parameters. `key_pairs` should be a Hash of `{key => array_like}` or an Array of Arrays like `[[key, array_like], ... ]`. `array_like` is ether `Vector`, `Array` or `Arrow::Array`.
+    `assign(key_value_pairs)` accepts pairs of key and values as parameters. `key_value_pairs` should be a Hash of `{key => array_like}` or an Array of Arrays like `[[key, array_like], ... ]`. `array_like` is ether `Vector`, `Array` or `Arrow::Array`.
 
     ```ruby
     df = RedAmber::DataFrame.new(
@@ -864,12 +864,12 @@ penguins.to_rover
     2 Hinata        28
 
     # update :age and add :brother
-    df.assign do
+    df.assign(
       {
         age: age + 29,
         brother: ['Santa', nil, 'Momotaro']
       }
-    end
+    )
 
     # =>
     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000658b0>
@@ -939,7 +939,7 @@ penguins.to_rover
 
 - Append from left
 
-  `assign_left` method accepts the same parameters and block as `assign`, but append new columns from leftside.
+  `assign_left` method accepts the same parameters and block as `assign`, but append new columns from left.
 
   ```ruby
   df.assign_left(new_index: df.indices(1))
