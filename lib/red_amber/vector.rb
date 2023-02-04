@@ -250,7 +250,7 @@ module RedAmber
     #   @example propagate by a block
     #     vec.propagate { |v| v.mean.round }
     #     # =>
-    #     #<RedAmber::Vector(:uint8, size=4):0x000000000000cb98>                     
+    #     #<RedAmber::Vector(:uint8, size=4):0x000000000000cb98>
     #     [3, 3, 3, 3]
     #
     # @since 0.3.1

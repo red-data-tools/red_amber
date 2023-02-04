@@ -38,7 +38,7 @@ module RedAmber
     #   2 BMW_MINI         25427    25984    23813    20196    18211
     #   3 Mercedes-Benz    68221    67554    66553    57041    51722
     #   4 VW               49040    51961    46794    36576    35215
-    #  
+    #
     #   The leftmost column is created by original keys and
     #   `:NAME` is automatically used for the column name.
     #
@@ -129,7 +129,7 @@ module RedAmber
     #   4    2021   22535   35905    18211         51722   35215
     #
     #   import_cars.to_long(:Year)
-    # 
+    #
     #   # =>
     #   #<RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000011864>
     #          Year NAME             VALUE
