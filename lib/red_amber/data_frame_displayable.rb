@@ -5,7 +5,9 @@ require 'stringio'
 module RedAmber
   # mix-ins for the class DataFrame
   module DataFrameDisplayable
+    # Used internally to display table.
     INDEX_KEY = :index_key_for_format_table
+    private_constant :INDEX_KEY
 
     def to_s(width: 80)
       return '' if empty?

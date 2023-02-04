@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Namespace of RedAmber
 module RedAmber
   # Add additional capabilities to Hash
   module RefineHash
@@ -196,4 +197,6 @@ module RedAmber
       end
     end
   end
+
+  private_constant :RefineArray, :RefineArrayLike, :RefineArrowTable, :RefineHash
 end
