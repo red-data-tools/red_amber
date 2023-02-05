@@ -11,6 +11,7 @@ class RefinementsTest < Test::Unit::TestCase
   sub_test_case 'refine Array' do
     setup do
       @integers = [1, 0, -1]
+      @floats = [1.0, -1.0, Float::NAN]
       @booleans = [true, false, nil]
       @symbols = %i[a b c]
       @strings = %w[a b c]
@@ -21,6 +22,13 @@ class RefinementsTest < Test::Unit::TestCase
       assert_true @integers.integers?
       assert_true [].integers?
       assert_false @booleans.integers?
+    end
+
+    test 'Array#numeric?' do
+      assert_true @integers.numeric?
+      assert_true @floats.numeric?
+      assert_true [].numeric?
+      assert_false @booleans.numeric?
     end
 
     test 'Array#booleans?' do

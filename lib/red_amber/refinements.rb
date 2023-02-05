@@ -159,6 +159,10 @@ module RedAmber
         all? { |e| e.is_a?(Integer) } # rubocop:disable Performance/RedundantEqualityComparisonBlock
       end
 
+      def numeric?
+        all? { |e| e.is_a?(Numeric) } # rubocop:disable Performance/RedundantEqualityComparisonBlock
+      end
+
       def booleans?
         all? { |e| e.is_a?(TrueClass) || e.is_a?(FalseClass) || e.is_a?(NilClass) }
       end
