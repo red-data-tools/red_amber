@@ -627,6 +627,42 @@ vector.merge(other, sep: '')
 ["ab", "cd", "ef"]
 ```
 
+### `concatenate(other)` or `concat(other)`
+
+Concatenate other array-like to self and return a concatenated Vector.
+- `other` is one of `Vector`, `Array`, `Arrow::Array` or `Arrow::ChunkedArray`
+- Different type will be 'resolved'.
+
+Concatenate to string
+```ruby
+string_vector
+
+# =>
+#<RedAmber::Vector(:string, size=2):0x00000000000037b4>
+["A", "B"]
+
+string_vector.concatenate([1, 2])
+
+# =>
+#<RedAmber::Vector(:string, size=4):0x0000000000003818>
+["A", "B", "1", "2"]
+```
+
+Concatenate to integer
+
+```ruby
+integer_vector
+
+# =>
+#<RedAmber::Vector(:uint8, size=2):0x000000000000382c>
+[1, 2]
+
+nteger_vector.concatenate(["A", "B"])
+# =>
+#<RedAmber::Vector(:uint8, size=4):0x0000000000003840>
+[1, 2, 65, 66]
+```
+
 ### `rank`
 
 Returns numerical rank of self.

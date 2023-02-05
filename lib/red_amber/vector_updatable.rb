@@ -391,6 +391,53 @@ module RedAmber
       Vector.create(datum.value)
     end
 
+    # Concatenate other array-like to self.
+    #
+    # @param other [Vector, Array, Arrow::Array, Arrow::ChunkedArray]
+    #   other array-like to concatenate.
+    # @return [Vector]
+    #   concatenated Vector.
+    # @example Concatenate to string
+    #   string_vector
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:string, size=2):0x00000000000037b4>
+    #   ["A", "B"]
+    #
+    #   string_vector.concatenate([1, 2])
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:string, size=4):0x0000000000003818>
+    #   ["A", "B", "1", "2"]
+    #
+    # @example Concatenate to integer
+    #   integer_vector
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint8, size=2):0x000000000000382c>
+    #   [1, 2]
+    #
+    #   nteger_vector.concatenate(["A", "B"])
+    #   # =>
+    #   #<RedAmber::Vector(:uint8, size=4):0x0000000000003840>
+    #   [1, 2, 65, 66]
+    #
+    # @since 0.3.1
+    #
+    def concatenate(other)
+      concatenated_array =
+        case other
+        when Vector
+          data + other.data
+        when Arrow::ChunkedArray
+          data + other.pack
+        else
+          data + other
+        end
+      Vector.create(concatenated_array)
+    end
+    alias_method :concat, :concatenate
+
     private
 
     # Replace elements selected with a boolean mask
