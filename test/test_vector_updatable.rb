@@ -319,4 +319,46 @@ class VectorTest < Test::Unit::TestCase
       assert_raise(NameError) { Vector.new(array).merge(other) }
     end
   end
+
+  sub_test_case '#concatenate' do
+    setup do
+      @string = Vector.new(%w[A B C])
+      @integer = Vector.new([1, 2])
+    end
+
+    test '#concatenate []' do
+      assert_raise(ArgumentError) { @string.concatenate }
+      assert_equal_array %w[A B C], @string.concatenate([])
+      assert_equal_array %w[A B C], @string.concatenate(Vector.new)
+      assert_equal_array [1, 2], @integer.concatenate([])
+      assert_equal_array [1, 2], @integer.concatenate(Vector.new)
+    end
+
+    test '#concatenate integer into string' do
+      expected = %w[A B C 1 2]
+      assert_equal_array expected, @string.concatenate([1, 2])
+      assert_equal_array expected, @string.concatenate(@integer)
+    end
+
+    test '#concatenate string into integer' do
+      assert_equal_array [1, 2, 65, 66, 67], @integer.concatenate(%w[A B C])
+      assert_raise(Arrow::Error::Invalid) { @integer.concatenate(@string) }
+    end
+
+    test '#concatenate string' do
+      assert_equal_array %w[A B C], Vector.new.concatenate(@string)
+      assert_equal_array %w[1 2], Vector.new.concatenate(@integer)
+      assert_equal_array %w[A B C D E], @string.concatenate(%w[D E])
+      assert_equal_array %w[A B C D E], @string.concatenate(Arrow::Array.new(%w[D E]))
+      assert_equal_array %w[A B C D E], @string.concatenate(Arrow::ChunkedArray.new([%w[D E]]))
+      assert_equal_array %w[A B C D E], @string.concatenate(Vector.new(%w[D E]))
+    end
+
+    test '#concatenate integer' do
+      assert_equal_array [1, 2, 3, 4], @integer.concatenate([3, 4])
+      assert_equal_array [1, 2, 3, 4], @integer.concatenate(Arrow::Array.new([3, 4]))
+      assert_equal_array [1, 2, 3, 4], @integer.concatenate(Arrow::ChunkedArray.new([[3, 4]]))
+      assert_equal_array [1, 2, 3, 4], @integer.concatenate(Vector.new([3, 4]))
+    end
+  end
 end
