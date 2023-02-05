@@ -275,13 +275,31 @@ module RedAmber
       end
     end
 
-    private # =====
-
+    # Return class and shape of self by a String.
+    #
+    # @param with_id [true, false]
+    #   show id if true.
+    # @return [String]
+    #   shape string.
+    # @example Default (without id)
+    #   penguins.shape_str
+    #
+    #   # =>
+    #   "RedAmber::DataFrame : 344 x 8 Vectors"
+    #
+    # @example With id
+    #   penguins.shape_str(with_id: true)
+    #
+    #   # =>
+    #   "RedAmber::DataFrame : 344 x 8 Vectors, 0x0000000000003980"
+    #
     def shape_str(with_id: false)
       shape_info = empty? ? '(empty)' : "#{size} x #{n_keys} Vector#{pl(n_keys)}"
       id = with_id ? format(', 0x%016x', object_id) : ''
       "#{self.class} : #{shape_info}#{id}"
     end
+
+    private # =====
 
     def dataframe_info(limit, tally_level: 5, max_element: 5)
       return '' if empty?

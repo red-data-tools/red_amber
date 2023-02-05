@@ -543,4 +543,16 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       assert_equal html, df.to_iruby[1]
     end
   end
+
+  sub_test_case '#shape_str' do
+    setup do
+      @df = DataFrame.new(x: [1, 2, 3])
+    end
+
+    test '#shape_str' do
+      assert_equal 'RedAmber::DataFrame : 3 x 1 Vector', @df.shape_str
+      e = "RedAmber::DataFrame : 3 x 1 Vector, #{format('0x%016x', @df.object_id)}"
+      assert_equal e, @df.shape_str(with_id: true)
+    end
+  end
 end
