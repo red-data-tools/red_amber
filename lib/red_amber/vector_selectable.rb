@@ -148,6 +148,11 @@ module RedAmber
       to_a.index(element)
     end
 
+    # Drop nil in self and returns a new Vector as a result.
+    #
+    # @return [Vector]
+    #   a Vector without nils.
+    #
     def drop_nil
       datum = find(:drop_null).execute([data])
       Vector.create(datum.value)

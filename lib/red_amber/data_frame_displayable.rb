@@ -80,9 +80,9 @@ module RedAmber
     # Show information of self.
     #
     # According to `ENV [“RED_AMBER_OUTPUT_MODE”].upcase`,
-    # - If it is 'TDR', returns shape and transposed preview by 3 rows.
-    # - If it is 'MINIMUM', returns shape only.
-    # - If it is 'TABLE' or otherwise, returns shape and Table preview.
+    # - If it is 'TDR', returns class, shape and transposed preview by 3 rows.
+    # - If it is 'MINIMUM', returns class and shape.
+    # - If it is 'TABLE' or otherwise, returns class, shape and Table preview.
     #   Default value of the ENV is 'Table'.
     # @return [String]
     #   information of self.
