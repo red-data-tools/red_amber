@@ -134,7 +134,7 @@ module RedAmber
         in nil | [nil]
           return replace_to_nil(booleans.data)
         in Arrow::Array
-        # nop
+          replacer
         in Vector
           replacer.data
         in Array

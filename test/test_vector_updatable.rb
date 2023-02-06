@@ -100,6 +100,10 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array [4, 2, 5], @vec.replace(Arrow::Array.new([true, false, true]), Vector.new(4, 5))
     end
 
+    test 'replace with Arrow::Array' do
+      assert_equal_array [4, 2, 5], @vec.replace(Arrow::Array.new([true, false, true]), Arrow::Array.new([4, 5]))
+    end
+
     test 'invalid specifier' do
       assert_raise(VectorArgumentError) { @vec.replace(%w[A B C], 0) }
     end
