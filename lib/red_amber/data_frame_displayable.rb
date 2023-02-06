@@ -3,7 +3,7 @@
 require 'stringio'
 
 module RedAmber
-  # mix-in for the class DataFrame
+  # Mix-in for the class DataFrame
   module DataFrameDisplayable
     # Used internally to display table.
     INDEX_KEY = :index_key_for_format_table
@@ -13,8 +13,10 @@ module RedAmber
 
     # Show a preview of self as a string.
     #
-    # @param width [Integer] Maximum size of result.
-    # @return [String] String representation of self.
+    # @param width [Integer]
+    #   maximum size of result.
+    # @return [String]
+    #   string representation of self.
     # @example Show penguins dataset
     #   puts penguins.to_s
     #
@@ -43,7 +45,8 @@ module RedAmber
     # - NaNs are ignored.
     # - `count` shows non-NaN counts.
     #
-    # @return [DataFrame] a new dataframe.
+    # @return [DataFrame]
+    #   a new dataframe.
     # @example Statistical summary of penguins dataset
     #   # needs more width to show all stats in this example
     #   puts penguins.summary.to_s(width: 82)
@@ -77,11 +80,12 @@ module RedAmber
     # Show information of self.
     #
     # According to `ENV [“RED_AMBER_OUTPUT_MODE”].upcase`,
-    # - if it is 'TDR', returns shape and transposed preview by 3 rows.
-    # - if it is 'MINIMUM', returns shape only.
-    # - if it is 'TABLE' or otherwise, returns shape and Table preview.
-    #   Default value of the ENV is 'TABLE'.
-    # @return [String] information of self.
+    # - If it is 'TDR', returns shape and transposed preview by 3 rows.
+    # - If it is 'MINIMUM', returns shape only.
+    # - If it is 'TABLE' or otherwise, returns shape and Table preview.
+    #   Default value of the ENV is 'Table'.
+    # @return [String]
+    #   information of self.
     # @example Default (ENV ['RED_AMBER_OUTPUT_MODE'] == 'Table')
     #   puts df.inspect
     #
@@ -123,15 +127,18 @@ module RedAmber
 
     # Shows some information about self in a transposed style.
     #
-    # @param limit [Integer, :all] maximum number of variables (columns) to show.
+    # @param limit [Integer, :all]
+    #   maximum number of variables (columns) to show.
     #   Shows all valiables (columns) if it is `:all`.
-    # @param tally [Integer] maximum level to use tally mode.
+    # @param tally [Integer]
+    #   maximum level to use tally mode.
     #   Tally mode counts the occurrences of each element and shows as a hash
     #   with the elements as keys and the corresponding counts as values.
-    # @param elements [Integer] maximum number of elements to show values
+    # @param elements [Integer]
+    #   maximum number of elements to show values
     #   in each column.
     # @return [nil]
-    # @example Default.
+    # @example Default
     #   diamonds = diamonds.assign_left(:index) { indices }
     #   diamonds
     #
@@ -167,7 +174,7 @@ module RedAmber
     #   9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, ... ]
     #    ... 1 more Vector ...
     #
-    # @example Show all variables.
+    # @example Show all variables
     #   diamonds.tdr(:all)
     #
     #   # =>
@@ -186,7 +193,7 @@ module RedAmber
     #   9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, ... ]
     #   10 :z       double   375 [2.43, 2.31, 2.31, 2.63, 2.75, ... ]
     #
-    # @example Use tally mode up to 8 levels.
+    # @example Use tally mode up to 8 levels
     #   diamonds.tdr(tally: 8)
     #
     #   # =>
@@ -205,7 +212,7 @@ module RedAmber
     #   9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, ... ]
     #    ... 1 more Vector ...
     #
-    # @example Increase elements to show.
+    # @example Increase elements to show
     #   diamonds.tdr(elements: 10)
     #
     #   # =>
@@ -243,12 +250,13 @@ module RedAmber
     # Returns html formatted text of self by IRuby::HTML.table.
     #
     # According to `ENV [“RED_AMBER_OUTPUT_MODE”].upcase`,
-    # - if it is 'MINIMUM', returns shape by plain text.
-    # - if it is 'PLAIN', returns `#inspect` value by plain text.
-    # - if it is 'TDR', returns shape and transposed preview by plain text.
-    # - if it is 'TABLE' or otherwise, returns Table preview by html format.
+    # - If it is 'MINIMUM', returns shape by plain text.
+    # - If it is 'PLAIN', returns `#inspect` value by plain text.
+    # - If it is 'TDR', returns shape and transposed preview by plain text.
+    # - If it is 'TABLE' or otherwise, returns Table preview by html format.
     #   Default value of the ENV is 'TABLE'.
-    # @return [String] formatted string.
+    # @return [String]
+    #   formatted string.
     #
     def to_iruby
       require 'iruby'

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # mix-ins for the class DataFrame
+  # Mix-in for the class DataFrame
   module DataFrameLoadSave
     # Enable `self.load` as class method of DataFrame
     def self.included(klass)

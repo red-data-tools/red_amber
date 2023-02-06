@@ -1,19 +1,22 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # mix-in for the class DataFrame
+  # Mix-in for the class DataFrame
   module DataFrameReshaping
     # Create a transposed DataFrame for the wide (messy) DataFrame.
     #
-    # @param key [Symbol] key of the index column
+    # @param key [Symbol]
+    #   key of the index column
     #   to transepose into keys.
     #   If it is not specified, keys[0] is used.
-    # @param name [Symbol] key name of transposed index column.
+    # @param name [Symbol]
+    #   key name of transposed index column.
     #   If it is not specified, :NAME is used.
     #   If it already exists, :NAME1 or :NAME1.succ is used.
-    # @return [DataFrame] trnsposed DataFrame
+    # @return [DataFrame]
+    #   trnsposed DataFrame
     #
-    # @example transpose a DataFrame without options
+    # @example Transpose a DataFrame without options
     #
     #   import_cars
     #
@@ -42,7 +45,7 @@ module RedAmber
     #   The leftmost column is created by original keys and
     #   `:NAME` is automatically used for the column name.
     #
-    # @example transpose a DataFrame with `:name` option
+    # @example Transpose a DataFrame with `:name` option
     #
     #   import_cars.transpose(name: :Manufacturer)
     #
@@ -58,7 +61,7 @@ module RedAmber
     #
     #   `:name` option can specify column name.
     #
-    # @example transpose a DataFrame by the :key in the middle of the DataFrame
+    # @example Transpose a DataFrame by the :key in the middle of the DataFrame
     #
     #   import_cars_middle = import_cars.pick(1..2, 0, 3..)
     #
@@ -107,12 +110,14 @@ module RedAmber
 
     # Create a 'long' (may be tidy) DataFrame from a 'wide' DataFrame.
     #
-    # @param keep_keys [<Symbol>] keys to keep.
+    # @param keep_keys [<Symbol>]
+    #   keys to keep.
     # @param name [Symbol, String]
     #   a new key name of the column which is come from key names.
     # @param value [Symbol, String]
     #   a new key name of the column which is come from values.
-    # @return [DataFrame] long DataFrame.
+    # @return [DataFrame]
+    #   long DataFrame.
     #
     # @example `to_long` without options
     #
@@ -206,7 +211,8 @@ module RedAmber
     #   a new key name of the columnwhich will be expanded to key names.
     # @param value [Symbol, String]
     #   a new key name of the column which will be expanded to values.
-    # @return [DataFrame] wide DataFrame.
+    # @return [DataFrame]
+    #   wide DataFrame.
     #
     # @example `to_wide` without options
     #

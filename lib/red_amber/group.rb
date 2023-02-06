@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # group class
+  # Group class
   class Group
     include Enumerable # This feature is experimental
 

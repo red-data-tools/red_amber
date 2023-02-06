@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # mix-ins for the class DataFrame
+  # Mix-ins for the class DataFrame
   module DataFrameIndexable
     # Common method
     def map_indices(*indices)

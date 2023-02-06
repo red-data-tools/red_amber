@@ -4,16 +4,20 @@
 # reference: https://arrow.apache.org/docs/cpp/compute.html
 
 module RedAmber
-  # mix-in for class Vector
+  # Mix-in for class Vector
   # Functions to make up some data (especially missing) for new data.
   module VectorUpdatable
     # Add properties to Arrow::Array and Arrow::ChunkedArray
     using RefineArrayLike
 
     # Replace data
-    # @param specifier [Array, Vector, Arrow::Array] index or booleans.
-    # @param replacer [Scalar, Array, Vector, Arrow::Array] new data to replace for.
-    # @return [Vector] Replaced new Vector.
+    #
+    # @param specifier [Array, Vector, Arrow::Array]
+    #   index or booleans.
+    # @param replacer [Scalar, Array, Vector, Arrow::Array]
+    #   new data to replace for.
+    # @return [Vector]
+    #   replaced new Vector.
     #   If specifier has no true, return self.
     #
     def replace(specifier, replacer)
@@ -87,12 +91,15 @@ module RedAmber
 
     # Split string Vector and returns Array of columns.
     #
-    # @param sep [nil, String, Regexp] separater.
+    # @param sep [nil, String, Regexp]
+    #   separater.
     #   If separator is nil (or no argeument given), the column will be splitted by
     #   Arrow's split function using any ASCII whitespace.
     #   Otherwise sep will passed to String#split.
-    # @param limit [Integer] maximum number to limit separation. Passed to String#split.
-    # @return [Array<Vector>] an Array of Vectors.
+    # @param limit [Integer]
+    #   maximum number to limit separation. Passed to String#split.
+    # @return [Array<Vector>]
+    #   an Array of Vectors.
     # @note nil will separated as nil's at same row. ex) `nil => [nil, nil]`
     #
     def split_to_columns(sep = nil, limit = 0)
@@ -102,12 +109,15 @@ module RedAmber
 
     # Split string Vector and flatten into rows.
     #
-    # @param sep [nil, String, Regexp] separater.
+    # @param sep [nil, String, Regexp]
+    #   separater.
     #   If separator is nil (or no argeument given), the column will be splitted by
     #   Arrow's split function using any ASCII whitespace.
     #   Otherwise sep will passed to String#split.
-    # @param limit [Integer] maximum number to limit separation. Passed to String#split.
-    # @return [Vector] a flatten Vector.
+    # @param limit [Integer]
+    #   maximum number to limit separation. Passed to String#split.
+    # @return [Vector]
+    #   a flatten Vector.
     # @note nil will separated as nil's at same row. ex) `nil => [nil, nil]`
     #
     def split_to_rows(sep = nil, limit = 0)
@@ -179,8 +189,10 @@ module RedAmber
     #
     # @param other [String, Vector]
     #   merger from right. It will be broadcasted if it is a scalar String.
-    # @param sep [String] separator.
-    # @return [Vector] merged Vector
+    # @param sep [String]
+    #   separator.
+    # @return [Vector]
+    #   merged Vector
     #
     def merge(other, sep: ' ')
       if empty? || !string?
@@ -222,7 +234,8 @@ module RedAmber
     #   - `replacer.size` must be equal to `mask.count(true)`.
     #   - Types of self and replacer must be same
     #
-    # @return [Vector] Replaced vector.
+    # @return [Vector]
+    #   replaced vector.
     #   Type of returned Vector is upcasted if needed.
     #
     def replace_with(boolean_mask, replacer)
@@ -241,7 +254,8 @@ module RedAmber
     #   Boolean mask which indicates the position to be replaced.
     #   - Position with true will be replaced by nil
     #   - Position with nil will remain as nil.
-    # @return [Vector] Replaced vector.
+    # @return [Vector]
+    #   replaced vector.
     #
     def replace_to_nil(boolean_mask)
       nil_array = data.class.new([nil] * size) # Casted nil Array

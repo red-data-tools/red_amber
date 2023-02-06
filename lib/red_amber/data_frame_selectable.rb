@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # mix-in for the class DataFrame
+  # Mix-in for the class DataFrame
   module DataFrameSelectable
     # Array, Arrow::Array and Arrow::ChunkedArray are refined
     using RefineArray
@@ -10,31 +10,36 @@ module RedAmber
     # Select variables or records.
     #
     # @overload [](key)
-    #   select single variable and return as a Vetor.
+    #   Select single variable and return as a Vetor.
     #
-    #   @param key [Symbol, String] key name to select.
-    #   @return [Vector] selected variable as a Vector.
+    #   @param key [Symbol, String]
+    #     key name to select.
+    #   @return [Vector]
+    #     selected variable as a Vector.
     #   @note DataFrame.v(key) is faster to create Vector from a variable.
     #
     # @overload [](keys)
-    #   select variables and return a DataFrame.
+    #   Select variables and return a DataFrame.
     #
     #   @param keys [<Symbol, String>] key names to select.
-    #   @return [DataFrame] selected variables as a DataFrame.
+    #   @return [DataFrame]
+    #     selected variables as a DataFrame.
     #
     # @overload [](index)
-    #   select records and return a DataFrame.
+    #   Select records and return a DataFrame.
     #
     #   @param index [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
     #     index of a row to select.
-    #   @return [DataFrame] selected variables as a DataFrame.
+    #   @return [DataFrame]
+    #     selected variables as a DataFrame.
     #
     # @overload [](indices)
-    #   select records and return a DataFrame.
+    #   Select records and return a DataFrame.
     #
     #   @param indices [<Indeger, Float, Range<Integer>, Vector, Arrow::Array>]
     #     indices of rows to select.
-    #   @return [DataFrame] selected variables as a DataFrame.
+    #   @return [DataFrame]
+    #     selected variables as a DataFrame.
     #
     def [](*args)
       raise DataFrameArgumentError, 'self is an empty dataframe' if empty?
@@ -82,48 +87,58 @@ module RedAmber
     # Select records to create a DataFrame.
     #
     # @overload slice(row)
-    #   select a record and return a DataFrame.
+    #   Select a record and return a DataFrame.
     #
     #   @param row [Indeger, Float]
     #     a row index to select.
-    #   @return [DataFrame] selected variables as a DataFrame.
+    #   @return [DataFrame]
+    #     selected variables as a DataFrame.
     #
     # @overload slice(rows)
-    #   select records and return a DataFrame.
+    #   Select records and return a DataFrame.
     #   - Duplicated selection is acceptable. The same record will be returned.
     #   - The order of records will be the same as specified indices.
     #
     #   @param rows [Integer, Float, Range<Integer>, Vector, Arrow::Array]
     #     row indeces to select.
-    #   @return [DataFrame] selected variables as a DataFrame.
+    #   @return [DataFrame]
+    #     selected variables as a DataFrame.
     #
     # @overload slice
-    #   select records by indices with block and return a DataFrame.
+    #   Select records by indices with block and return a DataFrame.
     #   - Duplicated selection is acceptable. The same record will be returned.
     #   - The order of records will be the same as specified indices.
     #
-    #   @yield [self] gives self to the block.
+    #   @yield [self]
+    #     gives self to the block.
     #     The block is evaluated within the context of self.
-    #   @yieldparam self [DataFrame] self. Usually, it can be omitted.
+    #   @yieldparam self [DataFrame]
+    #     self. Usually, it can be omitted.
     #   @yieldreturn [<Integer, Float>, Range<Integer>, Vector, Arrow::Array]
     #     row indeces to select.
-    #   @return [DataFrame] selected records as a DataFrame.
+    #   @return [DataFrame]
+    #     selected records as a DataFrame.
     #
     # @overload slice(booleans)
-    #   select records by filtering with booleans and return a DataFrame.
+    #   Select records by filtering with booleans and return a DataFrame.
+    #
     #   @param booleans [<Boolean, nil>, Vector, Arrow::Array]
     #     a boolean filter.
-    #   @return [DataFrame] filtered records as a DataFrame.
+    #   @return [DataFrame]
+    #     filtered records as a DataFrame.
     #
     # @overload slice
-    #   select records by filtering with block and return a DataFrame.
+    #   Select records by filtering with block and return a DataFrame.
     #
-    #   @yield [self] gives self to the block.
+    #   @yield [self]
+    #     gives self to the block.
     #     The block is evaluated within the context of self.
-    #   @yieldparam self [DataFrame] self. Usually, it can be omitted.
+    #   @yieldparam self [DataFrame]
+    #     self. Usually, it can be omitted.
     #   @yieldreturn [<Boolean, nil>, Vector, Arrow::Array]
     #     a boolean filter. `Vector` or `Arrow::Array` must be boolean type.
-    #   @return [DataFrame] filtered records as a DataFrame.
+    #   @return [DataFrame]
+    #     filtered records as a DataFrame.
     #
     def slice(*args, &block)
       raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?
@@ -204,22 +219,26 @@ module RedAmber
     # Select records by filtering with booleans to create a DataFrame.
     #
     # @overload filter(booleans)
-    #   select records by filtering with booleans and return a DataFrame.
+    #   Select records by filtering with booleans and return a DataFrame.
     #
     #   @param booleans [<Boolean, nil>, Vector, Arrow::Array]
     #     a boolean filter.
-    #   @return [DataFrame] filtered records as a DataFrame.
-    #   @example filter by boolean Vector
+    #   @return [DataFrame]
+    #     filtered records as a DataFrame.
+    #   @example Filter by boolean Vector
     #
     # @overload filter
-    #   select records by filtering with block and return a DataFrame.
+    #   Select records by filtering with block and return a DataFrame.
     #
-    #   @yield [self] gives self to the block.
+    #   @yield [self]
+    #     gives self to the block.
     #     The block is evaluated within the context of self.
-    #   @yieldparam self [DataFrame] self. Usually, it can be omitted.
+    #   @yieldparam self [DataFrame]
+    #     self. Usually, it can be omitted.
     #   @yieldreturn [<Boolean, nil>, Vector, Arrow::Array]
     #     a boolean filter. `Vector` or `Arrow::Array` must be boolean type.
-    #   @return [DataFrame] filtered records as a DataFrame.
+    #   @return [DataFrame]
+    #     filtered records as a DataFrame.
     #
     def filter(*booleans, &block)
       booleans.flatten!
@@ -255,30 +274,34 @@ module RedAmber
     # Select records and remove them to create a remainer DataFrame.
     #
     # @overload remove(row)
-    #   select a record and remove it to create a remainer DataFrame.
+    #   Select a record and remove it to create a remainer DataFrame.
     #   - The order of records in self will be preserved.
     #
     #   @param row [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
     #     a row index to remove.
-    #   @yield [self] gives self to the block.
+    #   @yield [self]
+    #     gives self to the block.
     #     @note The block is evaluated within the context of self.
     #       It is accessable to self's instance variables and private methods.
     #   @yieldreturn [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
     #     a row index to remove.
-    #   @return [DataFrame] remainer variables as a DataFrame.
+    #   @return [DataFrame]
+    #     remainer variables as a DataFrame.
     #
     # @overload remove(rows)
-    #   select records and remove them to create a remainer DataFrame.
+    #   Select records and remove them to create a remainer DataFrame.
     #   - The order of records in self will be preserved.
     #
     #   @param rows [Indeger, Float, Range<Integer>, Vector, Arrow::Array]
     #     row indeces to remove.
-    #   @yield [self] gives self to the block.
+    #   @yield [self]
+    #     gives self to the block.
     #     @note The block is evaluated within the context of self.
     #       It is accessable to self's instance variables and private methods.
     #   @yieldreturn [<Indeger, Float, Range<Integer>, Vector, Arrow::Array>]
     #     row indeces to remove.
-    #   @return [DataFrame] remainer variables as a DataFrame.
+    #   @return [DataFrame]
+    #     remainer variables as a DataFrame.
     #
     def remove(*args, &block)
       raise DataFrameArgumentError, 'Self is an empty dataframe' if empty?

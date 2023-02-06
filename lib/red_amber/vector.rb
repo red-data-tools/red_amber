@@ -122,38 +122,74 @@ module RedAmber
       list? ? :list : @data.value_type.nick.to_sym
     end
 
+    # Test if self is a boolean Vector.
+    #
+    # @return [true, false] test result.
+    #
     def boolean?
       @data.boolean?
     end
 
+    # Test if self is a numeric Vector.
+    #
+    # @return [true, false] test result.
+    #
     def numeric?
       @data.numeric?
     end
 
+    # Test if self is a float Vector.
+    #
+    # @return [true, false] test result.
+    #
     def float?
       @data.float?
     end
 
+    # Test if self is a integer Vector.
+    #
+    # @return [true, false] test result.
+    #
     def integer?
       @data.integer?
     end
 
+    # Test if self is a string Vector.
+    #
+    # @return [true, false] test result.
+    #
     def string?
       @data.string?
     end
 
+    # Test if self is a dictionary Vector.
+    #
+    # @return [true, false] test result.
+    #
     def dictionary?
       @data.dictionary?
     end
 
+    # Test if self is a temporal Vector.
+    #
+    # @return [true, false] test result.
+    #
     def temporal?
       @data.temporal?
     end
 
+    # Test if self is a list Vector.
+    #
+    # @return [true, false] test result.
+    #
     def list?
       @data.list?
     end
 
+    # Type Class of self.
+    #
+    # @return [type_Class] type class.
+    #
     def type_class
       @data.type_class
     end

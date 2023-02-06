@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # mix-ins for the class DataFrame
+  # Mix-in for the class DataFrame
   module DataFrameVariableOperation
     # Array is refined
     using RefineArray
@@ -17,7 +17,7 @@ module RedAmber
     #   @param keys [Symbol, String, <Symbol, String>]
     #     key name(s) of variables to pick.
     #   @return [DataFrame]
-    #     Picked DataFrame.
+    #     picked DataFrame.
     #   @example Pick up by a key
     #     languages
     #
@@ -53,7 +53,7 @@ module RedAmber
     #   @param booleans [<Booleans, nil>, Vector]
     #     boolean array or vecctor to pick up variables at true.
     #   @return [DataFrame]
-    #     Picked DataFrame.
+    #     picked DataFrame.
     #   @example Pick up by booleans
     #     languages.pick(true, true, false)
     #
@@ -77,7 +77,7 @@ module RedAmber
     #   @param indices [Integer, Float, Range<Integer>, Vector, Arrow::Array]
     #     numeric array to pick up variables by column index.
     #   @return [DataFrame]
-    #     Picked DataFrame.
+    #     picked DataFrame.
     #   @example Pick up by indices
     #     languages.pick(0, 2, 1)
     #
@@ -94,12 +94,13 @@ module RedAmber
     #   Pick up variables by the yielded value from the block.
     #   @note Arguments and a block cannot be used simultaneously.
     #
-    #   @yield [self] the block is called within the context of self.
+    #   @yield [self]
+    #     the block is called within the context of self.
     #     (Block is called by instance_eval(&block). )
     #   @yieldreturn [keys, booleans, indices]
     #     returns keys, booleans or indices just same as arguments.
     #   @return [DataFrame]
-    #     Picked DataFrame.
+    #     picked DataFrame.
     #   @example Pick up by a block.
     #     # same as languages.pick { |df| df.languages.vectors.map(&:string?) }
     #     languages.pick { languages.vectors.map(&:string?) }
@@ -159,7 +160,7 @@ module RedAmber
     #   @param keys [Symbol, String, <Symbol, String>]
     #     key name(s) of variables to drop.
     #   @return [DataFrame]
-    #     Remainer DataFrame.
+    #     remainer DataFrame.
     #   @example Drop off by a key
     #     languages
     #
@@ -189,7 +190,7 @@ module RedAmber
     #   @param booleans [<Booleans, nil>, Vector]
     #     boolean array or vector of variables to drop at true.
     #   @return [DataFrame]
-    #     Remainer DataFrame.
+    #     remainer DataFrame.
     #   @example Drop off by booleans
     #     is_numeric = languages.vectors.map(&:numeric?) # [nil, nil, true]
     #     languages.drop(is_numeric)
@@ -209,7 +210,7 @@ module RedAmber
     #   @param indices [Integer, Float, Range<Integer>, Vector, Arrow::Array]
     #     numeric array of variables to drop by column index.
     #   @return [DataFrame]
-    #     Remainer DataFrame.
+    #     remainer DataFrame.
     #   @example Drop off by indices
     #     languages.drop(2)
     #
@@ -231,7 +232,7 @@ module RedAmber
     #   @yieldreturn [keys, booleans, indices]
     #     returns keys, booleans or indices just same as arguments.
     #   @return [DataFrame]
-    #     Remainer DataFrame.
+    #     remainer DataFrame.
     #   @example Drop off by a block.
     #     # same as languages.drop { |df| df.vectors.map(&:numeric?) }
     #     languages.drop { vectors.map(&:numeric?) }
@@ -290,7 +291,8 @@ module RedAmber
     #
     #   @param key_pairs [Hash{existing_key => new_key}]
     #     key pair(s) of existing name and new name.
-    #   @return [DataFrame] renamed DataFrame.
+    #   @return [DataFrame]
+    #     renamed DataFrame.
     #   @example Rename by a Hash
     #     comecome
     #
@@ -317,7 +319,8 @@ module RedAmber
     #
     #   @param key_pairs [<Array[existing_key, new_key]>]
     #     key pair(s) of existing name and new name.
-    #   @return [DataFrame] renamed DataFrame.
+    #   @return [DataFrame]
+    #     renamed DataFrame.
     #   @example Rename by an Array
     #     renamer = [[:name, :heroine], [:age, :age_in_1993]]
     #     comecome.rename(renamer)
@@ -338,7 +341,7 @@ module RedAmber
     #   @yieldreturn [<[existing_key, new_key]>, Hash]
     #     returns an Array or a Hash just same as arguments.
     #   @return [DataFrame]
-    #     Renamed DataFrame.
+    #     renamed DataFrame.
     #   @example Rename by block.
     #     df
     #
@@ -393,11 +396,13 @@ module RedAmber
     #
     # @overload assign(key_value_pairs)
     #   accepts pairs of key and values by an Array or a Hash.
+    #
     #   @param key_value_pairs [Array<key, array_like>, Hash{key => array_like}]
     #     `key` must be a Symbol or a String.
     #     `array_like` is column data to be assigned.
     #     It must be one of `Vector` or `Arrow::Array` or `Array`.
-    #   @return [DataFrame] assigned DataFrame.
+    #   @return [DataFrame]
+    #     assigned DataFrame.
     #   @example Assign a new column
     #     comecome
     #
@@ -439,13 +444,16 @@ module RedAmber
     #
     # @overload assign
     #   accepts block yielding pairs of key and values.
-    #   @yield [self] the block is called within the context of self.
+    #
+    #   @yield [self]
+    #     the block is called within the context of self.
     #     (Block is called by instance_eval(&block). )
     #   @yieldreturn [Array<key, array_like>, Hash(key => array_like)]
     #     `key` must be a Symbol or a String.
     #     `array_like` is column data to be assigned.
     #     It must be one of `Vector` or `Arrow::Array` or `Array`.
-    #   @return [DataFrame] assigned DataFrame.
+    #   @return [DataFrame]
+    #      assigned DataFrame.
     #   @example Assign new data for a existing column by block
     #     comecome.assign { { age: age + 29 } }
     #     # or
@@ -463,13 +471,16 @@ module RedAmber
     #
     # @overload assign(keys)
     #   accepts keys from argument and pairs of key and values from block.
+    #
     #   @param keys [Symbol, String] keys of columns to create or update.
-    #   @yield [self] the block is called within the context of self.
+    #   @yield [self]
+    #     the block is called within the context of self.
     #     (Block is called by instance_eval(&block).)
     #   @yieldreturn [Array<array_like>]
     #     column data to be assigned.
     #     `array_like` must be one of `Vector` or `Arrow::Array` or `Array`.
-    #   @return [DataFrame] assigned DataFrame.
+    #   @return [DataFrame]
+    #     assigned DataFrame.
     #   @example Assign new data for a existing column by block
     #     comecome.assign(:age) { age + 29 }
     #
@@ -509,11 +520,13 @@ module RedAmber
     #
     # @overload assign_left(key_value_pairs)
     #   accepts pairs of key and values by an Array or a Hash.
+    #
     #   @param key_value_pairs [Array<key, array_like>, Hash{key => array_like}]
     #     `key` must be a Symbol or a String.
     #     `array_like` is column data to be assigned.
     #     It must be one of `Vector` or `Arrow::Array` or `Array`.
-    #   @return [DataFrame] assigned DataFrame.
+    #   @return [DataFrame]
+    #     assigned DataFrame.
     #   @example Assign a new column from left
     #     df
     #
@@ -541,23 +554,30 @@ module RedAmber
     #
     # @overload assign_left
     #   accepts block yielding pairs of key and values.
-    #   @yield [self] the block is called within the context of self.
+    #
+    #   @yield [self]
+    #     the block is called within the context of self.
     #     (Block is called by instance_eval(&block). )
     #   @yieldreturn [Array<key, array_like>, Hash(key => array_like)]
     #     `key` must be a Symbol or a String.
     #     `array_like` is column data to be assigned.
     #     It must be one of `Vector` or `Arrow::Array` or `Array`.
-    #   @return [DataFrame] assigned DataFrame.
+    #   @return [DataFrame]
+    #     assigned DataFrame.
     #
     # @overload assign_left(keys)
     #   accepts keys from argument and pairs of key and values from block.
-    #   @param keys [Symbol, String] keys of columns to create or update.
-    #   @yield [self] the block is called within the context of self.
+    #
+    #   @param keys [Symbol, String]
+    #     keys of columns to create or update.
+    #   @yield [self]
+    #     the block is called within the context of self.
     #     (Block is called by instance_eval(&block).)
     #   @yieldreturn [Array<array_like>]
     #     column data to be assigned.
     #     `array_like` must be one of `Vector` or `Arrow::Array` or `Array`.
-    #   @return [DataFrame] assigned DataFrame.
+    #   @return [DataFrame]
+    #     assigned DataFrame.
     #
     def assign_left(*assigner, &block)
       assign_update(*assigner, append_to_left: true, &block)

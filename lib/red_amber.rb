@@ -23,13 +23,19 @@ require_relative 'red_amber/vector'
 require_relative 'red_amber/version'
 
 module RedAmber
+  # Generic error
   class Error < StandardError; end
 
+  # Argument error in DataFrame
   class DataFrameArgumentError < ArgumentError; end
+  # Data type error in DataFrame
   class DataFrameTypeError < TypeError; end
 
+  # Argument error in Vector
   class VectorArgumentError < ArgumentError; end
+  # Data type error in DataFrame
   class VectorTypeError < TypeError; end
 
+  # Argument error in Group
   class GroupArgumentError < ArgumentError; end
 end

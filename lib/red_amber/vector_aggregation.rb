@@ -23,13 +23,15 @@ module RedAmber
 
     # Test whether all elements in self are evaluated to true.
     #
-    # @return [true, false] all? result of self.
+    # @return [true, false]
+    #   all? result of self.
     define_unary_aggregation(:all)
     alias_method :all?, :all
 
     # Test whether any elements in self are evaluated to true.
     #
-    # @return [true, false] any? result of self.
+    # @return [true, false]
+    #   any? result of self.
     define_unary_aggregation(:any)
     alias_method :any?, :any
 
