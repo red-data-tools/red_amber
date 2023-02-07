@@ -17,7 +17,7 @@ module RedAmber
     using RefineArrowTable
     using RefineHash
 
-    # Quicker DataFrame construction from a `Arrow::Table`.
+    # Quicker DataFrame constructor from a `Arrow::Table`.
     #
     # @param table [Arrow::Table]
     #   A table to have in the DataFrame.
@@ -63,7 +63,8 @@ module RedAmber
     # @overload initialize()
     #   Create empty DataFrame
     #
-    #   @example DataFrame.new
+    #   @example
+    #     DataFrame.new
     #
     # @overload initialize(empty)
     #   Create empty DataFrame
@@ -119,10 +120,10 @@ module RedAmber
     attr_reader :table
     alias_method :to_arrow, :table
 
-    # Returns the number of rows.
+    # Returns the number of records (rows).
     #
     # @return [Integer]
-    #   number of rows.
+    #   number of records (rows).
     #
     def size
       @table.n_rows
@@ -131,10 +132,10 @@ module RedAmber
     alias_method :n_obs, :size
     alias_method :n_rows, :size
 
-    # Returns the number of columns.
+    # Returns the number of variables (columns).
     #
     # @return [Integer]
-    #   number of columns.
+    #   number of variables (columns).
     #
     def n_keys
       @table.n_columns
@@ -321,12 +322,47 @@ module RedAmber
       Rover::DataFrame.new(to_h)
     end
 
-    # Create a Group object.
+    # Create a Group object. Or create a Group and summarize it.
     #
-    # @param group_keys [Array<Symbol>]
-    #   keys to create a group.
-    # @return [Group]
-    #   group object.
+    # @overload group(*group_keys)
+    #   Create a Group object.
+    #
+    #   @param group_keys [Array<Symbol, String>]
+    #     keys for grouping.
+    #   @return [Group]
+    #     Group object.
+    #   @example Create a Group
+    #     penguins.group(:species)
+    #
+    #     # =>
+    #     #<RedAmber::Group : 0x000000000000c3c8>
+    #       species   group_count
+    #       <string>      <uint8>
+    #     0 Adelie            152
+    #     1 Chinstrap          68
+    #     2 Gentoo            124
+    #
+    # @overload group(*group_keys)
+    #   Create a Group and summarize it by aggregation functions from the block.
+    #
+    #   @yield [Group]
+    #     passes created group.
+    #   @yieldparam group [Group]
+    #     passes Group object.
+    #   @yieldreturn [DataFrame, Array<DataFrame>]
+    #     an aggregated DataFrame or an array of aggregated DataFrames.
+    #   @return [DataFrame]
+    #     summarized DataFrame.
+    #   @example Create a group and summarize it.
+    #     penguins.group(:species)  { mean(:bill_length_mm) }
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000f3fc>
+    #       species   mean(bill_length_mm)
+    #       <string>              <double>
+    #     0 Adelie                   38.79
+    #     1 Chinstrap                48.83
+    #     2 Gentoo                    47.5
     #
     def group(*group_keys, &block)
       g = Group.new(self, group_keys)

@@ -50,7 +50,7 @@ module RedAmber
 
     # Create a Vector.
     #
-    # @param array [List, Vector, Range, Arrow::Array, #to_arrow_array]
+    # @param array [Array, Vector, Range, Arrow::Array, #to_arrow_array]
     #   array-like.
     # @return [Vector]
     #   created Vector.
@@ -428,10 +428,14 @@ module RedAmber
     # @overload propagate
     #   Returns a Vector of same size as self spreading the value from block.
     #
-    #   @yield [self] gives self to the block.
-    #   @yieldparam self [Vector] self.
-    #   @yieldreturn [scalar] a scalar value.
-    #   @return [Vector] Returns a Vector that is the same size as self
+    #   @yield [self]
+    #     gives self to the block.
+    #   @yieldparam self [Vector]
+    #     self.
+    #   @yieldreturn [scalar]
+    #     a scalar value.
+    #   @return [Vector]
+    #     returns a Vector that is the same size as self
     #     and such that all elements are the same as the yielded value from the block.
     #   @example propagate by a block
     #     vec.propagate { |v| v.mean.round }
