@@ -40,7 +40,7 @@ Rubycw/Rubycw:
 # Offense count: 38
 Lint/BinaryOperatorWithIdenticalOperands:
   Exclude:
-    - 'test/test_vector_function.rb'
+    - 'test/test_vector_binary_element_wise.rb'
 
 # Need for test with empty block
 # Offense count: 1
@@ -206,7 +206,7 @@ Naming/PredicateName:
 # This cop supports safe autocorrection (--autocorrect).
 Style/OperatorMethodCall:
   Exclude:
-    - 'test/test_vector_function.rb'
+    - 'test/test_vector_binary_element_wise.rb'
 
 # Necessary to test when range.end == -1
 # Offense count: 2

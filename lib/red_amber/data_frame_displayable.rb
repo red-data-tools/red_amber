@@ -3,22 +3,63 @@
 require 'stringio'
 
 module RedAmber
-  # mix-ins for the class DataFrame
+  # Mix-in for the class DataFrame
   module DataFrameDisplayable
+    # Used internally to display table.
     INDEX_KEY = :index_key_for_format_table
+    private_constant :INDEX_KEY
 
+    # rubocop:disable Layout/LineLength
+
+    # Show a preview of self as a string.
+    #
+    # @param width [Integer]
+    #   maximum size of result.
+    # @return [String]
+    #   string representation of self.
+    # @example Show penguins dataset
+    #   puts penguins.to_s
+    #
+    #   # =>
+    #       species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    #       <string> <string>        <double>      <double>           <uint8> ... <uint16>
+    #     0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+    #     1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+    #     2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+    #     3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+    #     4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+    #     : :        :                      :             :                 : ...        :
+    #   341 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+    #   342 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+    #   343 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+    #
     def to_s(width: 80)
       return '' if empty?
 
       format_table(width: width)
     end
 
-    # Show statistical summary by a new DatFrame.
-    #   Make stats for numeric columns only.
-    #   NaNs are ignored.
-    #   Counts also show non-NaN counts.
+    # Show statistical summary by a new DataFrame.
     #
-    # @return [DataFrame] a new dataframe.
+    # This method will make stats only for numeric columns.
+    # - NaNs are ignored.
+    # - `count` shows non-NaN counts.
+    #
+    # @return [DataFrame]
+    #   a new dataframe.
+    # @example Statistical summary of penguins dataset
+    #   # needs more width to show all stats in this example
+    #   puts penguins.summary.to_s(width: 82)
+    #
+    #   # =>
+    #     variables            count     mean      std      min      25%   median      75%      max
+    #     <dictionary>      <uint16> <double> <double> <double> <double> <double> <double> <double>
+    #   0 bill_length_mm         342    43.92     5.46     32.1    39.23    44.38     48.5     59.6
+    #   1 bill_depth_mm          342    17.15     1.97     13.1     15.6    17.32     18.7     21.5
+    #   2 flipper_length_mm      342   200.92    14.06    172.0    190.0    197.0    213.0    231.0
+    #   3 body_mass_g            342  4201.75   801.95   2700.0   3550.0   4031.5   4750.0   6300.0
+    #   4 year                   344  2008.03     0.82   2007.0   2007.0   2008.0   2009.0   2009.0
+    #
     def summary
       num_keys = keys.select { |key| self[key].numeric? }
 
@@ -36,6 +77,42 @@ module RedAmber
     end
     alias_method :describe, :summary
 
+    # Show information of self.
+    #
+    # According to `ENV [“RED_AMBER_OUTPUT_MODE”].upcase`,
+    # - If it is 'TDR', returns class, shape and transposed preview by 3 rows.
+    # - If it is 'MINIMUM', returns class and shape.
+    # - If it is 'TABLE' or otherwise, returns class, shape and Table preview.
+    #   Default value of the ENV is 'Table'.
+    # @return [String]
+    #   information of self.
+    # @example Default (ENV ['RED_AMBER_OUTPUT_MODE'] == 'Table')
+    #   puts df.inspect
+    #
+    #   # =>
+    #   #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000c148>
+    #           x y
+    #     <uint8> <string>
+    #   0       1 A
+    #   1       2 B
+    #   2       3 C
+    #
+    # @example In case of ENV ['RED_AMBER_OUTPUT_MODE'] == 'TDR'
+    #   puts df.inspect
+    #
+    #   # =>
+    #   #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000c148>
+    #   Vectors : 1 numeric, 1 string
+    #   # key type   level data_preview
+    #   0 :x  uint8      3 [1, 2, 3]
+    #   1 :y  string     3 ["A", "B", "C"]
+    #
+    # @example In case of ENV ['RED_AMBER_OUTPUT_MODE'] == 'Minimum'
+    #   puts df.inspect
+    #
+    #   # =>
+    #   RedAmber::DataFrame : 3 x 2 Vectors
+    #
     def inspect
       mode = ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table')
       case mode.upcase
@@ -48,17 +125,139 @@ module RedAmber
       end
     end
 
-    # - limit: max num of Vectors to show
-    # - tally: max level to use tally mode
-    # - elements: max element to show values in each vector
+    # Shows some information about self in a transposed style.
+    #
+    # @param limit [Integer, :all]
+    #   maximum number of variables (columns) to show.
+    #   Shows all valiables (columns) if it is `:all`.
+    # @param tally [Integer]
+    #   maximum level to use tally mode.
+    #   Tally mode counts the occurrences of each element and shows as a hash
+    #   with the elements as keys and the corresponding counts as values.
+    # @param elements [Integer]
+    #   maximum number of elements to show values
+    #   in each column.
+    # @return [nil]
+    # @example Default
+    #   diamonds = diamonds.assign_left(:index) { indices }
+    #   diamonds
+    #
+    #   # =>
+    #   #<RedAmber::DataFrame : 53940 x 11 Vectors, 0x000000000000c314>
+    #            index    carat cut       color    clarity     depth    table    price ...        z
+    #         <uint16> <double> <string>  <string> <string> <double> <double> <uint16> ... <double>
+    #       0        0     0.23 Ideal     E        SI2          61.5     55.0      326 ...     2.43
+    #       1        1     0.21 Premium   E        SI1          59.8     61.0      326 ...     2.31
+    #       2        2     0.23 Good      E        VS1          56.9     65.0      327 ...     2.31
+    #       3        3     0.29 Premium   I        VS2          62.4     58.0      334 ...     2.63
+    #       4        4     0.31 Good      J        SI2          63.3     58.0      335 ...     2.75
+    #       :        :        : :         :        :               :        :        : ...        :
+    #   53937    53937      0.7 Very Good D        SI1          62.8     60.0     2757 ...     3.56
+    #   53938    53938     0.86 Premium   H        SI2          61.0     58.0     2757 ...     3.74
+    #   53939    53939     0.75 Ideal     D        SI2          62.2     55.0     2757 ...     3.64
+    #
+    #   diamonds.tdr
+    #
+    #   # =>
+    #   RedAmber::DataFrame : 53940 x 11 Vectors
+    #   Vectors : 8 numeric, 3 strings
+    #   #  key      type   level data_preview
+    #   0  :index   uint16 53940 [0, 1, 2, 3, 4, ... ]
+    #   1  :carat   double   273 [0.23, 0.21, 0.23, 0.29, 0.31, ... ]
+    #   2  :cut     string     5 {"Ideal"=>21551, "Premium"=>13791, "Good"=>4906, "Very Good"=>12082, "Fair"=>1610}
+    #   3  :color   string     7 ["E", "E", "E", "I", "J", ... ]
+    #   4  :clarity string     8 ["SI2", "SI1", "VS1", "VS2", "SI2", ... ]
+    #   5  :depth   double   184 [61.5, 59.8, 56.9, 62.4, 63.3, ... ]
+    #   6  :table   double   127 [55.0, 61.0, 65.0, 58.0, 58.0, ... ]
+    #   7  :price   uint16 11602 [326, 326, 327, 334, 335, ... ]
+    #   8  :x       double   554 [3.95, 3.89, 4.05, 4.2, 4.34, ... ]
+    #   9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, ... ]
+    #    ... 1 more Vector ...
+    #
+    # @example Show all variables
+    #   diamonds.tdr(:all)
+    #
+    #   # =>
+    #   RedAmber::DataFrame : 53940 x 11 Vectors
+    #   Vectors : 8 numeric, 3 strings
+    #   #  key      type   level data_preview
+    #   0  :index   uint16 53940 [0, 1, 2, 3, 4, ... ]
+    #   1  :carat   double   273 [0.23, 0.21, 0.23, 0.29, 0.31, ... ]
+    #   2  :cut     string     5 {"Ideal"=>21551, "Premium"=>13791, "Good"=>4906, "Very Good"=>12082, "Fair"=>1610}
+    #   3  :color   string     7 ["E", "E", "E", "I", "J", ... ]
+    #   4  :clarity string     8 ["SI2", "SI1", "VS1", "VS2", "SI2", ... ]
+    #   5  :depth   double   184 [61.5, 59.8, 56.9, 62.4, 63.3, ... ]
+    #   6  :table   double   127 [55.0, 61.0, 65.0, 58.0, 58.0, ... ]
+    #   7  :price   uint16 11602 [326, 326, 327, 334, 335, ... ]
+    #   8  :x       double   554 [3.95, 3.89, 4.05, 4.2, 4.34, ... ]
+    #   9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, ... ]
+    #   10 :z       double   375 [2.43, 2.31, 2.31, 2.63, 2.75, ... ]
+    #
+    # @example Use tally mode up to 8 levels
+    #   diamonds.tdr(tally: 8)
+    #
+    #   # =>
+    #   RedAmber::DataFrame : 53940 x 11 Vectors
+    #   Vectors : 8 numeric, 3 strings
+    #   #  key      type   level data_preview
+    #   0  :index   uint16 53940 [0, 1, 2, 3, 4, ... ]
+    #   1  :carat   double   273 [0.23, 0.21, 0.23, 0.29, 0.31, ... ]
+    #   2  :cut     string     5 {"Ideal"=>21551, "Premium"=>13791, "Good"=>4906, "Very Good"=>12082, "Fair"=>1610}
+    #   3  :color   string     7 {"E"=>9797, "I"=>5422, "J"=>2808, "H"=>8304, "F"=>9542, "G"=>11292, "D"=>6775}
+    #   4  :clarity string     8 {"SI2"=>9194, "SI1"=>13065, "VS1"=>8171, "VS2"=>12258, "VVS2"=>5066, "VVS1"=>3655, "I1"=>741, "IF"=>1790}
+    #   5  :depth   double   184 [61.5, 59.8, 56.9, 62.4, 63.3, ... ]
+    #   6  :table   double   127 [55.0, 61.0, 65.0, 58.0, 58.0, ... ]
+    #   7  :price   uint16 11602 [326, 326, 327, 334, 335, ... ]
+    #   8  :x       double   554 [3.95, 3.89, 4.05, 4.2, 4.34, ... ]
+    #   9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, ... ]
+    #    ... 1 more Vector ...
+    #
+    # @example Increase elements to show
+    #   diamonds.tdr(elements: 10)
+    #
+    #   # =>
+    #   RedAmber::DataFrame : 53940 x 11 Vectors
+    #   Vectors : 8 numeric, 3 strings
+    #   #  key      type   level data_preview
+    #   0  :index   uint16 53940 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ... ]
+    #   1  :carat   double   273 [0.23, 0.21, 0.23, 0.29, 0.31, 0.24, 0.24, 0.26, 0.22, 0.23, ... ]
+    #   2  :cut     string     5 {"Ideal"=>21551, "Premium"=>13791, "Good"=>4906, "Very Good"=>12082, "Fair"=>1610}
+    #   3  :color   string     7 ["E", "E", "E", "I", "J", "J", "I", "H", "E", "H", ... ]
+    #   4  :clarity string     8 ["SI2", "SI1", "VS1", "VS2", "SI2", "VVS2", "VVS1", "SI1", "VS2", "VS1", ... ]
+    #   5  :depth   double   184 [61.5, 59.8, 56.9, 62.4, 63.3, 62.8, 62.3, 61.9, 65.1, 59.4, ... ]
+    #   6  :table   double   127 [55.0, 61.0, 65.0, 58.0, 58.0, 57.0, 57.0, 55.0, 61.0, 61.0, ... ]
+    #   7  :price   uint16 11602 [326, 326, 327, 334, 335, 336, 336, 337, 337, 338, ... ]
+    #   8  :x       double   554 [3.95, 3.89, 4.05, 4.2, 4.34, 3.94, 3.95, 4.07, 3.87, 4.0, ... ]
+    #   9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78, 4.05, ... ]
+    #    ... 1 more Vector ...
+    #
     def tdr(limit = 10, tally: 5, elements: 5)
       puts tdr_str(limit, tally: tally, elements: elements)
     end
 
+    # rubocop:enable Layout/LineLength
+
+    # Returns some information about self in a transposed style by a string.
+    #
+    # @param (see #tdr)
+    # @option (see #tdr)
+    # @return [String] TDR style string.
+    #
     def tdr_str(limit = 10, tally: 5, elements: 5)
       "#{shape_str}\n#{dataframe_info(limit, tally_level: tally, max_element: elements)}"
     end
 
+    # Returns html formatted text of self by IRuby::HTML.table.
+    #
+    # According to `ENV [“RED_AMBER_OUTPUT_MODE”].upcase`,
+    # - If it is 'MINIMUM', returns shape by plain text.
+    # - If it is 'PLAIN', returns `#inspect` value by plain text.
+    # - If it is 'TDR', returns shape and transposed preview by plain text.
+    # - If it is 'TABLE' or otherwise, returns Table preview by html format.
+    #   Default value of the ENV is 'TABLE'.
+    # @return [String]
+    #   formatted string.
+    #
     def to_iruby
       require 'iruby'
       return ['text/plain', '(empty DataFrame)'] if empty?

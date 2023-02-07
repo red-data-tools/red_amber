@@ -17,7 +17,16 @@ class DataFrameIndexableTest < Test::Unit::TestCase
     )
   end
 
-  sub_test_case 'sort_index' do
+  sub_test_case '#indices' do
+    test 'indices' do
+      assert_true @df.indices.is_a?(Vector)
+      assert_equal_array [*0..4], @df.indices
+      assert_equal_array [*1..5], @df.indices(1)
+      assert_equal_array ('a'..).take(5), @df.indices('a')
+    end
+  end
+
+  sub_test_case '#sort_index' do
     test 'Empty dataframe' do
       df = DataFrame.new
       assert_raise(Arrow::Error::Invalid) { df.sort_indices(:key) }
@@ -43,7 +52,7 @@ class DataFrameIndexableTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case 'sort' do
+  sub_test_case '#sort' do
     test 'Empty dataframe' do
       df = DataFrame.new
       assert_raise(Arrow::Error::Invalid) { df.sort(:key) }
@@ -100,22 +109,6 @@ class DataFrameIndexableTest < Test::Unit::TestCase
         3 :bool   boolean     3 [true, nil, false, false, true], 1 nil
       OUTPUT
       assert_equal str, @df.sort('+float', '-string').tdr_str(tally: 0)
-    end
-  end
-
-  sub_test_case 'map_indices' do
-    test 'indices by Vector/Arrow::Array' do
-      str = <<~OUTPUT
-        RedAmber::DataFrame : 5 x 4 Vectors
-        Vectors : 2 numeric, 1 string, 1 boolean
-        # key     type    level data_preview
-        0 :index  uint8       3 [nil, 1, 0, 0, 1], 1 nil
-        1 :float  double      4 [0.0, 1.1, 1.1, NaN, nil], 1 NaN, 1 nil
-        2 :string string      4 ["A", "C", "B", nil, "B"], 1 nil
-        3 :bool   boolean     3 [true, nil, false, false, true], 1 nil
-      OUTPUT
-      vector = Vector.new([3, 0, 4, 2, 1])
-      assert_equal str, @df.map_indices(vector).tdr_str(tally: 0)
     end
   end
 end

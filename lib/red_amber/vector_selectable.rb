@@ -4,7 +4,7 @@
 # reference: https://arrow.apache.org/docs/cpp/compute.html
 
 module RedAmber
-  # mix-in for class Vector
+  # Mix-in for class Vector
   #   Functions to select some data.
   module VectorSelectable
     using RefineArray
@@ -12,11 +12,14 @@ module RedAmber
 
     # Select elements in the self by indices.
     #
-    # @param indices [Array<Numeric>, Vector] indices.
-    # @yield [Array<Numeric>, Vector] indices.
-    # @return [Vector] Vector by selected elements.
+    # @param indices [Array<Numeric>, Vector]
+    #   indices.
+    # @yield [Array<Numeric>, Vector]
+    #   indices.
+    # @return [Vector]
+    #   vector by selected elements.
     #
-    #   TODO: support for the option `boundscheck: true`
+    # TODO: support for the option `boundscheck: true`
     def take(*indices, &block)
       if block
         unless indices.empty?
@@ -47,11 +50,14 @@ module RedAmber
 
     # Select elements in the self by booleans.
     #
-    # @param booleans [Array<true, false, nil>, Vector] booleans.
-    # @yield [Array<true, false, nil>, Vector] booleans.
-    # @return [Vector] Vector by selected elements.
+    # @param booleans [Array<true, false, nil>, Vector]
+    #   booleans.
+    # @yield [Array<true, false, nil>, Vector]
+    #   booleans.
+    # @return [Vector]
+    #   vector by selected elements.
     #
-    #   TODO: support for the option `null_selection_behavior: :drop`
+    # TODO: support for the option `null_selection_behavior: :drop`
     def filter(*booleans, &block)
       if block
         unless booleans.empty?
@@ -87,9 +93,12 @@ module RedAmber
 
     # Select elements in the self by indices or booleans.
     #
-    # @param args [Array<Numeric, true, false, nil>, Vector] specifier.
-    # @yield [Array<Numeric, true, false, nil>, Vector] specifier.
-    # @return [scalar, Array] returns scalar or array.
+    # @param args [Array<Numeric, true, false, nil>, Vector]
+    #   specifier.
+    # @yield [Array<Numeric, true, false, nil>, Vector]
+    #   specifier.
+    # @return [scalar, Array]
+    #   returns scalar or array.
     #
     def [](*args)
       array =
@@ -139,6 +148,11 @@ module RedAmber
       to_a.index(element)
     end
 
+    # Drop nil in self and returns a new Vector as a result.
+    #
+    # @return [Vector]
+    #   a Vector without nils.
+    #
     def drop_nil
       datum = find(:drop_null).execute([data])
       Vector.create(datum.value)
@@ -146,21 +160,25 @@ module RedAmber
 
     # Arrange values in Vector.
     #
-    # @param order [Symbol] sort order.
+    # @param order [Symbol]
+    #   sort order.
     #   - `:+`, `:ascending` or without argument will sort in increasing order.
     #   - `:-` or `:descending` will sort in decreasing order.
-    # @return [Vector] sorted Vector.
-    # @example sort in increasing order (default)
+    # @return [Vector]
+    #   sorted Vector.
+    # @example Sort in increasing order (default)
     #   Vector.new(%w[B D A E C]).sort
     #   # same as #sort(:+)
     #   # same as #sort(:ascending)
+    #
     #   # =>
     #   #<RedAmber::Vector(:string, size=5):0x000000000000c134>
     #   ["A", "B", "C", "D", "E"]
     #
-    # @example sort in decreasing order
+    # @example Sort in decreasing order
     #   Vector.new(%w[B D A E C]).sort(:-)
     #   # same as #sort(:descending)
+    #
     #   # =>
     #   #<RedAmber::Vector(:string, size=5):0x000000000000c148>
     #   ["E", "D", "C", "B", "A"]
@@ -181,31 +199,36 @@ module RedAmber
     end
 
     # Returns numerical rank of self.
-    #   - Nil values are considered greater than any value.
-    #   - NaN values are considered greater than any value but smaller than nil values.
-    #   - Tiebreakers are ranked in order of appearance.
-    #   - `RankOptions` in C++ function is not implemented in C GLib yet.
-    #     This method is currently fixed to the default behavior.
+    # - Nil values are considered greater than any value.
+    # - NaN values are considered greater than any value but smaller than nil values.
+    # - Tiebreakers are ranked in order of appearance.
+    # - `RankOptions` in C++ function is not implemented in C GLib yet.
+    #   This method is currently fixed to the default behavior.
     #
-    # @return [Vector] 0-based rank of self (0...size in range).
-    # @example rank of float Vector
+    # @return [Vector]
+    #   0-based rank of self (0...size in range).
+    # @example Rank of float Vector
     #   fv = Vector.new(0.1, nil, Float::NAN, 0.2, 0.1); fv
+    #
     #   # =>
     #   #<RedAmber::Vector(:double, size=5):0x000000000000c65c>
     #   [0.1, nil, NaN, 0.2, 0.1]
     #
     #   fv.rank
+    #
     #   # =>
     #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
     #   [0, 4, 3, 2, 1]
     #
-    # @example rank of string Vector
+    # @example Rank of string Vector
     #   sv = Vector.new("A", "B", nil, "A", "C"); sv
+    #
     #   # =>
     #   #<RedAmber::Vector(:string, size=5):0x0000000000003854>
     #   ["A", "B", nil, "A", "C"]
     #
     #   sv.rank
+    #
     #   # =>
     #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
     #   [0, 2, 4, 1, 3]
@@ -223,40 +246,48 @@ module RedAmber
     #   Return a randomly selected element.
     #   This is one of an aggregation function.
     #
-    #   @return [scalar] one of an element in self.
-    #   @example sample a element
+    #   @return [scalar]
+    #     one of an element in self.
+    #   @example Sample a element
     #     v = Vector.new('A'..'H'); v
+    #
     #     # =>
     #     #<RedAmber::Vector(:string, size=8):0x0000000000011b20>
     #     ["A", "B", "C", "D", "E", "F", "G", "H"]
     #
     #     v.sample
+    #
     #     # =>
     #     "C"
     #
     # @overload sample(n)
     #   Pick up n elements at random.
     #
-    #   @param n [Integer] positive number of elements to pick.
+    #   @param n [Integer]
+    #     positive number of elements to pick.
     #     If n is smaller or equal to size, elements are picked by non-repeating.
     #     If n is greater than `size`, elements are picked repeatedly.
-    #   @return [Vector] sampled elements.
+    #   @return [Vector]
+    #     sampled elements.
     #     If n == 1 (in case of `sample(1)`), it returns a Vector of size == 1
     #     not a scalar.
-    #   @example sample Vector in size 1
+    #   @example Sample Vector in size 1
     #     v.sample(1)
+    #
     #     # =>
     #     #<RedAmber::Vector(:string, size=1):0x000000000001a3b0>
     #     ["H"]
     #
-    #   @example sample same size of self: every element is picked in random order
+    #   @example Sample same size of self: every element is picked in random order
     #     v.sample(8)
+    #
     #     # =>
     #     #<RedAmber::Vector(:string, size=8):0x000000000001bda0>
     #     ["H", "D", "B", "F", "E", "A", "G", "C"]
     #
-    #   @example over sampling: "E" and "A" are sampled repeatedly
+    #   @example Over sampling: "E" and "A" are sampled repeatedly
     #     v.sample(9)
+    #
     #     # =>
     #     #<RedAmber::Vector(:string, size=9):0x000000000001d790>
     #     ["E", "E", "A", "D", "H", "C", "A", "F", "H"]
@@ -264,21 +295,25 @@ module RedAmber
     # @overload sample(prop)
     #   Pick up elements by proportion `prop` at random.
     #
-    #   @param prop [Float] positive proportion of elements to pick.
+    #   @param prop [Float]
+    #     positive proportion of elements to pick.
     #     Absolute number of elements to pick:`prop*size` is rounded (by `half: :up``).
     #     If prop is smaller or equal to 1.0, elements are picked by non-repeating.
     #     If prop is greater than 1.0, some elements are picked repeatedly.
-    #   @return [Vector] sampled elements.
+    #   @return [Vector]
+    #     sampled elements.
     #     If picked element is only one, it returns a Vector of size == 1
     #     not a scalar.
-    #   @example sample same size of self: every element is picked in random order
+    #   @example Sample same size of self: every element is picked in random order
     #     v.sample(1.0)
+    #
     #     # =>
     #     #<RedAmber::Vector(:string, size=8):0x000000000001bda0>
     #     ["D", "H", "F", "C", "A", "B", "E", "G"]
     #
     #   @example 2 times over sampling
     #     v.sample(2.0)
+    #
     #     # =>
     #     #<RedAmber::Vector(:string, size=16):0x00000000000233e8>
     #     ["H", "B", "C", "B", "C", "A", "F", "A", "E", "C", "H", "F", "F", "A", ... ]

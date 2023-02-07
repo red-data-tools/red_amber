@@ -4,7 +4,7 @@ module RedAmber
   # Class to represent a data frame.
   # Variable @table holds an Arrow::Table object.
   class DataFrame
-    # mix-in
+    # Mix-in
     include DataFrameCombinable
     include DataFrameDisplayable
     include DataFrameIndexable
@@ -17,13 +17,16 @@ module RedAmber
     using RefineArrowTable
     using RefineHash
 
-    # Quicker DataFrame construction from a `Arrow::Table`.
+    # Quicker DataFrame constructor from a `Arrow::Table`.
     #
-    # @param table [Arrow::Table] A table to have in the DataFrame.
-    # @return [DataFrame] Initialized DataFrame.
+    # @param table [Arrow::Table]
+    #   A table to have in the DataFrame.
+    # @return [DataFrame]
+    #   Initialized DataFrame.
     #
     # @note This method will allocate table directly and may be used in the method.
     # @note `table` must have unique keys.
+    #
     def self.create(table)
       instance = allocate
       instance.instance_variable_set(:@table, table)
@@ -60,14 +63,16 @@ module RedAmber
     # @overload initialize()
     #   Create empty DataFrame
     #
-    #   @example DataFrame.new
+    #   @example
+    #     DataFrame.new
     #
     # @overload initialize(empty)
     #   Create empty DataFrame
     #
     #   @param empty [nil, [], {}]
     #
-    #   @example DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
+    #   @example
+    #     DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
     #
     # @overload initialize(args)
     #
@@ -109,15 +114,16 @@ module RedAmber
 
     # Returns the table having within.
     #
-    # @return [Arrow::Table] The table within.
+    # @return [Arrow::Table]
+    #   the table within.
     #
     attr_reader :table
-
     alias_method :to_arrow, :table
 
-    # Returns the number of rows.
+    # Returns the number of records (rows).
     #
-    # @return [Integer] Number of rows.
+    # @return [Integer]
+    #   number of records (rows).
     #
     def size
       @table.n_rows
@@ -126,9 +132,10 @@ module RedAmber
     alias_method :n_obs, :size
     alias_method :n_rows, :size
 
-    # Returns the number of columns.
+    # Returns the number of variables (columns).
     #
-    # @return [Integer] Number of columns.
+    # @return [Integer]
+    #   number of variables (columns).
     #
     def n_keys
       @table.n_columns
@@ -140,7 +147,7 @@ module RedAmber
     # Returns the numbers of rows and columns.
     #
     # @return [Array]
-    #   Number of rows and number of columns in an array.
+    #   number of rows and number of columns in an array.
     #   Same as [size, n_keys].
     #
     def shape
@@ -160,7 +167,7 @@ module RedAmber
     # Returns an Array of keys.
     #
     # @return [Array]
-    #   Keys in an Array.
+    #   keys in an Array.
     #
     def keys
       @keys || @keys = init_instance_vars(:keys)
@@ -170,9 +177,10 @@ module RedAmber
 
     # Returns true if self has a specified key in the argument.
     #
-    # @param key [Symbol, String] Key to test.
+    # @param key [Symbol, String]
+    #   key to test.
     # @return [Boolean]
-    #   Returns true if self has key in Symbol.
+    #   returns true if self has key in Symbol.
     #
     def key?(key)
       keys.include?(key.to_sym)
@@ -181,9 +189,10 @@ module RedAmber
 
     # Returns index of specified key in the Array keys.
     #
-    # @param key [Symbol, String] key to know.
+    # @param key [Symbol, String]
+    #   key to know.
     # @return [Integer]
-    #   Index of key in the Array keys.
+    #   index of key in the Array keys.
     #
     def key_index(key)
       keys.find_index(key.to_sym)
@@ -194,7 +203,7 @@ module RedAmber
     # Returns abbreviated type names in an Array.
     #
     # @return [Array]
-    #   Abbreviated Red Arrow data type names.
+    #   abbreviated Red Arrow data type names.
     #
     def types
       @types || @types = @table.columns.map do |column|
@@ -205,7 +214,7 @@ module RedAmber
     # Returns an Array of Classes of data type.
     #
     # @return [Array]
-    #   An Array of Red Arrow data type Classes.
+    #   an Array of Red Arrow data type Classes.
     #
     def type_classes
       @data_types || @data_types = @table.columns.map { |column| column.data_type.class }
@@ -214,34 +223,16 @@ module RedAmber
     # Returns Vectors in an Array.
     #
     # @return [Array]
-    #   An Array of `RedAmber::Vector`s.
+    #   an Array of Vector.
     #
     def vectors
       @vectors || @vectors = init_instance_vars(:vectors)
     end
 
-    # Returns row indices (start...(size+start)) in a Vector.
-    #
-    # @param start [Object]
-    #   Object which have `#succ` method.
-    #
-    # @return [Array]
-    #   A Vector of row indices.
-    #
-    # @example
-    #   (when self.size == 5)
-    #   - indices #=> Vector[0, 1, 2, 3, 4]
-    #   - indices(1) #=> Vector[1, 2, 3, 4, 5]
-    #   - indices('a') #=> Vector['a', 'b', 'c', 'd', 'e']
-    #
-    def indices(start = 0)
-      Vector.new((start..).take(size))
-    end
-    alias_method :indexes, :indices
-
     # Returns column-oriented data in a Hash.
     #
-    # @return [Hash] A Hash of 'key => column_in_an_array'.
+    # @return [Hash]
+    #   a Hash of 'key => column_in_an_array'.
     #
     def to_h
       variables.transform_values(&:to_a)
@@ -249,7 +240,8 @@ module RedAmber
 
     # Returns a row-oriented array without header.
     #
-    # @return [Array] Row-oriented data without header.
+    # @return [Array]
+    #   row-oriented data without header.
     #
     # @note If you need column-oriented array, use `.to_h.to_a`.
     #
@@ -260,7 +252,8 @@ module RedAmber
 
     # Returns column name and data type in a Hash.
     #
-    # @return [Hash] Column name and data type.
+    # @return [Hash]
+    #   column name and data type.
     #
     # @example
     #   RedAmber::DataFrame.new(x: [1, 2, 3], y: %w[A B C]).schema
@@ -273,7 +266,7 @@ module RedAmber
     # Compare DataFrames.
     #
     # @return [true, false]
-    #   True if other is a DataFrame and table is same.
+    #   true if other is a DataFrame and table is same.
     #   Otherwise return false.
     #
     def ==(other)
@@ -282,7 +275,8 @@ module RedAmber
 
     # Check if it is a empty DataFrame.
     #
-    # @return [true, false] True if it has no columns.
+    # @return [true, false
+    #  ] true if it has no columns.
     #
     def empty?
       variables.empty?
@@ -293,14 +287,18 @@ module RedAmber
     # @overload each_row
     #   Returns Enumerator when no block given.
     #
-    #   @return [Enumerator] Enumerator of each rows.
+    #   @return [Enumerator]
+    #     enumerator of each rows.
     #
     # @overload each_row(&block)
     #   Yields with key and row pairs.
     #
-    #   @yield [key_row_pairs] Yields with key and row pairs.
-    #   @yieldparam [Hash] Key and row pairs.
-    #   @yieldreturn [Integer] Size of the DataFrame.
+    #   @yield [key_row_pairs]
+    #     yields with key and row pairs.
+    #   @yieldparam [Hash]
+    #     key and row pairs.
+    #   @yieldreturn [Integer]
+    #     size of the DataFrame.
     #
     def each_row
       return enum_for(:each_row) unless block_given?
@@ -316,25 +314,70 @@ module RedAmber
 
     # Returns self in a `Rover::DataFrame`.
     #
-    # @return [Rover::DataFrame] A `Rover::DataFrame`.
+    # @return [Rover::DataFrame]
+    #   a `Rover::DataFrame`.
     #
     def to_rover
       require 'rover'
       Rover::DataFrame.new(to_h)
     end
 
+    # Create a Group object. Or create a Group and summarize it.
+    #
+    # @overload group(*group_keys)
+    #   Create a Group object.
+    #
+    #   @param group_keys [Array<Symbol, String>]
+    #     keys for grouping.
+    #   @return [Group]
+    #     Group object.
+    #   @example Create a Group
+    #     penguins.group(:species)
+    #
+    #     # =>
+    #     #<RedAmber::Group : 0x000000000000c3c8>
+    #       species   group_count
+    #       <string>      <uint8>
+    #     0 Adelie            152
+    #     1 Chinstrap          68
+    #     2 Gentoo            124
+    #
+    # @overload group(*group_keys)
+    #   Create a Group and summarize it by aggregation functions from the block.
+    #
+    #   @yield [Group]
+    #     passes created group.
+    #   @yieldparam group [Group]
+    #     passes Group object.
+    #   @yieldreturn [DataFrame, Array<DataFrame>]
+    #     an aggregated DataFrame or an array of aggregated DataFrames.
+    #   @return [DataFrame]
+    #     summarized DataFrame.
+    #   @example Create a group and summarize it.
+    #     penguins.group(:species)  { mean(:bill_length_mm) }
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000f3fc>
+    #       species   mean(bill_length_mm)
+    #       <string>              <double>
+    #     0 Adelie                   38.79
+    #     1 Chinstrap                48.83
+    #     2 Gentoo                    47.5
+    #
     def group(*group_keys, &block)
       g = Group.new(self, group_keys)
       g = g.summarize(&block) if block
       g
     end
 
+    # Catch variable (column) key as method name.
     def method_missing(name, *args, &block)
       return v(name) if args.empty? && key?(name)
 
       super
     end
 
+    # Catch variable (column) key as method name.
     def respond_to_missing?(name, include_private)
       return true if key?(name)
 

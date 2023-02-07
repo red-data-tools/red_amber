@@ -1,28 +1,33 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # mix-in for the class DataFrame
+  # Mix-in for the class DataFrame
   module Helper
     private
 
     # If num is larger than 1 return 's' to be plural.
     #
-    # @param num [Numeric] some number.
-    # @return ['s', ''] return 's' if num is larger than 1.
+    # @param num [Numeric]
+    #   some number.
+    # @return ['s', '']
+    #   return 's' if num is larger than 1.
     #   Otherwise return ''.
+    #
     def pl(num)
       num > 1 ? 's' : ''
     end
 
-    # Parse the argments in an Array
-    #   and returns a parsed Array.
+    # Parse the argments in an Array and returns a parsed Array.
     #
     # @param args
     #   [<Integer, Symbol, true, false, nil, Array, Range, Enumerator, String, Float>]
     #   arguments.
-    # @param array_size [Integer] size of target Array to use in a endless Range.
-    # @return [<Integer, Symbol, true, false, nil>] parsed flat Array.
+    # @param array_size [Integer]
+    #   size of target Array to use in a endless Range.
+    # @return [<Integer, Symbol, true, false, nil>]
+    #   parsed flat Array.
     # @note This method is recursively called to parse.
+    #
     def parse_args(args, array_size)
       args.flat_map do |elem|
         case elem
@@ -46,9 +51,13 @@ module RedAmber
 
     # Parse a Range to an Array
     #
-    # @param range [Range] Range to parse.
-    # @param array_size [Integer] size of target Array to use in a endless Range.
-    # @return [Array<Integer, Symbol, String>] parsed Array.
+    # @param range [Range]
+    #   range to parse.
+    # @param array_size [Integer]
+    #   size of target Array to use in a endless Range.
+    # @return [Array<Integer, Symbol, String>]
+    #   parsed Array.
+    #
     def parse_range(range, array_size)
       bg = range.begin
       en = range.end
@@ -75,10 +84,25 @@ module RedAmber
   module ArrowFunction
     module_function
 
+    # Find Arrow's compute function.
+    #
+    # {https://arrow.apache.org/docs/cpp/compute.html}
+    # @param function_name [Symbol]
+    #   function name.
+    # @return [Arrow::Function]
+    #   arrow compute function object.
+    #
     def find(function_name)
       Arrow::Function.find(function_name)
     end
 
+    # Show document of Arrow's compute function.
+    #
+    # @param function_name [Symbol]
+    #   function name.
+    # @return [String]
+    #   document of compute function object.
+    #
     def arrow_doc(function_name)
       f = find(function_name)
       "#{f}\n#{'-' * function_name.size}\n#{f.doc.description}"

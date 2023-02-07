@@ -1,0 +1,6 @@
+/* Override this file with custom rules */
+
+/* Use monospace font for code */
+code {
+  font-family: "Courier New", Consolas, monospace;
+}

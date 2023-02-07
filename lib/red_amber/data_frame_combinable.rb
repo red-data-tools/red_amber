@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # mix-in for the class DataFrame
+  # Mix-in for the class DataFrame
   module DataFrameCombinable
     # Refinements for Arrow::Table
     using RefineArrowTable
@@ -12,16 +12,18 @@ module RedAmber
     # @param other [DataFrame, Arrow::Table, Array<DataFrame, Arrow::Table>]
     #   DataFrames or Tables to concatenate.
     # @return [DataFrame]
-    #   Concatenated dataframe.
+    #   concatenated dataframe.
     # @example
     #   df    = DataFrame.new(x: [1, 2], y: ['A', 'B'])
     #   other = DataFrame.new(x: [3, 4], y: ['C', 'D'])
     #   [df.types, other.types]
-    #   #=>
+    #
+    #   # =>
     #   [[:uint8, :string], [:uint8, :string]]
     #
     #   df.concatenate(other)
-    #   #=>
+    #
+    #   # =>
     #           x y
     #     <uint8> <string>
     #   0       1 A
@@ -65,12 +67,13 @@ module RedAmber
     # @raise [DataFrameArgumentError]
     #   if size is not same or self and other shares the same key.
     # @return [DataFrame]
-    #   Merged dataframe.
+    #   merged dataframe.
     # @example
     #   df    = DataFrame.new(x: [1, 2], y: [3, 4])
     #   other = DataFrame.new(a: ['A', 'B'], b: ['C', 'D'])
     #   df.merge(other)
-    #   #=>
+    #
+    #   # =>
     #           x       y a        b
     #     <uint8> <uint8> <string> <string>
     #   0       1       3 A        C
@@ -119,7 +122,8 @@ module RedAmber
     #     A DataFrame or a Table to be joined with self.
     #
     # @!macro join_dorce_order
-    #   @param force_order [Boolean] wheather force order of the output always same.
+    #   @param force_order [Boolean]
+    #     wheather force order of the output always same.
     #     - This option is used in `:full_outer` and `:right_outer`.
     #     - If this option is true (by default) it will append index to the source
     #       and sort after joining. It will cause some degradation in performance.
@@ -129,24 +133,25 @@ module RedAmber
     #     a suffix to rename keys when key names conflict as a result of join.
     #     `suffix` must be responsible to `#succ`.
     #   @return [DataFrame]
-    #     Joined dataframe.
+    #     joined dataframe.
     #
     # @!macro join_key_in_array
     #   @param join_keys [String, Symbol, Array<String, Symbol>]
-    #     A key or keys to match.
+    #     a key or keys to match.
     #
     # @!macro join_key_in_hash
     #   @param join_key_pairs [Hash]
-    #     Pairs of a key name or key names to match in left and right.
+    #     pairs of a key name or key names to match in left and right.
     #   @option join_key_pairs [String, Symbol, Array<String, Symbol>] :left
-    #     Join keys in `self`.
+    #     join keys in `self`.
     #   @option join_key_pairs [String, Symbol, Array<String, Symbol>] :right
-    #     Join keys in `other`.
+    #     join keys in `other`.
     #
     # @!macro join_common_example_1
     #   @example
     #     df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1
     #       <string> <uint8>
     #     0 A              1
@@ -154,7 +159,8 @@ module RedAmber
     #     2 C              3
     #
     #     other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-    #     #=>
+    #
+    #     # =>
     #       KEY      X2
     #       <string> <boolean>
     #     0 A        true
@@ -164,7 +170,8 @@ module RedAmber
     # @!macro join_common_example_2
     #   @example
     #     df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
-    #     #=>
+    #
+    #     # =>
     #       KEY1          X1
     #       <string> <uint8>
     #     0 A              1
@@ -172,7 +179,8 @@ module RedAmber
     #     2 C              3
     #
     #     other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
-    #     #=>
+    #
+    #     # =>
     #       KEY2     X2
     #       <string> <boolean>
     #     0 A        true
@@ -185,7 +193,8 @@ module RedAmber
     #       KEY1: %w[A B C],
     #       KEY2: [1, 2, 3]
     #     )
-    #     #=>
+    #
+    #     # =>
     #       KEY1        KEY2
     #       <string> <uint8>
     #     0 A              1
@@ -196,7 +205,8 @@ module RedAmber
     #       KEY1: %w[A B D],
     #       KEY2: [1, 4, 5]
     #     )
-    #     #=>
+    #
+    #     # =>
     #       KEY1        KEY2
     #       <string> <uint8>
     #     0 A              1
@@ -216,7 +226,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
     #     df.inner_join(other)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -230,7 +241,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example with a key
     #     df.inner_join(other, :KEY)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -244,7 +256,8 @@ module RedAmber
     #   @macro join_common_example_2
     #   @example with key pairs
     #     df2.inner_join(other2, { left: :KEY1, right: :KEY2 })
-    #     #=>
+    #
+    #     # =>
     #       KEY1          X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -268,7 +281,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
     #     df.full_join(other)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -285,7 +299,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example with a key
     #     df.full_join(other, :KEY)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -302,7 +317,8 @@ module RedAmber
     #   @macro join_common_example_2
     #   @example with key pairs
     #     df2.full_join(other2, { left: :KEY1, right: :KEY2 })
-    #     #=>
+    #
+    #     # =>
     #       KEY1          X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -330,7 +346,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
     #     df.left_join(other)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -345,7 +362,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example with a key
     #     df.left_join(other, :KEY)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -360,7 +378,8 @@ module RedAmber
     #   @macro join_common_example_2
     #   @example with key pairs
     #     df2.left_join(other2, { left: :KEY1, right: :KEY2 })
-    #     #=>
+    #
+    #     # =>
     #       KEY1          X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -385,7 +404,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
     #     df.right_join(other)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -401,7 +421,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example with a key
     #     df.right_join(other, :KEY)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -417,7 +438,8 @@ module RedAmber
     #   @macro join_common_example_2
     #   @example with key pairs
     #     df2.right_join(other2, { left: :KEY1, right: :KEY2 })
-    #     #=>
+    #
+    #     # =>
     #       KEY1          X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -444,7 +466,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
     #     df.semi_join(other)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1
     #       <string> <uint8>
     #     0 A              1
@@ -458,7 +481,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example with a key
     #     df.semi_join(other, :KEY)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1
     #       <string> <uint8>
     #     0 A              1
@@ -472,7 +496,8 @@ module RedAmber
     #   @macro join_common_example_2
     #   @example with key pairs
     #     df2.semi_join(other2, { left: :KEY1, right: :KEY2 })
-    #     #=>
+    #
+    #     # =>
     #       KEY1          X1
     #       <string> <uint8>
     #     0 A              1
@@ -495,7 +520,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
     #     df.anti_join(other)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1
     #       <string> <uint8>
     #     0 C              3
@@ -508,7 +534,8 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example with a key
     #     df.anti_join(other, :KEY)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1
     #       <string> <uint8>
     #     0 C              3
@@ -521,7 +548,8 @@ module RedAmber
     #   @macro join_common_example_2
     #   @example with key pairs
     #     df2.anti_join(other2, { left: :KEY1, right: :KEY2 })
-    #     #=>
+    #
+    #     # =>
     #       KEY1          X1
     #       <string> <uint8>
     #     0 C              3
@@ -535,10 +563,11 @@ module RedAmber
     # Check if set operation with self and other is possible.
     #
     # @macro join_before
-    # @return [Boolean] true if set operation is possible.
+    # @return [Boolean]
+    #   true if set operation is possible.
     # @macro join_common_example_3
     # @example
-    #   df3.set_operable?(other3) #=> true
+    #   df3.set_operable?(other3) # => true
     #
     def set_operable?(other) # rubocop:disable Naming/AccessorMethodName
       keys == other.keys.map(&:to_sym)
@@ -549,11 +578,13 @@ module RedAmber
     # - A kind of set operations.
     #
     # @macro join_before
-    # @return [DataFrame] Joined dataframe.
+    # @return [DataFrame]
+    #   joined dataframe.
     # @macro join_common_example_3
     # @example
     #   df3.intersect(other3)
-    #   #=>
+    #
+    #   # =>
     #     KEY1        KEY2
     #     <string> <uint8>
     #   0 A              1
@@ -571,11 +602,13 @@ module RedAmber
     # - A kind of set operations.
     #
     # @macro join_before
-    # @return [DataFrame] Joined dataframe.
+    # @return [DataFrame]
+    #   joined dataframe.
     # @macro join_common_example_3
     # @example
     #   df3.intersect(other3)
-    #   #=>
+    #
+    #   # =>
     #     KEY1        KEY2
     #     <string> <uint8>
     #   0 A              1
@@ -597,18 +630,21 @@ module RedAmber
     # - A kind of set operations.
     #
     # @macro join_before
-    # @return [DataFrame] Joined dataframe.
+    # @return [DataFrame]
+    #   joined dataframe.
     # @macro join_common_example_3
     # @example
     #   df3.intersect(other3)
-    #   #=>
+    #
+    #   # =>
     #     KEY1        KEY2
     #     <string> <uint8>
     #   0 B              2
     #   1 C              3
     #
     #   other.intersect(df)
-    #   #=>
+    #
+    #   # =>
     #     KEY1        KEY2
     #     <string> <uint8>
     #   0 B              4
@@ -636,7 +672,8 @@ module RedAmber
     #       X1: %w[A B C],
     #       Y: %w[D E F]
     #     )
-    #     #=>
+    #
+    #     # =>
     #       X1       Y1
     #       <string> <string>
     #     0 A        D
@@ -647,7 +684,8 @@ module RedAmber
     #       X2: %w[A B D],
     #       Y:  %w[e E E]
     #     )
-    #     #=>
+    #
+    #     # =>
     #       X1       Y1
     #       <string> <string>
     #     0 A        D
@@ -671,14 +709,16 @@ module RedAmber
     #   @macro join_common_example_1
     #   @example
     #     df.join(other)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
     #     1 B              2 false
     #
     #     df.join(other, type: :full_outer)
-    #     #=>
+    #
+    #     # =>
     #       KEY           X1 X2
     #       <string> <uint8> <boolean>
     #     0 A              1 true
@@ -696,14 +736,16 @@ module RedAmber
     #   @macro join_common_example_3
     #   @example join keys in an Array
     #     df3.join(other3, [:KEY1, :KEY2])
-    #     #=>
+    #
+    #     # =>
     #       KEY1        KEY2
     #       <string> <uint8>
     #     0 A              1
     #
     #   @example partial join key and suffix
     #     df3.join(other3, :KEY1, suffix: '.a')
-    #     #=>
+    #
+    #     # =>
     #       KEY1        KEY2  KEY2.a
     #       <string> <uint8> <uint8>
     #     0 A              1       1
@@ -719,7 +761,8 @@ module RedAmber
     #   @macro join_common_example_4
     #   @example without options
     #     df4.join(other4)
-    #     #=>
+    #
+    #     # =>
     #       X1       Y        X2
     #       <string> <string> <string>
     #     0 B        E        D
@@ -727,14 +770,16 @@ module RedAmber
     #
     #   @example join by key pairs
     #     df4.join(other4, { left: [:X1, :Y], right: [:X2, :Y] })
-    #     #=>
+    #
+    #     # =>
     #       X1       Y
     #       <string> <string>
     #     0 B        E
     #
     #   @example join by key pairs, using renaming by suffix
     #     df4.join(other4, { left: :X1, right: :X2 })
-    #     #=>
+    #
+    #     # =>
     #       X1       Y        Y.1
     #       <string> <string> <string>
     #     0 A        D        e

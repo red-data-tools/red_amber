@@ -97,15 +97,6 @@ class DataFrameTest < Test::Unit::TestCase
       assert_equal size, df.n_rows
     end
 
-    test 'indices' do
-      hash, df, = data
-      size = hash.empty? ? 0 : hash.values.first.size
-      assert_true df.indices.is_a?(Vector)
-      assert_equal [*0...size], df.indices
-      assert_equal [*1..size], df.indices(1)
-      assert_equal ('a'..).take(size), df.indices('a')
-    end
-
     test 'n_keys' do
       hash, df, = data
       assert_equal hash.keys.size, df.n_keys
