@@ -91,7 +91,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>mix-ins for the class DataFrame</p>
+<p>Mix-in for the class DataFrame</p>
 
 
   </div>
@@ -100,22 +100,6 @@
   
 
 </div>
-  
-    <h2>
-      Constant Summary
-      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
-    </h2>
-
-    <dl class="constants">
-      
-        <dt id="INDEX_KEY-constant" class="">INDEX_KEY =
-          
-        </dt>
-        <dd><pre class="code"><span class='symbol'>:index_key_for_format_table</span></pre></dd>
-      
-    </dl>
-  
-
 
 
 
@@ -133,7 +117,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#inspect-instance_method" title="#inspect (instance method)">#<strong>inspect</strong>  &#x21d2; Object </a>
+      <a href="#inspect-instance_method" title="#inspect (instance method)">#<strong>inspect</strong>  &#x21d2; String </a>
     
 
     
@@ -147,7 +131,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Show information of self.</p>
+</div></span>
   
 </li>
 
@@ -172,7 +158,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Show statistical summary by a new DatFrame.</p>
+<p>Show statistical summary by a new DataFrame.</p>
 </div></span>
   
 </li>
@@ -181,7 +167,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#tdr-instance_method" title="#tdr (instance method)">#<strong>tdr</strong>(limit = 10, tally: 5, elements: 5)  &#x21d2; Object </a>
+      <a href="#tdr-instance_method" title="#tdr (instance method)">#<strong>tdr</strong>(limit = 10, tally: 5, elements: 5)  &#x21d2; nil </a>
     
 
     
@@ -195,9 +181,8 @@
   
 
   
-    <span class="summary_desc"><div class='inline'><ul><li>
-<p>limit: max num of Vectors to show - tally: max level to use tally mode - elements: max element to show values in each vector.</p>
-</li></ul>
+    <span class="summary_desc"><div class='inline'>
+<p>Shows some information about self in a transposed style.</p>
 </div></span>
   
 </li>
@@ -206,7 +191,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#tdr_str-instance_method" title="#tdr_str (instance method)">#<strong>tdr_str</strong>(limit = 10, tally: 5, elements: 5)  &#x21d2; Object </a>
+      <a href="#tdr_str-instance_method" title="#tdr_str (instance method)">#<strong>tdr_str</strong>(limit = 10, tally: 5, elements: 5)  &#x21d2; String </a>
     
 
     
@@ -220,7 +205,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns some information about self in a transposed style by a string.</p>
+</div></span>
   
 </li>
 
@@ -228,7 +215,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#to_iruby-instance_method" title="#to_iruby (instance method)">#<strong>to_iruby</strong>  &#x21d2; Object </a>
+      <a href="#to_iruby-instance_method" title="#to_iruby (instance method)">#<strong>to_iruby</strong>  &#x21d2; String </a>
     
 
     
@@ -242,7 +229,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Returns html formatted text of self by IRuby::HTML.table.</p>
+</div></span>
   
 </li>
 
@@ -250,7 +239,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#to_s-instance_method" title="#to_s (instance method)">#<strong>to_s</strong>(width: 80)  &#x21d2; Object </a>
+      <a href="#to_s-instance_method" title="#to_s (instance method)">#<strong>to_s</strong>(width: 80)  &#x21d2; String </a>
     
 
     
@@ -264,7 +253,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Show a preview of self as a string.</p>
+</div></span>
   
 </li>
 
@@ -281,32 +272,114 @@
       <div class="method_details first">
   <h3 class="signature first" id="inspect-instance_method">
   
-    #<strong>inspect</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>inspect</strong>  &#x21d2; <tt>String</tt> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Show information of self.</p>
+
+<p>According to ‘ENV [“RED_AMBER_OUTPUT_MODE”].upcase`,</p>
+<ul><li>
+<p>If it is ‘TDR’, returns class, shape and transposed preview by 3 rows.</p>
+</li><li>
+<p>If it is ‘MINIMUM’, returns class and shape.</p>
+</li><li>
+<p>If it is ‘TABLE’ or otherwise, returns class, shape and Table preview. Default value of the ENV is ‘Table’.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Default (ENV [‘RED_AMBER_OUTPUT_MODE’] == ‘Table’)</p>
+</div></p>
+      
+      <pre class="example code"><code>puts df.inspect
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000c148&gt;
+        x y
+  &lt;uint8&gt; &lt;string&gt;
+0       1 A
+1       2 B
+2       3 C</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>In case of ENV [‘RED_AMBER_OUTPUT_MODE’] == ‘TDR’</p>
+</div></p>
+      
+      <pre class="example code"><code>puts df.inspect
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000c148&gt;
+Vectors : 1 numeric, 1 string
+# key type   level data_preview
+0 :x  uint8      3 [1, 2, 3]
+1 :y  string     3 [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;]</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>In case of ENV [‘RED_AMBER_OUTPUT_MODE’] == ‘Minimum’</p>
+</div></p>
+      
+      <pre class="example code"><code>puts df.inspect
+
+# =&gt;
+RedAmber::DataFrame : 3 x 2 Vectors</code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>information of self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49</pre>
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span>
   <span class='id identifier rubyid_mode'>mode</span> <span class='op'>=</span> <span class='const'>ENV</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>RED_AMBER_OUTPUT_MODE</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Table</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -340,18 +413,42 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Show statistical summary by a new DatFrame.</p>
+<p>Show statistical summary by a new DataFrame.</p>
 
-<pre class="code ruby"><code class="ruby">Make stats for numeric columns only.
-NaNs are ignored.
-Counts also show non-NaN counts.
-</code></pre>
+<p>This method will make stats only for numeric columns.</p>
+<ul><li>
+<p>NaNs are ignored.</p>
+</li><li>
+<p>‘count` shows non-NaN counts.</p>
+</li></ul>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Statistical summary of penguins dataset</p>
+</div></p>
+      
+      <pre class="example code"><code># needs more width to show all stats in this example
+puts penguins.summary.to_s(width: 82)
+
+# =&gt;
+  variables            count     mean      std      min      25%   median      75%      max
+  &lt;dictionary&gt;      &lt;uint16&gt; &lt;double&gt; &lt;double&gt; &lt;double&gt; &lt;double&gt; &lt;double&gt; &lt;double&gt; &lt;double&gt;
+0 bill_length_mm         342    43.92     5.46     32.1    39.23    44.38     48.5     59.6
+1 bill_depth_mm          342    17.15     1.97     13.1     15.6    17.32     18.7     21.5
+2 flipper_length_mm      342   200.92    14.06    172.0    190.0    197.0    213.0    231.0
+3 body_mass_g            342  4201.75   801.95   2700.0   3550.0   4031.5   4750.0   6300.0
+4 year                   344  2008.03     0.82   2007.0   2007.0   2008.0   2009.0   2009.0</code></pre>
+    
+  </div>
+
 <p class="tag_title">Returns:</p>
 <ul class="return">
   
@@ -377,24 +474,24 @@ Counts also show non-NaN counts.
       <pre class="lines">
 
 
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36</pre>
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 63</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_summary'>summary</span>
   <span class='id identifier rubyid_num_keys'>num_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='op'>|</span> <span class='kw'>self</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_numeric?'>numeric?</span> <span class='rbrace'>}</span>
@@ -419,7 +516,7 @@ Counts also show non-NaN counts.
       <div class="method_details ">
   <h3 class="signature " id="tdr-instance_method">
   
-    #<strong>tdr</strong>(limit = 10, tally: 5, elements: 5)  &#x21d2; <tt>Object</tt> 
+    #<strong>tdr</strong>(limit = 10, tally: 5, elements: 5)  &#x21d2; <tt>nil</tt> 
   
 
   
@@ -427,19 +524,199 @@ Counts also show non-NaN counts.
   
 </h3><div class="docstring">
   <div class="discussion">
-    <ul><li>
-<p>limit: max num of Vectors to show</p>
-</li><li>
-<p>tally: max level to use tally mode</p>
-</li><li>
-<p>elements: max element to show values in each vector</p>
-</li></ul>
+    
+<p>Shows some information about self in a transposed style.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Default</p>
+</div></p>
+      
+      <pre class="example code"><code>diamonds = diamonds.assign_left(:index) { indices }
+diamonds
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 53940 x 11 Vectors, 0x000000000000c314&gt;
+         index    carat cut       color    clarity     depth    table    price ...        z
+      &lt;uint16&gt; &lt;double&gt; &lt;string&gt;  &lt;string&gt; &lt;string&gt; &lt;double&gt; &lt;double&gt; &lt;uint16&gt; ... &lt;double&gt;
+    0        0     0.23 Ideal     E        SI2          61.5     55.0      326 ...     2.43
+    1        1     0.21 Premium   E        SI1          59.8     61.0      326 ...     2.31
+    2        2     0.23 Good      E        VS1          56.9     65.0      327 ...     2.31
+    3        3     0.29 Premium   I        VS2          62.4     58.0      334 ...     2.63
+    4        4     0.31 Good      J        SI2          63.3     58.0      335 ...     2.75
+    :        :        : :         :        :               :        :        : ...        :
+53937    53937      0.7 Very Good D        SI1          62.8     60.0     2757 ...     3.56
+53938    53938     0.86 Premium   H        SI2          61.0     58.0     2757 ...     3.74
+53939    53939     0.75 Ideal     D        SI2          62.2     55.0     2757 ...     3.64
+
+diamonds.tdr
+
+# =&gt;
+RedAmber::DataFrame : 53940 x 11 Vectors
+Vectors : 8 numeric, 3 strings
+#  key      type   level data_preview
+0  :index   uint16 53940 [0, 1, 2, 3, 4, ... ]
+1  :carat   double   273 [0.23, 0.21, 0.23, 0.29, 0.31, ... ]
+2  :cut     string     5 {&quot;Ideal&quot;=&gt;21551, &quot;Premium&quot;=&gt;13791, &quot;Good&quot;=&gt;4906, &quot;Very Good&quot;=&gt;12082, &quot;Fair&quot;=&gt;1610}
+3  :color   string     7 [&quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;I&quot;, &quot;J&quot;, ... ]
+4  :clarity string     8 [&quot;SI2&quot;, &quot;SI1&quot;, &quot;VS1&quot;, &quot;VS2&quot;, &quot;SI2&quot;, ... ]
+5  :depth   double   184 [61.5, 59.8, 56.9, 62.4, 63.3, ... ]
+6  :table   double   127 [55.0, 61.0, 65.0, 58.0, 58.0, ... ]
+7  :price   uint16 11602 [326, 326, 327, 334, 335, ... ]
+8  :x       double   554 [3.95, 3.89, 4.05, 4.2, 4.34, ... ]
+9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, ... ]
+ ... 1 more Vector ...</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Show all variables</p>
+</div></p>
+      
+      <pre class="example code"><code>diamonds.tdr(:all)
+
+# =&gt;
+RedAmber::DataFrame : 53940 x 11 Vectors
+Vectors : 8 numeric, 3 strings
+#  key      type   level data_preview
+0  :index   uint16 53940 [0, 1, 2, 3, 4, ... ]
+1  :carat   double   273 [0.23, 0.21, 0.23, 0.29, 0.31, ... ]
+2  :cut     string     5 {&quot;Ideal&quot;=&gt;21551, &quot;Premium&quot;=&gt;13791, &quot;Good&quot;=&gt;4906, &quot;Very Good&quot;=&gt;12082, &quot;Fair&quot;=&gt;1610}
+3  :color   string     7 [&quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;I&quot;, &quot;J&quot;, ... ]
+4  :clarity string     8 [&quot;SI2&quot;, &quot;SI1&quot;, &quot;VS1&quot;, &quot;VS2&quot;, &quot;SI2&quot;, ... ]
+5  :depth   double   184 [61.5, 59.8, 56.9, 62.4, 63.3, ... ]
+6  :table   double   127 [55.0, 61.0, 65.0, 58.0, 58.0, ... ]
+7  :price   uint16 11602 [326, 326, 327, 334, 335, ... ]
+8  :x       double   554 [3.95, 3.89, 4.05, 4.2, 4.34, ... ]
+9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, ... ]
+10 :z       double   375 [2.43, 2.31, 2.31, 2.63, 2.75, ... ]</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Use tally mode up to 8 levels</p>
+</div></p>
+      
+      <pre class="example code"><code>diamonds.tdr(tally: 8)
+
+# =&gt;
+RedAmber::DataFrame : 53940 x 11 Vectors
+Vectors : 8 numeric, 3 strings
+#  key      type   level data_preview
+0  :index   uint16 53940 [0, 1, 2, 3, 4, ... ]
+1  :carat   double   273 [0.23, 0.21, 0.23, 0.29, 0.31, ... ]
+2  :cut     string     5 {&quot;Ideal&quot;=&gt;21551, &quot;Premium&quot;=&gt;13791, &quot;Good&quot;=&gt;4906, &quot;Very Good&quot;=&gt;12082, &quot;Fair&quot;=&gt;1610}
+3  :color   string     7 {&quot;E&quot;=&gt;9797, &quot;I&quot;=&gt;5422, &quot;J&quot;=&gt;2808, &quot;H&quot;=&gt;8304, &quot;F&quot;=&gt;9542, &quot;G&quot;=&gt;11292, &quot;D&quot;=&gt;6775}
+4  :clarity string     8 {&quot;SI2&quot;=&gt;9194, &quot;SI1&quot;=&gt;13065, &quot;VS1&quot;=&gt;8171, &quot;VS2&quot;=&gt;12258, &quot;VVS2&quot;=&gt;5066, &quot;VVS1&quot;=&gt;3655, &quot;I1&quot;=&gt;741, &quot;IF&quot;=&gt;1790}
+5  :depth   double   184 [61.5, 59.8, 56.9, 62.4, 63.3, ... ]
+6  :table   double   127 [55.0, 61.0, 65.0, 58.0, 58.0, ... ]
+7  :price   uint16 11602 [326, 326, 327, 334, 335, ... ]
+8  :x       double   554 [3.95, 3.89, 4.05, 4.2, 4.34, ... ]
+9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, ... ]
+ ... 1 more Vector ...</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Increase elements to show</p>
+</div></p>
+      
+      <pre class="example code"><code>diamonds.tdr(elements: 10)
+
+# =&gt;
+RedAmber::DataFrame : 53940 x 11 Vectors
+Vectors : 8 numeric, 3 strings
+#  key      type   level data_preview
+0  :index   uint16 53940 [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ... ]
+1  :carat   double   273 [0.23, 0.21, 0.23, 0.29, 0.31, 0.24, 0.24, 0.26, 0.22, 0.23, ... ]
+2  :cut     string     5 {&quot;Ideal&quot;=&gt;21551, &quot;Premium&quot;=&gt;13791, &quot;Good&quot;=&gt;4906, &quot;Very Good&quot;=&gt;12082, &quot;Fair&quot;=&gt;1610}
+3  :color   string     7 [&quot;E&quot;, &quot;E&quot;, &quot;E&quot;, &quot;I&quot;, &quot;J&quot;, &quot;J&quot;, &quot;I&quot;, &quot;H&quot;, &quot;E&quot;, &quot;H&quot;, ... ]
+4  :clarity string     8 [&quot;SI2&quot;, &quot;SI1&quot;, &quot;VS1&quot;, &quot;VS2&quot;, &quot;SI2&quot;, &quot;VVS2&quot;, &quot;VVS1&quot;, &quot;SI1&quot;, &quot;VS2&quot;, &quot;VS1&quot;, ... ]
+5  :depth   double   184 [61.5, 59.8, 56.9, 62.4, 63.3, 62.8, 62.3, 61.9, 65.1, 59.4, ... ]
+6  :table   double   127 [55.0, 61.0, 65.0, 58.0, 58.0, 57.0, 57.0, 55.0, 61.0, 61.0, ... ]
+7  :price   uint16 11602 [326, 326, 327, 334, 335, 336, 336, 337, 337, 338, ... ]
+8  :x       double   554 [3.95, 3.89, 4.05, 4.2, 4.34, 3.94, 3.95, 4.07, 3.87, 4.0, ... ]
+9  :y       double   552 [3.98, 3.84, 4.07, 4.23, 4.35, 3.96, 3.98, 4.11, 3.78, 4.05, ... ]
+ ... 1 more Vector ...</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>limit</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>, <tt>:all</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>10</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>maximum number of variables (columns) to show. Shows all valiables (columns) if it is ‘:all`.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tally</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>5</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>maximum level to use tally mode. Tally mode counts the occurrences of each element and shows as a hash with the elements as keys and the corresponding counts as values.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>elements</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>5</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>maximum number of elements to show values in each column.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -447,12 +724,12 @@ Counts also show non-NaN counts.
       <pre class="lines">
 
 
-54
-55
-56</pre>
+234
+235
+236</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 54</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 234</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_tdr'>tdr</span><span class='lparen'>(</span><span class='id identifier rubyid_limit'>limit</span> <span class='op'>=</span> <span class='int'>10</span><span class='comma'>,</span> <span class='label'>tally:</span> <span class='int'>5</span><span class='comma'>,</span> <span class='label'>elements:</span> <span class='int'>5</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_tdr_str'>tdr_str</span><span class='lparen'>(</span><span class='id identifier rubyid_limit'>limit</span><span class='comma'>,</span> <span class='label'>tally:</span> <span class='id identifier rubyid_tally'>tally</span><span class='comma'>,</span> <span class='label'>elements:</span> <span class='id identifier rubyid_elements'>elements</span><span class='rparen'>)</span>
@@ -465,24 +742,111 @@ Counts also show non-NaN counts.
       <div class="method_details ">
   <h3 class="signature " id="tdr_str-instance_method">
   
-    #<strong>tdr_str</strong>(limit = 10, tally: 5, elements: 5)  &#x21d2; <tt>Object</tt> 
+    #<strong>tdr_str</strong>(limit = 10, tally: 5, elements: 5)  &#x21d2; <tt>String</tt> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns some information about self in a transposed style by a string.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>limit</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>, <tt>:all</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>10</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>maximum number of variables (columns) to show. Shows all valiables (columns) if it is ‘:all`.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tally</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>5</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>maximum level to use tally mode. Tally mode counts the occurrences of each element and shows as a hash with the elements as keys and the corresponding counts as values.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>elements</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>5</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>maximum number of elements to show values in each column.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>TDR style string.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-58
-59
-60</pre>
+246
+247
+248</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 246</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_tdr_str'>tdr_str</span><span class='lparen'>(</span><span class='id identifier rubyid_limit'>limit</span> <span class='op'>=</span> <span class='int'>10</span><span class='comma'>,</span> <span class='label'>tally:</span> <span class='int'>5</span><span class='comma'>,</span> <span class='label'>elements:</span> <span class='int'>5</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_shape_str'>shape_str</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_dataframe_info'>dataframe_info</span><span class='lparen'>(</span><span class='id identifier rubyid_limit'>limit</span><span class='comma'>,</span> <span class='label'>tally_level:</span> <span class='id identifier rubyid_tally'>tally</span><span class='comma'>,</span> <span class='label'>max_element:</span> <span class='id identifier rubyid_elements'>elements</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
@@ -495,37 +859,77 @@ Counts also show non-NaN counts.
       <div class="method_details ">
   <h3 class="signature " id="to_iruby-instance_method">
   
-    #<strong>to_iruby</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>to_iruby</strong>  &#x21d2; <tt>String</tt> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns html formatted text of self by IRuby::HTML.table.</p>
+
+<p>According to ‘ENV [“RED_AMBER_OUTPUT_MODE”].upcase`,</p>
+<ul><li>
+<p>If it is ‘MINIMUM’, returns shape by plain text.</p>
+</li><li>
+<p>If it is ‘PLAIN’, returns ‘#inspect` value by plain text.</p>
+</li><li>
+<p>If it is ‘TDR’, returns shape and transposed preview by plain text.</p>
+</li><li>
+<p>If it is ‘TABLE’ or otherwise, returns Table preview by html format. Default value of the ENV is ‘TABLE’.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>formatted string.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77</pre>
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 62</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 261</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_iruby'>to_iruby</span>
   <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>iruby</span><span class='tstring_end'>&#39;</span></span>
@@ -551,26 +955,102 @@ Counts also show non-NaN counts.
       <div class="method_details ">
   <h3 class="signature " id="to_s-instance_method">
   
-    #<strong>to_s</strong>(width: 80)  &#x21d2; <tt>Object</tt> 
+    #<strong>to_s</strong>(width: 80)  &#x21d2; <tt>String</tt> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Show a preview of self as a string.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Show penguins dataset</p>
+</div></p>
+      
+      <pre class="example code"><code>puts penguins.to_s
+
+# =&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  : :        :                      :             :                 : ...        :
+341 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+342 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+343 Gentoo   Biscoe              49.9          16.1               213 ...     2009</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>width</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>80</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>maximum size of result.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>string representation of self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-10
-11
-12
-13
-14</pre>
+36
+37
+38
+39
+40</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 10</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 36</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span><span class='lparen'>(</span><span class='label'>width:</span> <span class='int'>80</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_empty?'>empty?</span>
@@ -587,7 +1067,7 @@ Counts also show non-NaN counts.
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  1 22:02:46 2023 by
+  Generated on Tue Feb  7 10:33:38 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>

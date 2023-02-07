@@ -91,7 +91,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>mix-in for the class DataFrame</p>
+<p>Mix-in for the class DataFrame</p>
 
 
   </div>
@@ -165,7 +165,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#first-instance_method" title="#first (instance method)">#<strong>first</strong>(n_obs = 1)  &#x21d2; Object </a>
+      <a href="#first-instance_method" title="#first (instance method)">#<strong>first</strong>(n_obs = 1)  &#x21d2; DataFrame </a>
     
 
     
@@ -179,7 +179,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Select records from the top.</p>
+</div></span>
   
 </li>
 
@@ -187,7 +189,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#head-instance_method" title="#head (instance method)">#<strong>head</strong>(n_obs = 5)  &#x21d2; Object </a>
+      <a href="#head-instance_method" title="#head (instance method)">#<strong>head</strong>(n_obs = 5)  &#x21d2; DataFrame </a>
     
 
     
@@ -201,7 +203,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Select records from the top.</p>
+</div></span>
   
 </li>
 
@@ -209,7 +213,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#last-instance_method" title="#last (instance method)">#<strong>last</strong>(n_obs = 1)  &#x21d2; Object </a>
+      <a href="#last-instance_method" title="#last (instance method)">#<strong>last</strong>(n_obs = 1)  &#x21d2; DataFrame </a>
     
 
     
@@ -223,7 +227,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Select records from the end.</p>
+</div></span>
   
 </li>
 
@@ -255,7 +261,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#remove_nil-instance_method" title="#remove_nil (instance method)">#<strong>remove_nil</strong>  &#x21d2; Object </a>
+      <a href="#remove_nil-instance_method" title="#remove_nil (instance method)">#<strong>remove_nil</strong>  &#x21d2; DataFrame </a>
     
 
     
@@ -271,7 +277,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Remove records (rows) contains any nil.</p>
+</div></span>
   
 </li>
 
@@ -317,7 +325,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Select records by a column specified by a key and corresponding record with a block.</p>
+</div></span>
   
 </li>
 
@@ -325,51 +335,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#tail-instance_method" title="#tail (instance method)">#<strong>tail</strong>(n_obs = 5)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#take-instance_method" title="#take (instance method)">#<strong>take</strong>(index_array)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#v-instance_method" title="#v (instance method)">#<strong>v</strong>(key)  &#x21d2; Object </a>
+      <a href="#tail-instance_method" title="#tail (instance method)">#<strong>tail</strong>(n_obs = 5)  &#x21d2; DataFrame </a>
     
 
     
@@ -384,7 +350,55 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Select a variable by a key in String or Symbol.</p>
+<p>Select records from the end.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#take-instance_method" title="#take (instance method)">#<strong>take</strong>(index_array)  &#x21d2; DataFrame </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Select records by index Array to create a DataFrame.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#v-instance_method" title="#v (instance method)">#<strong>v</strong>(key)  &#x21d2; Vector </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Select a variable by String or Symbol and return as a Vector.</p>
 </div></span>
   
 </li>
@@ -410,6 +424,8 @@
       <span class="overload">#<strong>[]</strong>(index)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
     
       <span class="overload">#<strong>[]</strong>(indices)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>[]</strong>(booleans)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
     
   
 
@@ -443,13 +459,45 @@
   </div>
 
 
-<p>select single variable and return as a Vetor.</p>
+<p>Select single variable (column) and return as a Vetor.</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select a column and return Vector</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 344 x 8 Vectors, 0x00000000000039bc&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  : :        :                      :             :                 : ...        :
+341 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+342 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+343 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+
+penguins[:bill_length_mm]
+
+# =&gt;
+#&lt;RedAmber::Vector(:double, size=344):0x00000000000104dc&gt;
+[39.1, 39.5, 40.3, nil, 36.7, 39.3, 38.9, 39.2, 34.1, 42.0, 37.8, 37.8, 41.1, ... ]</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -498,13 +546,39 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>select variables and return a DataFrame.</p>
+<p>Select variables and return a DataFrame.</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select columns</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins[:island, :bill_length_mm]
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 344 x 2 Vectors, 0x00000000000104f0&gt;
+    island    bill_length_mm
+    &lt;string&gt;        &lt;double&gt;
+  0 Torgersen           39.1
+  1 Torgersen           39.5
+  2 Torgersen           40.3
+  3 Torgersen          (nil)
+  4 Torgersen           36.7
+  : :                      :
+341 Biscoe              50.4
+342 Biscoe              45.2
+343 Biscoe              49.9</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -553,13 +627,31 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>select records and return a DataFrame.</p>
+<p>Select a record and return a DataFrame.</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select a row</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins[0]
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 1 x 8 Vectors, 0x0000000000010504&gt;
+  species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+  &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+0 Adelie   Torgersen           39.1          18.7               181 ...     2007</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -608,13 +700,39 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>select records and return a DataFrame.</p>
+<p>Select records by indices and return a DataFrame.</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select rows by indices</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins[0..100]
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 101 x 8 Vectors, 0x00000000000105e0&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  : :        :                      :             :                 : ...        :
+ 98 Adelie   Dream               33.1          16.1               178 ...     2008
+ 99 Adelie   Dream               43.2          18.5               192 ...     2008
+100 Adelie   Biscoe              35.0          17.9               192 ...     2009</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -622,13 +740,94 @@
         <span class='name'>indices</span>
       
       
-        <span class='type'>(<tt>&lt;Indeger, Float, Range&lt;Integer&gt;, <span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span>, Arrow::Array&gt;</tt>)</span>
+        <span class='type'>(<tt>&lt;Indeger&gt;</tt>, <tt>&lt;Float&gt;</tt>, <tt>Range&lt;Integer&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>indices of rows to select.</p>
+<p>] indices of rows to select.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>selected variables as a DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>[]</strong>(booleans)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Select records by booleans and return a DataFrame.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select rows by booleans</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins[penguins.species == &#39;Adelie&#39;]
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 152 x 8 Vectors, 0x0000000000010658&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  : :        :                      :             :                 : ...        :
+149 Adelie   Dream               37.8          18.1               193 ...     2009
+150 Adelie   Dream               36.0          17.1               187 ...     2009
+151 Adelie   Dream               41.5          18.5               201 ...     2009</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>booleans</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;true, false, nil&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>] booleans of rows to select.</p>
 </div>
       
     </li>
@@ -679,41 +878,41 @@
       <pre class="lines">
 
 
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70</pre>
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 132</span>
 
 <span class='kw'>def</span> <span class='op'>[]</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>self is an empty dataframe</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_empty?'>empty?</span>
@@ -784,7 +983,7 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>select records by filtering with booleans and return a DataFrame.</p>
+<p>Select records by filtering with booleans and return a DataFrame.</p>
 
 
   </div>
@@ -796,10 +995,40 @@
     
       
         <p class="example_title"><div class='inline'>
-<p>filter by boolean Vector</p>
+<p>Filter by boolean Vector</p>
 </div></p>
       
-      <pre class="example code"><code></code></pre>
+      <pre class="example code"><code>penguins
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 344 x 8 Vectors, 0x00000000000039bc&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  : :        :                      :             :                 : ...        :
+341 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+342 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+343 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+
+penguins.filter(penguins.bill_length_mm &lt; 50)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 285 x 8 Vectors, 0x00000000000101a8&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  4 Adelie   Torgersen           39.3          20.6               190 ...     2007
+  : :        :                      :             :                 : ...        :
+282 Gentoo   Biscoe              46.8          14.3               215 ...     2009
+283 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+284 Gentoo   Biscoe              49.9          16.1               213 ...     2009</code></pre>
     
   </div>
 <p class="tag_title">Parameters:</p>
@@ -851,13 +1080,39 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>select records by filtering with block and return a DataFrame.</p>
+<p>Select records by filtering with block and return a DataFrame.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Filter by boolean Vector</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.filter { bill_length_mm &lt; 50 }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 285 x 8 Vectors, 0x00000000000101bc&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  4 Adelie   Torgersen           39.3          20.6               190 ...     2007
+  : :        :                      :             :                 : ...        :
+282 Gentoo   Biscoe              46.8          14.3               215 ...     2009
+283 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+284 Gentoo   Biscoe              49.9          16.1               213 ...     2009</code></pre>
+    
+  </div>
+
 <p class="tag_title">Yields:</p>
 <ul class="yield">
   
@@ -958,39 +1213,39 @@
       <pre class="lines">
 
 
-224
-225
-226
-227
-228
-229
-230
-231
-232
-233
-234
-235
-236
-237
-238
-239
-240
-241
-242
-243
-244
-245
-246
-247
-248
-249
-250
-251
-252
-253</pre>
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 224</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 549</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_filter'>filter</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_booleans'>booleans</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_booleans'>booleans</span><span class='period'>.</span><span class='id identifier rubyid_flatten!'>flatten!</span>
@@ -1030,24 +1285,70 @@
       <div class="method_details ">
   <h3 class="signature " id="first-instance_method">
   
-    #<strong>first</strong>(n_obs = 1)  &#x21d2; <tt>Object</tt> 
+    #<strong>first</strong>(n_obs = 1)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Select records from the top.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>n_obs</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>1</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>number of records to select.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-339
-340
-341</pre>
+815
+816
+817</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 339</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 815</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_first'>first</span><span class='lparen'>(</span><span class='id identifier rubyid_n_obs'>n_obs</span> <span class='op'>=</span> <span class='int'>1</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_head'>head</span><span class='lparen'>(</span><span class='id identifier rubyid_n_obs'>n_obs</span><span class='rparen'>)</span>
@@ -1060,7 +1361,7 @@
       <div class="method_details ">
   <h3 class="signature " id="head-instance_method">
   
-    #<strong>head</strong>(n_obs = 5)  &#x21d2; <tt>Object</tt> 
+    #<strong>head</strong>(n_obs = 5)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
   
 
   
@@ -1069,11 +1370,48 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Select records from the top.</p>
+
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>n_obs</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>5</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>number of records to select.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -1094,14 +1432,14 @@
       <pre class="lines">
 
 
-327
-328
-329
-330
-331</pre>
+791
+792
+793
+794
+795</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 327</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 791</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_head'>head</span><span class='lparen'>(</span><span class='id identifier rubyid_n_obs'>n_obs</span> <span class='op'>=</span> <span class='int'>5</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Index is out of range </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_n_obs'>n_obs</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_n_obs'>n_obs</span><span class='period'>.</span><span class='id identifier rubyid_negative?'>negative?</span>
@@ -1116,24 +1454,70 @@
       <div class="method_details ">
   <h3 class="signature " id="last-instance_method">
   
-    #<strong>last</strong>(n_obs = 1)  &#x21d2; <tt>Object</tt> 
+    #<strong>last</strong>(n_obs = 1)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Select records from the end.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>n_obs</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>1</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>number of records to select.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-343
-344
-345</pre>
+825
+826
+827</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 343</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 825</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_last'>last</span><span class='lparen'>(</span><span class='id identifier rubyid_n_obs'>n_obs</span> <span class='op'>=</span> <span class='int'>1</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_tail'>tail</span><span class='lparen'>(</span><span class='id identifier rubyid_n_obs'>n_obs</span><span class='rparen'>)</span>
@@ -1147,9 +1531,15 @@
   <h3 class="signature " id="remove-instance_method">
   
     
-      <span class="overload">#<strong>remove</strong>(row) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+      <span class="overload">#<strong>remove</strong>(row)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
     
-      <span class="overload">#<strong>remove</strong>(rows) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+      <span class="overload">#<strong>remove</strong>(rows)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>remove</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>remove</strong>(booleans)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>remove</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
     
   
 
@@ -1171,11 +1561,11 @@
     
       
       <li class="overload_item">
-        <span class="signature">#<strong>remove</strong>(row) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <span class="signature">#<strong>remove</strong>(row)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
         <div class="docstring">
   <div class="discussion">
     
-<p>select a record and remove it to create a remainer DataFrame.</p>
+<p>Select a record and remove it to create a remainer DataFrame.</p>
 <ul><li>
 <p>The order of records in self will be preserved.</p>
 </li></ul>
@@ -1184,371 +1574,33 @@
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
   
-    <li>
-      
-        <span class='name'>row</span>
-      
-      
-        <span class='type'>(<tt>Indeger</tt>, <tt>Float</tt>, <tt>Range&lt;Integer&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>a row index to remove.</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>gives self to the block. @note The block is evaluated within the context of self.</p>
-
-<pre class="code ruby"><code class="ruby">It is accessable to self&#39;s instance variables and private methods.
-</code></pre>
-</div>
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Yield Returns:</p>
-<ul class="yieldreturn">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Indeger</tt>, <tt>Float</tt>, <tt>Range&lt;Integer&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>a row index to remove.</p>
-</div>
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>remainer variables as a DataFrame.</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div>
-      </li>
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
     
       
-      <li class="overload_item">
-        <span class="signature">#<strong>remove</strong>(rows) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
-        <div class="docstring">
-  <div class="discussion">
+        <p class="example_title"><div class='inline'>
+<p>Remove a row</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.remove(-1)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 343 x 8 Vectors, 0x0000000000010310&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  : :        :                      :             :                 : ...        :
+340 Gentoo   Biscoe              46.8          14.3               215 ...     2009
+341 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+342 Gentoo   Biscoe              45.2          14.8               212 ...     2009</code></pre>
     
-<p>select records and remove them to create a remainer DataFrame.</p>
-<ul><li>
-<p>The order of records in self will be preserved.</p>
-</li></ul>
-
-
   </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
-<ul class="param">
-  
-    <li>
-      
-        <span class='name'>rows</span>
-      
-      
-        <span class='type'>(<tt>Indeger</tt>, <tt>Float</tt>, <tt>Range&lt;Integer&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>row indeces to remove.</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-<p class="tag_title">Yields:</p>
-<ul class="yield">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>self</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>gives self to the block. @note The block is evaluated within the context of self.</p>
-
-<pre class="code ruby"><code class="ruby">It is accessable to self&#39;s instance variables and private methods.
-</code></pre>
-</div>
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Yield Returns:</p>
-<ul class="yieldreturn">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>&lt;Indeger, Float, Range&lt;Integer&gt;, <span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span>, Arrow::Array&gt;</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>row indeces to remove.</p>
-</div>
-      
-    </li>
-  
-</ul>
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'>
-<p>remainer variables as a DataFrame.</p>
-</div>
-      
-    </li>
-  
-</ul>
-
-</div>
-      </li>
-    
-  </ul>
-
-<p class="tag_title">Raises:</p>
-<ul class="raise">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></tt>)</span>
-      
-      
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-283
-284
-285
-286
-287
-288
-289
-290
-291
-292
-293
-294
-295
-296
-297
-298
-299
-300
-301
-302
-303
-304
-305
-306
-307
-308
-309
-310
-311
-312
-313
-314
-315
-316
-317
-318
-319</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 283</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_remove'>remove</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Self is an empty dataframe</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_empty?'>empty?</span>
-
-  <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span>
-    <span class='kw'>unless</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-      <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Must not specify both arguments and block.</span><span class='tstring_end'>&#39;</span></span>
-    <span class='kw'>end</span>
-
-    <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_instance_eval'>instance_eval</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span><span class='rbracket'>]</span>
-  <span class='kw'>end</span>
-
-  <span class='id identifier rubyid_arrow_array'>arrow_array</span> <span class='op'>=</span>
-    <span class='kw'>case</span> <span class='id identifier rubyid_args'>args</span>
-    <span class='kw'>in</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='op'>|</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rbracket'>]</span> <span class='op'>|</span> <span class='lbracket'>[</span><span class='kw'>nil</span><span class='rbracket'>]</span>
-      <span class='kw'>return</span> <span class='kw'>self</span>
-    <span class='kw'>in</span> <span class='lbracket'>[</span><span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_v'>v</span><span class='rbracket'>]</span>
-      <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span>
-    <span class='kw'>in</span> <span class='lbracket'>[</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Array</span> <span class='op'>|</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>ChunkedArray</span><span class='rparen'>)</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_aa'>aa</span><span class='rbracket'>]</span>
-      <span class='id identifier rubyid_aa'>aa</span>
-    <span class='kw'>else</span>
-      <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_parse_args'>parse_args</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span><span class='rparen'>)</span>
-    <span class='kw'>end</span>
-
-  <span class='kw'>if</span> <span class='id identifier rubyid_arrow_array'>arrow_array</span><span class='period'>.</span><span class='id identifier rubyid_boolean?'>boolean?</span>
-    <span class='id identifier rubyid_filter_by_array'>filter_by_array</span><span class='lparen'>(</span><span class='id identifier rubyid_arrow_array'>arrow_array</span><span class='period'>.</span><span class='id identifier rubyid_primitive_invert'>primitive_invert</span><span class='rparen'>)</span>
-  <span class='kw'>elsif</span> <span class='id identifier rubyid_arrow_array'>arrow_array</span><span class='period'>.</span><span class='id identifier rubyid_numeric?'>numeric?</span>
-    <span class='id identifier rubyid_remover'>remover</span> <span class='op'>=</span> <span class='id identifier rubyid_normalize_indices'>normalize_indices</span><span class='lparen'>(</span><span class='id identifier rubyid_arrow_array'>arrow_array</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
-    <span class='kw'>return</span> <span class='kw'>self</span> <span class='kw'>if</span> <span class='id identifier rubyid_remover'>remover</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-
-    <span class='id identifier rubyid_slicer'>slicer</span> <span class='op'>=</span> <span class='id identifier rubyid_indices'>indices</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span> <span class='op'>-</span> <span class='id identifier rubyid_remover'>remover</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_i</span><span class='rparen'>)</span>
-    <span class='kw'>return</span> <span class='id identifier rubyid_remove_all_values'>remove_all_values</span> <span class='kw'>if</span> <span class='id identifier rubyid_slicer'>slicer</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
-
-    <span class='id identifier rubyid_take'>take</span><span class='lparen'>(</span><span class='id identifier rubyid_slicer'>slicer</span><span class='rparen'>)</span>
-  <span class='kw'>else</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid argument </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-  <span class='kw'>end</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="remove_nil-instance_method">
-  
-    #<strong>remove_nil</strong>  &#x21d2; <tt>Object</tt> 
-  
-
-  
-    <span class="aliases">Also known as:
-    <span class="names"><span id='drop_nil-instance_method'>drop_nil</span></span>
-    </span>
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-321
-322
-323
-324</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 321</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_remove_nil'>remove_nil</span>
-  <span class='id identifier rubyid_func'>func</span> <span class='op'>=</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Function</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:drop_null</span><span class='rparen'>)</span>
-  <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_table'>table</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="slice-instance_method">
-  
-    
-      <span class="overload">#<strong>slice</strong>(row)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
-    
-      <span class="overload">#<strong>slice</strong>(rows)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
-    
-      <span class="overload">#<strong>slice</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
-    
-      <span class="overload">#<strong>slice</strong>(booleans)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
-    
-      <span class="overload">#<strong>slice</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
-    
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>Select records to create a DataFrame.</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-  <p class="tag_title">Overloads:</p>
-  <ul class="overload">
-    
-      
-      <li class="overload_item">
-        <span class="signature">#<strong>slice</strong>(row)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
-        <div class="docstring">
-  <div class="discussion">
-    
-<p>select a record and return a DataFrame.</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  <p class="tag_title">Parameters:</p>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -1562,7 +1614,7 @@
       
         &mdash;
         <div class='inline'>
-<p>a row index to select.</p>
+<p>a row index to remove.</p>
 </div>
       
     </li>
@@ -1581,7 +1633,7 @@
       
         &mdash;
         <div class='inline'>
-<p>selected variables as a DataFrame.</p>
+<p>remainer variables as a DataFrame.</p>
 </div>
       
     </li>
@@ -1593,22 +1645,48 @@
     
       
       <li class="overload_item">
-        <span class="signature">#<strong>slice</strong>(rows)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <span class="signature">#<strong>remove</strong>(rows)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
         <div class="docstring">
   <div class="discussion">
     
-<p>select records and return a DataFrame.</p>
+<p>Select records and remove them to create a remainer DataFrame.</p>
 <ul><li>
-<p>Duplicated selection is acceptable. The same record will be returned.</p>
+<p>Duplicated selection is acceptable.</p>
 </li><li>
-<p>The order of records will be the same as specified indices.</p>
+<p>The order of records in self will be preserved.</p>
 </li></ul>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Remove rows</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.remove(100..200)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 243 x 8 Vectors, 0x0000000000010450&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  : :        :                      :             :                 : ...        :
+240 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+241 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+242 Gentoo   Biscoe              49.9          16.1               213 ...     2009</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -1616,13 +1694,13 @@
         <span class='name'>rows</span>
       
       
-        <span class='type'>(<tt>Integer</tt>, <tt>Float</tt>, <tt>Range&lt;Integer&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
+        <span class='type'>(<tt>&lt;Integer&gt;</tt>, <tt>&lt;Float&gt;</tt>, <tt>Range&lt;Integer&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>row indeces to select.</p>
+<p>row indeces to remove.</p>
 </div>
       
     </li>
@@ -1641,7 +1719,7 @@
       
         &mdash;
         <div class='inline'>
-<p>selected variables as a DataFrame.</p>
+<p>remainer variables as a DataFrame.</p>
 </div>
       
     </li>
@@ -1653,15 +1731,15 @@
     
       
       <li class="overload_item">
-        <span class="signature">#<strong>slice</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <span class="signature">#<strong>remove</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
         <div class="docstring">
   <div class="discussion">
     
-<p>select records by indices with block and return a DataFrame.</p>
+<p>Select records by indices from block and remove them to create a remainer DataFrame.</p>
 <ul><li>
-<p>Duplicated selection is acceptable. The same record will be returned.</p>
+<p>Duplicated selection is acceptable.</p>
 </li><li>
-<p>The order of records will be the same as specified indices.</p>
+<p>The order of records in self will be preserved.</p>
 </li></ul>
 
 
@@ -1669,6 +1747,32 @@
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Remove rows by indices from block</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.remove { 0.step(size, 10) }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 309 x 8 Vectors, 0x00000000000104c8&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  1 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  2 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  3 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  4 Adelie   Torgersen           39.3          20.6               190 ...     2007
+  : :        :                      :             :                 : ...        :
+306 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+307 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+308 Gentoo   Biscoe              49.9          16.1               213 ...     2009</code></pre>
+    
+  </div>
+
 <p class="tag_title">Yields:</p>
 <ul class="yield">
   
@@ -1719,6 +1823,732 @@
       
         &mdash;
         <div class='inline'>
+<p>row indeces to remove.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>remainer variables as a DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>remove</strong>(booleans)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Select records by filtering with booleans and return a DataFrame.</p>
+<ul><li>
+<p>The order of records in self will be preserved.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Remove rows by boolean filter</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.remove(penguins.bill_length_mm.is_nil)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 342 x 8 Vectors, 0x0000000000010234&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  4 Adelie   Torgersen           39.3          20.6               190 ...     2007
+  : :        :                      :             :                 : ...        :
+339 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+340 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+341 Gentoo   Biscoe              49.9          16.1               213 ...     2009</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>booleans</span>
+      
+      
+        <span class='type'>(<tt>&lt;Boolean, nil&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a boolean filter to remove.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>remainer records as a DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>remove</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Select records by booleans from block and remove them to create a remainer DataFrame.</p>
+<ul><li>
+<p>The order of records in self will be preserved.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Remove rows by booleans from block</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.remove { (species == &#39;Adelie&#39;) | (year == 2009) }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 124 x 8 Vectors, 0x00000000000102fc&gt;
+    species   island   bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt;  &lt;string&gt;       &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Chinstrap Dream              46.5          17.9               192 ...     2007
+  1 Chinstrap Dream              50.0          19.5               196 ...     2007
+  2 Chinstrap Dream              51.3          19.2               193 ...     2007
+  3 Chinstrap Dream              45.4          18.7               188 ...     2007
+  4 Chinstrap Dream              52.7          19.8               197 ...     2007
+  : :         :                     :             :                 : ...        :
+121 Gentoo    Biscoe             51.1          16.3               220 ...     2008
+122 Gentoo    Biscoe             45.2          13.8               215 ...     2008
+123 Gentoo    Biscoe             45.2          16.4               223 ...     2008</code></pre>
+    
+  </div>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>gives self to the block. The block is evaluated within the context of self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
+  
+    <li>
+      
+        <span class='name'>self</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>self. Usually, it can be omitted.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>&lt;Boolean, nil&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a boolean filter to remove. ‘Vector` or `Arrow::Array` must be boolean type.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>remainer records as a DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+721
+722
+723
+724
+725
+726
+727
+728
+729
+730
+731
+732
+733
+734
+735
+736
+737
+738
+739
+740
+741
+742
+743
+744
+745
+746
+747
+748
+749
+750
+751
+752
+753
+754
+755
+756
+757</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 721</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_remove'>remove</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Self is an empty dataframe</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_empty?'>empty?</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span>
+    <span class='kw'>unless</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+      <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Must not specify both arguments and block.</span><span class='tstring_end'>&#39;</span></span>
+    <span class='kw'>end</span>
+
+    <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_instance_eval'>instance_eval</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_arrow_array'>arrow_array</span> <span class='op'>=</span>
+    <span class='kw'>case</span> <span class='id identifier rubyid_args'>args</span>
+    <span class='kw'>in</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='op'>|</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rbracket'>]</span> <span class='op'>|</span> <span class='lbracket'>[</span><span class='kw'>nil</span><span class='rbracket'>]</span>
+      <span class='kw'>return</span> <span class='kw'>self</span>
+    <span class='kw'>in</span> <span class='lbracket'>[</span><span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_v'>v</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span>
+    <span class='kw'>in</span> <span class='lbracket'>[</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Array</span> <span class='op'>|</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>ChunkedArray</span><span class='rparen'>)</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_aa'>aa</span><span class='rbracket'>]</span>
+      <span class='id identifier rubyid_aa'>aa</span>
+    <span class='kw'>else</span>
+      <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_parse_args'>parse_args</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_arrow_array'>arrow_array</span><span class='period'>.</span><span class='id identifier rubyid_boolean?'>boolean?</span>
+    <span class='id identifier rubyid_filter_by_array'>filter_by_array</span><span class='lparen'>(</span><span class='id identifier rubyid_arrow_array'>arrow_array</span><span class='period'>.</span><span class='id identifier rubyid_primitive_invert'>primitive_invert</span><span class='rparen'>)</span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_arrow_array'>arrow_array</span><span class='period'>.</span><span class='id identifier rubyid_numeric?'>numeric?</span>
+    <span class='id identifier rubyid_remover'>remover</span> <span class='op'>=</span> <span class='id identifier rubyid_normalize_indices'>normalize_indices</span><span class='lparen'>(</span><span class='id identifier rubyid_arrow_array'>arrow_array</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
+    <span class='kw'>return</span> <span class='kw'>self</span> <span class='kw'>if</span> <span class='id identifier rubyid_remover'>remover</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+
+    <span class='id identifier rubyid_slicer'>slicer</span> <span class='op'>=</span> <span class='id identifier rubyid_indices'>indices</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span> <span class='op'>-</span> <span class='id identifier rubyid_remover'>remover</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_i</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='id identifier rubyid_remove_all_values'>remove_all_values</span> <span class='kw'>if</span> <span class='id identifier rubyid_slicer'>slicer</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+
+    <span class='id identifier rubyid_take'>take</span><span class='lparen'>(</span><span class='id identifier rubyid_slicer'>slicer</span><span class='rparen'>)</span>
+  <span class='kw'>else</span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid argument </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="remove_nil-instance_method">
+  
+    #<strong>remove_nil</strong>  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
+  
+
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='drop_nil-instance_method'>drop_nil</span></span>
+    </span>
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Remove records (rows) contains any nil.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code>penguins.remove_nil
+# =&gt;
+#&lt;RedAmber::DataFrame : 333 x 8 Vectors, 0x00000000000039d0&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  4 Adelie   Torgersen           39.3          20.6               190 ...     2007
+  : :        :                      :             :                 : ...        :
+330 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+331 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+332 Gentoo   Biscoe              49.9          16.1               213 ...     2009</code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>removed DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+779
+780
+781
+782</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 779</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_remove_nil'>remove_nil</span>
+  <span class='id identifier rubyid_func'>func</span> <span class='op'>=</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Function</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:drop_null</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_func'>func</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_table'>table</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="slice-instance_method">
+  
+    
+      <span class="overload">#<strong>slice</strong>(row)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>slice</strong>(rows)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>slice</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>slice</strong>(booleans)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>slice</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Select records to create a DataFrame.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>slice</strong>(row)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Select a record and return a DataFrame.</p>
+
+<p>penguins</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 344 x 8 Vectors, 0x00000000000039bc&gt;</p>
+
+<pre class="code ruby"><code class="ruby">  species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+  &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+: :        :                      :             :                 : ...        :
+</code></pre>
+
+<p>341 Gentoo   Biscoe              50.4          15.7               222 …     2009 342 Gentoo   Biscoe              45.2          14.8               212 …     2009 343 Gentoo   Biscoe              49.9          16.1               213 …     2009 penguins.slice(2)</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 1 x 8 Vectors, 0x00000000000039d0&gt;</p>
+
+<pre class="code ruby"><code class="ruby">species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+&lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+</code></pre>
+
+<p>0 Adelie   Torgersen           40.3          18.0               195 …     2007</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select a row</p>
+</div></p>
+      
+      <pre class="example code"><code></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>row</span>
+      
+      
+        <span class='type'>(<tt>Indeger</tt>, <tt>Float</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a row index to select.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>selected variables as a DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>slice</strong>(rows)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Select records and return a DataFrame.</p>
+<ul><li>
+<p>Duplicated selection is acceptable. The same record will be returned.</p>
+</li><li>
+<p>The order of records will be the same as specified indices.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select rows</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.slice(300..-1)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 44 x 8 Vectors, 0x000000000000fb54&gt;
+   species  island   bill_length_mm bill_depth_mm flipper_length_mm ...     year
+   &lt;string&gt; &lt;string&gt;       &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+ 0 Gentoo   Biscoe             49.1          14.5               212 ...     2009
+ 1 Gentoo   Biscoe             52.5          15.6               221 ...     2009
+ 2 Gentoo   Biscoe             47.4          14.6               212 ...     2009
+ 3 Gentoo   Biscoe             50.0          15.9               224 ...     2009
+ 4 Gentoo   Biscoe             44.9          13.8               212 ...     2009
+ : :        :                     :             :                 : ...        :
+41 Gentoo   Biscoe             50.4          15.7               222 ...     2009
+42 Gentoo   Biscoe             45.2          14.8               212 ...     2009
+43 Gentoo   Biscoe             49.9          16.1               213 ...     2009</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>rows</span>
+      
+      
+        <span class='type'>(<tt>&lt;Integer&gt;</tt>, <tt>&lt;Float&gt;</tt>, <tt>Range&lt;Integer&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>row indeces to select.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>selected variables as a DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>slice</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Select records by indices with block and return a DataFrame.</p>
+<ul><li>
+<p>Duplicated selection is acceptable. The same record will be returned.</p>
+</li><li>
+<p>The order of records will be the same as specified indices.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select rows by block</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.slice { 0.step(size, 10) }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 35 x 8 Vectors, 0x000000000000fd84&gt;
+   species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+   &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+ 0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+ 1 Adelie   Torgersen           37.8          17.1               186 ...     2007
+ 2 Adelie   Biscoe              37.8          18.3               174 ...     2007
+ 3 Adelie   Dream               39.5          16.7               178 ...     2007
+ 4 Adelie   Dream               36.5          18.0               182 ...     2007
+ : :        :                      :             :                 : ...        :
+32 Gentoo   Biscoe              48.5          15.0               219 ...     2009
+33 Gentoo   Biscoe              50.5          15.2               216 ...     2009
+34 Gentoo   Biscoe              46.8          14.3               215 ...     2009</code></pre>
+    
+  </div>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>gives self to the block. The block is evaluated within the context of self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
+  
+    <li>
+      
+        <span class='name'>self</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>self. Usually, it can be omitted.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>&lt;Integer&gt;</tt>, <tt>&lt;Float&gt;</tt>, <tt>Range&lt;Integer&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
 <p>row indeces to select.</p>
 </div>
       
@@ -1753,13 +2583,39 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>select records by filtering with booleans and return a DataFrame.</p>
+<p>Select records by filtering with booleans and return a DataFrame.</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select rows by boolean filter</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.slice(penguins[:bill_length_mm] &gt; 50)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 52 x 8 Vectors, 0x000000000000fd98&gt;
+   species   island   bill_length_mm bill_depth_mm flipper_length_mm ...     year
+   &lt;string&gt;  &lt;string&gt;       &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+ 0 Chinstrap Dream              51.3          19.2               193 ...     2007
+ 1 Chinstrap Dream              52.7          19.8               197 ...     2007
+ 2 Chinstrap Dream              51.3          18.2               197 ...     2007
+ 3 Chinstrap Dream              51.3          19.9               198 ...     2007
+ 4 Chinstrap Dream              51.7          20.3               194 ...     2007
+ : :         :                     :             :                 : ...        :
+49 Gentoo    Biscoe             51.5          16.3               230 ...     2009
+50 Gentoo    Biscoe             55.1          16.0               230 ...     2009
+51 Gentoo    Biscoe             50.4          15.7               222 ...     2009</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -1808,13 +2664,39 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>select records by filtering with block and return a DataFrame.</p>
+<p>Select records by filtering with block and return a DataFrame.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select rows by booleans from block</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.slice { indices.map(&amp;:even?) }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 172 x 8 Vectors, 0x000000000000ff78&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  2 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  3 Adelie   Torgersen           38.9          17.8               181 ...     2007
+  4 Adelie   Torgersen           34.1          18.1               193 ...     2007
+  : :        :                      :             :                 : ...        :
+169 Gentoo   Biscoe              47.2          13.7               214 ...     2009
+170 Gentoo   Biscoe              46.8          14.3               215 ...     2009
+171 Gentoo   Biscoe              45.2          14.8               212 ...     2009</code></pre>
+    
+  </div>
+
 <p class="tag_title">Yields:</p>
 <ul class="yield">
   
@@ -1915,43 +2797,43 @@
       <pre class="lines">
 
 
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141
-142
-143
-144
-145
-146
-147
-148
-149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
-161</pre>
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 128</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 331</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_slice'>slice</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Self is an empty dataframe</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_empty?'>empty?</span>
@@ -1995,7 +2877,11 @@
       <div class="method_details ">
   <h3 class="signature " id="slice_by-instance_method">
   
-    #<strong>slice_by</strong>(key, keep_key: false, &amp;block)  &#x21d2; <tt>Object</tt> 
+    
+      <span class="overload">#<strong>slice_by</strong>(key) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>slice_by</strong>(key) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -2004,11 +2890,323 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Select records by a column specified by a key and corresponding record with a block.</p>
+
 
   </div>
 </div>
 <div class="tags">
   
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>slice_by</strong>(key) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Select records by elements.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select records by elements</p>
+</div></p>
+      
+      <pre class="example code"><code>df
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 5 x 3 Vectors, 0x0000000000069e60&gt;
+    index    float string
+  &lt;uint8&gt; &lt;double&gt; &lt;string&gt;
+0       0      0.0 A
+1       1      1.1 B
+2       2      2.2 C
+3       3      NaN D
+4   (nil)    (nil) (nil)
+
+df.slice_by(:string) { [&quot;A&quot;, &quot;C&quot;] }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 2 x 2 Vectors, 0x000000000001b1ac&gt;
+    index    float
+  &lt;uint8&gt; &lt;double&gt;
+0       0      0.0
+1       2      2.2</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>key</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a key to select column.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>keep_key</span>
+      
+      
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>preserve column specified by key in the result if true.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>gives self to the block. The block is evaluated within the context of self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
+  
+    <li>
+      
+        <span class='name'>self</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>self. Usually, it can be omitted.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>&lt;elements&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>array of elements to select.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>selected records as a DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>slice_by</strong>(key) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Select records by elements range.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select records by elements range</p>
+</div></p>
+      
+      <pre class="example code"><code>df.slice_by(:string) { &quot;A&quot;..&quot;C&quot; }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000069668&gt;
+    index    float
+  &lt;uint8&gt; &lt;double&gt;
+0       0      0.0
+1       1      1.1
+2       2      2.2</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>key</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a key to select column.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>keep_key</span>
+      
+      
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>preserve column specified by key in the result if true.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>gives self to the block. The block is evaluated within the context of self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
+  
+    <li>
+      
+        <span class='name'>self</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>self. Usually, it can be omitted.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Range</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>specifies position of elements at the start and the end and select records between them.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>selected records as a DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2022,6 +3220,22 @@
     </li>
   
 </ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.1</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -2029,49 +3243,49 @@
       <pre class="lines">
 
 
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177
-178
-179
-180
-181
-182
-183
-184
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
-197
-198
-199
-200
-201
-202</pre>
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 163</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 437</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_slice_by'>slice_by</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='label'>keep_key:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Self is an empty dataframe</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_empty?'>empty?</span>
@@ -2121,7 +3335,7 @@
       <div class="method_details ">
   <h3 class="signature " id="tail-instance_method">
   
-    #<strong>tail</strong>(n_obs = 5)  &#x21d2; <tt>Object</tt> 
+    #<strong>tail</strong>(n_obs = 5)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
   
 
   
@@ -2130,11 +3344,48 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+<p>Select records from the end.</p>
+
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>n_obs</span>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>5</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>number of records to select.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2155,14 +3406,14 @@
       <pre class="lines">
 
 
-333
-334
-335
-336
-337</pre>
+803
+804
+805
+806
+807</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 333</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 803</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_tail'>tail</span><span class='lparen'>(</span><span class='id identifier rubyid_n_obs'>n_obs</span> <span class='op'>=</span> <span class='int'>5</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Index is out of range </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_n_obs'>n_obs</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_n_obs'>n_obs</span><span class='period'>.</span><span class='id identifier rubyid_negative?'>negative?</span>
@@ -2177,7 +3428,7 @@
       <div class="method_details ">
   <h3 class="signature " id="take-instance_method">
   
-    #<strong>take</strong>(index_array)  &#x21d2; <tt>Object</tt> 
+    #<strong>take</strong>(index_array)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
   
 
   
@@ -2185,12 +3436,63 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Select records by index Array to create a DataFrame.</p>
+<ul><li>
+<p>TODO: support for option ‘boundscheck: true`</p>
+</li><li>
+<p>Supports indices in an Arrow::UInt8, UInt16, Uint32, Uint64 or an Array</p>
+</li><li>
+<p>Negative index is not supported.</p>
+</li></ul>
+
 
   </div>
 </div>
 <div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
   
+    <li>
+      
+        <span class='name'>index_array</span>
+      
+      
+        <span class='type'>(<tt>&lt;Integer&gt;</tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>row indeces to select.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>selected variables as a DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -2198,12 +3500,12 @@
       <pre class="lines">
 
 
-351
-352
-353</pre>
+841
+842
+843</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 351</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 841</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_take'>take</span><span class='lparen'>(</span><span class='id identifier rubyid_index_array'>index_array</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_take'>take</span><span class='lparen'>(</span><span class='id identifier rubyid_index_array'>index_array</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -2216,7 +3518,7 @@
       <div class="method_details ">
   <h3 class="signature " id="v-instance_method">
   
-    #<strong>v</strong>(key)  &#x21d2; <tt>Object</tt> 
+    #<strong>v</strong>(key)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> 
   
 
   
@@ -2225,13 +3527,75 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Select a variable by a key in String or Symbol</p>
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>#v(key) is faster then #[](key).</p>
+</div>
+  </div>
+
+
+<p>Select a variable by String or Symbol and return as a Vector.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Select a column and return Vector</p>
+</div></p>
+      
+      <pre class="example code"><code>penguins.v(:bill_length_mm)
+
+# =&gt;
+#&lt;RedAmber::Vector(:double, size=344):0x000000000000f140&gt;
+[39.1, 39.5, 40.3, nil, 36.7, 39.3, 38.9, 39.2, 34.1, 42.0, 37.8, 37.8, 41.1, ... ]</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>key</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>key name to select.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>selected variable as a Vector.</p>
+</div>
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -2252,17 +3616,17 @@
       <pre class="lines">
 
 
-73
-74
-75
-76
-77
-78
-79
-80</pre>
+179
+180
+181
+182
+183
+184
+185
+186</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 73</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_selectable.rb', line 179</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_v'>v</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Symbol</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>String</span><span class='rparen'>)</span>
@@ -2282,7 +3646,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  1 22:02:46 2023 by
+  Generated on Tue Feb  7 10:33:38 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>

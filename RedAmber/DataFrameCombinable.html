@@ -91,7 +91,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>mix-in for the class DataFrame</p>
+<p>Mix-in for the class DataFrame</p>
 
 
   </div>
@@ -492,7 +492,8 @@
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -500,7 +501,8 @@
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -513,7 +515,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.anti_join(other)
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 C              3</code></pre>
@@ -570,7 +573,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -586,7 +589,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -598,7 +601,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -606,7 +610,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -619,7 +624,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.anti_join(other, :KEY)
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 C              3</code></pre>
@@ -655,7 +661,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>A key or keys to match.</p>
+<p>a key or keys to match.</p>
 </div>
       
     </li>
@@ -692,7 +698,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -708,7 +714,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -720,7 +726,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY1          X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -728,7 +735,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY2     X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -741,7 +749,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df2.anti_join(other2, { left: :KEY1, right: :KEY2 })
-#=&gt;
+
+# =&gt;
   KEY1          X1
   &lt;string&gt; &lt;uint8&gt;
 0 C              3</code></pre>
@@ -777,7 +786,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Pairs of a key name or key names to match in left and right.</p>
+<p>pairs of a key name or key names to match in left and right.</p>
 </div>
       
     </li>
@@ -818,7 +827,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘self`.</p>
+<p>join keys in ‘self`.</p>
 </div>
           
         </li>
@@ -831,7 +840,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘other`.</p>
+<p>join keys in ‘other`.</p>
 </div>
           
         </li>
@@ -853,7 +862,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -872,12 +881,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-529
-530
-531</pre>
+557
+558
+559</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 529</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 557</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_anti_join'>anti_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_anti</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
@@ -925,11 +934,13 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="example code"><code>df    = DataFrame.new(x: [1, 2], y: [&#39;A&#39;, &#39;B&#39;])
 other = DataFrame.new(x: [3, 4], y: [&#39;C&#39;, &#39;D&#39;])
 [df.types, other.types]
-#=&gt;
+
+# =&gt;
 [[:uint8, :string], [:uint8, :string]]
 
 df.concatenate(other)
-#=&gt;
+
+# =&gt;
         x y
   &lt;uint8&gt; &lt;string&gt;
 0       1 A
@@ -971,7 +982,7 @@ df.concatenate(other)
       
         &mdash;
         <div class='inline'>
-<p>Concatenated dataframe.</p>
+<p>concatenated dataframe.</p>
 </div>
       
     </li>
@@ -984,8 +995,6 @@ df.concatenate(other)
       <pre class="lines">
 
 
-32
-33
 34
 35
 36
@@ -1006,10 +1015,12 @@ df.concatenate(other)
 51
 52
 53
-54</pre>
+54
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 32</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 34</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_concatenate'>concatenate</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_other'>other</span>
@@ -1075,7 +1086,8 @@ df.concatenate(other)
   KEY1: %w[A B C],
   KEY2: [1, 2, 3]
 )
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -1086,7 +1098,8 @@ other3 = DataFrame.new(
   KEY1: %w[A B D],
   KEY2: [1, 4, 5]
 )
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -1095,14 +1108,16 @@ other3 = DataFrame.new(
     
       
       <pre class="example code"><code>df3.intersect(other3)
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 B              2
 1 C              3
 
 other.intersect(df)
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 B              4
@@ -1142,7 +1157,7 @@ other.intersect(df)
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -1155,16 +1170,16 @@ other.intersect(df)
       <pre class="lines">
 
 
-617
-618
-619
-620
-621
-622
-623</pre>
+653
+654
+655
+656
+657
+658
+659</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 617</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 653</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_difference'>difference</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -1233,7 +1248,8 @@ other.intersect(df)
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -1241,7 +1257,8 @@ other.intersect(df)
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -1254,7 +1271,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.full_join(other)
-#=&gt;
+
+# =&gt;
   KEY           X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -1337,7 +1355,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -1353,7 +1371,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -1365,7 +1383,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -1373,7 +1392,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -1386,7 +1406,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.full_join(other, :KEY)
-#=&gt;
+
+# =&gt;
   KEY           X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -1425,7 +1446,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>A key or keys to match.</p>
+<p>a key or keys to match.</p>
 </div>
       
     </li>
@@ -1485,7 +1506,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -1501,7 +1522,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -1513,7 +1534,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY1          X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -1521,7 +1543,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY2     X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -1534,7 +1557,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df2.full_join(other2, { left: :KEY1, right: :KEY2 })
-#=&gt;
+
+# =&gt;
   KEY1          X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -1573,7 +1597,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Pairs of a key name or key names to match in left and right.</p>
+<p>pairs of a key name or key names to match in left and right.</p>
 </div>
       
     </li>
@@ -1637,7 +1661,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘self`.</p>
+<p>join keys in ‘self`.</p>
 </div>
           
         </li>
@@ -1650,7 +1674,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘other`.</p>
+<p>join keys in ‘other`.</p>
 </div>
           
         </li>
@@ -1674,7 +1698,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -1693,13 +1717,13 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-313
-314
-315
-316</pre>
+329
+330
+331
+332</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 313</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 329</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_full_join'>full_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span>
@@ -1761,7 +1785,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -1769,7 +1794,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -1782,7 +1808,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.inner_join(other)
-#=&gt;
+
+# =&gt;
   KEY           X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -1840,7 +1867,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -1856,7 +1883,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -1868,7 +1895,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -1876,7 +1904,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -1889,7 +1918,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.inner_join(other, :KEY)
-#=&gt;
+
+# =&gt;
   KEY           X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -1926,7 +1956,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>A key or keys to match.</p>
+<p>a key or keys to match.</p>
 </div>
       
     </li>
@@ -1963,7 +1993,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -1979,7 +2009,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -1991,7 +2021,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY1          X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -1999,7 +2030,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY2     X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -2012,7 +2044,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df2.inner_join(other2, { left: :KEY1, right: :KEY2 })
-#=&gt;
+
+# =&gt;
   KEY1          X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -2049,7 +2082,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Pairs of a key name or key names to match in left and right.</p>
+<p>pairs of a key name or key names to match in left and right.</p>
 </div>
       
     </li>
@@ -2090,7 +2123,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘self`.</p>
+<p>join keys in ‘self`.</p>
 </div>
           
         </li>
@@ -2103,7 +2136,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘other`.</p>
+<p>join keys in ‘other`.</p>
 </div>
           
         </li>
@@ -2125,7 +2158,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -2144,12 +2177,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-253
-254
-255</pre>
+266
+267
+268</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 253</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 266</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inner_join'>inner_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
@@ -2191,7 +2224,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
   KEY1: %w[A B C],
   KEY2: [1, 2, 3]
 )
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -2202,7 +2236,8 @@ other3 = DataFrame.new(
   KEY1: %w[A B D],
   KEY2: [1, 4, 5]
 )
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -2211,7 +2246,8 @@ other3 = DataFrame.new(
     
       
       <pre class="example code"><code>df3.intersect(other3)
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1</code></pre>
@@ -2250,7 +2286,7 @@ other3 = DataFrame.new(
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -2263,16 +2299,16 @@ other3 = DataFrame.new(
       <pre class="lines">
 
 
-561
-562
-563
-564
-565
-566
-567</pre>
+592
+593
+594
+595
+596
+597
+598</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 561</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 592</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_intersect'>intersect</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -2338,7 +2374,8 @@ other3 = DataFrame.new(
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -2346,7 +2383,8 @@ other3 = DataFrame.new(
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -2355,14 +2393,16 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df.join(other)
-#=&gt;
+
+# =&gt;
   KEY           X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
 1 B              2 false
 
 df.join(other, type: :full_outer)
-#=&gt;
+
+# =&gt;
   KEY           X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -2463,7 +2503,7 @@ df.join(other, type: :full_outer)
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -2479,7 +2519,7 @@ df.join(other, type: :full_outer)
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -2494,7 +2534,8 @@ df.join(other, type: :full_outer)
   KEY1: %w[A B C],
   KEY2: [1, 2, 3]
 )
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -2505,7 +2546,8 @@ other3 = DataFrame.new(
   KEY1: %w[A B D],
   KEY2: [1, 4, 5]
 )
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -2518,7 +2560,8 @@ other3 = DataFrame.new(
 </div></p>
       
       <pre class="example code"><code>df3.join(other3, [:KEY1, :KEY2])
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1</code></pre>
@@ -2529,7 +2572,8 @@ other3 = DataFrame.new(
 </div></p>
       
       <pre class="example code"><code>df3.join(other3, :KEY1, suffix: &#39;.a&#39;)
-#=&gt;
+
+# =&gt;
   KEY1        KEY2  KEY2.a
   &lt;string&gt; &lt;uint8&gt; &lt;uint8&gt;
 0 A              1       1
@@ -2566,7 +2610,7 @@ other3 = DataFrame.new(
       
         &mdash;
         <div class='inline'>
-<p>A key or keys to match.</p>
+<p>a key or keys to match.</p>
 </div>
       
     </li>
@@ -2644,7 +2688,7 @@ other3 = DataFrame.new(
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -2660,7 +2704,7 @@ other3 = DataFrame.new(
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -2675,7 +2719,8 @@ other3 = DataFrame.new(
   X1: %w[A B C],
   Y: %w[D E F]
 )
-#=&gt;
+
+# =&gt;
   X1       Y1
   &lt;string&gt; &lt;string&gt;
 0 A        D
@@ -2686,7 +2731,8 @@ other4 = DataFrame.new(
   X2: %w[A B D],
   Y:  %w[e E E]
 )
-#=&gt;
+
+# =&gt;
   X1       Y1
   &lt;string&gt; &lt;string&gt;
 0 A        D
@@ -2699,7 +2745,8 @@ other4 = DataFrame.new(
 </div></p>
       
       <pre class="example code"><code>df4.join(other4)
-#=&gt;
+
+# =&gt;
   X1       Y        X2
   &lt;string&gt; &lt;string&gt; &lt;string&gt;
 0 B        E        D
@@ -2711,7 +2758,8 @@ other4 = DataFrame.new(
 </div></p>
       
       <pre class="example code"><code>df4.join(other4, { left: [:X1, :Y], right: [:X2, :Y] })
-#=&gt;
+
+# =&gt;
   X1       Y
   &lt;string&gt; &lt;string&gt;
 0 B        E</code></pre>
@@ -2722,7 +2770,8 @@ other4 = DataFrame.new(
 </div></p>
       
       <pre class="example code"><code>df4.join(other4, { left: :X1, right: :X2 })
-#=&gt;
+
+# =&gt;
   X1       Y        Y.1
   &lt;string&gt; &lt;string&gt; &lt;string&gt;
 0 A        D        e
@@ -2759,7 +2808,7 @@ other4 = DataFrame.new(
       
         &mdash;
         <div class='inline'>
-<p>Pairs of a key name or key names to match in left and right.</p>
+<p>pairs of a key name or key names to match in left and right.</p>
 </div>
       
     </li>
@@ -2841,7 +2890,7 @@ other4 = DataFrame.new(
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘self`.</p>
+<p>join keys in ‘self`.</p>
 </div>
           
         </li>
@@ -2854,7 +2903,7 @@ other4 = DataFrame.new(
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘other`.</p>
+<p>join keys in ‘other`.</p>
 </div>
           
         </li>
@@ -2880,7 +2929,7 @@ other4 = DataFrame.new(
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -2899,51 +2948,6 @@ other4 = DataFrame.new(
       <pre class="lines">
 
 
-743
-744
-745
-746
-747
-748
-749
-750
-751
-752
-753
-754
-755
-756
-757
-758
-759
-760
-761
-762
-763
-764
-765
-766
-767
-768
-769
-770
-771
-772
-773
-774
-775
-776
-777
-778
-779
-780
-781
-782
-783
-784
-785
-786
-787
 788
 789
 790
@@ -2994,10 +2998,55 @@ other4 = DataFrame.new(
 835
 836
 837
-838</pre>
+838
+839
+840
+841
+842
+843
+844
+845
+846
+847
+848
+849
+850
+851
+852
+853
+854
+855
+856
+857
+858
+859
+860
+861
+862
+863
+864
+865
+866
+867
+868
+869
+870
+871
+872
+873
+874
+875
+876
+877
+878
+879
+880
+881
+882
+883</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 743</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 788</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_right_table'>right_table</span> <span class='op'>=</span>
@@ -3151,7 +3200,8 @@ other4 = DataFrame.new(
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -3159,7 +3209,8 @@ other4 = DataFrame.new(
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -3172,7 +3223,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.left_join(other)
-#=&gt;
+
+# =&gt;
   KEY           X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -3231,7 +3283,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -3247,7 +3299,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -3259,7 +3311,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -3267,7 +3320,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -3280,7 +3334,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.left_join(other, :KEY)
-#=&gt;
+
+# =&gt;
   KEY           X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -3318,7 +3373,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>A key or keys to match.</p>
+<p>a key or keys to match.</p>
 </div>
       
     </li>
@@ -3355,7 +3410,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -3371,7 +3426,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -3383,7 +3438,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY1          X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -3391,7 +3447,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY2     X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -3404,7 +3461,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df2.left_join(other2, { left: :KEY1, right: :KEY2 })
-#=&gt;
+
+# =&gt;
   KEY1          X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -3442,7 +3500,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Pairs of a key name or key names to match in left and right.</p>
+<p>pairs of a key name or key names to match in left and right.</p>
 </div>
       
     </li>
@@ -3483,7 +3541,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘self`.</p>
+<p>join keys in ‘self`.</p>
 </div>
           
         </li>
@@ -3496,7 +3554,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘other`.</p>
+<p>join keys in ‘other`.</p>
 </div>
           
         </li>
@@ -3518,7 +3576,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -3537,12 +3595,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-370
-371
-372</pre>
+389
+390
+391</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 370</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 389</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_left_join'>left_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_outer</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
@@ -3597,7 +3655,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="example code"><code>df    = DataFrame.new(x: [1, 2], y: [3, 4])
 other = DataFrame.new(a: [&#39;A&#39;, &#39;B&#39;], b: [&#39;C&#39;, &#39;D&#39;])
 df.merge(other)
-#=&gt;
+
+# =&gt;
         x       y a        b
   &lt;uint8&gt; &lt;uint8&gt; &lt;string&gt; &lt;string&gt;
 0       1       3 A        C
@@ -3637,7 +3696,7 @@ df.merge(other)
       
         &mdash;
         <div class='inline'>
-<p>Merged dataframe.</p>
+<p>merged dataframe.</p>
 </div>
       
     </li>
@@ -3668,9 +3727,6 @@ df.merge(other)
       <pre class="lines">
 
 
-79
-80
-81
 82
 83
 84
@@ -3700,10 +3756,13 @@ df.merge(other)
 108
 109
 110
-111</pre>
+111
+112
+113
+114</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 79</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 82</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_other'>other</span>
@@ -3794,7 +3853,8 @@ df.merge(other)
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -3802,7 +3862,8 @@ df.merge(other)
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -3815,7 +3876,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.right_join(other)
-#=&gt;
+
+# =&gt;
   KEY           X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -3897,7 +3959,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -3913,7 +3975,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -3925,7 +3987,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -3933,7 +3996,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -3946,7 +4010,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.right_join(other, :KEY)
-#=&gt;
+
+# =&gt;
   KEY           X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -3984,7 +4049,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>A key or keys to match.</p>
+<p>a key or keys to match.</p>
 </div>
       
     </li>
@@ -4044,7 +4109,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -4060,7 +4125,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -4072,7 +4137,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY1          X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4080,7 +4146,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY2     X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -4093,7 +4160,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df2.right_join(other2, { left: :KEY1, right: :KEY2 })
-#=&gt;
+
+# =&gt;
   KEY1          X1 X2
   &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
 0 A              1 true
@@ -4131,7 +4199,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Pairs of a key name or key names to match in left and right.</p>
+<p>pairs of a key name or key names to match in left and right.</p>
 </div>
       
     </li>
@@ -4195,7 +4263,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘self`.</p>
+<p>join keys in ‘self`.</p>
 </div>
           
         </li>
@@ -4208,7 +4276,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘other`.</p>
+<p>join keys in ‘other`.</p>
 </div>
           
         </li>
@@ -4232,7 +4300,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -4251,13 +4319,13 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-427
-428
-429
-430</pre>
+449
+450
+451
+452</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 427</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 449</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_right_join'>right_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span>
@@ -4319,7 +4387,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4327,7 +4396,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -4340,7 +4410,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.semi_join(other)
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4398,7 +4469,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -4414,7 +4485,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -4426,7 +4497,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4434,7 +4506,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY      X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -4447,7 +4520,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df.semi_join(other, :KEY)
-#=&gt;
+
+# =&gt;
   KEY           X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4484,7 +4558,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>A key or keys to match.</p>
+<p>a key or keys to match.</p>
 </div>
       
     </li>
@@ -4521,7 +4595,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -4537,7 +4611,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns Joined dataframe.</p>
+<p>Returns joined dataframe.</p>
 
 
   </div>
@@ -4549,7 +4623,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
-#=&gt;
+
+# =&gt;
   KEY1          X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4557,7 +4632,8 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 C              3
 
 other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
-#=&gt;
+
+# =&gt;
   KEY2     X2
   &lt;string&gt; &lt;boolean&gt;
 0 A        true
@@ -4570,7 +4646,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 </div></p>
       
       <pre class="example code"><code>df2.semi_join(other2, { left: :KEY1, right: :KEY2 })
-#=&gt;
+
+# =&gt;
   KEY1          X1
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4607,7 +4684,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Pairs of a key name or key names to match in left and right.</p>
+<p>pairs of a key name or key names to match in left and right.</p>
 </div>
       
     </li>
@@ -4648,7 +4725,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘self`.</p>
+<p>join keys in ‘self`.</p>
 </div>
           
         </li>
@@ -4661,7 +4738,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
           </span>
           
             &mdash; <div class='inline'>
-<p>Join keys in ‘other`.</p>
+<p>join keys in ‘other`.</p>
 </div>
           
         </li>
@@ -4683,7 +4760,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -4702,12 +4779,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-481
-482
-483</pre>
+506
+507
+508</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 481</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 506</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_semi_join'>semi_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
@@ -4744,7 +4821,8 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
   KEY1: %w[A B C],
   KEY2: [1, 2, 3]
 )
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4755,7 +4833,8 @@ other3 = DataFrame.new(
   KEY1: %w[A B D],
   KEY2: [1, 4, 5]
 )
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4763,7 +4842,7 @@ other3 = DataFrame.new(
 2 D              5</code></pre>
     
       
-      <pre class="example code"><code><span class='id identifier rubyid_df3'>df3</span><span class='period'>.</span><span class='id identifier rubyid_set_operable?'>set_operable?</span><span class='lparen'>(</span><span class='id identifier rubyid_other3'>other3</span><span class='rparen'>)</span> <span class='comment'>#=&gt; true</span></code></pre>
+      <pre class="example code"><code><span class='id identifier rubyid_df3'>df3</span><span class='period'>.</span><span class='id identifier rubyid_set_operable?'>set_operable?</span><span class='lparen'>(</span><span class='id identifier rubyid_other3'>other3</span><span class='rparen'>)</span> <span class='comment'># =&gt; true</span></code></pre>
     
   </div>
 <p class="tag_title">Parameters:</p>
@@ -4812,12 +4891,12 @@ other3 = DataFrame.new(
       <pre class="lines">
 
 
-543
-544
-545</pre>
+572
+573
+574</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 543</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 572</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_operable?'>set_operable?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='comment'># rubocop:disable Naming/AccessorMethodName
 </span>  <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -4859,7 +4938,8 @@ other3 = DataFrame.new(
   KEY1: %w[A B C],
   KEY2: [1, 2, 3]
 )
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4870,7 +4950,8 @@ other3 = DataFrame.new(
   KEY1: %w[A B D],
   KEY2: [1, 4, 5]
 )
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4879,7 +4960,8 @@ other3 = DataFrame.new(
     
       
       <pre class="example code"><code>df3.intersect(other3)
-#=&gt;
+
+# =&gt;
   KEY1        KEY2
   &lt;string&gt; &lt;uint8&gt;
 0 A              1
@@ -4922,7 +5004,7 @@ other3 = DataFrame.new(
       
         &mdash;
         <div class='inline'>
-<p>Joined dataframe.</p>
+<p>joined dataframe.</p>
 </div>
       
     </li>
@@ -4935,16 +5017,16 @@ other3 = DataFrame.new(
       <pre class="lines">
 
 
-587
-588
-589
-590
-591
-592
-593</pre>
+620
+621
+622
+623
+624
+625
+626</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 587</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 620</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -4963,7 +5045,7 @@ other3 = DataFrame.new(
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  1 22:02:46 2023 by
+  Generated on Tue Feb  7 10:33:38 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>

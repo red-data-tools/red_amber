@@ -91,7 +91,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>mix-ins for the class DataFrame</p>
+<p>Mix-in for the class DataFrame</p>
 
 
   </div>
@@ -132,7 +132,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>assign variables to create a new DataFrame.</p>
+<p>Assign new or updated variables (columns) and create an updated DataFrame.</p>
 </div></span>
   
 </li>
@@ -155,7 +155,9 @@
   
 
   
-    <span class="summary_desc"><div class='inline'></div></span>
+    <span class="summary_desc"><div class='inline'>
+<p>Assign new or updated variables (columns) and create an updated DataFrame.</p>
+</div></span>
   
 </li>
 
@@ -178,7 +180,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Drop some variables (columns) to create a remainer DataFrame.</p>
+<p>Drop off some variables (columns) to create a remainer DataFrame.</p>
 </div></span>
   
 </li>
@@ -202,7 +204,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Pick up variables (columns) to create a new DataFrame.</p>
+<p>Select variables (columns) to create a new DataFrame.</p>
 </div></span>
   
 </li>
@@ -226,7 +228,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>rename variables to create a new DataFrame.</p>
+<p>rename keys (variable/column names) to create a updated DataFrame.</p>
 </div></span>
   
 </li>
@@ -244,7 +246,13 @@
       <div class="method_details first">
   <h3 class="signature first" id="assign-instance_method">
   
-    #<strong>assign</strong>(*assigner, &amp;block)  &#x21d2; <tt>Object</tt> 
+    
+      <span class="overload">#<strong>assign</strong>(key_value_pairs)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>assign</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>assign</strong>(keys) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -253,13 +261,360 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>assign variables to create a new DataFrame</p>
+<p>Assign new or updated variables (columns) and create an updated DataFrame.</p>
+<ul><li>
+<p>Array-like variables with new keys will append new columns from right.</p>
+</li><li>
+<p>Array-like variables with exisiting keys will update corresponding vectors.</p>
+</li><li>
+<p>Symbol key and String key are considered as the same key.</p>
+</li><li>
+<p>If assigner is empty or nil, returns self.</p>
+</li></ul>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>assign</strong>(key_value_pairs)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>accepts pairs of key and values by an Array or a Hash.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Assign a new column</p>
+</div></p>
+      
+      <pre class="example code"><code>comecome
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000000280dc&gt;
+  name         age
+  &lt;string&gt; &lt;uint8&gt;
+0 Yasuko        68
+1 Rui           49
+2 Hinata        28
+
+brothers = [&#39;Santa&#39;, nil, &#39;Momotaro&#39;]
+comecome.assign(brother: brothers)
+# or
+comecome.assign({ brother: brothers })
+# or
+comecome.assign(:brother, brothers)
+# or
+comecome.assign([:brother, brothers])
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000004077c&gt;
+  name         age brother
+  &lt;string&gt; &lt;uint8&gt; &lt;string&gt;
+0 Yasuko        68 Santa
+1 Rui           49 (nil)
+2 Hinata        28 Momotaro</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Assign new data for a existing column</p>
+</div></p>
+      
+      <pre class="example code"><code>comecome.assign(age: comecome[:age] + 29)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000065860&gt;
+  name         age
+  &lt;string&gt; &lt;uint8&gt;
+0 Yasuko        97
+1 Rui           78
+2 Hinata        57</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>key_value_pairs</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;key, array_like&gt;</tt>, <tt>Hash{key =&gt; array_like}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>‘key` must be a Symbol or a String. `array_like` is column data to be assigned. It must be one of `Vector` or `Arrow::Array` or `Array`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>assigned DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>assign</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>accepts block yielding pairs of key and values.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Assign new data for a existing column by block</p>
+</div></p>
+      
+      <pre class="example code"><code>comecome.assign { { age: age + 29 } }
+# or
+comecome.assign { [:age, age + 29] }
+# or
+comecome.assign { [[:age, age + 29]] }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000007d640&gt;
+  name         age
+  &lt;string&gt; &lt;uint8&gt;
+0 Yasuko        97
+1 Rui           78
+2 Hinata        57</code></pre>
+    
+  </div>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the block is called within the context of self. (Block is called by instance_eval(&amp;block). )</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;key, array_like&gt;</tt>, <tt>Hash(key =&gt; array_like)</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>‘key` must be a Symbol or a String. `array_like` is column data to be assigned. It must be one of `Vector` or `Arrow::Array` or `Array`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>assigned DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>assign</strong>(keys) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>accepts keys from argument and pairs of key and values from block.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Assign new data for a existing column by block</p>
+</div></p>
+      
+      <pre class="example code"><code>comecome.assign(:age) { age + 29 }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000007af94&gt;
+  name         age
+  &lt;string&gt; &lt;uint8&gt;
+0 Yasuko        97
+1 Rui           78
+2 Hinata        57</code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Assign multiple data</p>
+</div></p>
+      
+      <pre class="example code"><code>comecome.assign(:age_in_1993, :brother) do
+  [
+    age + 29,
+    [&#39;Santa&#39;, nil, &#39;Momotaro&#39;],
+  ]
+end
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 4 Vectors, 0x00000000000b363c&gt;
+  name         age age_in_1993 brother
+  &lt;string&gt; &lt;uint8&gt;     &lt;uint8&gt; &lt;string&gt;
+0 Yasuko        68          97 Santa
+1 Rui           49          78 (nil)
+2 Hinata        28          57 Momotaro</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>keys</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>keys of columns to create or update.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the block is called within the context of self. (Block is called by instance_eval(&amp;block).)</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;array_like&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>column data to be assigned. ‘array_like` must be one of `Vector` or `Arrow::Array` or `Array`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>assigned DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -267,12 +622,12 @@
       <pre class="lines">
 
 
-166
-167
-168</pre>
+511
+512
+513</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 166</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 511</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_assign'>assign</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_assign_update'>assign_update</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='label'>append_to_left:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
@@ -285,24 +640,306 @@
       <div class="method_details ">
   <h3 class="signature " id="assign_left-instance_method">
   
-    #<strong>assign_left</strong>(*assigner, &amp;block)  &#x21d2; <tt>Object</tt> 
+    
+      <span class="overload">#<strong>assign_left</strong>(key_value_pairs)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>assign_left</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>assign_left</strong>(keys) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
 
   
-</h3><table class="source_code">
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Assign new or updated variables (columns) and create an updated DataFrame.</p>
+<ul><li>
+<p>Array-like variables with new keys will append new columns from left.</p>
+</li><li>
+<p>Array-like variables with exisiting keys will update corresponding vectors.</p>
+</li><li>
+<p>Symbol key and String key are considered as the same key.</p>
+</li><li>
+<p>If assigner is empty or nil, returns self.</p>
+</li></ul>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>assign_left</strong>(key_value_pairs)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>accepts pairs of key and values by an Array or a Hash.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Assign a new column from left</p>
+</div></p>
+      
+      <pre class="example code"><code>df
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 5 x 3 Vectors, 0x000000000000c10c&gt;
+    index    float string
+  &lt;uint8&gt; &lt;double&gt; &lt;string&gt;
+0       0      0.0 A
+1       1      1.1 B
+2       2      2.2 C
+3       3      NaN D
+4   (nil)    (nil) (nil)
+
+df.assign_left(new_index: df.indices(1))
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000001787c&gt;
+  new_index   index    float string
+    &lt;uint8&gt; &lt;uint8&gt; &lt;double&gt; &lt;string&gt;
+0         1       0      0.0 A
+1         2       1      1.1 B
+2         3       2      2.2 C
+3         4       3      NaN D
+4         5   (nil)    (nil) (nil)</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>key_value_pairs</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;key, array_like&gt;</tt>, <tt>Hash{key =&gt; array_like}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>‘key` must be a Symbol or a String. `array_like` is column data to be assigned. It must be one of `Vector` or `Arrow::Array` or `Array`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>assigned DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>assign_left</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>accepts block yielding pairs of key and values.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the block is called within the context of self. (Block is called by instance_eval(&amp;block). )</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;key, array_like&gt;</tt>, <tt>Hash(key =&gt; array_like)</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>‘key` must be a Symbol or a String. `array_like` is column data to be assigned. It must be one of `Vector` or `Arrow::Array` or `Array`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>assigned DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>assign_left</strong>(keys) {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>accepts keys from argument and pairs of key and values from block.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>keys</span>
+      
+      
+        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>keys of columns to create or update.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the block is called within the context of self. (Block is called by instance_eval(&amp;block).)</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;array_like&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>column data to be assigned. ‘array_like` must be one of `Vector` or `Arrow::Array` or `Array`.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>assigned DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
+
+</div><table class="source_code">
   <tr>
     <td>
       <pre class="lines">
 
 
-170
-171
-172</pre>
+582
+583
+584</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 170</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 582</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_assign_left'>assign_left</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_assign_update'>assign_update</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='label'>append_to_left:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
@@ -322,6 +959,8 @@
     
       <span class="overload">#<strong>drop</strong>(indices)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
     
+      <span class="overload">#<strong>drop</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -333,12 +972,12 @@
   <div class="note notetag">
     <strong>Note:</strong>
     <div class='inline'>
-<p>DataFrame#drop creates a DataFrame even if it is a single column.</p>
+<p>DataFrame#drop creates a DataFrame even if it is a single column (not a Vector).</p>
 </div>
   </div>
 
 
-<p>Drop some variables (columns) to create a remainer DataFrame</p>
+<p>Drop off some variables (columns) to create a remainer DataFrame.</p>
 
 
   </div>
@@ -354,13 +993,45 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>Drop variables by Symbols or Strings.</p>
+<p>Drop off variables by Symbol(s) or String(s).</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Drop off by a key</p>
+</div></p>
+      
+      <pre class="example code"><code>languages
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 4 x 3 Vectors, 0x00000000000cfd8c&gt;
+  Language Creator                         Released
+  &lt;string&gt; &lt;string&gt;                        &lt;uint16&gt;
+0 Ruby     Yukihiro Matsumoto                  1995
+1 Python   Guido van Rossum                    1991
+2 R        Ross Ihaka and Robert Gentleman     1993
+3 Rust     Graydon Hoare                       2001
+
+languages.drop(:Language)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 4 x 2 Vectors, 0x000000000005805c&gt;
+  Creator                         Released
+  &lt;string&gt;                        &lt;uint16&gt;
+0 Yukihiro Matsumoto                  1995
+1 Guido van Rossum                    1991
+2 Ross Ihaka and Robert Gentleman     1993
+3 Graydon Hoare                       2001</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -393,7 +1064,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Remainer DataFrame.</p>
+<p>remainer DataFrame.</p>
 </div>
       
     </li>
@@ -409,13 +1080,35 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>Drop variables by booleans.</p>
+<p>Drop off variables by booleans.</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Drop off by booleans</p>
+</div></p>
+      
+      <pre class="example code"><code>is_numeric = languages.vectors.map(&amp;:numeric?) # [nil, nil, true]
+languages.drop(is_numeric)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000066a1c&gt;
+Language Creator
+&lt;string&gt; &lt;string&gt;
+0 Ruby     Yukihiro Matsumoto
+1 Python   Guido van Rossum
+2 R        Ross Ihaka and Robert Gentleman
+3 Rust     Graydon Hoare</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -423,13 +1116,13 @@
         <span class='name'>booleans</span>
       
       
-        <span class='type'>(<tt>&lt;true, false, nil&gt;</tt>)</span>
+        <span class='type'>(<tt>&lt;Booleans, nil&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>boolean array of variables to drop at true.</p>
+<p>boolean array or vector of variables to drop at true.</p>
 </div>
       
     </li>
@@ -448,7 +1141,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Remainer DataFrame.</p>
+<p>remainer DataFrame.</p>
 </div>
       
     </li>
@@ -464,13 +1157,34 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>Pick variables by column indices.</p>
+<p>Drop off variables by column indices.</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Drop off by indices</p>
+</div></p>
+      
+      <pre class="example code"><code>languages.drop(2)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000066a1c&gt;
+Language Creator
+&lt;string&gt; &lt;string&gt;
+0 Ruby     Yukihiro Matsumoto
+1 Python   Guido van Rossum
+2 R        Ross Ihaka and Robert Gentleman
+3 Rust     Graydon Hoare</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -503,7 +1217,108 @@
       
         &mdash;
         <div class='inline'>
-<p>Remainer DataFrame.</p>
+<p>remainer DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>drop</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>Arguments and a block cannot be used simultaneously.</p>
+</div>
+  </div>
+
+
+<p>Drop off variables by the yielded value from the block.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Drop off by a block.</p>
+</div></p>
+      
+      <pre class="example code"><code># same as languages.drop { |df| df.vectors.map(&amp;:numeric?) }
+languages.drop { vectors.map(&amp;:numeric?) }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000154104&gt;
+  Language Creator
+  &lt;string&gt; &lt;string&gt;
+0 Ruby     Yukihiro Matsumoto
+1 Python   Guido van Rossum
+2 R        Ross Ihaka and Robert Gentleman
+3 Rust     Graydon Hoare</code></pre>
+    
+  </div>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the block is called within the context of self. (Block is called by instance_eval(&amp;block). )</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>keys</tt>, <tt>booleans</tt>, <tt>indices</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>returns keys, booleans or indices just same as arguments.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>remainer DataFrame.</p>
 </div>
       
     </li>
@@ -522,46 +1337,46 @@
       <pre class="lines">
 
 
-101
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111
-112
-113
-114
-115
-116
-117
-118
-119
-120
-121
-122
-123
-124
-125
-126
-127
-128
-129
-130
-131
-132
-133
-134
-135
-136
-137</pre>
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 101</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 249</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_drop'>drop</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span>
@@ -615,6 +1430,8 @@
     
       <span class="overload">#<strong>pick</strong>(indices)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
     
+      <span class="overload">#<strong>pick</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -626,12 +1443,12 @@
   <div class="note notetag">
     <strong>Note:</strong>
     <div class='inline'>
-<p>DataFrame#pick creates a DataFrame with single key. DataFrame#[] creates a Vector if single key is specified.</p>
+<p>if a single key is specified, DataFrame#pick generates a DataFrame. On the other hand, DataFrame#[] generates a Vector.</p>
 </div>
   </div>
 
 
-<p>Pick up variables (columns) to create a new DataFrame</p>
+<p>Select variables (columns) to create a new DataFrame.</p>
 
 
   </div>
@@ -647,13 +1464,51 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>Pick variables by Symbols or Strings.</p>
+<p>Pick up variables by Symbol(s) or String(s).</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Pick up by a key</p>
+</div></p>
+      
+      <pre class="example code"><code>languages
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 4 x 3 Vectors, 0x00000000000cfd8c&gt;
+  Language Creator                         Released
+  &lt;string&gt; &lt;string&gt;                        &lt;uint16&gt;
+0 Ruby     Yukihiro Matsumoto                  1995
+1 Python   Guido van Rossum                    1991
+2 R        Ross Ihaka and Robert Gentleman     1993
+3 Rust     Graydon Hoare                       2001
+
+languages.pick(:Language)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 4 x 1 Vector, 0x0000000000113d20&gt;
+  Language
+  &lt;string&gt;
+0 Ruby
+1 Python
+2 R
+3 Rust
+
+languages[:Language]
+
+# =&gt;
+#&lt;RedAmber::Vector(:string, size=4):0x000000000010359c&gt;
+[&quot;Ruby&quot;, &quot;Python&quot;, &quot;R&quot;, &quot;Rust&quot;]</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -686,7 +1541,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Picked DataFrame.</p>
+<p>picked DataFrame.</p>
 </div>
       
     </li>
@@ -702,13 +1557,39 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>Pick variables by booleans.</p>
+<p>Pick up variables by booleans.</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Pick up by booleans</p>
+</div></p>
+      
+      <pre class="example code"><code>languages.pick(true, true, false)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000066a1c&gt;
+Language Creator
+&lt;string&gt; &lt;string&gt;
+0 Ruby     Yukihiro Matsumoto
+1 Python   Guido van Rossum
+2 R        Ross Ihaka and Robert Gentleman
+3 Rust     Graydon Hoare
+
+is_string = languages.vectors.map(&amp;:string?) # [true, true, false]
+languages.pick(is_string)
+# =&gt;
+(same as above)</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -716,13 +1597,13 @@
         <span class='name'>booleans</span>
       
       
-        <span class='type'>(<tt>&lt;true, false, nil&gt;</tt>)</span>
+        <span class='type'>(<tt>&lt;Booleans, nil&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
       
       
       
         &mdash;
         <div class='inline'>
-<p>boolean array to pick variables at true.</p>
+<p>boolean array or vecctor to pick up variables at true.</p>
 </div>
       
     </li>
@@ -741,7 +1622,7 @@
       
         &mdash;
         <div class='inline'>
-<p>Picked DataFrame.</p>
+<p>picked DataFrame.</p>
 </div>
       
     </li>
@@ -757,13 +1638,34 @@
         <div class="docstring">
   <div class="discussion">
     
-<p>Pick variables by column indices.</p>
+<p>Pick up variables by column indices.</p>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Pick up by indices</p>
+</div></p>
+      
+      <pre class="example code"><code>languages.pick(0, 2, 1)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 4 x 3 Vectors, 0x000000000011cfb0&gt;
+  Language Released Creator
+  &lt;string&gt; &lt;uint16&gt; &lt;string&gt;
+0 Ruby         1995 Yukihiro Matsumoto
+1 Python       1991 Guido van Rossum
+2 R            1993 Ross Ihaka and Robert Gentleman
+3 Rust         2001 Graydon Hoare</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -777,7 +1679,7 @@
       
         &mdash;
         <div class='inline'>
-<p>numeric array to pick variables by column index.</p>
+<p>numeric array to pick up variables by column index.</p>
 </div>
       
     </li>
@@ -796,7 +1698,108 @@
       
         &mdash;
         <div class='inline'>
-<p>Picked DataFrame.</p>
+<p>picked DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>pick</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>Arguments and a block cannot be used simultaneously.</p>
+</div>
+  </div>
+
+
+<p>Pick up variables by the yielded value from the block.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Pick up by a block.</p>
+</div></p>
+      
+      <pre class="example code"><code># same as languages.pick { |df| df.languages.vectors.map(&amp;:string?) }
+languages.pick { languages.vectors.map(&amp;:string?) }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000154104&gt;
+  Language Creator
+  &lt;string&gt; &lt;string&gt;
+0 Ruby     Yukihiro Matsumoto
+1 Python   Guido van Rossum
+2 R        Ross Ihaka and Robert Gentleman
+3 Rust     Graydon Hoare</code></pre>
+    
+  </div>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the block is called within the context of self. (Block is called by instance_eval(&amp;block). )</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>keys</tt>, <tt>booleans</tt>, <tt>indices</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>returns keys, booleans or indices just same as arguments.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>picked DataFrame.</p>
 </div>
       
     </li>
@@ -828,43 +1831,43 @@
       <pre class="lines">
 
 
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71</pre>
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 117</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pick'>pick</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span>
@@ -908,7 +1911,13 @@
       <div class="method_details ">
   <h3 class="signature " id="rename-instance_method">
   
-    #<strong>rename</strong>(*renamer, &amp;block)  &#x21d2; <tt>Object</tt> 
+    
+      <span class="overload">#<strong>rename</strong>(key_pairs)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>rename</strong>(key_pairs)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
+      <span class="overload">#<strong>rename</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+    
   
 
   
@@ -917,13 +1926,280 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>rename variables to create a new DataFrame</p>
+<p>rename keys (variable/column names) to create a updated DataFrame.</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>rename</strong>(key_pairs)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Rename by key pairs as a Hash.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Rename by a Hash</p>
+</div></p>
+      
+      <pre class="example code"><code>comecome
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000000037b4&gt;
+  name         age
+  &lt;string&gt; &lt;uint8&gt;
+0 Yasuko        68
+1 Rui           49
+2 Hinata        28
+
+comecome.rename(:age =&gt; :age_in_1993)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000000037c8&gt;
+  name     age_in_1993
+  &lt;string&gt;     &lt;uint8&gt;
+0 Yasuko            68
+1 Rui               49
+2 Hinata            28</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>key_pairs</span>
+      
+      
+        <span class='type'>(<tt>Hash{existing_key =&gt; new_key}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>key pair(s) of existing name and new name.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>renamed DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>rename</strong>(key_pairs)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Rename by key pairs as an Array of Array.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Rename by an Array</p>
+</div></p>
+      
+      <pre class="example code"><code>renamer = [[:name, :heroine], [:age, :age_in_1993]]
+comecome.rename(renamer)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000000037dc&gt;
+  heroine  age_in_1993
+  &lt;string&gt;     &lt;uint8&gt;
+0 Yasuko            68
+1 Rui               49
+2 Hinata            28</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>key_pairs</span>
+      
+      
+        <span class='type'>(<tt>&lt;Array[existing_key, new_key]&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>key pair(s) of existing name and new name.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>renamed DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>rename</strong> {|self| ... } &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Rename by key pairs yielding from block.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Rename by block.</p>
+</div></p>
+      
+      <pre class="example code"><code>df
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000c29c&gt;
+        X       Y       Z
+  &lt;uint8&gt; &lt;uint8&gt; &lt;uint8&gt;
+0       1       3       5
+1       2       4       6
+
+df.rename { keys.zip(keys.map(&amp;:downcase)) }
+# or
+df.rename { [keys, keys.map(&amp;:downcase)].transpose }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000c364&gt;
+        x       y       z
+  &lt;uint8&gt; &lt;uint8&gt; &lt;uint8&gt;
+0       1       3       5
+1       2       4       6</code></pre>
+    
+  </div>
+
+<p class="tag_title">Yields:</p>
+<ul class="yield">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>self</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the block is called within the context of self. (Block is called by instance_eval(&amp;block). )</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>&lt;[existing_key, new_key]&gt;</tt>, <tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>returns an Array or a Hash just same as arguments.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>renamed DataFrame.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -931,33 +2207,33 @@
       <pre class="lines">
 
 
-140
-141
-142
-143
-144
-145
-146
-147
-148
-149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
-161
-162
-163</pre>
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 140</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 366</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_rename'>rename</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_renamer'>renamer</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span>
@@ -993,7 +2269,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  1 22:02:46 2023 by
+  Generated on Tue Feb  7 10:33:38 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>

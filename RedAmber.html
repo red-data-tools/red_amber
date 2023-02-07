@@ -78,8 +78,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/red_amber/vector_updatable.rb<span class="defines">,<br />
-  lib/red_amber.rb,<br /> lib/red_amber/group.rb,<br /> lib/red_amber/helper.rb,<br /> lib/red_amber/vector.rb,<br /> lib/red_amber/version.rb,<br /> lib/red_amber/data_frame.rb,<br /> lib/red_amber/refinements.rb,<br /> lib/red_amber/vector_selectable.rb,<br /> lib/red_amber/vector_aggregation.rb,<br /> lib/red_amber/data_frame_loadsave.rb,<br /> lib/red_amber/data_frame_indexable.rb,<br /> lib/red_amber/data_frame_reshaping.rb,<br /> lib/red_amber/data_frame_combinable.rb,<br /> lib/red_amber/data_frame_selectable.rb,<br /> lib/red_amber/data_frame_displayable.rb,<br /> lib/red_amber/vector_unary_element_wise.rb,<br /> lib/red_amber/vector_binary_element_wise.rb,<br /> lib/red_amber/data_frame_variable_operation.rb</span>
+    <dd>lib/red_amber/refinements.rb<span class="defines">,<br />
+  lib/red_amber.rb,<br /> lib/red_amber/group.rb,<br /> lib/red_amber/helper.rb,<br /> lib/red_amber/vector.rb,<br /> lib/red_amber/version.rb,<br /> lib/red_amber/data_frame.rb,<br /> lib/red_amber/vector_updatable.rb,<br /> lib/red_amber/vector_selectable.rb,<br /> lib/red_amber/vector_aggregation.rb,<br /> lib/red_amber/data_frame_loadsave.rb,<br /> lib/red_amber/data_frame_indexable.rb,<br /> lib/red_amber/data_frame_reshaping.rb,<br /> lib/red_amber/data_frame_combinable.rb,<br /> lib/red_amber/data_frame_selectable.rb,<br /> lib/red_amber/data_frame_displayable.rb,<br /> lib/red_amber/vector_unary_element_wise.rb,<br /> lib/red_amber/vector_binary_element_wise.rb,<br /> lib/red_amber/data_frame_variable_operation.rb</span>
 </dd>
   </dl>
   
@@ -100,7 +100,7 @@
 <p class="children">
   
     
-      <strong class="modules">Modules:</strong> <span class='object_link'><a href="RedAmber/ArrowFunction.html" title="RedAmber::ArrowFunction (module)">ArrowFunction</a></span>, <span class='object_link'><a href="RedAmber/DataFrameCombinable.html" title="RedAmber::DataFrameCombinable (module)">DataFrameCombinable</a></span>, <span class='object_link'><a href="RedAmber/DataFrameDisplayable.html" title="RedAmber::DataFrameDisplayable (module)">DataFrameDisplayable</a></span>, <span class='object_link'><a href="RedAmber/DataFrameIndexable.html" title="RedAmber::DataFrameIndexable (module)">DataFrameIndexable</a></span>, <span class='object_link'><a href="RedAmber/DataFrameLoadSave.html" title="RedAmber::DataFrameLoadSave (module)">DataFrameLoadSave</a></span>, <span class='object_link'><a href="RedAmber/DataFrameReshaping.html" title="RedAmber::DataFrameReshaping (module)">DataFrameReshaping</a></span>, <span class='object_link'><a href="RedAmber/DataFrameSelectable.html" title="RedAmber::DataFrameSelectable (module)">DataFrameSelectable</a></span>, <span class='object_link'><a href="RedAmber/DataFrameVariableOperation.html" title="RedAmber::DataFrameVariableOperation (module)">DataFrameVariableOperation</a></span>, <span class='object_link'><a href="RedAmber/Helper.html" title="RedAmber::Helper (module)">Helper</a></span>, <span class='object_link'><a href="RedAmber/RefineArray.html" title="RedAmber::RefineArray (module)">RefineArray</a></span>, <span class='object_link'><a href="RedAmber/RefineArrayLike.html" title="RedAmber::RefineArrayLike (module)">RefineArrayLike</a></span>, <span class='object_link'><a href="RedAmber/RefineArrowTable.html" title="RedAmber::RefineArrowTable (module)">RefineArrowTable</a></span>, <span class='object_link'><a href="RedAmber/RefineHash.html" title="RedAmber::RefineHash (module)">RefineHash</a></span>, <span class='object_link'><a href="RedAmber/VectorSelectable.html" title="RedAmber::VectorSelectable (module)">VectorSelectable</a></span>, <span class='object_link'><a href="RedAmber/VectorUpdatable.html" title="RedAmber::VectorUpdatable (module)">VectorUpdatable</a></span>
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="RedAmber/ArrowFunction.html" title="RedAmber::ArrowFunction (module)">ArrowFunction</a></span>, <span class='object_link'><a href="RedAmber/DataFrameCombinable.html" title="RedAmber::DataFrameCombinable (module)">DataFrameCombinable</a></span>, <span class='object_link'><a href="RedAmber/DataFrameDisplayable.html" title="RedAmber::DataFrameDisplayable (module)">DataFrameDisplayable</a></span>, <span class='object_link'><a href="RedAmber/DataFrameIndexable.html" title="RedAmber::DataFrameIndexable (module)">DataFrameIndexable</a></span>, <span class='object_link'><a href="RedAmber/DataFrameLoadSave.html" title="RedAmber::DataFrameLoadSave (module)">DataFrameLoadSave</a></span>, <span class='object_link'><a href="RedAmber/DataFrameReshaping.html" title="RedAmber::DataFrameReshaping (module)">DataFrameReshaping</a></span>, <span class='object_link'><a href="RedAmber/DataFrameSelectable.html" title="RedAmber::DataFrameSelectable (module)">DataFrameSelectable</a></span>, <span class='object_link'><a href="RedAmber/DataFrameVariableOperation.html" title="RedAmber::DataFrameVariableOperation (module)">DataFrameVariableOperation</a></span>, <span class='object_link'><a href="RedAmber/Helper.html" title="RedAmber::Helper (module)">Helper</a></span>, <span class='object_link'><a href="RedAmber/VectorSelectable.html" title="RedAmber::VectorSelectable (module)">VectorSelectable</a></span>, <span class='object_link'><a href="RedAmber/VectorUpdatable.html" title="RedAmber::VectorUpdatable (module)">VectorUpdatable</a></span>
     
   
     
@@ -118,7 +118,18 @@
     <dl class="constants">
       
         <dt id="VERSION-constant" class="">VERSION =
-          
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Library version</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
         </dt>
         <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0.3.1-HEAD</span><span class='tstring_end'>&#39;</span></span></pre></dd>
       
@@ -136,7 +147,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  1 22:02:45 2023 by
+  Generated on Tue Feb  7 10:33:38 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>

@@ -91,7 +91,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>mix-in for class Vector Functions to make up some data (especially missing) for new data.</p>
+<p>Mix-in for class Vector Functions to make up some data (especially missing) for new data.</p>
 
 
   </div>
@@ -132,7 +132,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>[Ternary element-wise]: boolean_vector.func(if_true, else) =&gt; vector.</p>
+<p>Choose values based on self.</p>
 </div></span>
   
 </li>
@@ -204,7 +204,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>return element size Array for list Vector.</p>
+<p>Return element size Array for list Vector.</p>
 </div></span>
   
 </li>
@@ -237,7 +237,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#primitive_invert-instance_method" title="#primitive_invert (instance method)">#<strong>primitive_invert</strong>  &#x21d2; Object </a>
+      <a href="#primitive_invert-instance_method" title="#primitive_invert (instance method)">#<strong>primitive_invert</strong>  &#x21d2; Vector </a>
     
 
     
@@ -252,7 +252,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>same behavior as Ruby’s invert ![true, false, nil] #=&gt; [false, true, true].</p>
+<p>Another #invert which is same behavior as Ruby’s invert.</p>
 </div></span>
   
 </li>
@@ -261,7 +261,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#replace-instance_method" title="#replace (instance method)">#<strong>replace</strong>(specifier, replacer)  &#x21d2; Vector </a>
+      <a href="#replace-instance_method" title="#replace (instance method)">#<strong>replace</strong>(specifier, replacer)  &#x21d2; Object </a>
     
 
     
@@ -276,7 +276,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Replace data.</p>
+<p>Replace data in self by position specifier and replacer.</p>
 </div></span>
   
 </li>
@@ -388,7 +388,11 @@
       <div class="method_details first">
   <h3 class="signature first" id="if_else-instance_method">
   
-    #<strong>if_else</strong>(true_choice, false_choice)  &#x21d2; <tt>Object</tt> 
+    
+      <span class="overload">#<strong>if_else</strong>(true_choise, false_choise)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+    
+      <span class="overload">#<strong>if_else</strong>(true_choise, false_choise)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+    
   
 
   
@@ -397,13 +401,219 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>[Ternary element-wise]: boolean_vector.func(if_true, else) =&gt; vector</p>
+<p>Choose values based on self.</p>
+<dl class="rdoc-list label-list"><dt>Ternary element-wise function
+<dd>
+<p>Returns a Vector.</p>
+</dd></dl>
+<ul><li>
+<p>Self must be a boolean Vector.</p>
+</li><li>
+<p>‘true_choice`, `false_choice` must be of the same type scalar / array / Vector.</p>
+</li><li>
+<p>‘nil` values in self will be promoted to the output.</p>
+</li></ul>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>if_else</strong>(true_choise, false_choise)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>replace with a scalar.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Replace with scalar choices</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='kw'>false</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_if_else'>if_else</span><span class='lparen'>(</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=5):0x000000000000c198&gt;
+</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>true_choice</span>
+      
+      
+        <span class='type'>(<tt>scalar</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a value to be replaced with true.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>false_choice</span>
+      
+      
+        <span class='type'>(<tt>scalar</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a value to be replaced with false.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>replaced result.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>if_else</strong>(true_choise, false_choise)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>replace with a scalar.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Replace with Array choices</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_boolean_vector'>boolean_vector</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='kw'>false</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_true_choise'>true_choise</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='float'>1.1</span><span class='comma'>,</span> <span class='float'>2.2</span><span class='comma'>,</span> <span class='float'>3.3</span><span class='comma'>,</span> <span class='float'>4.4</span><span class='comma'>,</span> <span class='float'>5.5</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_false_choise'>false_choise</span> <span class='op'>=</span> <span class='op'>-</span><span class='id identifier rubyid_true_choise'>true_choise</span>
+<span class='id identifier rubyid_boolean_vector'>boolean_vector</span><span class='period'>.</span><span class='id identifier rubyid_if_else'>if_else</span><span class='lparen'>(</span><span class='id identifier rubyid_true_choise'>true_choise</span><span class='comma'>,</span> <span class='id identifier rubyid_false_choise'>false_choise</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:double, size=5):0x000000000000cd28&gt;
+</span><span class='lbracket'>[</span><span class='float'>1.1</span><span class='comma'>,</span> <span class='float'>2.2</span><span class='comma'>,</span> <span class='op'>-</span><span class='float'>3.3</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>-</span><span class='float'>5.5</span><span class='rbracket'>]</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Normalize negative indices to positive ones</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_indices'>indices</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>4</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_array_size'>array_size</span> <span class='op'>=</span> <span class='int'>10</span>
+<span class='id identifier rubyid_normalized_indices'>normalized_indices</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_indices'>indices</span> <span class='op'>&lt;</span> <span class='int'>0</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_if_else'>if_else</span><span class='lparen'>(</span><span class='id identifier rubyid_indices'>indices</span> <span class='op'>+</span> <span class='id identifier rubyid_array_size'>array_size</span><span class='comma'>,</span> <span class='id identifier rubyid_indices'>indices</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:int16, size=4):0x000000000000f85c&gt;
+</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>9</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>6</span><span class='rbracket'>]</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>true_choice</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Array</tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>values to be replaced with true. The size of true_choice must be same as self.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>false_choice</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Array</tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>values to be replaced with false. The size of false_choice must be same as self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>replaced result.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -424,17 +634,17 @@
       <pre class="lines">
 
 
-59
-60
-61
-62
-63
-64
-65
-66</pre>
+205
+206
+207
+208
+209
+210
+211
+212</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 59</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 205</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_if_else'>if_else</span><span class='lparen'>(</span><span class='id identifier rubyid_true_choice'>true_choice</span><span class='comma'>,</span> <span class='id identifier rubyid_false_choice'>false_choice</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_true_choice'>true_choice</span> <span class='op'>=</span> <span class='id identifier rubyid_true_choice'>true_choice</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_true_choice'>true_choice</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span>
@@ -479,12 +689,12 @@
       <pre class="lines">
 
 
-150
-151
-152</pre>
+332
+333
+334</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 150</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 332</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_list_flatten'>list_flatten</span>
   <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="Vector.html#create-class_method" title="RedAmber::Vector.create (method)">create</a></span></span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:list_flatten</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span>
@@ -524,24 +734,24 @@
       <pre class="lines">
 
 
-130
-131
-132
-133
-134
-135
-136
-137
-138
-139
-140
-141
-142
-143
-144</pre>
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 130</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 312</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_list_separate'>list_separate</span>
   <span class='id identifier rubyid_len'>len</span> <span class='op'>=</span> <span class='id identifier rubyid_list_sizes'>list_sizes</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span>
@@ -579,7 +789,7 @@
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
 
-<p>return element size Array for list Vector.</p>
+<p>Return element size Array for list Vector.</p>
 
 
   </div>
@@ -593,12 +803,12 @@
       <pre class="lines">
 
 
-122
-123
-124</pre>
+304
+305
+306</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 122</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 304</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_list_sizes'>list_sizes</span>
   <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="Vector.html#create-class_method" title="RedAmber::Vector.create (method)">create</a></span></span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:list_value_length</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span>
@@ -693,33 +903,33 @@
       <pre class="lines">
 
 
-185
-186
-187
-188
-189
-190
-191
-192
-193
-194
-195
-196
-197
-198
-199
-200
-201
-202
-203
-204
-205
-206
-207
-208</pre>
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 185</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 369</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='label'>sep:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> </span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>||</span> <span class='op'>!</span><span class='id identifier rubyid_string?'>string?</span>
@@ -753,7 +963,7 @@
       <div class="method_details ">
   <h3 class="signature " id="primitive_invert-instance_method">
   
-    #<strong>primitive_invert</strong>  &#x21d2; <tt>Object</tt> 
+    #<strong>primitive_invert</strong>  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> 
   
 
   
@@ -762,13 +972,61 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>same behavior as Ruby’s invert ![true, false, nil] #=&gt; [false, true, true]</p>
+<p>Another #invert which is same behavior as Ruby’s invert.</p>
+
+<p>![true, false, nil] #=&gt; [false, true, true]</p>
 
 
   </div>
 </div>
 <div class="tags">
   
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:boolean, size=4):0x000000000000fa8c&gt;
+</span><span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span>
+
+<span class='comment'># nil is converted to nil by Vector#invert.
+</span><span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_invert'>invert</span>
+<span class='comment'># or
+</span><span class='op'>!</span><span class='id identifier rubyid_vector'>vector</span>
+
+<span class='comment'>#&lt;RedAmber::Vector(:boolean, size=4):0x000000000000faa0&gt;
+</span><span class='lbracket'>[</span><span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span>
+
+<span class='comment'># On the other hand,
+</span><span class='comment'># Vector#primitive_invert follows Ruby&#39;s BasicObject#!&#39;s behavior.
+</span><span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_primitive_invert'>primitive_invert</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:boolean, size=4):0x000000000000fab4&gt;
+</span><span class='lbracket'>[</span><span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span></code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>follows Ruby’s BasicObject#!‘s behavior.</p>
+</div>
+      
+    </li>
+  
+</ul>
 <p class="tag_title">Raises:</p>
 <ul class="raise">
   
@@ -789,14 +1047,14 @@
       <pre class="lines">
 
 
-70
-71
-72
-73
-74</pre>
+242
+243
+244
+245
+246</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 242</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_primitive_invert'>primitive_invert</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="VectorTypeError.html" title="RedAmber::VectorTypeError (class)">VectorTypeError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Not a boolean Vector: </span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>unless</span> <span class='id identifier rubyid_boolean?'>boolean?</span>
@@ -811,7 +1069,15 @@
       <div class="method_details ">
   <h3 class="signature " id="replace-instance_method">
   
-    #<strong>replace</strong>(specifier, replacer)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> 
+    
+      <span class="overload">#<strong>replace</strong>(booleans, replacer_by_scalar)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+    
+      <span class="overload">#<strong>replace</strong>(indices, replacer_by_scalar)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+    
+      <span class="overload">#<strong>replace</strong>(booleans, replacer_array)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+    
+      <span class="overload">#<strong>replace</strong>(indices, replacer_array)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+    
   
 
   
@@ -820,18 +1086,89 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Replace data</p>
+<p>Replace data in self by position specifier and replacer.</p>
+<ul><li>
+<p>Scalar value may be broadcasted.</p>
+</li><li>
+<p>Returned value type may be automatically up-casted by replacer.</p>
+</li></ul>
 
 
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <p class="tag_title">Overloads:</p>
+  <ul class="overload">
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>replace</strong>(booleans, replacer_by_scalar)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Replace the value where true in boolean specifier to scalar replacer.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Replace with boolean specifier and scalar replacer</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='int'>0</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=3):0x000000000001ee10&gt;
+</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Type of result is up-casted by replacer.</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_ector'>ector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='op'>-</span><span class='float'>1.0</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:double, size=3):0x0000000000025d78&gt;
+</span><span class='lbracket'>[</span><span class='op'>-</span><span class='float'>1.0</span><span class='comma'>,</span> <span class='float'>2.0</span><span class='comma'>,</span> <span class='op'>-</span><span class='float'>1.0</span><span class='rbracket'>]</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Position of nil in booleans is replaced with nil</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:int8, size=3):0x00000000000304d0&gt;
+</span><span class='lbracket'>[</span><span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Replace ‘NA’ to nil</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>A</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>B</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>NA</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='id identifier rubyid_vector'>vector</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>NA</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=3):0x000000000000f8ac&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
       
-        <span class='name'>specifier</span>
+        <span class='name'>booleans</span>
       
       
         <span class='type'>(<tt>Array</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
@@ -840,17 +1177,17 @@
       
         &mdash;
         <div class='inline'>
-<p>index or booleans.</p>
+<p>boolean position specifier to specify the position to be replaced by true.</p>
 </div>
       
     </li>
   
     <li>
       
-        <span class='name'>replacer</span>
+        <span class='name'>replacer_by_scalar</span>
       
       
-        <span class='type'>(<tt>Scalar</tt>, <tt>Array</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
+        <span class='type'>(<tt>Scalar</tt>)</span>
       
       
       
@@ -875,12 +1212,285 @@
       
         &mdash;
         <div class='inline'>
-<p>Replaced new Vector. If specifier has no true, return self.</p>
+<p>a new replaced Vector. If specifier has no true, returns self.</p>
 </div>
       
     </li>
   
 </ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>replace</strong>(indices, replacer_by_scalar)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Replace the value at the index specifier to scalar replacer.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Replace with index specifier and scalar replacer</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='int'>0</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=3):0x000000000000c15c&gt;
+</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>indices</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>index specifier to specify the position to be replaced.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>replacer_by_scalar</span>
+      
+      
+        <span class='type'>(<tt>Scalar</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>new data to replace for.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a new replaced Vector. If specifier is empty, returns self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>replace</strong>(booleans, replacer_array)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Replace the value where true in boolean specifier to replacer array.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Replace with boolean specifier and replacer array</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_booleans'>booleans</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_replacer'>replacer</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='id identifier rubyid_booleans'>booleans</span><span class='comma'>,</span> <span class='id identifier rubyid_replacer'>replacer</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=3):0x000000000001ee10&gt;
+</span><span class='lbracket'>[</span><span class='int'>4</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>booleans</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>boolean position specifier to specify the position to be replaced by true.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>replacer_array</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Array</tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>new data to replace for. The number of true in booleans must be equal to the length of replacer array.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a new replaced Vector. If specifier has no true, returns self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+      
+      <li class="overload_item">
+        <span class="signature">#<strong>replace</strong>(indices, replacer_array)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> </span>
+        <div class="docstring">
+  <div class="discussion">
+    
+<p>Replace the value at the index specifier to replacer array.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Replace with index specifier and replacer array</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_indices'>indices</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_replacer'>replacer</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='id identifier rubyid_indices'>indices</span><span class='comma'>,</span> <span class='id identifier rubyid_replacer'>replacer</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=3):0x000000000001ee10&gt;
+</span><span class='lbracket'>[</span><span class='int'>4</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>indices</span>
+      
+      
+        <span class='type'>(<tt>Array</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>index specifier to specify the position to be replaced.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>replacer_array</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>Array</tt>, <tt>Arrow::Array</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>new data to replace for. The length of index specifier must be equal to the length of replacer array.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>a new replaced Vector. If specifier is empty, returns self.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div>
+      </li>
+    
+  </ul>
+
 
 </div><table class="source_code">
   <tr>
@@ -888,44 +1498,44 @@
       <pre class="lines">
 
 
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53</pre>
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 19</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 116</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='id identifier rubyid_specifier'>specifier</span><span class='comma'>,</span> <span class='id identifier rubyid_replacer'>replacer</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_parse_args'>parse_args</span><span class='lparen'>(</span><span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_specifier'>specifier</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -948,8 +1558,8 @@
     <span class='kw'>in</span> <span class='kw'>nil</span> <span class='op'>|</span> <span class='lbracket'>[</span><span class='kw'>nil</span><span class='rbracket'>]</span>
       <span class='kw'>return</span> <span class='id identifier rubyid_replace_to_nil'>replace_to_nil</span><span class='lparen'>(</span><span class='id identifier rubyid_booleans'>booleans</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span>
     <span class='kw'>in</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Array</span>
-    <span class='comment'># nop
-</span>    <span class='kw'>in</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span>
+      <span class='id identifier rubyid_replacer'>replacer</span>
+    <span class='kw'>in</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span>
       <span class='id identifier rubyid_replacer'>replacer</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span>
     <span class='kw'>in</span> <span class='const'>Array</span>
       <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_replacer'>replacer</span><span class='rparen'>)</span>
@@ -1004,20 +1614,20 @@
       <pre class="lines">
 
 
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86</pre>
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 76</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 248</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_shift'>shift</span><span class='lparen'>(</span><span class='id identifier rubyid_amount'>amount</span> <span class='op'>=</span> <span class='int'>1</span><span class='comma'>,</span> <span class='label'>fill:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="VectorArgumentError.html" title="RedAmber::VectorArgumentError (class)">VectorArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Shift amount is too large</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_amount'>amount</span><span class='period'>.</span><span class='id identifier rubyid_abs'>abs</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_size'>size</span>
@@ -1076,25 +1686,25 @@
       <pre class="lines">
 
 
-160
-161
-162
-163
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175</pre>
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 160</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 342</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='id identifier rubyid_sep'>sep</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_limit'>limit</span> <span class='op'>=</span> <span class='int'>0</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>||</span> <span class='op'>!</span><span class='id identifier rubyid_string?'>string?</span>
@@ -1159,7 +1769,7 @@
       
         &mdash;
         <div class='inline'>
-<p>separater. If separator is nil (or no argeument given), the column will be splitted by Arrow’s split function using any ASCII whitespace. Otherwise sep will passed to String#split.</p>
+<p>separator. If separator is nil (or no argeument given), the column will be splitted by Arrow’s split function using any ASCII whitespace. Otherwise, sep will passed to String#split.</p>
 </div>
       
     </li>
@@ -1209,13 +1819,13 @@
       <pre class="lines">
 
 
-98
-99
-100
-101</pre>
+275
+276
+277
+278</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 98</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 275</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_split_to_columns'>split_to_columns</span><span class='lparen'>(</span><span class='id identifier rubyid_sep'>sep</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_limit'>limit</span> <span class='op'>=</span> <span class='int'>0</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_l'>l</span> <span class='op'>=</span> <span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='id identifier rubyid_sep'>sep</span><span class='comma'>,</span> <span class='id identifier rubyid_limit'>limit</span><span class='rparen'>)</span>
@@ -1268,7 +1878,7 @@
       
         &mdash;
         <div class='inline'>
-<p>separater. If separator is nil (or no argeument given), the column will be splitted by Arrow’s split function using any ASCII whitespace. Otherwise sep will passed to String#split.</p>
+<p>separater. If separator is nil (or no argeument given), the column will be splitted by Arrow’s split function using any ASCII whitespace. Otherwise, sep will passed to String#split.</p>
 </div>
       
     </li>
@@ -1318,13 +1928,13 @@
       <pre class="lines">
 
 
-113
-114
-115
-116</pre>
+295
+296
+297
+298</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 113</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_updatable.rb', line 295</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_split_to_rows'>split_to_rows</span><span class='lparen'>(</span><span class='id identifier rubyid_sep'>sep</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='id identifier rubyid_limit'>limit</span> <span class='op'>=</span> <span class='int'>0</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_l'>l</span> <span class='op'>=</span> <span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='id identifier rubyid_sep'>sep</span><span class='comma'>,</span> <span class='id identifier rubyid_limit'>limit</span><span class='rparen'>)</span>
@@ -1340,7 +1950,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  1 22:02:45 2023 by
+  Generated on Tue Feb  7 10:33:38 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.0).
 </div>
