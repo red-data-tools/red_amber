@@ -80,6 +80,8 @@ module RedAmber
     end
   end
 
+  # rubocop:disable Layout/LineLength
+
   # Helper for Arrow Functions
   module ArrowFunction
     module_function
@@ -91,6 +93,11 @@ module RedAmber
     #   function name.
     # @return [Arrow::Function]
     #   arrow compute function object.
+    # @example
+    #   RedAmber::ArrowFunction.find(:array_sort_indices)
+    #
+    #   # =>
+    #   #<Arrow::Function:0x7fa8838a0d80 ptr=0x7fa87e9b7320 array_sort_indices(array, {order=Ascending, null_placement=AtEnd}): Return the indices that would sort an array>
     #
     def find(function_name)
       Arrow::Function.find(function_name)
@@ -102,10 +109,25 @@ module RedAmber
     #   function name.
     # @return [String]
     #   document of compute function object.
+    # @example
+    #   puts RedAmber::ArrowFunction.arrow_doc(:array_sort_indices)
+    #
+    #   # =>
+    #   array_sort_indices(array, {order=Ascending, null_placement=AtEnd}): Return the indices that would sort an array
+    #   ------------------
+    #   This function computes an array of indices that define a stable sort
+    #   of the input array.  By default, Null values are considered greater
+    #   than any other value and are therefore sorted at the end of the array.
+    #   For floating-point types, NaNs are considered greater than any
+    #   other non-null value, but smaller than null values.
+    #
+    #   The handling of nulls and NaNs can be changed in ArraySortOptions.
     #
     def arrow_doc(function_name)
       f = find(function_name)
       "#{f}\n#{'-' * function_name.size}\n#{f.doc.description}"
     end
   end
+
+  # rubocop:enable Layout/LineLength
 end
