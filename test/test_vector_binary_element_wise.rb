@@ -64,6 +64,18 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @double.bit_wise_xor(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_xor(@string) }
     end
+
+    test '#logb(base)' do
+      boolean = Vector.new([true, false, nil])
+      integer = Vector.new([-1, 0, 1, 2])
+      double = Vector.new([-1.0, 0.0, 1.0, 2])
+      string = Vector.new(%w[A B C])
+      assert_raise(Arrow::Error::NotImplemented) { boolean.logb(2) }
+      assert_equal_array_with_nan integer.log2, integer.logb(2)
+      assert_equal_array_with_nan double.log2, double.logb(2)
+      assert_equal_array_with_nan [Float::NAN, Float::NAN, -0.0, -0.0], double.logb(0)
+      assert_raise(Arrow::Error::NotImplemented) { string.logb(2) }
+    end
   end
 
   sub_test_case 'binary element-wise with operator' do

@@ -167,14 +167,6 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array_with_nan expected, @double.log2
       assert_raise(Arrow::Error::NotImplemented) { @string.log2 }
     end
-
-    test '#logb(b)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.logb(2) }
-      assert_equal_array_with_nan @integer.log2, @integer.logb(2)
-      assert_equal_array_with_nan @double.log2, @double.logb(2)
-      assert_equal_array_with_nan [Float::NAN, Float::NAN, -0.0, -0.0], @double.logb(0)
-      assert_raise(Arrow::Error::NotImplemented) { @string.logb(2) }
-    end
   end
 
   sub_test_case('unary element-wise rounding') do
