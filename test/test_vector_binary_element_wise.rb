@@ -6,7 +6,7 @@ class VectorFunctionTest < Test::Unit::TestCase
   include TestHelper
   include RedAmber
 
-  sub_test_case('binary element-wise') do
+  sub_test_case 'class method' do
     setup do
       @boolean = Vector.new([true, true, nil])
       @integer = Vector.new([1, 2, 3])
@@ -14,11 +14,20 @@ class VectorFunctionTest < Test::Unit::TestCase
       @string = Vector.new(%w[A B A])
     end
 
-    test '#atan2(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.atan2(@boolean) }
-      assert_equal_array_in_delta [0.7853981633974483, 0.7853981633974483, 0.7853981633974483], @integer.atan2(@integer), delta = 1e-15
-      assert_equal_array_in_delta [0.7853981633974483, -2.356194490192345, 0.7853981633974483], @double.atan2(@double), delta = 1e-15
-      assert_raise(Arrow::Error::NotImplemented) { @string.atan2(@string) }
+    test '.atan2(y, x)' do
+      assert_raise(Arrow::Error::NotImplemented) { Vector.atan2(@boolean, @boolean) }
+      assert_equal_array_in_delta [0.7853981633974483, 0.7853981633974483, 0.7853981633974483], Vector.atan2(@integer, @integer), delta = 1e-15
+      assert_equal_array_in_delta [0.7853981633974483, -2.356194490192345, 0.7853981633974483], Vector.atan2(@double, @double), delta = 1e-15
+      assert_raise(Arrow::Error::NotImplemented) { Vector.atan2(@string, @boolean) }
+    end
+  end
+
+  sub_test_case 'binary element-wise' do
+    setup do
+      @boolean = Vector.new([true, true, nil])
+      @integer = Vector.new([1, 2, 3])
+      @double = Vector.new([1.0, -2, 3])
+      @string = Vector.new(%w[A B A])
     end
 
     test '#and_not(vector)' do
@@ -57,7 +66,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('binary element-wise with operator') do
+  sub_test_case 'binary element-wise with operator' do
     setup do
       @bool_self = Vector.new([true, true, true, false, false, false, nil, nil, nil])
       @bool_other = Vector.new([true, false, nil, true, false, nil, true, false, nil])
@@ -115,7 +124,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('binary element-wise with operator') do
+  sub_test_case 'binary element-wise with operator' do
     setup do
       @boolean = Vector.new([true, true, nil])
       @integer = Vector.new([1, 2, 3])

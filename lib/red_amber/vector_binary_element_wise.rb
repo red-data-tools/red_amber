@@ -7,6 +7,25 @@ module RedAmber
   # Representing a series of data.
   class Vector
     class << self
+      # Compute the inverse tangent of y/x.
+      #
+      # [Binary element-wise function] Returns a Vector.
+      # The return value is in the range [-pi, pi].
+      # @param y [Vector, array-like]
+      #   numeric array-like.
+      # @param x [Vector, array-like]
+      #   numeric array-like.
+      # @return [Vector]
+      #   inverse tangent of y/x.
+      #
+      def atan2(y, x) # rubocop:disable Naming/MethodParameterName
+        y = y.data if y.is_a? Vector
+        x = x.data if x.is_a? Vector
+
+        datum = Arrow::Function.find(:atan2).execute([y, x])
+        Vector.create(datum.value)
+      end
+
       private
 
       # @!macro [attach] define_binary_element_wise
@@ -51,9 +70,6 @@ module RedAmber
         end
       end
     end
-
-    # @return [Vector] atan2 of self and other.
-    define_binary_element_wise(:atan2)
 
     # @return [Vector] and not of self and other.
     define_binary_element_wise(:and_not)
