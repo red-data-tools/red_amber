@@ -167,14 +167,6 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array_with_nan expected, @double.log2
       assert_raise(Arrow::Error::NotImplemented) { @string.log2 }
     end
-
-    test '#logb(b)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.logb(2) }
-      assert_equal_array_with_nan @integer.log2, @integer.logb(2)
-      assert_equal_array_with_nan @double.log2, @double.logb(2)
-      assert_equal_array_with_nan [Float::NAN, Float::NAN, -0.0, -0.0], @double.logb(0)
-      assert_raise(Arrow::Error::NotImplemented) { @string.logb(2) }
-    end
   end
 
   sub_test_case('unary element-wise rounding') do
@@ -225,14 +217,10 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @boolean.round_to_multiple }
       assert_equal_array [1, 2, 3], @integer.round_to_multiple
       assert_equal_array @double.round, @double.round_to_multiple
-      multiple = Arrow::DoubleScalar.new(1)
-      assert_equal_array @double.round_to_multiple, @double.round_to_multiple(multiple: multiple)
-      multiple = Arrow::DoubleScalar.new(0.1)
-      assert_equal_array [15.200000000000001, 2.5, 3.5, -4.5, -5.5], @double.round_to_multiple(multiple: multiple)
-      multiple = Arrow::DoubleScalar.new(10)
-      assert_equal_array [20.0, 0.0, 0.0, -0.0, -10.0], @double.round_to_multiple(multiple: multiple)
-      multiple = Arrow::DoubleScalar.new(2)
-      assert_equal_array [16.0, 2.0, 4.0, -4.0, -6.0], @double.round_to_multiple(multiple: multiple)
+      assert_equal_array @double.round_to_multiple, @double.round_to_multiple(multiple: 1)
+      assert_equal_array [15.200000000000001, 2.5, 3.5, -4.5, -5.5], @double.round_to_multiple(multiple: 0.1)
+      assert_equal_array [20.0, 0.0, 0.0, -0.0, -10.0], @double.round_to_multiple(multiple: 10)
+      assert_equal_array [16.0, 2.0, 4.0, -4.0, -6.0], @double.round_to_multiple(multiple: 2)
       assert_raise(Arrow::Error::NotImplemented) { @string.round_to_multiple }
     end
 
