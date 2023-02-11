@@ -210,13 +210,13 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal 2.0, @integer.quantile(1)
       assert_equal 1.75, @integer.quantile(0.75)
       assert_raise(VectorArgumentError) { @integer.quantile(1.5) }
-      assert_nil @integer.quantile(skip_nils: false)
+      assert_nil @integer.quantile(skip_nulls: false)
     end
 
     test '#quantile @double' do
       assert_equal 2.0, @double.quantile(0.75)
       assert_equal Float::INFINITY, @double2.quantile(0.75)
-      assert_nil @double2.quantile(0.75, skip_nils: false)
+      assert_nil @double2.quantile(0.75, skip_nulls: false)
       assert_equal 0.5, @double2.quantile(0.5, interpolation: :linear)
       assert_equal 0.0, @double2.quantile(0.5, interpolation: :lower)
       assert_equal 1.0, @double2.quantile(0.5, interpolation: :higher)
@@ -237,8 +237,8 @@ class VectorFunctionTest < Test::Unit::TestCase
         RedAmber::DataFrame : 5 x 2 Vectors
         Vectors : 2 numeric
         # key        type   level data_preview
-        0 :probs     double     5 [1.0, 0.75, 0.5, 0.25, 0.0]
-        1 :quantiles double     5 [7.0, 5.5, 4.0, 2.75, 2.0]
+        0 :probs     double     5 [0.0, 0.25, 0.5, 0.75, 1.0]
+        1 :quantiles double     5 [2.0, 2.75, 4.0, 5.5, 7.0]
       STR
 
       assert_equal <<~STR, @vector.quantiles([0.3], interpolation: :midpoint).tdr_str
