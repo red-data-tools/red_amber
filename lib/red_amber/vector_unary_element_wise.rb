@@ -328,15 +328,13 @@ module RedAmber
     #
     define_unary_element_wise :round
 
-    # rubocop:disable Layout/LineLength
-
     # Round to a given multiple.
     #
     # Options are used to control the rounding multiple and rounding mode.
     # Default behavior is to round to the nearest integer and
     # use half-to-even rule to break ties.
-    # @!method round_to_multiple(multiple: Arrow::DoubleScalar.new(1.0), round_mode: :half_to_even)
-    # @param multiple [Arrow::DoubleScalar]
+    # @!method round_to_multiple(multiple: 1.0, round_mode: :half_to_even)
+    # @param multiple [Float, Integer]
     #   Rounding scale (multiple to round to).
     #   Should be a positive numeric scalar of a type compatible with the argument
     #   to be rounded. The cast kernel is used to convert the rounding multiple
@@ -345,9 +343,12 @@ module RedAmber
     # @return [Vector]
     #   round to multiple of each element of self.
     #
-    define_unary_element_wise :round_to_multiple
-
-    # rubocop:enable Layout/LineLength
+    def round_to_multiple(multiple: 1.0, round_mode: :half_to_even)
+      datum = exec_func_unary(:round_to_multiple,
+                              multiple: Arrow::DoubleScalar.new(multiple),
+                              round_mode: round_mode)
+      Vector.create(datum.value)
+    end
 
     # Get the signedness of the arguments element-wise.
     #
