@@ -189,7 +189,26 @@
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code>puts RedAmber::ArrowFunction.arrow_doc(:array_sort_indices)
+
+# =&gt;
+array_sort_indices(array, {order=Ascending, null_placement=AtEnd}): Return the indices that would sort an array
+------------------
+This function computes an array of indices that define a stable sort
+of the input array.  By default, Null values are considered greater
+than any other value and are therefore sorted at the end of the array.
+For floating-point types, NaNs are considered greater than any
+other non-null value, but smaller than null values.
+
+The handling of nulls and NaNs can be changed in ArraySortOptions.</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -235,13 +254,13 @@
       <pre class="lines">
 
 
-106
-107
-108
-109</pre>
+126
+127
+128
+129</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/helper.rb', line 106</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/helper.rb', line 126</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_arrow_doc'>arrow_doc</span><span class='lparen'>(</span><span class='id identifier rubyid_function_name'>function_name</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_f'>f</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_function_name'>function_name</span><span class='rparen'>)</span>
@@ -272,7 +291,18 @@
   </div>
 </div>
 <div class="tags">
-  <p class="tag_title">Parameters:</p>
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RedAmber.html" title="RedAmber (module)">RedAmber</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RedAmber::ArrowFunction (module)">ArrowFunction</a></span></span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:array_sort_indices</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;Arrow::Function:0x7fa8838a0d80 ptr=0x7fa87e9b7320 array_sort_indices(array, {order=Ascending, null_placement=AtEnd}): Return the indices that would sort an array&gt;</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
 <ul class="param">
   
     <li>
@@ -318,12 +348,12 @@
       <pre class="lines">
 
 
-95
-96
-97</pre>
+102
+103
+104</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/helper.rb', line 95</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/helper.rb', line 102</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_function_name'>function_name</span><span class='rparen'>)</span>
   <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Function</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='id identifier rubyid_function_name'>function_name</span><span class='rparen'>)</span>
@@ -338,9 +368,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Feb  7 10:33:38 2023 by
+  Generated on Sat Feb 11 08:08:52 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.2.0).
+  0.9.28 (ruby-3.2.1).
 </div>
 
     </div>
