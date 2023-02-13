@@ -9,17 +9,46 @@ module RedAmber
     using RefineArray
     using RefineArrayLike
 
-    # Create a new SubFrames object from a DataFrame and the array of indices.
-    # [Experimental feature]
-    #
-    # @param dataframe [DataFrame]
-    #   source dataframe.
-    # @param subset_indices [Array<#numeric?>]
-    #   an Array of index array-likes to create subsets of DataFrame.
-    #   All index array-likes are responsible to #numeric?.
-    # @return [SubFrames]
-    #   new SubFrames.
-    # @since 0.3.1
+    class << self
+      # @!macro subframes_initialize
+      #   Create a new SubFrames object from a DataFrame and the array of indices.
+      #
+      #   @param dataframe [DataFrame]
+      #     source dataframe.
+      #   @param subset_indices [Array<#numeric?>]
+      #     an Array of index array-likes to create subsets of DataFrame.
+      #     All index array-likes are responsible to #numeric?.
+      #   @return [SubFrames]
+      #     new SubFrames.
+      #   @since 0.3.1
+
+      # @macro subframes_initialize
+      # @note Same as SubFrames.new
+      #
+      def by_indices(dataframe, subset_indices)
+        new(dataframe, subset_indices)
+      end
+
+      # Create a new SubFrames by the array of filters.
+      #
+      # @param dataframe [DataFrame]
+      #   source dataframe.
+      # @param subset_filters [Array<#boolean?>]
+      #   an Array of boolean filters to specify subsets of DataFrame.
+      #   All boolean filters are responsible to #boolean?.
+      # @return [SubFrames]
+      #   new SubFrames.
+      # @since 0.3.1
+      #
+      def by_filters(dataframe, subset_filters)
+        subset_indices = subset_filters.map do |f|
+          dataframe.indices.filter(f)
+        end
+        new(dataframe, subset_indices)
+      end
+    end
+
+    # @macro subframes_initialize
     #
     def initialize(dataframe, subset_indices)
       unless dataframe.is_a?(DataFrame)

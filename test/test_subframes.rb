@@ -6,6 +6,56 @@ class SubFranesTest < Test::Unit::TestCase
   include RedAmber
   include TestHelper
 
+  sub_test_case '.by_indices' do
+    setup do
+      @df = DataFrame.new(x: [*1..3])
+    end
+
+    test '.by_indices a SubFrames with Array' do
+      sf = SubFrames.by_indices(@df, [[0, 2]])
+      assert_equal_array [[0, 2]], sf.subset_indices
+    end
+
+    test '.by_indices a SubFrames with Vector' do
+      sf = SubFrames.by_indices(@df, [Vector.new(0, 2)])
+      assert_equal_array [[0, 2]], sf.subset_indices
+    end
+  end
+
+  sub_test_case '.by_filters' do
+    test '.by_filters illegal dataframe' do
+      assert_raise(SubFramesArgumentError) { SubFrames.by_filters('a', []) }
+    end
+
+    test '.by_filters empty dataframe' do
+      filter = Vector.new(Arrow::BooleanArray.new([]))
+      sf = SubFrames.by_filters(DataFrame.new, [filter])
+      assert_equal [], sf.subset_indices
+    end
+
+    setup do
+      @df = DataFrame.new(x: [*1..3])
+    end
+
+    test '.by_filters empty specifier' do
+      assert_equal [], SubFrames.by_filters(@df, []).subset_indices
+    end
+
+    test '.by_filters illegal specifier' do
+      assert_raise(VectorTypeError) { SubFrames.by_filters(@df, [%w[0 1]]) }
+    end
+
+    test '.by_filters a SubFrames with Array' do
+      sf = SubFrames.by_filters(@df, [[true, false, true]])
+      assert_equal_array [[0, 2]], sf.subset_indices
+    end
+
+    test '.by_filters a SubFrames with Vector' do
+      sf = SubFrames.by_filters(@df, [Vector.new(true, false, true)])
+      assert_equal_array [[0, 2]], sf.subset_indices
+    end
+  end
+
   sub_test_case '.new' do
     test '.new illegal dataframe' do
       assert_raise(SubFramesArgumentError) { SubFrames.new('a', []) }
