@@ -213,4 +213,26 @@ class SubFranesTest < Test::Unit::TestCase
       STR
     end
   end
+
+  sub_test_case '#each' do
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+    end
+
+    test '#each w/o block' do
+      assert_kind_of Enumerator, @sf.each
+    end
+
+    test '#each yielded block' do
+      expect = [[[1, 'A', false], [2, 'A', true]],
+                [[3, 'B', false], [4, 'B', nil], [5, 'B', true]],
+                [[6, 'C', false]]]
+      assert_equal expect, @sf.each.with_object([]) { |df, a| a << df.to_a }
+    end
+  end
 end

@@ -5,6 +5,7 @@ module RedAmber
   #   @data : holds Arrow::ChunkedArray
   class Vector
     # mix-in
+    include Enumerable
     include Helper
     include ArrowFunction
     include VectorUpdatable

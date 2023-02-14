@@ -4,6 +4,7 @@ module RedAmber
   # class SubFrames treats a set of subsets of a DataFrame
   # [Experimental feature] Class SubFrames may be removed or be changed in the future.
   class SubFrames
+    include Enumerable
     include Helper
 
     using RefineArray
@@ -184,6 +185,35 @@ module RedAmber
         "@universal_frame=#<#{@universal_frame.shape_str(with_id: true)}>\n" \
         "#{size} SubFrame#{pl(size)}: " \
         "[#{sizes_truncated}] in size#{pl(size)}.\n"
+    end
+
+    # Iterates over sub DataFrames or returns an Enumerator.
+    #
+    # @overload each
+    #   Returns a new Enumerator if no block given.
+    #
+    #   @return [Enumerator]
+    #     Enumerator of each elements.
+    #
+    # @overload each
+    #   When a block given, passes each sub DataFrames to the block.
+    #
+    #   @yield [DataFrame]
+    #     each sub DataFrame.
+    #   @yieldparam subframe [DataFrame]
+    #     passes sub DataFrame by a block parameter.
+    #   @yieldreturn [Object]
+    #     evaluated result value from the block.
+    #   @return [self]
+    #     returns self.
+    #
+    def each
+      return enum_for(:each) unless block_given?
+
+      @subset_indices.each do |i|
+        yield @universal_frame.take(i.data)
+      end
+      self
     end
   end
 end
