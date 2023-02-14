@@ -126,9 +126,9 @@ module RedAmber
       case args
       in [] | [nil]
         return DataFrame.new
-      in [*] if args.symbols?
+      in [*] if args.symbol?
         return DataFrame.create(@table.select_columns(*args))
-      in [*] if args.booleans?
+      in [*] if args.boolean?
         picker = keys.select_by_booleans(args)
         return DataFrame.create(@table.select_columns(*picker))
       in [(Vector | Arrow::Array | Arrow::ChunkedArray) => a]
@@ -139,7 +139,7 @@ module RedAmber
 
       return DataFrame.new if picker.compact.empty?
 
-      if picker.booleans?
+      if picker.boolean?
         picker = keys.select_by_booleans(picker)
         return DataFrame.create(@table.select_columns(*picker))
       end
@@ -257,21 +257,21 @@ module RedAmber
       return self if args.empty? || empty?
 
       picker =
-        if args.symbols?
+        if args.symbol?
           keys - args
-        elsif args.booleans?
+        elsif args.boolean?
           keys.reject_by_booleans(args)
-        elsif args.integers?
+        elsif args.integer?
           keys.reject_by_indices(args)
         else
           dropper = parse_args(args, n_keys)
-          if dropper.booleans?
+          if dropper.boolean?
             keys.reject_by_booleans(dropper)
-          elsif dropper.symbols?
+          elsif dropper.symbol?
             keys - dropper
           else
             dropper.compact!
-            unless dropper.integers?
+            unless dropper.integer?
               raise DataFrameArgumentError, "Invalid argument #{args}"
             end
 

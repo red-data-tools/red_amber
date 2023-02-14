@@ -145,10 +145,10 @@ module RedAmber
         arrow_array = aa
       else
         a = parse_args(args, size)
-        return select_variables_by_keys(a) if a.symbols?
-        return take(normalize_indices(Arrow::Array.new(a))) if a.integers?
+        return select_variables_by_keys(a) if a.symbol?
+        return take(normalize_indices(Arrow::Array.new(a))) if a.integer?
         return remove_all_values if a.compact.empty?
-        return filter_by_array(Arrow::BooleanArray.new(a)) if a.booleans?
+        return filter_by_array(Arrow::BooleanArray.new(a)) if a.boolean?
 
         raise DataFrameArgumentError, "invalid arguments: #{args}"
       end
@@ -157,7 +157,7 @@ module RedAmber
       return filter_by_array(arrow_array) if arrow_array.boolean?
 
       a = arrow_array.to_a
-      return select_variables_by_keys(a) if a.symbols_or_strings?
+      return select_variables_by_keys(a) if a.symbol_or_string?
 
       raise DataFrameArgumentError, "invalid arguments: #{args}"
     end

@@ -155,7 +155,7 @@ module RedAmber
   # Add additional capabilities to Array
   module RefineArray
     refine Array do
-      def integers?
+      def integer?
         all? { |e| e.is_a?(Integer) } # rubocop:disable Performance/RedundantEqualityComparisonBlock
       end
 
@@ -163,19 +163,19 @@ module RedAmber
         all? { |e| e.is_a?(Numeric) } # rubocop:disable Performance/RedundantEqualityComparisonBlock
       end
 
-      def booleans?
+      def boolean?
         all? { |e| e.is_a?(TrueClass) || e.is_a?(FalseClass) || e.is_a?(NilClass) }
       end
 
-      def symbols?
+      def symbol?
         all? { |e| e.is_a?(Symbol) } # rubocop:disable Performance/RedundantEqualityComparisonBlock
       end
 
-      def strings?
+      def string?
         all? { |e| e.is_a?(String) } # rubocop:disable Performance/RedundantEqualityComparisonBlock
       end
 
-      def symbols_or_strings?
+      def symbol_or_string?
         all? { |e| e.is_a?(Symbol) || e.is_a?(String) }
       end
 

@@ -18,10 +18,10 @@ class RefinementsTest < Test::Unit::TestCase
       @symbols_or_strings = [:a, 'b', :c]
     end
 
-    test 'Array#integers?' do
-      assert_true @integers.integers?
-      assert_true [].integers?
-      assert_false @booleans.integers?
+    test 'Array#integer?' do
+      assert_true @integers.integer?
+      assert_true [].integer?
+      assert_false @booleans.integer?
     end
 
     test 'Array#numeric?' do
@@ -31,28 +31,28 @@ class RefinementsTest < Test::Unit::TestCase
       assert_false @booleans.numeric?
     end
 
-    test 'Array#booleans?' do
-      assert_true @booleans.booleans?
-      assert_true [].booleans?
-      assert_false @integers.booleans?
+    test 'Array#boolean?' do
+      assert_true @booleans.boolean?
+      assert_true [].boolean?
+      assert_false @integers.boolean?
     end
 
-    test 'Array#symbols?' do
-      assert_true @symbols.symbols?
-      assert_true [].symbols?
-      assert_false @integers.symbols?
+    test 'Array#symbol?' do
+      assert_true @symbols.symbol?
+      assert_true [].symbol?
+      assert_false @integers.symbol?
     end
 
-    test 'Array#strings?' do
-      assert_true @strings.strings?
-      assert_true [].strings?
-      assert_false @integers.strings?
+    test 'Array#string?' do
+      assert_true @strings.string?
+      assert_true [].string?
+      assert_false @integers.string?
     end
 
-    test 'Array#symbols_or_strings?' do
-      assert_true @symbols_or_strings.symbols_or_strings?
-      assert_true [].symbols_or_strings?
-      assert_false @integers.symbols_or_strings?
+    test 'Array#symbol_or_string?' do
+      assert_true @symbols_or_strings.symbol_or_string?
+      assert_true [].symbol_or_string?
+      assert_false @integers.symbol_or_string?
     end
 
     test 'Array#booleans_to_indices' do
