@@ -11,48 +11,28 @@ class SubFranesTest < Test::Unit::TestCase
       @df = DataFrame.new(x: [*1..3])
     end
 
-    test '.by_indices a SubFrames with Array' do
-      sf = SubFrames.by_indices(@df, [[0, 2]])
-      assert_equal_array [[0, 2]], sf.subset_indices
-    end
-
     test '.by_indices a SubFrames with Vector' do
       sf = SubFrames.by_indices(@df, [Vector.new(0, 2)])
       assert_equal_array [[0, 2]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
     end
   end
 
   sub_test_case '.by_filters' do
-    test '.by_filters illegal dataframe' do
-      assert_raise(SubFramesArgumentError) { SubFrames.by_filters('a', []) }
-    end
-
-    test '.by_filters empty dataframe' do
-      filter = Vector.new(Arrow::BooleanArray.new([]))
-      sf = SubFrames.by_filters(DataFrame.new, [filter])
-      assert_equal [], sf.subset_indices
-    end
-
     setup do
       @df = DataFrame.new(x: [*1..3])
-    end
-
-    test '.by_filters empty specifier' do
-      assert_equal [], SubFrames.by_filters(@df, []).subset_indices
-    end
-
-    test '.by_filters illegal specifier' do
-      assert_raise(VectorTypeError) { SubFrames.by_filters(@df, [%w[0 1]]) }
     end
 
     test '.by_filters a SubFrames with Array' do
       sf = SubFrames.by_filters(@df, [[true, false, true]])
       assert_equal_array [[0, 2]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
     end
 
     test '.by_filters a SubFrames with Vector' do
       sf = SubFrames.by_filters(@df, [Vector.new(true, false, true)])
       assert_equal_array [[0, 2]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
     end
   end
 
@@ -78,18 +58,32 @@ class SubFranesTest < Test::Unit::TestCase
       assert_raise(SubFramesArgumentError) { SubFrames.new(@df, [%w[0 1]]) }
     end
 
-    test '.new a SubFrames with Array' do
+    test '.new a SubFrames with index Array' do
       sf = SubFrames.new(@df, [[0, 2]])
       assert_equal_array [[0, 2]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
     end
 
-    test '.new a SubFrames with Vector' do
+    test '.new a SubFrames with index Vector' do
       sf = SubFrames.new(@df, [Vector.new(0, 2)])
       assert_equal_array [[0, 2]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
     end
 
     test '.new index out of range' do
       assert_raise(SubFramesArgumentError) { SubFrames.new(@df, [[0, 2, 4]]) }
+    end
+
+    test '.new a SubFrames with boolean Array' do
+      sf = SubFrames.new(@df, [[true, false, true]])
+      assert_equal_array [[0, 2]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
+    end
+
+    test '.new a SubFrames with boolean Vector' do
+      sf = SubFrames.new(@df, [Vector.new(true, false, true)])
+      assert_equal_array [[0, 2]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
     end
   end
 
@@ -99,7 +93,7 @@ class SubFranesTest < Test::Unit::TestCase
       @df = DataFrame.new(
         x: [*1..6],
         y: %w[A A B B B C],
-        z: [true, true, true, false, nil, false]
+        z: [false, true, false, nil, true, false]
       )
     end
 
@@ -135,7 +129,7 @@ class SubFranesTest < Test::Unit::TestCase
       @df = DataFrame.new(
         x: [*1..6],
         y: %w[A A B B B C],
-        z: [true, true, true, false, nil, false]
+        z: [false, true, false, nil, true, false]
       )
     end
 
@@ -143,7 +137,7 @@ class SubFranesTest < Test::Unit::TestCase
       empty_subframe = SubFrames.new(@df, [])
       assert_equal <<~STR, empty_subframe.inspect
         #<RedAmber::SubFrames : #{format('0x%016x', empty_subframe.object_id)}>
-        @universal_frame = #<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
+        @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         0 SubFrame: [] in size.
       STR
     end
@@ -153,7 +147,7 @@ class SubFranesTest < Test::Unit::TestCase
       sf = SubFrames.new(@df, specifier)
       assert_equal <<~STR, sf.inspect
         #<RedAmber::SubFrames : #{format('0x%016x', sf.object_id)}>
-        @universal_frame = #<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
+        @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         3 SubFrames: [2, 3, 1] in sizes.
       STR
     end
@@ -163,7 +157,7 @@ class SubFranesTest < Test::Unit::TestCase
       universal = SubFrames.new(@df, specifier)
       assert_equal <<~STR, universal.inspect
         #<RedAmber::SubFrames : #{format('0x%016x', universal.object_id)}>
-        @universal_frame = #<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
+        @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         1 SubFrame: [6] in size.
       STR
     end

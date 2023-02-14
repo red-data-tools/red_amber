@@ -2,7 +2,7 @@
 
 module RedAmber
   # class SubFrames treats a set of subsets of a DataFrame
-  # [Experimental feature] It may be removed or be changed in the future.
+  # [Experimental feature] Class SubFrames may be removed or be changed in the future.
   class SubFrames
     include Helper
 
@@ -10,32 +10,34 @@ module RedAmber
     using RefineArrayLike
 
     class << self
-      # @!macro subframes_initialize
-      #   Create a new SubFrames object from a DataFrame and the array of indices.
+      # Create a new SubFrames object from a DataFrame and an array of indices.
       #
-      #   @param dataframe [DataFrame]
-      #     source dataframe.
-      #   @param subset_indices [Array<#numeric?>]
-      #     an Array of index array-likes to create subsets of DataFrame.
-      #     All index array-likes are responsible to #numeric?.
-      #   @return [SubFrames]
-      #     new SubFrames.
-      #   @since 0.3.1
-
-      # @macro subframes_initialize
-      # @note Same as SubFrames.new
+      # @api private
+      # @note this method doesn't check arguments.
+      # @param dataframe [DataFrame]
+      #   a source dataframe.
+      # @param subset_indices [Array<Vector>]
+      #   an Array of numeric Vectors of indices to create subsets of DataFrame.
+      # @return [SubFrames]
+      #   new SubFrames.
+      # @since 0.3.1
       #
       def by_indices(dataframe, subset_indices)
-        new(dataframe, subset_indices)
+        instance = allocate
+        instance.instance_variable_set(:@universal_frame, dataframe)
+        instance.instance_variable_set(:@universal_indices, dataframe.indices)
+        instance.instance_variable_set(:@subset_indices, subset_indices)
+        instance
       end
 
-      # Create a new SubFrames by the array of filters.
+      # Create a new SubFrames object from a DataFrame and an array of filters.
       #
+      # @api private
+      # @note this method doesn't check arguments.
       # @param dataframe [DataFrame]
-      #   source dataframe.
-      # @param subset_filters [Array<#boolean?>]
-      #   an Array of boolean filters to specify subsets of DataFrame.
-      #   All boolean filters are responsible to #boolean?.
+      #   a source dataframe.
+      # @param subset_filters [Array<Vector>]
+      #   an Array of boolean Vectors to specify subsets of DataFrame.
       # @return [SubFrames]
       #   new SubFrames.
       # @since 0.3.1
@@ -44,13 +46,22 @@ module RedAmber
         subset_indices = subset_filters.map do |f|
           dataframe.indices.filter(f)
         end
-        new(dataframe, subset_indices)
+        by_indices(dataframe, subset_indices)
       end
     end
 
-    # @macro subframes_initialize
+    # Create a new SubFrames object from a DataFrame and an array of indices or filters.
     #
-    def initialize(dataframe, subset_indices)
+    # @param dataframe [DataFrame]
+    #   a source dataframe.
+    # @param subset_specifier [Array<Vector>, Array<array-like>]
+    #   an Array of numeric indices or boolean filters
+    #   to create subsets of DataFrame.
+    # @return [SubFrames]
+    #   new SubFrames.
+    # @since 0.3.1
+    #
+    def initialize(dataframe, subset_specifier)
       unless dataframe.is_a?(DataFrame)
         raise SubFramesArgumentError, "not a DataFrame: #{dataframe}"
       end
@@ -58,17 +69,18 @@ module RedAmber
       @universal_frame = dataframe
       @universal_indices = dataframe.indices
       @subset_indices =
-        if subset_indices.empty? || dataframe.empty?
+        if subset_specifier.empty? || dataframe.empty?
           []
         else
-          subset_indices.map do |idxs|
+          subset_specifier.map do |i|
             vector =
-              if idxs.is_a?(Vector)
-                idxs
+              if i.boolean?
+                @universal_indices.filter(i)
+              elsif i.numeric?
+                Vector.new(i)
               else
-                Vector.new(idxs)
+                raise SubFramesArgumentError, "illegal type: #{i}"
               end
-            raise SubFramesArgumentError, "illegal type: #{idxs}" unless vector.numeric?
 
             unless vector.is_in(@universal_indices).all?
               raise SubFramesArgumentError, "index out of range: #{vector.to_a}"
@@ -79,7 +91,19 @@ module RedAmber
         end
     end
 
-    attr_reader :universal_frame, :subset_indices
+    # The source DataFrame object.
+    #
+    # @return [DataFrame]
+    #   the value of instance variable `universal_frame`.
+    #
+    attr_reader :universal_frame
+
+    # Index Vectors of subsets.
+    #
+    # @return [Array]
+    #   the value of instance variable `subset_indices`.
+    #
+    attr_reader :subset_indices
 
     # Number of subsets.
     #
@@ -132,7 +156,7 @@ module RedAmber
       limit = 16
       sizes_truncated = (size > limit ? sizes.take(limit) << '...' : sizes).join(', ')
       "#<#{self.class} : #{format('0x%016x', object_id)}>\n" \
-        "@universal_frame = #<#{@universal_frame.shape_str(with_id: true)}>\n" \
+        "@universal_frame=#<#{@universal_frame.shape_str(with_id: true)}>\n" \
         "#{size} SubFrame#{pl(size)}: " \
         "[#{sizes_truncated}] in size#{pl(size)}.\n"
     end
