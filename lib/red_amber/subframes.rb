@@ -52,24 +52,49 @@ module RedAmber
 
     # Create a new SubFrames object from a DataFrame and an array of indices or filters.
     #
-    # @param dataframe [DataFrame]
-    #   a source dataframe.
-    # @param subset_specifier [Array<Vector>, Array<array-like>]
-    #   an Array of numeric indices or boolean filters
-    #   to create subsets of DataFrame.
-    # @return [SubFrames]
-    #   new SubFrames.
+    # @overload initialize(dataframe, subset_specifier)
+    #   Create a new SubFrames object.
+    #
+    #   @param dataframe [DataFrame]
+    #     a source dataframe.
+    #   @param subset_specifier [Array<Vector>, Array<array-like>]
+    #     an Array of numeric indices or boolean filters
+    #     to create subsets of DataFrame.
+    #   @return [SubFrames]
+    #     new SubFrames.
+    #
+    # @overload initialize(dataframe)
+    #   Create a new SubFrames object by block.
+    #
+    #   @param dataframe [DataFrame]
+    #     a source dataframe.
+    #   @yield dataframe [DataFrame]
+    #     the block is called with the parameter `dataframe`.
+    #   @yieldreturn [Array<numeric_array_like>, Array<boolean_array_like>]
+    #     an Array of index or boolean array-likes to create subsets of DataFrame.
+    #     All array-likes are responsible to #numeric? or #boolean?.
+    #   @return [SubFrames]
+    #     new SubFrames.
+    #
     # @since 0.3.1
     #
-    def initialize(dataframe, subset_specifier)
+    def initialize(dataframe, subset_specifier = nil, &block)
       unless dataframe.is_a?(DataFrame)
         raise SubFramesArgumentError, "not a DataFrame: #{dataframe}"
+      end
+
+      if block
+        unless subset_specifier.nil?
+          raise SubFramesArgumentError, 'Must not specify both arguments and block.'
+        end
+
+        subset_specifier = yield(dataframe)
       end
 
       @universal_frame = dataframe
       @universal_indices = dataframe.indices
       @subset_indices =
-        if subset_specifier.empty? || dataframe.empty?
+        if subset_specifier.nil? || subset_specifier.empty? || dataframe.empty?
           []
         else
           subset_specifier.map do |i|

@@ -41,25 +41,54 @@ class SubFranesTest < Test::Unit::TestCase
       assert_raise(SubFramesArgumentError) { SubFrames.new('a', []) }
     end
 
+    test '.new illegal dataframe by a block' do
+      assert_raise(SubFramesArgumentError) { SubFrames.new('a') { [] } }
+    end
+
     test '.new empty dataframe' do
       sf = SubFrames.new(DataFrame.new, [[0, 1, 2]])
       assert_equal [], sf.subset_indices
     end
 
+    test '.new empty dataframe by a block' do
+      sf = SubFrames.new(DataFrame.new) { [[0, 1, 2]] }
+      assert_equal [], sf.subset_indices
+    end
+
     setup do
-      @df = DataFrame.new(x: [*1..3])
+      @df = DataFrame.new(x: [*1..6], y: %w[A A B B B C])
     end
 
     test '.new empty specifier' do
+      assert_equal [], SubFrames.new(@df).subset_indices
       assert_equal [], SubFrames.new(@df, []).subset_indices
+    end
+
+    test '.new empty specifier by a block' do
+      assert_equal [], SubFrames.new(@df) { nil }.subset_indices
+      assert_equal [], SubFrames.new(@df) { [] }.subset_indices
     end
 
     test '.new illegal specifier' do
       assert_raise(SubFramesArgumentError) { SubFrames.new(@df, [%w[0 1]]) }
     end
 
+    test '.new illegal specifier by a block' do
+      assert_raise(SubFramesArgumentError) { SubFrames.new(@df) { [%w[0 1]] } }
+    end
+
+    test '.new both specifier and block' do
+      assert_raise(SubFramesArgumentError) { SubFrames.new(@df, [[0]]) { [[0]] } }
+    end
+
     test '.new a SubFrames with index Array' do
       sf = SubFrames.new(@df, [[0, 2]])
+      assert_equal_array [[0, 2]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
+    end
+
+    test '.new a SubFrames with index Array by a block' do
+      sf = SubFrames.new(@df) { [[0, 2]] }
       assert_equal_array [[0, 2]], sf.subset_indices
       assert_kind_of Vector, sf.subset_indices[0]
     end
@@ -70,19 +99,41 @@ class SubFranesTest < Test::Unit::TestCase
       assert_kind_of Vector, sf.subset_indices[0]
     end
 
+    test '.new a SubFrames with index Vector by a block' do
+      sf = SubFrames.new(@df) { [Vector.new(0, 2, 5)] }
+      assert_equal_array [[0, 2, 5]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
+    end
+
     test '.new index out of range' do
-      assert_raise(SubFramesArgumentError) { SubFrames.new(@df, [[0, 2, 4]]) }
+      assert_raise(SubFramesArgumentError) { SubFrames.new(@df, [[0, 2, 6]]) }
+    end
+
+    test '.new index out of range by a block' do
+      assert_raise(SubFramesArgumentError) { SubFrames.new(@df) { [[0, 2, 6]] } }
     end
 
     test '.new a SubFrames with boolean Array' do
-      sf = SubFrames.new(@df, [[true, false, true]])
-      assert_equal_array [[0, 2]], sf.subset_indices
+      sf = SubFrames.new(@df, [[true, false, true, false, nil, true]])
+      assert_equal_array [[0, 2, 5]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
+    end
+
+    test '.new a SubFrames with boolean Array by a block' do
+      sf = SubFrames.new(@df) { [[true, false, true, false, nil, true]] }
+      assert_equal_array [[0, 2, 5]], sf.subset_indices
       assert_kind_of Vector, sf.subset_indices[0]
     end
 
     test '.new a SubFrames with boolean Vector' do
-      sf = SubFrames.new(@df, [Vector.new(true, false, true)])
-      assert_equal_array [[0, 2]], sf.subset_indices
+      sf = SubFrames.new(@df, [Vector.new(true, false, true, false, nil, true)])
+      assert_equal_array [[0, 2, 5]], sf.subset_indices
+      assert_kind_of Vector, sf.subset_indices[0]
+    end
+
+    test '.new a SubFrames with boolean Vector by a block' do
+      sf = SubFrames.new(@df) { |df| [df.y == 'B'] }
+      assert_equal_array [[2, 3, 4]], sf.subset_indices
       assert_kind_of Vector, sf.subset_indices[0]
     end
   end

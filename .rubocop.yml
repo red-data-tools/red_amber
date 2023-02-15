@@ -179,6 +179,7 @@ Metrics/PerceivedComplexity:
     'dataframe_info', # 13
     'replace', # 13
     'drop', # 12
+    'initialize', # 12
     '[]', # 11
     'filters', # 11
     'html_table', # 11
