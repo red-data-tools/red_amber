@@ -245,13 +245,24 @@ module RedAmber
       is_nil.if_else(false, self).invert
     end
 
+    # Shift elements in self.
+    #
+    # @param amount [Integer]
+    #   amount of shift. Positive value will shift right, negative will shift left.
+    # @param fill [Object]
+    #   complementary element to fill the new seat.
+    # @return [Vector]
+    #   shifted Vector.
+    #
     def shift(amount = 1, fill: nil)
-      raise VectorArgumentError, 'Shift amount is too large' if amount.abs > size
+      raise VectorArgumentError, 'Shift amount is too large' if amount.abs >= size
 
       if amount.positive?
-        replace(amount..-1, self[0...-amount]).replace(0...amount, fill)
+        filler = [fill] * amount
+        Vector.new(filler.concat(Array(self[0...-amount])))
       elsif amount.negative?
-        replace(0...amount, self[-amount..]).replace(amount..-1, fill)
+        filler = [fill] * -amount
+        Vector.new(Array(self[-amount...]).concat(filler))
       else # amount == 0
         self
       end
