@@ -164,16 +164,31 @@ class VectorTest < Test::Unit::TestCase
   end
 
   sub_test_case '#shift' do
-    test '#shift' do
-      vector = Vector.new([1, 2, 3, 4, 5])
-      assert_equal [nil, 1, 2, 3, 4], vector.shift
-      assert_equal [3, 4, 5, nil, nil], vector.shift(-2)
-      assert_equal [0, 0, 1, 2, 3], vector.shift(2, fill: 0)
+    setup do
+      @numeric = Vector.new(1, 2, 3, 4, 5)
+      @boolean = Vector.new(true, false, true, false, false)
+    end
+
+    test '#shift amount too large' do
+      assert_raise(VectorArgumentError) { @numeric.shift(5) }
+      assert_raise(VectorArgumentError) { @numeric.shift(-5) }
+    end
+
+    test '#shift numeric Vector' do
+      assert_equal_array [nil, 1, 2, 3, 4], @numeric.shift
+      assert_equal_array [3, 4, 5, nil, nil], @numeric.shift(-2)
+      assert_equal_array [0, 0, 1, 2, 3], @numeric.shift(2, fill: 0)
+    end
+
+    test '#shift boolean Vector' do
+      assert_equal_array [nil, true, false, true, false], @boolean.shift
+      assert_equal_array [true, false, false, nil, nil], @boolean.shift(-2)
+      assert_equal_array [false, false, true, false, true], @boolean.shift(2, fill: false)
     end
 
     test '#shift, amount == 0' do
-      vector = Vector.new([1, 2, 3, 4, 5])
-      assert_equal_array vector, vector.shift(0)
+      assert_equal_array [1, 2, 3, 4, 5], @numeric.shift(0)
+      assert_equal_array [true, false, true, false, false], @boolean.shift(0)
     end
   end
 
