@@ -25,6 +25,43 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#to_s' do
+    setup do
+      hash = { integer: [1, 2, 3, 4, 5, 6],
+               double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
+               string: %w[A A B C D E],
+               boolean: [true, false, nil, true, false, nil] }
+      @df = DataFrame.new(hash)
+    end
+
+    test '#to_s default' do
+      str = <<~OUTPUT
+          integer    double string   boolean
+          <uint8>  <double> <string> <boolean>
+        0       1       1.0 A        true
+        1       2       NaN A        false
+        2       3  Infinity B        (nil)
+        3       4 -Infinity C        true
+        4       5     (nil) D        false
+        5       6       0.0 E        (nil)
+      OUTPUT
+      assert_equal str, @df.to_s
+    end
+
+    test '#to_s specify head and tail' do
+      str = <<~OUTPUT
+          integer   double string   boolean
+          <uint8> <double> <string> <boolean>
+        0       1      1.0 A        true
+        1       2      NaN A        false
+        :       :        : :        :
+        4       5    (nil) D        false
+        5       6      0.0 E        (nil)
+      OUTPUT
+      assert_equal str, @df.to_s(head: 2, tail: 2)
+    end
+  end
+
   sub_test_case 'inspect by table mode' do
     setup do
       ENV['RED_AMBER_OUTPUT_MODE'] = nil # Table mode

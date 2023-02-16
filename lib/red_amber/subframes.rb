@@ -69,7 +69,7 @@ module RedAmber
     #
     #   @param dataframe [DataFrame]
     #     a source dataframe.
-    #   @yield dataframe [DataFrame]
+    #   @yield [DataFrame]
     #     the block is called with the parameter `dataframe`.
     #   @yieldreturn [Array<numeric_array_like>, Array<boolean_array_like>]
     #     an Array of index or boolean array-likes to create subsets of DataFrame.
@@ -173,18 +173,101 @@ module RedAmber
 
     # Return summary information of self.
     #
+    # @param limit [Integer]
+    #   maximum number of DataFrames to show.
     # @return [String]
     #   return class name, object id, universal DataFrame,
     #   size and subset sizes in a String.
+    # @example
+    #   df
+    #
+    #   # =>
+    #   #<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000caa8>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   2       3 B        false
+    #   3       4 B        (nil)
+    #   4       5 B        true
+    #   5       6 C        false
+    #
+    #   SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x000000000000c1fc>
+    #   @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000c170>
+    #   3 SubFrames: [2, 3, 1] in sizes.
+    #   ---
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   ---
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #   ---
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       6 C        false
+    #
     # @since 0.3.1
     #
-    def inspect
-      limit = 16
+    def inspect(limit: 16)
       sizes_truncated = (size > limit ? sizes.take(limit) << '...' : sizes).join(', ')
       "#<#{self.class} : #{format('0x%016x', object_id)}>\n" \
         "@universal_frame=#<#{@universal_frame.shape_str(with_id: true)}>\n" \
         "#{size} SubFrame#{pl(size)}: " \
-        "[#{sizes_truncated}] in size#{pl(size)}.\n"
+        "[#{sizes_truncated}] in size#{pl(size)}.\n" \
+        "---\n#{_to_s(limit: limit)}"
+      # "---\n#{_to_s(limit: limit, with_id: true)}"
+    end
+
+    # Return string representation of self.
+    #
+    # @param limit [Integer]
+    #   maximum number of DataFrames to show.
+    # @return [String]
+    #   return string representation of each sub DataFrame.
+    # @example
+    #   df
+    #
+    #   # =>
+    #   #<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000caa8>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   2       3 B        false
+    #   3       4 B        (nil)
+    #   4       5 B        true
+    #   5       6 C        false
+    #
+    #   puts SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
+    #
+    #   # =>
+    #     x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   ---
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #   ---
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       6 C        false
+    #
+    # @since 0.3.1
+    #
+    def to_s(limit: 16)
+      _to_s(limit: limit)
     end
 
     # Iterates over sub DataFrames or returns an Enumerator.
@@ -207,6 +290,8 @@ module RedAmber
     #   @return [self]
     #     returns self.
     #
+    # @since 0.3.1
+    #
     def each
       return enum_for(:each) unless block_given?
 
@@ -214,6 +299,22 @@ module RedAmber
         yield @universal_frame.take(i.data)
       end
       self
+    end
+
+    private
+
+    # def _to_s(limit: 16, with_id: false)
+    def _to_s(limit: 16)
+      a = take(limit).map do |df|
+        # if with_id
+        #   "#<#{df.shape_str(with_id: with_id)}>\n" \
+        #     "#{df.to_s(head: 2, tail: 2)}"
+        # else
+        df.to_s(head: 2, tail: 2)
+        # end
+      end
+      a << "+ #{size - limit} more DataFrame#{pl(size - limit)}.\n" if size > limit
+      a.join("---\n")
     end
   end
 end

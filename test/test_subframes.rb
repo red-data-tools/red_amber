@@ -190,6 +190,7 @@ class SubFranesTest < Test::Unit::TestCase
         #<RedAmber::SubFrames : #{format('0x%016x', empty_subframe.object_id)}>
         @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         0 SubFrame: [] in size.
+        ---
       STR
     end
 
@@ -200,6 +201,21 @@ class SubFranesTest < Test::Unit::TestCase
         #<RedAmber::SubFrames : #{format('0x%016x', sf.object_id)}>
         @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         3 SubFrames: [2, 3, 1] in sizes.
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        1       4 B        (nil)
+        2       5 B        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       6 C        false
       STR
     end
 
@@ -210,7 +226,64 @@ class SubFranesTest < Test::Unit::TestCase
         #<RedAmber::SubFrames : #{format('0x%016x', universal.object_id)}>
         @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         1 SubFrame: [6] in size.
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        :       : :        :
+        4       5 B        true
+        5       6 C        false
       STR
+    end
+  end
+
+  sub_test_case '#to_s' do
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+    end
+
+    test '#to_s' do
+      expected = <<~STR
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        1       4 B        (nil)
+        2       5 B        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       6 C        false
+      STR
+      assert_equal expected, @sf.to_s
+    end
+
+    test '#to_s set limit' do
+      expected = <<~STR
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        1       4 B        (nil)
+        2       5 B        true
+        ---
+        + 1 more DataFrame.
+      STR
+      assert_equal expected, @sf.to_s(limit: 2)
     end
   end
 

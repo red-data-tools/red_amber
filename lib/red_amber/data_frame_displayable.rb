@@ -15,6 +15,10 @@ module RedAmber
     #
     # @param width [Integer]
     #   maximum size of result.
+    # @param head [Integer]
+    #   number of records to show from head.
+    # @param tail [Integer]
+    #   number of records to show at tail.
     # @return [String]
     #   string representation of self.
     # @example Show penguins dataset
@@ -33,10 +37,10 @@ module RedAmber
     #   342 Gentoo   Biscoe              45.2          14.8               212 ...     2009
     #   343 Gentoo   Biscoe              49.9          16.1               213 ...     2009
     #
-    def to_s(width: 80)
+    def to_s(width: 80, head: 5, tail: 3)
       return '' if empty?
 
-      format_table(width: width)
+      format_table(width: width, head: head, tail: tail)
     end
 
     # Show statistical summary by a new DataFrame.
