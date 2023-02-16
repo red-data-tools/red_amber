@@ -347,4 +347,20 @@ class SubFranesTest < Test::Unit::TestCase
       assert_equal expect, @sf.each.with_object([]) { |df, a| a << df.to_a }
     end
   end
+
+  sub_test_case '#concatenate' do
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+    end
+
+    test '#concatenate' do
+      assert_kind_of DataFrame, @sf.concatenate
+      assert_equal_array @df.to_a, @sf.concatenate
+    end
+  end
 end

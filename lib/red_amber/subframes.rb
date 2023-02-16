@@ -354,6 +354,17 @@ module RedAmber
       self
     end
 
+    # Concatenate SubFrames to create a DataFrame.
+    #
+    # @return [DataFrame]
+    #   a concatenated DataFrame.
+    # @since 0.3.1
+    #
+    def concatenate
+      reduce(&:concatenate)
+    end
+    alias_method :concat, :concatenate
+
     private
 
     # def _to_s(limit: 16, with_id: false)
