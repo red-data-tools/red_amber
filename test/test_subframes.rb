@@ -177,6 +177,28 @@ class SubFranesTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#each' do
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+    end
+
+    test '#each w/o block' do
+      assert_kind_of Enumerator, @sf.each
+    end
+
+    test '#each yielded block' do
+      expect = [[[1, 'A', false], [2, 'A', true]],
+                [[3, 'B', false], [4, 'B', nil], [5, 'B', true]],
+                [[6, 'C', false]]]
+      assert_equal expect, @sf.each.with_object([]) { |df, a| a << df.to_a }
+    end
+  end
+
   # Tests for #size, #sizes, #empty? and #universal?
   sub_test_case 'properties' do
     setup do
@@ -236,22 +258,26 @@ class SubFranesTest < Test::Unit::TestCase
     test '#inspect SubFrames' do
       specifier = [[0, 1], [2, 3, 4], [5]]
       sf = SubFrames.new(@df, specifier)
+      a = sf.to_a
       assert_equal <<~STR, sf.inspect
         #<RedAmber::SubFrames : #{format('0x%016x', sf.object_id)}>
         @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         3 SubFrames: [2, 3, 1] in sizes.
         ---
+        #<RedAmber::DataFrame : 2 x 3 Vectors, #{format('0x%016x', a[0].object_id)}>
                 x y        z
           <uint8> <string> <boolean>
         0       1 A        false
         1       2 A        true
         ---
+        #<RedAmber::DataFrame : 3 x 3 Vectors, #{format('0x%016x', a[1].object_id)}>
                 x y        z
           <uint8> <string> <boolean>
         0       3 B        false
         1       4 B        (nil)
         2       5 B        true
         ---
+        #<RedAmber::DataFrame : 1 x 3 Vectors, #{format('0x%016x', a[2].object_id)}>
                 x y        z
           <uint8> <string> <boolean>
         0       6 C        false
@@ -266,6 +292,7 @@ class SubFranesTest < Test::Unit::TestCase
         @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         1 SubFrame: [6] in size.
         ---
+        #<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', universal.to_a[0].object_id)}>
                 x y        z
           <uint8> <string> <boolean>
         0       1 A        false
@@ -323,28 +350,6 @@ class SubFranesTest < Test::Unit::TestCase
         + 1 more DataFrame.
       STR
       assert_equal expected, @sf.to_s(limit: 2)
-    end
-  end
-
-  sub_test_case '#each' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
-    end
-
-    test '#each w/o block' do
-      assert_kind_of Enumerator, @sf.each
-    end
-
-    test '#each yielded block' do
-      expect = [[[1, 'A', false], [2, 'A', true]],
-                [[3, 'B', false], [4, 'B', nil], [5, 'B', true]],
-                [[6, 'C', false]]]
-      assert_equal expect, @sf.each.with_object([]) { |df, a| a << df.to_a }
     end
   end
 

@@ -108,6 +108,7 @@ Metrics/ClassLength:
     - 'test/**/*'
     - 'lib/red_amber/data_frame.rb' # 162
     - 'lib/red_amber/group.rb' # 105
+    - 'lib/red_amber/subframes.rb' # 110
     - 'lib/red_amber/vector.rb' # 152
 
 # Only for monitoring. I will measure by PerceivedComplexity.
@@ -139,6 +140,7 @@ Metrics/MethodLength:
     'format_table', # 53
     'slice_by', # 38
     'assign_update', # 35
+    'initialize', # 31 (SubFrames)
   ]
 
 # Max: 100
