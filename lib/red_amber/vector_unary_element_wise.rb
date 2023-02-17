@@ -129,6 +129,28 @@ module RedAmber
     #
     define_unary_element_wise :cos
 
+    # Compute cumulative sum over the numeric Vector.
+    #
+    # @note Self must be numeric.
+    # @note Return error for integer overflow.
+    # @return [Vector]
+    #   cumulative sum of self.
+    #
+    define_unary_element_wise :cumulative_sum_checked
+
+    # Compute cumulative sum over the numeric Vector.
+    #
+    # @note Self must be numeric.
+    # @note Try to cast to Int64 if integer overflow occured.
+    # @return [Vector]
+    #   cumulative sum of self.
+    #
+    def cumsum
+      cumulative_sum_checked
+    rescue Arrow::Error::Invalid
+      Vector.create(Arrow::Int64Array.new(data)).cumulative_sum_checked
+    end
+
     # Carry non-nil values backward to fill nil slots.
     #
     # Propagate next valid value backward to previous nil values.

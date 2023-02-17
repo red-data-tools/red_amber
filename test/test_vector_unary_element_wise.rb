@@ -6,7 +6,7 @@ class VectorFunctionTest < Test::Unit::TestCase
   include TestHelper
   include RedAmber
 
-  sub_test_case('unary element-wise') do
+  sub_test_case 'unary element-wise' do
     setup do
       @boolean = Vector.new([true, true, nil])
       @integer = Vector.new([1, 2, 3])
@@ -112,7 +112,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('element-wise with NaN or Infinity') do
+  sub_test_case 'element-wise with NaN or Infinity' do
     setup do
       @boolean = Vector.new([true, false, nil])
       @integer = Vector.new([-1, 0, 1, 2])
@@ -169,7 +169,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('unary element-wise rounding') do
+  sub_test_case 'unary element-wise rounding' do
     setup do
       @boolean = Vector.new([true, true, nil])
       @integer = Vector.new([1, 2, 3])
@@ -233,7 +233,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('unary output vector') do
+  sub_test_case 'unary output vector' do
     setup do
       @boolean = Vector.new([true, true, nil, false, nil])
       @integer = Vector.new([1, 2, 1, nil])
@@ -260,7 +260,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('unary element-wise categorizations') do
+  sub_test_case 'unary element-wise categorizations' do
     setup do
       @boolean = Vector.new([true, false, true, false, nil])
       @integer = Vector.new([0, 1, -2, 3, nil])
@@ -311,7 +311,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case('unary element-wise fill_nil_forward/backward') do
+  sub_test_case 'unary element-wise fill_nil_forward/backward' do
     setup do
       @boolean = Vector.new([true, false, nil, true, nil])
       @integer = Vector.new([0, 1, nil, 3, nil])
@@ -331,6 +331,24 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [0, 1, 1, 3, 3], @integer.fill_nil_forward
       assert_equal_array_with_nan [Math::PI, Float::INFINITY, Float::INFINITY, Float::NAN, Float::NAN], @double.fill_nil_forward
       assert_equal_array ['A', 'B', 'B', '', ''], @string.fill_nil_forward
+    end
+  end
+
+  sub_test_case '#cumulative_sum' do
+    test '#cumulative_sum' do
+      assert_equal_array [1, 3, 6, 255], Vector.new(1, 2, 3, 249).cumulative_sum_checked
+      assert_raise(Arrow::Error::Invalid) { Vector.new(1, 2, 3, 250).cumulative_sum_checked }
+      assert_equal_array [1.0, 3.0, 6.0, 256.0], Vector.new(1.0, 2, 3, 250).cumulative_sum_checked
+      assert_raise(Arrow::Error::NotImplemented) { Vector.new(%w[A B C]).cumulative_sum_checked }
+      assert_raise(Arrow::Error::NotImplemented) { Vector.new(true, false, nil).cumulative_sum_checked }
+    end
+
+    test '#cumsum' do
+      assert_equal_array [1, 3, 6, 255], Vector.new(1, 2, 3, 249).cumsum
+      assert_equal_array [1, 3, 6, 256], Vector.new(1, 2, 3, 250).cumsum
+      assert_equal_array [1.0, 3.0, 6.0, 256.0], Vector.new(1.0, 2, 3, 250).cumsum
+      assert_raise(Arrow::Error::NotImplemented) { Vector.new(%w[A B C]).cumsum }
+      assert_raise(Arrow::Error::NotImplemented) { Vector.new(true, false, nil).cumsum }
     end
   end
 end
