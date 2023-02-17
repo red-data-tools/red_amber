@@ -199,6 +199,65 @@ class SubFranesTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#aggregate' do
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+    end
+
+    test '#aggregate invalid argument' do
+      assert_raise(SubFramesArgumentError) { @sf.aggregate([:y], ['x', :sum]) }
+    end
+
+    test '#aggregate not a aggregation function by a Hash' do
+      assert_raise(SubFramesArgumentError) { @sf.aggregate([:y], { x: :abs }) }
+    end
+
+    test '#aggregate not a aggregation function by an Array' do
+      assert_raise(SubFramesArgumentError) { @sf.aggregate([:y], [[:x], [:abs]]) }
+    end
+
+    test '#aggregate by a Hash' do
+      aggregated = @sf.aggregate([:y], { x: :sum })
+      assert_kind_of DataFrame, aggregated
+      assert_equal <<~STR, aggregated.to_s
+          y          sum_x
+          <string> <uint8>
+        0 A              3
+        1 B             12
+        2 C              6
+      STR
+    end
+
+    test '#aggregate by an Array' do
+      aggregated = @sf.aggregate([:y], [%i[x z], %i[sum count]])
+      assert_kind_of DataFrame, aggregated
+      assert_equal <<~STR, aggregated.to_s
+          y          sum_x   sum_z count_x count_z
+          <string> <uint8> <uint8> <uint8> <uint8>
+        0 A              3       1       2       2
+        1 B             12       1       3       2
+        2 C              6       0       1       1
+      STR
+    end
+
+    test '#aggregate by an Array w/o group_key' do
+      aggregated = @sf.aggregate([], [%i[x z], %i[sum count]])
+      assert_kind_of DataFrame, aggregated
+      assert_equal <<~STR, aggregated.to_s
+            sum_x   sum_z count_x count_z
+          <uint8> <uint8> <uint8> <uint8>
+        0       3       1       2       2
+        1      12       1       3       2
+        2       6       0       1       1
+      STR
+    end
+  end
+
   # Tests for #size, #sizes, #offset_indices, #empty? and #universal?
   sub_test_case 'properties' do
     setup do

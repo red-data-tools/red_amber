@@ -270,6 +270,75 @@ module RedAmber
       self
     end
 
+    # Aggregate SubFrames to create a DataFrame.
+    #
+    # This method will check if built-in aggregation function is used.
+    # @todo Support user-defined aggregation functions.
+    #
+    # @overload aggregate(group_keys, aggregations)
+    #
+    #   Aggregate SubFrames for first values of the columns of
+    #   `group_keys` and the aggregated results of all combinations
+    #   of supplied keys and functions.
+    #
+    #   @param group_keys [Symbol, String, Array<Symbol, String>]
+    #     group key name(s) to output values.
+    #   @param aggregations [Array[Array<Symbol, String>, Array<:Symbol>]]
+    #     an Array of Array of variable (column) names and
+    #     Array of Vector aggregate function names to apply.
+    #   @return [DataFrame]
+    #     an aggregated DataFrame.
+    #
+    # @overload aggregate(group_keys, aggregations)
+    #
+    #   Aggregate SubFrames for first values of the columns of
+    #   `group_keys` and the aggregated results of key-function pairs.
+    #
+    #   @param group_keys [Symbol, String, Array<Symbol, String>]
+    #     group key name(s) to output values.
+    #   @param aggregations [Array<Symbol, String> => Array<:Symbol>]
+    #     a Hash of variable (column) name and
+    #     Vector aggregate function name to apply.
+    #   @return [DataFrame]
+    #     an aggregated DataFrame.
+    #
+    # @since 0.3.1
+    #
+    def aggregate(group_keys, aggregations)
+      aggregator =
+        case aggregations
+        in Hash
+          sf = self
+          aggregations.map do |key, func|
+            unless Vector.aggregate?(func)
+              raise SubFramesArgumentError, "not an aggregation function: #{func}"
+            end
+
+            ["#{func}_#{key}", sf.map { |df| df[key].send(func) }]
+          end
+        in [Array => keys, Array => functions]
+          functions.each do |func|
+            unless Vector.aggregate?(func)
+              raise SubFramesArgumentError, "not an aggregation function: #{func}"
+            end
+          end
+          sf = self
+          functions.product(keys).map do |func, key|
+            ["#{func}_#{key}", sf.map { |df| df[key].send(func) }]
+          end
+        else
+          raise SubFramesArgumentError, "invalid argument: #{aggregations}"
+        end
+
+      if group_keys.empty?
+        DataFrame.new(aggregator)
+      else
+        @universal_frame.pick(group_keys)
+                        .slice(offset_indices)
+                        .assign(aggregator)
+      end
+    end
+
     # Number of subsets.
     #
     # @return [Integer]
