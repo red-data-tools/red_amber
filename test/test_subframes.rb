@@ -199,7 +199,7 @@ class SubFranesTest < Test::Unit::TestCase
     end
   end
 
-  # Tests for #size, #sizes, #empty? and #universal?
+  # Tests for #size, #sizes, #offset_indices, #empty? and #universal?
   sub_test_case 'properties' do
     setup do
       @df = DataFrame.new(
@@ -213,6 +213,7 @@ class SubFranesTest < Test::Unit::TestCase
       empty_subframe = SubFrames.new(@df, [])
       assert_equal 0, empty_subframe.size
       assert_equal [], empty_subframe.sizes
+      assert_equal [], empty_subframe.offset_indices
       assert_true empty_subframe.empty?
       assert_false empty_subframe.universal?
     end
@@ -222,6 +223,7 @@ class SubFranesTest < Test::Unit::TestCase
       sf = SubFrames.new(@df, specifier)
       assert_equal 3, sf.size
       assert_equal [2, 3, 1], sf.sizes
+      assert_equal [0, 2, 5], sf.offset_indices
       assert_false sf.empty?
       assert_false sf.universal?
     end
@@ -231,6 +233,7 @@ class SubFranesTest < Test::Unit::TestCase
       universal = SubFrames.new(@df, specifier)
       assert_equal 1, universal.size
       assert_equal [6], universal.sizes
+      assert_equal [0], universal.offset_indices
       assert_false universal.empty?
       assert_true universal.universal?
     end

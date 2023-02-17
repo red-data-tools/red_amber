@@ -290,6 +290,22 @@ module RedAmber
       @sizes ||= @subset_indices.map(&:size)
     end
 
+    # Indices at the top of each sub DataFrames.
+    #
+    # @return [Array<Integer>]
+    #   indices of offset of each sub DataFrames.
+    # @example When `sizes` is [2, 3, 1].
+    #   sf.offset_indices # => [0, 2, 5]
+    # @since 0.3.1
+    #
+    def offset_indices
+      sum = 0
+      sizes.map do |size|
+        sum += size
+        sum - size
+      end
+    end
+
     # Test if subset is empty?.
     #
     # @return [true, false]
