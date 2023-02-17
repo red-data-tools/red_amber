@@ -65,6 +65,29 @@ class VectorTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#resolve' do
+    test '#resolve integer upcast' do
+      assert_equal :uint16, Vector.new(256).resolve([1]).type
+      assert_equal :uint16, Vector.new(256).resolve(Vector.new(1)).type
+    end
+
+    test '#resolve integer overflow' do
+      assert_equal_array [0], Vector.new(1).resolve([256])
+    end
+
+    test '#resolve string' do
+      assert_equal_array ['1'], Vector.new('A').resolve([1])
+    end
+
+    test '#resolve string to integer' do
+      assert_equal_array [65], Vector.new(1).resolve(['A'])
+    end
+
+    test '#resolve invalid argument' do
+      assert_raise(VectorArgumentError) { Vector.new(1).resolve(1) }
+    end
+  end
+
   sub_test_case 'Basic properties' do
     data(keep: true) do
       a = [0, 1, nil, 4]

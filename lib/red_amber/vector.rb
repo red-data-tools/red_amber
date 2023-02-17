@@ -86,6 +86,53 @@ module RedAmber
     #
     attr_accessor :key
 
+    # Return other as a Vector which is same data type as self.
+    #
+    # @param other [Vector, Array, Arrow::Array, Arrow::ChunkedArray]
+    #   a source array-like which will be converted.
+    # @return [Vector]
+    #   resolved Vector.
+    # @example Integer to String
+    #   Vector.new('A').resolve([1, 2])
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:string, size=2):0x00000000000037b4>
+    #   ["1", "2"]
+    #
+    # @example String to Ineger
+    #   Vector.new(1).resolve(["A"])
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint8, size=1):0x00000000000037dc>
+    #   [65]
+    #
+    # @example Upcast to uint16
+    #   vector = Vector.new(256)
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint16, size=1):0x000000000000c1fc>
+    #   [256]
+    #
+    #   vector.resolve([1, 2])
+    #
+    #   # =>
+    #   # Not a uint8 Vector
+    #   #<RedAmber::Vector(:uint16, size=2):0x000000000000c328>
+    #   [1, 2]
+    #
+    # @since 0.3.1
+    #
+    def resolve(other)
+      case other
+      when Vector
+        Vector.create(data.resolve(other.data))
+      when Array, Arrow::Array, Arrow::ChunkedArray
+        Vector.create(data.resolve(other))
+      else
+        raise VectorArgumentError, "invalid argument: #{other}"
+      end
+    end
+
     # String representation of self like an Array.
     #
     # @return [String]
