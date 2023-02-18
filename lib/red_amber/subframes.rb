@@ -11,6 +11,59 @@ module RedAmber
     using RefineArrayLike
 
     class << self
+      # Create SubFrames from a Group.
+      #
+      # [Experimental feature] this method may be removed or be changed in the future.
+      # @param group [Group]
+      #   a Group to be used to create SubFrames.
+      # @return [SubFrames]
+      #   a created SubFrames.
+      # @example
+      #   dataframe
+      #
+      #   # =>
+      #   #<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+      #   x y        z
+      #   <uint8> <string> <boolean>
+      #   0       1 A        false
+      #   1       2 A        true
+      #   2       3 B        false
+      #   3       4 B        (nil)
+      #   4       5 B        true
+      #   5       6 C        false
+      #
+      #   group = Group.new(dataframe, [:y])
+      #   sf = SubFrames.by_group(group)
+      #
+      #   # =>
+      #   #<RedAmber::SubFrames : 0x000000000000fbb8>
+      #   @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fb7c>
+      #   3 SubFrames: [2, 3, 1] in sizes.
+      #   ---
+      #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000fbcc>
+      #           x y        z
+      #     <uint8> <string> <boolean>
+      #   0       1 A        false
+      #   1       2 A        true
+      #   ---
+      #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000fbe0>
+      #           x y        z
+      #     <uint8> <string> <boolean>
+      #   0       3 B        false
+      #   1       4 B        (nil)
+      #   2       5 B        true
+      #   ---
+      #   #<RedAmber::DataFrame : 1 x 3 Vectors, 0x000000000000fbf4>
+      #           x y        z
+      #     <uint8> <string> <boolean>
+      #   0       6 C        false
+      #
+      # @since 0.3.1
+      #
+      def by_group(group)
+        SubFrames.new(group.dataframe, group.filters)
+      end
+
       # Create a new SubFrames object from a DataFrame and an array of indices.
       #
       # @api private

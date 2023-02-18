@@ -224,6 +224,216 @@ class DataFrameTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case 'SubFrames builders from DataFrame' do
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      # @df is:
+      #         x y        z
+      #   <uint8> <string> <boolean>
+      # 0       1 A        false
+      # 1       2 A        true
+      # 2       3 B        false
+      # 3       4 B        (nil)
+      # 4       5 B        true
+      # 5       6 C        false
+    end
+
+    test '#sub_by_value' do
+      sf = @df.sub_by_value(keys: :y)
+      assert_kind_of SubFrames, sf
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        1       4 B        (nil)
+        2       5 B        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       6 C        false
+      STR
+    end
+
+    test '#sub_by_value with multiple keys' do
+      sf = @df.sub_by_value(keys: %i[y z])
+      assert_kind_of SubFrames, sf
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       2 A        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       5 B        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       4 B        (nil)
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       6 C        false
+      STR
+    end
+
+    test '#sub_by_window with size and step' do
+      sf = @df.sub_by_window(size: 4, step: 2)
+      assert_kind_of SubFrames, sf
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        2       3 B        false
+        3       4 B        (nil)
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        1       4 B        (nil)
+        2       5 B        true
+        3       6 C        false
+      STR
+    end
+
+    test '#sub_by_window with from and size' do
+      sf = @df.sub_by_window(from: 1, size: 4)
+      assert_kind_of SubFrames, sf
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       2 A        true
+        1       3 B        false
+        2       4 B        (nil)
+        3       5 B        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        1       4 B        (nil)
+        2       5 B        true
+        3       6 C        false
+      STR
+    end
+
+    test '#sub_by_enum `each_slice`' do
+      sf = @df.sub_by_enum(:each_slice, 3)
+      assert_kind_of SubFrames, sf
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        2       3 B        false
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       4 B        (nil)
+        1       5 B        true
+        2       6 C        false
+      STR
+    end
+
+    test '#sub_by_enum `each_cons`' do
+      sf = @df.sub_by_enum(:each_cons, 4)
+      assert_kind_of SubFrames, sf
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        2       3 B        false
+        3       4 B        (nil)
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       2 A        true
+        1       3 B        false
+        2       4 B        (nil)
+        3       5 B        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        1       4 B        (nil)
+        2       5 B        true
+        3       6 C        false
+      STR
+    end
+
+    test '#sub_by_kernel `each_slice`' do
+      sf = @df.sub_by_kernel([true, false, false, true], step: 2)
+      assert_kind_of SubFrames, sf
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       4 B        (nil)
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        1       6 C        false
+      STR
+    end
+
+    test '#build_subframes' do
+      sf = @df.build_subframes([[0, 2, 4], [1, 3, 5]])
+      assert_kind_of SubFrames, sf
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       3 B        false
+        2       5 B        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       2 A        true
+        1       4 B        (nil)
+        2       6 C        false
+      STR
+    end
+
+    test '#build_subframes by block' do
+      sf = @df.build_subframes do
+        even = indices.map(&:even?)
+        [even, !even]
+      end
+      assert_kind_of SubFrames, sf
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       3 B        false
+        2       5 B        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       2 A        true
+        1       4 B        (nil)
+        2       6 C        false
+      STR
+    end
+  end
+
   sub_test_case 'method_missing' do
     setup do
       @df = DataFrame.new(number: [1, 2, 3], 'string.1': %w[Aa Bb Cc])

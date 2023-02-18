@@ -6,6 +6,45 @@ class SubFranesTest < Test::Unit::TestCase
   include RedAmber
   include TestHelper
 
+  sub_test_case '.by_group' do
+    test '.by_group' do
+      df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      # @df is:
+      #         x y        z
+      #   <uint8> <string> <boolean>
+      # 0       1 A        false
+      # 1       2 A        true
+      # 2       3 B        false
+      # 3       4 B        (nil)
+      # 4       5 B        true
+      # 5       6 C        false
+
+      group = Group.new(df, [:y])
+      sf = SubFrames.by_group(group)
+      assert_kind_of SubFrames, sf
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        1       4 B        (nil)
+        2       5 B        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       6 C        false
+      STR
+    end
+  end
+
   sub_test_case '.by_indices' do
     setup do
       @df = DataFrame.new(x: [*1..3])
