@@ -279,6 +279,7 @@ penguins.to_rover
 
   - Shows some information about self in a transposed style.
   - `tdr_str` returns same info as a String.
+  - `glimpse` is an alias. It is similar to dplyr's (or Polars's) `glimpse()`.
 
   ```ruby
   require 'red_amber'
