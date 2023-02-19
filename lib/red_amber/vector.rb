@@ -508,6 +508,7 @@ module RedAmber
         end
       Vector.new([value] * size)
     end
+    alias_method :expand, :propagate
 
     private # =======
 
