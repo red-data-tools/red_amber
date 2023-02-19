@@ -213,7 +213,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case 'tdr_str' do
+  sub_test_case 'tdr' do
     setup do
       hash = { integer: [1, 2, 3, 4, 5, 6],
                double: [1, 0 / 0.0, 1 / 0.0, -1 / 0.0, nil, ''],
@@ -328,6 +328,32 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         1 :double  double      6 [1.0, NaN, Infinity, -Infinity, nil, ... ], 1 NaN, 1 nil
         2 :string  string      5 {"A"=>2, "B"=>1, "C"=>1, "D"=>1, "E"=>1}
         3 :boolean boolean     3 {true=>2, false=>2, nil=>2}
+      STR
+    ensure
+      $stdout = STDOUT
+    end
+
+    test '#tdra' do
+      df = DataFrame.new(
+        (1..11).map { [(_1 + 96).chr, [_1 - 1, _1]] }
+      )
+      $stdout = StringIO.new
+      assert_nil df.tdra
+      assert_equal <<~STR, $stdout.string
+        RedAmber::DataFrame : 2 x 11 Vectors
+        Vectors : 11 numeric
+        #  key type  level data_preview
+        0  :a  uint8     2 [0, 1]
+        1  :b  uint8     2 [1, 2]
+        2  :c  uint8     2 [2, 3]
+        3  :d  uint8     2 [3, 4]
+        4  :e  uint8     2 [4, 5]
+        5  :f  uint8     2 [5, 6]
+        6  :g  uint8     2 [6, 7]
+        7  :h  uint8     2 [7, 8]
+        8  :i  uint8     2 [8, 9]
+        9  :j  uint8     2 [9, 10]
+        10 :k  uint8     2 [10, 11]
       STR
     ensure
       $stdout = STDOUT
