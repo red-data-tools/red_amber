@@ -235,6 +235,14 @@ module RedAmber
       puts tdr_str(limit, tally: tally, elements: elements)
     end
 
+    # Shortcut for `tdr(:all)``.
+    #
+    # @return (see #tdr)
+    #
+    def tdra
+      puts tdr_str(:all)
+    end
+
     # rubocop:enable Layout/LineLength
 
     # Returns some information about self in a transposed style by a string.
