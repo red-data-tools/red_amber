@@ -234,6 +234,7 @@ module RedAmber
     def tdr(limit = 10, tally: 5, elements: 5)
       puts tdr_str(limit, tally: tally, elements: elements)
     end
+    alias_method :glimpse, :tdr
 
     # Shortcut for `tdr(:all)``.
     #
