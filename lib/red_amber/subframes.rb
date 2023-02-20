@@ -37,7 +37,7 @@ module RedAmber
       #
       #   # =>
       #   #<RedAmber::SubFrames : 0x000000000000fbb8>
-      #   @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fb7c>
+      #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fb7c>
       #   3 SubFrames: [2, 3, 1] in sizes.
       #   ---
       #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000fbcc>
@@ -78,7 +78,7 @@ module RedAmber
       #
       def by_indices(dataframe, subset_indices)
         instance = allocate
-        instance.instance_variable_set(:@universal_frame, dataframe)
+        instance.instance_variable_set(:@baseframe, dataframe)
         instance.instance_variable_set(:@subset_indices, subset_indices)
         instance.instance_variable_set(:@frames, [])
         instance
@@ -145,7 +145,7 @@ module RedAmber
         subset_specifier = yield(dataframe)
       end
 
-      @universal_frame = dataframe
+      @baseframe = dataframe
       @subset_indices =
         if subset_specifier.nil? || subset_specifier.empty? || dataframe.empty?
           []
@@ -153,14 +153,14 @@ module RedAmber
           subset_specifier.map do |i|
             vector =
               if i.boolean?
-                universal_frame.indices.filter(i)
+                baseframe.indices.filter(i)
               elsif i.numeric?
                 Vector.new(i)
               else
                 raise SubFramesArgumentError, "illegal type: #{i}"
               end
 
-            unless vector.is_in(universal_frame.indices).all?
+            unless vector.is_in(baseframe.indices).all?
               raise SubFramesArgumentError, "index out of range: #{vector.to_a}"
             end
 
@@ -173,9 +173,9 @@ module RedAmber
     # The source DataFrame object.
     #
     # @return [DataFrame]
-    #   the value of instance variable `universal_frame`.
+    #   the value of instance variable `@baseframe`.
     #
-    attr_reader :universal_frame
+    attr_reader :baseframe
 
     # Index Vectors of subsets.
     #
@@ -258,7 +258,7 @@ module RedAmber
 
       if @frames.empty?
         @subset_indices.each do |i|
-          subframe = @universal_frame.take(i.data)
+          subframe = baseframe.take(i.data)
           @frames << subframe
           yield subframe
         end
@@ -331,9 +331,9 @@ module RedAmber
       if group_keys.empty?
         DataFrame.new(aggregator)
       else
-        @universal_frame.pick(group_keys)
-                        .slice(offset_indices)
-                        .assign(aggregator)
+        baseframe.pick(group_keys)
+                 .slice(offset_indices)
+                 .assign(aggregator)
       end
     end
 
@@ -390,7 +390,7 @@ module RedAmber
     # @since 0.3.1
     #
     def universal?
-      size == 1 && (@subset_indices[0] == universal_frame.indices).all?
+      size == 1 && (@subset_indices[0] == baseframe.indices).all?
     end
 
     # Return string representation of self.
@@ -462,7 +462,7 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::SubFrames : 0x000000000000c1fc>
-    #   @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000c170>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000c170>
     #   3 SubFrames: [2, 3, 1] in sizes.
     #   ---
     #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000002a120>
@@ -488,7 +488,7 @@ module RedAmber
     def inspect(limit: 16)
       sizes_truncated = (size > limit ? sizes.take(limit) << '...' : sizes).join(', ')
       "#<#{self.class} : #{format('0x%016x', object_id)}>\n" \
-        "@universal_frame=#<#{@universal_frame.shape_str(with_id: true)}>\n" \
+        "@baseframe=#<#{baseframe.shape_str(with_id: true)}>\n" \
         "#{size} SubFrame#{pl(size)}: " \
         "[#{sizes_truncated}] in size#{pl(size)}.\n" \
         "---\n#{_to_s(limit: limit, with_id: true)}"

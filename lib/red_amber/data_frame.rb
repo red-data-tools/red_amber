@@ -384,7 +384,7 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::SubFrames : 0x000000000000fc08>
-    #   @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
     #   3 SubFrames: [2, 3, 1] in sizes.
     #   ---
     #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000fc1c>
@@ -428,7 +428,7 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::SubFrames : 0x000000000000fc58>
-    #   @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
     #   2 SubFrames: [4, 4] in sizes.
     #   ---
     #   #<RedAmber::DataFrame : 4 x 3 Vectors, 0x000000000000fc6c>
@@ -473,7 +473,7 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::SubFrames : 0x000000000000fd20>
-    #   @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
     #   2 SubFrames: [3, 3] in sizes.
     #   ---
     #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000fd34>
@@ -495,7 +495,7 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::SubFrames : 0x000000000000fd98>
-    #   @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
     #   3 SubFrames: [4, 4, 4] in sizes.
     #   ---
     #   #<RedAmber::DataFrame : 4 x 3 Vectors, 0x000000000000fdac>
@@ -545,7 +545,7 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::SubFrames : 0x000000000000fde8>
-    #   @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
     #   2 SubFrames: [2, 2] in sizes.
     #   ---
     #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000fdfc>
@@ -589,7 +589,7 @@ module RedAmber
     #
     #     # =>
     #     #<RedAmber::SubFrames : 0x000000000000fe9c>
-    #     @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #     @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
     #     2 SubFrames: [3, 3] in sizes.
     #     ---
     #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000feb0>
@@ -623,7 +623,7 @@ module RedAmber
     #
     #     # =>
     #     #<RedAmber::SubFrames : 0x000000000000fe60>
-    #     @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #     @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
     #     2 SubFrames: [3, 3] in sizes.
     #     ---
     #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000fe74>

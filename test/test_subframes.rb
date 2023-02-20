@@ -311,7 +311,7 @@ class SubFranesTest < Test::Unit::TestCase
       empty_subframe = SubFrames.new(@df, [])
       assert_equal <<~STR, empty_subframe.inspect
         #<RedAmber::SubFrames : #{format('0x%016x', empty_subframe.object_id)}>
-        @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
+        @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         0 SubFrame: [] in size.
         ---
       STR
@@ -323,7 +323,7 @@ class SubFranesTest < Test::Unit::TestCase
       a = sf.to_a
       assert_equal <<~STR, sf.inspect
         #<RedAmber::SubFrames : #{format('0x%016x', sf.object_id)}>
-        @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
+        @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         3 SubFrames: [2, 3, 1] in sizes.
         ---
         #<RedAmber::DataFrame : 2 x 3 Vectors, #{format('0x%016x', a[0].object_id)}>
@@ -351,7 +351,7 @@ class SubFranesTest < Test::Unit::TestCase
       universal = SubFrames.new(@df, specifier)
       assert_equal <<~STR, universal.inspect
         #<RedAmber::SubFrames : #{format('0x%016x', universal.object_id)}>
-        @universal_frame=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
+        @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', @df.object_id)}>
         1 SubFrame: [6] in size.
         ---
         #<RedAmber::DataFrame : 6 x 3 Vectors, #{format('0x%016x', universal.to_a[0].object_id)}>
