@@ -3,21 +3,45 @@
 module RedAmber
   # Mix-ins for the class DataFrame
   module DataFrameIndexable
-    # Returns row indices (start...(size+start)) in a Vector.
+    # Returns row index Vector.
     #
-    # @param start [Object]
-    #   object which have `#succ` method.
-    # @return [Array]
-    #   a Vector of row indices.
-    # @example When self.size == 5
-    #   indices # => Vector[0, 1, 2, 3, 4]
+    # @overload indices
+    #   return @indices as row indices (0...size).
     #
-    #   indices(1) # => Vector[1, 2, 3, 4, 5]
+    #   @return [Vector]
+    #     a Vector of row indices.
+    #   @example When `dataframe.size == 5`;
+    #     dataframe.indices
     #
-    #   indices('a') # => Vector['a', 'b', 'c', 'd', 'e']
+    #     # =>
+    #     #<RedAmber::Vector(:uint8, size=5):0x000000000000fb54>
+    #     [0, 1, 2, 3, 4]
+    #
+    # @overload indices(start)
+    #   return customized index Vector `(start..).take(size)`.
+    #
+    #   @param start [#succ]
+    #     element of start which have `#succ` method.
+    #   @return [Vector]
+    #     a Vector of row indices.
+    #   @example When `dataframe.size == 5`;
+    #     dataframe.indices(1)
+    #
+    #     # =>
+    #     #<RedAmber::Vector(:uint8, size=5):0x000000000000fba4>
+    #     [1, 2, 3, 4, 5]
+    #
+    #     dataframe.indices('a')
+    #     # =>
+    #     #<RedAmber::Vector(:string, size=5):0x000000000000fbb8>
+    #     ["a", "b", "c", "d", "e"]
     #
     def indices(start = 0)
-      Vector.new((start..).take(size))
+      if start == 0 # rubocop:disable Style/NumericPredicate
+        @indices ||= Vector.new(0...size)
+      else
+        Vector.new((start..).take(size))
+      end
     end
     alias_method :indexes, :indices
 

@@ -79,7 +79,6 @@ module RedAmber
       def by_indices(dataframe, subset_indices)
         instance = allocate
         instance.instance_variable_set(:@universal_frame, dataframe)
-        instance.instance_variable_set(:@universal_indices, dataframe.indices)
         instance.instance_variable_set(:@subset_indices, subset_indices)
         instance.instance_variable_set(:@frames, [])
         instance
@@ -147,7 +146,6 @@ module RedAmber
       end
 
       @universal_frame = dataframe
-      @universal_indices = dataframe.indices
       @subset_indices =
         if subset_specifier.nil? || subset_specifier.empty? || dataframe.empty?
           []
@@ -155,14 +153,14 @@ module RedAmber
           subset_specifier.map do |i|
             vector =
               if i.boolean?
-                @universal_indices.filter(i)
+                universal_frame.indices.filter(i)
               elsif i.numeric?
                 Vector.new(i)
               else
                 raise SubFramesArgumentError, "illegal type: #{i}"
               end
 
-            unless vector.is_in(@universal_indices).all?
+            unless vector.is_in(universal_frame.indices).all?
               raise SubFramesArgumentError, "index out of range: #{vector.to_a}"
             end
 
@@ -392,7 +390,7 @@ module RedAmber
     # @since 0.3.1
     #
     def universal?
-      size == 1 && (@subset_indices[0] == @universal_indices).all?
+      size == 1 && (@subset_indices[0] == universal_frame.indices).all?
     end
 
     # Return string representation of self.
