@@ -212,9 +212,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         assert_equal expected, @df1.right_join(@right1, [:KEY])
         assert_equal expected, @df1.right_join(@right1.table, :KEY)
         assert_equal expected, @df1.right_join(@right1, { left: :KEY, right: :KEY })
-        assert_equal expected, @df1.rename(KEY: :KEY1)
-                                   .right_join(@right1,
-                                               { left: :KEY1, right: :KEY })
+        assert_equal expected, @df1
+                                 .rename(KEY: :KEY1)
+                                 .right_join(@right1, { left: :KEY1, right: :KEY })
       end
 
       test '#semi_join with a join_key' do
@@ -254,13 +254,16 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         )
         assert_equal expected, @df1.join(@right1, type: :right_semi)
         assert_equal expected, @df1.join(@right1, :KEY, type: :right_semi)
-        assert_equal expected, @df1.join(@right1,
-                                         { left: :KEY, right: :KEY },
-                                         type: :right_semi)
-        assert_equal expected, @df1.rename(KEY: :KEY1)
-                                   .join(@right1,
-                                         { left: :KEY1, right: :KEY },
-                                         type: :right_semi)
+        assert_equal(
+          expected,
+          @df1.join(@right1, { left: :KEY, right: :KEY }, type: :right_semi)
+        )
+        assert_equal(
+          expected,
+          @df1
+            .rename(KEY: :KEY1)
+            .join(@right1, { left: :KEY1, right: :KEY }, type: :right_semi)
+        )
       end
 
       test 'right_anti' do
@@ -270,13 +273,16 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         )
         assert_equal expected, @df1.join(@right1, type: :right_anti)
         assert_equal expected, @df1.join(@right1, :KEY, type: :right_anti)
-        assert_equal expected, @df1.join(@right1,
-                                         { left: :KEY, right: :KEY },
-                                         type: :right_anti)
-        assert_equal expected, @df1.rename(KEY: :KEY1)
-                                   .join(@right1,
-                                         { left: :KEY1, right: :KEY },
-                                         type: :right_anti)
+        assert_equal(
+          expected,
+          @df1.join(@right1, { left: :KEY, right: :KEY }, type: :right_anti)
+        )
+        assert_equal(
+          expected,
+          @df1
+            .rename(KEY: :KEY1)
+            .join(@right1, { left: :KEY1, right: :KEY }, type: :right_anti)
+        )
       end
     end
 
@@ -398,9 +404,12 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         assert_equal expected, @df2.right_join(@right2.table, %i[KEY1 KEY2])
         assert_equal expected, @df2.right_join(@right2,
                                                { left: %i[KEY1 KEY2], right: %w[KEY1 KEY2] })
-        assert_equal expected, @df2.rename(KEY1: :KEY3)
-                                   .right_join(@right2,
-                                               { left: %i[KEY3 KEY2], right: %w[KEY1 KEY2] })
+        assert_equal(
+          expected,
+          @df2
+            .rename(KEY1: :KEY3)
+            .right_join(@right2, { left: %i[KEY3 KEY2], right: %w[KEY1 KEY2] })
+        )
       end
 
       test '#right_join with join_keys, partial join_key/rename' do

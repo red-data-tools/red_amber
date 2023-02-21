@@ -447,8 +447,13 @@ module RedAmber
     #     2 D          (nil) (nil)
     #
     def right_join(other, join_keys = nil, suffix: '.1', force_order: true)
-      join(other, join_keys,
-           type: :right_outer, suffix: suffix, force_order: force_order)
+      join(
+        other,
+        join_keys,
+        type: :right_outer,
+        suffix: suffix,
+        force_order: force_order
+      )
     end
 
     # Filtering joins (#semi_join, #anti_join)
@@ -838,10 +843,13 @@ module RedAmber
 
       # Should we rescue errors in Arrow::Table#join for usability ?
       joined_table =
-        left_table.join(right_table, join_keys,
-                        type: type,
-                        left_outputs: left_outputs,
-                        right_outputs: right_outputs)
+        left_table.join(
+          right_table,
+          join_keys,
+          type: type,
+          left_outputs: left_outputs,
+          right_outputs: right_outputs
+        )
 
       case type
       when :inner, :left_outer, :left_semi, :left_anti, :right_semi, :right_anti
@@ -873,8 +881,10 @@ module RedAmber
             DataFrame.create(joined_table)
           end
         if force_order
-          dataframe = dataframe.sort(left_index, right_index)
-                               .drop(left_index, right_index)
+          dataframe =
+            dataframe
+              .sort(left_index, right_index)
+              .drop(left_index, right_index)
         end
         dataframe.pick do
           [right_keys, keys.map(&:to_s) - right_keys]

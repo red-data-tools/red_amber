@@ -427,7 +427,7 @@ module RedAmber
       df = df.assign do
         vectors.each_with_object({}) do |v, assigner|
           vec = v.replace(0, v.key == INDEX_KEY ? '' : v.key.to_s)
-                 .replace(1, v.key == INDEX_KEY ? '' : "<#{original[v.key].type}>")
+                  .replace(1, v.key == INDEX_KEY ? '' : "<#{original[v.key].type}>")
           assigner[v.key] =
             original.size > head + tail + 1 ? vec.replace(head + 2, ':') : vec
         end

@@ -31,6 +31,19 @@ Style/TrailingCommaInHashLiteral:
 
 # To let you know the possibility of refactoring ===
 
+# Max: 120
+# This cop supports safe autocorrection (--autocorrect).
+# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, AllowedPatterns, IgnoredPatterns.
+# URISchemes: http, https
+Layout/LineLength:
+  Max: 90
+  Exclude:
+    - 'test/**/*'
+
+# EnforcedStyle: aligned
+Layout/MultilineMethodCallIndentation:
+  EnforcedStyle: indented_relative_to_receiver
+
 # avoid unused variable asignment
 Rubycw/Rubycw:
   Exclude:
@@ -52,15 +65,6 @@ Lint/EmptyBlock:
 # avoid unused variable asignment
 # Offense count: 6
 Lint/UselessAssignment:
-  Exclude:
-    - 'test/**/*'
-
-# Max: 120
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowHeredoc, AllowURI, URISchemes, IgnoreCopDirectives, AllowedPatterns, IgnoredPatterns.
-# URISchemes: http, https
-Layout/LineLength:
-  Max: 90
   Exclude:
     - 'test/**/*'
 
