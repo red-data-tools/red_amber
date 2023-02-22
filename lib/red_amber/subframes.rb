@@ -4,7 +4,7 @@ module RedAmber
   # class SubFrames treats a set of subsets of a DataFrame
   # [Experimental feature] Class SubFrames may be removed or be changed in the future.
   class SubFrames
-    include Enumerable
+    include Enumerable # may change to use Forwardable.
     include Helper
 
     using RefineArray
@@ -70,8 +70,8 @@ module RedAmber
       # @note this method doesn't check arguments.
       # @param dataframe [DataFrame]
       #   a source dataframe.
-      # @param subset_indices [Array<Vector>]
-      #   an Array of numeric Vectors of indices to create subsets of DataFrame.
+      # @param subset_indices [Array, Array<Vector>]
+      #   an Array of numeric indices to create subsets of DataFrame.
       # @return [SubFrames]
       #   new SubFrames.
       # @since 0.3.1
@@ -79,8 +79,13 @@ module RedAmber
       def by_indices(dataframe, subset_indices)
         instance = allocate
         instance.instance_variable_set(:@baseframe, dataframe)
-        instance.instance_variable_set(:@subset_indices, subset_indices)
-        instance.instance_variable_set(:@frames, [])
+        enum =
+          Enumerator.new(subset_indices.size) do |y|
+            subset_indices.each do |i|
+              y.yield dataframe.take(i)
+            end
+          end
+        instance.instance_variable_set(:@enum, enum)
         instance
       end
 
@@ -90,17 +95,24 @@ module RedAmber
       # @note this method doesn't check arguments.
       # @param dataframe [DataFrame]
       #   a source dataframe.
-      # @param subset_filters [Array<Vector>]
-      #   an Array of boolean Vectors to specify subsets of DataFrame.
+      # @param subset_filters [Array, Array<Vector>]
+      #   an Array of booleans to specify subsets of DataFrame.
+      #   Each filters must have same length as dataframe.
       # @return [SubFrames]
       #   new SubFrames.
       # @since 0.3.1
       #
       def by_filters(dataframe, subset_filters)
-        subset_indices = subset_filters.map do |f|
-          dataframe.indices.filter(f)
-        end
-        by_indices(dataframe, subset_indices)
+        instance = allocate
+        instance.instance_variable_set(:@baseframe, dataframe)
+        enum =
+          Enumerator.new(subset_filters.size) do |y|
+            subset_filters.each do |i|
+              y.yield dataframe.filter(i)
+            end
+          end
+        instance.instance_variable_set(:@enum, enum)
+        instance
       end
     end
 
@@ -116,6 +128,39 @@ module RedAmber
     #     to create subsets of DataFrame.
     #   @return [SubFrames]
     #     new SubFrames.
+    #   @example
+    #     dataframe
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 6 x 3 Vectors, 0x00000000000039e4>
+    #       x y        z
+    #       <uint8> <string> <boolean>
+    #     0       1 A        false
+    #     1       2 A        true
+    #     2       3 B        false
+    #     3       4 B        (nil)
+    #     4       5 B        true
+    #     5       6 C        false
+    #
+    #     SubFrames.new(dataframe, [[0, 2, 3], [4, 1]])
+    #
+    #     # =>
+    #     #<RedAmber::SubFrames : 0x0000000000003a34>
+    #     @baseframe=#<RedAmber::DataFrame : 5 x 3 Vectors, 0x0000000000003a48>
+    #     2 SubFrames: [3, 2] in sizes.
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000003a5c>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       1 A        false
+    #     1       3 B        false
+    #     2       4 B        (nil)
+    #     ---
+    #     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000003a70>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       5 B        true
+    #     1       2 A        true
     #
     # @overload initialize(dataframe)
     #   Create a new SubFrames object by block.
@@ -129,6 +174,29 @@ module RedAmber
     #     All array-likes are responsible to #numeric? or #boolean?.
     #   @return [SubFrames]
     #     new SubFrames.
+    #   @example
+    #     SubFrames.new(dataframe) do |df|
+    #       booleans = df[:z]
+    #       [booleans, !booleans]
+    #     end
+    #
+    #     # =>
+    #     #<RedAmber::SubFrames : 0x0000000000003aac>
+    #     @baseframe=#<RedAmber::DataFrame : 5 x 3 Vectors, 0x0000000000003ac0>
+    #     2 SubFrames: [2, 3] in sizes.
+    #     ---
+    #     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000003ad4>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       2 A        true
+    #     1       5 B        true
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000003ae8>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       1 A        false
+    #     1       3 B        false
+    #     2       6 C        false
     #
     # @since 0.3.1
     #
@@ -145,44 +213,41 @@ module RedAmber
         subset_specifier = yield(dataframe)
       end
 
-      @baseframe = dataframe
-      @subset_indices =
-        if subset_specifier.nil? || subset_specifier.empty? || dataframe.empty?
-          []
-        else
-          subset_specifier.map do |i|
-            vector =
-              if i.boolean?
-                baseframe.indices.filter(i)
-              elsif i.numeric?
-                Vector.new(i)
-              else
-                raise SubFramesArgumentError, "illegal type: #{i}"
-              end
-
-            unless vector.is_in(baseframe.indices).all?
-              raise SubFramesArgumentError, "index out of range: #{vector.to_a}"
+      if subset_specifier.nil? || subset_specifier.empty? || dataframe.empty?
+        @baseframe = DataFrame.new
+        @frames = [@baseframe]
+        @enum = @frames.each
+      else
+        @baseframe = nil
+        @enum =
+          Enumerator.new(subset_specifier.size) do |yielder|
+            subset_specifier.map do |i|
+              df =
+                if i.numeric?
+                  dataframe.take(i)
+                elsif i.boolean?
+                  dataframe.filter(i)
+                else
+                  raise SubFramesArgumentError, "illegal type: #{i}"
+                end
+              yielder.yield df
             end
-
-            vector
           end
-        end
-      @frames = []
+      end
     end
 
-    # The source DataFrame object.
+    # Return concatenated SubFrames as a DataDrame.
     #
+    # Once evaluated, memorize it as @baseframe.
     # @return [DataFrame]
-    #   the value of instance variable `@baseframe`.
+    #   a concatenated DataFrame.
+    # @since 0.3.1
     #
-    attr_reader :baseframe
-
-    # Index Vectors of subsets.
-    #
-    # @return [Array]
-    #   the value of instance variable `subset_indices`.
-    #
-    attr_reader :subset_indices
+    def baseframe
+      @baseframe ||= reduce(&:concatenate)
+    end
+    alias_method :concatenate, :baseframe
+    alias_method :concat, :baseframe
 
     # Iterates over sub DataFrames or returns an Enumerator.
     #
@@ -256,22 +321,62 @@ module RedAmber
     def each(&block)
       return enum_for(:each) unless block
 
-      if @frames.empty?
-        @subset_indices.each do |i|
-          subframe = baseframe.take(i.data)
-          @frames << subframe
-          yield subframe
-        end
-      else
-        @frames.each(&block)
-      end
-      self
+      frames.each(&block)
+      nil
     end
 
     # Aggregate SubFrames to create a DataFrame.
     #
     # This method will check if built-in aggregation function is used.
     # @todo Support user-defined aggregation functions.
+    #
+    # @overload aggregate(group_keys, aggregations)
+    #
+    #   Aggregate SubFrames for first values of the columns of
+    #   `group_keys` and the aggregated results of key-function pairs.
+    #
+    #   @param group_keys [Symbol, String, Array<Symbol, String>]
+    #     group key name(s) to output values.
+    #   @param aggregations [Hash<Array<Symbol, String> => Array<:Symbol>>]
+    #     a Hash of variable (column) name and
+    #     Vector aggregate function name to apply.
+    #   @return [DataFrame]
+    #     an aggregated DataFrame.
+    #   @example
+    #     subframes
+    #
+    #     # =>
+    #     #<RedAmber::SubFrames : 0x0000000000003980>
+    #     @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x0000000000003994>
+    #     3 SubFrames: [2, 3, 1] in sizes.
+    #     ---
+    #     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x00000000000039a8>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       1 A        false
+    #     1       2 A        true
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000039bc>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       3 B        false
+    #     1       4 B        (nil)
+    #     2       5 B        true
+    #     ---
+    #     #<RedAmber::DataFrame : 1 x 3 Vectors, 0x00000000000039d0>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       6 C        false
+    #
+    #     subframes.aggregate(:y, { x: :sum })
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003b24>
+    #       y          sum_x
+    #       <string> <uint8>
+    #     0 A              3
+    #     1 B             12
+    #     2 C              6
     #
     # @overload aggregate(group_keys, aggregations)
     #
@@ -286,19 +391,16 @@ module RedAmber
     #     Array of Vector aggregate function names to apply.
     #   @return [DataFrame]
     #     an aggregated DataFrame.
+    #   @example
+    #     sf.aggregate(:y, [[:x, :z], [:count, :sum]])
     #
-    # @overload aggregate(group_keys, aggregations)
-    #
-    #   Aggregate SubFrames for first values of the columns of
-    #   `group_keys` and the aggregated results of key-function pairs.
-    #
-    #   @param group_keys [Symbol, String, Array<Symbol, String>]
-    #     group key name(s) to output values.
-    #   @param aggregations [Array<Symbol, String> => Array<:Symbol>]
-    #     a Hash of variable (column) name and
-    #     Vector aggregate function name to apply.
-    #   @return [DataFrame]
-    #     an aggregated DataFrame.
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 5 Vectors, 0x000000000000fcbc>
+    #       y        count_x count_z   sum_x   sum_z
+    #       <string> <uint8> <uint8> <uint8> <uint8>
+    #     0 A              2       2       3       1
+    #     1 B              3       2      12       1
+    #     2 C              1       1       6       0
     #
     # @since 0.3.1
     #
@@ -331,9 +433,10 @@ module RedAmber
       if group_keys.empty?
         DataFrame.new(aggregator)
       else
-        baseframe.pick(group_keys)
-                 .slice(offset_indices)
-                 .assign(aggregator)
+        baseframe
+          .pick(group_keys)
+          .slice(offset_indices)
+          .assign(aggregator)
       end
     end
 
@@ -344,7 +447,7 @@ module RedAmber
     # @since 0.3.1
     #
     def size
-      @size ||= @subset_indices.size
+      @size ||= @enum.size
     end
 
     # Size list of subsets.
@@ -354,7 +457,7 @@ module RedAmber
     # @since 0.3.1
     #
     def sizes
-      @sizes ||= @subset_indices.map(&:size)
+      @sizes ||= @enum.map(&:size)
     end
 
     # Indices at the top of each sub DataFrames.
@@ -380,7 +483,7 @@ module RedAmber
     # @since 0.3.1
     #
     def empty?
-      @subset_indices.empty?
+      sizes == [0]
     end
 
     # Test if self has only one subset and it is comprehensive.
@@ -390,7 +493,7 @@ module RedAmber
     # @since 0.3.1
     #
     def universal?
-      size == 1 && (@subset_indices[0] == baseframe.indices).all?
+      size == 1 && @enum.first == baseframe
     end
 
     # Return string representation of self.
@@ -494,18 +597,11 @@ module RedAmber
         "---\n#{_to_s(limit: limit, with_id: true)}"
     end
 
-    # Concatenate SubFrames to create a DataFrame.
-    #
-    # @return [DataFrame]
-    #   a concatenated DataFrame.
-    # @since 0.3.1
-    #
-    def concatenate
-      reduce(&:concatenate)
-    end
-    alias_method :concat, :concatenate
-
     private
+
+    def frames
+      @frames ||= @enum.to_a
+    end
 
     def _to_s(limit: 16, with_id: false)
       a = take(limit).map do |df|

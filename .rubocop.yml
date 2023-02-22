@@ -140,7 +140,7 @@ Metrics/MethodLength:
     'format_table', # 53
     'slice_by', # 38
     'assign_update', # 35
-    'initialize', # 31 (SubFrames)
+    'aggregate', # 31
   ]
 
 # Max: 100
