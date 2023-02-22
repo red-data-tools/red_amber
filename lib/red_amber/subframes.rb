@@ -560,6 +560,155 @@ module RedAmber
     end
     alias_method :collect, :map
 
+    # Update existing column(s) or create new columns(s) for each DataFrames in self.
+    #
+    # Column values are updated by an oveloaded common operation.
+    #
+    # @overload assign(key)
+    #   Assign a column by argument and block.
+    #
+    #   @param key [Symbol, String]
+    #     a key of column to assign.
+    #   @yieldparam dataframe [DataFrame]
+    #     gives overloaded dataframe in self to the block.
+    #   @yieldreturn [Vector, Array, Arrow::Array]
+    #     an updated column value which are overloaded.
+    #   @return [SubFrames]
+    #     a new SubFrames object with updated DataFrames.
+    #   @example
+    #     subframes
+    #
+    #     # =>
+    #     #<RedAmber::SubFrames : 0x000000000000c33c>
+    #     @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000c350>
+    #     3 SubFrames: [2, 3, 1] in sizes.
+    #     ---
+    #     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000c364>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       1 A        false
+    #     1       2 A        true
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000c378>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       3 B        false
+    #     1       4 B        (nil)
+    #     2       5 B        true
+    #     ---
+    #     #<RedAmber::DataFrame : 1 x 3 Vectors, 0x000000000000c38c>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       6 C        false
+    #
+    #     subframes.assign(:x_plus1) { x + 1 }
+    #
+    #     # =>
+    #     #<RedAmber::SubFrames : 0x000000000000c3a0>
+    #     @baseframe=#<RedAmber::DataFrame : 6 x 4 Vectors, 0x000000000000c3b4>
+    #     3 SubFrames: [2, 3, 1] in sizes.
+    #     ---
+    #     #<RedAmber::DataFrame : 2 x 4 Vectors, 0x000000000000c3c8>
+    #             x y        z         x_plus1
+    #       <uint8> <string> <boolean> <uint8>
+    #     0       1 A        false           2
+    #     1       2 A        true            3
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 4 Vectors, 0x000000000000c3dc>
+    #             x y        z         x_plus1
+    #       <uint8> <string> <boolean> <uint8>
+    #     0       3 B        false           4
+    #     1       4 B        (nil)           5
+    #     2       5 B        true            6
+    #     ---
+    #     #<RedAmber::DataFrame : 1 x 4 Vectors, 0x000000000000c3f0>
+    #             x y        z         x_plus1
+    #       <uint8> <string> <boolean> <uint8>
+    #     0       6 C        false           7
+    #
+    # @overload assign(keys)
+    #   Assign columns by arguments and block.
+    #
+    #   @param keys [Array<Symbol, String>]
+    #     keys of columns to assign.
+    #   @yieldparam dataframe [DataFrame]
+    #     gives overloaded dataframes in self to the block.
+    #   @yieldreturn [Array<Vector, Array, Arrow::Array>]
+    #     an updated column values which are overloaded.
+    #   @return [SubFrames]
+    #     a new SubFrames object with updated DataFrames.
+    #   @example
+    #     subframes.assign(:sum_x, :frac_x) do
+    #       group_sum = x.sum
+    #       [[group_sum] * size, x / s.to_f]
+    #     end
+    #
+    #     # =>
+    #     #<RedAmber::SubFrames : 0x000000000000fce4>
+    #     @baseframe=#<RedAmber::DataFrame : 6 x 5 Vectors, 0x000000000000fcf8>
+    #     3 SubFrames: [2, 3, 1] in sizes.
+    #     ---
+    #     #<RedAmber::DataFrame : 2 x 5 Vectors, 0x000000000000fd0c>
+    #             x y        z           sum_x   frac_x
+    #       <uint8> <string> <boolean> <uint8> <double>
+    #     0       1 A        false           3     0.33
+    #     1       2 A        true            3     0.67
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 5 Vectors, 0x000000000000fd20>
+    #             x y        z           sum_x   frac_x
+    #       <uint8> <string> <boolean> <uint8> <double>
+    #     0       3 B        false          12     0.25
+    #     1       4 B        (nil)          12     0.33
+    #     2       5 B        true           12     0.42
+    #     ---
+    #     #<RedAmber::DataFrame : 1 x 5 Vectors, 0x000000000000fd34>
+    #             x y        z           sum_x   frac_x
+    #       <uint8> <string> <boolean> <uint8> <double>
+    #     0       6 C        false           6      1.0
+    #
+    # @overload assign
+    #   Assign column(s) by block.
+    #
+    #   @yieldparam dataframe [DataFrame]
+    #     gives overloaded dataframes in self to the block.
+    #   @yieldreturn [Hash, Array]
+    #     pairs of keys and column values which are overloaded.
+    #   @return [SubFrames]
+    #     a new SubFrames object with updated DataFrames.
+    #   @example Compute 'x * z' when (true, not_true) = (1, 0) in z
+    #     subframes.assign do
+    #       { 'x*z': x * z.if_else(1, 0) }
+    #     end
+    #
+    #     # =>
+    #     #<RedAmber::SubFrames : 0x000000000000fd98>
+    #     @baseframe=#<RedAmber::DataFrame : 6 x 4 Vectors, 0x000000000000fdac>
+    #     3 SubFrames: [2, 3, 1] in sizes.
+    #     ---
+    #     #<RedAmber::DataFrame : 2 x 4 Vectors, 0x000000000000fdc0>
+    #             x y        z             x*z
+    #       <uint8> <string> <boolean> <uint8>
+    #     0       1 A        false           0
+    #     1       2 A        true            2
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 4 Vectors, 0x000000000000fdd4>
+    #             x y        z             x*z
+    #       <uint8> <string> <boolean> <uint8>
+    #     0       3 B        false           0
+    #     1       4 B        (nil)       (nil)
+    #     2       5 B        true            5
+    #     ---
+    #     #<RedAmber::DataFrame : 1 x 4 Vectors, 0x000000000000fde8>
+    #             x y        z             x*z
+    #       <uint8> <string> <boolean> <uint8>
+    #     0       6 C        false           0
+    #
+    # @since 0.3.1
+    #
+    def assign(...)
+      map { |df| df.assign(...) }
+    end
+
     # Number of subsets.
     #
     # @return [Integer]

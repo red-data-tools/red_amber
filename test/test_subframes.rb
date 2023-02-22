@@ -369,7 +369,7 @@ class SubFranesTest < Test::Unit::TestCase
       assert_equal @sf.to_a, sf.to_a # but have same contents
     end
 
-    test '#map create new column' do
+    test '#map create a new column' do
       sf = @sf.map { |df| df.assign(plus1: df[:x] + 1) }
       assert_equal <<~STR, sf.to_s
                 x y        z           plus1
@@ -388,6 +388,48 @@ class SubFranesTest < Test::Unit::TestCase
         0       6 C        false           7
       STR
       assert_equal @df.assign(plus1: @df[:x] + 1), sf.baseframe
+    end
+  end
+
+  sub_test_case '#assign' do
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+      @expected = <<~STR
+                x y        z           plus1
+          <uint8> <string> <boolean> <uint8>
+        0       1 A        false           2
+        1       2 A        true            3
+        ---
+                x y        z           plus1
+          <uint8> <string> <boolean> <uint8>
+        0       3 B        false           4
+        1       4 B        (nil)           5
+        2       5 B        true            6
+        ---
+                x y        z           plus1
+          <uint8> <string> <boolean> <uint8>
+        0       6 C        false           7
+      STR
+      @expected_baseframe = @df.assign(:plus1) { x + 1 }
+    end
+
+    test '#assign create a new column by arg and block' do
+      sf = @sf.assign(:plus1) { x + 1 }
+      assert_kind_of SubFrames, sf
+      assert_equal @expected, sf.to_s
+      assert_equal @expected_baseframe, sf.baseframe
+    end
+
+    test '#assign create a new column by block only' do
+      sf = @sf.assign { { plus1: x + 1 } }
+      assert_kind_of SubFrames, sf
+      assert_equal @expected, sf.to_s
+      assert_equal @expected_baseframe, sf.baseframe
     end
   end
 
