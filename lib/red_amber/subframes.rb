@@ -73,7 +73,7 @@ module RedAmber
       # @param subset_indices [Array, Array<Vector>]
       #   an Array of numeric indices to create subsets of DataFrame.
       # @return [SubFrames]
-      #   new SubFrames.
+      #   a new SubFrames object.
       # @since 0.3.1
       #
       def by_indices(dataframe, subset_indices)
@@ -99,7 +99,7 @@ module RedAmber
       #   an Array of booleans to specify subsets of DataFrame.
       #   Each filters must have same length as dataframe.
       # @return [SubFrames]
-      #   new SubFrames.
+      #   a new SubFrames object.
       # @since 0.3.1
       #
       def by_filters(dataframe, subset_filters)
@@ -112,6 +112,29 @@ module RedAmber
             end
           end
         instance.instance_variable_set(:@enum, enum)
+        instance
+      end
+
+      # Create a new SubFrames from an Array of DataFrames.
+      #
+      # @api private
+      # @note dataframes must have same schema.
+      # @param dataframes [Array<DataFrame>]
+      #   an array of DataFrames which have same schema.
+      # @return [SubFrames]
+      #   a new SubFrames object.
+      # @since 0.3.1
+      #
+      def by_dataframes(dataframes)
+        instance = allocate
+        enum =
+          Enumerator.new(dataframes.size) do |y|
+            dataframes.each do |i|
+              y.yield i
+            end
+          end
+        instance.instance_variable_set(:@enum, enum)
+        instance.instance_variable_set(:@baseframe, enum.reduce(&:concatenate))
         instance
       end
     end
@@ -173,7 +196,7 @@ module RedAmber
     #     an Array of index or boolean array-likes to create subsets of DataFrame.
     #     All array-likes are responsible to #numeric? or #boolean?.
     #   @return [SubFrames]
-    #     new SubFrames.
+    #     a new SubFrames object.
     #   @example
     #     SubFrames.new(dataframe) do |df|
     #       booleans = df[:z]
@@ -414,7 +437,7 @@ module RedAmber
               raise SubFramesArgumentError, "not an aggregation function: #{func}"
             end
 
-            ["#{func}_#{key}", sf.map { |df| df[key].send(func) }]
+            ["#{func}_#{key}", sf.each.map { |df| df[key].send(func) }]
           end
         in [Array => keys, Array => functions]
           functions.each do |func|
@@ -424,7 +447,7 @@ module RedAmber
           end
           sf = self
           functions.product(keys).map do |func, key|
-            ["#{func}_#{key}", sf.map { |df| df[key].send(func) }]
+            ["#{func}_#{key}", sf.each.map { |df| df[key].send(func) }]
           end
         else
           raise SubFramesArgumentError, "invalid argument: #{aggregations}"
@@ -439,6 +462,103 @@ module RedAmber
           .assign(aggregator)
       end
     end
+
+    # Returns a SubFrames of DataFrames returned by the block.
+    #
+    # Returns an Enumerator with no block given.
+    # @yieldparam dataframe [DataFrame]
+    #   gives each element.
+    # @yieldreturn [Array<DataFrame>]
+    #   the block should return DataFrames with same schema.
+    # @return [SubFrames]
+    #   a new SubFrames.
+    # @example Map as it is.
+    #   subframes
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x000000000001359c>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x00000000000135b0>
+    #   3 SubFrames: [2, 3, 1] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x00000000000135c4>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000135d8>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #   ---
+    #   #<RedAmber::DataFrame : 1 x 3 Vectors, 0x00000000000135ec>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       6 C        false
+    #
+    #   subframes.map { _1 }
+    #
+    #   # This will create a new SubFrame and a new baseframe,
+    #   # But each element DataFrames are re-used.
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x000000000001e6cc>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000001e6e0>
+    #   3 SubFrames: [2, 3, 1] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x00000000000135c4>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000135d8>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #   ---
+    #   #<RedAmber::DataFrame : 1 x 3 Vectors, 0x00000000000135ec>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       6 C        false
+    #
+    # @example Assign a new column.
+    #   subframes.map { |df| df.assign(x_plus1: df[:x] + 1) }
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x0000000000040948>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 4 Vectors, 0x000000000004095c>
+    #   3 SubFrames: [2, 3, 1] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 4 Vectors, 0x0000000000040970>
+    #           x y        z         x_plus1
+    #     <uint8> <string> <boolean> <uint8>
+    #   0       1 A        false           2
+    #   1       2 A        true            3
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 4 Vectors, 0x0000000000040984>
+    #           x y        z         x_plus1
+    #     <uint8> <string> <boolean> <uint8>
+    #   0       3 B        false           4
+    #   1       4 B        (nil)           5
+    #   2       5 B        true            6
+    #   ---
+    #   #<RedAmber::DataFrame : 1 x 4 Vectors, 0x0000000000040998>
+    #           x y        z         x_plus1
+    #     <uint8> <string> <boolean> <uint8>
+    #   0       6 C        false           7
+    #
+    # @since 0.3.1
+    #
+    def map(&block)
+      return enum_for(:map) unless block
+
+      self.class.by_dataframes(super(&block))
+    end
+    alias_method :collect, :map
 
     # Number of subsets.
     #

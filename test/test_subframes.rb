@@ -348,6 +348,49 @@ class SubFranesTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#map' do
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+    end
+
+    test '#map w/o block' do
+      assert_kind_of Enumerator, @sf.map
+    end
+
+    test '#map as it is' do
+      sf = @sf.map { |df| df }
+      assert_kind_of SubFrames, sf
+      assert_false @sf.equal?(sf) # object ids are not equal
+      assert_equal @sf.to_a, sf.to_a # but have same contents
+    end
+
+    test '#map create new column' do
+      sf = @sf.map { |df| df.assign(plus1: df[:x] + 1) }
+      assert_equal <<~STR, sf.to_s
+                x y        z           plus1
+          <uint8> <string> <boolean> <uint8>
+        0       1 A        false           2
+        1       2 A        true            3
+        ---
+                x y        z           plus1
+          <uint8> <string> <boolean> <uint8>
+        0       3 B        false           4
+        1       4 B        (nil)           5
+        2       5 B        true            6
+        ---
+                x y        z           plus1
+          <uint8> <string> <boolean> <uint8>
+        0       6 C        false           7
+      STR
+      assert_equal @df.assign(plus1: @df[:x] + 1), sf.baseframe
+    end
+  end
+
   # Tests for #size, #sizes, #offset_indices, #empty? and #universal?
   sub_test_case 'properties' do
     setup do
