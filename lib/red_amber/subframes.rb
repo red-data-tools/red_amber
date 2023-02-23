@@ -137,6 +137,27 @@ module RedAmber
         instance.instance_variable_set(:@baseframe, enum.reduce(&:concatenate))
         instance
       end
+
+      private
+
+      # @!macro [attach] define_subframable_method
+      #
+      #   [Returns SubFrames] Use `#each.$1` if you want to get DataFrames by Array.
+      #   Returns an Enumerator with no block given.
+      #   @yieldparam dataframe [DataFrame]
+      #     gives each element.
+      #   @yieldreturn [Array<DataFrame>]
+      #     the block should return DataFrames with same schema.
+      #   @return [SubFrames]
+      #     a new SubFrames.
+      #
+      def define_subframable_method(method)
+        define_method(method) do |&block|
+          return enum_for(:each) { size } unless block # rubocop:disable Lint/ToEnumArguments
+
+          self.class.by_dataframes(super(&block))
+        end
+      end
     end
 
     # Create a new SubFrames object from a DataFrame and an array of indices or filters.
@@ -342,7 +363,7 @@ module RedAmber
     # @since 0.3.1
     #
     def each(&block)
-      return enum_for(:each) unless block
+      return enum_for(__method__) { size } unless block
 
       frames.each(&block)
       nil
@@ -463,15 +484,8 @@ module RedAmber
       end
     end
 
-    # Returns a SubFrames of DataFrames returned by the block.
+    # Returns a SubFrames containing DataFrames returned by the block.
     #
-    # Returns an Enumerator with no block given.
-    # @yieldparam dataframe [DataFrame]
-    #   gives each element.
-    # @yieldreturn [Array<DataFrame>]
-    #   the block should return DataFrames with same schema.
-    # @return [SubFrames]
-    #   a new SubFrames.
     # @example Map as it is.
     #   subframes
     #
@@ -553,11 +567,7 @@ module RedAmber
     #
     # @since 0.3.1
     #
-    def map(&block)
-      return enum_for(:map) unless block
-
-      self.class.by_dataframes(super(&block))
-    end
+    define_subframable_method :map
     alias_method :collect, :map
 
     # Update existing column(s) or create new columns(s) for each DataFrames in self.

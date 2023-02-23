@@ -279,6 +279,7 @@ class SubFranesTest < Test::Unit::TestCase
 
     test '#each w/o block' do
       assert_kind_of Enumerator, @sf.each
+      assert_equal 3, @sf.each.size
     end
 
     test '#each yielded block' do
@@ -360,6 +361,7 @@ class SubFranesTest < Test::Unit::TestCase
 
     test '#map w/o block' do
       assert_kind_of Enumerator, @sf.map
+      assert_equal 3, @sf.map.size
     end
 
     test '#map as it is' do
