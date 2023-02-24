@@ -719,6 +719,90 @@ module RedAmber
       map { |df| df.assign(...) }
     end
 
+    # Returns a SubFrames containing DataFrames selected by the block.
+    #
+    # With a block given, calls the block with successive DataFrames;
+    # returns a SubFrames of those DataFrames for
+    # which the block returns a truthy value.
+    #
+    # @example Select all.
+    #   subframes
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x00000000000039e4>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x00000000000039f8>
+    #   3 SubFrames: [2, 3, 1] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000003a0c>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000003a20>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #   ---
+    #   #<RedAmber::DataFrame : 1 x 3 Vectors, 0x0000000000003a34>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       6 C        false
+    #
+    #   subframes.select { true }
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x0000000000003a84>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x0000000000003a98>
+    #   3 SubFrames: [2, 3, 1] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000003a0c>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000003a20>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #   ---
+    #   #<RedAmber::DataFrame : 1 x 3 Vectors, 0x0000000000003a34>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       6 C        false
+    #
+    # @example Select if Vector `:z` has any true.
+    #   subframes.select { |df| df[:z].any? }
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x000000000000fba4>
+    #   @baseframe=#<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000fbb8>
+    #   2 SubFrames: [2, 1] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000003a0c>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000003a20>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #
+    # @since 0.3.1
+    #
+    define_subframable_method :select
+    alias_method :filter, :select
+    alias_method :find_all, :select
+
     # Number of subsets.
     #
     # @return [Integer]
