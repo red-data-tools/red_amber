@@ -487,6 +487,51 @@ class SubFranesTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#reject' do
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+    end
+
+    test '#reject w/o block' do
+      assert_kind_of Enumerator, @sf.reject
+      assert_equal 3, @sf.reject.size
+    end
+
+    test '#reject all' do
+      sf = @sf.reject { true }
+      assert_kind_of SubFrames, sf
+      assert_true sf.empty?
+      assert_equal_array [], sf.baseframe.to_a
+    end
+
+    test '#reject nothing' do
+      sf = @sf.reject { false }
+      assert_kind_of SubFrames, sf
+      assert_false @sf.equal?(sf) # object ids are not equal
+      assert_equal @sf.to_a, sf.to_a # but have same contents
+    end
+
+    test '#reject elements' do
+      sf = @sf.reject { |df| df.size > 2 }
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       6 C        false
+      STR
+      assert_equal @df.remove(2..4), sf.baseframe
+    end
+  end
+
   # Tests for #size, #sizes, #offset_indices, #empty? and #universal?
   sub_test_case 'properties' do
     setup do

@@ -735,31 +735,6 @@ module RedAmber
     # which the block returns a truthy value.
     #
     # @example Select all.
-    #   subframes
-    #
-    #   # =>
-    #   #<RedAmber::SubFrames : 0x00000000000039e4>
-    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x00000000000039f8>
-    #   3 SubFrames: [2, 3, 1] in sizes.
-    #   ---
-    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000003a0c>
-    #           x y        z
-    #     <uint8> <string> <boolean>
-    #   0       1 A        false
-    #   1       2 A        true
-    #   ---
-    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000003a20>
-    #           x y        z
-    #     <uint8> <string> <boolean>
-    #   0       3 B        false
-    #   1       4 B        (nil)
-    #   2       5 B        true
-    #   ---
-    #   #<RedAmber::DataFrame : 1 x 3 Vectors, 0x0000000000003a34>
-    #           x y        z
-    #     <uint8> <string> <boolean>
-    #   0       6 C        false
-    #
     #   subframes.select { true }
     #
     #   # =>
@@ -784,6 +759,15 @@ module RedAmber
     #           x y        z
     #     <uint8> <string> <boolean>
     #   0       6 C        false
+    #
+    # @example Select nothing.
+    #   subframes.select { false }
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x00000000000238c0>
+    #   @baseframe=#<RedAmber::DataFrame : (empty), 0x00000000000238d4>
+    #   0 SubFrame: [] in size.
+    #   ---
     #
     # @example Select if Vector `:z` has any true.
     #   subframes.select { |df| df[:z].any? }
@@ -811,6 +795,63 @@ module RedAmber
     define_subframable_method :select
     alias_method :filter, :select
     alias_method :find_all, :select
+
+    # Returns a SubFrames containing DataFrames rejected by the block.
+    #
+    # With a block given, calls the block with successive DataFrames;
+    # returns a SubFrames of those DataFrames for
+    # which the block returns nil or false.
+    # @example Reject all.
+    #   subframes.reject { true }
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x00000000000238c0>
+    #   @baseframe=#<RedAmber::DataFrame : (empty), 0x00000000000238d4>
+    #   0 SubFrame: [] in size.
+    #   ---
+    #
+    # @example Reject nothing.
+    #   subframes.reject { false }
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x0000000000003a84>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x0000000000003a98>
+    #   3 SubFrames: [2, 3, 1] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000003a0c>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000003a20>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #   ---
+    #   #<RedAmber::DataFrame : 1 x 3 Vectors, 0x0000000000003a34>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       6 C        false
+    #
+    # @example Reject if Vector `:z` has any true.
+    #   subframes.reject { |df| df[:z].any? }
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x0000000000038d74>
+    #   @baseframe=#<RedAmber::DataFrame : 1 x 3 Vectors, 0x000000000001ad10>
+    #   1 SubFrame: [1] in size.
+    #   ---
+    #   #<RedAmber::DataFrame : 1 x 3 Vectors, 0x000000000001ad10>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       6 C        false
+    #
+    # @since 0.3.1
+    #
+    define_subframable_method :reject
 
     # Number of subsets.
     #
