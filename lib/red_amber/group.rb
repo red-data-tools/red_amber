@@ -7,6 +7,8 @@ module RedAmber
 
     using RefineArrowTable
 
+    attr_reader :dataframe, :group_keys
+
     class << self
       private
 
@@ -65,8 +67,6 @@ module RedAmber
       @group = @dataframe.table.group(*@group_keys)
     end
 
-    attr_reader :dataframe, :group_keys
-
     define_group_aggregation(:count)
     alias_method :__count, :count
     private :__count
@@ -97,6 +97,7 @@ module RedAmber
 
     # Returns Array of boolean filters to select each records in the Group.
     #
+    # @api private
     # @return [Array]
     #   an Array of boolean filter Vectors.
     #
@@ -117,6 +118,7 @@ module RedAmber
 
     # Iterates over each record group as a DataFrame or returns a Enumerator.
     #
+    # @api private
     # @overload each
     #   Returns a new Enumerator if no block given.
     #
