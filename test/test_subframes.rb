@@ -105,16 +105,16 @@ class SubFranesTest < Test::Unit::TestCase
 
     test '.new empty dataframe' do
       sf = SubFrames.new(DataFrame.new, [[0, 1, 2]])
-      assert_equal 1, sf.size
-      assert_equal [0], sf.sizes
-      assert_true sf.first.empty?
+      assert_equal 0, sf.size
+      assert_equal [], sf.sizes
+      assert_true sf.first.nil?
     end
 
     test '.new empty dataframe by a block' do
       sf = SubFrames.new(DataFrame.new) { [[0, 1, 2]] }
-      assert_equal 1, sf.size
-      assert_equal [0], sf.sizes
-      assert_true sf.first.empty?
+      assert_equal 0, sf.size
+      assert_equal [], sf.sizes
+      assert_true sf.first.nil?
     end
 
     setup do
@@ -127,30 +127,30 @@ class SubFranesTest < Test::Unit::TestCase
 
     test '.new empty specifier, nil' do
       sf = SubFrames.new(@df)
-      assert_equal 1, sf.size
-      assert_equal [0], sf.sizes
-      assert_true sf.first.empty?
+      assert_equal 0, sf.size
+      assert_equal [], sf.sizes
+      assert_true sf.first.nil?
     end
 
     test '.new empty specifier, []' do
       sf = SubFrames.new(@df, [])
-      assert_equal 1, sf.size
-      assert_equal [0], sf.sizes
-      assert_true sf.first.empty?
+      assert_equal 0, sf.size
+      assert_equal [], sf.sizes
+      assert_true sf.first.nil?
     end
 
     test '.new empty specifier by a block, nil' do
       sf = SubFrames.new(@df) { nil }
-      assert_equal 1, sf.size
-      assert_equal [0], sf.sizes
-      assert_true sf.first.empty?
+      assert_equal 0, sf.size
+      assert_equal [], sf.sizes
+      assert_true sf.first.nil?
     end
 
     test '.new empty specifier by a block, []' do
       sf = SubFrames.new(@df) { [] }
-      assert_equal 1, sf.size
-      assert_equal [0], sf.sizes
-      assert_true sf.first.empty?
+      assert_equal 0, sf.size
+      assert_equal [], sf.sizes
+      assert_true sf.first.nil?
     end
 
     test '.new illegal specifier' do
@@ -364,6 +364,13 @@ class SubFranesTest < Test::Unit::TestCase
       assert_equal 3, @sf.map.size
     end
 
+    test '#map empty SubFrames' do
+      empty = SubFrames.new(DataFrame.new, [])
+      assert_kind_of Enumerator, empty.map
+      assert_true empty.map.first.nil?
+      assert_equal [], empty.map.to_a
+    end
+
     test '#map as it is' do
       sf = @sf.map { |df| df }
       assert_kind_of SubFrames, sf
@@ -450,11 +457,18 @@ class SubFranesTest < Test::Unit::TestCase
       assert_equal 3, @sf.select.size
     end
 
-    test '#select as it is' do
+    test '#select all' do
       sf = @sf.select { true }
       assert_kind_of SubFrames, sf
       assert_false @sf.equal?(sf) # object ids are not equal
       assert_equal @sf.to_a, sf.to_a # but have same contents
+    end
+
+    test '#select nothing' do
+      sf = @sf.select { false }
+      assert_kind_of SubFrames, sf
+      assert_true sf.empty?
+      assert_equal_array [], sf.baseframe.to_a
     end
 
     test '#select elements' do
@@ -485,11 +499,11 @@ class SubFranesTest < Test::Unit::TestCase
 
     test 'properties of empty SubFrame' do
       empty_subframe = SubFrames.new(@df, [])
-      assert_equal 1, empty_subframe.size
-      assert_equal [0], empty_subframe.sizes
-      assert_equal [0], empty_subframe.offset_indices
+      assert_equal 0, empty_subframe.size
+      assert_equal [], empty_subframe.sizes
+      assert_equal [], empty_subframe.offset_indices
       assert_true empty_subframe.empty?
-      assert_true empty_subframe.universal?
+      assert_false empty_subframe.universal?
     end
 
     test 'properties of SubFrames' do
@@ -528,9 +542,8 @@ class SubFranesTest < Test::Unit::TestCase
       assert_equal <<~STR, sf.inspect
         #<RedAmber::SubFrames : #{format('0x%016x', sf.object_id)}>
         @baseframe=#<RedAmber::DataFrame : (empty), #{format('0x%016x', sf.baseframe.object_id)}>
-        1 SubFrame: [0] in size.
+        0 SubFrame: [] in size.
         ---
-        #<RedAmber::DataFrame : (empty), #{format('0x%016x', enum.next.object_id)}>
       STR
     end
 

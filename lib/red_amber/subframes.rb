@@ -127,18 +127,27 @@ module RedAmber
       #
       def by_dataframes(dataframes)
         instance = allocate
-        enum =
-          Enumerator.new(dataframes.size) do |y|
-            dataframes.each do |i|
-              y.yield i
+        case Array(dataframes)
+        when [] || [nil]
+          instance.instance_variable_set(:@baseframe, DataFrame.new)
+          instance.instance_variable_set(:@frames, [])
+          enum = [].each
+        else
+          enum =
+            Enumerator.new(dataframes.size) do |y|
+              dataframes.each do |i|
+                y.yield i
+              end
             end
-          end
+          instance.instance_variable_set(:@baseframe, enum.reduce(&:concatenate))
+        end
         instance.instance_variable_set(:@enum, enum)
-        instance.instance_variable_set(:@baseframe, enum.reduce(&:concatenate))
         instance
       end
 
       private
+
+      # This method upgrades a iterating method from Enumerable to return SubFrames.
 
       # @!macro [attach] define_subframable_method
       #
@@ -257,9 +266,9 @@ module RedAmber
         subset_specifier = yield(dataframe)
       end
 
-      if subset_specifier.nil? || subset_specifier.empty? || dataframe.empty?
+      if dataframe.empty? || subset_specifier.nil? || subset_specifier.empty?
         @baseframe = DataFrame.new
-        @frames = [@baseframe]
+        @frames = []
         @enum = @frames.each
       else
         @baseframe = nil
@@ -846,7 +855,7 @@ module RedAmber
     # @since 0.3.1
     #
     def empty?
-      sizes == [0]
+      size.zero?
     end
 
     # Test if self has only one subset and it is comprehensive.
