@@ -853,6 +853,42 @@ module RedAmber
     #
     define_subframable_method :reject
 
+    # Returns a SubFrames containing truthy DataFrames returned by the block.
+    #
+    # With a block given, calls the block with successive DataFrames;
+    # returns a SubFrames of those DataFrames for
+    # which the block returns nil or false.
+    # @example Filter for size is larger than 1 and append number to column 'y'.
+    #   subframes.filter_map do |df|
+    #     if df.size > 1
+    #       df.assign(:y) do
+    #         y.merge(indices('1'), sep: '')
+    #       end
+    #     end
+    #   end
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x000000000001da88>
+    #   @baseframe=#<RedAmber::DataFrame : 5 x 3 Vectors, 0x000000000001da9c>
+    #   2 SubFrames: [2, 3] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000001dab0>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A1       false
+    #   1       2 A2       true
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000001dac4>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B1       false
+    #   1       4 B2       (nil)
+    #   2       5 B3       true
+    #
+    # @since 0.3.1
+    #
+    define_subframable_method :filter_map
+
     # Number of subsets.
     #
     # @return [Integer]

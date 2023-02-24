@@ -532,6 +532,76 @@ class SubFranesTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#filter_map' do
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+    end
+
+    test '#filter_map w/o block' do
+      assert_kind_of Enumerator, @sf.filter_map
+      assert_equal 3, @sf.filter_map.size
+    end
+
+    test '#filter_map all' do
+      sf = @sf.filter_map { _1 }
+      assert_kind_of SubFrames, sf
+      assert_false @sf.equal?(sf) # object ids are not equal
+      assert_equal @sf.to_a, sf.to_a # but have same contents
+    end
+
+    test '#filter_map nothing' do
+      sf = @sf.filter_map { false }
+      assert_kind_of SubFrames, sf
+      assert_true sf.empty?
+      assert_equal_array [], sf.baseframe.to_a
+    end
+
+    test '#filter_map empty Dataframes' do
+      sf = @sf.filter_map { DataFrame.new }
+      assert_kind_of SubFrames, sf
+      assert_equal [0, 0, 0], sf.sizes
+      assert_equal_array [], sf.baseframe.to_a
+      assert_true sf.first.empty?
+    end
+
+    test '#filter_map elements' do
+      sf =
+        @sf.filter_map do |df|
+          if df.size > 1
+            df.assign(:y) do
+              y.merge(indices('1'), sep: '')
+            end
+          end
+        end
+      assert_equal <<~STR, sf.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A1       false
+        1       2 A2       true
+        ---
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B1       false
+        1       4 B2       (nil)
+        2       5 B3       true
+      STR
+      assert_equal <<~STR, sf.baseframe.to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A1       false
+        1       2 A2       true
+        2       3 B1       false
+        3       4 B2       (nil)
+        4       5 B3       true
+      STR
+    end
+  end
+
   # Tests for #size, #sizes, #offset_indices, #empty? and #universal?
   sub_test_case 'properties' do
     setup do
