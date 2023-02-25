@@ -428,7 +428,7 @@ module RedAmber
     #   #<RedAmber::Vector(:uint8, size=2):0x000000000000382c>
     #   [1, 2]
     #
-    #   nteger_vector.concatenate(["A", "B"])
+    #   integer_vector.concatenate(["A", "B"])
     #   # =>
     #   #<RedAmber::Vector(:uint8, size=4):0x0000000000003840>
     #   [1, 2, 65, 66]

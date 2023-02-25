@@ -101,7 +101,7 @@ module RedAmber
     #   ["1", "2"]
     #
     # @example String to Ineger
-    #   Vector.new(1).resolve(["A"])
+    #   Vector.new(1).resolve(['A'])
     #
     #   # =>
     #   #<RedAmber::Vector(:uint8, size=1):0x00000000000037dc>
@@ -334,8 +334,6 @@ module RedAmber
     # @overload each
     #   When a block given, passes each element in self to the block.
     #
-    #   @yield [Object]
-    #     each element.
     #   @yieldparam element [Object]
     #     passes element by a block parameter.
     #   @yieldreturn [Object]
@@ -364,8 +362,6 @@ module RedAmber
     #   When a block given, calls the block with successive elements.
     #   Returns a Vector of the objects returned by the block.
     #
-    #   @yield [Object]
-    #     each element.
     #   @yieldparam element [Object]
     #     passes element by a block parameter.
     #   @yieldreturn [Object]
@@ -380,13 +376,21 @@ module RedAmber
     end
     alias_method :collect, :map
 
+    # Tests wheather self is chunked or not.
+    #
     # @api private
+    # @return [true, false]
+    #   returns true if #data is chunked.
     #
     def chunked?
       @data.is_a? Arrow::ChunkedArray
     end
 
+    # Returns the number of chunks.
+    #
     # @api private
+    # @return [Integer]
+    #   the number of chunks. If self is not chunked, returns zero.
     #
     def n_chunks
       chunked? ? @data.n_chunks : 0
@@ -452,6 +456,36 @@ module RedAmber
       is_nil.any
     end
 
+    # Enable to compute with coercion mechanism.
+    #
+    # @example
+    #   vector = Vector.new(1,2,3)
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint8, size=3):0x00000000000decc4>
+    #   [1, 2, 3]
+    #
+    #   # Vector's `#*` method
+    #   vector * -1
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:int16, size=3):0x00000000000e3698>
+    #   [-1, -2, -3]
+    #
+    #   # coerced calculation
+    #   -1 * vector
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:int16, size=3):0x00000000000ea4ac>
+    #   [-1, -2, -3]
+    #
+    #   # `@-` operator
+    #   -vector
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint8, size=3):0x00000000000ee7b4>
+    #   [255, 254, 253]
+    #
     def coerce(other)
       [Vector.new(Array(other) * size), self]
     end
@@ -476,10 +510,8 @@ module RedAmber
     # @overload propagate
     #   Returns a Vector of same size as self spreading the value from block.
     #
-    #   @yield [self]
-    #     gives self to the block.
     #   @yieldparam self [Vector]
-    #     self.
+    #     gives self to the block.
     #   @yieldreturn [scalar]
     #     a scalar value.
     #   @return [Vector]

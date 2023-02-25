@@ -193,7 +193,7 @@ module RedAmber
     #   @param row [Indeger, Float]
     #     a row index to select.
     #   @return [DataFrame]
-    #     selected variables as a DataFrame.
+    #     selected records as a DataFrame.
     #   @example Select a row
     #   penguins
     #
@@ -226,7 +226,7 @@ module RedAmber
     #   @param rows [<Integer>, <Float>, Range<Integer>, Vector, Arrow::Array]
     #     row indeces to select.
     #   @return [DataFrame]
-    #     selected variables as a DataFrame.
+    #     selected records as a DataFrame.
     #   @example Select rows
     #     penguins.slice(300..-1)
     #
@@ -244,36 +244,61 @@ module RedAmber
     #     42 Gentoo   Biscoe             45.2          14.8               212 ...     2009
     #     43 Gentoo   Biscoe             49.9          16.1               213 ...     2009
     #
+    # @overload slice(enumerator)
+    #   Select records and return a DataFrame.
+    #   - Duplicated selection is acceptable. The same record will be returned.
+    #   - The order of records will be the same as specified indices.
+    #
+    #   @param enumerator [Enumerator]
+    #     an enumerator which returns row indeces to select.
+    #   @return [DataFrame]
+    #     selected records as a DataFrame.
+    #   @example Select rows by Enumerator.
+    #     penguins.assign_left(index: penguins.indices) # 0.2.0 feature
+    #             .slice(0.step(by: 10, to: 340))
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 35 x 9 Vectors, 0x000000000000f2e4>
+    #     index species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    #     <uint16> <string> <string>        <double>      <double>           <uint8> ... <uint16>
+    #     0        0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+    #     1       10 Adelie   Torgersen           37.8          17.1               186 ...     2007
+    #     2       20 Adelie   Biscoe              37.8          18.3               174 ...     2007
+    #     3       30 Adelie   Dream               39.5          16.7               178 ...     2007
+    #     4       40 Adelie   Dream               36.5          18.0               182 ...     2007
+    #     :        : :        :                      :             :                 : ...        :
+    #     32      320 Gentoo   Biscoe              48.5          15.0               219 ...     2009
+    #     33      330 Gentoo   Biscoe              50.5          15.2               216 ...     2009
+    #     34      340 Gentoo   Biscoe              46.8          14.3               215 ...     2009
+    #
     # @overload slice
     #   Select records by indices with block and return a DataFrame.
     #   - Duplicated selection is acceptable. The same record will be returned.
     #   - The order of records will be the same as specified indices.
     #
-    #   @yield [self]
+    #   @yieldparam self [DataFrame]
     #     gives self to the block.
     #     The block is evaluated within the context of self.
-    #   @yieldparam self [DataFrame]
-    #     self. Usually, it can be omitted.
-    #   @yieldreturn [<Integer>, <Float>, Range<Integer>, Vector, Arrow::Array]
+    #   @yieldreturn [<Integer>, <Float>, Range<Integer>, Vector, Arrow::Array, Enumerator]
     #     row indeces to select.
     #   @return [DataFrame]
     #     selected records as a DataFrame.
     #   @example Select rows by block
-    #     penguins.slice { 0.step(size, 10) }
+    #     penguins.assign_left(index: penguins.indices) # 0.2.0 feature
+    #             .slice { 0.step(by: 100, to: 300).map { |i| i..(i+1) } }
     #
     #     # =>
-    #     #<RedAmber::DataFrame : 35 x 8 Vectors, 0x000000000000fd84>
-    #        species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
-    #        <string> <string>        <double>      <double>           <uint8> ... <uint16>
-    #      0 Adelie   Torgersen           39.1          18.7               181 ...     2007
-    #      1 Adelie   Torgersen           37.8          17.1               186 ...     2007
-    #      2 Adelie   Biscoe              37.8          18.3               174 ...     2007
-    #      3 Adelie   Dream               39.5          16.7               178 ...     2007
-    #      4 Adelie   Dream               36.5          18.0               182 ...     2007
-    #      : :        :                      :             :                 : ...        :
-    #     32 Gentoo   Biscoe              48.5          15.0               219 ...     2009
-    #     33 Gentoo   Biscoe              50.5          15.2               216 ...     2009
-    #     34 Gentoo   Biscoe              46.8          14.3               215 ...     2009
+    #     #<RedAmber::DataFrame : 8 x 9 Vectors, 0x000000000000f3ac>
+    #          index species   island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    #       <uint16> <string>  <string>        <double>      <double>           <uint8> ... <uint16>
+    #     0        0 Adelie    Torgersen           39.1          18.7               181 ...     2007
+    #     1        1 Adelie    Torgersen           39.5          17.4               186 ...     2007
+    #     2      100 Adelie    Biscoe              35.0          17.9               192 ...     2009
+    #     3      101 Adelie    Biscoe              41.0          20.0               203 ...     2009
+    #     4      200 Chinstrap Dream               51.5          18.7               187 ...     2009
+    #     5      201 Chinstrap Dream               49.8          17.3               198 ...     2009
+    #     6      300 Gentoo    Biscoe              49.1          14.5               212 ...     2009
+    #     7      301 Gentoo    Biscoe              52.5          15.6               221 ...     2009
     #
     # @overload slice(booleans)
     #   Select records by filtering with booleans and return a DataFrame.
@@ -302,11 +327,9 @@ module RedAmber
     # @overload slice
     #   Select records by filtering with block and return a DataFrame.
     #
-    #   @yield [self]
+    #   @yieldparam self [DataFrame]
     #     gives self to the block.
     #     The block is evaluated within the context of self.
-    #   @yieldparam self [DataFrame]
-    #     self. Usually, it can be omitted.
     #   @yieldreturn [<Boolean, nil>, Vector, Arrow::Array]
     #     a boolean filter. `Vector` or `Arrow::Array` must be boolean type.
     #   @return [DataFrame]
@@ -373,11 +396,9 @@ module RedAmber
     #     a key to select column.
     #   @param keep_key [true, false]
     #     preserve column specified by key in the result if true.
-    #   @yield [self]
+    #   @yieldparam self [DataFrame]
     #     gives self to the block.
     #     The block is evaluated within the context of self.
-    #   @yieldparam self [DataFrame]
-    #     self. Usually, it can be omitted.
     #   @yieldreturn [<elements>]
     #     array of elements to select.
     #   @return [DataFrame]
@@ -411,11 +432,9 @@ module RedAmber
     #     a key to select column.
     #   @param keep_key [true, false]
     #     preserve column specified by key in the result if true.
-    #   @yield [self]
+    #   @yieldparam self [DataFrame]
     #     gives self to the block.
     #     The block is evaluated within the context of self.
-    #   @yieldparam self [DataFrame]
-    #     self. Usually, it can be omitted.
     #   @yieldreturn [Range]
     #     specifies position of elements at the start and the end and
     #     select records between them.
@@ -520,11 +539,9 @@ module RedAmber
     # @overload filter
     #   Select records by filtering with block and return a DataFrame.
     #
-    #   @yield [self]
+    #   @yieldparam self [DataFrame]
     #     gives self to the block.
     #     The block is evaluated within the context of self.
-    #   @yieldparam self [DataFrame]
-    #     self. Usually, it can be omitted.
     #   @yieldreturn [<Boolean, nil>, Vector, Arrow::Array]
     #     a boolean filter. `Vector` or `Arrow::Array` must be boolean type.
     #   @return [DataFrame]
@@ -636,11 +653,9 @@ module RedAmber
     #   - Duplicated selection is acceptable.
     #   - The order of records in self will be preserved.
     #
-    #   @yield [self]
+    #   @yieldparam self [DataFrame]
     #     gives self to the block.
     #     The block is evaluated within the context of self.
-    #   @yieldparam self [DataFrame]
-    #     self. Usually, it can be omitted.
     #   @yieldreturn [<Integer, Float>, Range<Integer>, Vector, Arrow::Array]
     #     row indeces to remove.
     #   @return [DataFrame]
@@ -692,11 +707,9 @@ module RedAmber
     #   and remove them to create a remainer DataFrame.
     #   - The order of records in self will be preserved.
     #
-    #   @yield [self]
+    #   @yieldparam self [DataFrame]
     #     gives self to the block.
     #     The block is evaluated within the context of self.
-    #   @yieldparam self [DataFrame]
-    #     self. Usually, it can be omitted.
     #   @yieldreturn [<Boolean, nil>, Vector, Arrow::Array]
     #     a boolean filter to remove. `Vector` or `Arrow::Array` must be boolean type.
     #   @return [DataFrame]

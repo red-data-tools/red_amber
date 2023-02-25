@@ -7,7 +7,19 @@ module RedAmber
 
     using RefineArrowTable
 
-    attr_reader :dataframe, :group_keys
+    # Source DataFrame.
+    #
+    # @return [DataFrame]
+    #   source DataFrame.
+    #
+    attr_reader :dataframe
+
+    # Keys for grouping by value.
+    #
+    # @return [Array]
+    #   group keys.
+    #
+    attr_reader :group_keys
 
     class << self
       private
@@ -128,8 +140,6 @@ module RedAmber
     # @overload each
     #   When a block given, passes each record group as a DataFrame to the block.
     #
-    #   @yield [DataFrame]
-    #     each record group
     #   @yieldparam df [DataFrame]
     #     passes each record group as a DataFrame by a block parameter.
     #   @yieldreturn [Object]
@@ -189,8 +199,6 @@ module RedAmber
 
     # Summarize Group by aggregation functions from the block.
     #
-    # @yield [self]
-    #   passes self.
     # @yieldparam group [Group]
     #   passes group object self.
     # @yieldreturn [DataFrame, Array<DataFrame>]
@@ -253,7 +261,10 @@ module RedAmber
       end
     end
 
+    # Aggregating summary.
+    #
     # @api private
+    #
     def agg_sum(*summary_keys)
       call_aggregating_function(:sum, summary_keys, _options = nil)
     end

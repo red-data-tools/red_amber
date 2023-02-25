@@ -102,7 +102,7 @@ module RedAmber
 
     # Count the number of unique values.
     #
-    # @!method count_distinct(mode: :non_null)
+    # @!method count_distinct(mode: :only_valid)
     # @macro count_options
     # @return [Integer]
     #   unique count of self.
