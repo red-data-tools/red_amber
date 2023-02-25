@@ -1,5 +1,3 @@
-# @markup markdown
-
 # Comparison of DataFrames
 
 Compare basic features of RedAmber with Python 
