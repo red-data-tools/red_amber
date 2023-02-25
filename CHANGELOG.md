@@ -1,3 +1,116 @@
+## [0.4.0] - 2023-02-25
+
+:memo: Update documents for consistency
+
+- Breaking change
+  - Upgrade dependency to Arrow 11.0.0 (#188)
+
+- Bug fixes
+  - Add :force_order option for DataFrame#join (#174)
+  - Return error for empty DataFrame in DataFrame#filter (#172)
+  - Accept ChunkedArray in DataFrame#filter (#172)
+  - Fix Vector#replace to accept Arrow::Array as a replacer (#179)
+  - Fix Vector#round_to_multiple to accept Float or Integer (#180)
+  - Change Vector atan2 to a class method (#180)
+  - Fix Vector#shift when boolean Vector (#184)
+  - Fix processing empty SubFrames (#183)
+  - Do not check object id in DataFrame#rename, #drop for self (#188)
+
+- New features and improvements
+  - Accept a block in DataFrame#filter (#172)
+  - Add Vector.aggregate? method (#175)
+  - Introduce Vector#propagate method (#175)
+  - Add Vector#rank methods (#176)
+  - Add Vector#sample method (#176)
+  - Add Vector#sort method (#176)
+  - Promote DataFrame#shape_str to public (#184)
+  - Introduce Vector#concatenate (#184)
+  - Add #numeric? in refinements of Array (#184)
+  - Add Vector#cumulative_sum_checked and #cumsum (#184)
+  - Add Vector#resolve method (#184)
+  - Add DataFrame#tdra method (#184)
+  - Add #expand as an alias for Vector#propagate (#184)
+  - Add #glimpse as an alias for DataFrame#tdr (#184)
+  - New class SubFrames (#183)
+    - Introduce class SubFrames
+    - Memorize dataframes in SubFrames
+    - Add @frames to memorize sub DataFrames
+    - Accept filters in SubFrames.new
+    - Accept block in SubFrames.new
+    - Add SubFrames.by_filter
+    - Introduce methods creating SubFrames from DataFrame
+    - Introduce SubFrames#each method
+    - Add SubFrames#to_s method
+    - Add SubFrames#concatenate method
+    - Add SubFrames#offset_indices method
+    - SubFrames#aggregate method
+    - Redefine SubFrames#map to return SubFrames
+    - Define SubFrame#map dynamically
+    - Add SubFrames#assign method
+    - Redefine SubFrames#select to return SubFrames
+    - Add SubFrames#reject method
+    - Add SubFrames#filter_map method
+    - Refine DataFrame#indices memorizing @indices
+    - Rename SubFrames#universal_frame as #baseframe
+    - Set Group iteration feature to @api private
+
+- Refactoring
+  - Generate Vector functions in class method (#177)
+  - Set Constant visibility to private (#179)
+  - Separate test_vector_function (#179)
+  - Relocate methods in DataFrameIndexable (#179)
+  - Rename Array refinements to the same name as Vector (#184)
+
+- Improve in tests/CI
+  - Tests
+    - Update benchmarks to set 0.3.0 as a reference (#167)
+    - Move test of Vector#logb to proper location (#180)
+
+  - Cops
+    - Update .rubocop.yml to align with latest cops (#174)
+    - Unify style of MethodCallIndentation as relative to reciever (#184)
+
+  - CI
+    - Fix setting up Arrow by homebrew in CI (#167)
+    - Fix CI error on homebrew deleting python link (#167)
+    - Set cache-version to get new C extensions in CI (#173) Thanks to @kou for suggestion.
+
+- Documentation
+  - Update DataFrame.md about loading csv without headers (#165)
+    - Thanks to kojix2
+  - Update YARD in DataFrame combinable (#168)
+  - Update comment for Ruby 2.7 support in README.md
+  - Update license year
+  - Update README (#172)
+  - Update Vector.md and yardoc in #propagate (#175)
+  - Use customized style sheet for YARD (#179)
+  - Add examples for the doc of #pick and #drop (#179)
+  - Add examples to YARD in DataFrame reshaping methods (#179)
+  - Update documents in DataFrameDisplayable (#179)
+  - Update documents in DataFrameVariableOperation (#179)
+  - Update document for dynamically generated methods (#179)
+  - Unify style in document (#179)
+  - Update documents in DataFrameSelectable (#179)
+  - Update documents of basic Vector methods (#179)
+  - Update document in VectorUpdatable (#179)
+  - Update document of Group (#179)
+  - Update document of DataFrameLoadSave (#180)
+  - Add examples for document of ArrowFunction (#180)
+  - Update document of Vector_unary_aggregation (#180)
+  - Update document of Vector_unary_element_wise (#180)
+  - Update document of Vector_biary_element_wise (#180)
+  - Add documentation to give comparison of dataframes(#169)
+    - Thanks to Benson Muite
+  - Update documents for consistency of method indentation (#189)
+  - Update CHANGELOG (#189)
+  - Update README for 0.4.0 (#189)
+
+- GitHub site
+
+- Thanks
+  - kojix2
+  - Benson Muite
+
 ## [0.3.0] - 2022-12-18
 
 - Breaking change

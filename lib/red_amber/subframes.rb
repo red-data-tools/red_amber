@@ -58,7 +58,7 @@ module RedAmber
       #     <uint8> <string> <boolean>
       #   0       6 C        false
       #
-      # @since 0.3.1
+      # @since 0.4.0
       #
       def by_group(group)
         SubFrames.new(group.dataframe, group.filters)
@@ -74,7 +74,7 @@ module RedAmber
       #   an Array of numeric indices to create subsets of DataFrame.
       # @return [SubFrames]
       #   a new SubFrames object.
-      # @since 0.3.1
+      # @since 0.4.0
       #
       def by_indices(dataframe, subset_indices)
         instance = allocate
@@ -100,7 +100,7 @@ module RedAmber
       #   Each filters must have same length as dataframe.
       # @return [SubFrames]
       #   a new SubFrames object.
-      # @since 0.3.1
+      # @since 0.4.0
       #
       def by_filters(dataframe, subset_filters)
         instance = allocate
@@ -123,7 +123,7 @@ module RedAmber
       #   an array of DataFrames which have same schema.
       # @return [SubFrames]
       #   a new SubFrames object.
-      # @since 0.3.1
+      # @since 0.4.0
       #
       def by_dataframes(dataframes)
         instance = allocate
@@ -251,7 +251,7 @@ module RedAmber
     #     1       3 B        false
     #     2       6 C        false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def initialize(dataframe, subset_specifier = nil, &block)
       unless dataframe.is_a?(DataFrame)
@@ -294,7 +294,7 @@ module RedAmber
     # Once evaluated, memorize it as @baseframe.
     # @return [DataFrame]
     #   a concatenated DataFrame.
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def baseframe
       @baseframe ||= reduce(&:concatenate)
@@ -367,7 +367,7 @@ module RedAmber
     #   4       5 B        true
     #   5       6 C        false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def each(&block)
       return enum_for(__method__) { size } unless block
@@ -453,7 +453,7 @@ module RedAmber
     #     1 B              3       2      12       1
     #     2 C              1       1       6       0
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def aggregate(group_keys, aggregations)
       aggregator =
@@ -572,7 +572,7 @@ module RedAmber
     #     <uint8> <string> <boolean> <uint8>
     #   0       6 C        false           7
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     define_subframable_method :map
     alias_method :collect, :map
@@ -720,7 +720,7 @@ module RedAmber
     #       <uint8> <string> <boolean> <uint8>
     #     0       6 C        false           0
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def assign(...)
       map { |df| df.assign(...) }
@@ -788,7 +788,7 @@ module RedAmber
     #   1       4 B        (nil)
     #   2       5 B        true
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     define_subframable_method :select
     alias_method :filter, :select
@@ -847,7 +847,7 @@ module RedAmber
     #     <uint8> <string> <boolean>
     #   0       6 C        false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     define_subframable_method :reject
 
@@ -883,7 +883,7 @@ module RedAmber
     #   1       4 B2       (nil)
     #   2       5 B3       true
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     define_subframable_method :filter_map
 
@@ -891,7 +891,7 @@ module RedAmber
     #
     # @return [Integer]
     #   number of subsets in self.
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def size
       @size ||= @enum.size
@@ -901,7 +901,7 @@ module RedAmber
     #
     # @return [Array<Integer>]
     #   sizes of sub DataFrames.
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def sizes
       @sizes ||= @enum.map(&:size)
@@ -913,7 +913,7 @@ module RedAmber
     #   indices of offset of each sub DataFrames.
     # @example When `sizes` is [2, 3, 1].
     #   sf.offset_indices # => [0, 2, 5]
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def offset_indices
       sum = 0
@@ -927,7 +927,7 @@ module RedAmber
     #
     # @return [true, false]
     #   true if self is an empty subset.
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def empty?
       size.zero?
@@ -937,7 +937,7 @@ module RedAmber
     #
     # @return [true, false]
     #   true if only member of self is equal to universal DataFrame.
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def universal?
       size == 1 && @enum.first == baseframe
@@ -981,7 +981,7 @@ module RedAmber
     #     <uint8> <string> <boolean>
     #   0       6 C        false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def to_s(limit: 16)
       _to_s(limit: limit)
@@ -1033,7 +1033,7 @@ module RedAmber
     #     <uint8> <string> <boolean>
     #   0       6 C        false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def inspect(limit: 16)
       sizes_truncated = (size > limit ? sizes.take(limit) << '...' : sizes).join(', ')

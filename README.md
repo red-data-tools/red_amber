@@ -22,8 +22,8 @@ Supported Ruby version is >= 3.0 (since RedAmber 0.3.0).
 
 ### Libraries
 ```ruby
-gem 'red-arrow',   '~> 10.0.0' # Requires Apache Arrow (see installation below)
-gem 'red-parquet', '~> 10.0.0' # Optional, if you use IO from/to parquet
+gem 'red-arrow',   '~> 11.0.0' # Requires Apache Arrow (see installation below)
+gem 'red-parquet', '~> 11.0.0' # Optional, if you use IO from/to parquet
 gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 ```
 
@@ -31,9 +31,9 @@ gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 
 Install requirements before you install Red Amber.
 
-- Apache Arrow (~> 10.0.0)
-- Apache Arrow GLib (~> 10.0.0)
-- Apache Parquet GLib (~> 10.0.0)  # If you use IO from/to parquet
+- Apache Arrow (~> 11.0.0)
+- Apache Arrow GLib (~> 11.0.0)
+- Apache Parquet GLib (~> 11.0.0)  # If you use IO from/to parquet
 
 See [Apache Arrow install document](https://arrow.apache.org/install/).
   
@@ -66,9 +66,9 @@ See [Apache Arrow install document](https://arrow.apache.org/install/).
 If you prepared Apache Arrow, add these lines to your Gemfile:
 
 ```ruby
-gem 'red-arrow',   '~> 10.0.0'
+gem 'red-arrow',   '~> 11.0.0'
 gem 'red_amber'
-gem 'red-parquet', '~> 10.0.0' # Optional, if you use IO from/to parquet
+gem 'red-parquet', '~> 11.0.0' # Optional, if you use IO from/to parquet
 gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFrame
 gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
 gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
@@ -78,11 +78,17 @@ And then execute `bundle install` or install them yourself such as `gem install 
 
 ## Docker image and Jupyter Notebook
 
-[RubyData Docker Stacks](https://github.com/RubyData/docker-stacks) is available as a ready-to-run Docker image containing Jupyter and useful data tools as well as RedAmber (Thanks to @mrkn).
+[RubyData Docker Stacks](https://github.com/RubyData/docker-stacks) is available as a ready-to-run Docker image containing Jupyter and useful data tools as well as RedAmber (Thanks to Kenta Murata).
 
 Also you can try the contents of this README interactively by [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb). 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb)
 
+## Comparison of DataFrames
+
+Comparison of  basic features of RedAmber with Python 
+[pandas](https://pandas.pydata.org/),
+R [Tidyverse](https://www.tidyverse.org/) and
+Julia [Dataframes](https://dataframes.juliadata.org/stable/) is [here](doc/DataFrame_Comparison.md) (Thanks to Benson Muite).
 
 ## Data frame in `RedAmber`
 
@@ -206,7 +212,7 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## Jupyter notebook
 
-[89 Examples of Red Amber](https://github.com/heronshoes/docker-stacks/blob/RedAmber-binder/binder/examples_of_red_amber.ipynb)
+[Examples of Red Amber](https://github.com/heronshoes/docker-stacks/blob/RedAmber-binder/binder/examples_of_red_amber.ipynb)
 ([raw file](https://raw.githubusercontent.com/heronshoes/docker-stacks/RedAmber-binder/binder/examples_of_red_amber.ipynb)) shows more examples in jupyter notebook.
 
 You can try this notebook on [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb). 

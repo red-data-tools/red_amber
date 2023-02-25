@@ -435,7 +435,7 @@ module RedAmber
     #     <uint8> <string> <boolean>
     #   0       6 C        false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def sub_by_value(keys: nil)
       SubFrames.new(self, group(keys).filters)
@@ -477,7 +477,7 @@ module RedAmber
     #   2       5 B        true
     #   3       6 C        false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def sub_by_window(from: 0, size: nil, step: 1)
       SubFrames.new(self) do
@@ -552,7 +552,7 @@ module RedAmber
     #   2       5 B        true
     #   3       6 C        false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def sub_by_enum(enumerator_method, *args)
       SubFrames.new(self, indices.send(enumerator_method, *args).to_a)
@@ -590,7 +590,7 @@ module RedAmber
     #   0       3 B        false
     #   1       6 C        false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def sub_by_kernel(kernel, step: 1)
       limit_size = size - kernel.size
@@ -670,7 +670,7 @@ module RedAmber
     #     1       4 B        (nil)
     #     2       6 C        false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def build_subframes(subset_specifier = nil, &block)
       if block
