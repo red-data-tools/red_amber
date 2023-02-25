@@ -17,20 +17,22 @@ module RedAmber
     using RefineArrowTable
     using RefineHash
 
-    # Quicker DataFrame constructor from a `Arrow::Table`.
-    #
-    # @param table [Arrow::Table]
-    #   A table to have in the DataFrame.
-    # @return [DataFrame]
-    #   Initialized DataFrame.
-    #
-    # @note This method will allocate table directly and may be used in the method.
-    # @note `table` must have unique keys.
-    #
-    def self.create(table)
-      instance = allocate
-      instance.instance_variable_set(:@table, table)
-      instance
+    class << self
+      # Quicker DataFrame constructor from a `Arrow::Table`.
+      #
+      # @param table [Arrow::Table]
+      #   A table to have in the DataFrame.
+      # @return [DataFrame]
+      #   Initialized DataFrame.
+      #
+      # @note This method will allocate table directly and may be used in the method.
+      # @note `table` must have unique keys.
+      #
+      def create(table)
+        instance = allocate
+        instance.instance_variable_set(:@table, table)
+        instance
+      end
     end
 
     # Creates a new DataFrame.
@@ -368,6 +370,284 @@ module RedAmber
       g = Group.new(self, group_keys)
       g = g.summarize(&block) if block
       g
+    end
+
+    # Create SubFrames by value grouping.
+    #
+    # [Experimental feature] this method may be removed or be changed in the future.
+    # @param keys [Symbol, String, Array<Symbol, String>]
+    #   grouping keys.
+    # @return [SubFrames]
+    #   a created SubFrames grouped by column values on `keys`.
+    # @example
+    #   df.sub_by_value(keys: :y)
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x000000000000fc08>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #   3 SubFrames: [2, 3, 1] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000fc1c>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000fc30>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #   ---
+    #   #<RedAmber::DataFrame : 1 x 3 Vectors, 0x000000000000fc44>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       6 C        false
+    #
+    # @since 0.3.1
+    #
+    def sub_by_value(keys: nil)
+      SubFrames.new(self, group(keys).filters)
+    end
+    alias_method :subframes_by_value, :sub_by_value
+
+    # Create SubFrames by Windowing with `from`, `size` and `step`.
+    #
+    # [Experimental feature] this method may be removed or be changed in the future.
+    # @param from [Integer]
+    #   start position of window.
+    # @param size [Integer]
+    #   window size.
+    # @param step [Integer]
+    #   moving step of window.
+    # @return [SubFrames]
+    #   a created SubFrames.
+    # @example
+    #   df.sub_by_window(size: 4, step: 2)
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x000000000000fc58>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #   2 SubFrames: [4, 4] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 4 x 3 Vectors, 0x000000000000fc6c>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   2       3 B        false
+    #   3       4 B        (nil)
+    #   ---
+    #   #<RedAmber::DataFrame : 4 x 3 Vectors, 0x000000000000fc80>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #   3       6 C        false
+    #
+    # @since 0.3.1
+    #
+    def sub_by_window(from: 0, size: nil, step: 1)
+      SubFrames.new(self) do
+        from.step(by: step, to: (size() - size)).map do |i| # rubocop:disable Style/MethodCallWithoutArgsParentheses
+          [*i...(i + size)]
+        end
+      end
+    end
+    alias_method :subframes_by_window, :sub_by_window
+
+    # Create SubFrames by Grouping/Windowing by posion from a enumrator method.
+    #
+    # This method will process the indices of self by enumerator.
+    # [Experimental feature] this method may be removed or be changed in the future.
+    # @param enumerator_method [Symbol]
+    #   Enumerator name.
+    # @param args [<Object>]
+    #   arguments for the enumerator method.
+    # @return [SubFrames]
+    #   a created SubFrames.
+    # @example Create a SubFrames object sliced by 3 rows.
+    #   df.sub_by_enum(:each_slice, 3)
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x000000000000fd20>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #   2 SubFrames: [3, 3] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000fd34>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   2       3 B        false
+    #   ---
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000fd48>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       4 B        (nil)
+    #   1       5 B        true
+    #   2       6 C        false
+    #
+    # @example Create a SubFrames object for each consecutive 3 rows.
+    #   df.sub_by_enum(:each_cons, 4)
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x000000000000fd98>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #   3 SubFrames: [4, 4, 4] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 4 x 3 Vectors, 0x000000000000fdac>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   2       3 B        false
+    #   3       4 B        (nil)
+    #   ---
+    #   #<RedAmber::DataFrame : 4 x 3 Vectors, 0x000000000000fdc0>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       2 A        true
+    #   1       3 B        false
+    #   2       4 B        (nil)
+    #   3       5 B        true
+    #   ---
+    #   #<RedAmber::DataFrame : 4 x 3 Vectors, 0x000000000000fdd4>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       4 B        (nil)
+    #   2       5 B        true
+    #   3       6 C        false
+    #
+    # @since 0.3.1
+    #
+    def sub_by_enum(enumerator_method, *args)
+      SubFrames.new(self, indices.send(enumerator_method, *args).to_a)
+    end
+    alias_method :subframes_by_enum, :sub_by_enum
+
+    # Create SubFrames by windowing with a kernel (i.e. masked window) and step.
+    #
+    # [Experimental feature] this method may be removed or be changed in the future.
+    # @param kernel [Array<true, false>, Vector]
+    #   boolean array-like to pick records in the window.
+    #   Kernel is a boolean Array and it behaves like a masked window.
+    # @param step [Integer]
+    #   moving step of window.
+    # @return [SubFrames]
+    #   a created SubFrames.
+    # @example
+    #   kernel = [true, false, false, true]
+    #   df.sub_by_kernel(kernel, step: 2)
+    #
+    #   # =>
+    #   #<RedAmber::SubFrames : 0x000000000000fde8>
+    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #   2 SubFrames: [2, 2] in sizes.
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000fdfc>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       4 B        (nil)
+    #   ---
+    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000fe10>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       3 B        false
+    #   1       6 C        false
+    #
+    # @since 0.3.1
+    #
+    def sub_by_kernel(kernel, step: 1)
+      limit_size = size - kernel.size
+      kernel_vector = Vector.new(kernel.concat([nil] * limit_size))
+      SubFrames.new(self) do
+        0.step(by: step, to: limit_size).map do |i|
+          kernel_vector.shift(i)
+        end
+      end
+    end
+    alias_method :subframes_by_kernel, :sub_by_kernel
+
+    # Generic builder of sub-dataframes from self.
+    #
+    # [Experimental feature] this method may be removed or be changed in the future.
+    # @overload build_subframes(subset_specifier)
+    #   Create a new SubFrames object.
+    #
+    #   @param subset_specifier [Array<Vector>, Array<array-like>]
+    #     an Array of numeric indices or boolean filters
+    #     to create subsets of DataFrame.
+    #   @return [SubFrames]
+    #     new SubFrames.
+    #   @example
+    #     df.build_subframes([[0, 2, 4], [1, 3, 5]])
+    #
+    #     # =>
+    #     #<RedAmber::SubFrames : 0x000000000000fe9c>
+    #     @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #     2 SubFrames: [3, 3] in sizes.
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000feb0>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       1 A        false
+    #     1       3 B        false
+    #     2       5 B        true
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000fec4>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       2 A        true
+    #     1       4 B        (nil)
+    #     2       6 C        false
+    #
+    # @overload build_subframes
+    #   Create a new SubFrames object by block.
+    #
+    #   @yield [self]
+    #     the block is called within the context of self.
+    #     (Block is called by instance_eval(&block). )
+    #   @yieldreturn [Array<numeric_array_like>, Array<boolean_array_like>]
+    #     an Array of index or boolean array-likes to create subsets of DataFrame.
+    #     All array-likes are responsible to #numeric? or #boolean?.
+    #   @example
+    #     dataframe.build_subframes do
+    #       even = indices.map(&:even?)
+    #       [even, !even]
+    #     end
+    #
+    #     # =>
+    #     #<RedAmber::SubFrames : 0x000000000000fe60>
+    #     @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000fba4>
+    #     2 SubFrames: [3, 3] in sizes.
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000fe74>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       1 A        false
+    #     1       3 B        false
+    #     2       5 B        true
+    #     ---
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000fe88>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       2 A        true
+    #     1       4 B        (nil)
+    #     2       6 C        false
+    #
+    # @since 0.3.1
+    #
+    def build_subframes(subset_specifier = nil, &block)
+      if block
+        SubFrames.new(self, instance_eval(&block))
+      else
+        SubFrames.new(self, subset_specifier)
+      end
     end
 
     # Catch variable (column) key as method name.
