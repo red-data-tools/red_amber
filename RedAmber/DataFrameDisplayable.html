@@ -141,6 +141,30 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#shape_str-instance_method" title="#shape_str (instance method)">#<strong>shape_str</strong>(with_id: false)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Return class and shape of self by a String.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#summary-instance_method" title="#summary (instance method)">#<strong>summary</strong>  &#x21d2; DataFrame </a>
     
 
@@ -170,6 +194,8 @@
       <a href="#tdr-instance_method" title="#tdr (instance method)">#<strong>tdr</strong>(limit = 10, tally: 5, elements: 5)  &#x21d2; nil </a>
     
 
+    
+      (also: #glimpse)
     
   </span>
   
@@ -207,6 +233,30 @@
   
     <span class="summary_desc"><div class='inline'>
 <p>Returns some information about self in a transposed style by a string.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#tdra-instance_method" title="#tdra (instance method)">#<strong>tdra</strong>  &#x21d2; nil </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Shortcut for ‘tdr(:all)“.</p>
 </div></span>
   
 </li>
@@ -398,6 +448,116 @@ RedAmber::DataFrame : 3 x 2 Vectors</code></pre>
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="shape_str-instance_method">
+  
+    #<strong>shape_str</strong>(with_id: false)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Return class and shape of self by a String.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Default (without id)</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_penguins'>penguins</span><span class='period'>.</span><span class='id identifier rubyid_shape_str'>shape_str</span>
+
+<span class='comment'># =&gt;
+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>RedAmber::DataFrame : 344 x 8 Vectors</span><span class='tstring_end'>&quot;</span></span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>With id</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_penguins'>penguins</span><span class='period'>.</span><span class='id identifier rubyid_shape_str'>shape_str</span><span class='lparen'>(</span><span class='label'>with_id:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>RedAmber::DataFrame : 344 x 8 Vectors, 0x0000000000003980</span><span class='tstring_end'>&quot;</span></span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>with_id</span>
+      
+      
+        <span class='type'>(<tt>true</tt>, <tt>false</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>show id if true.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>shape string.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+305
+306
+307
+308
+309</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 305</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_shape_str'>shape_str</span><span class='lparen'>(</span><span class='label'>with_id:</span> <span class='kw'>false</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_shape_info'>shape_info</span> <span class='op'>=</span> <span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>(empty)</span><span class='tstring_end'>&#39;</span></span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_size'>size</span><span class='embexpr_end'>}</span><span class='tstring_content'> x </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_n_keys'>n_keys</span><span class='embexpr_end'>}</span><span class='tstring_content'> Vector</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_pl'>pl</span><span class='lparen'>(</span><span class='id identifier rubyid_n_keys'>n_keys</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_with_id'>with_id</span> <span class='op'>?</span> <span class='id identifier rubyid_format'>format</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>, 0x%016x</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_object_id'>object_id</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='embexpr_end'>}</span><span class='tstring_content'> : </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_shape_info'>shape_info</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="summary-instance_method">
   
     #<strong>summary</strong>  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> 
@@ -519,6 +679,10 @@ puts penguins.summary.to_s(width: 82)
     #<strong>tdr</strong>(limit = 10, tally: 5, elements: 5)  &#x21d2; <tt>nil</tt> 
   
 
+  
+    <span class="aliases">Also known as:
+    <span class="names"><span id='glimpse-instance_method'>glimpse</span></span>
+    </span>
   
 
   
@@ -841,15 +1005,69 @@ Vectors : 8 numeric, 3 strings
       <pre class="lines">
 
 
-246
-247
-248</pre>
+255
+256
+257</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 246</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 255</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_tdr_str'>tdr_str</span><span class='lparen'>(</span><span class='id identifier rubyid_limit'>limit</span> <span class='op'>=</span> <span class='int'>10</span><span class='comma'>,</span> <span class='label'>tally:</span> <span class='int'>5</span><span class='comma'>,</span> <span class='label'>elements:</span> <span class='int'>5</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_shape_str'>shape_str</span><span class='embexpr_end'>}</span><span class='tstring_content'>\n</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_dataframe_info'>dataframe_info</span><span class='lparen'>(</span><span class='id identifier rubyid_limit'>limit</span><span class='comma'>,</span> <span class='label'>tally_level:</span> <span class='id identifier rubyid_tally'>tally</span><span class='comma'>,</span> <span class='label'>max_element:</span> <span class='id identifier rubyid_elements'>elements</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="tdra-instance_method">
+  
+    #<strong>tdra</strong>  &#x21d2; <tt>nil</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Shortcut for ‘tdr(:all)“.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>nil</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+243
+244
+245</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 243</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_tdra'>tdra</span>
+  <span class='id identifier rubyid_puts'>puts</span> <span class='id identifier rubyid_tdr_str'>tdr_str</span><span class='lparen'>(</span><span class='symbol'>:all</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -911,25 +1129,25 @@ Vectors : 8 numeric, 3 strings
       <pre class="lines">
 
 
-261
-262
-263
-264
-265
-266
-267
-268
-269
 270
 271
 272
 273
 274
 275
-276</pre>
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 261</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_displayable.rb', line 270</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_iruby'>to_iruby</span>
   <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>iruby</span><span class='tstring_end'>&#39;</span></span>
@@ -1067,7 +1285,7 @@ Vectors : 8 numeric, 3 strings
 </div>
 
       <div id="footer">
-  Generated on Sat Feb 25 00:37:53 2023 by
+  Generated on Sat Feb 25 01:21:37 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.1).
 </div>
