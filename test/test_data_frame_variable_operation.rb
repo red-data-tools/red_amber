@@ -141,11 +141,24 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_true df.drop(:key).empty?
     end
 
+    test 'drop nothing' do
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key type    level data_preview
+        0 :a  uint8       3 [1, 2, 3]
+        1 :b  double      3 [0.0, NaN, nil], 1 NaN, 1 nil
+        2 :c  string      3 ["A", "B", "C"]
+        3 :d  boolean     3 [true, false, nil], 1 nil
+      STR
+      assert_equal str, @df.drop.tdr_str
+      assert_equal str, @df.drop([]).tdr_str
+      assert_equal str, @df.drop { nil }.tdr_str
+    end
+
     test 'drop by arguments' do
       assert_raise(DataFrameArgumentError) { @df.drop(:a) { :block } }
 
-      assert_equal @df, @df.drop # drop nothing
-      assert_equal @df, @df.drop([]) # drop nothing
       assert_true @df.drop(@df.keys).empty? # drop all
 
       str = <<~STR
@@ -192,7 +205,6 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         1 :b  double     3 [0.0, NaN, nil], 1 NaN, 1 nil
         2 :c  string     3 ["A", "B", "C"]
       STR
-      assert_equal(@df, @df.drop { nil }) # drop nothing
       assert_equal str, @df.drop { 3 }.tdr_str
       assert_equal str, @df.drop { [3] }.tdr_str
       assert_equal str, @df.drop { :d }.tdr_str
@@ -243,15 +255,25 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { df.rename(:key) }
     end
 
+    test 'rename nothing' do
+      str = <<~OUTPUT
+        RedAmber::DataFrame : 5 x 4 Vectors
+        Vectors : 2 numeric, 1 string, 1 boolean
+        # key     type    level data_preview
+        0 :index  uint8       5 [0, 1, 2, 3, nil], 1 nil
+        1 :float  double      5 [0.0, 1.1, 2.2, NaN, nil], 1 NaN, 1 nil
+        2 :string string      5 ["A", "B", "C", "D", nil], 1 nil
+        3 :bool   boolean     3 {true=>2, false=>2, nil=>1}
+      OUTPUT
+      assert_equal str, @df2.rename.tdr_str
+      assert_equal str, @df2.rename([]).tdr_str
+      unchanged_key_pair = @df2.keys.each_with_object({}) { |k, h| h[k] = k }
+      assert_equal str, @df2.rename(unchanged_key_pair).tdr_str
+    end
+
     test 'rename by arguments' do
       assert_raise(DataFrameArgumentError) { @df2.rename(:key) { :block } }
       assert_raise(DataFrameArgumentError) { @df2.rename(:key) }
-
-      assert_equal @df2, @df2.rename # rename nothing
-      assert_equal @df2, @df2.rename([])
-
-      unchanged_key_pair = @df2.keys.each_with_object({}) { |k, h| h[k] = k }
-      assert_equal @df2, @df2.rename(unchanged_key_pair)
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 5 x 4 Vectors
