@@ -120,7 +120,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#[]-instance_method" title="#[] (instance method)">#<strong>[]</strong>(*args) {|Array&lt;Numeric, true, false, nil&gt;, Vector| ... } &#x21d2; scalar, Array </a>
+      <a href="#[]-instance_method" title="#[] (instance method)">#<strong>[]</strong>(*args) {|specifier.| ... } &#x21d2; scalar, Array </a>
     
 
     
@@ -168,7 +168,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#filter-instance_method" title="#filter (instance method)">#<strong>filter</strong>(*booleans) {|Array&lt;true, false, nil&gt;, Vector| ... } &#x21d2; Vector </a>
+      <a href="#filter-instance_method" title="#filter (instance method)">#<strong>filter</strong>(*booleans, &amp;block)  &#x21d2; Vector </a>
     
 
     
@@ -312,7 +312,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#take-instance_method" title="#take (instance method)">#<strong>take</strong>(*indices) {|Array&lt;Numeric&gt;, Vector| ... } &#x21d2; Vector </a>
+      <a href="#take-instance_method" title="#take (instance method)">#<strong>take</strong>(*indices, &amp;block)  &#x21d2; Vector </a>
     
 
     
@@ -345,7 +345,7 @@
       <div class="method_details first">
   <h3 class="signature first" id="[]-instance_method">
   
-    #<strong>[]</strong>(*args) {|Array&lt;Numeric, true, false, nil&gt;, Vector| ... } &#x21d2; <tt>scalar</tt>, <tt>Array</tt> 
+    #<strong>[]</strong>(*args) {|specifier.| ... } &#x21d2; <tt>scalar</tt>, <tt>Array</tt> 
   
 
   
@@ -374,17 +374,19 @@
       
         &mdash;
         <div class='inline'>
-<p>specifier.</p>
+<p>specifier. Indices or booleans.</p>
 </div>
       
     </li>
   
 </ul>
 
-<p class="tag_title">Yields:</p>
-<ul class="yield">
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
   
     <li>
+      
+        <span class='name'>specifier.</span>
       
       
         <span class='type'>(<tt>Array&lt;Numeric, true, false, nil&gt;</tt>, <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
@@ -393,7 +395,7 @@
       
         &mdash;
         <div class='inline'>
-<p>specifier.</p>
+<p>Indices or booleans.</p>
 </div>
       
     </li>
@@ -564,7 +566,7 @@
       <div class="method_details ">
   <h3 class="signature " id="filter-instance_method">
   
-    #<strong>filter</strong>(*booleans) {|Array&lt;true, false, nil&gt;, Vector| ... } &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> 
+    #<strong>filter</strong>(*booleans, &amp;block)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> 
   
 
   
@@ -599,15 +601,15 @@
       
         &mdash;
         <div class='inline'>
-<p>booleans.</p>
+<p>an array-like of booleans.</p>
 </div>
       
     </li>
   
 </ul>
 
-<p class="tag_title">Yields:</p>
-<ul class="yield">
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
   
     <li>
       
@@ -618,7 +620,7 @@
       
         &mdash;
         <div class='inline'>
-<p>booleans.</p>
+<p>an array-like of booleans from the block.</p>
 </div>
       
     </li>
@@ -928,7 +930,7 @@
       
         
         <div class='inline'>
-<p>0.3.1</p>
+<p>0.4.0</p>
 </div>
       
     </li>
@@ -1229,7 +1231,7 @@
       
         
         <div class='inline'>
-<p>0.3.1</p>
+<p>0.4.0</p>
 </div>
       
     </li>
@@ -1411,7 +1413,7 @@
       
         
         <div class='inline'>
-<p>0.3.1</p>
+<p>0.4.0</p>
 </div>
       
     </li>
@@ -1460,7 +1462,7 @@
       <div class="method_details ">
   <h3 class="signature " id="take-instance_method">
   
-    #<strong>take</strong>(*indices) {|Array&lt;Numeric&gt;, Vector| ... } &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> 
+    #<strong>take</strong>(*indices, &amp;block)  &#x21d2; <tt><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></tt> 
   
 
   
@@ -1491,15 +1493,15 @@
       
         &mdash;
         <div class='inline'>
-<p>indices.</p>
+<p>an array-like of indices.</p>
 </div>
       
     </li>
   
 </ul>
 
-<p class="tag_title">Yields:</p>
-<ul class="yield">
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
   
     <li>
       
@@ -1510,7 +1512,7 @@
       
         &mdash;
         <div class='inline'>
-<p>indices.</p>
+<p>an array-like of indices from the block.</p>
 </div>
       
     </li>
@@ -1609,7 +1611,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Feb 25 01:40:09 2023 by
+  Generated on Sat Feb 25 04:47:55 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.1).
 </div>
