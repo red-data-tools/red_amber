@@ -39,7 +39,7 @@ module RedAmber
     #
     #   Vector.aggregate?(:round) # => false
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def self.aggregate?(function)
       %i[
@@ -121,7 +121,7 @@ module RedAmber
     #   #<RedAmber::Vector(:uint16, size=2):0x000000000000c328>
     #   [1, 2]
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def resolve(other)
       case other
@@ -523,7 +523,7 @@ module RedAmber
     #     #<RedAmber::Vector(:uint8, size=4):0x000000000000cb98>
     #     [3, 3, 3, 3]
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def propagate(function = nil, &block)
       value =

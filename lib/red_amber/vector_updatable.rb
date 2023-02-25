@@ -433,7 +433,7 @@ module RedAmber
     #   #<RedAmber::Vector(:uint8, size=4):0x0000000000003840>
     #   [1, 2, 65, 66]
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def concatenate(other)
       concatenated_array =

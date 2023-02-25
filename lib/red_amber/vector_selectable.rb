@@ -183,7 +183,7 @@ module RedAmber
     #   #<RedAmber::Vector(:string, size=5):0x000000000000c148>
     #   ["E", "D", "C", "B", "A"]
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def sort(order = :ascending)
       order =
@@ -233,7 +233,7 @@ module RedAmber
     #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
     #   [0, 2, 4, 1, 3]
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def rank
       datum = Arrow::Function.find(:rank).execute([data])
@@ -318,7 +318,7 @@ module RedAmber
     #     #<RedAmber::Vector(:string, size=16):0x00000000000233e8>
     #     ["H", "B", "C", "B", "C", "A", "F", "A", "E", "C", "H", "F", "F", "A", ... ]
     #
-    # @since 0.3.1
+    # @since 0.4.0
     #
     def sample(n_or_prop = nil)
       require 'arrow-numo-narray'
