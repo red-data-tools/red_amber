@@ -13,9 +13,9 @@ module RedAmber
     # Select elements in the self by indices.
     #
     # @param indices [Array<Numeric>, Vector]
-    #   indices.
-    # @yield [Array<Numeric>, Vector]
-    #   indices.
+    #   an array-like of indices.
+    # @yieldreturn [Array<Numeric>, Vector]
+    #   an array-like of indices from the block.
     # @return [Vector]
     #   vector by selected elements.
     #
@@ -51,9 +51,9 @@ module RedAmber
     # Select elements in the self by booleans.
     #
     # @param booleans [Array<true, false, nil>, Vector]
-    #   booleans.
-    # @yield [Array<true, false, nil>, Vector]
-    #   booleans.
+    #   an array-like of booleans.
+    # @yieldreturn [Array<true, false, nil>, Vector]
+    #   an array-like of booleans from the block.
     # @return [Vector]
     #   vector by selected elements.
     #
@@ -94,9 +94,9 @@ module RedAmber
     # Select elements in the self by indices or booleans.
     #
     # @param args [Array<Numeric, true, false, nil>, Vector]
-    #   specifier.
-    # @yield [Array<Numeric, true, false, nil>, Vector]
-    #   specifier.
+    #   specifier. Indices or booleans.
+    # @yieldparam [Array<Numeric, true, false, nil>, Vector]
+    #   specifier. Indices or booleans.
     # @return [scalar, Array]
     #   returns scalar or array.
     #

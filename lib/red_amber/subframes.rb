@@ -220,8 +220,8 @@ module RedAmber
     #
     #   @param dataframe [DataFrame]
     #     a source dataframe.
-    #   @yield [DataFrame]
-    #     the block is called with the parameter `dataframe`.
+    #   @yieldparam dataframe [DataFrame]
+    #     the block is called with `dataframe`.
     #   @yieldreturn [Array<numeric_array_like>, Array<boolean_array_like>]
     #     an Array of index or boolean array-likes to create subsets of DataFrame.
     #     All array-likes are responsible to #numeric? or #boolean?.
@@ -317,8 +317,6 @@ module RedAmber
     # @overload each
     #   When a block given, passes each sub DataFrames to the block.
     #
-    #   @yield [DataFrame]
-    #     each sub DataFrame.
     #   @yieldparam subframe [DataFrame]
     #     passes sub DataFrame by a block parameter.
     #   @yieldreturn [Object]

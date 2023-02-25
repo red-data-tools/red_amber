@@ -37,11 +37,42 @@ module RedAmber
 
     # Creates a new DataFrame.
     #
+    # @overload initialize(hash)
+    #   Initialize a DataFrame by a Hash.
+    #
+    #   @param hash [Hash<key => <Array, Arrow::Array, #to_arrow_array>>]
+    #     a Hash of `key` with array-like for column values.
+    #     `key`s are Symbol or String.
+    #   @example Initialize by a Hash
+    #     hash = { x: [1, 2, 3], y: %w[A B C] }
+    #     DataFrame.new(hash)
+    #   @example Initialize by a Hash like arguments.
+    #     DataFrame.new(x: [1, 2, 3], y: %w[A B C])
+    #   @example Initialize from #to_arrow_array responsibles.
+    #     # #to_arrow_array responsible `array-like` is also available.
+    #     require 'arrow-numo-narray'
+    #     DataFrame.new(numo: Numo::DFloat.new(3).rand)
+    #
     # @overload initialize(table)
-    #   Initialize DataFrame by an `Arrow::Table`
+    #   Initialize a DataFrame by an `Arrow::Table`.
     #
     #   @param table [Arrow::Table]
-    #     A table to have in the DataFrame.
+    #     a table to have in the DataFrame.
+    #   @example Initialize by a Table
+    #     table = Arrow::Table.new(x: [1, 2, 3], y: %w[A B C])
+    #     DataFrame.new(table)
+    #
+    # @overload initialize(schama, row_oriented_array)
+    #   Initialize a DataFrame by schema and row_oriented_array.
+    #
+    #   @param schema [Hash<key => type>]
+    #     a schema of key and data type.
+    #   @param row_oriented_array [Array]
+    #     an Array of rows.
+    #   @example Initialize by a schema and a row_oriented_array.
+    #     schema = { x: :uint8, y: :string }
+    #     row_oriented_array = [[1, 'A'], [2, 'B'], [3, 'C']]
+    #     DataFrame.new(schema, row_oriented_array)
     #
     # @overload initialize(arrowable)
     #   Initialize DataFrame by a `#to_arrow` responsible object.
@@ -52,6 +83,11 @@ module RedAmber
     #
     #   @note `RedAmber::DataFrame` itself is readable by this.
     #   @note Hash is refined to respond to `#to_arrow` in this class.
+    #   @example Initialize by Red Dataset object.
+    #     require 'datasets-arrow'
+    #     dataset = Datasets::Penguins.new
+    #     penguins = DataFrame.new(dataset)
+    #   @since 0.2.2
     #
     # @overload initialize(rover_like)
     #   Initialize DataFrame by a `Rover::DataFrame`-like `#to_h` responsible object.
@@ -73,14 +109,10 @@ module RedAmber
     #
     #   @param empty [nil, [], {}]
     #
-    #   @example
-    #     DataFrame.new([]), DataFrame.new({}), DataFrame.new(nil)
-    #
-    # @overload initialize(args)
-    #
-    #   @param args [values]
-    #     Accepts any argments which is valid for `Arrow::Table.new(args)`. See
-    #     {https://github.com/apache/arrow/blob/master/ruby/red-arrow/lib/arrow/table.rb
+    #   @example Return empty DataFrame.
+    #     DataFrame.new([])
+    #     DataFrame.new({})
+    #     DataFrame.new(nil)
     #
     def initialize(*args)
       case args
@@ -295,12 +327,12 @@ module RedAmber
     # @overload each_row(&block)
     #   Yields with key and row pairs.
     #
-    #   @yield [key_row_pairs]
-    #     yields with key and row pairs.
-    #   @yieldparam [Hash]
+    #   @yieldparam key_row_pairs [Hash]
     #     key and row pairs.
     #   @yieldreturn [Integer]
     #     size of the DataFrame.
+    #   @return [Integer]
+    #     returns size.
     #
     def each_row
       return enum_for(:each_row) unless block_given?
@@ -347,8 +379,6 @@ module RedAmber
     # @overload group(*group_keys)
     #   Create a Group and summarize it by aggregation functions from the block.
     #
-    #   @yield [Group]
-    #     passes created group.
     #   @yieldparam group [Group]
     #     passes Group object.
     #   @yieldreturn [DataFrame, Array<DataFrame>]

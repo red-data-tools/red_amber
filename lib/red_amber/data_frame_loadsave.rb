@@ -35,7 +35,7 @@ module RedAmber
       # @example Load from URI
       #   DataFrame.load(URI("https://some_uri/file.csv"))
       #
-      # @example Load from Buffer
+      # @example Load from a Buffer
       #   DataFrame.load(Arrow::Buffer.new(<<~BUFFER), format: :csv)
       #     name,age
       #     Yasuko,68
@@ -43,7 +43,7 @@ module RedAmber
       #     Hinata,28
       #   BUFFER
       #
-      # @example Load from Buffer skipping comment line
+      # @example Load from a Buffer skipping comment line
       #   DataFrame.load(Arrow::Buffer.new(<<~BUFFER), format: :csv, skip_lines: /^#/)
       #     # comment
       #     name,age
