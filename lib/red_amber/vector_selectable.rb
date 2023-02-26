@@ -148,6 +148,26 @@ module RedAmber
       to_a.index(element)
     end
 
+    # Returns first element of self.
+    #
+    # @return
+    #   the first element.
+    # @since 0.4.1
+    #
+    def first
+      data[0]
+    end
+
+    # Returns last element of self.
+    #
+    # @return
+    #   the last element.
+    # @since 0.4.1
+    #
+    def last
+      data[-1]
+    end
+
     # Drop nil in self and returns a new Vector as a result.
     #
     # @return [Vector]

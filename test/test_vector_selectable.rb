@@ -197,6 +197,20 @@ class VectorTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#first' do
+    vector = Vector.new([1, 2, 3, nil])
+    test '#first' do
+      assert_equal 1, vector.first
+    end
+  end
+
+  sub_test_case '#last' do
+    vector = Vector.new([1, 2, 3, nil])
+    test '#last' do
+      assert_nil vector.last
+    end
+  end
+
   sub_test_case '#drop_nil' do
     test 'empty vector' do
       assert_equal_array [], Vector.new([]).drop_nil
