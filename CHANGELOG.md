@@ -1,7 +1,5 @@
 ## [0.4.0] - 2023-02-25
 
-:memo: Update documents for consistency
-
 - Breaking change
   - Upgrade dependency to Arrow 11.0.0 (#188)
 
