@@ -6,24 +6,27 @@ class SubFranesTest < Test::Unit::TestCase
   include RedAmber
   include TestHelper
 
+  setup do
+    @df = DataFrame.new(
+      x: [*1..6],
+      y: %w[A A B B B C],
+      z: [false, true, false, nil, true, false]
+    )
+    # @df is:
+    #         x y        z
+    #   <uint8> <string> <boolean>
+    # 0       1 A        false
+    # 1       2 A        true
+    # 2       3 B        false
+    # 3       4 B        (nil)
+    # 4       5 B        true
+    # 5       6 C        false
+    @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+  end
+
   sub_test_case '.by_group' do
     test '.by_group' do
-      df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      # @df is:
-      #         x y        z
-      #   <uint8> <string> <boolean>
-      # 0       1 A        false
-      # 1       2 A        true
-      # 2       3 B        false
-      # 3       4 B        (nil)
-      # 4       5 B        true
-      # 5       6 C        false
-
-      group = Group.new(df, [:y])
+      group = Group.new(@df, [:y])
       sf = SubFrames.by_group(group)
       assert_equal <<~STR, sf.to_s
                 x y        z
@@ -45,14 +48,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '.by_indices' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-    end
-
     test '.by_indices a SubFrames with Vector' do
       sf = SubFrames.by_indices(@df, [Vector.new(0, 2)])
       assert_equal <<~STR, sf.to_s
@@ -65,14 +60,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '.by_filters' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-    end
-
     test '.by_filters a SubFrames with Array' do
       sf = SubFrames.by_filters(@df, [[true, false, true, false, nil, false]])
       assert_equal <<~STR, sf.to_s
@@ -115,14 +102,6 @@ class SubFranesTest < Test::Unit::TestCase
       assert_equal 0, sf.size
       assert_equal [], sf.sizes
       assert_true sf.first.nil?
-    end
-
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
     end
 
     test '.new empty specifier, nil' do
@@ -268,15 +247,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '#each' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
-    end
-
     test '#each w/o block' do
       assert_kind_of Enumerator, @sf.each
       assert_equal 3, @sf.each.size
@@ -291,15 +261,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '#aggregate' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
-    end
-
     test '#aggregate invalid argument' do
       assert_raise(SubFramesArgumentError) { @sf.aggregate([:y], ['x', :sum]) }
     end
@@ -350,15 +311,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '#map' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
-    end
-
     test '#map w/o block' do
       assert_kind_of Enumerator, @sf.map
       assert_equal 3, @sf.map.size
@@ -402,12 +354,6 @@ class SubFranesTest < Test::Unit::TestCase
 
   sub_test_case '#assign' do
     setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
       @expected = <<~STR
                 x y        z           plus1
           <uint8> <string> <boolean> <uint8>
@@ -443,15 +389,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '#select' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
-    end
-
     test '#select w/o block' do
       assert_kind_of Enumerator, @sf.select
       assert_equal 3, @sf.select.size
@@ -488,15 +425,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '#reject' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
-    end
-
     test '#reject w/o block' do
       assert_kind_of Enumerator, @sf.reject
       assert_equal 3, @sf.reject.size
@@ -533,15 +461,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '#filter_map' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
-    end
-
     test '#filter_map w/o block' do
       assert_kind_of Enumerator, @sf.filter_map
       assert_equal 3, @sf.filter_map.size
@@ -604,14 +523,6 @@ class SubFranesTest < Test::Unit::TestCase
 
   # Tests for #size, #sizes, #offset_indices, #empty? and #universal?
   sub_test_case 'properties' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-    end
-
     test 'properties of empty SubFrame' do
       empty_subframe = SubFrames.new(@df, [])
       assert_equal 0, empty_subframe.size
@@ -643,14 +554,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '#inspect' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-    end
-
     test '#inspect empty SubFrame' do
       sf = SubFrames.new(@df, [])
       enum = sf.each
@@ -711,15 +614,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '#to_s' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
-    end
-
     test '#to_s' do
       expected = <<~STR
                 x y        z
@@ -760,15 +654,6 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '#concatenate' do
-    setup do
-      @df = DataFrame.new(
-        x: [*1..6],
-        y: %w[A A B B B C],
-        z: [false, true, false, nil, true, false]
-      )
-      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
-    end
-
     test '#concatenate' do
       assert_kind_of DataFrame, @sf.concatenate
       assert_equal_array @df.to_a, @sf.concatenate
