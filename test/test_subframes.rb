@@ -261,22 +261,14 @@ class SubFranesTest < Test::Unit::TestCase
   end
 
   sub_test_case '#aggregate' do
-    test '#aggregate invalid argument' do
-      assert_raise(SubFramesArgumentError) { @sf.aggregate([:y], ['x', :sum]) }
-    end
-
-    test '#aggregate not a aggregation function by a Hash' do
-      assert_raise(SubFramesArgumentError) { @sf.aggregate([:y], { x: :abs }) }
-    end
-
-    test '#aggregate not a aggregation function by an Array' do
-      assert_raise(SubFramesArgumentError) { @sf.aggregate([:y], [[:x], [:abs]]) }
-    end
-
-    test '#aggregate by a Hash' do
-      aggregated = @sf.aggregate([:y], { x: :sum })
-      assert_kind_of DataFrame, aggregated
-      assert_equal <<~STR, aggregated.to_s
+    setup do
+      @df = DataFrame.new(
+        x: [*1..6],
+        y: %w[A A B B B C],
+        z: [false, true, false, nil, true, false]
+      )
+      @sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]])
+      @expected = <<~STR
           y          sum_x
           <string> <uint8>
         0 A              3
@@ -285,7 +277,59 @@ class SubFranesTest < Test::Unit::TestCase
       STR
     end
 
-    test '#aggregate by an Array' do
+    test '#aggregate nothing' do
+      assert_raise(SubFramesArgumentError) { @sf.aggregate }
+    end
+
+    test '#aggregate invalid argument' do
+      assert_raise(SubFramesArgumentError) { @sf.aggregate([:y], ['x', :sum]) }
+    end
+
+    # It is not a aggregation function, but returns a concatenated string.
+    test '#aggregate by an element-wise function by block' do
+      aggregated = @sf.aggregate(:y, :abs_x) { [y.first, x.abs] }
+      assert_kind_of DataFrame, aggregated
+      assert_equal <<~STR, aggregated.to_s
+          y        abs_x
+          <string> <string>
+        0 A        [1, 2]
+        1 B        [3, 4, 5]
+        2 C        [6]
+      STR
+    end
+
+    # It is not a aggregation function, but returns a concatenated string.
+    test '#aggregate by an element-wise function by a Hash' do
+      aggregated = @sf.aggregate([:y], { x: :abs })
+      assert_kind_of DataFrame, aggregated
+      assert_equal <<~STR, aggregated.to_s
+          y        abs_x
+          <string> <string>
+        0 A        [1, 2]
+        1 B        [3, 4, 5]
+        2 C        [6]
+      STR
+    end
+
+    test '#aggregate by a Hash' do
+      aggregated = @sf.aggregate([:y], { x: :sum })
+      assert_kind_of DataFrame, aggregated
+      assert_equal @expected, aggregated.to_s
+    end
+
+    test '#aggregate by an Array w/o group key' do
+      aggregated = @sf.aggregate([], [%i[x z], %i[sum count]])
+      assert_kind_of DataFrame, aggregated
+      assert_equal <<~STR, aggregated.to_s
+            sum_x   sum_z count_x count_z
+          <uint8> <uint8> <uint8> <uint8>
+        0       3       1       2       2
+        1      12       1       3       2
+        2       6       0       1       1
+      STR
+    end
+
+    test '#aggregate by an Array with group key' do
       aggregated = @sf.aggregate([:y], [%i[x z], %i[sum count]])
       assert_kind_of DataFrame, aggregated
       assert_equal <<~STR, aggregated.to_s
@@ -297,8 +341,45 @@ class SubFranesTest < Test::Unit::TestCase
       STR
     end
 
-    test '#aggregate by an Array w/o group_key' do
-      aggregated = @sf.aggregate([], [%i[x z], %i[sum count]])
+    test '#aggregate by args and block' do
+      aggregated = @sf.aggregate(:y, :sum_x) { [y.first, x.sum] }
+      assert_kind_of DataFrame, aggregated
+      assert_equal @expected, aggregated.to_s
+    end
+
+    test '#aggregate by array and block' do
+      aggregated = @sf.aggregate(%i[y sum_x]) { [y.first, x.sum] }
+      assert_kind_of DataFrame, aggregated
+      assert_equal @expected, aggregated.to_s
+    end
+
+    test '#aggregate by block with a hash' do
+      aggregated = @sf.aggregate { { y: y.first, sum_x: x.sum } }
+      assert_kind_of DataFrame, aggregated
+      assert_equal @expected, aggregated.to_s
+    end
+
+    test '#aggregate by block with an array' do
+      aggregated = @sf.aggregate { [[:y, y.first], [:sum_x, x.sum]] }
+      assert_kind_of DataFrame, aggregated
+      assert_equal @expected, aggregated.to_s
+    end
+
+    test '#aggregate by block with an Array' do
+      assert_raise(TypeError) { @sf.aggregate { [:y, y.first] } }
+    end
+
+    test '#aggregate by block with an Array w/o group key' do
+      aggregations =
+        %i[sum count].product(%i[x z]).map do |func, key|
+          ["#{func}_#{key}".to_sym, key, func]
+        end
+      aggregated =
+        @sf.aggregate do |df|
+          aggregations.map do |label, key, func|
+            [label, df.send(key).send(func)]
+          end
+        end
       assert_kind_of DataFrame, aggregated
       assert_equal <<~STR, aggregated.to_s
             sum_x   sum_z count_x count_z
@@ -306,6 +387,27 @@ class SubFranesTest < Test::Unit::TestCase
         0       3       1       2       2
         1      12       1       3       2
         2       6       0       1       1
+      STR
+    end
+
+    test '#aggregate by block with an Array and group key' do
+      aggregations = [%i[y y first]]
+      %i[sum count].product(%i[x z]).each do |func, key|
+        aggregations << ["#{func}_#{key}".to_sym, key, func]
+      end
+      aggregated =
+        @sf.aggregate do |df|
+          aggregations.map do |label, key, func|
+            [label, df.send(key).send(func)]
+          end
+        end
+      assert_kind_of DataFrame, aggregated
+      assert_equal <<~STR, aggregated.to_s
+          y          sum_x   sum_z count_x count_z
+          <string> <uint8> <uint8> <uint8> <uint8>
+        0 A              3       1       2       2
+        1 B             12       1       3       2
+        2 C              6       0       1       1
       STR
     end
   end
