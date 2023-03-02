@@ -256,7 +256,13 @@ module RedAmber
     # @since 0.4.0
     #
     def rank
-      datum = Arrow::Function.find(:rank).execute([data])
+      datum =
+        case data
+        when Arrow::ChunkedArray
+          Arrow::Function.find(:rank).execute([data.pack])
+        else
+          Arrow::Function.find(:rank).execute([data])
+        end
       Vector.create(datum.value) - 1
     end
 

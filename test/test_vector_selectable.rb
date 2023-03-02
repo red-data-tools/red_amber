@@ -254,9 +254,11 @@ class VectorTest < Test::Unit::TestCase
     test '#rank default option' do
       float = [0.1, nil, Float::NAN, 0.2, 0.1]
       string = ['A', nil, 'C', 'B', 'A']
+      chunked = Arrow::ChunkedArray.new([float])
       expect = [0, 4, 3, 2, 1]
       assert_equal_array expect, Vector.new(float).rank
       assert_equal_array expect, Vector.new(string).rank
+      assert_equal_array expect, Vector.new(chunked).rank
     end
   end
 
