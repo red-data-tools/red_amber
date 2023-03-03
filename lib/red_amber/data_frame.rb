@@ -194,7 +194,7 @@ module RedAmber
     #   `key => Vector` pairs for each columns.
     #
     def variables
-      @variables || @variables = init_instance_vars(:variables)
+      @variables ||= init_instance_vars(:variables)
     end
     alias_method :vars, :variables
 
@@ -204,7 +204,7 @@ module RedAmber
     #   keys in an Array.
     #
     def keys
-      @keys || @keys = init_instance_vars(:keys)
+      @keys ||= init_instance_vars(:keys)
     end
     alias_method :column_names, :keys
     alias_method :var_names, :keys
@@ -240,7 +240,7 @@ module RedAmber
     #   abbreviated Red Arrow data type names.
     #
     def types
-      @types || @types = @table.columns.map do |column|
+      @types ||= @table.columns.map do |column|
         column.data.value_type.nick.to_sym
       end
     end
@@ -251,7 +251,7 @@ module RedAmber
     #   an Array of Red Arrow data type Classes.
     #
     def type_classes
-      @data_types || @data_types = @table.columns.map { |column| column.data_type.class }
+      @type_classes ||= @table.columns.map { |column| column.data_type.class }
     end
 
     # Returns Vectors in an Array.
@@ -260,7 +260,7 @@ module RedAmber
     #   an Array of Vector.
     #
     def vectors
-      @vectors || @vectors = init_instance_vars(:vectors)
+      @vectors ||= init_instance_vars(:vectors)
     end
 
     # Returns column-oriented data in a Hash.
