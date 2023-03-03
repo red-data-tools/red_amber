@@ -143,7 +143,7 @@ module RedAmber
   module RefineArrowTable
     refine Arrow::Table do
       def keys
-        columns.map(&:name)
+        columns.map { |column| column.name.to_sym }
       end
 
       def key?(key)

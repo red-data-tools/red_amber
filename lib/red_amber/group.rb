@@ -42,8 +42,7 @@ module RedAmber
 
           table = @group.aggregate(*build_aggregation_keys("hash_#{function}",
                                                            summary_keys))
-          g = @group_keys.map(&:to_s)
-          DataFrame.new(table[g + (table.keys - g)])
+          DataFrame.new(table[@group_keys + (table.keys - @group_keys)])
         end
       end
     end
