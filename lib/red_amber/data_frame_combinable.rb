@@ -906,17 +906,9 @@ module RedAmber
       renamed_right_keys =
         other_keys.map do |key|
           if dup_keys.include?(key)
-            new_key = nil
-            loop do
-              new_key = "#{key}#{suffix}".to_sym
-              break unless joined_keys.include?(new_key)
-
-              s = suffix.succ
-              raise DataFrameArgumentError, "suffix #{suffix} is invalid" if s == suffix
-
-              suffix = s
-            end
-            new_key
+            suffixed = "#{key}#{suffix}".to_sym
+            # Find a key from suffixed.succ
+            (suffixed..).find { !joined_keys.include?(_1) }
           else
             key
           end
