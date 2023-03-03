@@ -495,7 +495,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         )
       end
 
-      test '#inner_join with rename and collision' do
+      test '#inner_join with rename and collision by default' do
         expected = DataFrame.new(
           'KEY.1': %w[A B],
           KEY: %w[s t],
@@ -508,7 +508,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
                                                { left: :'KEY.1', right: 'KEY.1' })
       end
 
-      test '#full_join with rename and collision' do
+      test '#full_join with rename and collision by default' do
         expected = DataFrame.new(
           'KEY.1': %w[A B C D],
           KEY: ['s', 't', 'u', nil],
@@ -521,7 +521,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
                                               { left: :'KEY.1', right: 'KEY.1' })
       end
 
-      test '#left_join with rename and collision' do
+      test '#left_join with rename and collision by default' do
         expected = DataFrame.new(
           'KEY.1': %w[A B C],
           KEY: %w[s t u],
@@ -534,7 +534,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
                                               { left: :'KEY.1', right: 'KEY.1' })
       end
 
-      test '#right_join with rename and collision' do
+      test '#right_join with rename and collision by default' do
         expected = DataFrame.new(
           'KEY.1': %w[A B D],
           KEY: ['s', 't', nil],
@@ -547,8 +547,15 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
                                                { left: :'KEY.1', right: 'KEY.1' })
       end
 
-      test 'invalid suffix' do
-        assert_raise(DataFrameArgumentError) { @df3.inner_join(@right3, :KEY, suffix: '') }
+      test '#inner_join with empty suffix' do
+        expected = DataFrame.new(
+          'KEY.1': %w[A B],
+          KEY: %w[s t],
+          X: [1, 2],
+          KEZ: %w[s u],
+          Y: [3, 2]
+        )
+        assert_equal expected, @df3.inner_join(@right3, :'KEY.1', suffix: '')
       end
     end
 
