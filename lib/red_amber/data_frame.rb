@@ -723,11 +723,9 @@ module RedAmber
     end
 
     def name_unnamed_keys
-      return unless @table.key?('')
+      return unless @table.key?(:'')
 
-      # We can't use #keys because it causes mismatch of @table and @keys
-      keys = @table.schema.fields.map { |f| f.name.to_sym }
-      unnamed = (:unnamed1..).find { |e| !keys.include?(e) }
+      unnamed = (:unnamed1..).find { |name| !@table.key?(name) }
       fields =
         @table.schema.fields.map do |field|
           if field.name.empty?

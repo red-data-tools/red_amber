@@ -820,14 +820,12 @@ module RedAmber
 
       # This is not necessary if additional procedure is contributed to Red Arrow.
       if join_keys.is_a?(Hash)
-        left_keys = join_keys[:left]
-        right_keys = join_keys[:right]
+        left_keys = ensure_keys(join_keys[:left])
+        right_keys = ensure_keys(join_keys[:right])
       else
-        left_keys = join_keys
-        right_keys = join_keys
+        left_keys = ensure_keys(join_keys)
+        right_keys = left_keys
       end
-      left_keys = Array(left_keys).map(&:to_s)
-      right_keys = Array(right_keys).map(&:to_s)
 
       case type
       when :full_outer, :left_semi, :left_anti, :right_semi, :right_anti
@@ -887,12 +885,17 @@ module RedAmber
               .drop(left_index, right_index)
         end
         dataframe.pick do
-          [right_keys, keys.map(&:to_s) - right_keys]
+          [right_keys, keys - right_keys]
         end
       end
     end
 
     private
+
+    # To ensure Array of Symbols
+    def ensure_keys(keys)
+      Array(keys).map(&:to_sym)
+    end
 
     # Rename duplicate keys by suffix
     def rename_table(joined_table, n_keys, suffix)
@@ -905,7 +908,7 @@ module RedAmber
           if dup_keys.include?(key)
             new_key = nil
             loop do
-              new_key = "#{key}#{suffix}"
+              new_key = "#{key}#{suffix}".to_sym
               break unless joined_keys.include?(new_key)
 
               s = suffix.succ

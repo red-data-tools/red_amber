@@ -168,10 +168,19 @@ class RefinementsTest < Test::Unit::TestCase
   using RefineArrowTable
 
   sub_test_case 'refine Arrow::Table' do
+    setup do
+      @table = Arrow::Table.new(x: [1, 2, 3], y: %w[A B C])
+    end
+
     test 'Arrow::Table#keys' do
-      table = Arrow::Table.new(x: [1, 2, 3], y: %w[A B C])
-      assert_true table.respond_to?(:keys)
-      assert_equal %w[x y], table.keys
+      assert_true @table.respond_to?(:keys)
+      assert_equal %i[x y], @table.keys
+    end
+
+    test 'Arrow::Table#key?' do
+      assert_true @table.respond_to?(:key?)
+      assert_true @table.key?(:x)
+      assert_false @table.key?(:a)
     end
   end
 
