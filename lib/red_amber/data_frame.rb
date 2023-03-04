@@ -682,7 +682,7 @@ module RedAmber
 
     # Catch variable (column) key as method name.
     def method_missing(name, *args, &block)
-      return v(name) if args.empty? && key?(name)
+      return variables[name] if args.empty? && key?(name)
 
       super
     end

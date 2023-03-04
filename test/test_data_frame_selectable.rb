@@ -616,7 +616,8 @@ class DataFrameSelectableTest < Test::Unit::TestCase
       assert_equal_array %w[A B C], df.v('y')
       assert_raise(DataFrameArgumentError) { df.v(:z) }
       assert_raise(DataFrameArgumentError) { df.v('') }
-      assert_raise(DataFrameArgumentError) { df.v(0) }
+      assert_raise(NoMethodError) { df.v(nil) }
+      assert_raise(NoMethodError) { df.v(0) }
     end
 
     test 'head/first' do

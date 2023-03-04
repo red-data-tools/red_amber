@@ -177,10 +177,7 @@ module RedAmber
     #   [39.1, 39.5, 40.3, nil, 36.7, 39.3, 38.9, 39.2, 34.1, 42.0, 37.8, 37.8, 41.1, ... ]
     #
     def v(key)
-      unless key.is_a?(Symbol) || key.is_a?(String)
-        raise DataFrameArgumentError, "Key is not a Symbol or a String: [#{key}]"
-      end
-      raise DataFrameArgumentError, "Key does not exist: [#{key}]" unless key? key
+      raise DataFrameArgumentError, "Key does not exist: [#{key}]" unless key?(key)
 
       variables[key.to_sym]
     end
