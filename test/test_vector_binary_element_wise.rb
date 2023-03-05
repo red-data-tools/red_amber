@@ -37,11 +37,21 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.and_not(@string) }
     end
 
+    test '#and_not(scalar)' do
+      assert_equal_array [false, false, nil], @boolean.and_not(true)
+      assert_equal_array [true, true, nil], @boolean.and_not(false)
+    end
+
     test '#and_not_kleene(vector)' do
       assert_equal_array [false, false, nil], @boolean.and_not_kleene(@boolean)
       assert_raise(Arrow::Error::NotImplemented) { @integer.and_not_kleene(@integer) }
       assert_raise(Arrow::Error::NotImplemented) { @double.and_not_kleene(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.and_not_kleene(@string) }
+    end
+
+    test '#and_not_kleene(scalar)' do
+      assert_equal_array [false, false, false], @boolean.and_not_kleene(true)
+      assert_equal_array [true, true, nil], @boolean.and_not_kleene(false)
     end
 
     test '#bit_wise_and(vector)' do
@@ -51,6 +61,10 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_and(@string) }
     end
 
+    test '#bit_wise_and(scalar)' do
+      assert_equal_array [0, 2, 2], @integer.bit_wise_and(2)
+    end
+
     test '#bit_wise_or(vector)' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.bit_wise_or(@boolean) }
       assert_equal_array [1, 2, 3], @integer.bit_wise_or(@integer)
@@ -58,11 +72,19 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_or(@string) }
     end
 
+    test '#bit_wise_or(scalar)' do
+      assert_equal_array [3, 2, 3], @integer.bit_wise_or(2)
+    end
+
     test '#bit_wise_xor(vector)' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.bit_wise_xor(@boolean) }
       assert_equal_array [0, 0, 0], @integer.bit_wise_xor(@integer)
       assert_raise(Arrow::Error::NotImplemented) { @double.bit_wise_xor(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.bit_wise_xor(@string) }
+    end
+
+    test '#bit_wise_xor(scalar)' do
+      assert_equal_array [3, 0, 1], @integer.bit_wise_xor(2)
     end
 
     test '#logb(base)' do
@@ -80,14 +102,15 @@ class VectorFunctionTest < Test::Unit::TestCase
 
   sub_test_case 'binary element-wise with operator' do
     setup do
-      @bool_self = Vector.new([true, true, true, false, false, false, nil, nil, nil])
-      @bool_other = Vector.new([true, false, nil, true, false, nil, true, false, nil])
-      @integer = Vector.new([1, 2, 3])
-      @double = Vector.new([1.0, -2, 3])
+      @bool_self = Vector.new(true, true, true, false, false, false, nil, nil, nil)
+      @bool_self3 = Vector.new(true, false, nil)
+      @bool_other = Vector.new(true, false, nil, true, false, nil, true, false, nil)
+      @integer = Vector.new(1, 2, 3)
+      @double = Vector.new(1.0, -2, 3)
       @string = Vector.new(%w[A B A])
     end
 
-    test '#&(vector)' do
+    test '#&' do
       assert_equal_array([true, false, nil, false, false, false, nil, false, nil],
                          @bool_self & @bool_other)
       assert_raise(Arrow::Error::NotImplemented) { @integer & @integer }
@@ -96,22 +119,32 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
 
     test '#and_kleene(vector)' do
-      assert_equal_array [true, false, nil, false, false, false, nil, false, nil],
-                         @bool_self.and_kleene(@bool_other)
+      assert_equal_array([true, false, nil, false, false, false, nil, false, nil],
+                         @bool_self.and_kleene(@bool_other))
       assert_raise(Arrow::Error::NotImplemented) { @integer.and_kleene(@integer) }
       assert_raise(Arrow::Error::NotImplemented) { @double.and_kleene(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.and_kleene(@string) }
     end
 
+    test '#and_kleene(scalar)' do
+      assert_equal_array [true, false, nil], @bool_self3.and_kleene(true)
+      assert_equal_array [false, false, false], @bool_self3.and_kleene(false)
+    end
+
     test '#and_org(vector)' do
-      assert_equal_array [true, false, nil, false, false, nil, nil, nil, nil],
-                         @bool_self.and_org(@bool_other)
+      assert_equal_array([true, false, nil, false, false, nil, nil, nil, nil],
+                         @bool_self.and_org(@bool_other))
       assert_raise(Arrow::Error::NotImplemented) { @integer.and_org(@integer) }
       assert_raise(Arrow::Error::NotImplemented) { @double.and_org(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.and_org(@string) }
     end
 
-    test '#|(vector)' do
+    test '#and_org(scalar)' do
+      assert_equal_array [true, false, nil], @bool_self3.and_org(true)
+      assert_equal_array [false, false, nil], @bool_self3.and_org(false)
+    end
+
+    test '#|' do
       assert_equal_array([true, true, true, true, false, nil, true, nil, nil],
                          @bool_self | @bool_other)
       assert_raise(Arrow::Error::NotImplemented) { @integer | @integer }
@@ -120,19 +153,29 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
 
     test '#or_kleene(vector)' do
-      assert_equal_array [true, true, true, true, false, nil, true, nil, nil],
-                         @bool_self.or_kleene(@bool_other)
+      assert_equal_array([true, true, true, true, false, nil, true, nil, nil],
+                         @bool_self.or_kleene(@bool_other))
       assert_raise(Arrow::Error::NotImplemented) { @integer.or_kleene(@integer) }
       assert_raise(Arrow::Error::NotImplemented) { @double.or_kleene(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.or_kleene(@string) }
     end
 
+    test '#or_kleene(scalar)' do
+      assert_equal_array [true, true, true], @bool_self3.or_kleene(true)
+      assert_equal_array [true, false, nil], @bool_self3.or_kleene(false)
+    end
+
     test '#or_org(vector)' do
-      assert_equal_array [true, true, nil, true, false, nil, nil, nil, nil],
-                         @bool_self.or_org(@bool_other)
+      assert_equal_array([true, true, nil, true, false, nil, nil, nil, nil],
+                         @bool_self.or_org(@bool_other))
       assert_raise(Arrow::Error::NotImplemented) { @integer.or_org(@integer) }
       assert_raise(Arrow::Error::NotImplemented) { @double.or_org(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.or_org(@string) }
+    end
+
+    test '#or_org(scalar)' do
+      assert_equal_array [true, true, nil], @bool_self3.or_org(true)
+      assert_equal_array [true, false, nil], @bool_self3.or_org(false)
     end
   end
 
@@ -151,11 +194,17 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.add(@string) }
     end
 
-    test '#+(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.+(@boolean) }
-      assert_equal_array [2, 4, 6], @integer.+(@integer)
-      assert_equal_array [2.0, -4.0, 6.0], @double.+(@double)
-      assert_raise(Arrow::Error::NotImplemented) { @string.+(@string) }
+    test '#add(scalar)' do
+      assert_equal_array [3, 4, 5], @integer.add(2)
+      assert_equal_array [3.0, 4.0, 5.0], @integer.add(2.0)
+      assert_equal_array [3.0, 0.0, 5.0], @double.add(2)
+    end
+
+    test '#+' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean + @boolean }
+      assert_equal_array [2, 4, 6], @integer + @integer
+      assert_equal_array [2.0, -4.0, 6.0], @double + @double
+      assert_raise(Arrow::Error::NotImplemented) { @string + @string }
     end
 
     test '#divide(vector)' do
@@ -165,23 +214,32 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.divide(@string) }
     end
 
-    test '#/(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean./(@boolean) }
-      assert_equal_array [1, 1, 1], @integer./(@integer)
-      assert_equal_array [1.0, 1.0, 1.0], @double./(@double)
-      assert_raise(Arrow::Error::NotImplemented) { @string./(@string) }
+    test '#divide(scalar)' do
+      assert_equal_array [0, 1, 1], @integer.divide(2)
+      assert_equal_array [0.5, 1.0, 1.5], @integer.divide(2.0)
+      assert_equal_array [-0.5, 1.0, -1.5], @double.divide(-2)
     end
 
-    test '#modulo' do
+    test '#/' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean / @boolean }
+      assert_equal_array [1, 1, 1], @integer / @integer
+      assert_equal_array [1.0, 1.0, 1.0], @double / @double
+      assert_raise(Arrow::Error::NotImplemented) { @string / @string }
+    end
+
+    test '#modulo(vector)' do
       divisor = Vector.new(2, 2, 2)
       float_divisor = Vector.new(-2, 1.0, 3)
       assert_raise(Arrow::Error::NotImplemented) { @boolean.modulo(@boolean) }
       assert_equal_array [1, 0, 1], @integer.modulo(divisor)
-      assert_equal_array [1.0, 0.0, 1.0], @integer.modulo(2.0)
       assert_equal_array [1.0, 0.0, 1.0], @double.modulo(divisor)
-      assert_equal_array [-1.0, 0.0, -1.0], @double.modulo(-2)
       assert_equal_array [-1.0, 0.0, 0.0], @double.modulo(float_divisor)
       assert_raise(Arrow::Error::NotImplemented) { @string.modulo(@string) }
+    end
+
+    test '#modulo(scalar)' do
+      assert_equal_array [1.0, 0.0, 1.0], @integer.modulo(2.0)
+      assert_equal_array [-1.0, 0.0, -1.0], @double.modulo(-2)
     end
 
     test '#%' do
@@ -189,9 +247,7 @@ class VectorFunctionTest < Test::Unit::TestCase
       float_divisor = Vector.new(-2, 1.0, 3)
       assert_raise(Arrow::Error::NotImplemented) { @boolean % @boolean }
       assert_equal_array [1, 0, 1], @integer % divisor
-      assert_equal_array [1.0, 0.0, 1.0], @integer % 2.0
       assert_equal_array [1.0, 0.0, 1.0], @double % divisor
-      assert_equal_array [-1.0, 0.0, -1.0], @double % -2
       assert_equal_array [-1.0, 0.0, 0.0], @double % float_divisor
       assert_raise(Arrow::Error::NotImplemented) { @string % @string }
     end
@@ -203,11 +259,17 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.multiply(@string) }
     end
 
-    test '#*(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.*(@boolean) }
-      assert_equal_array [1, 4, 9], @integer.*(@integer)
-      assert_equal_array [1.0, 4.0, 9.0], @double.*(@double)
-      assert_raise(Arrow::Error::NotImplemented) { @string.*(@string) }
+    test '#multiply(scalar)' do
+      assert_equal_array [2, 4, 6], @integer.multiply(2)
+      assert_equal_array [2.0, 4.0, 6.0], @integer.multiply(2.0)
+      assert_equal_array [-2.0, 4.0, -6.0], @double.multiply(-2)
+    end
+
+    test '#*' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean * @boolean }
+      assert_equal_array [1, 4, 9], @integer * @integer
+      assert_equal_array [1.0, 4.0, 9.0], @double * @double
+      assert_raise(Arrow::Error::NotImplemented) { @string * @string }
     end
 
     test '#power(vector)' do
@@ -217,23 +279,32 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.power(@string) }
     end
 
-    test '#**(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.**(@boolean) }
-      assert_equal_array [1, 4, 27], @integer.**(@integer)
-      assert_equal_array [1.0, 0.25, 27.0], @double.**(@double)
-      assert_raise(Arrow::Error::NotImplemented) { @string.**(@string) }
+    test '#power(scalar)' do
+      assert_equal_array [1, 4, 9], @integer.power(2)
+      assert_equal_array [1.0, 4.0, 9.0], @integer.power(2.0)
+      assert_equal_array [1.0, 0.25, 0.1111111111111111], @double.power(-2)
     end
 
-    test '#quotient' do
+    test '#**' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean**@boolean }
+      assert_equal_array [1, 4, 27], @integer**@integer
+      assert_equal_array [1.0, 0.25, 27.0], @double**@double
+      assert_raise(Arrow::Error::NotImplemented) { @string**@string }
+    end
+
+    test '#quotient(vector)' do
       divisor = Vector.new(2, 2, 2)
       float_divisor = Vector.new(-2, 1.0, 3)
       assert_raise(TypeError) { @boolean.quotient(@boolean) }
       assert_equal_array [0.5, 1.0, 1.5], @integer.quotient(divisor)
-      assert_equal_array [0.5, 1.0, 1.5], @integer.quotient(2.0)
       assert_equal_array [0.5, -1.0, 1.5], @double.quotient(divisor)
-      assert_equal_array [-0.5, 1.0, -1.5], @double.quotient(-2)
       assert_equal_array [-0.5, -2.0, 1.0], @double.quotient(float_divisor)
       assert_raise(Arrow::Error::NotImplemented) { @string.quotient(@string) }
+    end
+
+    test '#quotient(scalar)' do
+      assert_equal_array [0.5, 1.0, 1.5], @integer.quotient(2.0)
+      assert_equal_array [-0.5, 1.0, -1.5], @double.quotient(-2)
     end
 
     test '#subtract(vector)' do
@@ -243,11 +314,17 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.subtract(@string) }
     end
 
-    test '#-(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.-(@boolean) }
-      assert_equal_array [0, 0, 0], @integer.-(@integer)
-      assert_equal_array [0.0, 0.0, 0.0], @double.-(@double)
-      assert_raise(Arrow::Error::NotImplemented) { @string.-(@string) }
+    test '#subtract(scalar)' do
+      assert_equal_array [255, 0, 1], @integer.subtract(2)
+      assert_equal_array [-1.0, 0.0, 1.0], @integer.subtract(2.0)
+      assert_equal_array [3.0, 0.0, 5.0], @double.subtract(-2)
+    end
+
+    test '#-' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean - @boolean }
+      assert_equal_array [0, 0, 0], @integer - @integer
+      assert_equal_array [0.0, 0.0, 0.0], @double - @double
+      assert_raise(Arrow::Error::NotImplemented) { @string - @string }
     end
 
     test '#shift_left(vector)' do
@@ -257,9 +334,14 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.shift_left(@string) }
     end
 
-    test '#<<(vector)' do
+    test '#shift_left(scalar)' do
+      assert_equal_array [4, 8, 12], @integer.shift_left(2)
+      assert_equal_array [1, 2, 3], @integer.shift_left(-2)
+    end
+
+    test '#<<' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.<<(@boolean) }
-      assert_equal_array [2, 8, 24], @integer.<<(@integer)
+      assert_equal_array [2, 8, 24], @integer << @integer
       assert_raise(Arrow::Error::NotImplemented) { @double.<<(@double) }
       assert_raise(Arrow::Error::NotImplemented) { @string.<<(@string) }
     end
@@ -271,11 +353,16 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.shift_right(@string) }
     end
 
-    test '#>>(vector)' do
-      assert_raise(Arrow::Error::NotImplemented) { @boolean.>>(@boolean) }
-      assert_equal_array [0, 0, 0], @integer.>>(@integer)
-      assert_raise(Arrow::Error::NotImplemented) { @double.>>(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.>>(@string) }
+    test '#shift_right(scalar)' do
+      assert_equal_array [0, 0, 0], @integer.shift_right(2)
+      assert_equal_array [1, 2, 3], @integer.shift_right(-2)
+    end
+
+    test '#>>' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean >> @boolean }
+      assert_equal_array [0, 0, 0], @integer >> @integer
+      assert_raise(Arrow::Error::NotImplemented) { @double >> @double }
+      assert_raise(Arrow::Error::NotImplemented) { @string >> @string }
     end
 
     test '#xor(vector)' do
@@ -285,11 +372,16 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.xor(@string) }
     end
 
-    test '#^(vector)' do
-      assert_equal_array [false, false, nil], @boolean.xor(@boolean)
-      assert_raise(Arrow::Error::NotImplemented) { @integer.xor(@integer) }
-      assert_raise(Arrow::Error::NotImplemented) { @double.xor(@double) }
-      assert_raise(Arrow::Error::NotImplemented) { @string.xor(@string) }
+    test '#xor(scalar)' do
+      assert_equal_array [false, false, nil], @boolean.xor(true)
+      assert_equal_array [true, true, nil], @boolean.xor(false)
+    end
+
+    test '#^' do
+      assert_equal_array [false, false, nil], @boolean ^ @boolean
+      assert_raise(Arrow::Error::NotImplemented) { @integer ^ @integer }
+      assert_raise(Arrow::Error::NotImplemented) { @double ^ @double }
+      assert_raise(Arrow::Error::NotImplemented) { @string ^ @string }
     end
 
     test '#equal(vector)' do
@@ -307,18 +399,18 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [true, false, true], @string.equal('A')
     end
 
-    test '#eq(vector)' do
+    test '#eq' do
       assert_equal_array [true, true, nil], @boolean.eq(@boolean)
       assert_equal_array [true, true, true], @integer.eq(@integer)
       assert_equal_array [true, true, true], @double.eq(@double)
       assert_equal_array [true, true, true], @string.eq(@string)
     end
 
-    test '#==(vector)' do
-      assert_equal_array [true, true, nil], @boolean.==(@boolean)
-      assert_equal_array [true, true, true], @integer.==(@integer)
-      assert_equal_array [true, true, true], @double.==(@double)
-      assert_equal_array [true, true, true], @string.==(@string)
+    test '#==' do
+      assert_equal_array [true, true, nil], @boolean == @boolean
+      assert_equal_array [true, true, true], @integer == @integer
+      assert_equal_array [true, true, true], @double == @double
+      assert_equal_array [true, true, true], @string == @string
     end
 
     test '#greater(vector)' do
@@ -328,18 +420,26 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [false, false, false], @string.greater(@string)
     end
 
-    test '#gt(vector)' do
+    test '#greater(scalar)' do
+      assert_equal_array [false, false, nil], @boolean.greater(true)
+      assert_equal_array [true, true, nil], @boolean.greater(false)
+      assert_equal_array [false, true, true], @integer.greater(1)
+      assert_equal_array [false, false, true], @double.greater(1.0)
+      assert_equal_array [false, true, false], @string.greater('A')
+    end
+
+    test '#gt' do
       assert_equal_array [false, false, nil], @boolean.gt(@boolean)
       assert_equal_array [false, false, false], @integer.gt(@integer)
       assert_equal_array [false, false, false], @double.gt(@double)
       assert_equal_array [false, false, false], @string.gt(@string)
     end
 
-    test '#>(vector)' do
-      assert_equal_array [false, false, nil], @boolean.>(@boolean)
-      assert_equal_array [false, false, false], @integer.>(@integer)
-      assert_equal_array [false, false, false], @double.>(@double)
-      assert_equal_array [false, false, false], @string.>(@string)
+    test '#>' do
+      assert_equal_array [false, false, nil], @boolean > @boolean
+      assert_equal_array [false, false, false], @integer > @integer
+      assert_equal_array [false, false, false], @double > @double
+      assert_equal_array [false, false, false], @string > @string
     end
 
     test '#greater_equal(vector)' do
@@ -349,18 +449,26 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [true, true, true], @string.greater_equal(@string)
     end
 
-    test '#ge(vector)' do
+    test '#greater_equal(scalar)' do
+      assert_equal_array [true, true, nil], @boolean.greater_equal(true)
+      assert_equal_array [true, true, nil], @boolean.greater_equal(false)
+      assert_equal_array [true, true, true], @integer.greater_equal(1)
+      assert_equal_array [true, false, true], @double.greater_equal(1.0)
+      assert_equal_array [true, true, true], @string.greater_equal('A')
+    end
+
+    test '#ge' do
       assert_equal_array [true, true, nil], @boolean.ge(@boolean)
       assert_equal_array [true, true, true], @integer.ge(@integer)
       assert_equal_array [true, true, true], @double.ge(@double)
       assert_equal_array [true, true, true], @string.ge(@string)
     end
 
-    test '#>=(vector)' do
-      assert_equal_array [true, true, nil], @boolean.>=(@boolean)
-      assert_equal_array [true, true, true], @integer.>=(@integer)
-      assert_equal_array [true, true, true], @double.>=(@double)
-      assert_equal_array [true, true, true], @string.>=(@string)
+    test '#>=' do
+      assert_equal_array [true, true, nil], @boolean >= @boolean
+      assert_equal_array [true, true, true], @integer >= @integer
+      assert_equal_array [true, true, true], @double >= @double
+      assert_equal_array [true, true, true], @string >= @string
     end
 
     test '#less(vector)' do
@@ -378,18 +486,18 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [true, false, true], @string.less('B')
     end
 
-    test '#lt(vector)' do
+    test '#lt' do
       assert_equal_array [false, false, nil], @boolean.lt(@boolean)
       assert_equal_array [false, false, false], @integer.lt(@integer)
       assert_equal_array [false, false, false], @double.lt(@double)
       assert_equal_array [false, false, false], @string.lt(@string)
     end
 
-    test '#<(vector)' do
-      assert_equal_array [false, false, nil], @boolean.<(@boolean)
-      assert_equal_array [false, false, false], @integer.<(@integer)
-      assert_equal_array [false, false, false], @double.<(@double)
-      assert_equal_array [false, false, false], @string.<(@string)
+    test '#<' do
+      assert_equal_array [false, false, nil], @boolean < @boolean
+      assert_equal_array [false, false, false], @integer < @integer
+      assert_equal_array [false, false, false], @double < @double
+      assert_equal_array [false, false, false], @string < @string
     end
 
     test '#less_equal(vector)' do
@@ -399,18 +507,26 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [true, true, true], @string.less_equal(@string)
     end
 
-    test '#le(vector)' do
+    test '#less_equal(scalar)' do
+      assert_equal_array [true, true, nil], @boolean.less_equal(true)
+      assert_equal_array [false, false, nil], @boolean.less_equal(false)
+      assert_equal_array [true, true, false], @integer.less_equal(2)
+      assert_equal_array [true, true, false], @double.less_equal(2.0)
+      assert_equal_array [true, true, true], @string.less_equal('B')
+    end
+
+    test '#le' do
       assert_equal_array [true, true, nil], @boolean.le(@boolean)
       assert_equal_array [true, true, true], @integer.le(@integer)
       assert_equal_array [true, true, true], @double.le(@double)
       assert_equal_array [true, true, true], @string.le(@string)
     end
 
-    test '#<=(vector)' do
-      assert_equal_array [true, true, nil], @boolean.<=(@boolean)
-      assert_equal_array [true, true, true], @integer.<=(@integer)
-      assert_equal_array [true, true, true], @double.<=(@double)
-      assert_equal_array [true, true, true], @string.<=(@string)
+    test '#<=' do
+      assert_equal_array [true, true, nil], @boolean <= @boolean
+      assert_equal_array [true, true, true], @integer <= @integer
+      assert_equal_array [true, true, true], @double <= @double
+      assert_equal_array [true, true, true], @string <= @string
     end
 
     test '#not_equal(vector)' do
@@ -420,14 +536,22 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [false, false, false], @string.not_equal(@string)
     end
 
-    test '#ne(vector)' do
+    test '#not_equal(scalar)' do
+      assert_equal_array [false, false, nil], @boolean.not_equal(true)
+      assert_equal_array [true, true, nil], @boolean.not_equal(false)
+      assert_equal_array [true, false, true], @integer.not_equal(2)
+      assert_equal_array [true, true, true], @double.not_equal(2.0)
+      assert_equal_array [true, false, true], @string.not_equal('B')
+    end
+
+    test '#ne' do
       assert_equal_array [false, false, nil], @boolean.ne(@boolean)
       assert_equal_array [false, false, false], @integer.ne(@integer)
       assert_equal_array [false, false, false], @double.ne(@double)
       assert_equal_array [false, false, false], @string.ne(@string)
     end
 
-    test '#!=(vector)' do
+    test '#!=' do
       assert_equal_array [false, false, nil], @boolean != @boolean
       assert_equal_array [false, false, false], @integer != @integer
       assert_equal_array [false, false, false], @double != @double
