@@ -222,6 +222,7 @@ module RedAmber
     #   division of self by other.
     #
     define_binary_element_wise :divide
+    alias_method :div, :divide
     alias_method :'/', :divide
 
     # Returns element-wise modulo.
@@ -240,6 +241,7 @@ module RedAmber
       datum = find(:subtract).execute([data, m])
       Vector.create(datum.value)
     end
+    alias_method :mod, :modulo
     alias_method :'%', :modulo
 
     # Multiply the arguments element-wise.
@@ -252,6 +254,7 @@ module RedAmber
     #   multiplication of self and other.
     #
     define_binary_element_wise :multiply
+    alias_method :mul, :multiply
     alias_method :'*', :multiply
 
     # Raise arguments to power element-wise.
@@ -266,6 +269,7 @@ module RedAmber
     #   power operation of self and other.
     #
     define_binary_element_wise :power
+    alias_method :pow, :power
     alias_method :'**', :power
 
     # Returns element-wise quotient by double Vector.
@@ -280,6 +284,7 @@ module RedAmber
       datum = find(:divide).execute([Arrow::DoubleArray.new(data), other])
       Vector.create(datum.value)
     end
+    alias_method :quo, :quotient
     alias_method :fdiv, :quotient
 
     # Subtract the arguments element-wise.
@@ -292,6 +297,7 @@ module RedAmber
     #   subtraction of self and other.
     #
     define_binary_element_wise :subtract
+    alias_method :sub, :subtract
     alias_method :'-', :subtract
 
     # Left shift of self by other.
