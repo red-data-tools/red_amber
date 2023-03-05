@@ -555,8 +555,10 @@ module RedAmber
       case other
       when Vector
         find(function).execute([data, other.data], options)
-      when Arrow::Array, Arrow::ChunkedArray, Arrow::Scalar,
-           Array, Numeric, String, TrueClass, FalseClass
+      when NilClass
+        nils = data.class.new([nil] * size)
+        find(function).execute([data, nils], options)
+      else
         find(function).execute([data, other], options)
       end
     end

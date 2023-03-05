@@ -40,6 +40,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#and_not(scalar)' do
       assert_equal_array [false, false, nil], @boolean.and_not(true)
       assert_equal_array [true, true, nil], @boolean.and_not(false)
+      assert_equal_array [nil, nil, nil], @boolean.and_not(nil)
     end
 
     test '#and_not_kleene(vector)' do
@@ -52,6 +53,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#and_not_kleene(scalar)' do
       assert_equal_array [false, false, false], @boolean.and_not_kleene(true)
       assert_equal_array [true, true, nil], @boolean.and_not_kleene(false)
+      assert_equal_array [nil, nil, nil], @boolean.and_not_kleene(nil)
     end
 
     test '#bit_wise_and(vector)' do
@@ -129,6 +131,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#and_kleene(scalar)' do
       assert_equal_array [true, false, nil], @bool_self3.and_kleene(true)
       assert_equal_array [false, false, false], @bool_self3.and_kleene(false)
+      assert_equal_array [nil, false, nil], @bool_self3.and_kleene(nil)
     end
 
     test '#and_org(vector)' do
@@ -142,6 +145,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#and_org(scalar)' do
       assert_equal_array [true, false, nil], @bool_self3.and_org(true)
       assert_equal_array [false, false, nil], @bool_self3.and_org(false)
+      assert_equal_array [nil, nil, nil], @bool_self3.and_org(nil)
     end
 
     test '#|' do
@@ -163,6 +167,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#or_kleene(scalar)' do
       assert_equal_array [true, true, true], @bool_self3.or_kleene(true)
       assert_equal_array [true, false, nil], @bool_self3.or_kleene(false)
+      assert_equal_array [true, nil, nil], @bool_self3.or_kleene(nil)
     end
 
     test '#or_org(vector)' do
@@ -176,6 +181,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#or_org(scalar)' do
       assert_equal_array [true, true, nil], @bool_self3.or_org(true)
       assert_equal_array [true, false, nil], @bool_self3.or_org(false)
+      assert_equal_array [nil, nil, nil], @bool_self3.or_org(nil)
     end
   end
 
@@ -375,6 +381,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#xor(scalar)' do
       assert_equal_array [false, false, nil], @boolean.xor(true)
       assert_equal_array [true, true, nil], @boolean.xor(false)
+      assert_equal_array [nil, nil, nil], @boolean.xor(nil)
     end
 
     test '#^' do
@@ -394,6 +401,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#equal(scalar)' do
       assert_equal_array [true, true, nil], @boolean.equal(true)
       assert_equal_array [false, false, nil], @boolean.equal(false)
+      assert_equal_array [nil, nil, nil], @boolean.equal(nil)
       assert_equal_array [true, false, false], @integer.equal(1)
       assert_equal_array [true, false, false], @double.equal(1.0)
       assert_equal_array [true, false, true], @string.equal('A')
@@ -423,6 +431,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#greater(scalar)' do
       assert_equal_array [false, false, nil], @boolean.greater(true)
       assert_equal_array [true, true, nil], @boolean.greater(false)
+      assert_equal_array [nil, nil, nil], @boolean.greater(nil)
       assert_equal_array [false, true, true], @integer.greater(1)
       assert_equal_array [false, false, true], @double.greater(1.0)
       assert_equal_array [false, true, false], @string.greater('A')
@@ -452,6 +461,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#greater_equal(scalar)' do
       assert_equal_array [true, true, nil], @boolean.greater_equal(true)
       assert_equal_array [true, true, nil], @boolean.greater_equal(false)
+      assert_equal_array [nil, nil, nil], @boolean.greater_equal(nil)
       assert_equal_array [true, true, true], @integer.greater_equal(1)
       assert_equal_array [true, false, true], @double.greater_equal(1.0)
       assert_equal_array [true, true, true], @string.greater_equal('A')
@@ -481,6 +491,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#less(scalar)' do
       assert_equal_array [false, false, nil], @boolean.less(true)
       assert_equal_array [false, false, nil], @boolean.less(false)
+      assert_equal_array [nil, nil, nil], @boolean.less(nil)
       assert_equal_array [true, false, false], @integer.less(2)
       assert_equal_array [true, true, false], @double.less(2.0)
       assert_equal_array [true, false, true], @string.less('B')
@@ -510,6 +521,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#less_equal(scalar)' do
       assert_equal_array [true, true, nil], @boolean.less_equal(true)
       assert_equal_array [false, false, nil], @boolean.less_equal(false)
+      assert_equal_array [nil, nil, nil], @boolean.less_equal(nil)
       assert_equal_array [true, true, false], @integer.less_equal(2)
       assert_equal_array [true, true, false], @double.less_equal(2.0)
       assert_equal_array [true, true, true], @string.less_equal('B')
@@ -539,6 +551,7 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#not_equal(scalar)' do
       assert_equal_array [false, false, nil], @boolean.not_equal(true)
       assert_equal_array [true, true, nil], @boolean.not_equal(false)
+      assert_equal_array [nil, nil, nil], @boolean.not_equal(nil)
       assert_equal_array [true, false, true], @integer.not_equal(2)
       assert_equal_array [true, true, true], @double.not_equal(2.0)
       assert_equal_array [true, false, true], @string.not_equal('B')
