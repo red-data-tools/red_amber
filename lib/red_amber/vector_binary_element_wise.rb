@@ -219,10 +219,28 @@ module RedAmber
     # @param divisor [Vector, Numeric]
     #   numeric vector or numeric scalar as divisor.
     # @return [Vector]
-    #   division of self and other.
+    #   division of self by other.
     #
     define_binary_element_wise :divide
     alias_method :'/', :divide
+
+    # Returns element-wise modulo.
+    #
+    # This is equivalent to `self-other*(self/other).floor`.
+    # @param other [Vector, numeric]
+    #   other numeric Vector or numeric scalar.
+    # @return [Vector]
+    #   modulo of dividing self by other
+    #
+    def modulo(other)
+      other = other.data if other.is_a?(Vector)
+      d = find(:divide).execute([data, other])
+      d = find(:floor).execute([d]) if d.value.is_a?(Arrow::DoubleArray)
+      m = find(:multiply).execute([d, other])
+      datum = find(:subtract).execute([data, m])
+      Vector.create(datum.value)
+    end
+    alias_method :'%', :modulo
 
     # Multiply the arguments element-wise.
     #

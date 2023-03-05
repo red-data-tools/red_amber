@@ -172,6 +172,30 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string./(@string) }
     end
 
+    test '#modulo' do
+      divisor = Vector.new(2, 2, 2)
+      float_divisor = Vector.new(-2, 1.0, 3)
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.modulo(@boolean) }
+      assert_equal_array [1, 0, 1], @integer.modulo(divisor)
+      assert_equal_array [1.0, 0.0, 1.0], @integer.modulo(2.0)
+      assert_equal_array [1.0, 0.0, 1.0], @double.modulo(divisor)
+      assert_equal_array [-1.0, 0.0, -1.0], @double.modulo(-2)
+      assert_equal_array [-1.0, 0.0, 0.0], @double.modulo(float_divisor)
+      assert_raise(Arrow::Error::NotImplemented) { @string.modulo(@string) }
+    end
+
+    test '#%' do
+      divisor = Vector.new(2, 2, 2)
+      float_divisor = Vector.new(-2, 1.0, 3)
+      assert_raise(Arrow::Error::NotImplemented) { @boolean % @boolean }
+      assert_equal_array [1, 0, 1], @integer % divisor
+      assert_equal_array [1.0, 0.0, 1.0], @integer % 2.0
+      assert_equal_array [1.0, 0.0, 1.0], @double % divisor
+      assert_equal_array [-1.0, 0.0, -1.0], @double % -2
+      assert_equal_array [-1.0, 0.0, 0.0], @double % float_divisor
+      assert_raise(Arrow::Error::NotImplemented) { @string % @string }
+    end
+
     test '#multiply(vector)' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.multiply(@boolean) }
       assert_equal_array [1, 4, 9], @integer.multiply(@integer)
