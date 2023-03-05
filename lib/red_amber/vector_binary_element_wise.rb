@@ -268,6 +268,20 @@ module RedAmber
     define_binary_element_wise :power
     alias_method :'**', :power
 
+    # Returns element-wise quotient by double Vector.
+    #
+    # @param other [Vector, numeric]
+    #   other numeric Vector or numeric scalar.
+    # @return [Vector]
+    #   quotient of dividing self by other.
+    #
+    def quotient(other)
+      other = other.data if other.is_a?(Vector)
+      datum = find(:divide).execute([Arrow::DoubleArray.new(data), other])
+      Vector.create(datum.value)
+    end
+    alias_method :fdiv, :quotient
+
     # Subtract the arguments element-wise.
     #
     # Results will wrap around on integer overflow.

@@ -224,6 +224,18 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.**(@string) }
     end
 
+    test '#quotient' do
+      divisor = Vector.new(2, 2, 2)
+      float_divisor = Vector.new(-2, 1.0, 3)
+      assert_raise(TypeError) { @boolean.quotient(@boolean) }
+      assert_equal_array [0.5, 1.0, 1.5], @integer.quotient(divisor)
+      assert_equal_array [0.5, 1.0, 1.5], @integer.quotient(2.0)
+      assert_equal_array [0.5, -1.0, 1.5], @double.quotient(divisor)
+      assert_equal_array [-0.5, 1.0, -1.5], @double.quotient(-2)
+      assert_equal_array [-0.5, -2.0, 1.0], @double.quotient(float_divisor)
+      assert_raise(Arrow::Error::NotImplemented) { @string.quotient(@string) }
+    end
+
     test '#subtract(vector)' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.subtract(@boolean) }
       assert_equal_array [0, 0, 0], @integer.subtract(@integer)
