@@ -110,6 +110,7 @@ Metrics/ClassLength:
     - 'lib/red_amber/group.rb' # 105
     - 'lib/red_amber/subframes.rb' # 110
     - 'lib/red_amber/vector.rb' # 152
+    - 'lib/red_amber/vector_binary_element_wise.rb' # 109
 
 # Only for monitoring. I will measure by PerceivedComplexity.
 # Max: 7

@@ -56,6 +56,13 @@ module RedAmber
     #
     define_unary_element_wise :abs
 
+    # Calculate the absolute value of self element-wise.
+    #
+    # This function is a overflow-checking variant of #abs.
+    # @return (see #abs)
+    #
+    define_unary_element_wise :abs_checked
+
     # Compute the inverse cosine of self element-wise.
     #
     # NaN is returned for invalid input values.
@@ -64,6 +71,13 @@ module RedAmber
     #
     define_unary_element_wise :acos
 
+    # Compute the inverse cosine of self element-wise.
+    #
+    # This function is a overflow-checking variant of #acos.
+    # @return (see #acos)
+    #
+    define_unary_element_wise :acos_checked
+
     # Compute the inverse sine of self element-wise.
     #
     # NaN is returned for invalid input values.
@@ -71,6 +85,13 @@ module RedAmber
     #   asin of each element of self.
     #
     define_unary_element_wise :asin
+
+    # Compute the inverse sine of self element-wise.
+    #
+    # This function is a overflow-checking variant of #asin.
+    # @return (see #asin)
+    #
+    define_unary_element_wise :asin_checked
 
     # Return the indices that would sort self.
     #
@@ -129,8 +150,16 @@ module RedAmber
     #
     define_unary_element_wise :cos
 
+    # Compute the cosine of self element-wise.
+    #
+    # This function is a overflow-checking variant of #cos.
+    # @return (see #cos)
+    #
+    define_unary_element_wise :cos_checked
+
     # Compute cumulative sum over the numeric Vector.
     #
+    # This function is a overflow-checking variant of #cumsum.
     # @note Self must be numeric.
     # @note Return error for integer overflow.
     # @return [Vector]
@@ -261,6 +290,13 @@ module RedAmber
     #
     define_unary_element_wise :ln
 
+    # Compute natural logarithm.
+    #
+    # This function is a overflow-checking variant of #ln.
+    # @return (see #ln)
+    #
+    define_unary_element_wise :ln_checked
+
     # Compute base 10 logarithm.
     #
     # Non-positive values return -inf or NaN. Nil values return nil.
@@ -268,6 +304,13 @@ module RedAmber
     #   base 10 logarithm of each element of self.
     #
     define_unary_element_wise :log10
+
+    # Compute base 10 logarithm.
+    #
+    # This function is a overflow-checking variant of #log10.
+    # @return (see #log10)
+    #
+    define_unary_element_wise :log10_checked
 
     # Compute natural log of (1+x).
     #
@@ -278,6 +321,13 @@ module RedAmber
     #
     define_unary_element_wise :log1p
 
+    # Compute natural log of (1+x).
+    #
+    # This function is a overflow-checking variant of #log1p.
+    # @return (see #log1p)
+    #
+    define_unary_element_wise :log1p_checked
+
     # Compute base 2 logarithm.
     #
     # Non-positive values return -inf or NaN. Nil values return nil.
@@ -285,6 +335,13 @@ module RedAmber
     #   base 2 logarithm of each element of self.
     #
     define_unary_element_wise :log2
+
+    # Compute base 2 logarithm.
+    #
+    # This function is a overflow-checking variant of #log2.
+    # @return (see #log2)
+    #
+    define_unary_element_wise :log2_checked
 
     # Round to a given precision.
     #
@@ -390,6 +447,28 @@ module RedAmber
     #
     define_unary_element_wise :sin
 
+    # Compute the sine of self element-wise.
+    #
+    # This function is a overflow-checking variant of #sin.
+    # @return (see #sin)
+    #
+    define_unary_element_wise :sin_checked
+
+    # Compute square root of self.
+    #
+    # NaN is returned for invalid input values.
+    # @return [Vector]
+    #   sqrt of each element of self.
+    #
+    define_unary_element_wise :sqrt
+
+    # Compute square root of self.
+    #
+    # This function is a overflow-checking variant of #sqrt.
+    # @return (see #sqrt)
+    #
+    define_unary_element_wise :sqrt_checked
+
     # Compute the tangent of self element-wise.
     #
     # NaN is returned for invalid input values.
@@ -397,6 +476,13 @@ module RedAmber
     #   tangent of each element of self.
     #
     define_unary_element_wise :tan
+
+    # Compute the tangent of self element-wise.
+    #
+    # This function is a overflow-checking variant of #tan.
+    # @return (see #tan)
+    #
+    define_unary_element_wise :tan_checked
 
     # Compute the integral part
     #
@@ -432,5 +518,12 @@ module RedAmber
     #
     define_unary_element_wise :negate
     alias_method :'-@', :negate # rubocop:disable Lint/SymbolConversion
+
+    # Negate the argument element-wise
+    #
+    # This function is a overflow-checking variant of #negate.
+    # @return (see #negate)
+    #
+    define_unary_element_wise :negate_checked
   end
 end

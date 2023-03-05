@@ -100,6 +100,13 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array_with_nan [Float::NAN, Float::NAN, -0.0, -0.0], double.logb(0)
       assert_raise(Arrow::Error::NotImplemented) { string.logb(2) }
     end
+
+    test '#logb_checked(base)' do
+      integer = Vector.new([-1, 0, 1, 2])
+      double = Vector.new([-1.0, 0.0, 1.0, 2])
+      assert_raise(Arrow::Error::Invalid) { integer.logb_checked(2) }
+      assert_raise(Arrow::Error::Invalid) { double.logb_checked(2) }
+    end
   end
 
   sub_test_case 'binary element-wise with operator' do
@@ -213,6 +220,14 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string + @string }
     end
 
+    test '#add overflow' do
+      assert_equal_array [0, 1, 2], @integer.add(255)
+    end
+
+    test '#add_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.add_checked(255) }
+    end
+
     test '#divide(vector)' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.divide(@boolean) }
       assert_equal_array [1, 1, 1], @integer.divide(@integer)
@@ -231,6 +246,11 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [1, 1, 1], @integer / @integer
       assert_equal_array [1.0, 1.0, 1.0], @double / @double
       assert_raise(Arrow::Error::NotImplemented) { @string / @string }
+    end
+
+    test '#divide_checked' do
+      assert_equal_array [0, 1, 1], @integer.divide_checked(2)
+      assert_equal_array [-0.5, 1.0, -1.5], @double.divide_checked(-2)
     end
 
     test '#modulo(vector)' do
@@ -258,6 +278,11 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string % @string }
     end
 
+    test '#modulo_checked' do
+      assert_equal_array [1.0, 0.0, 1.0], @integer.modulo_checked(2.0)
+      assert_equal_array [-1.0, 0.0, -1.0], @double.modulo_checked(-2)
+    end
+
     test '#multiply(vector)' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.multiply(@boolean) }
       assert_equal_array [1, 4, 9], @integer.multiply(@integer)
@@ -276,6 +301,14 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [1, 4, 9], @integer * @integer
       assert_equal_array [1.0, 4.0, 9.0], @double * @double
       assert_raise(Arrow::Error::NotImplemented) { @string * @string }
+    end
+
+    test '#multiply overflow' do
+      assert_equal_array [86, 172, 2], @integer.multiply(86)
+    end
+
+    test '#multiply_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.multiply_checked(86) }
     end
 
     test '#power(vector)' do
@@ -298,6 +331,14 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string**@string }
     end
 
+    test '#power overflow' do
+      assert_equal_array [1, 64, 217], @integer.power(6)
+    end
+
+    test '#power_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.power_checked(6) }
+    end
+
     test '#quotient(vector)' do
       divisor = Vector.new(2, 2, 2)
       float_divisor = Vector.new(-2, 1.0, 3)
@@ -311,6 +352,11 @@ class VectorFunctionTest < Test::Unit::TestCase
     test '#quotient(scalar)' do
       assert_equal_array [0.5, 1.0, 1.5], @integer.quotient(2.0)
       assert_equal_array [-0.5, 1.0, -1.5], @double.quotient(-2)
+    end
+
+    test '#quotient_checked' do
+      assert_equal_array [0.5, 1.0, 1.5], @integer.quotient_checked(2.0)
+      assert_equal_array [-0.5, 1.0, -1.5], @double.quotient_checked(-2)
     end
 
     test '#subtract(vector)' do
@@ -333,6 +379,14 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string - @string }
     end
 
+    test '#subtract overflow' do
+      assert_equal_array [255, 0, 1], @integer.subtract(2)
+    end
+
+    test '#subtract_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.subtract_checked(2) }
+    end
+
     test '#shift_left(vector)' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.shift_left(@boolean) }
       assert_equal_array [2, 8, 24], @integer.shift_left(@integer)
@@ -352,6 +406,14 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.<<(@string) }
     end
 
+    test '#shift_left overflow' do
+      assert_equal_array [1, 2, 3], @integer.shift_left(8)
+    end
+
+    test '#shift_left_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.shift_left_checked(8) }
+    end
+
     test '#shift_right(vector)' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.shift_right(@boolean) }
       assert_equal_array [0, 0, 0], @integer.shift_right(@integer)
@@ -369,6 +431,14 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [0, 0, 0], @integer >> @integer
       assert_raise(Arrow::Error::NotImplemented) { @double >> @double }
       assert_raise(Arrow::Error::NotImplemented) { @string >> @string }
+    end
+
+    test '#shift_right overflow' do
+      assert_equal_array [1, 2, 3], @integer.shift_right(8)
+    end
+
+    test '#shift_right_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.shift_right_checked(8) }
     end
 
     test '#xor(vector)' do

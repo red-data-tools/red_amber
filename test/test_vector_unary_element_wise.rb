@@ -28,6 +28,11 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.negate }
     end
 
+    test '#negate_checked' do
+      assert_raise(Arrow::Error::NotImplemented) { @integer.negate_checked }
+      assert_equal_array [-1.0, 2.0, -3.0], @double.negate_checked
+    end
+
     test '#!' do
       assert_equal_array [false, false, nil], !@boolean
       assert_raise(Arrow::Error::NotImplemented) { @integer.! }
@@ -56,6 +61,11 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.abs }
     end
 
+    test '#abs_checked' do
+      assert_equal_array [1, 2, 3], @integer.abs_checked
+      assert_equal_array [1.0, 2.0, 3.0], @double.abs_checked
+    end
+
     test '#atan' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.atan }
       assert_equal_array_in_delta [0.7853981633974483, 1.1071487177940906, 1.2490457723982544], @integer.atan, delta = 1e-15
@@ -77,6 +87,11 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.cos }
     end
 
+    test '#cos_checked' do
+      assert_equal_array [0.5403023058681398, -0.4161468365471424, -0.9899924966004454], @integer.cos_checked
+      assert_equal_array [0.5403023058681398, -0.4161468365471424, -0.9899924966004454], @double.cos_checked
+    end
+
     test '#sign' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.sign }
       assert_equal_array [1, 1, 1], @integer.sign
@@ -91,11 +106,33 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.sin }
     end
 
+    test '#sin_checked' do
+      assert_equal_array [0.8414709848078965, 0.9092974268256817, 0.1411200080598672], @integer.sin_checked
+      assert_equal_array [0.8414709848078965, -0.9092974268256817, 0.1411200080598672], @double.sin_checked
+    end
+
+    test '#sqrt' do
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.sqrt }
+      assert_equal_array [1.0, 1.4142135623730951, 1.7320508075688772], @integer.sqrt
+      assert_equal_array_with_nan [1.0, Float::NAN, 1.7320508075688772], @double.sqrt
+      assert_raise(Arrow::Error::NotImplemented) { @string.sqrt }
+    end
+
+    test '#sqrt_checked' do
+      assert_equal_array [1.0, 1.4142135623730951, 1.7320508075688772], @integer.sqrt_checked
+      assert_raise(Arrow::Error::Invalid) { @double.sqrt_checked }
+    end
+
     test '#tan' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.tan }
       assert_equal_array_in_delta [1.557407724654902, -2.185039863261519, -0.1425465430742778], @integer.tan, delta = 1e-15
       assert_equal_array_in_delta [1.557407724654902, 2.185039863261519, -0.1425465430742778], @double.tan, delta = 1e-15
       assert_raise(Arrow::Error::NotImplemented) { @string.tan }
+    end
+
+    test '#tan_checked' do
+      assert_equal_array_in_delta [1.557407724654902, -2.185039863261519, -0.1425465430742778], @integer.tan_checked, delta = 1e-15
+      assert_equal_array_in_delta [1.557407724654902, 2.185039863261519, -0.1425465430742778], @double.tan_checked, delta = 1e-15
     end
 
     test `#sort_indexes` do # alias sort_indices, array_sort_indices
@@ -128,12 +165,22 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.acos }
     end
 
+    test '#acos_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.acos_checked }
+      assert_raise(Arrow::Error::Invalid) { @double.acos_checked }
+    end
+
     test '#asin' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.asin }
       expected = [Math.asin(-1), 0.0, Math.asin(1), Float::NAN]
       assert_equal_array_with_nan expected, @integer.asin
       assert_equal_array_with_nan expected, @double.asin
       assert_raise(Arrow::Error::NotImplemented) { @string.asin }
+    end
+
+    test '#asin_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.asin_checked }
+      assert_raise(Arrow::Error::Invalid) { @double.asin_checked }
     end
 
     test '#ln' do
@@ -144,12 +191,22 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.ln }
     end
 
+    test '#ln_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.ln_checked }
+      assert_raise(Arrow::Error::Invalid) { @double.ln_checked }
+    end
+
     test '#log10' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.log10 }
       expected = [Float::NAN, -Float::INFINITY, 0.0, Math.log10(2)]
       assert_equal_array_with_nan expected, @integer.log10
       assert_equal_array_with_nan expected, @double.log10
       assert_raise(Arrow::Error::NotImplemented) { @string.log10 }
+    end
+
+    test '#log10_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.log10_checked }
+      assert_raise(Arrow::Error::Invalid) { @double.log10_checked }
     end
 
     test '#log1p' do
@@ -160,12 +217,22 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::NotImplemented) { @string.log1p }
     end
 
+    test '#log1p_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.log1p_checked }
+      assert_raise(Arrow::Error::Invalid) { @double.log1p_checked }
+    end
+
     test '#log2' do
       assert_raise(Arrow::Error::NotImplemented) { @boolean.log2 }
       expected = [Float::NAN, -Float::INFINITY, 0.0, 1.0]
       assert_equal_array_with_nan expected, @integer.log2
       assert_equal_array_with_nan expected, @double.log2
       assert_raise(Arrow::Error::NotImplemented) { @string.log2 }
+    end
+
+    test '#log2_checked' do
+      assert_raise(Arrow::Error::Invalid) { @integer.log2_checked }
+      assert_raise(Arrow::Error::Invalid) { @double.log2_checked }
     end
   end
 
