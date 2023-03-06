@@ -97,6 +97,7 @@ class DataFrameReshapingTest < Test::Unit::TestCase
          3 Three    3.1
          4 names    name2
          : :        :
+         8 names    name3
          9 One      1.3
         10 Two      2.3
         11 Three    3.3
