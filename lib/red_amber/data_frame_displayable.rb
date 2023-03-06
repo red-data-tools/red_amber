@@ -25,19 +25,20 @@ module RedAmber
     #   puts penguins.to_s
     #
     #   # =>
-    #       species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
-    #       <string> <string>        <double>      <double>           <uint8> ... <uint16>
-    #     0 Adelie   Torgersen           39.1          18.7               181 ...     2007
-    #     1 Adelie   Torgersen           39.5          17.4               186 ...     2007
-    #     2 Adelie   Torgersen           40.3          18.0               195 ...     2007
-    #     3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
-    #     4 Adelie   Torgersen           36.7          19.3               193 ...     2007
-    #     : :        :                      :             :                 : ...        :
-    #   341 Gentoo   Biscoe              50.4          15.7               222 ...     2009
-    #   342 Gentoo   Biscoe              45.2          14.8               212 ...     2009
-    #   343 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+    #       species  island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g ...     year
+    #       <string> <string>        <double>      <double>           <uint8>    <uint16> ... <uint16>
+    #     0 Adelie   Torgersen           39.1          18.7               181        3750 ...     2007
+    #     1 Adelie   Torgersen           39.5          17.4               186        3800 ...     2007
+    #     2 Adelie   Torgersen           40.3          18.0               195        3250 ...     2007
+    #     3 Adelie   Torgersen          (nil)         (nil)             (nil)       (nil) ...     2007
+    #     4 Adelie   Torgersen           36.7          19.3               193        3450 ...     2007
+    #     : :        :                      :             :                 :           : ...        :
+    #   340 Gentoo   Biscoe              46.8          14.3               215        4850 ...     2009
+    #   341 Gentoo   Biscoe              50.4          15.7               222        5750 ...     2009
+    #   342 Gentoo   Biscoe              45.2          14.8               212        5200 ...     2009
+    #   343 Gentoo   Biscoe              49.9          16.1               213        5400 ...     2009
     #
-    def to_s(width: 80, head: 5, tail: 3)
+    def to_s(width: 90, head: 5, tail: 4)
       return '' if empty?
 
       format_table(width: width, head: head, tail: tail)
@@ -52,8 +53,7 @@ module RedAmber
     # @return [DataFrame]
     #   a new dataframe.
     # @example Statistical summary of penguins dataset
-    #   # needs more width to show all stats in this example
-    #   puts penguins.summary.to_s(width: 82)
+    #   puts penguins.summary.to_s
     #
     #   # =>
     #     variables            count     mean      std      min      25%   median      75%      max
@@ -84,13 +84,19 @@ module RedAmber
     # Show information of self.
     #
     # According to `ENV [“RED_AMBER_OUTPUT_MODE”].upcase`,
-    # - If it is 'TDR', returns class, shape and transposed preview by 3 rows.
-    # - If it is 'MINIMUM', returns class and shape.
-    # - If it is 'TABLE' or otherwise, returns class, shape and Table preview.
+    # - If it is 'TDR', returns class name, shape, object id
+    #   and transposed preview for up to 10 variables.
+    # - If it is 'TDRA', returns class name, shape, object id
+    #   and transposed preview for all variables.
+    # - If it is 'MINIMUM', returns class name and shape.
+    # - If it is 'PLAIN', returns class name, shape and Table preview
+    #   for up to 512 columns and 128 columns.
+    # - If it is 'TABLE' or otherwise, returns class name, shape, object id
+    #   and Table preview for up to 512 rows and 512 columns.
     #   Default value of the ENV is 'Table'.
     # @return [String]
     #   information of self.
-    # @example Default (ENV ['RED_AMBER_OUTPUT_MODE'] == 'Table')
+    # @example Default for ENV ['RED_AMBER_OUTPUT_MODE'] == 'Table'
     #   puts df.inspect
     #
     #   # =>
@@ -121,11 +127,15 @@ module RedAmber
       mode = ENV.fetch('RED_AMBER_OUTPUT_MODE', 'Table')
       case mode.upcase
       when 'TDR'
-        "#<#{shape_str(with_id: true)}>\n#{dataframe_info(3)}"
+        "#<#{shape_str(with_id: true)}>\n#{dataframe_info(10)}"
+      when 'TDRA'
+        "#<#{shape_str(with_id: true)}>\n#{dataframe_info(:all)}"
       when 'MINIMUM'
         shape_str
+      when 'PLAIN'
+        "#<#{shape_str}>\n#{to_s(width: 128, head: 128)}"
       else
-        "#<#{shape_str(with_id: true)}>\n#{self}"
+        "#<#{shape_str(with_id: true)}>\n#{to_s(width: 100, head: 20)}"
       end
     end
 
@@ -147,18 +157,34 @@ module RedAmber
     #   diamonds
     #
     #   # =>
-    #   #<RedAmber::DataFrame : 53940 x 11 Vectors, 0x000000000000c314>
-    #            index    carat cut       color    clarity     depth    table    price ...        z
-    #         <uint16> <double> <string>  <string> <string> <double> <double> <uint16> ... <double>
-    #       0        0     0.23 Ideal     E        SI2          61.5     55.0      326 ...     2.43
-    #       1        1     0.21 Premium   E        SI1          59.8     61.0      326 ...     2.31
-    #       2        2     0.23 Good      E        VS1          56.9     65.0      327 ...     2.31
-    #       3        3     0.29 Premium   I        VS2          62.4     58.0      334 ...     2.63
-    #       4        4     0.31 Good      J        SI2          63.3     58.0      335 ...     2.75
-    #       :        :        : :         :        :               :        :        : ...        :
-    #   53937    53937      0.7 Very Good D        SI1          62.8     60.0     2757 ...     3.56
-    #   53938    53938     0.86 Premium   H        SI2          61.0     58.0     2757 ...     3.74
-    #   53939    53939     0.75 Ideal     D        SI2          62.2     55.0     2757 ...     3.64
+    #   #<RedAmber::DataFrame : 53940 x 11 Vectors, 0x0000000000035084>
+    #            index    carat cut       color    clarity     depth    table    price        x        y        z
+    #         <uint16> <double> <string>  <string> <string> <double> <double> <uint16> <double> <double> <double>
+    #       0        0     0.23 Ideal     E        SI2          61.5     55.0      326     3.95     3.98     2.43
+    #       1        1     0.21 Premium   E        SI1          59.8     61.0      326     3.89     3.84     2.31
+    #       2        2     0.23 Good      E        VS1          56.9     65.0      327     4.05     4.07     2.31
+    #       3        3     0.29 Premium   I        VS2          62.4     58.0      334      4.2     4.23     2.63
+    #       4        4     0.31 Good      J        SI2          63.3     58.0      335     4.34     4.35     2.75
+    #       5        5     0.24 Very Good J        VVS2         62.8     57.0      336     3.94     3.96     2.48
+    #       6        6     0.24 Very Good I        VVS1         62.3     57.0      336     3.95     3.98     2.47
+    #       7        7     0.26 Very Good H        SI1          61.9     55.0      337     4.07     4.11     2.53
+    #       8        8     0.22 Fair      E        VS2          65.1     61.0      337     3.87     3.78     2.49
+    #       9        9     0.23 Very Good H        VS1          59.4     61.0      338      4.0     4.05     2.39
+    #      10       10      0.3 Good      J        SI1          64.0     55.0      339     4.25     4.28     2.73
+    #      11       11     0.23 Ideal     J        VS1          62.8     56.0      340     3.93      3.9     2.46
+    #      12       12     0.22 Premium   F        SI1          60.4     61.0      342     3.88     3.84     2.33
+    #      13       13     0.31 Ideal     J        SI2          62.2     54.0      344     4.35     4.37     2.71
+    #      14       14      0.2 Premium   E        SI2          60.2     62.0      345     3.79     3.75     2.27
+    #      15       15     0.32 Premium   E        I1           60.9     58.0      345     4.38     4.42     2.68
+    #      16       16      0.3 Ideal     I        SI2          62.0     54.0      348     4.31     4.34     2.68
+    #      17       17      0.3 Good      J        SI1          63.4     54.0      351     4.23     4.29      2.7
+    #      18       18      0.3 Good      J        SI1          63.8     56.0      351     4.23     4.26     2.71
+    #      19       19      0.3 Very Good J        SI1          62.7     59.0      351     4.21     4.27     2.66
+    #       :        :        : :         :        :               :        :        :        :        :        :
+    #   53936    53936     0.72 Good      D        SI1          63.1     55.0     2757     5.69     5.75     3.61
+    #   53937    53937      0.7 Very Good D        SI1          62.8     60.0     2757     5.66     5.68     3.56
+    #   53938    53938     0.86 Premium   H        SI2          61.0     58.0     2757     6.15     6.12     3.74
+    #   53939    53939     0.75 Ideal     D        SI2          62.2     55.0     2757     5.83     5.87     3.64
     #
     #   diamonds.tdr
     #
@@ -266,6 +292,7 @@ module RedAmber
     # - If it is 'MINIMUM', returns shape by plain text.
     # - If it is 'PLAIN', returns `#inspect` value by plain text.
     # - If it is 'TDR', returns shape and transposed preview by plain text.
+    # - If it is 'TDRA', returns shape and transposed preview by plain text.
     # - If it is 'TABLE' or otherwise, returns Table preview by html format.
     #   Default value of the ENV is 'TABLE'.
     # @return [String]
@@ -283,6 +310,8 @@ module RedAmber
         ['text/plain', shape_str]
       when 'TDR'
         size <= 5 ? ['text/plain', tdr_str(tally: 0)] : ['text/plain', tdr_str]
+      when 'TDRA'
+        ['text/plain', tdr_str(:all)]
       else # 'TABLE'
         ['text/html', html_table]
       end
@@ -325,7 +354,7 @@ module RedAmber
       quoted_keys = keys.map(&:inspect)
       headers = { idx: '#', key: 'key', type: 'type', levels: 'level',
                   data: 'data_preview' }
-      header_format = make_header_format(levels, headers, quoted_keys)
+      header_format = make_header_format(levels, headers, quoted_keys, limit)
 
       sio = StringIO.new # output string buffer
       sio.puts "Vector#{pl(n_keys)} : #{var_type_count(type_groups).join(', ')}"
@@ -355,9 +384,9 @@ module RedAmber
       sio.string
     end
 
-    def make_header_format(levels, headers, quoted_keys)
+    def make_header_format(levels, headers, quoted_keys, limit)
       # find longest word to adjust width
-      w_idx = n_keys.to_s.size
+      w_idx = ([n_keys, limit].min - 1).to_s.size
       w_key = [quoted_keys.map(&:size).max, headers[:key].size].max
       w_type = [types.map(&:size).max, headers[:type].size].max
       w_level = [levels.map { |l| l.to_s.size }.max, headers[:levels].size].max
@@ -477,7 +506,7 @@ module RedAmber
     end
 
     def html_table
-      reduced = size > 8 ? self[0..4, -4..-1] : self
+      reduced = size > 10 ? self[0..5, -5..-1] : self
 
       converted = reduced.assign do
         vectors.select.with_object({}) do |vector, assigner|
@@ -502,7 +531,7 @@ module RedAmber
         end
       end
 
-      html = IRuby::HTML.table(converted.to_h, maxrows: 8, maxcols: 15)
+      html = IRuby::HTML.table(converted.to_h, maxrows: 10, maxcols: 15)
       "#{self.class} <#{size} x #{n_keys} vector#{pl(n_keys)}> #{html}"
     end
   end
