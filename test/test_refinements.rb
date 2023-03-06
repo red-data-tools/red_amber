@@ -194,4 +194,13 @@ class RefinementsTest < Test::Unit::TestCase
       assert_equal Arrow::Table.new(x: [1, 2, 3]), h.to_arrow
     end
   end
+
+  using RefineString
+
+  sub_test_case 'refine String' do
+    test 'String#width' do
+      assert_equal 0, ''.width
+      assert_equal 7, 'ABC予想'.width
+    end
+  end
 end
