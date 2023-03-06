@@ -1,15 +1,15 @@
 loop_count: 3
 
 contexts:
-  - name: HEAD
-    prelude: |
-      $LOAD_PATH.unshift(File.expand_path('lib'))
-  - name: 0.3.0
-    gems:
-      red_amber: 0.3.0
   - name: 0.2.0
     gems:
       red_amber: 0.2.0
+  - name: 0.3.0
+    gems:
+      red_amber: 0.3.0
+  - name: HEAD
+    prelude: |
+      $LOAD_PATH.unshift(File.expand_path('lib'))
 
 prelude: |
   require 'red_amber'
@@ -19,8 +19,14 @@ prelude: |
 
   starwars = RedAmber::DataFrame.new(Datasets::Rdataset.new('dplyr', 'starwars').to_arrow)
 
-  uri = URI("https://raw.githubusercontent.com/heronshoes/red_amber/master/test/entity/import_cars.tsv")
-  import_cars = RedAmber::DataFrame.load(uri)
+  import_cars = RedAmber::DataFrame.load(Arrow::Buffer.new(<<~TSV), format: :tsv)
+    Year	Audi	BMW	BMW_MINI	Mercedes-Benz	VW
+    2017	28336	52527	25427	68221	49040
+    2018	26473	50982	25984	67554	51961
+    2019	24222	46814	23813	66553	46794
+    2020	22304	35712	20196	57041	36576
+    2021	22535	35905	18211	51722	35215
+  TSV
 
   ds = Datasets::Rdataset.new('openintro', 'simpsons_paradox_covid')
   simpsons_paradox_covid = RedAmber::DataFrame.new(ds.to_arrow)
@@ -43,7 +49,7 @@ benchmark:
       .group(:species) { [count(:species), mean(:height, :mass)] }
       .slice { v(:count) > 1 }
 
-  'D03: Inport cars test': |
+  'D03: Import cars test': |
     import_cars
       .to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
       .to_wide(name: :Manufacturer, value: :Num_of_imported)
