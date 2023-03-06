@@ -127,6 +127,7 @@ Metrics/CyclomaticComplexity:
     'parse_range', # 14
     'remove', # 14
     '[]', # 13
+    'drop', # 13
   ]
 
 # Max: 10
@@ -140,6 +141,7 @@ Metrics/MethodLength:
     'format_table', # 53
     'slice_by', # 38
     'assign_update', # 35
+    'drop', # 32
     'aggregate', # 31
   ]
 

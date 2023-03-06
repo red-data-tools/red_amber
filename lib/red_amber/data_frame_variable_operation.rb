@@ -254,7 +254,7 @@ module RedAmber
 
         args = [instance_eval(&block)]
       end
-      return self if args.empty? || empty?
+      return self if args.compact.empty? || empty?
 
       picker =
         if args.symbol?
@@ -265,7 +265,9 @@ module RedAmber
           keys.reject_by_indices(args)
         else
           dropper = parse_args(args, n_keys)
-          if dropper.boolean?
+          if dropper.empty?
+            return self
+          elsif dropper.boolean?
             keys.reject_by_booleans(dropper)
           elsif dropper.symbol?
             keys - dropper
