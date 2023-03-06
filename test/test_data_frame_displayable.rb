@@ -114,6 +114,33 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
       OUTPUT
       assert_equal str, df.to_s
     end
+
+    test '#to_s non-ascii elements' do
+      df = DataFrame.load(Arrow::Buffer.new(<<~CSV), format: :csv)
+        postal_code,prefecture,city,address
+        9800856,宮城県,仙台市青葉区,青葉山
+        1040061,東京都,中央区,銀座
+        1340091,東京都,江戸川区,船堀
+        3900815,長野県,松本市,深志
+        5140061,三重県,津市,一身田上津部田
+        6060001,京都府,京都市左京区,岩倉大鷺町
+        7300811,広島県,広島市中区,中島町
+        8120032,福岡県,福岡市博多区,石城町
+      CSV
+      expected = <<~OUTPUT
+          postal_code prefecture city         address
+              <int64> <string>   <string>     <string>
+        0     9800856 宮城県           仙台市青葉区             青葉山
+        1     1040061 東京都           中央区             銀座
+        2     1340091 東京都           江戸川区             船堀
+        3     3900815 長野県           松本市             深志
+        4     5140061 三重県           津市             一身田上津部田
+        5     6060001 京都府           京都市左京区             岩倉大鷺町
+        6     7300811 広島県           広島市中区             中島町
+        7     8120032 福岡県           福岡市博多区             石城町
+      OUTPUT
+      assert_equal expected, df.to_s
+    end
   end
 
   sub_test_case 'inspect by table mode' do
