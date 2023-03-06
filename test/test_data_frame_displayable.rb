@@ -592,9 +592,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
 
     test 'else' do
-      obj = []
-      html = "RedAmber::DataFrame <1 x 1 vector> <table><tr><th>other</th></tr><tr><td>#{obj.inspect}</td></tr></table>"
-      assert_equal html, DataFrame.new(other: [obj]).to_iruby[1]
+      date = Date.parse('2022/04/15')
+      html = "RedAmber::DataFrame <1 x 1 vector> <table><tr><th>date</th></tr><tr><td>#{date}</td></tr></table>"
+      assert_equal html, DataFrame.new(date: [date]).to_iruby[1]
     end
   end
 
