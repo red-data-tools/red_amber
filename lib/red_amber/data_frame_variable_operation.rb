@@ -648,6 +648,7 @@ module RedAmber
       unless not_existing_keys.empty?
         raise DataFrameArgumentError, "Not existing: #{not_existing_keys}"
       end
+      return self if key_pairs.all? { |k, v| k == v }
 
       fields =
         keys.map do |key|
