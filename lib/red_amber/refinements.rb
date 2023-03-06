@@ -202,5 +202,18 @@ module RedAmber
     end
   end
 
-  private_constant :RefineArray, :RefineArrayLike, :RefineArrowTable, :RefineHash
+  # Add additional capabilities to String
+  module RefineString
+    refine String do
+      def width
+        chars
+          .partition(&:ascii_only?)
+          .map.with_index(1) { |a, i| a.size * i }
+          .sum
+      end
+    end
+  end
+
+  private_constant :RefineArray, :RefineArrayLike, :RefineArrowTable,
+                   :RefineHash, :RefineString
 end
