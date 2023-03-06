@@ -5,6 +5,9 @@ require 'stringio'
 module RedAmber
   # Mix-in for the class DataFrame
   module DataFrameDisplayable
+    # Refineme class String
+    using RefineString
+
     # Used internally to display table.
     INDEX_KEY = :index_key_for_format_table
     private_constant :INDEX_KEY
@@ -466,7 +469,7 @@ module RedAmber
         end
       end
 
-      width_list = df.vectors.map { |v| v.to_a.map(&:length).max }
+      width_list = df.vectors.map { |v| v.to_a.map(&:width).max }
       total_length = width_list[-1] # reserved for last column
 
       formats = []
@@ -475,14 +478,13 @@ module RedAmber
         w = width_list[i]
         if total_length + w > width && i < df.n_keys - 1
           row_ellipsis = i
-          formats << '%3s'
-          formats << format_for_column(df.vectors[-1], original, width_list[-1])
+          formats << 3
+          formats << format_width(df.vectors[-1], original, width_list[-1])
           break
         end
-        formats << format_for_column(v, original, w)
+        formats << format_width(v, original, w)
         total_length += w
       end
-      format_str = formats.join(' ')
 
       str = StringIO.new
       if row_ellipsis
@@ -491,17 +493,26 @@ module RedAmber
       end
 
       df.to_a.each do |row|
-        str.puts format(format_str, *row).rstrip
+        a =
+          row.zip(formats).map do |elem, format|
+            non_ascii_diff = elem.ascii_only? ? 0 : elem.width - elem.size
+            if format.negative?
+              elem.ljust(-format + non_ascii_diff)
+            else
+              elem.rjust(format + non_ascii_diff)
+            end
+          end
+        str.puts a.join(' ').rstrip
       end
 
       str.string
     end
 
-    def format_for_column(vector, original, width)
+    def format_width(vector, original, width)
       if vector.key != INDEX_KEY && !original[vector.key].numeric?
-        "%-#{width}s"
+        -width
       else
-        "%#{width}s"
+        width
       end
     end
 
