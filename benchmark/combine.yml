@@ -1,12 +1,12 @@
 loop_count: 3
 
 contexts:
-  - name: HEAD
-    prelude: |
-      $LOAD_PATH.unshift(File.expand_path('lib'))
   - name: 0.3.0
     gems:
       red_amber: 0.3.0
+  - name: HEAD
+    prelude: |
+      $LOAD_PATH.unshift(File.expand_path('lib'))
 
 prelude: |
   require 'red_amber'
