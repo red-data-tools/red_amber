@@ -151,9 +151,9 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
         2 :c  string      3 ["A", "B", "C"]
         3 :d  boolean     3 [true, false, nil], 1 nil
       STR
-      assert_equal str, @df.drop.tdr_str
-      assert_equal str, @df.drop([]).tdr_str
-      assert_equal str, @df.drop { nil }.tdr_str
+      assert_equal @df, @df.drop
+      assert_equal @df, @df.drop([])
+      assert_equal(@df, @df.drop { nil })
     end
 
     test 'drop by arguments' do
