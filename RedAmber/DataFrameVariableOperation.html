@@ -622,12 +622,12 @@ end
       <pre class="lines">
 
 
-511
-512
-513</pre>
+513
+514
+515</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 511</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 513</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_assign'>assign</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_assign_update'>assign_update</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='label'>append_to_left:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
@@ -934,12 +934,12 @@ df.assign_left(new_index: df.indices(1))
       <pre class="lines">
 
 
-582
-583
-584</pre>
+584
+585
+586</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 582</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 584</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_assign_left'>assign_left</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_assign_update'>assign_update</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='label'>append_to_left:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
@@ -1373,7 +1373,9 @@ languages.drop { vectors.map(&amp;:numeric?) }
 282
 283
 284
-285</pre>
+285
+286
+287</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 249</span>
@@ -1386,7 +1388,7 @@ languages.drop { vectors.map(&amp;:numeric?) }
 
     <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_instance_eval'>instance_eval</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span><span class='rbracket'>]</span>
   <span class='kw'>end</span>
-  <span class='kw'>return</span> <span class='kw'>self</span> <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>||</span> <span class='id identifier rubyid_empty?'>empty?</span>
+  <span class='kw'>return</span> <span class='kw'>self</span> <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>||</span> <span class='id identifier rubyid_empty?'>empty?</span>
 
   <span class='id identifier rubyid_picker'>picker</span> <span class='op'>=</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_symbol?'>symbol?</span>
@@ -1397,7 +1399,9 @@ languages.drop { vectors.map(&amp;:numeric?) }
       <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_reject_by_indices'>reject_by_indices</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
     <span class='kw'>else</span>
       <span class='id identifier rubyid_dropper'>dropper</span> <span class='op'>=</span> <span class='id identifier rubyid_parse_args'>parse_args</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='id identifier rubyid_n_keys'>n_keys</span><span class='rparen'>)</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_dropper'>dropper</span><span class='period'>.</span><span class='id identifier rubyid_boolean?'>boolean?</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_dropper'>dropper</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+        <span class='kw'>return</span> <span class='kw'>self</span>
+      <span class='kw'>elsif</span> <span class='id identifier rubyid_dropper'>dropper</span><span class='period'>.</span><span class='id identifier rubyid_boolean?'>boolean?</span>
         <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_reject_by_booleans'>reject_by_booleans</span><span class='lparen'>(</span><span class='id identifier rubyid_dropper'>dropper</span><span class='rparen'>)</span>
       <span class='kw'>elsif</span> <span class='id identifier rubyid_dropper'>dropper</span><span class='period'>.</span><span class='id identifier rubyid_symbol?'>symbol?</span>
         <span class='id identifier rubyid_keys'>keys</span> <span class='op'>-</span> <span class='id identifier rubyid_dropper'>dropper</span>
@@ -2207,8 +2211,6 @@ df.rename { [keys, keys.map(&amp;:downcase)].transpose }
       <pre class="lines">
 
 
-366
-367
 368
 369
 370
@@ -2230,10 +2232,12 @@ df.rename { [keys, keys.map(&amp;:downcase)].transpose }
 386
 387
 388
-389</pre>
+389
+390
+391</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 366</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 368</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_rename'>rename</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_renamer'>renamer</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span>
@@ -2269,7 +2273,7 @@ df.rename { [keys, keys.map(&amp;:downcase)].transpose }
 </div>
 
       <div id="footer">
-  Generated on Sat Feb 25 04:47:55 2023 by
+  Generated on Tue Mar  7 10:02:48 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.1).
 </div>

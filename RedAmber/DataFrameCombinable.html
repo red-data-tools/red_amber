@@ -3046,9 +3046,7 @@ other4 = DataFrame.new(
 888
 889
 890
-891
-892
-893</pre>
+891</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 793</span>
@@ -3083,14 +3081,12 @@ other4 = DataFrame.new(
 
   <span class='comment'># This is not necessary if additional procedure is contributed to Red Arrow.
 </span>  <span class='kw'>if</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_left_keys'>left_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='lbracket'>[</span><span class='symbol'>:left</span><span class='rbracket'>]</span>
-    <span class='id identifier rubyid_right_keys'>right_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='lbracket'>[</span><span class='symbol'>:right</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_left_keys'>left_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_ensure_keys'>ensure_keys</span><span class='lparen'>(</span><span class='id identifier rubyid_join_keys'>join_keys</span><span class='lbracket'>[</span><span class='symbol'>:left</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_right_keys'>right_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_ensure_keys'>ensure_keys</span><span class='lparen'>(</span><span class='id identifier rubyid_join_keys'>join_keys</span><span class='lbracket'>[</span><span class='symbol'>:right</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='kw'>else</span>
-    <span class='id identifier rubyid_left_keys'>left_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_join_keys'>join_keys</span>
-    <span class='id identifier rubyid_right_keys'>right_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_join_keys'>join_keys</span>
+    <span class='id identifier rubyid_left_keys'>left_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_ensure_keys'>ensure_keys</span><span class='lparen'>(</span><span class='id identifier rubyid_join_keys'>join_keys</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_right_keys'>right_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_left_keys'>left_keys</span>
   <span class='kw'>end</span>
-  <span class='id identifier rubyid_left_keys'>left_keys</span> <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_left_keys'>left_keys</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_right_keys'>right_keys</span> <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_right_keys'>right_keys</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
 
   <span class='kw'>case</span> <span class='id identifier rubyid_type'>type</span>
   <span class='kw'>when</span> <span class='symbol'>:full_outer</span><span class='comma'>,</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='symbol'>:left_anti</span><span class='comma'>,</span> <span class='symbol'>:right_semi</span><span class='comma'>,</span> <span class='symbol'>:right_anti</span>
@@ -3150,7 +3146,7 @@ other4 = DataFrame.new(
           <span class='period'>.</span><span class='id identifier rubyid_drop'>drop</span><span class='lparen'>(</span><span class='id identifier rubyid_left_index'>left_index</span><span class='comma'>,</span> <span class='id identifier rubyid_right_index'>right_index</span><span class='rparen'>)</span>
     <span class='kw'>end</span>
     <span class='id identifier rubyid_dataframe'>dataframe</span><span class='period'>.</span><span class='id identifier rubyid_pick'>pick</span> <span class='kw'>do</span>
-      <span class='lbracket'>[</span><span class='id identifier rubyid_right_keys'>right_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span> <span class='op'>-</span> <span class='id identifier rubyid_right_keys'>right_keys</span><span class='rbracket'>]</span>
+      <span class='lbracket'>[</span><span class='id identifier rubyid_right_keys'>right_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>-</span> <span class='id identifier rubyid_right_keys'>right_keys</span><span class='rbracket'>]</span>
     <span class='kw'>end</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -5065,7 +5061,7 @@ other3 = DataFrame.new(
 </div>
 
       <div id="footer">
-  Generated on Sat Feb 25 04:47:55 2023 by
+  Generated on Tue Mar  7 10:02:48 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.1).
 </div>

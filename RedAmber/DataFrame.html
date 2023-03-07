@@ -1477,7 +1477,7 @@
       <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 684</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='id identifier rubyid_v'>v</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_variables'>variables</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
 
   <span class='kw'>super</span>
 <span class='kw'>end</span></pre>
@@ -2646,7 +2646,7 @@ end
       <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 206</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_keys'>keys</span>
-  <span class='ivar'>@keys</span> <span class='op'>||</span> <span class='ivar'>@keys</span> <span class='op'>=</span> <span class='id identifier rubyid_init_instance_vars'>init_instance_vars</span><span class='lparen'>(</span><span class='symbol'>:keys</span><span class='rparen'>)</span>
+  <span class='ivar'>@keys</span> <span class='op'>||=</span> <span class='id identifier rubyid_init_instance_vars'>init_instance_vars</span><span class='lparen'>(</span><span class='symbol'>:keys</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -3868,7 +3868,7 @@ df.sub_by_kernel(kernel, step: 2)
       <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 253</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_type_classes'>type_classes</span>
-  <span class='ivar'>@data_types</span> <span class='op'>||</span> <span class='ivar'>@data_types</span> <span class='op'>=</span> <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_column'>column</span><span class='op'>|</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_data_type'>data_type</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='rbrace'>}</span>
+  <span class='ivar'>@type_classes</span> <span class='op'>||=</span> <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_column'>column</span><span class='op'>|</span> <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_data_type'>data_type</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -3929,7 +3929,7 @@ df.sub_by_kernel(kernel, step: 2)
       <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 242</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_types'>types</span>
-  <span class='ivar'>@types</span> <span class='op'>||</span> <span class='ivar'>@types</span> <span class='op'>=</span> <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_column'>column</span><span class='op'>|</span>
+  <span class='ivar'>@types</span> <span class='op'>||=</span> <span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_columns'>columns</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_column'>column</span><span class='op'>|</span>
     <span class='id identifier rubyid_column'>column</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='period'>.</span><span class='id identifier rubyid_value_type'>value_type</span><span class='period'>.</span><span class='id identifier rubyid_nick'>nick</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -3994,7 +3994,7 @@ df.sub_by_kernel(kernel, step: 2)
       <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 196</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_variables'>variables</span>
-  <span class='ivar'>@variables</span> <span class='op'>||</span> <span class='ivar'>@variables</span> <span class='op'>=</span> <span class='id identifier rubyid_init_instance_vars'>init_instance_vars</span><span class='lparen'>(</span><span class='symbol'>:variables</span><span class='rparen'>)</span>
+  <span class='ivar'>@variables</span> <span class='op'>||=</span> <span class='id identifier rubyid_init_instance_vars'>init_instance_vars</span><span class='lparen'>(</span><span class='symbol'>:variables</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -4053,7 +4053,7 @@ df.sub_by_kernel(kernel, step: 2)
       <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 262</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_vectors'>vectors</span>
-  <span class='ivar'>@vectors</span> <span class='op'>||</span> <span class='ivar'>@vectors</span> <span class='op'>=</span> <span class='id identifier rubyid_init_instance_vars'>init_instance_vars</span><span class='lparen'>(</span><span class='symbol'>:vectors</span><span class='rparen'>)</span>
+  <span class='ivar'>@vectors</span> <span class='op'>||=</span> <span class='id identifier rubyid_init_instance_vars'>init_instance_vars</span><span class='lparen'>(</span><span class='symbol'>:vectors</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -4065,7 +4065,7 @@ df.sub_by_kernel(kernel, step: 2)
 </div>
 
       <div id="footer">
-  Generated on Sat Feb 25 04:47:57 2023 by
+  Generated on Tue Mar  7 10:02:50 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.1).
 </div>
