@@ -151,7 +151,7 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array @expected, @vector.is_in(Vector.new(@values)) # Vector
       assert_equal_array @expected, @vector.is_in([2.0, 3.0]) # Cast
       assert_equal_array @expected, Vector.new([1.0, 2, 3, 4, 5]).is_in([2, 3]) # Cast
-      assert_raise(TypeError) { @vector.is_in([1, true]) } # Can't cast
+      assert_raise(Arrow::Error::NotImplemented) { @vector.is_in([1, true]) } # Can't cast
     end
 
     test 'chunked array' do
@@ -163,7 +163,7 @@ class VectorTest < Test::Unit::TestCase
 
     test 'str and numeric' do
       array = ['1', 2, 3]
-      assert_equal_array @expected, @vector.is_in(array)
+      assert_raise(Arrow::Error::NotImplemented) { @vector.is_in(array) }
     end
 
     setup do
@@ -184,6 +184,14 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array expected, @int_vector.is_in(@uint)
       assert_equal_array expected, @int_vector.is_in(Arrow::Array.new(@uint))
       assert_equal_array expected, @int_vector.is_in(@uint_vector)
+    end
+
+    test '#is_in string' do
+      string = Vector.new(%w[A B C D E])
+      expected = [true, false, true, true, false]
+      assert_equal_array expected, string.is_in(%w[A D C])
+      assert_equal_array expected, string.is_in('A', 'C'..'D')
+      assert_equal_array expected, string.is_in(Vector.new(%w[A D C]))
     end
   end
 

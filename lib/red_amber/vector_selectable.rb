@@ -128,19 +128,24 @@ module RedAmber
       raise VectorArgumentError, "Invalid argument: #{args}"
     end
 
-    # @param values [Array, Arrow::Array, Vector]
+    # Check if elements of self are in the other values.
+    #
+    # @param values [Vector, Array, Arrow::Array, Arrow::ChunkedArray]
+    #   values to test existence.
+    # @return [Vector]
+    #   boolean Vector.
+    #
     def is_in(*values)
-      self_data = chunked? ? data.pack : data
-
-      array =
+      enum =
         case values
-        in [Vector] | [Arrow::Array] | [Arrow::ChunkedArray]
-          values[0].to_a
+        in [] | [[]] | [nil] |[[nil]]
+          return Vector.new([false] * size)
+        in [Vector | Arrow::Array | Arrow::ChunkedArray]
+          values[0].each
         else
-          Array(values).flatten
+          parse_args(values, size, symbolize: false)
         end
-
-      Vector.create(self_data.is_in(array))
+      enum.filter_map { self == _1 unless _1.nil? }.reduce(&:|)
     end
 
     # Arrow's support required
