@@ -148,9 +148,15 @@ module RedAmber
       enum.filter_map { self == _1 unless _1.nil? }.reduce(&:|)
     end
 
-    # Arrow's support required
+    # Returns index of first matched position of element in self.
+    #
+    # @param element
+    #   an element of self.
+    # @return [integer, nil]
+    #   founded position of element. If it is not found, returns nil.
+    #
     def index(element)
-      to_a.index(element)
+      (0...size).find { |i| self[i] == element }
     end
 
     # Returns first element of self.
