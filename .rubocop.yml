@@ -190,6 +190,7 @@ Metrics/PerceivedComplexity:
     'filters', # 11
     'html_table', # 11
     'slice', # 11
+    'pick', # 11
   ]
 
 # Offense count: 1
