@@ -146,6 +146,8 @@ module RedAmber
       picker.compact!
       raise DataFrameArgumentError, "some keys are duplicated: #{args}" if picker.uniq!
 
+      return self if picker == keys
+
       DataFrame.create(@table.select_columns(*picker))
     end
 
@@ -265,7 +267,7 @@ module RedAmber
           keys.reject_by_indices(args)
         else
           dropper = parse_args(args, n_keys)
-          if dropper.empty?
+          if dropper.compact.empty?
             return self
           elsif dropper.boolean?
             keys.reject_by_booleans(dropper)

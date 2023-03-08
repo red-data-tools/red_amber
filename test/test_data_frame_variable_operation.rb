@@ -33,7 +33,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { @df.pick(:index) { :block } }
 
       assert_true @df.pick.empty? # pick nothing
-      assert_equal @df.tdr_str, @df.pick(@df.keys).tdr_str # pick all
+      assert_true @df.equal?(@df.pick(@df.keys)) # pick all
 
       str = <<~STR
         RedAmber::DataFrame : 3 x 1 Vector
@@ -142,9 +142,13 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'drop nothing' do
-      assert_equal @df, @df.drop
-      assert_equal @df, @df.drop([])
-      assert_equal(@df, @df.drop { nil })
+      assert_true @df.equal?(@df.drop)
+      assert_true @df.equal?(@df.drop([]))
+      assert_true @df.equal?(@df.drop(nil))
+      assert_true @df.equal?(@df.drop([nil]))
+      assert_true @df.equal?(@df.drop { [] })
+      assert_true @df.equal?(@df.drop { nil })
+      assert_true @df.equal?(@df.drop { [nil] })
     end
 
     test 'drop by arguments' do
@@ -247,10 +251,14 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'rename nothing' do
-      assert_equal @df2, @df2.rename
-      assert_equal @df2, @df2.rename([])
+      assert_true @df2.equal?(@df2.rename)
+      assert_true @df2.equal?(@df2.rename([]))
+      assert_true @df2.equal?(@df2.rename(nil))
+      assert_true @df2.equal?(@df2.rename({}))
+      assert_true @df2.equal?(@df2.rename { {} })
+      assert_true @df2.equal?(@df2.rename { nil })
       unchanged_key_pair = @df2.keys.each_with_object({}) { |k, h| h[k] = k }
-      assert_equal @df2, @df2.rename(unchanged_key_pair)
+      assert_true @df2.equal?(@df2.rename(unchanged_key_pair))
     end
 
     test 'rename by arguments' do
@@ -271,10 +279,7 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
     end
 
     test 'rename by block' do
-      assert_equal(@df2, @df2.rename {}) # empty block
-      assert_equal(@df2, @df2.rename { nil }) # empty block
       assert_raise(DataFrameArgumentError) { @df2.rename { :key } }
-      assert_equal(@df2, @df2.rename { {} }) # rename nothing
       assert_raise(DataFrameArgumentError) { @df2.rename { { key_not_exist: :new_key } } }
 
       str = <<~OUTPUT
@@ -350,13 +355,19 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_raise(DataFrameArgumentError) { @df2.assign(append: %w[a b c d]) }
     end
 
+    test 'assign_nothing' do
+      assert_true @df2.equal?(@df2.assign)
+      assert_true @df2.equal?(@df2.assign(nil))
+      assert_true @df2.equal?(@df2.assign([]))
+      assert_true @df2.equal?(@df2.assign({}))
+      assert_true @df2.equal?(@df2.assign {}) # rubocop:ignore Lint/EmptyBlock
+      assert_true @df2.equal?(@df2.assign { nil })
+      assert_true @df2.equal?(@df2.assign { {} })
+      assert_true @df2.equal?(@df2.assign { [] })
+    end
+
     test 'assign by arguments' do
       assert_raise(DataFrameArgumentError) { @df2.assign(:key) } # key only
-
-      assert_equal @df2, @df2.assign # assign nothing
-      assert_equal @df2, @df2.assign(nil) # assign nil
-      assert_equal @df2, @df2.assign([]) # assign empty array
-      assert_equal @df2, @df2.assign({}) # assign empty hash
 
       unchanged_pair = @df2.keys.each_with_object({}) { |k, h| h[k] = @df2[k].to_a }
       assert_equal @df2.tdr_str, @df2.assign(unchanged_pair).tdr_str
@@ -398,10 +409,6 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
 
     test 'assign by block' do
       assert_raise(DataFrameArgumentError) { @df2.assign { :key } } # key only
-      assert_equal(@df2, @df2.assign {}) # assign nothing
-      assert_equal(@df2, @df2.assign { nil }) # assign nothing
-      assert_equal(@df2, @df2.assign { {} }) # assign nothing
-      assert_equal(@df2, @df2.assign { [] }) # assign nothing
 
       assigner = { new: %w[a a b b c] }
       str = <<~OUTPUT
