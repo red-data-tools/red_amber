@@ -125,19 +125,38 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
   end
 
   sub_test_case '#join' do
+    setup do
+      @df1 = DataFrame.new(
+        KEY: %w[A B C],
+        X: [1, 2, 3]
+      )
+      @right1 = DataFrame.new(
+        KEY: %w[A B D],
+        Y: [3, 2, 1]
+      )
+      @df2 = DataFrame.new(
+        KEY1: %w[A B C],
+        KEY2: %w[s t u],
+        X: [1, 2, 3]
+      )
+      @right2 = DataFrame.new(
+        KEY1: %w[A B D],
+        KEY2: %w[s u v],
+        Y: [3, 2, 1]
+      )
+      @df3 = DataFrame.new(
+        'KEY.1': %w[A B C],
+        KEY: %w[s t u],
+        X: [1, 2, 3]
+      )
+      @right3 = DataFrame.new(
+        'KEY.1': %w[A B D],
+        KEY: %w[s u v],
+        Y: [3, 2, 1]
+      )
+    end
+
     sub_test_case 'with a join_key' do
-      setup do
-        @df1 = DataFrame.new(
-          KEY: %w[A B C],
-          X: [1, 2, 3]
-        )
-
-        @right1 = DataFrame.new(
-          KEY: %w[A B D],
-          Y: [3, 2, 1]
-        )
-      end
-
       test 'illegal right object' do
         assert_raise(DataFrameArgumentError) { @df1.join(@right1.to_h) }
       end
@@ -287,20 +306,6 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
 
     sub_test_case 'with join_keys' do
-      setup do
-        @df2 = DataFrame.new(
-          KEY1: %w[A B C],
-          KEY2: %w[s t u],
-          X: [1, 2, 3]
-        )
-
-        @right2 = DataFrame.new(
-          KEY1: %w[A B D],
-          KEY2: %w[s u v],
-          Y: [3, 2, 1]
-        )
-      end
-
       test '#inner_join with join_keys' do
         expected = DataFrame.new(
           KEY1: %w[A],
@@ -380,11 +385,11 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
 
       test '#left_join with join_keys, partial join_key/rename' do
         expected = DataFrame.new(
-          KEY1: %w[A C B],
-          KEY2: %w[s u t],
-          X: [1, 3, 2],
-          'KEY1.1': ['A', 'B', nil],
-          Y: [3, 2, nil]
+          KEY1: %w[A B C],
+          KEY2: %w[s t u],
+          X: [1, 2, 3],
+          'KEY1.1': ['A', nil, 'B'],
+          Y: [3, nil, 2]
         )
         assert_equal expected, @df2.left_join(@right2, :KEY2)
         assert_equal expected, @df2.left_join(@right2,
@@ -421,8 +426,8 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
           Y: [3, 2, 1]
         )
         assert_equal expected, @df2.right_join(@right2, :KEY2)
-        assert_equal expected, @df2.right_join(@right2,
-                                               { left: :KEY2, right: 'KEY2' })
+        assert_equal expected,
+                     @df2.right_join(@right2, { left: :KEY2, right: 'KEY2' })
       end
 
       test '#semi_join with join_keys' do
@@ -481,20 +486,6 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
 
     sub_test_case 'renaming duplicate keys by suffix' do
-      setup do
-        @df3 = DataFrame.new(
-          'KEY.1': %w[A B C],
-          KEY: %w[s t u],
-          X: [1, 2, 3]
-        )
-
-        @right3 = DataFrame.new(
-          'KEY.1': %w[A B D],
-          KEY: %w[s u v],
-          Y: [3, 2, 1]
-        )
-      end
-
       test '#inner_join with rename and collision by default' do
         expected = DataFrame.new(
           'KEY.1': %w[A B],
@@ -556,6 +547,26 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
           Y: [3, 2]
         )
         assert_equal expected, @df3.inner_join(@right3, :'KEY.1', suffix: '')
+      end
+    end
+
+    sub_test_case 'sort by :force_order' do
+      test '#full_join w/o sort' do
+        sort = @df2.full_join(@right2, :KEY2, force_order: true)
+        no_sort = @df2.full_join(@right2, :KEY2, force_order: false)
+        assert_equal_dataframe_by_hash(sort, no_sort)
+      end
+
+      test '#left_join w/o sort' do
+        sort = @df2.left_join(@right2, :KEY2, force_order: true)
+        no_sort = @df2.left_join(@right2, :KEY2, force_order: false)
+        assert_equal_dataframe_by_hash(sort, no_sort)
+      end
+
+      test '#right_join w/o sort' do
+        sort = @df2.right_join(@right2, :KEY2, force_order: true)
+        no_sort = @df2.right_join(@right2, :KEY2, force_order: false)
+        assert_equal_dataframe_by_hash(sort, no_sort)
       end
     end
 

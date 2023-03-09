@@ -121,7 +121,7 @@ module RedAmber
     #   @param other [DataFrame, Arrow::Table]
     #     A DataFrame or a Table to be joined with self.
     #
-    # @!macro join_dorce_order
+    # @!macro join_force_order
     #   @param force_order [Boolean]
     #     wheather force order of the output always same.
     #     - This option is used in `:full_outer` and `:right_outer`.
@@ -217,11 +217,12 @@ module RedAmber
     # - Same as `#join` with `type: :inner`
     # - A kind of mutating join.
     #
-    # @overload inner_join(other, suffix: '.1')
+    # @overload inner_join(other, suffix: '.1', force_order: true)
     #   If `join_key` is not specified, common keys in self and other are used
     #   (natural keys). Returns joined dataframe.
     #
     #   @macro join_before
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
@@ -233,10 +234,11 @@ module RedAmber
     #     0 A              1 true
     #     1 B              2 false
     #
-    # @overload inner_join(other, join_keys, suffix: '.1')
+    # @overload inner_join(other, join_keys, suffix: '.1', force_order: true)
     #
     #   @macro join_before
     #   @macro join_key_in_array
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example with a key
@@ -248,10 +250,11 @@ module RedAmber
     #     0 A              1 true
     #     1 B              2 false
     #
-    # @overload inner_join(other, join_key_pairs, suffix: '.1')
+    # @overload inner_join(other, join_key_pairs, suffix: '.1', force_order: true)
     #
     #   @macro join_before
     #   @macro join_key_in_hash
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_2
     #   @example with key pairs
@@ -263,8 +266,8 @@ module RedAmber
     #     0 A              1 true
     #     1 B              2 false
     #
-    def inner_join(other, join_keys = nil, suffix: '.1')
-      join(other, join_keys, type: :inner, suffix: suffix)
+    def inner_join(other, join_keys = nil, suffix: '.1', force_order: true)
+      join(other, join_keys, type: :inner, suffix: suffix, force_order: force_order)
     end
 
     # Join another DataFrame or Table, leaving all records.
@@ -276,7 +279,7 @@ module RedAmber
     #   (natural keys). Returns joined dataframe.
     #
     #   @macro join_before
-    #   @macro join_dorce_order
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
@@ -294,7 +297,7 @@ module RedAmber
     #
     #   @macro join_before
     #   @macro join_key_in_array
-    #   @macro join_dorce_order
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example with a key
@@ -312,7 +315,7 @@ module RedAmber
     #
     #   @macro join_before
     #   @macro join_key_in_hash
-    #   @macro join_dorce_order
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_2
     #   @example with key pairs
@@ -337,11 +340,12 @@ module RedAmber
     # - Same as `#join` with `type: :left_outer`
     # - A kind of mutating join.
     #
-    # @overload left_join(other, suffix: '.1')
+    # @overload left_join(other, suffix: '.1', force_order: true)
     #   If `join_key` is not specified, common keys in self and other are used
     #   (natural keys). Returns joined dataframe.
     #
     #   @macro join_before
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
@@ -354,10 +358,11 @@ module RedAmber
     #     1 B              2 false
     #     2 C              3 (nil)
     #
-    # @overload left_join(other, join_keys, suffix: '.1')
+    # @overload left_join(other, join_keys, suffix: '.1', force_order: true)
     #
     #   @macro join_before
     #   @macro join_key_in_array
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example with a key
@@ -370,10 +375,11 @@ module RedAmber
     #     1 B              2 false
     #     2 C              3 (nil)
     #
-    # @overload left_join(other, join_key_pairs, suffix: '.1')
+    # @overload left_join(other, join_key_pairs, suffix: '.1', force_order: true)
     #
     #   @macro join_before
     #   @macro join_key_in_hash
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_2
     #   @example with key pairs
@@ -386,8 +392,8 @@ module RedAmber
     #     1 B              2 false
     #     2 C              3 (nil)
     #
-    def left_join(other, join_keys = nil, suffix: '.1')
-      join(other, join_keys, type: :left_outer, suffix: suffix)
+    def left_join(other, join_keys = nil, suffix: '.1', force_order: true)
+      join(other, join_keys, type: :left_outer, suffix: suffix, force_order: force_order)
     end
 
     # Join matching values from self to other.
@@ -399,7 +405,7 @@ module RedAmber
     #   (natural keys). Returns joined dataframe.
     #
     #   @macro join_before
-    #   @macro join_dorce_order
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
@@ -416,7 +422,7 @@ module RedAmber
     #
     #   @macro join_before
     #   @macro join_key_in_array
-    #   @macro join_dorce_order
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example with a key
@@ -433,7 +439,7 @@ module RedAmber
     #
     #   @macro join_before
     #   @macro join_key_in_hash
-    #   @macro join_dorce_order
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_2
     #   @example with key pairs
@@ -462,11 +468,12 @@ module RedAmber
     # - Same as `#join` with `type: :left_semi`
     # - A kind of filtering join.
     #
-    # @overload semi_join(other, suffix: '.1')
+    # @overload semi_join(other, suffix: '.1', force_order: true)
     #   If `join_key` is not specified, common keys in self and other are used
     #   (natural keys). Returns joined dataframe.
     #
     #   @macro join_before
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
@@ -478,10 +485,11 @@ module RedAmber
     #     0 A              1
     #     1 B              2
     #
-    # @overload semi_join(other, join_keys, suffix: '.1')
+    # @overload semi_join(other, join_keys, suffix: '.1', force_order: true)
     #
     #   @macro join_before
     #   @macro join_key_in_array
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example with a key
@@ -493,10 +501,11 @@ module RedAmber
     #     0 A              1
     #     1 B              2
     #
-    # @overload semi_join(other, join_key_pairs, suffix: '.1')
+    # @overload semi_join(other, join_key_pairs, suffix: '.1', force_order: true)
     #
     #   @macro join_before
     #   @macro join_key_in_hash
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_2
     #   @example with key pairs
@@ -508,19 +517,20 @@ module RedAmber
     #     0 A              1
     #     1 B              2
     #
-    def semi_join(other, join_keys = nil, suffix: '.1')
-      join(other, join_keys, type: :left_semi, suffix: suffix)
+    def semi_join(other, join_keys = nil, suffix: '.1', force_order: true)
+      join(other, join_keys, type: :left_semi, suffix: suffix, force_order: force_order)
     end
 
     # Return records of self that do not have a match in other.
     # - Same as `#join` with `type: :left_anti`
     # - A kind of filtering join.
     #
-    # @overload anti_join(other, suffix: '.1')
+    # @overload anti_join(other, suffix: '.1', force_order: true)
     #   If `join_key` is not specified, common keys in self and other are used
     #   (natural keys). Returns joined dataframe.
     #
     #   @macro join_before
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example without key (use implicit common key)
@@ -531,10 +541,11 @@ module RedAmber
     #       <string> <uint8>
     #     0 C              3
     #
-    # @overload anti_join(other, join_keys, suffix: '.1')
+    # @overload anti_join(other, join_keys, suffix: '.1', force_order: true)
     #
     #   @macro join_before
     #   @macro join_key_in_array
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example with a key
@@ -545,10 +556,11 @@ module RedAmber
     #       <string> <uint8>
     #     0 C              3
     #
-    # @overload anti_join(other, join_key_pairs, suffix: '.1')
+    # @overload anti_join(other, join_key_pairs, suffix: '.1', force_order: true)
     #
     #   @macro join_before
     #   @macro join_key_in_hash
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_2
     #   @example with key pairs
@@ -559,8 +571,8 @@ module RedAmber
     #       <string> <uint8>
     #     0 C              3
     #
-    def anti_join(other, join_keys = nil, suffix: '.1')
-      join(other, join_keys, type: :left_anti, suffix: suffix)
+    def anti_join(other, join_keys = nil, suffix: '.1', force_order: true)
+      join(other, join_keys, type: :left_anti, suffix: suffix, force_order: force_order)
     end
 
     # Set operations (#intersect, #union, #difference, #set_operable?)
@@ -709,7 +721,7 @@ module RedAmber
     #
     #   @macro join_before
     #   @macro join_common_type
-    #   @macro join_dorce_order
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_1
     #   @example
@@ -736,7 +748,7 @@ module RedAmber
     #   @macro join_before
     #   @macro join_key_in_array
     #   @macro join_common_type
-    #   @macro join_dorce_order
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_3
     #   @example join keys in an Array
@@ -761,7 +773,7 @@ module RedAmber
     #   @macro join_before
     #   @macro join_key_in_hash
     #   @macro join_common_type
-    #   @macro join_dorce_order
+    #   @macro join_force_order
     #   @macro join_after
     #   @macro join_common_example_4
     #   @example without options
@@ -804,7 +816,7 @@ module RedAmber
       type = type.to_sym
       left_index = :__LEFT_INDEX__
       right_index = :__RIGHT_INDEX__
-      if force_order && %i[full_outer right_outer].include?(type)
+      if force_order
         left_table = assign(left_index) { indices }.table
         other = DataFrame.create(other) if other.is_a?(Arrow::Table)
         right_table = other.assign(right_index) { indices }.table
@@ -851,26 +863,36 @@ module RedAmber
 
       case type
       when :inner, :left_outer, :left_semi, :left_anti, :right_semi, :right_anti
-        if joined_table.keys.uniq!
-          DataFrame.create(rename_table(joined_table, n_keys, suffix))
-        else
-          DataFrame.create(joined_table)
-        end
-      when :full_outer
-        renamed_table = rename_table(joined_table, n_keys, suffix)
-        renamed_keys = renamed_table.keys
-        dropper = []
-        dataframe = DataFrame.create(renamed_table).assign do |df|
-          left_keys.map do |left_key|
-            i_left_key = renamed_keys.index(left_key)
-            right_key = renamed_keys[i_left_key + table_keys.size]
-            dropper << right_key
-            [left_key.to_sym, merge_array(df[left_key].data, df[right_key].data)]
+        dataframe =
+          if joined_table.keys.uniq!
+            DataFrame.create(rename_table(joined_table, n_keys, suffix))
+          else
+            DataFrame.create(joined_table)
           end
-        end
-        dataframe = dataframe.sort(left_index, right_index) if force_order
-
-        dataframe.drop(dropper, left_index, right_index)
+        sorter =
+          case type
+          when :inner, :left_outer
+            [left_index, right_index]
+          when :left_semi, :left_anti
+            [left_index]
+          when :right_semi, :right_anti
+            [right_index]
+          end
+      when :full_outer
+        key_index_lr =
+          left_keys.map { left_table.keys.index(_1) }
+            .zip(right_keys.map { left_table.keys.size + right_table.keys.index(_1) })
+        renamed_table = rename_table(joined_table, n_keys, suffix)
+        dropper = []
+        dataframe =
+          DataFrame.create(renamed_table).assign do |df|
+            key_index_lr.map do |l, r|
+              dropper << df.keys[r]
+              [df.keys[l], merge_array(df.vectors[l].data, df.vectors[r].data)]
+            end
+          end
+        dataframe = dataframe.drop(dropper)
+        sorter = [left_index, right_index]
       when :right_outer
         dataframe =
           if joined_table.keys.uniq!
@@ -878,15 +900,16 @@ module RedAmber
           else
             DataFrame.create(joined_table)
           end
-        if force_order
-          dataframe =
-            dataframe
-              .sort(left_index, right_index)
-              .drop(left_index, right_index)
-        end
-        dataframe.pick do
-          [right_keys, keys - right_keys]
-        end
+        dataframe = dataframe.pick(right_keys, dataframe.keys - right_keys)
+        sorter = [left_index, right_index]
+      end
+
+      if force_order
+        dataframe
+          .sort(sorter)
+          .drop(sorter)
+      else
+        dataframe
       end
     end
 
