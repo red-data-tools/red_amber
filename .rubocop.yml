@@ -44,16 +44,15 @@ Layout/LineLength:
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented_relative_to_receiver
 
-# avoid unused variable asignment
-Rubycw/Rubycw:
-  Exclude:
-    - 'test/**/*'
-
 # Disabled to define Vector operators
 # Offense count: 38
 Lint/BinaryOperatorWithIdenticalOperands:
   Exclude:
     - 'test/test_vector_binary_element_wise.rb'
+
+Lint/Debugger:
+  Exclude:
+    - 'bin/example'
 
 # Need for test with empty block
 # Offense count: 1
@@ -214,6 +213,12 @@ Naming/PredicateName:
     - 'lib/red_amber/vector_functions.rb'
     - 'lib/red_amber/vector_selectable.rb'
 
+# avoid unused variable asignment
+Rubycw/Rubycw:
+  Exclude:
+    - 'test/**/*'
+    - 'bin/example'
+
 # Offense count: 16
 # This cop supports safe autocorrection (--autocorrect).
 Style/OperatorMethodCall:
@@ -226,6 +231,10 @@ Style/OperatorMethodCall:
 Style/SlicingWithRange:
   Exclude:
     - 'test/test_data_frame_selectable.rb'
+
+Style/MixinUsage:
+  Exclude:
+    - 'bin/example'
 
 # Necessary to Vector < 0 element-wise comparison
 # Offense count: 5
