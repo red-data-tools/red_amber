@@ -33,6 +33,23 @@ module RedAmber
         instance.instance_variable_set(:@table, table)
         instance
       end
+
+      # Return new DataFrame for specified schema and value.
+      #
+      # @param dataframe_for_schema [Dataframe]
+      #   schema of this dataframe will be used.
+      # @param dataframe_for_value [DataFrame]
+      #   column values of thes dataframe will be used.
+      # @return [DataFrame]
+      #   created DataFrame.
+      # @since 0.4.1
+      #
+      def new_dataframe_with_schema(dataframe_for_schema, dataframe_for_value)
+        DataFrame.create(
+          Arrow::Table.new(dataframe_for_schema.table.schema,
+                           dataframe_for_value.table.columns)
+        )
+      end
     end
 
     # Creates a new DataFrame.

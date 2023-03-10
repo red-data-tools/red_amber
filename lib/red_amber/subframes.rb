@@ -82,7 +82,7 @@ module RedAmber
         enum =
           Enumerator.new(subset_indices.size) do |y|
             subset_indices.each do |i|
-              y.yield dataframe.take(i)
+              y.yield DataFrame.new_dataframe_with_schema(dataframe, dataframe.take(i))
             end
           end
         instance.instance_variable_set(:@enum, enum)
@@ -108,7 +108,7 @@ module RedAmber
         enum =
           Enumerator.new(subset_filters.size) do |y|
             subset_filters.each do |i|
-              y.yield dataframe.filter(i)
+              y.yield DataFrame.new_dataframe_with_schema(dataframe, dataframe.filter(i))
             end
           end
         instance.instance_variable_set(:@enum, enum)
@@ -139,7 +139,7 @@ module RedAmber
                 y.yield i
               end
             end
-          instance.instance_variable_set(:@baseframe, enum.reduce(&:concatenate))
+          instance.instance_variable_set(:@baseframe, enum.lazy)
         end
         instance.instance_variable_set(:@enum, enum)
         instance
@@ -160,11 +160,13 @@ module RedAmber
       #   @return [SubFrames]
       #     a new SubFrames.
       #
+      # @since 0.4.0
+      #
       def define_subframable_method(method)
         define_method(method) do |&block|
           return enum_for(:each) { size } unless block # rubocop:disable Lint/ToEnumArguments
 
-          self.class.by_dataframes(super(&block))
+          SubFrames.by_dataframes(super(&block))
         end
       end
     end
@@ -289,7 +291,7 @@ module RedAmber
                 else
                   raise SubFramesArgumentError, "illegal type: #{i}"
                 end
-              yielder.yield df
+              yielder.yield DataFrame.new_dataframe_with_schema(dataframe, df)
             end
           end
       end
@@ -303,7 +305,11 @@ module RedAmber
     # @since 0.4.0
     #
     def baseframe
-      @baseframe ||= reduce(&:concatenate)
+      if @baseframe.nil? || @baseframe.is_a?(Enumerator)
+        @baseframe = reduce(&:concatenate)
+      else
+        @baseframe
+      end
     end
     alias_method :concatenate, :baseframe
     alias_method :concat, :baseframe
@@ -1059,9 +1065,15 @@ module RedAmber
     # @since 0.4.0
     #
     def inspect(limit: 16)
+      shape =
+        if @baseframe.is_a?(Enumerator)
+          "Enumerator::Lazy:size=#{@baseframe.size}"
+        else
+          baseframe.shape_str(with_id: true)
+        end
       sizes_truncated = (size > limit ? sizes.take(limit) << '...' : sizes).join(', ')
       "#<#{self.class} : #{format('0x%016x', object_id)}>\n" \
-        "@baseframe=#<#{baseframe.shape_str(with_id: true)}>\n" \
+        "@baseframe=#<#{shape}>\n" \
         "#{size} SubFrame#{pl(size)}: " \
         "[#{sizes_truncated}] in size#{pl(size)}.\n" \
         "---\n#{_to_s(limit: limit, with_id: true)}"

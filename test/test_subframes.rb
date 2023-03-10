@@ -713,6 +713,34 @@ class SubFranesTest < Test::Unit::TestCase
         5       6 C        false
       STR
     end
+
+    test '#inspect @baseframe is a Enumerator' do
+      sf = SubFrames.new(@df, [[0, 1], [2, 3, 4], [5]]).map { _1 }
+      enum = sf.each
+      assert_equal <<~STR, sf.inspect
+        #<RedAmber::SubFrames : #{format('0x%016x', sf.object_id)}>
+        @baseframe=#<Enumerator::Lazy:size=#{enum.size}>
+        3 SubFrames: [2, 3, 1] in sizes.
+        ---
+        #<RedAmber::DataFrame : 2 x 3 Vectors, #{format('0x%016x', enum.next.object_id)}>
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+        ---
+        #<RedAmber::DataFrame : 3 x 3 Vectors, #{format('0x%016x', enum.next.object_id)}>
+                x y        z
+          <uint8> <string> <boolean>
+        0       3 B        false
+        1       4 B        (nil)
+        2       5 B        true
+        ---
+        #<RedAmber::DataFrame : 1 x 3 Vectors, #{format('0x%016x', enum.next.object_id)}>
+                x y        z
+          <uint8> <string> <boolean>
+        0       6 C        false
+      STR
+    end
   end
 
   sub_test_case '#to_s' do
