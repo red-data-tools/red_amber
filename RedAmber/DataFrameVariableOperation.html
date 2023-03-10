@@ -622,12 +622,12 @@ end
       <pre class="lines">
 
 
-513
-514
-515</pre>
+515
+516
+517</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 513</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 515</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_assign'>assign</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_assign_update'>assign_update</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='label'>append_to_left:</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
@@ -934,12 +934,12 @@ df.assign_left(new_index: df.indices(1))
       <pre class="lines">
 
 
-584
-585
-586</pre>
+586
+587
+588</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 584</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 586</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_assign_left'>assign_left</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_assign_update'>assign_update</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_assigner'>assigner</span><span class='comma'>,</span> <span class='label'>append_to_left:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
@@ -1337,8 +1337,6 @@ languages.drop { vectors.map(&amp;:numeric?) }
       <pre class="lines">
 
 
-249
-250
 251
 252
 253
@@ -1375,10 +1373,12 @@ languages.drop { vectors.map(&amp;:numeric?) }
 284
 285
 286
-287</pre>
+287
+288
+289</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 249</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 251</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_drop'>drop</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span>
@@ -1399,7 +1399,7 @@ languages.drop { vectors.map(&amp;:numeric?) }
       <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_reject_by_indices'>reject_by_indices</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
     <span class='kw'>else</span>
       <span class='id identifier rubyid_dropper'>dropper</span> <span class='op'>=</span> <span class='id identifier rubyid_parse_args'>parse_args</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='id identifier rubyid_n_keys'>n_keys</span><span class='rparen'>)</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_dropper'>dropper</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+      <span class='kw'>if</span> <span class='id identifier rubyid_dropper'>dropper</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
         <span class='kw'>return</span> <span class='kw'>self</span>
       <span class='kw'>elsif</span> <span class='id identifier rubyid_dropper'>dropper</span><span class='period'>.</span><span class='id identifier rubyid_boolean?'>boolean?</span>
         <span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_reject_by_booleans'>reject_by_booleans</span><span class='lparen'>(</span><span class='id identifier rubyid_dropper'>dropper</span><span class='rparen'>)</span>
@@ -1868,7 +1868,9 @@ languages.pick { languages.vectors.map(&amp;:string?) }
 147
 148
 149
-150</pre>
+150
+151
+152</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 117</span>
@@ -1904,6 +1906,8 @@ languages.pick { languages.vectors.map(&amp;:string?) }
   <span class='kw'>end</span>
   <span class='id identifier rubyid_picker'>picker</span><span class='period'>.</span><span class='id identifier rubyid_compact!'>compact!</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>some keys are duplicated: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_args'>args</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_picker'>picker</span><span class='period'>.</span><span class='id identifier rubyid_uniq!'>uniq!</span>
+
+  <span class='kw'>return</span> <span class='kw'>self</span> <span class='kw'>if</span> <span class='id identifier rubyid_picker'>picker</span> <span class='op'>==</span> <span class='id identifier rubyid_keys'>keys</span>
 
   <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='ivar'>@table</span><span class='period'>.</span><span class='id identifier rubyid_select_columns'>select_columns</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_picker'>picker</span><span class='rparen'>)</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
@@ -2211,8 +2215,6 @@ df.rename { [keys, keys.map(&amp;:downcase)].transpose }
       <pre class="lines">
 
 
-368
-369
 370
 371
 372
@@ -2234,10 +2236,12 @@ df.rename { [keys, keys.map(&amp;:downcase)].transpose }
 388
 389
 390
-391</pre>
+391
+392
+393</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 368</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_variable_operation.rb', line 370</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_rename'>rename</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_renamer'>renamer</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span>
@@ -2273,7 +2277,7 @@ df.rename { [keys, keys.map(&amp;:downcase)].transpose }
 </div>
 
       <div id="footer">
-  Generated on Fri Mar 10 03:11:13 2023 by
+  Generated on Fri Mar 10 04:27:09 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.1).
 </div>
