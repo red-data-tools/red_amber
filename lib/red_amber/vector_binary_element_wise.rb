@@ -174,6 +174,13 @@ module RedAmber
     #
     define_binary_element_wise :logb
 
+    # Compute base `b` logarithm of self.
+    #
+    # This function is a overflow-checking variant of #logb.
+    # @return (see #logb)
+    #
+    define_binary_element_wise :logb_checked
+
     # Logical 'or' boolean values with Kleene logic.
     #
     # @macro kleene_logic_or
@@ -211,6 +218,13 @@ module RedAmber
     define_binary_element_wise :add
     alias_method :'+', :add
 
+    # Add the arguments element-wise.
+    #
+    # This function is a overflow-checking variant of #add.
+    # @return (see #add)
+    #
+    define_binary_element_wise :add_checked
+
     # Divide the arguments element-wise.
     #
     # Integer division by zero returns an error. However, integer overflow
@@ -219,10 +233,51 @@ module RedAmber
     # @param divisor [Vector, Numeric]
     #   numeric vector or numeric scalar as divisor.
     # @return [Vector]
-    #   division of self and other.
+    #   division of self by other.
     #
     define_binary_element_wise :divide
+    alias_method :div, :divide
     alias_method :'/', :divide
+
+    # Divide the arguments element-wise.
+    #
+    # This function is a overflow-checking variant of #divide.
+    # @return (see #divide)
+    #
+    define_binary_element_wise :divide_checked
+
+    # Returns element-wise modulo.
+    #
+    # This is equivalent to `self-other*(self/other).floor`.
+    # @param other [Vector, numeric]
+    #   other numeric Vector or numeric scalar.
+    # @return [Vector]
+    #   modulo of dividing self by other.
+    #
+    def modulo(other)
+      other = other.data if other.is_a?(Vector)
+      d = find(:divide).execute([data, other])
+      d = find(:floor).execute([d]) if d.value.is_a?(Arrow::DoubleArray)
+      m = find(:multiply).execute([d, other])
+      datum = find(:subtract).execute([data, m])
+      Vector.create(datum.value)
+    end
+    alias_method :mod, :modulo
+    alias_method :'%', :modulo
+
+    # Returns element-wise modulo.
+    #
+    # This function is a overflow-checking variant of #modulo.
+    # @return (see #modulo)
+    #
+    def modulo_checked(other)
+      other = other.data if other.is_a?(Vector)
+      d = find(:divide_checked).execute([data, other])
+      d = find(:floor).execute([d]) if d.value.is_a?(Arrow::DoubleArray)
+      m = find(:multiply_checked).execute([d, other])
+      datum = find(:subtract_checked).execute([data, m])
+      Vector.create(datum.value)
+    end
 
     # Multiply the arguments element-wise.
     #
@@ -234,7 +289,15 @@ module RedAmber
     #   multiplication of self and other.
     #
     define_binary_element_wise :multiply
+    alias_method :mul, :multiply
     alias_method :'*', :multiply
+
+    # Multiply the arguments element-wise.
+    #
+    # This function is a overflow-checking variant of #multiply.
+    # @return (see #multiply)
+    #
+    define_binary_element_wise :multiply_checked
 
     # Raise arguments to power element-wise.
     #
@@ -248,7 +311,41 @@ module RedAmber
     #   power operation of self and other.
     #
     define_binary_element_wise :power
+    alias_method :pow, :power
     alias_method :'**', :power
+
+    # Raise arguments to power element-wise.
+    #
+    # This function is a overflow-checking variant of #power.
+    # @return (see #power)
+    #
+    define_binary_element_wise :power_checked
+
+    # Returns element-wise quotient by double Vector.
+    #
+    # @param other [Vector, numeric]
+    #   other numeric Vector or numeric scalar.
+    # @return [Vector]
+    #   quotient of dividing self by other.
+    #
+    def quotient(other)
+      other = other.data if other.is_a?(Vector)
+      datum = find(:divide).execute([Arrow::DoubleArray.new(data), other])
+      Vector.create(datum.value)
+    end
+    alias_method :quo, :quotient
+    alias_method :fdiv, :quotient
+
+    # Returns element-wise quotient by double Vector.
+    #
+    # This function is a overflow-checking variant of #quotient.
+    # @return (see #quotient)
+    #
+    def quotient_checked(other)
+      other = other.data if other.is_a?(Vector)
+      datum = find(:divide_checked).execute([Arrow::DoubleArray.new(data), other])
+      Vector.create(datum.value)
+    end
 
     # Subtract the arguments element-wise.
     #
@@ -260,7 +357,15 @@ module RedAmber
     #   subtraction of self and other.
     #
     define_binary_element_wise :subtract
+    alias_method :sub, :subtract
     alias_method :'-', :subtract
+
+    # Subtract the arguments element-wise.
+    #
+    # This function is a overflow-checking variant of #subtract.
+    # @return (see #subtract)
+    #
+    define_binary_element_wise :subtract_checked
 
     # Left shift of self by other.
     #
@@ -278,6 +383,13 @@ module RedAmber
     define_binary_element_wise :shift_left
     alias_method :'<<', :shift_left
 
+    # Left shift of self by other.
+    #
+    # This function is a overflow-checking variant of #shift_left.
+    # @return (see #shift_left)
+    #
+    define_binary_element_wise :shift_left_checked
+
     # Right shift of self by other.
     #
     # This is equivalent to dividing `x` by 2 to the power `y`.
@@ -291,6 +403,13 @@ module RedAmber
     #
     define_binary_element_wise :shift_right
     alias_method :'>>', :shift_right
+
+    # Right shift of self by other.
+    #
+    # This function is a overflow-checking variant of #shift_right.
+    # @return (see #shift_right)
+    #
+    define_binary_element_wise :shift_right_checked
 
     # Logical 'xor' boolean values
     #

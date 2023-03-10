@@ -28,19 +28,19 @@ module RedAmber
     #   parsed flat Array.
     # @note This method is recursively called to parse.
     #
-    def parse_args(args, array_size)
+    def parse_args(args, array_size, symbolize: true)
       args.flat_map do |elem|
         case elem
         when Integer, Symbol, NilClass, TrueClass, FalseClass
           elem
         when Array
-          parse_args(elem, array_size)
+          parse_args(elem, array_size, symbolize: symbolize)
         when Range
           parse_range(elem, array_size)
         when Enumerator
-          parse_args(Array(elem), array_size)
+          parse_args(Array(elem), array_size, symbolize: symbolize)
         when String
-          elem.to_sym
+          symbolize ? elem.to_sym : elem
         when Float
           elem.floor.to_i
         else

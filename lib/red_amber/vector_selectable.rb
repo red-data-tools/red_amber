@@ -128,24 +128,55 @@ module RedAmber
       raise VectorArgumentError, "Invalid argument: #{args}"
     end
 
-    # @param values [Array, Arrow::Array, Vector]
+    # Check if elements of self are in the other values.
+    #
+    # @param values [Vector, Array, Arrow::Array, Arrow::ChunkedArray]
+    #   values to test existence.
+    # @return [Vector]
+    #   boolean Vector.
+    #
     def is_in(*values)
-      self_data = chunked? ? data.pack : data
-
-      array =
+      enum =
         case values
-        in [Vector] | [Arrow::Array] | [Arrow::ChunkedArray]
-          values[0].to_a
+        in [] | [[]] | [nil] |[[nil]]
+          return Vector.new([false] * size)
+        in [Vector | Arrow::Array | Arrow::ChunkedArray]
+          values[0].each
         else
-          Array(values).flatten
+          parse_args(values, size, symbolize: false)
         end
-
-      Vector.create(self_data.is_in(array))
+      enum.filter_map { self == _1 unless _1.nil? }.reduce(&:|)
     end
 
-    # Arrow's support required
+    # Returns index of first matched position of element in self.
+    #
+    # @param element
+    #   an element of self.
+    # @return [integer, nil]
+    #   founded position of element. If it is not found, returns nil.
+    #
     def index(element)
-      to_a.index(element)
+      (0...size).find { |i| self[i] == element }
+    end
+
+    # Returns first element of self.
+    #
+    # @return
+    #   the first element.
+    # @since 0.4.1
+    #
+    def first
+      data[0]
+    end
+
+    # Returns last element of self.
+    #
+    # @return
+    #   the last element.
+    # @since 0.4.1
+    #
+    def last
+      data[-1]
     end
 
     # Drop nil in self and returns a new Vector as a result.
@@ -236,7 +267,13 @@ module RedAmber
     # @since 0.4.0
     #
     def rank
-      datum = Arrow::Function.find(:rank).execute([data])
+      datum =
+        case data
+        when Arrow::ChunkedArray
+          Arrow::Function.find(:rank).execute([data.pack])
+        else
+          Arrow::Function.find(:rank).execute([data])
+        end
       Vector.create(datum.value) - 1
     end
 
