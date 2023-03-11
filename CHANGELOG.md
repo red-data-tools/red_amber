@@ -1,3 +1,69 @@
+## [0.4.1] - 2023-03-11
+
+- Breaking change
+  - Remove Vector.aggregate? method (#200)
+
+- Bug fixes
+  - Return self in DataFrame#drop when dropper is empty (reverts 746ac263) (#193)
+  - Return self in DataFrame#rename when renaming to same name (#193)
+  - Return self in DataFrame#pick when pick itself (#199)
+  - Fix column width for non-ascii elemnts in DataFrame#to_s (#193)
+    - This change uses String#width.
+  - Fix DataFrame#to_iruby when data is date32 type (#193)
+  - Fix DataFrame#shorthand to show temporal type data simply (#193)
+  - Fix Vector#rank when data is ChunkedArray (#198)
+  - Fix Vector element-wise functions with nil as scalar (#198)
+  - Support :force_order for all methods of join family (#199)
+    - Supports :force_order option to force sorting after join for all #join familiy. 
+    - This will valuable in some cases such as large dataframes.
+  - Ensure baseframe's schema for SubFrames (#200)
+
+- New features and improvements
+  - Add Vector#first, #last method (#198)
+    - This method will be used in SubFrames feature.
+  - Add Vector#modulo method (#198)
+    - The divmod function in Arrow C++ is still in draft state.
+      This method was created by combining existing functions
+  - Add Vector#quotient method (#198)
+  - Add aliases #div, #mod, #mul, #pow, #quo and #sub for Vector (#198)
+  - Add Vector#*_checked functions (#198)
+    - This functions will check numeric range overflow.
+  - Add 'tdra' and 'plain' in display mode (#193)
+    - The plain mode and default inspect will show up to 128 rows and 128 columns.
+  - Add String#width method in refinements (#193)
+    - This will be used to update DataFrame#to_s.
+  - Introduce pre-loaded REPL environment (#199)
+    - This commit will add bin/example and it will start irb environment
+      with enabled commonly used datasets such as penguins, diamonds, etc.
+  - Upgrade SubFrames#aggregate to accept block (#200)
+
+- Refactoring
+  - Use symbolized keys in refinements of Table#keys, #key? (#193)
+    - This can be treat Tables and DataFrames as same manner.
+  - Use key_name.succ in suffix of DataFrame#join (#193)
+    - This will make simple to get name candidate.
+  - Use ||= to memorize instance variables (#193)
+  - Refine vector projection to use #variables (#193)
+    - #variables is fastest when picking Vectors.
+  - Refine Vector#is_in to avoid #pack (#198)
+  - Refine Vector#index (#198)
+
+- Improve in tests/CI
+  - Tests
+    - Update benchmarks to test from older version (#193)
+    - Refine test of Vector function with scalar (#198)
+    - Refine test subframes and test_vector_selectable (#200)
+
+  - Cops
+  - CI
+
+- Documentation
+  - Update documents(small fix) (#201)
+
+- GitHub site
+
+- Thanks
+
 ## [0.4.0] - 2023-02-25
 
 - Breaking change
@@ -71,7 +137,8 @@
   - CI
     - Fix setting up Arrow by homebrew in CI (#167)
     - Fix CI error on homebrew deleting python link (#167)
-    - Set cache-version to get new C extensions in CI (#173) Thanks to @kou for suggestion.
+    - Set cache-version to get new C extensions in CI (#173)
+      - Thanks to @kou for suggestion.
 
 - Documentation
   - Update DataFrame.md about loading csv without headers (#165)

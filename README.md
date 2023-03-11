@@ -18,7 +18,7 @@ A simple dataframe library for Ruby.
 ## Requirements
 ### Ruby
 Supported Ruby version is >= 3.0 (since RedAmber 0.3.0).
-- I decided to remove Ruby 2.7 without waiting for EOL. See [Release note for v0.3.0](https://github.com/heronshoes/red_amber/discussions/162) for details.
+- I decided to remove support for Ruby 2.7 without waiting for its EOL. See [Release note for v0.3.0](https://github.com/heronshoes/red_amber/discussions/162) for details.
 
 ### Libraries
 ```ruby
@@ -29,7 +29,7 @@ gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
 
 ## Installation
 
-Install requirements before you install Red Amber.
+Install requirements before you install RedAmber.
 
 - Apache Arrow (~> 11.0.0)
 - Apache Arrow GLib (~> 11.0.0)
@@ -88,12 +88,12 @@ Also you can try the contents of this README interactively by [Binder](https://m
 Comparison of  basic features of RedAmber with Python 
 [pandas](https://pandas.pydata.org/),
 R [Tidyverse](https://www.tidyverse.org/) and
-Julia [Dataframes](https://dataframes.juliadata.org/stable/) is [here](doc/DataFrame_Comparison.md) (Thanks to Benson Muite).
+Julia [Dataframes](https://dataframes.juliadata.org/stable/) is in [DataFrame_Comparison.md](doc/DataFrame_Comparison.md) (Thanks to Benson Muite).
 
 ## Data frame in `RedAmber`
 
 Class `RedAmber::DataFrame` represents a set of data in 2D-shape.
-The entity is a Red Arrow's Table object. 
+Its entity is a Red Arrow's Table object. 
 
 ![dataframe model of RedAmber](https://raw.githubusercontent.com/heronshoes/red_amber/main/doc/image/dataframe_model.png)
 
@@ -115,7 +115,7 @@ then
 require 'datasets-arrow' # to load sample data
 
 dataset = Datasets::Diamonds.new
-diamonds = DataFrame.new(dataset) # from v0.2.2, should be `dataset.to_arrow` if older.
+diamonds = DataFrame.new(dataset) # before v0.2.3, should be `dataset.to_arrow`
 
 # =>
 #<RedAmber::DataFrame : 53940 x 10 Vectors, 0x000000000000f668>
@@ -174,7 +174,7 @@ df.rename('mean(price)': :mean_price_USD)
 
 ### Example: starwars dataset
 
-Next example is `starwars` dataset reading from the downloaded CSV file. Followed by minimum data cleansing.
+Next example is `starwars` dataset reading from the downloaded CSV file. Followed by minimum data cleaning.
 
 ```ruby
 uri = URI('https://vincentarelbundock.github.io/Rdatasets/csv/dplyr/starwars.csv')
