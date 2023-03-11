@@ -945,6 +945,22 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
     
   </ul>
 
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -952,12 +968,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-574
-575
-576</pre>
+590
+591
+592</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 574</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 590</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_anti_join'>anti_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_anti</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='id identifier rubyid_force_order'>force_order</span><span class='rparen'>)</span>
@@ -1059,6 +1075,22 @@ df.concatenate(other)
     </li>
   
 </ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -1066,8 +1098,6 @@ df.concatenate(other)
       <pre class="lines">
 
 
-34
-35
 36
 37
 38
@@ -1088,10 +1118,12 @@ df.concatenate(other)
 53
 54
 55
-56</pre>
+56
+57
+58</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 34</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 36</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_concatenate'>concatenate</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_other'>other</span>
@@ -1234,6 +1266,22 @@ other.intersect(df)
     </li>
   
 </ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -1241,16 +1289,16 @@ other.intersect(df)
       <pre class="lines">
 
 
-670
-671
-672
-673
-674
-675
-676</pre>
+694
+695
+696
+697
+698
+699
+700</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 670</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 694</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_difference'>difference</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -1781,6 +1829,22 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
     
   </ul>
 
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -1788,13 +1852,13 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-332
-333
-334
-335</pre>
+340
+341
+342
+343</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 332</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 340</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_full_join'>full_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span>
@@ -2312,6 +2376,22 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
     
   </ul>
 
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -2319,12 +2399,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-269
-270
-271</pre>
+275
+276
+277</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 269</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 275</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inner_join'>inner_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='id identifier rubyid_force_order'>force_order</span><span class='rparen'>)</span>
@@ -2434,6 +2514,22 @@ other3 = DataFrame.new(
     </li>
   
 </ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -2441,16 +2537,16 @@ other3 = DataFrame.new(
       <pre class="lines">
 
 
-609
-610
-611
-612
-613
-614
-615</pre>
+629
+630
+631
+632
+633
+634
+635</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 609</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 629</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_intersect'>intersect</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -3083,6 +3179,22 @@ other4 = DataFrame.new(
     
   </ul>
 
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -3090,32 +3202,6 @@ other4 = DataFrame.new(
       <pre class="lines">
 
 
-805
-806
-807
-808
-809
-810
-811
-812
-813
-814
-815
-816
-817
-818
-819
-820
-821
-822
-823
-824
-825
-826
-827
-828
-829
-830
 831
 832
 833
@@ -3199,10 +3285,36 @@ other4 = DataFrame.new(
 911
 912
 913
-914</pre>
+914
+915
+916
+917
+918
+919
+920
+921
+922
+923
+924
+925
+926
+927
+928
+929
+930
+931
+932
+933
+934
+935
+936
+937
+938
+939
+940</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 805</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 831</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_right_table'>right_table</span> <span class='op'>=</span>
@@ -3829,6 +3941,22 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
     
   </ul>
 
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -3836,12 +3964,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-395
-396
-397</pre>
+405
+406
+407</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 395</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 405</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_left_join'>left_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_outer</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='id identifier rubyid_force_order'>force_order</span><span class='rparen'>)</span>
@@ -3961,6 +4089,22 @@ df.merge(other)
     </li>
   
 </ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -3968,10 +4112,6 @@ df.merge(other)
       <pre class="lines">
 
 
-82
-83
-84
-85
 86
 87
 88
@@ -4000,10 +4140,14 @@ df.merge(other)
 111
 112
 113
-114</pre>
+114
+115
+116
+117
+118</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 82</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 86</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_other'>other</span>
@@ -4553,6 +4697,22 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
     
   </ul>
 
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -4560,18 +4720,18 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-455
-456
-457
-458
-459
-460
-461
-462
-463</pre>
+467
+468
+469
+470
+471
+472
+473
+474
+475</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 455</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 467</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_right_join'>right_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span>
@@ -5094,6 +5254,22 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
     
   </ul>
 
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -5101,12 +5277,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-520
-521
-522</pre>
+534
+535
+536</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 520</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 534</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_semi_join'>semi_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='id identifier rubyid_force_order'>force_order</span><span class='rparen'>)</span>
@@ -5206,6 +5382,22 @@ other3 = DataFrame.new(
     </li>
   
 </ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -5213,12 +5405,12 @@ other3 = DataFrame.new(
       <pre class="lines">
 
 
-589
-590
-591</pre>
+607
+608
+609</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 589</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 607</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_operable?'>set_operable?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='comment'># rubocop:disable Naming/AccessorMethodName
 </span>  <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -5332,6 +5524,22 @@ other3 = DataFrame.new(
     </li>
   
 </ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.2.3</p>
+</div>
+      
+    </li>
+  
+</ul>
 
 </div><table class="source_code">
   <tr>
@@ -5339,16 +5547,16 @@ other3 = DataFrame.new(
       <pre class="lines">
 
 
-637
-638
-639
-640
-641
-642
-643</pre>
+659
+660
+661
+662
+663
+664
+665</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 637</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 659</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -5367,7 +5575,7 @@ other3 = DataFrame.new(
 </div>
 
       <div id="footer">
-  Generated on Sat Mar 11 00:16:06 2023 by
+  Generated on Sat Mar 11 00:51:55 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.1).
 </div>

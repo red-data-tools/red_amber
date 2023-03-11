@@ -75,7 +75,7 @@
 
 <h3 id="label-Ruby">Ruby</h3>
 
-<p>Supported Ruby version is &gt;= 3.0 (since RedAmber 0.3.0). - I decided to remove Ruby 2.7 without waiting for EOL. See <a href="https://github.com/heronshoes/red_amber/discussions/162">Release note for v0.3.0</a> for details.</p>
+<p>Supported Ruby version is &gt;= 3.0 (since RedAmber 0.3.0). - I decided to remove support for Ruby 2.7 without waiting for its EOL. See <a href="https://github.com/heronshoes/red_amber/discussions/162">Release note for v0.3.0</a> for details.</p>
 
 <h3 id="label-Libraries">Libraries</h3>
 
@@ -86,7 +86,7 @@
 
 <h2 id="label-Installation">Installation</h2>
 
-<p>Install requirements before you install Red Amber.</p>
+<p>Install requirements before you install RedAmber.</p>
 <ul><li>
 <p>Apache Arrow (~&gt; 11.0.0)</p>
 </li><li>
@@ -130,11 +130,11 @@
 
 <h2 id="label-Comparison+of+DataFrames">Comparison of DataFrames</h2>
 
-<p>Comparison of basic features of RedAmber with Python <a href="https://pandas.pydata.org/">pandas</a>, R <a href="https://www.tidyverse.org/">Tidyverse</a> and Julia <a href="https://dataframes.juliadata.org/stable/">Dataframes</a> is <a href="doc/DataFrame_Comparison_md.html">here</a> (Thanks to Benson Muite).</p>
+<p>Comparison of basic features of RedAmber with Python <a href="https://pandas.pydata.org/">pandas</a>, R <a href="https://www.tidyverse.org/">Tidyverse</a> and Julia <a href="https://dataframes.juliadata.org/stable/">Dataframes</a> is in <a href="doc/DataFrame_Comparison_md.html">DataFrame_Comparison.md</a> (Thanks to Benson Muite).</p>
 
 <h2 id="label-Data+frame+in+RedAmber">Data frame in <code>RedAmber</code></h2>
 
-<p>Class <code>RedAmber::DataFrame</code> represents a set of data in 2D-shape. The entity is a Red Arrow’s Table object.</p>
+<p>Class <code>RedAmber::DataFrame</code> represents a set of data in 2D-shape. Its entity is a Red Arrow’s Table object.</p>
 
 <p><img src="https://raw.githubusercontent.com/heronshoes/red_amber/main/doc/image/dataframe_model.png"></p>
 
@@ -151,7 +151,7 @@
 <pre class="code ruby"><code class="ruby">require &#39;datasets-arrow&#39; # to load sample data
 
 dataset = Datasets::Diamonds.new
-diamonds = DataFrame.new(dataset) # from v0.2.2, should be `dataset.to_arrow` if older.
+diamonds = DataFrame.new(dataset) # before v0.2.3, should be `dataset.to_arrow`
 
 # =&gt;
 #&lt;RedAmber::DataFrame : 53940 x 10 Vectors, 0x000000000000f668&gt;
@@ -207,7 +207,7 @@ df.rename(&#39;mean(price)&#39;: :mean_price_USD)
 
 <h3 id="label-Example-3A+starwars+dataset">Example: starwars dataset</h3>
 
-<p>Next example is <code>starwars</code> dataset reading from the downloaded CSV file. Followed by minimum data cleansing.</p>
+<p>Next example is <code>starwars</code> dataset reading from the downloaded CSV file. Followed by minimum data cleaning.</p>
 
 <pre class="code ruby"><code class="ruby">uri = URI(&#39;https://vincentarelbundock.github.io/Rdatasets/csv/dplyr/starwars.csv&#39;)
 
@@ -280,7 +280,7 @@ bundle exec rake test
 </div></div>
 
       <div id="footer">
-  Generated on Sat Mar 11 00:16:05 2023 by
+  Generated on Sat Mar 11 00:51:54 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.1).
 </div>
