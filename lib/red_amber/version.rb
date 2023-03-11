@@ -2,5 +2,5 @@
 
 module RedAmber
   # Library version
-  VERSION = '0.4.1-HEAD'
+  VERSION = '0.4.1'
 end
