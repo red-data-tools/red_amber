@@ -3,7 +3,7 @@
 module RedAmber
   # Mix-in for the class DataFrame
   module DataFrameReshaping
-    # Create a transposed DataFrame for the wide (messy) DataFrame.
+    # Create a transposed DataFrame for the wide (may be messy) DataFrame.
     #
     # @param key [Symbol]
     #   key of the index column

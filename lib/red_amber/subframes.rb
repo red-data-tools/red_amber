@@ -297,7 +297,7 @@ module RedAmber
       end
     end
 
-    # Return concatenated SubFrames as a DataDrame.
+    # Return concatenated SubFrames as a DataFrame.
     #
     # Once evaluated, memorize it as @baseframe.
     # @return [DataFrame]

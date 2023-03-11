@@ -31,6 +31,8 @@ module RedAmber
     #   2       3 C
     #   3       4 D
     #
+    # @since 0.2.3
+    #
     def concatenate(*other)
       case other
       in [] | [nil] | [[]]
@@ -78,6 +80,8 @@ module RedAmber
     #     <uint8> <uint8> <string> <string>
     #   0       1       3 A        C
     #   1       2       4 B        D
+    #
+    # @since 0.2.3
     #
     def merge(*other)
       case other
@@ -266,6 +270,8 @@ module RedAmber
     #     0 A              1 true
     #     1 B              2 false
     #
+    # @since 0.2.3
+    #
     def inner_join(other, join_keys = nil, suffix: '.1', force_order: true)
       join(other, join_keys, type: :inner, suffix: suffix, force_order: force_order)
     end
@@ -328,6 +334,8 @@ module RedAmber
     #     1 B              2 false
     #     2 C              3 (nil)
     #     3 D          (nil) (nil)
+    #
+    # @since 0.2.3
     #
     def full_join(other, join_keys = nil, suffix: '.1', force_order: true)
       join(other, join_keys,
@@ -392,6 +400,8 @@ module RedAmber
     #     1 B              2 false
     #     2 C              3 (nil)
     #
+    # @since 0.2.3
+    #
     def left_join(other, join_keys = nil, suffix: '.1', force_order: true)
       join(other, join_keys, type: :left_outer, suffix: suffix, force_order: force_order)
     end
@@ -451,6 +461,8 @@ module RedAmber
     #     0 A              1 true
     #     1 B              2 false
     #     2 D          (nil) (nil)
+    #
+    # @since 0.2.3
     #
     def right_join(other, join_keys = nil, suffix: '.1', force_order: true)
       join(
@@ -517,6 +529,8 @@ module RedAmber
     #     0 A              1
     #     1 B              2
     #
+    # @since 0.2.3
+    #
     def semi_join(other, join_keys = nil, suffix: '.1', force_order: true)
       join(other, join_keys, type: :left_semi, suffix: suffix, force_order: force_order)
     end
@@ -571,6 +585,8 @@ module RedAmber
     #       <string> <uint8>
     #     0 C              3
     #
+    # @since 0.2.3
+    #
     def anti_join(other, join_keys = nil, suffix: '.1', force_order: true)
       join(other, join_keys, type: :left_anti, suffix: suffix, force_order: force_order)
     end
@@ -585,6 +601,8 @@ module RedAmber
     # @macro join_common_example_3
     # @example
     #   df3.set_operable?(other3) # => true
+    #
+    # @since 0.2.3
     #
     def set_operable?(other) # rubocop:disable Naming/AccessorMethodName
       keys == other.keys.map(&:to_sym)
@@ -605,6 +623,8 @@ module RedAmber
     #     KEY1        KEY2
     #     <string> <uint8>
     #   0 A              1
+    #
+    # @since 0.2.3
     #
     def intersect(other)
       unless keys == other.keys.map(&:to_sym)
@@ -633,6 +653,8 @@ module RedAmber
     #   2 C              3
     #   3 B              4
     #   4 D              5
+    #
+    # @since 0.2.3
     #
     def union(other)
       unless keys == other.keys.map(&:to_sym)
@@ -666,6 +688,8 @@ module RedAmber
     #     <string> <uint8>
     #   0 B              4
     #   1 D              5
+    #
+    # @since 0.2.3
     #
     def difference(other)
       unless keys == other.keys.map(&:to_sym)
@@ -801,6 +825,8 @@ module RedAmber
     #       <string> <string> <string>
     #     0 A        D        e
     #     1 B        E        E
+    #
+    # @since 0.2.3
     #
     def join(other, join_keys = nil, type: :inner, suffix: '.1', force_order: true)
       right_table =
