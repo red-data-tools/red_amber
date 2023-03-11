@@ -49,9 +49,9 @@ module RedAmber
     #
     # @param sort_keys [Arrow::SortKey]
     #   :key, "key" or "+key" denotes ascending,
-    #   "-key" denotes descending order
+    #   :"-key" or "-key" denotes descending order.
     # @return [RedAmber::Vector]
-    #   sorted indices in Vector
+    #   sorted indices in Vector.
     # @example
     #   df
     #
@@ -79,9 +79,9 @@ module RedAmber
     #
     # @param sort_keys [Arrow::SortKey]
     #   :key, "key" or "+key" denotes ascending,
-    #   "-key" denotes descending order
+    #   :"-key" or "-key" denotes descending order.
     # @return [RedAmber::DataFrame]
-    #   sorted DataFrame
+    #   sorted DataFrame.
     # @example Sort by a key
     #   df
     #
