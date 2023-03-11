@@ -82,7 +82,7 @@ module RedAmber
         enum =
           Enumerator.new(subset_indices.size) do |y|
             subset_indices.each do |i|
-              y.yield dataframe.take(i)
+              y.yield DataFrame.new_dataframe_with_schema(dataframe, dataframe.take(i))
             end
           end
         instance.instance_variable_set(:@enum, enum)
@@ -108,7 +108,7 @@ module RedAmber
         enum =
           Enumerator.new(subset_filters.size) do |y|
             subset_filters.each do |i|
-              y.yield dataframe.filter(i)
+              y.yield DataFrame.new_dataframe_with_schema(dataframe, dataframe.filter(i))
             end
           end
         instance.instance_variable_set(:@enum, enum)
@@ -139,7 +139,7 @@ module RedAmber
                 y.yield i
               end
             end
-          instance.instance_variable_set(:@baseframe, enum.reduce(&:concatenate))
+          instance.instance_variable_set(:@baseframe, enum.lazy)
         end
         instance.instance_variable_set(:@enum, enum)
         instance
@@ -160,11 +160,13 @@ module RedAmber
       #   @return [SubFrames]
       #     a new SubFrames.
       #
+      # @since 0.4.0
+      #
       def define_subframable_method(method)
         define_method(method) do |&block|
           return enum_for(:each) { size } unless block # rubocop:disable Lint/ToEnumArguments
 
-          self.class.by_dataframes(super(&block))
+          SubFrames.by_dataframes(super(&block))
         end
       end
     end
@@ -195,25 +197,31 @@ module RedAmber
     #     4       5 B        true
     #     5       6 C        false
     #
-    #     SubFrames.new(dataframe, [[0, 2, 3], [4, 1]])
+    #     # --- This object is used as common source in this class ---
+    #     subframes = SubFrames.new(dataframe, [[0 ,1], [2, 3, 4], [5]])
     #
     #     # =>
-    #     #<RedAmber::SubFrames : 0x0000000000003a34>
-    #     @baseframe=#<RedAmber::DataFrame : 5 x 3 Vectors, 0x0000000000003a48>
-    #     2 SubFrames: [3, 2] in sizes.
+    #     #<RedAmber::SubFrames : 0x000000000000cf6c>
+    #     @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000cf80>
+    #     3 SubFrames: [2, 3, 1] in sizes.
     #     ---
-    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000003a5c>
+    #     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000cf94>
     #             x y        z
     #       <uint8> <string> <boolean>
     #     0       1 A        false
-    #     1       3 B        false
-    #     2       4 B        (nil)
+    #     1       2 A        true
     #     ---
-    #     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000003a70>
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000cfa8>
     #             x y        z
     #       <uint8> <string> <boolean>
-    #     0       5 B        true
-    #     1       2 A        true
+    #     0       3 B        false
+    #     1       4 B        (nil)
+    #     2       5 B        true
+    #     ---
+    #     #<RedAmber::DataFrame : 1 x 3 Vectors, 0x000000000000cfbc>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       6 C        false
     #
     # @overload initialize(dataframe)
     #   Create a new SubFrames object by block.
@@ -283,7 +291,7 @@ module RedAmber
                 else
                   raise SubFramesArgumentError, "illegal type: #{i}"
                 end
-              yielder.yield df
+              yielder.yield DataFrame.new_dataframe_with_schema(dataframe, df)
             end
           end
       end
@@ -297,7 +305,11 @@ module RedAmber
     # @since 0.4.0
     #
     def baseframe
-      @baseframe ||= reduce(&:concatenate)
+      if @baseframe.nil? || @baseframe.is_a?(Enumerator)
+        @baseframe = reduce(&:concatenate)
+      else
+        @baseframe
+      end
     end
     alias_method :concatenate, :baseframe
     alias_method :concat, :baseframe
@@ -325,13 +337,13 @@ module RedAmber
     #     returns self.
     #
     # @example Returns Enumerator
-    #   sf.each
+    #   subframes.each
     #
     #   # =>
     #   #<Enumerator: ...>
     #
     # @example `to_a` from Enumerable.
-    #   sf.to_a
+    #   subframes.to_a
     #
     #   # =>
     #   [#<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000002a120>
@@ -354,7 +366,7 @@ module RedAmber
     #   ]
     #
     # @example Concatenate SubFrames. This example is used in #concatenate.
-    #   sf.reduce(&:concatenate)
+    #   subframes.reduce(&:concatenate)
     #
     #   # =>
     #   #<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000004883c>
@@ -378,48 +390,88 @@ module RedAmber
 
     # Aggregate SubFrames to create a DataFrame.
     #
-    # This method will check if built-in aggregation function is used.
-    # @todo Support user-defined aggregation functions.
+    # This method creates a DataFrame with one row corresponding to one sub dataframe.
+    # @note This method does not check if aggregation function is used.
     #
-    # @overload aggregate(group_keys, aggregations)
+    # @overload aggregate(keys)
     #
-    #   Aggregate SubFrames for first values of the columns of
-    #   `group_keys` and the aggregated results of key-function pairs.
+    #   Aggregate SubFrames creating DataFrame with label `keys` and
+    #   its column values by block.
     #
-    #   @param group_keys [Symbol, String, Array<Symbol, String>]
-    #     group key name(s) to output values.
-    #   @param aggregations [Hash<Array<Symbol, String> => Array<:Symbol>>]
-    #     a Hash of variable (column) name and
-    #     Vector aggregate function name to apply.
+    #   @param keys [Symbol, Array<Symbol>]
+    #     a key or keys of result. Key names may be renamed to new label.
+    #   @yieldparam dataframe [DataFrame]
+    #     passes each dataframe in self to the block. Block is called by instance_eval,
+    #     so inside of the block is the context of passed dataframe.
+    #   @yieldreturn [Array]
+    #     aggregated values from the columns of passed dataframe.
     #   @return [DataFrame]
-    #     an aggregated DataFrame.
-    #   @example
-    #     subframes
+    #     created DataFrame.
+    #   @example Aggregate by key labels in arguments and values from block.
+    #     subframes.aggregate(:y, :sum_x) { [y.first, x.sum] }
     #
     #     # =>
-    #     #<RedAmber::SubFrames : 0x0000000000003980>
-    #     @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x0000000000003994>
-    #     3 SubFrames: [2, 3, 1] in sizes.
-    #     ---
-    #     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x00000000000039a8>
-    #             x y        z
-    #       <uint8> <string> <boolean>
-    #     0       1 A        false
-    #     1       2 A        true
-    #     ---
-    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000039bc>
-    #             x y        z
-    #       <uint8> <string> <boolean>
-    #     0       3 B        false
-    #     1       4 B        (nil)
-    #     2       5 B        true
-    #     ---
-    #     #<RedAmber::DataFrame : 1 x 3 Vectors, 0x00000000000039d0>
-    #             x y        z
-    #       <uint8> <string> <boolean>
-    #     0       6 C        false
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003b24>
+    #       y          sum_x
+    #       <string> <uint8>
+    #     0 A              3
+    #     1 B             12
+    #     2 C              6
     #
-    #     subframes.aggregate(:y, { x: :sum })
+    #   @example Aggregate by key labels in an Array and values from block.
+    #     subframes.aggregate([:y, :sum_x]) { [y.first, x.sum] }
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003b24>
+    #       y          sum_x
+    #       <string> <uint8>
+    #     0 A              3
+    #     1 B             12
+    #     2 C              6
+    #
+    # @overload aggregate
+    #
+    #   Aggregate SubFrames creating DataFrame with pairs of key and aggregated value
+    #   in Hash from the block.
+    #
+    #   @yieldparam dataframe [DataFrame]
+    #     passes each dataframe in self to the block. Block is called by instance_eval,
+    #     so inside of the block is the context of passed dataframe.
+    #   @yieldreturn [Hash<key => aggregated_value>]
+    #     pairs of key name and aggregated values from the columns of passed dataframe.
+    #     Key names may be renamed to new label in the result.
+    #   @return [DataFrame]
+    #     created DataFrame.
+    #   @example Aggregate by key and value pairs from block.
+    #     subframes.aggregate do
+    #       { y: y.first, sum_x: x.sum }
+    #     end
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003b24>
+    #       y          sum_x
+    #       <string> <uint8>
+    #     0 A              3
+    #     1 B             12
+    #     2 C              6
+    #
+    # @overload aggregate
+    #
+    #   Aggregate SubFrames creating DataFrame with an Array of key and aggregated value
+    #   from the block.
+    #
+    #   @yieldparam dataframe [DataFrame]
+    #     passes each dataframe in self to the block. Block is called by instance_eval,
+    #     so inside of the block is the context of passed dataframe.
+    #   @yieldreturn [Array<key, aggregated_value>]
+    #     pairs of key name and aggregated values from the columns of passed dataframe.
+    #     Key names may be renamed to new label in the result.
+    #   @return [DataFrame]
+    #     created DataFrame.
+    #   @example Aggregate by key and value arrays from block.
+    #     subframes.aggregate do
+    #       [[:y, y.first], [:sum_x, x.sum]]
+    #     end
     #
     #     # =>
     #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003b24>
@@ -432,8 +484,33 @@ module RedAmber
     # @overload aggregate(group_keys, aggregations)
     #
     #   Aggregate SubFrames for first values of the columns of
+    #   `group_keys` and the aggregated results of key-function pairs.
+    #   [Experimental] This API may be changed in the future.
+    #
+    #   @param group_keys [Symbol, String, Array<Symbol, String>]
+    #     group key name(s) to output values.
+    #   @param aggregations [Hash<Array<Symbol, String> => Array<:Symbol>>]
+    #     a Hash of variable (column) name and
+    #     Vector aggregate function name to apply.
+    #   @return [DataFrame]
+    #     an aggregated DataFrame.
+    #   @example Aggregate with a group key and key function pairs by a Hash.
+    #     subframes.aggregate(:y, { x: :sum, z: :count })
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003b24>
+    #       y          sum_x count_z
+    #       <string> <uint8> <uint8>
+    #     0 A              3       2
+    #     1 B             12       2
+    #     2 C              6       1
+    #
+    # @overload aggregate(group_keys, aggregations)
+    #
+    #   Aggregate SubFrames for first values of the columns of
     #   `group_keys` and the aggregated results of all combinations
     #   of supplied keys and functions.
+    #   [Experimental] This API may be changed in the future.
     #
     #   @param group_keys [Symbol, String, Array<Symbol, String>]
     #     group key name(s) to output values.
@@ -442,83 +519,60 @@ module RedAmber
     #     Array of Vector aggregate function names to apply.
     #   @return [DataFrame]
     #     an aggregated DataFrame.
-    #   @example
+    #   @example Aggregate with group keys and keys and functions by an Array.
     #     sf.aggregate(:y, [[:x, :z], [:count, :sum]])
     #
     #     # =>
     #     #<RedAmber::DataFrame : 3 x 5 Vectors, 0x000000000000fcbc>
-    #       y        count_x count_z   sum_x   sum_z
+    #       y        count_x   sum_x count_z   sum_z
     #       <string> <uint8> <uint8> <uint8> <uint8>
-    #     0 A              2       2       3       1
-    #     1 B              3       2      12       1
-    #     2 C              1       1       6       0
+    #     0 A              2       3       2       1
+    #     1 B              3      12       2       1
+    #     2 C              1       6       1       0
     #
     # @since 0.4.0
     #
-    def aggregate(group_keys, aggregations)
+    def aggregate(*args, &block)
       aggregator =
-        case aggregations
-        in Hash
-          sf = self
-          aggregations.map do |key, func|
-            unless Vector.aggregate?(func)
-              raise SubFramesArgumentError, "not an aggregation function: #{func}"
+        if block
+          if args.empty?
+            # aggregate { {key => value} or [[key, value], ...] }
+            each_with_object(Hash.new { |h, k| h[k] = [] }) do |df, hash|
+              df.instance_eval(&block).to_h.each do |k, v|
+                hash[k] << v
+              end
             end
-
-            ["#{func}_#{key}", sf.each.map { |df| df[key].send(func) }]
-          end
-        in [Array => keys, Array => functions]
-          functions.each do |func|
-            unless Vector.aggregate?(func)
-              raise SubFramesArgumentError, "not an aggregation function: #{func}"
-            end
-          end
-          sf = self
-          functions.product(keys).map do |func, key|
-            ["#{func}_#{key}", sf.each.map { |df| df[key].send(func) }]
+          else
+            # aggregate(keys) { values }
+            values = each.map { |df| Array(df.instance_eval(&block)) }.transpose
+            args.flatten.zip(values)
           end
         else
-          raise SubFramesArgumentError, "invalid argument: #{aggregations}"
+          # These functions may be removed in the future.
+          case args
+          in [group_keys1, Hash => h]
+            # aggregate(group_keys, { key => func })
+            ary = Array(group_keys1).map { |key| [:first, key] }
+            ary.concat(h.to_a.map { [_2, _1] }) # rubocop:disable Style/NumberedParametersLimit
+          in [group_keys2, [Array => keys, Array => funcs]]
+            # aggregate(group_keys, [keys, funcs])
+            ary = Array(group_keys2).map { |key| [:first, key] }
+            ary.concat(funcs.product(keys))
+          else
+            raise SubFramesArgumentError, "invalid argument: #{args}"
+          end
+          sf = self
+          ary.map do |func, key|
+            label = func == :first ? key : "#{func}_#{key}"
+            [label, sf.each.map { |df| df[key].send(func) }]
+          end
         end
-
-      if group_keys.empty?
-        DataFrame.new(aggregator)
-      else
-        baseframe
-          .pick(group_keys)
-          .slice(offset_indices)
-          .assign(aggregator)
-      end
+      DataFrame.new(aggregator)
     end
 
     # Returns a SubFrames containing DataFrames returned by the block.
     #
     # @example Map as it is.
-    #   subframes
-    #
-    #   # =>
-    #   #<RedAmber::SubFrames : 0x000000000001359c>
-    #   @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x00000000000135b0>
-    #   3 SubFrames: [2, 3, 1] in sizes.
-    #   ---
-    #   #<RedAmber::DataFrame : 2 x 3 Vectors, 0x00000000000135c4>
-    #           x y        z
-    #     <uint8> <string> <boolean>
-    #   0       1 A        false
-    #   1       2 A        true
-    #   ---
-    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000135d8>
-    #           x y        z
-    #     <uint8> <string> <boolean>
-    #   0       3 B        false
-    #   1       4 B        (nil)
-    #   2       5 B        true
-    #   ---
-    #   #<RedAmber::DataFrame : 1 x 3 Vectors, 0x00000000000135ec>
-    #           x y        z
-    #     <uint8> <string> <boolean>
-    #   0       6 C        false
-    #
     #   subframes.map { _1 }
     #
     #   # This will create a new SubFrame and a new baseframe,
@@ -593,31 +647,6 @@ module RedAmber
     #   @return [SubFrames]
     #     a new SubFrames object with updated DataFrames.
     #   @example
-    #     subframes
-    #
-    #     # =>
-    #     #<RedAmber::SubFrames : 0x000000000000c33c>
-    #     @baseframe=#<RedAmber::DataFrame : 6 x 3 Vectors, 0x000000000000c350>
-    #     3 SubFrames: [2, 3, 1] in sizes.
-    #     ---
-    #     #<RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000000c364>
-    #             x y        z
-    #       <uint8> <string> <boolean>
-    #     0       1 A        false
-    #     1       2 A        true
-    #     ---
-    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000c378>
-    #             x y        z
-    #       <uint8> <string> <boolean>
-    #     0       3 B        false
-    #     1       4 B        (nil)
-    #     2       5 B        true
-    #     ---
-    #     #<RedAmber::DataFrame : 1 x 3 Vectors, 0x000000000000c38c>
-    #             x y        z
-    #       <uint8> <string> <boolean>
-    #     0       6 C        false
-    #
     #     subframes.assign(:x_plus1) { x + 1 }
     #
     #     # =>
@@ -912,7 +941,7 @@ module RedAmber
     # @return [Array<Integer>]
     #   indices of offset of each sub DataFrames.
     # @example When `sizes` is [2, 3, 1].
-    #   sf.offset_indices # => [0, 2, 5]
+    #   subframes.offset_indices # => [0, 2, 5]
     # @since 0.4.0
     #
     def offset_indices
@@ -1036,9 +1065,15 @@ module RedAmber
     # @since 0.4.0
     #
     def inspect(limit: 16)
+      shape =
+        if @baseframe.is_a?(Enumerator)
+          "Enumerator::Lazy:size=#{@baseframe.size}"
+        else
+          baseframe.shape_str(with_id: true)
+        end
       sizes_truncated = (size > limit ? sizes.take(limit) << '...' : sizes).join(', ')
       "#<#{self.class} : #{format('0x%016x', object_id)}>\n" \
-        "@baseframe=#<#{baseframe.shape_str(with_id: true)}>\n" \
+        "@baseframe=#<#{shape}>\n" \
         "#{size} SubFrame#{pl(size)}: " \
         "[#{sizes_truncated}] in size#{pl(size)}.\n" \
         "---\n#{_to_s(limit: limit, with_id: true)}"

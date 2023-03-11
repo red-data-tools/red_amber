@@ -27,28 +27,6 @@ module RedAmber
       instance
     end
 
-    # Return true if it is an aggregation function.
-    #
-    # @param function [Symbol]
-    #   function name to test.
-    # @return [Booleans]
-    #   true if function is a aggregation function, otherwise false.
-    #
-    # @example
-    #   Vector.aggregate?(:mean) # => true
-    #
-    #   Vector.aggregate?(:round) # => false
-    #
-    # @since 0.4.0
-    #
-    def self.aggregate?(function)
-      %i[
-        all all? any any? approximate_median count count_distinct count_uniq
-        max mean median min min_max product quantile sd std stddev sum
-        unbiased_variance var variance
-      ].include?(function.to_sym)
-    end
-
     # Create a Vector.
     #
     # @param array [Array, Vector, Range, Arrow::Array, #to_arrow_array]
@@ -532,13 +510,10 @@ module RedAmber
 
           yield self
         else
-          function = function&.to_sym
-          unless function && respond_to?(function) && Vector.aggregate?(function)
-            raise VectorArgumentError, "illegal function: #{function.inspect}"
-          end
-
-          send(function)
+          send(function&.to_sym)
         end
+      raise VectorArgumentError, 'not an aggregation function' if value.is_a?(Vector)
+
       Vector.new([value] * size)
     end
     alias_method :expand, :propagate

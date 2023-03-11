@@ -6,12 +6,13 @@ class VectorTest < Test::Unit::TestCase
   include TestHelper
   include RedAmber
 
-  sub_test_case('#take(indices)') do
-    setup do
-      @string = Vector.new(%w[A B C D E])
-      @indices = [3, 0, -2]
-    end
+  setup do
+    @string = Vector.new(%w[A B C D E])
+    @booleans = [true, false, nil, false, true]
+    @indices = [3, 0, -2]
+  end
 
+  sub_test_case('#take(indices)') do
     test 'empty vector' do
       assert_equal_array [], Vector.new([]).take
     end
@@ -43,11 +44,6 @@ class VectorTest < Test::Unit::TestCase
   end
 
   sub_test_case('#filter(booleans)') do
-    setup do
-      @string = Vector.new(%w[A B C D E])
-      @booleans = [true, false, nil, false, true]
-    end
-
     test 'empty vector' do
       assert_equal_array [], Vector.new([]).filter
     end
@@ -81,12 +77,6 @@ class VectorTest < Test::Unit::TestCase
   end
 
   sub_test_case '#[]' do
-    setup do
-      @string = Vector.new(%w[A B C D E])
-      @booleans = [true, false, nil, false, true]
-      @indices = [3, 0, -2]
-    end
-
     test 'empty vector' do
       assert_nil Vector.new[]
     end
