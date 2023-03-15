@@ -7,3 +7,5 @@
 /spec/reports/
 /tmp/
 Gemfile.lock
+!/docker/Gemfile.lock
+/docker/notebook/.ipynb_checkpoints/

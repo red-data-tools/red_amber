@@ -1,0 +1,21 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+gem 'irb'
+
+gem 'red-arrow', '~> 11.0.0'
+gem 'red-parquet', '~> 11.0.0'
+gem 'numo-narray'
+gem 'red-arrow-numo-narray'
+
+gem 'red_amber', '>=0.4.0'
+gem 'red-amber-view'
+gem 'rover-df'
+
+gem 'red-datasets'
+gem 'red-datasets-arrow'
+
+gem 'faker'
+gem 'benchmark-ips'
+gem 'benchmark_driver'

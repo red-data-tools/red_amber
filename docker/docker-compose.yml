@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  datascience-ruby:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: red_amber-notebook
+    container_name: red_amber-notebook
+    user: root
+    environment:
+      - GRANT_SUDO=yes
+      - NB_USER=${NB_USER}
+      - CHOWN_HOME=yes
+    working_dir: /home/${NB_USER}/work
+    ports:
+      - '8888:8888'
+    volumes:
+      - ./notebook:/home/${NB_USER}/work
+    command: start-notebook.sh --NotebookApp.token=$TOKEN
