@@ -236,7 +236,6 @@ module RedAmber
     #   division of self by other.
     #
     define_binary_element_wise :divide
-    alias_method :div, :divide
     alias_method :'/', :divide
 
     # Divide the arguments element-wise.
@@ -248,21 +247,21 @@ module RedAmber
 
     # Returns element-wise modulo.
     #
-    # This is equivalent to `self-other*(self/other).floor`.
-    # @param other [Vector, numeric]
-    #   other numeric Vector or numeric scalar.
+    # This is equivalent to `self-divisor*(self/divisor).floor`.
+    # @note Same behavior as Ruby.
+    # @param divisor [Vector, numeric]
+    #   divisor numeric Vector or numeric scalar.
     # @return [Vector]
-    #   modulo of dividing self by other.
+    #   modulo of dividing self by divisor.
     #
-    def modulo(other)
-      other = other.data if other.is_a?(Vector)
-      d = find(:divide).execute([data, other])
+    def modulo(divisor)
+      divisor = divisor.data if divisor.is_a?(Vector)
+      d = find(:divide).execute([data, divisor])
       d = find(:floor).execute([d]) if d.value.is_a?(Arrow::DoubleArray)
-      m = find(:multiply).execute([d, other])
+      m = find(:multiply).execute([d, divisor])
       datum = find(:subtract).execute([data, m])
       Vector.create(datum.value)
     end
-    alias_method :mod, :modulo
     alias_method :'%', :modulo
 
     # Returns element-wise modulo.
@@ -270,11 +269,11 @@ module RedAmber
     # This function is a overflow-checking variant of #modulo.
     # @return (see #modulo)
     #
-    def modulo_checked(other)
-      other = other.data if other.is_a?(Vector)
-      d = find(:divide_checked).execute([data, other])
+    def modulo_checked(divisor)
+      divisor = divisor.data if divisor.is_a?(Vector)
+      d = find(:divide_checked).execute([data, divisor])
       d = find(:floor).execute([d]) if d.value.is_a?(Arrow::DoubleArray)
-      m = find(:multiply_checked).execute([d, other])
+      m = find(:multiply_checked).execute([d, divisor])
       datum = find(:subtract_checked).execute([data, m])
       Vector.create(datum.value)
     end
@@ -323,27 +322,57 @@ module RedAmber
 
     # Returns element-wise quotient by double Vector.
     #
-    # @param other [Vector, numeric]
-    #   other numeric Vector or numeric scalar.
+    # @param divisor [Vector, numeric]
+    #   divisor numeric Vector or numeric scalar.
     # @return [Vector]
-    #   quotient of dividing self by other.
+    #   quotient of dividing self by divisor.
     #
-    def quotient(other)
-      other = other.data if other.is_a?(Vector)
-      datum = find(:divide).execute([Arrow::DoubleArray.new(data), other])
+    def fdiv(divisor)
+      divisor = divisor.data if divisor.is_a?(Vector)
+      datum = find(:divide).execute([Arrow::DoubleArray.new(data), divisor])
       Vector.create(datum.value)
     end
-    alias_method :quo, :quotient
-    alias_method :fdiv, :quotient
 
     # Returns element-wise quotient by double Vector.
     #
     # This function is a overflow-checking variant of #quotient.
     # @return (see #quotient)
     #
-    def quotient_checked(other)
-      other = other.data if other.is_a?(Vector)
-      datum = find(:divide_checked).execute([Arrow::DoubleArray.new(data), other])
+    def fdiv_checked(divisor)
+      divisor = divisor.data if divisor.is_a?(Vector)
+      datum = find(:divide_checked).execute([Arrow::DoubleArray.new(data), divisor])
+      Vector.create(datum.value)
+    end
+
+    # Returns element-wise remainder.
+    #
+    # This is equivalent to `self-divisor*(self/divisor).trunc`.
+    # @note Same behavior as Ruby's remainder.
+    # @param divisor [Vector, numeric]
+    #   divisor numeric Vector or numeric scalar.
+    # @return [Vector]
+    #   modulo of dividing self by divisor.
+    #
+    def remainder(divisor)
+      divisor = divisor.data if divisor.is_a?(Vector)
+      d = find(:divide).execute([data, divisor])
+      d = find(:trunc).execute([d]) if d.value.is_a?(Arrow::DoubleArray)
+      m = find(:multiply).execute([d, divisor])
+      datum = find(:subtract).execute([data, m])
+      Vector.create(datum.value)
+    end
+
+    # Returns element-wise modulo.
+    #
+    # This function is a overflow-checking variant of #modulo.
+    # @return (see #modulo)
+    #
+    def remainder_checked(divisor)
+      divisor = divisor.data if divisor.is_a?(Vector)
+      d = find(:divide_checked).execute([data, divisor])
+      d = find(:trunc).execute([d]) if d.value.is_a?(Arrow::DoubleArray)
+      m = find(:multiply_checked).execute([d, divisor])
+      datum = find(:subtract_checked).execute([data, m])
       Vector.create(datum.value)
     end
 

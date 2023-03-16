@@ -43,7 +43,7 @@ benchmark:
   'B06: Pick by a block': |
     df.pick { keys.map { |key| key.end_with?('time') } }
 
-  'B07: Slice([]) by a index': |
+  'B07: Slice([]) by an index': |
     df[877]
 
   'B08: Slice by indeces': |

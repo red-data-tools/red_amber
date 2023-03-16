@@ -253,13 +253,35 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal_array [-0.5, 1.0, -1.5], @double.divide_checked(-2)
     end
 
-    test '#modulo(vector)' do
+    test '#fdiv(vector)' do
       divisor = Vector.new(2, 2, 2)
       float_divisor = Vector.new(-2, 1.0, 3)
+      assert_raise(TypeError) { @boolean.fdiv(@boolean) }
+      assert_equal_array [0.5, 1.0, 1.5], @integer.fdiv(divisor)
+      assert_equal_array [0.5, -1.0, 1.5], @double.fdiv(divisor)
+      assert_equal_array [-0.5, -2.0, 1.0], @double.fdiv(float_divisor)
+      assert_raise(Arrow::Error::NotImplemented) { @string.fdiv(@string) }
+    end
+
+    test '#fdiv(scalar)' do
+      assert_equal_array [0.5, 1.0, 1.5], @integer.fdiv(2.0)
+      assert_equal_array [-0.5, 1.0, -1.5], @double.fdiv(-2)
+    end
+
+    test '#fdiv_checked' do
+      assert_equal_array [0.5, 1.0, 1.5], @integer.fdiv_checked(2.0)
+      assert_equal_array [-0.5, 1.0, -1.5], @double.fdiv_checked(-2)
+    end
+
+    test '#modulo(vector)' do
+      integer = Vector.new(-5, -3, 3, 5)
+      float = Vector.new(-5.0, -3, 3, 5)
+      divisor = Vector.new(-3, 3, -5, 5)
+      float_divisor = Vector.new(-3.0, 3.0, -5.0, 5.0)
       assert_raise(Arrow::Error::NotImplemented) { @boolean.modulo(@boolean) }
-      assert_equal_array [1, 0, 1], @integer.modulo(divisor)
-      assert_equal_array [1.0, 0.0, 1.0], @double.modulo(divisor)
-      assert_equal_array [-1.0, 0.0, 0.0], @double.modulo(float_divisor)
+      assert_equal_array [-2, 0, 3, 0], integer.modulo(divisor)
+      assert_equal_array [-2.0, 0.0, -2.0, 0.0], float.modulo(divisor)
+      assert_equal_array [-2.0, 0.0, -2.0, 0.0], float.modulo(float_divisor)
       assert_raise(Arrow::Error::NotImplemented) { @string.modulo(@string) }
     end
 
@@ -339,24 +361,26 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_raise(Arrow::Error::Invalid) { @integer.power_checked(6) }
     end
 
-    test '#quotient(vector)' do
-      divisor = Vector.new(2, 2, 2)
-      float_divisor = Vector.new(-2, 1.0, 3)
-      assert_raise(TypeError) { @boolean.quotient(@boolean) }
-      assert_equal_array [0.5, 1.0, 1.5], @integer.quotient(divisor)
-      assert_equal_array [0.5, -1.0, 1.5], @double.quotient(divisor)
-      assert_equal_array [-0.5, -2.0, 1.0], @double.quotient(float_divisor)
-      assert_raise(Arrow::Error::NotImplemented) { @string.quotient(@string) }
+    test '#remainder(vector)' do
+      integer = Vector.new(-5, -3, 3, 5)
+      float = Vector.new(-5.0, -3, 3, 5)
+      divisor = Vector.new(-3, 3, -5, 5)
+      float_divisor = Vector.new(-3.0, 3.0, -5.0, 5.0)
+      assert_raise(Arrow::Error::NotImplemented) { @boolean.remainder(@boolean) }
+      assert_equal_array [-2, 0, 3, 0], integer.remainder(divisor)
+      assert_equal_array [-2.0, 0.0, 3.0, 0.0], float.remainder(divisor)
+      assert_equal_array [-2.0, 0.0, 3.0, 0.0], float.remainder(float_divisor)
+      assert_raise(Arrow::Error::NotImplemented) { @string.remainder(@string) }
     end
 
-    test '#quotient(scalar)' do
-      assert_equal_array [0.5, 1.0, 1.5], @integer.quotient(2.0)
-      assert_equal_array [-0.5, 1.0, -1.5], @double.quotient(-2)
+    test '#remainder(scalar)' do
+      assert_equal_array [1.0, 0.0, 1.0], @integer.remainder(2.0)
+      assert_equal_array [1.0, 0.0, 1.0], @double.remainder(-2)
     end
 
-    test '#quotient_checked' do
-      assert_equal_array [0.5, 1.0, 1.5], @integer.quotient_checked(2.0)
-      assert_equal_array [-0.5, 1.0, -1.5], @double.quotient_checked(-2)
+    test '#remainder_checked' do
+      assert_equal_array [1.0, 0.0, 1.0], @integer.remainder_checked(2.0)
+      assert_equal_array [1.0, 0.0, 1.0], @double.remainder_checked(-2)
     end
 
     test '#subtract(vector)' do
