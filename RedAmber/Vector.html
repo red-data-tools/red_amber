@@ -1041,7 +1041,7 @@
     
 
     
-      (also: #div, #/)
+      (also: #/)
     
   </span>
   
@@ -1153,6 +1153,54 @@
   
     <span class="summary_desc"><div class='inline'>
 <p>Compare values for equality (self == other).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fdiv-instance_method" title="#fdiv (instance method)">#<strong>fdiv</strong>(divisor)  &#x21d2; Vector </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns element-wise quotient by double Vector.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#fdiv_checked-instance_method" title="#fdiv_checked (instance method)">#<strong>fdiv_checked</strong>(divisor)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns element-wise quotient by double Vector.</p>
 </div></span>
   
 </li>
@@ -2047,11 +2095,11 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#modulo-instance_method" title="#modulo (instance method)">#<strong>modulo</strong>(other)  &#x21d2; Vector </a>
+      <a href="#modulo-instance_method" title="#modulo (instance method)">#<strong>modulo</strong>(divisor)  &#x21d2; Vector </a>
     
 
     
-      (also: #mod, #%)
+      (also: #%)
     
   </span>
   
@@ -2073,7 +2121,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#modulo_checked-instance_method" title="#modulo_checked (instance method)">#<strong>modulo_checked</strong>(other)  &#x21d2; Vector </a>
+      <a href="#modulo_checked-instance_method" title="#modulo_checked (instance method)">#<strong>modulo_checked</strong>(divisor)  &#x21d2; Vector </a>
     
 
     
@@ -2519,11 +2567,9 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#quotient-instance_method" title="#quotient (instance method)">#<strong>quotient</strong>(other)  &#x21d2; Vector </a>
+      <a href="#remainder-instance_method" title="#remainder (instance method)">#<strong>remainder</strong>(divisor)  &#x21d2; Vector </a>
     
 
-    
-      (also: #quo, #fdiv)
     
   </span>
   
@@ -2536,7 +2582,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns element-wise quotient by double Vector.</p>
+<p>Returns element-wise remainder.</p>
 </div></span>
   
 </li>
@@ -2545,7 +2591,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#quotient_checked-instance_method" title="#quotient_checked (instance method)">#<strong>quotient_checked</strong>(other)  &#x21d2; Vector </a>
+      <a href="#remainder_checked-instance_method" title="#remainder_checked (instance method)">#<strong>remainder_checked</strong>(divisor)  &#x21d2; Vector </a>
     
 
     
@@ -2560,7 +2606,7 @@
 
   
     <span class="summary_desc"><div class='inline'>
-<p>Returns element-wise quotient by double Vector.</p>
+<p>Returns element-wise modulo.</p>
 </div></span>
   
 </li>
@@ -6349,7 +6395,7 @@
 
   
     <span class="aliases">Also known as:
-    <span class="names"><span id='div-instance_method'>div</span>, <span id='/-instance_method'>/</span></span>
+    <span class="names"><span id='/-instance_method'>/</span></span>
     </span>
   
 
@@ -6476,10 +6522,10 @@
       <pre class="lines">
 
 
-247</pre>
+246</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 247</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 246</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:divide_checked</span></pre>
     </td>
@@ -6788,12 +6834,142 @@
       <pre class="lines">
 
 
-435</pre>
+464</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 435</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 464</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:equal</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="fdiv-instance_method">
+  
+    #<strong>fdiv</strong>(divisor)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns element-wise quotient by double Vector.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>divisor</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>numeric</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>divisor numeric Vector or numeric scalar.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>quotient of dividing self by divisor.</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+330
+331
+332
+333
+334</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 330</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_fdiv'>fdiv</span><span class='lparen'>(</span><span class='id identifier rubyid_divisor'>divisor</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_divisor'>divisor</span> <span class='op'>=</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_datum'>datum</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:divide</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>DoubleArray</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="#create-class_method" title="RedAmber::Vector.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_datum'>datum</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="fdiv_checked-instance_method">
+  
+    #<strong>fdiv_checked</strong>(divisor)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns element-wise quotient by double Vector.</p>
+
+<p>This function is a overflow-checking variant of #quotient.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+341
+342
+343
+344
+345</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 341</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_fdiv_checked'>fdiv_checked</span><span class='lparen'>(</span><span class='id identifier rubyid_divisor'>divisor</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_divisor'>divisor</span> <span class='op'>=</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_datum'>datum</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:divide_checked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>DoubleArray</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="#create-class_method" title="RedAmber::Vector.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_datum'>datum</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
     </td>
   </tr>
 </table>
@@ -7162,10 +7338,10 @@
       <pre class="lines">
 
 
-448</pre>
+477</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 448</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 477</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:greater</span></pre>
     </td>
@@ -7247,10 +7423,10 @@
       <pre class="lines">
 
 
-461</pre>
+490</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 461</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 490</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:greater_equal</span></pre>
     </td>
@@ -8104,10 +8280,10 @@
       <pre class="lines">
 
 
-474</pre>
+503</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 474</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 503</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:less</span></pre>
     </td>
@@ -8189,10 +8365,10 @@
       <pre class="lines">
 
 
-487</pre>
+516</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 487</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 516</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:less_equal</span></pre>
     </td>
@@ -9454,12 +9630,12 @@
       <div class="method_details ">
   <h3 class="signature " id="modulo-instance_method">
   
-    #<strong>modulo</strong>(other)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
+    #<strong>modulo</strong>(divisor)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
   
 
   
     <span class="aliases">Also known as:
-    <span class="names"><span id='mod-instance_method'>mod</span>, <span id='%-instance_method'>%</span></span>
+    <span class="names"><span id='%-instance_method'>%</span></span>
     </span>
   
 
@@ -9467,9 +9643,17 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>Same behavior as Ruby.</p>
+</div>
+  </div>
+
+
 <p>Returns element-wise modulo.</p>
 
-<p>This is equivalent to ‘self-other*(self/other).floor`.</p>
+<p>This is equivalent to ‘self-divisor*(self/divisor).floor`.</p>
 
 
   </div>
@@ -9480,7 +9664,7 @@
   
     <li>
       
-        <span class='name'>other</span>
+        <span class='name'>divisor</span>
       
       
         <span class='type'>(<tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>numeric</tt>)</span>
@@ -9489,7 +9673,7 @@
       
         &mdash;
         <div class='inline'>
-<p>other numeric Vector or numeric scalar.</p>
+<p>divisor numeric Vector or numeric scalar.</p>
 </div>
       
     </li>
@@ -9508,7 +9692,7 @@
       
         &mdash;
         <div class='inline'>
-<p>modulo of dividing self by other.</p>
+<p>modulo of dividing self by divisor.</p>
 </div>
       
     </li>
@@ -9533,11 +9717,11 @@
     <td>
       <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 257</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_modulo'>modulo</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:divide</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_other'>other</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_modulo'>modulo</span><span class='lparen'>(</span><span class='id identifier rubyid_divisor'>divisor</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_divisor'>divisor</span> <span class='op'>=</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:divide</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:floor</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_d'>d</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_d'>d</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>DoubleArray</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_m'>m</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:multiply</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_d'>d</span><span class='comma'>,</span> <span class='id identifier rubyid_other'>other</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_m'>m</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:multiply</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_d'>d</span><span class='comma'>,</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_datum'>datum</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:subtract</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_m'>m</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="#create-class_method" title="RedAmber::Vector.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_datum'>datum</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
@@ -9549,7 +9733,7 @@
       <div class="method_details ">
   <h3 class="signature " id="modulo_checked-instance_method">
   
-    #<strong>modulo_checked</strong>(other)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
+    #<strong>modulo_checked</strong>(divisor)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
   
 
   
@@ -9579,7 +9763,7 @@
       
         &mdash;
         <div class='inline'>
-<p>modulo of dividing self by other.</p>
+<p>modulo of dividing self by divisor.</p>
 </div>
       
     </li>
@@ -9592,23 +9776,23 @@
       <pre class="lines">
 
 
+272
 273
 274
 275
 276
 277
 278
-279
-280</pre>
+279</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 273</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 272</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_modulo_checked'>modulo_checked</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:divide_checked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_other'>other</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_modulo_checked'>modulo_checked</span><span class='lparen'>(</span><span class='id identifier rubyid_divisor'>divisor</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_divisor'>divisor</span> <span class='op'>=</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:divide_checked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:floor</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_d'>d</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_d'>d</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>DoubleArray</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_m'>m</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:multiply_checked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_d'>d</span><span class='comma'>,</span> <span class='id identifier rubyid_other'>other</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_m'>m</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:multiply_checked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_d'>d</span><span class='comma'>,</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_datum'>datum</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:subtract_checked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_m'>m</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="#create-class_method" title="RedAmber::Vector.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_datum'>datum</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
@@ -9691,10 +9875,10 @@
       <pre class="lines">
 
 
-291</pre>
+290</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 291</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 290</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:multiply</span></pre>
     </td>
@@ -9752,10 +9936,10 @@
       <pre class="lines">
 
 
-300</pre>
+299</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 300</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 299</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:multiply_checked</span></pre>
     </td>
@@ -10148,10 +10332,10 @@
       <pre class="lines">
 
 
-500</pre>
+529</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 500</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 529</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:not_equal</span></pre>
     </td>
@@ -10471,10 +10655,10 @@
       <pre class="lines">
 
 
-313</pre>
+312</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 313</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 312</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:power</span></pre>
     </td>
@@ -10532,10 +10716,10 @@
       <pre class="lines">
 
 
-322</pre>
+321</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 322</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 321</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:power_checked</span></pre>
     </td>
@@ -11289,22 +11473,28 @@
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="quotient-instance_method">
+  <h3 class="signature " id="remainder-instance_method">
   
-    #<strong>quotient</strong>(other)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
+    #<strong>remainder</strong>(divisor)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
   
 
-  
-    <span class="aliases">Also known as:
-    <span class="names"><span id='quo-instance_method'>quo</span>, <span id='fdiv-instance_method'>fdiv</span></span>
-    </span>
   
 
   
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns element-wise quotient by double Vector.</p>
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>Same behavior as Ruby’s remainder.</p>
+</div>
+  </div>
+
+
+<p>Returns element-wise remainder.</p>
+
+<p>This is equivalent to ‘self-divisor*(self/divisor).trunc`.</p>
 
 
   </div>
@@ -11315,7 +11505,7 @@
   
     <li>
       
-        <span class='name'>other</span>
+        <span class='name'>divisor</span>
       
       
         <span class='type'>(<tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt>, <tt>numeric</tt>)</span>
@@ -11324,7 +11514,7 @@
       
         &mdash;
         <div class='inline'>
-<p>other numeric Vector or numeric scalar.</p>
+<p>divisor numeric Vector or numeric scalar.</p>
 </div>
       
     </li>
@@ -11343,7 +11533,7 @@
       
         &mdash;
         <div class='inline'>
-<p>quotient of dividing self by other.</p>
+<p>modulo of dividing self by divisor.</p>
 </div>
       
     </li>
@@ -11356,18 +11546,24 @@
       <pre class="lines">
 
 
-331
-332
-333
-334
-335</pre>
+356
+357
+358
+359
+360
+361
+362
+363</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 331</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 356</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_quotient'>quotient</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_datum'>datum</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:divide</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>DoubleArray</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_other'>other</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_remainder'>remainder</span><span class='lparen'>(</span><span class='id identifier rubyid_divisor'>divisor</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_divisor'>divisor</span> <span class='op'>=</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:divide</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:trunc</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_d'>d</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_d'>d</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>DoubleArray</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_m'>m</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:multiply</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_d'>d</span><span class='comma'>,</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_datum'>datum</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:subtract</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_m'>m</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="#create-class_method" title="RedAmber::Vector.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_datum'>datum</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -11376,9 +11572,9 @@
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="quotient_checked-instance_method">
+  <h3 class="signature " id="remainder_checked-instance_method">
   
-    #<strong>quotient_checked</strong>(other)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
+    #<strong>remainder_checked</strong>(divisor)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
   
 
   
@@ -11387,9 +11583,9 @@
 </h3><div class="docstring">
   <div class="discussion">
     
-<p>Returns element-wise quotient by double Vector.</p>
+<p>Returns element-wise modulo.</p>
 
-<p>This function is a overflow-checking variant of #quotient.</p>
+<p>This function is a overflow-checking variant of #modulo.</p>
 
 
   </div>
@@ -11408,7 +11604,7 @@
       
         &mdash;
         <div class='inline'>
-<p>quotient of dividing self by other.</p>
+<p>modulo of dividing self by divisor.</p>
 </div>
       
     </li>
@@ -11421,18 +11617,24 @@
       <pre class="lines">
 
 
-344
-345
-346
-347
-348</pre>
+370
+371
+372
+373
+374
+375
+376
+377</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 344</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 370</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_quotient_checked'>quotient_checked</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_datum'>datum</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:divide_checked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>DoubleArray</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_other'>other</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_remainder_checked'>remainder_checked</span><span class='lparen'>(</span><span class='id identifier rubyid_divisor'>divisor</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_divisor'>divisor</span> <span class='op'>=</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span> <span class='kw'>if</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:divide_checked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_d'>d</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:trunc</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_d'>d</span><span class='rbracket'>]</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_d'>d</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>DoubleArray</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_m'>m</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:multiply_checked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_d'>d</span><span class='comma'>,</span> <span class='id identifier rubyid_divisor'>divisor</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_datum'>datum</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:subtract_checked</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_m'>m</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="#create-class_method" title="RedAmber::Vector.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_datum'>datum</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -12103,10 +12305,10 @@
       <pre class="lines">
 
 
-383</pre>
+412</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 383</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 412</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:shift_left</span></pre>
     </td>
@@ -12164,10 +12366,10 @@
       <pre class="lines">
 
 
-391</pre>
+420</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 391</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 420</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:shift_left_checked</span></pre>
     </td>
@@ -12249,10 +12451,10 @@
       <pre class="lines">
 
 
-404</pre>
+433</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 404</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 433</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:shift_right</span></pre>
     </td>
@@ -12310,10 +12512,10 @@
       <pre class="lines">
 
 
-412</pre>
+441</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 412</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 441</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:shift_right_checked</span></pre>
     </td>
@@ -12949,10 +13151,10 @@
       <pre class="lines">
 
 
-359</pre>
+388</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 359</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 388</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:subtract</span></pre>
     </td>
@@ -13010,10 +13212,10 @@
       <pre class="lines">
 
 
-368</pre>
+397</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 368</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 397</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:subtract_checked</span></pre>
     </td>
@@ -14150,10 +14352,10 @@
       <pre class="lines">
 
 
-423</pre>
+452</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 423</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_binary_element_wise.rb', line 452</span>
 
 <span class='id identifier rubyid_define_binary_element_wise'>define_binary_element_wise</span> <span class='symbol'>:xor</span></pre>
     </td>
@@ -14166,7 +14368,7 @@
 </div>
 
       <div id="footer">
-  Generated on Sat Mar 11 00:51:57 2023 by
+  Generated on Fri Mar 17 12:24:00 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.2.1).
 </div>
