@@ -40,7 +40,7 @@ RUN set -eux; \
         libgirepository1.0-dev; \
     rm -rf /var/lib/apt/lists/*
 
-USER $NB_USER
+USER $NB_UID
 
 WORKDIR $HOME
 
@@ -62,11 +62,13 @@ RUN set -eux; \
         iruby; \
     iruby register --force
 
-COPY Gemfile $HOME
-COPY Gemfile.lock $HOME
+COPY --chown=$NB_UID:$NB_GID Gemfile $HOME
+COPY --chown=$NB_UID:$NB_GID Gemfile.lock $HOME
 
 ENV GEM_HOME=$HOME/.local/share/gem
 ENV BUNDLE_PATH=$HOME/.local/share/gem
 ENV BUNDLE_BIN=$HOME/.local/share/gem/bin
 
 RUN bundle install --jobs=4
+
+COPY --chown=$NB_UID:$NB_GID example $HOME
