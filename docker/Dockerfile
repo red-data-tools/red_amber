@@ -44,14 +44,6 @@ USER $NB_UID
 
 WORKDIR $HOME
 
-# Install rbenv
-RUN set -eux; \
-    git clone https://github.com/rbenv/rbenv.git $HOME/.rbenv; \
-    echo 'eval "$(~/.rbenv/bin/rbenv init - bash)"' >> $HOME/.bash_profile; \
-    source $HOME/.bash_profile; \
-    git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
-
-ENV MAKE_OPTS='-j 4'
 ENV PATH $HOME/.local/share/gem/bin:$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH
 
 # IRuby
