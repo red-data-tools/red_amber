@@ -26,7 +26,7 @@ ds = Datasets::Rdataset.new('openintro', 'simpsons_paradox_covid')
 simpsons_paradox_covid = DataFrame.new(ds.to_arrow)
 
 $stderr.print "reading mtcars...                          \r"
-DataFrame.new(Datasets::Rdatasets.new('datasets', 'mtcars'))
+mtcars = DataFrame.new(Datasets::Rdatasets.new('datasets', 'mtcars'))
 
 $stderr.print "reading iris...  \r"
 iris = DataFrame.new(Datasets::Iris.new)
@@ -68,7 +68,7 @@ subframes = SubFrames.new(dataframe, [[0, 1], [2, 3, 4], [5]])
 
 # Welcome to RedAmber example!
 # This environment will offer these pre-loaded datasets:
-#   penguins, diamonds, iris, starwars, simpsons_paradox_covid, 
+#   penguins, diamonds, iris, starwars, simpsons_paradox_covid,
 #   mtcars, band_members, band_instruments, band_instruments2
 #   (original) import_cars, comecome, dataframe, subframes
 binding.irb

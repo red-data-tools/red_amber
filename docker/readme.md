@@ -34,10 +34,10 @@ cd  docker
 
 Edit ENV variable in `.env` as you like.
 
-[note:] NB_USER is fixed for `jovyan`, the common user name in Jupyter.
-It can not change in this version.
+[note] NB_USER is fixed for `jovyan`, the common user name in Jupyter,
+can not change it in this version.
 
-If TZ is not used in your system, define it here.
+If TZ is not used in your host system, define it here.
 Otherwise UTC is used in the container.
 
 TOKEN will be used for token-based authentication.
@@ -67,18 +67,20 @@ You can access Jupyter Lab from `http://localhost:8888/` in your browser.
 - `red-amber.ipynb`:
   - Walks through the [README of RedAmber](https://github.com/heronshoes/red_amber#readme).
 - `examples_of_red_amber.ipynb`:
-  - Examples of RedAmber in Notebook style.
+  - [Examples of RedAmber](https://github.com/heronshoes/red_amber/blob/main/docker/notebook/examples_of_red_amber.ipynb) in Notebook style.
 
-## Example in irb
+## Example in REPL
 
-You can try RedAmber in irb with pre-loaded datasets in Jupyter.
+You can try RedAmber in irb with pre-loaded datasets.
 
-Start `terminal`.
+Start `terminal` in Jupyter.
 
-For the first time,
+For the first run,
+
 ```
 source ~/.bashrc
 ../example
+
 ```
 
 It will take a while for the first run to fetch and prepare red-datasets cache.
@@ -87,12 +89,12 @@ If irb starts you can see:
 
 ```ruby
 
-    70: # Welcome to RedAmber example!
-    71: # This environment will offer these pre-loaded datasets:
-    72: #   penguins, diamonds, starwars, simpsons_paradox_covid
-    73: #   (nycflights13) flights, airlines, airports, planes, weather
-    74: #   (original) import_cars, comecome, dataframe, subframes
- => 75: binding.irb
+    69: # Welcome to RedAmber example!
+    70: # This environment will offer these pre-loaded datasets:
+    71: #   penguins, diamonds, iris, starwars, simpsons_paradox_covid,
+    72: #   mtcars, band_members, band_instruments, band_instruments2
+    73: #   (original) import_cars, comecome, dataframe, subframes
+ => 74: binding.irb
 
 irb(main):001:0> 
 ```

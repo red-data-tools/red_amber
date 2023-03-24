@@ -52,7 +52,7 @@ Lint/BinaryOperatorWithIdenticalOperands:
 
 Lint/Debugger:
   Exclude:
-    - 'bin/example'
+    - 'docker/example'
 
 # Need for test with empty block
 # Offense count: 1
@@ -219,7 +219,7 @@ Naming/PredicateName:
 Rubycw/Rubycw:
   Exclude:
     - 'test/**/*'
-    - 'bin/example'
+    - 'docker/example'
 
 # Offense count: 16
 # This cop supports safe autocorrection (--autocorrect).
@@ -236,7 +236,7 @@ Style/SlicingWithRange:
 
 Style/MixinUsage:
   Exclude:
-    - 'bin/example'
+    - 'docker/example'
 
 # Necessary to Vector < 0 element-wise comparison
 # Offense count: 5
