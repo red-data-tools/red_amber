@@ -12,6 +12,8 @@ module RedAmber
 
     # Entity to select sub-dataframes
     class Selectors
+      attr_reader :selectors, :size, :sizes
+
       def initialize(selectors)
         @selectors = selectors
         @size = selectors.size
@@ -21,22 +23,20 @@ module RedAmber
       def each
         @selectors.each
       end
-
-      attr_reader :selectors, :size, :sizes
     end
 
     # Boolean selectors of sub-dataframes
     class Filters < Selectors
       def sizes
         # count true
-        @selectors.map { |s| s.to_a.count { _1 } } # rubocop:disable Performance/Size
+        @sizes = @selectors.map { |s| s.to_a.count { _1 } } # rubocop:disable Performance/Size
       end
     end
 
     # Index selectors of sub-dataframes
     class Indices < Selectors
       def sizes
-        @selectors.map(&:size)
+        @sizes = @selectors.map(&:size)
       end
     end
 
@@ -1115,8 +1115,37 @@ module RedAmber
         "---\n#{_to_s(limit: limit, with_id: true)}"
     end
 
+    # Return an Array of sub DataFrames
+    #
+    # @overload frames
+    #   Returns all sub dataframes.
+    #
+    #   @return [Array<DataFrame>]
+    #     sub DataFrames.
+    #
+    # @overload frames(n_frames)
+    #   Returns partial sub dataframes.
+    #
+    #   @param n_frames [Integer]
+    #     num of dataframes to retrieve.
+    #   @return [Array<DataFrame>]
+    #     sub DataFrames.
+    #
+    # @since 0.4.2
+    #
+    def frames(n_frames = nil)
+      if n_frames.nil?
+        @frames = take(size)
+      elsif @frames.size < n_frames
+        @frames = take(n_frames)
+      else
+        @frames
+      end
+    end
+
     private
 
+    # Get sub dataframe specified by 'selector'
     def get_subframe(selector)
       df =
         case @selectors
@@ -1128,16 +1157,7 @@ module RedAmber
       DataFrame.new_dataframe_with_schema(@baseframe, df)
     end
 
-    def frames(n_frames = nil)
-      if n_frames.nil?
-        @frames = take(size)
-      elsif @frames.size < n_frames
-        @frames = take(n_frames)
-      else
-        @frames
-      end
-    end
-
+    # Subcontractor of to_s
     def _to_s(limit: 5, with_id: false)
       a = take(limit).map do |df|
         if with_id

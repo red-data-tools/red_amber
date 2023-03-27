@@ -805,4 +805,24 @@ class SubFranesTest < Test::Unit::TestCase
       assert_equal_array @df.to_a, @sf.concatenate
     end
   end
+
+  sub_test_case '#frames' do
+    setup do
+      @sf_frames = SubFrames.by_indices(@df, [[0], [0, 1], [0, 1, 2]])
+    end
+
+    test '#frames first' do
+      assert_equal [@sf_frames.first], @sf_frames.frames(1)
+    end
+
+    test '#frames second' do
+      expected = [@df[0], @df[0, 1]]
+      assert_equal expected, @sf_frames.frames(2)
+    end
+
+    test '#frames all' do
+      expected = [@df[0], @df[0, 1], @df[0, 1, 2]]
+      assert_equal expected, @sf_frames.frames
+    end
+  end
 end
