@@ -266,12 +266,12 @@ class GroupTest < Test::Unit::TestCase
       group = @df.group(:i)
       str = <<~STR
         #<RedAmber::Group : #{format('0x%016x', group.object_id)}>
-                i group_count
-          <uint8>     <uint8>
-        0       0           2
-        1       1           1
-        2       2           2
-        3   (nil)           1
+                i   count
+          <uint8> <int64>
+        0       0       2
+        1       1       1
+        2       2       2
+        3   (nil)       0
       STR
       assert_equal str, group.inspect
     end

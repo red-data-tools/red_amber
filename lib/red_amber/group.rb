@@ -60,11 +60,11 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::Group : 0x000000000000f410>
-    #     species   group_count
-    #     <string>      <uint8>
-    #   0 Adelie            152
-    #   1 Chinstrap          68
-    #   2 Gentoo            124
+    #     species     count
+    #     <string>  <uint8>
+    #   0 Adelie        152
+    #   1 Chinstrap      68
+    #   2 Gentoo        124
     #
     def initialize(dataframe, *group_keys)
       @dataframe = dataframe
@@ -186,14 +186,14 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::Group : 0x0000000000003a98>
-    #     species   group_count
-    #     <string>      <uint8>
-    #   0 Adelie            152
-    #   1 Chinstrap          68
-    #   2 Gentoo            124
+    #     species     count
+    #     <string>  <uint8>
+    #   0 Adelie        152
+    #   1 Chinstrap      68
+    #   2 Gentoo        124
     #
     def inspect
-      "#<#{self.class} : #{format('0x%016x', object_id)}>\n#{group_count}"
+      "#<#{self.class} : #{format('0x%016x', object_id)}>\n#{count(@group_keys)}"
     end
 
     # Summarize Group by aggregation functions from the block.
@@ -210,11 +210,11 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::Group : 0x000000000000c314>
-    #     species   group_count
-    #     <string>      <uint8>
-    #   0 Adelie            152
-    #   1 Chinstrap          68
-    #   2 Gentoo            124
+    #     species     count
+    #     <string>  <uint8>
+    #   0 Adelie        152
+    #   1 Chinstrap      68
+    #   2 Gentoo        124
     #
     #   group.summarize { mean(:bill_length_mm) }
     #
