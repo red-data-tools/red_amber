@@ -10,6 +10,38 @@ module RedAmber
     using RefineArray
     using RefineArrayLike
 
+    # Entity to select sub-dataframes
+    class Selectors
+      attr_reader :selectors, :size, :sizes
+
+      def initialize(selectors)
+        @selectors = selectors
+        @size = selectors.size
+        @sizes = []
+      end
+
+      def each
+        @selectors.each
+      end
+    end
+
+    # Boolean selectors of sub-dataframes
+    class Filters < Selectors
+      def sizes
+        # count true
+        @sizes = @selectors.map { |s| s.to_a.count { _1 } } # rubocop:disable Performance/Size
+      end
+    end
+
+    # Index selectors of sub-dataframes
+    class Indices < Selectors
+      def sizes
+        @sizes = @selectors.map(&:size)
+      end
+    end
+
+    private_constant :Selectors, :Filters, :Indices
+
     class << self
       # Create SubFrames from a Group.
       #
@@ -79,13 +111,8 @@ module RedAmber
       def by_indices(dataframe, subset_indices)
         instance = allocate
         instance.instance_variable_set(:@baseframe, dataframe)
-        enum =
-          Enumerator.new(subset_indices.size) do |y|
-            subset_indices.each do |i|
-              y.yield DataFrame.new_dataframe_with_schema(dataframe, dataframe.take(i))
-            end
-          end
-        instance.instance_variable_set(:@enum, enum)
+        instance.instance_variable_set(:@selectors, Indices.new(subset_indices))
+        instance.instance_variable_set(:@frames, [])
         instance
       end
 
@@ -105,13 +132,8 @@ module RedAmber
       def by_filters(dataframe, subset_filters)
         instance = allocate
         instance.instance_variable_set(:@baseframe, dataframe)
-        enum =
-          Enumerator.new(subset_filters.size) do |y|
-            subset_filters.each do |i|
-              y.yield DataFrame.new_dataframe_with_schema(dataframe, dataframe.filter(i))
-            end
-          end
-        instance.instance_variable_set(:@enum, enum)
+        instance.instance_variable_set(:@selectors, Filters.new(subset_filters))
+        instance.instance_variable_set(:@frames, [])
         instance
       end
 
@@ -130,18 +152,13 @@ module RedAmber
         case Array(dataframes)
         when [] || [nil]
           instance.instance_variable_set(:@baseframe, DataFrame.new)
+          instance.instance_variable_set(:@selectors, [])
           instance.instance_variable_set(:@frames, [])
-          enum = [].each
         else
-          enum =
-            Enumerator.new(dataframes.size) do |y|
-              dataframes.each do |i|
-                y.yield i
-              end
-            end
-          instance.instance_variable_set(:@baseframe, enum.lazy)
+          instance.instance_variable_set(:@baseframe, nil)
+          instance.instance_variable_set(:@selectors, nil)
+          instance.instance_variable_set(:@frames, dataframes)
         end
-        instance.instance_variable_set(:@enum, enum)
         instance
       end
 
@@ -261,40 +278,34 @@ module RedAmber
     #
     # @since 0.4.0
     #
-    def initialize(dataframe, subset_specifier = nil, &block)
+    def initialize(dataframe, selectors = nil, &block)
       unless dataframe.is_a?(DataFrame)
         raise SubFramesArgumentError, "not a DataFrame: #{dataframe}"
       end
 
       if block
-        unless subset_specifier.nil?
+        unless selectors.nil?
           raise SubFramesArgumentError, 'Must not specify both arguments and block.'
         end
 
-        subset_specifier = yield(dataframe)
+        selectors = yield(dataframe)
       end
 
-      if dataframe.empty? || subset_specifier.nil? || subset_specifier.empty?
+      if dataframe.empty? || selectors.nil? || selectors.empty?
         @baseframe = DataFrame.new
-        @frames = []
-        @enum = @frames.each
+        @selectors = Selectors.new([])
       else
-        @baseframe = nil
-        @enum =
-          Enumerator.new(subset_specifier.size) do |yielder|
-            subset_specifier.map do |i|
-              df =
-                if i.numeric?
-                  dataframe.take(i)
-                elsif i.boolean?
-                  dataframe.filter(i)
-                else
-                  raise SubFramesArgumentError, "illegal type: #{i}"
-                end
-              yielder.yield DataFrame.new_dataframe_with_schema(dataframe, df)
-            end
+        @baseframe = dataframe
+        @selectors =
+          if selectors[0].boolean?
+            Filters.new(selectors)
+          elsif selectors[0].numeric?
+            Indices.new(selectors)
+          else
+            raise SubFramesArgumentError, "illegal type: #{selectors}"
           end
       end
+      @frames = []
     end
 
     # Return concatenated SubFrames as a DataFrame.
@@ -305,11 +316,7 @@ module RedAmber
     # @since 0.4.0
     #
     def baseframe
-      if @baseframe.nil? || @baseframe.is_a?(Enumerator)
-        @baseframe = reduce(&:concatenate)
-      else
-        @baseframe
-      end
+      @baseframe ||= reduce(&:concatenate)
     end
     alias_method :concatenate, :baseframe
     alias_method :concat, :baseframe
@@ -384,7 +391,19 @@ module RedAmber
     def each(&block)
       return enum_for(__method__) { size } unless block
 
-      frames.each(&block)
+      if @selectors
+        @selectors.each.with_index do |selector, i|
+          if i < @frames.size
+            yield @frames[i]
+          else
+            frame = get_subframe(selector)
+            @frames << frame
+            yield frame
+          end
+        end
+      else
+        @frames.each(&block)
+      end
       nil
     end
 
@@ -923,7 +942,12 @@ module RedAmber
     # @since 0.4.0
     #
     def size
-      @size ||= @enum.size
+      @size ||=
+        if @selectors
+          @selectors.size
+        else
+          @frames.size
+        end
     end
 
     # Size list of subsets.
@@ -933,7 +957,12 @@ module RedAmber
     # @since 0.4.0
     #
     def sizes
-      @sizes ||= @enum.map(&:size)
+      @sizes ||=
+        if @selectors
+          @selectors.sizes
+        else
+          @frames.map(&:size)
+        end
     end
 
     # Indices at the top of each sub DataFrames.
@@ -945,10 +974,17 @@ module RedAmber
     # @since 0.4.0
     #
     def offset_indices
-      sum = 0
-      sizes.map do |size|
-        sum += size
-        sum - size
+      case @selectors
+      when Filters
+        @selectors.selectors.map do |selector|
+          selector.each.with_index.find { |x, _| x }[1]
+        end
+      else # Indices, nil
+        sum = 0
+        sizes.map do |size|
+          sum += size
+          sum - size
+        end
       end
     end
 
@@ -965,11 +1001,11 @@ module RedAmber
     # Test if self has only one subset and it is comprehensive.
     #
     # @return [true, false]
-    #   true if only member of self is equal to universal DataFrame.
+    #   true if the only member of self is equal to universal DataFrame.
     # @since 0.4.0
     #
     def universal?
-      size == 1 && @enum.first == baseframe
+      size == 1 && first == @baseframe
     end
 
     # Return string representation of self.
@@ -1012,7 +1048,7 @@ module RedAmber
     #
     # @since 0.4.0
     #
-    def to_s(limit: 16)
+    def to_s(limit: 5)
       _to_s(limit: limit)
     end
 
@@ -1064,10 +1100,10 @@ module RedAmber
     #
     # @since 0.4.0
     #
-    def inspect(limit: 16)
+    def inspect(limit: 5)
       shape =
-        if @baseframe.is_a?(Enumerator)
-          "Enumerator::Lazy:size=#{@baseframe.size}"
+        if @baseframe.nil?
+          '(Not prepared)'
         else
           baseframe.shape_str(with_id: true)
         end
@@ -1079,13 +1115,50 @@ module RedAmber
         "---\n#{_to_s(limit: limit, with_id: true)}"
     end
 
-    private
-
-    def frames
-      @frames ||= @enum.to_a
+    # Return an Array of sub DataFrames
+    #
+    # @overload frames
+    #   Returns all sub dataframes.
+    #
+    #   @return [Array<DataFrame>]
+    #     sub DataFrames.
+    #
+    # @overload frames(n_frames)
+    #   Returns partial sub dataframes.
+    #
+    #   @param n_frames [Integer]
+    #     num of dataframes to retrieve.
+    #   @return [Array<DataFrame>]
+    #     sub DataFrames.
+    #
+    # @since 0.4.2
+    #
+    def frames(n_frames = nil)
+      if n_frames.nil?
+        @frames = take(size)
+      elsif @frames.size < n_frames
+        @frames = take(n_frames)
+      else
+        @frames
+      end
     end
 
-    def _to_s(limit: 16, with_id: false)
+    private
+
+    # Get sub dataframe specified by 'selector'
+    def get_subframe(selector)
+      df =
+        case @selectors
+        when Filters
+          @baseframe.filter(selector)
+        when Indices
+          @baseframe.take(selector)
+        end
+      DataFrame.new_dataframe_with_schema(@baseframe, df)
+    end
+
+    # Subcontractor of to_s
+    def _to_s(limit: 5, with_id: false)
       a = take(limit).map do |df|
         if with_id
           "#<#{df.shape_str(with_id: with_id)}>\n" \

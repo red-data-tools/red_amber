@@ -287,9 +287,7 @@ class DataFrameTest < Test::Unit::TestCase
           <uint8> <string> <boolean>
         0       4 B        (nil)
         ---
-                x y        z
-          <uint8> <string> <boolean>
-        0       6 C        false
+        + 1 more DataFrame.
       STR
     end
 

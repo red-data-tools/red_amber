@@ -104,47 +104,43 @@ class SubFranesTest < Test::Unit::TestCase
       assert_true sf.first.nil?
     end
 
-    test '.new empty specifier, nil' do
+    test '.new empty selector, nil' do
       sf = SubFrames.new(@df)
       assert_equal 0, sf.size
       assert_equal [], sf.sizes
       assert_true sf.first.nil?
     end
 
-    test '.new empty specifier, []' do
+    test '.new empty selector, []' do
       sf = SubFrames.new(@df, [])
       assert_equal 0, sf.size
       assert_equal [], sf.sizes
       assert_true sf.first.nil?
     end
 
-    test '.new empty specifier by a block, nil' do
+    test '.new empty selector by a block, nil' do
       sf = SubFrames.new(@df) { nil }
       assert_equal 0, sf.size
       assert_equal [], sf.sizes
       assert_true sf.first.nil?
     end
 
-    test '.new empty specifier by a block, []' do
+    test '.new empty selector by a block, []' do
       sf = SubFrames.new(@df) { [] }
       assert_equal 0, sf.size
       assert_equal [], sf.sizes
       assert_true sf.first.nil?
     end
 
-    test '.new illegal specifier' do
-      sf = SubFrames.new(@df, [%w[0 1]])
-      assert_kind_of Enumerator, sf.each
-      assert_raise(SubFramesArgumentError) { sf.first }
+    test '.new illegal selector' do
+      assert_raise(SubFramesArgumentError) { SubFrames.new(@df, [%w[0 1]]) }
     end
 
-    test '.new illegal specifier by a block' do
-      sf = SubFrames.new(@df) { [%w[0 1]] }
-      assert_kind_of Enumerator, sf.each
-      assert_raise(SubFramesArgumentError) { sf.first }
+    test '.new illegal selector by a block' do
+      assert_raise(SubFramesArgumentError) { SubFrames.new(@df) { [%w[0 1]] } }
     end
 
-    test '.new both specifier and block' do
+    test '.new both selector and block' do
       assert_raise(SubFramesArgumentError) { SubFrames.new(@df, [[0]]) { [[0]] } }
     end
 
@@ -257,6 +253,16 @@ class SubFranesTest < Test::Unit::TestCase
                 [[3, 'B', false], [4, 'B', nil], [5, 'B', true]],
                 [[6, 'C', false]]]
       assert_equal expect, @sf.each.with_object([]) { |df, a| a << df.to_a }
+    end
+
+    test '#each for stepwise iteration' do
+      sf = SubFrames.by_indices(@df, [[1], [1, 2]])
+      enum = sf.each
+      assert_kind_of Enumerator, enum
+      assert_equal 2, enum.size
+      first = sf.first
+      assert_equal first, enum.next
+      assert_equal first, sf.take(2).first
     end
   end
 
@@ -635,8 +641,8 @@ class SubFranesTest < Test::Unit::TestCase
     end
 
     test 'properties of SubFrames' do
-      specifier = [[0, 1], [2, 3, 4], [5]]
-      sf = SubFrames.new(@df, specifier)
+      selector = [[0, 1], [2, 3, 4], [5]]
+      sf = SubFrames.new(@df, selector)
       assert_equal 3, sf.size
       assert_equal [2, 3, 1], sf.sizes
       assert_equal [0, 2, 5], sf.offset_indices
@@ -645,13 +651,23 @@ class SubFranesTest < Test::Unit::TestCase
     end
 
     test 'properties of universal SubFrame' do
-      specifier = [[*0..5]]
-      universal = SubFrames.new(@df, specifier)
+      selector = [[*0..5]]
+      universal = SubFrames.new(@df, selector)
       assert_equal 1, universal.size
       assert_equal [6], universal.sizes
       assert_equal [0], universal.offset_indices
       assert_false universal.empty?
       assert_true universal.universal?
+    end
+
+    test 'proprties of Subframes from Filters' do
+      selector = [[false, true, true, nil, false, true]]
+      sf = SubFrames.new(@df, selector)
+      assert_equal 1, sf.size
+      assert_equal [3], sf.sizes
+      assert_equal [1], sf.offset_indices
+      assert_false sf.empty?
+      assert_false sf.universal?
     end
   end
 
@@ -719,7 +735,7 @@ class SubFranesTest < Test::Unit::TestCase
       enum = sf.each
       assert_equal <<~STR, sf.inspect
         #<RedAmber::SubFrames : #{format('0x%016x', sf.object_id)}>
-        @baseframe=#<Enumerator::Lazy:size=#{enum.size}>
+        @baseframe=#<(Not prepared)>
         3 SubFrames: [2, 3, 1] in sizes.
         ---
         #<RedAmber::DataFrame : 2 x 3 Vectors, #{format('0x%016x', enum.next.object_id)}>
@@ -787,6 +803,26 @@ class SubFranesTest < Test::Unit::TestCase
     test '#concatenate' do
       assert_kind_of DataFrame, @sf.concatenate
       assert_equal_array @df.to_a, @sf.concatenate
+    end
+  end
+
+  sub_test_case '#frames' do
+    setup do
+      @sf_frames = SubFrames.by_indices(@df, [[0], [0, 1], [0, 1, 2]])
+    end
+
+    test '#frames first' do
+      assert_equal [@sf_frames.first], @sf_frames.frames(1)
+    end
+
+    test '#frames second' do
+      expected = [@df[0], @df[0, 1]]
+      assert_equal expected, @sf_frames.frames(2)
+    end
+
+    test '#frames all' do
+      expected = [@df[0], @df[0, 1], @df[0, 1, 2]]
+      assert_equal expected, @sf_frames.frames
     end
   end
 end
