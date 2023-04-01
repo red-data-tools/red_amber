@@ -1135,9 +1135,9 @@ module RedAmber
     #
     def frames(n_frames = nil)
       if n_frames.nil?
-        @frames = take(size)
+        @frames = each.take(size)
       elsif @frames.size < n_frames
-        @frames = take(n_frames)
+        @frames = each.take(n_frames)
       else
         @frames
       end
@@ -1159,7 +1159,7 @@ module RedAmber
 
     # Subcontractor of to_s
     def _to_s(limit: 5, with_id: false)
-      a = take(limit).map do |df|
+      a = each.take(limit).map do |df|
         if with_id
           "#<#{df.shape_str(with_id: with_id)}>\n" \
             "#{df.to_s(head: 2, tail: 2)}"
