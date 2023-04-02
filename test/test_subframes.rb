@@ -629,6 +629,26 @@ class SubFranesTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#take' do
+    test '#take(0)' do
+      assert_true @sf.take(0).empty?
+    end
+
+    test '#take all' do
+      assert_equal @sf, @sf.take(@sf.size)
+      assert_equal @sf, @sf.take(@sf.size + 1)
+    end
+
+    test '#take(1)' do
+      assert_equal <<~STR, @sf.take(1).to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+      STR
+    end
+  end
+
   # Tests for #size, #sizes, #offset_indices, #empty? and #universal?
   sub_test_case 'properties' do
     test 'properties of empty SubFrame' do
@@ -808,21 +828,23 @@ class SubFranesTest < Test::Unit::TestCase
 
   sub_test_case '#frames' do
     setup do
-      @sf_frames = SubFrames.by_indices(@df, [[0], [0, 1], [0, 1, 2]])
+      @sf_frames = SubFrames.by_indices(@df, [[0, 1], [2, 3, 4], [5]])
     end
 
-    test '#frames first' do
-      assert_equal [@sf_frames.first], @sf_frames.frames(1)
+    test '#frames(0)' do
+      assert_equal [], @sf_frames.frames(0)
     end
 
-    test '#frames second' do
-      expected = [@df[0], @df[0, 1]]
-      assert_equal expected, @sf_frames.frames(2)
+    test '#frames(1)' do
+      expected = [@df[0, 1]]
+      assert_equal expected, @sf_frames.frames(1)
+      assert_equal [], @sf_frames.frames(0)
     end
 
     test '#frames all' do
-      expected = [@df[0], @df[0, 1], @df[0, 1, 2]]
+      expected = [@df[0, 1], @df[2, 3, 4], @df[5]]
       assert_equal expected, @sf_frames.frames
+      assert_equal [], @sf_frames.frames(0)
     end
   end
 end

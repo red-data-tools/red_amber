@@ -935,6 +935,26 @@ module RedAmber
     #
     define_subframable_method :filter_map
 
+    # Return 0...num sub-dataframes in self.
+    #
+    # @param num [Integer, Float]
+    #   num of sub-dataframes to pick up. `num`` must be positive or zero.
+    # @return [SubFrames]
+    #   A new SubFrames.
+    #   If n == 0, it returns empty SubFrames.
+    #   If n >= size, it returns self.
+    # @since 0.4.2
+    #
+    def take(num)
+      if num.zero?
+        SubFrames.new(DataFrame.new, [])
+      elsif num >= size
+        self
+      else
+        SubFrames.by_dataframes(frames(num))
+      end
+    end
+
     # Number of subsets.
     #
     # @return [Integer]
@@ -1134,12 +1154,12 @@ module RedAmber
     # @since 0.4.2
     #
     def frames(n_frames = nil)
-      if n_frames.nil?
-        @frames = take(size)
-      elsif @frames.size < n_frames
-        @frames = take(n_frames)
+      n_frames = size if n_frames.nil?
+
+      if @frames.size < n_frames
+        @frames = each.take(n_frames)
       else
-        @frames
+        @frames.take(n_frames)
       end
     end
 
@@ -1159,7 +1179,7 @@ module RedAmber
 
     # Subcontractor of to_s
     def _to_s(limit: 5, with_id: false)
-      a = take(limit).map do |df|
+      a = each.take(limit).map do |df|
         if with_id
           "#<#{df.shape_str(with_id: with_id)}>\n" \
             "#{df.to_s(head: 2, tail: 2)}"
