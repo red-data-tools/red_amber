@@ -11,13 +11,13 @@ Gem::Specification.new do |spec|
   spec.summary = 'Simple dataframe library for Ruby'
   spec.description = 'RedAmber is a simple dataframe library ' \
                      'inspired by Rover-df and powered by Red Arrow.'
-  spec.homepage = 'https://github.com/heronshoes/red_amber'
+  spec.homepage = 'https://github.com/red-data-tools/red_amber'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 3.0'
 
   spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://github.com/heronshoes/red_amber'
-  spec.metadata['changelog_uri'] = 'https://github.com/heronshoes/red_amber/blob/main/CHANGELOG.md'
+  spec.metadata['source_code_uri'] = 'https://github.com/red-data-tools/red_amber'
+  spec.metadata['changelog_uri'] = 'https://github.com/red-data-tools/red_amber/blob/main/CHANGELOG.md'
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
