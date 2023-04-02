@@ -629,6 +629,26 @@ class SubFranesTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#take' do
+    test '#take(0)' do
+      assert_true @sf.take(0).empty?
+    end
+
+    test '#take all' do
+      assert_equal @sf, @sf.take(@sf.size)
+      assert_equal @sf, @sf.take(@sf.size + 1)
+    end
+
+    test '#take(1)' do
+      assert_equal <<~STR, @sf.take(1).to_s
+                x y        z
+          <uint8> <string> <boolean>
+        0       1 A        false
+        1       2 A        true
+      STR
+    end
+  end
+
   # Tests for #size, #sizes, #offset_indices, #empty? and #universal?
   sub_test_case 'properties' do
     test 'properties of empty SubFrame' do
