@@ -808,21 +808,23 @@ class SubFranesTest < Test::Unit::TestCase
 
   sub_test_case '#frames' do
     setup do
-      @sf_frames = SubFrames.by_indices(@df, [[0], [0, 1], [0, 1, 2]])
+      @sf_frames = SubFrames.by_indices(@df, [[0, 1], [2, 3, 4], [5]])
     end
 
-    test '#frames first' do
-      assert_equal [@sf_frames.first], @sf_frames.frames(1)
+    test '#frames(0)' do
+      assert_equal [], @sf_frames.frames(0)
     end
 
-    test '#frames second' do
-      expected = [@df[0], @df[0, 1]]
-      assert_equal expected, @sf_frames.frames(2)
+    test '#frames(1)' do
+      expected = [@df[0, 1]]
+      assert_equal expected, @sf_frames.frames(1)
+      assert_equal [], @sf_frames.frames(0)
     end
 
     test '#frames all' do
-      expected = [@df[0], @df[0, 1], @df[0, 1, 2]]
+      expected = [@df[0, 1], @df[2, 3, 4], @df[5]]
       assert_equal expected, @sf_frames.frames
+      assert_equal [], @sf_frames.frames(0)
     end
   end
 end

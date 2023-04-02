@@ -1134,12 +1134,12 @@ module RedAmber
     # @since 0.4.2
     #
     def frames(n_frames = nil)
-      if n_frames.nil?
-        @frames = each.take(size)
-      elsif @frames.size < n_frames
+      n_frames = size if n_frames.nil?
+
+      if @frames.size < n_frames
         @frames = each.take(n_frames)
       else
-        @frames
+        @frames.take(n_frames)
       end
     end
 
