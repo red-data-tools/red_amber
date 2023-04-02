@@ -13,7 +13,7 @@ A simple dataframe library for Ruby.
 [![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en) [![Gem Version](https://img.shields.io/gem/v/red-arrow?color=brightgreen)](https://rubygems.org/gems/red-arrow)
 - Inspired by the dataframe library [Rover-df](https://github.com/ankane/rover)
 
-![screenshot from jupyterlab](https://raw.githubusercontent.comred-data-tools/red_amber/main/doc/image/screenshot.png)
+![screenshot from jupyterlab](https://raw.githubusercontent.com/red-data-tools/red_amber/main/doc/image/screenshot.png)
 
 ## Requirements
 ### Ruby
