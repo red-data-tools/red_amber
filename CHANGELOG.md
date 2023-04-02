@@ -1,3 +1,38 @@
+## [0.4.2] - 2023-04-02
+
+- Breaking change
+
+- Bug fixes
+ - Fix Vector#modulo, #fdiv, #remainder (#203)
+ 
+- New features and improvements
+  - Update SubFrames#take to return SubFrames (#212)
+
+- Refactoring
+  - Refine SubFrames to support partial retrieval (#207)
+  - Upgrade SubFrames#frames  and promote to public (#207)
+  - Use faster count in Group#inspect (#207)
+
+- Improve in tests/CI
+
+- Documentation and Example
+  - Introduce minimum docker environment (#205)
+  - Move example REPL to docker (#205)
+  - Add readme.md in docker (#205)
+  - Add example_of_red_amber.ipynb (#205)
+  - Use smaller dataset in irb example
+  - Fix docker/example
+  - Updated link to red-data-tools (#213)
+    - Thanks to Soumya Kushwaha
+
+- GitHub site
+  - Migrated to [Red Data Tools](https://github.com/red-data-tools)
+    - Thanks to Sutou Kouhei
+
+- Thanks
+  - Sutou Kouhei
+  - Soumya Kushwaha
+
 ## [0.4.1] - 2023-03-11
 
 - Breaking change
@@ -676,7 +711,7 @@
    -  Improve `DataFrame#[]`, `#slice`, `#remove` by a new engine
       -  It parses arguments to Vector internally.
       -  Used Kernel#Array to simplify code (#16) .
-    - recycle: Move `DataFrame#slice`, `#remove` to Selectable
+    - Move `DataFrame#slice`, `#remove` to Selectable
     - Refine `DataFrame#take`, `#filter` (undocumented)
 
   - Introduce coerce in Vector (#35)
