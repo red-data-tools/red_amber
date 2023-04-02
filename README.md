@@ -1,11 +1,11 @@
 # RedAmber
 
 [![Gem Version](https://img.shields.io/gem/v/red_amber?color=brightgreen)](https://rubygems.org/gems/red_amber)
-[![CI](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml/badge.svg)](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/maintainability)](https://codeclimate.com/github/heronshoes/red_amber/maintainability)
-[![Test coverage](https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/test_coverage)](https://codeclimate.com/github/heronshoes/red_amber/test_coverage)
+[![CI](https://github.com/heronshoes/red_amber/actions/workflows/ci.yml/badge.svg)](https://github.com/red-data-tools/red_amber/actions/workflows/ci.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/maintainability)](https://codeclimate.com/github/red-data-tools/red_amber/maintainability)
+[![Test coverage](https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/test_coverage)](https://codeclimate.com/github/red-data-tools/red_amber/test_coverage)
 [![Doc](https://img.shields.io/badge/docs-latest-blue)](https://heronshoes.github.io/red_amber/)
-[![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/heronshoes/red_amber/discussions)
+[![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/red-data-tools/red_amber/discussions)
 
 A simple dataframe library for Ruby.
 
@@ -13,12 +13,12 @@ A simple dataframe library for Ruby.
 [![Gitter Chat](https://badges.gitter.im/red-data-tools/en.svg)](https://gitter.im/red-data-tools/en) [![Gem Version](https://img.shields.io/gem/v/red-arrow?color=brightgreen)](https://rubygems.org/gems/red-arrow)
 - Inspired by the dataframe library [Rover-df](https://github.com/ankane/rover)
 
-![screenshot from jupyterlab](https://raw.githubusercontent.com/heronshoes/red_amber/main/doc/image/screenshot.png)
+![screenshot from jupyterlab](https://raw.githubusercontent.comred-data-tools/red_amber/main/doc/image/screenshot.png)
 
 ## Requirements
 ### Ruby
 Supported Ruby version is >= 3.0 (since RedAmber 0.3.0).
-- I decided to remove support for Ruby 2.7 without waiting for its EOL. See [Release note for v0.3.0](https://github.com/heronshoes/red_amber/discussions/162) for details.
+- I decided to remove support for Ruby 2.7 without waiting for its EOL. See [Release note for v0.3.0](https://github.com/red-data-tools/red_amber/discussions/162) for details.
 
 ### Libraries
 ```ruby
@@ -97,7 +97,7 @@ Julia [Dataframes](https://dataframes.juliadata.org/stable/) is in [DataFrame_Co
 Class `RedAmber::DataFrame` represents a set of data in 2D-shape.
 Its entity is a Red Arrow's Table object. 
 
-![dataframe model of RedAmber](https://raw.githubusercontent.com/heronshoes/red_amber/main/doc/image/dataframe_model.png)
+![dataframe model of RedAmber](https://raw.githubusercontent.com/red-data-tools/red_amber/main/doc/image/dataframe_model.png)
 
 Let's load the library and try some examples.
 
@@ -224,7 +224,7 @@ You can try this notebook on [Binder](https://mybinder.org/v2/gh/heronshoes/dock
 ## Development
 
 ```shell
-git clone https://github.com/heronshoes/red_amber.git
+git clone https://github.com/red-data-tools/red_amber.git
 cd red_amber
 bundle install
 bundle exec rake test
@@ -234,12 +234,12 @@ bundle exec rake test
 
 I will appreciate if you could help to improve this project. Here are a few ways you can help:
 
-- Let's talk in the [discussions](https://github.com/heronshoes/red_amber/discussions). [![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/heronshoes/red_amber/discussions)
+- Let's talk in the [discussions](https://github.com/heronshoes/red_amber/discussions). [![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/red-data-tools/red_amber/discussions)
   - Browse Q and A, how to use, tips, etc.
   - Ask questions you’re wondering about.
   - Share ideas. The idea may be promoted to issues or pull requests.
-- [Report bugs or suggest new features](https://github.com/heronshoes/red_amber/issues)
-- Fix bugs and [submit pull requests](https://github.com/heronshoes/red_amber/pulls)
+- [Report bugs or suggest new features](https://github.com/red-data-tools/red_amber/issues)
+- Fix bugs and [submit pull requests](https://github.com/red-data-tools/red_amber/pulls)
 - Write, clarify, or fix documentation
 
 ## License
