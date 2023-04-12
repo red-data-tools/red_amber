@@ -174,7 +174,7 @@ module RedAmber
     #   2 Gentoo            124
     #
     def group_count
-      DataFrame.create(add_columns_to_table(base_table, [:group_count], [group_counts]))
+      DataFrame.create(group_table)
     end
 
     # String representation of self.
@@ -186,14 +186,14 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::Group : 0x0000000000003a98>
-    #     species     count
-    #     <string>  <uint8>
-    #   0 Adelie        152
-    #   1 Chinstrap      68
-    #   2 Gentoo        124
+    #     species   group_count
+    #     <string>      <uint8>
+    #   0 Adelie            152
+    #   1 Chinstrap          68
+    #   2 Gentoo            124
     #
     def inspect
-      "#<#{self.class} : #{format('0x%016x', object_id)}>\n#{count(@group_keys)}"
+      "#<#{self.class} : #{format('0x%016x', object_id)}>\n#{group_count}"
     end
 
     # Summarize Group by aggregation functions from the block.
@@ -210,11 +210,11 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::Group : 0x000000000000c314>
-    #     species     count
-    #     <string>  <uint8>
-    #   0 Adelie        152
-    #   1 Chinstrap      68
-    #   2 Gentoo        124
+    #     species   group_count
+    #     <string>      <uint8>
+    #   0 Adelie            152
+    #   1 Chinstrap          68
+    #   2 Gentoo            124
     #
     #   group.summarize { mean(:bill_length_mm) }
     #
@@ -269,6 +269,51 @@ module RedAmber
     end
 
     private
+
+    def group_table
+      @group_table ||= build_aggregated_table
+    end
+
+    def build_aggregated_table
+      keys = @group_keys
+      key = keys[0]
+      table = @dataframe.table
+
+      plan = Arrow::ExecutePlan.new
+      source_node = plan.build_source_node(table)
+
+      aggregate_node =
+        plan.build_aggregate_node(
+          source_node,
+          { aggregations: [{ function: 'hash_count', input: key }], keys: keys }
+        )
+
+      null_count = Arrow::Function.find('is_null').execute([table[key]]).value.sum
+      expressions = keys.map { |k| Arrow::FieldExpression.new(k) }
+      count_field = Arrow::FieldExpression.new("count(#{key})")
+      if null_count.zero?
+        expressions << count_field
+      else
+        is_zero =
+          Arrow::CallExpression.new('equal', [count_field, Arrow::Int64Scalar.new(0)])
+        expressions <<
+          Arrow::CallExpression.new(
+            'if_else', [is_zero, Arrow::Int64Scalar.new(null_count), count_field]
+          )
+      end
+      options = Arrow::ProjectNodeOptions.new(expressions, keys << 'group_count')
+      project_node = plan.build_project_node(aggregate_node, options)
+
+      sink_node_options = Arrow::SinkNodeOptions.new
+      plan.build_sink_node(project_node, sink_node_options)
+      plan.validate
+      plan.start
+      plan.wait
+      reader = sink_node_options.get_reader(project_node.output_schema)
+      group = reader.read_all
+      plan.stop
+      group
+    end
 
     def build_aggregation_keys(function_name, summary_keys)
       if summary_keys.empty?

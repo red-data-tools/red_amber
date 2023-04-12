@@ -216,14 +216,25 @@ class GroupTest < Test::Unit::TestCase
     end
 
     test 'group_count' do
-      str = <<~STR
+      assert_equal <<~STR, @df.group(:i).group_count.tdr_str
         RedAmber::DataFrame : 4 x 2 Vectors
         Vectors : 2 numeric
         # key          type  level data_preview
         0 :i           uint8     4 [0, 1, 2, nil], 1 nil
-        1 :group_count uint8     2 {2=>2, 1=>2}
+        1 :group_count int64     2 {2=>2, 1=>2}
       STR
-      assert_equal str, @df.group(:i).group_count.tdr_str
+    end
+
+    test 'group_count w/o nil' do
+      dataframe = DataFrame.new(x: %w[A A B B B C])
+      group = Group.new(dataframe, :x)
+      assert_equal <<~STR, group.group_count.tdr_str
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 1 numeric, 1 string
+        # key          type   level data_preview
+        0 :x           string     3 ["A", "B", "C"]
+        1 :group_count int64      3 [2, 3, 1]
+      STR
     end
 
     test 'each' do
@@ -266,12 +277,12 @@ class GroupTest < Test::Unit::TestCase
       group = @df.group(:i)
       str = <<~STR
         #<RedAmber::Group : #{format('0x%016x', group.object_id)}>
-                i   count
-          <uint8> <int64>
-        0       0       2
-        1       1       1
-        2       2       2
-        3   (nil)       0
+                i group_count
+          <uint8>     <int64>
+        0       0           2
+        1       1           1
+        2       2           2
+        3   (nil)           1
       STR
       assert_equal str, group.inspect
     end
