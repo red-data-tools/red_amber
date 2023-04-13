@@ -281,11 +281,11 @@ class DataFrameTest < Test::Unit::TestCase
         ---
                 x y        z
           <uint8> <string> <boolean>
-        0       5 B        true
+        0       4 B        (nil)
         ---
                 x y        z
           <uint8> <string> <boolean>
-        0       4 B        (nil)
+        0       5 B        true
         ---
         + 1 more DataFrame.
       STR

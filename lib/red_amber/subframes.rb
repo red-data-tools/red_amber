@@ -93,7 +93,7 @@ module RedAmber
       # @since 0.4.0
       #
       def by_group(group)
-        SubFrames.new(group.dataframe, group.filters)
+        SubFrames.by_filters(group.dataframe, group.filters)
       end
 
       # Create a new SubFrames object from a DataFrame and an array of indices.
@@ -291,15 +291,15 @@ module RedAmber
         selectors = yield(dataframe)
       end
 
-      if dataframe.empty? || selectors.nil? || selectors.empty?
+      if dataframe.empty? || selectors.nil? || selectors.size.zero? # rubocop:disable Style/ZeroLengthPredicate
         @baseframe = DataFrame.new
         @selectors = Selectors.new([])
       else
         @baseframe = dataframe
         @selectors =
-          if selectors[0].boolean?
+          if selectors.first.boolean?
             Filters.new(selectors)
-          elsif selectors[0].numeric?
+          elsif selectors.first.numeric?
             Indices.new(selectors)
           else
             raise SubFramesArgumentError, "illegal type: #{selectors}"

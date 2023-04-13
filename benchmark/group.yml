@@ -7,12 +7,16 @@ contexts:
   - name: 0.3.0
     gems:
       red_amber: 0.3.0
+  - name: 0.4.2
+    gems:
+      red_amber: 0.4.2
   - name: HEAD
     prelude: |
       $LOAD_PATH.unshift(File.expand_path('lib'))
 
 prelude: |
   require 'red_amber'
+  include RedAmber
   require 'datasets-arrow'
 
   ds = Datasets::Rdatasets.new('nycflights13', 'flights')
@@ -37,3 +41,6 @@ benchmark:
 
   'G05: sum dep_delay, arr_delay by carrer': |
     df.group(:carrier).sum(:dep_delay, :arr_delay)
+  
+  'G06: inspect': |
+    Group.new(df, :dest).inspect

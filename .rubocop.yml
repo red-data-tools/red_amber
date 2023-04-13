@@ -87,6 +87,7 @@ Metrics/AbcSize:
     '[]', # 33.76
     'split', # 37.35
     'aggregate', # 38.13
+    'filter_table', # 31.11
   ]
 
 # Max: 25

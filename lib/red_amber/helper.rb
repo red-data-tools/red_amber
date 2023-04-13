@@ -78,6 +78,32 @@ module RedAmber
         Array(range)
       end
     end
+
+    # Create sink node and execute plan
+    #
+    # @param plan [Arrow::ExecutePlan]
+    #   Execute plan of Acero.
+    # @param node [Arrow::ExecuteNode]
+    #   Execute node of Acero.
+    # @param output_schema [Arrow::Schema, nil]
+    #   Schema of table to output. If it is nil, output_schema of
+    #   sink node is used.
+    # @return [Arrow::Table]
+    #   Result of plan.
+    # @since 0.5.0
+    #
+    def sink_and_start_plan(plan, node, output_schema: nil)
+      sink_node_options = Arrow::SinkNodeOptions.new
+      plan.build_sink_node(node, sink_node_options)
+      plan.validate
+      plan.start
+      plan.wait
+      output_schema = node.output_schema if output_schema.nil?
+      reader = sink_node_options.get_reader(output_schema)
+      table = reader.read_all
+      plan.stop
+      table
+    end
   end
 
   # rubocop:disable Layout/LineLength

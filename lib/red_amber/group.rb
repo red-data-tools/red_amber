@@ -4,6 +4,7 @@ module RedAmber
   # Group class
   class Group
     include Enumerable # This feature is experimental
+    include Helper
 
     using RefineArrowTable
 
@@ -114,15 +115,11 @@ module RedAmber
     #
     def filters
       @filters ||= begin
-        first, *others = @group_keys.map do |key|
-          vector = @dataframe[key]
-          vector.uniq.each.map { |u| u.nil? ? vector.is_nil : vector == u }
-        end
-
-        if others.empty?
-          first.select(&:any?)
-        else
-          first.product(*others).map { |a| a.reduce(&:&) }.select(&:any?)
+        df = DataFrame.create(filter_table).pick((@group_keys.size - 1)..)
+        Enumerator.new(df.n_keys) do |yielder|
+          df.vectors.each do |vector|
+            yielder << vector
+          end
         end
       end
     end
@@ -147,11 +144,10 @@ module RedAmber
     #     group size.
     #
     def each
-      filters
       return enum_for(:each) unless block_given?
 
-      @filters.each do |filter|
-        yield @dataframe[filter]
+      filters.each do |filter|
+        yield @dataframe.filter(filter)
       end
       @filters.size
     end
@@ -283,36 +279,76 @@ module RedAmber
       source_node = plan.build_source_node(table)
 
       aggregate_node =
-        plan.build_aggregate_node(
-          source_node,
-          { aggregations: [{ function: 'hash_count', input: key }], keys: keys }
-        )
-
-      null_count = Arrow::Function.find('is_null').execute([table[key]]).value.sum
+        plan.build_aggregate_node(source_node, {
+                                    aggregations: [{ function: 'hash_count',
+                                                     input: key }], keys: keys
+                                  })
       expressions = keys.map { |k| Arrow::FieldExpression.new(k) }
+      null_count = Arrow::Function.find('is_null').execute([table[key]]).value.sum
       count_field = Arrow::FieldExpression.new("count(#{key})")
       if null_count.zero?
         expressions << count_field
       else
         is_zero =
           Arrow::CallExpression.new('equal', [count_field, Arrow::Int64Scalar.new(0)])
+        null_count_scalar = Arrow::Int64Scalar.new(null_count)
         expressions <<
-          Arrow::CallExpression.new(
-            'if_else', [is_zero, Arrow::Int64Scalar.new(null_count), count_field]
-          )
+          Arrow::CallExpression.new('if_else', [
+                                      is_zero, null_count_scalar, count_field
+                                    ])
       end
       options = Arrow::ProjectNodeOptions.new(expressions, keys << 'group_count')
       project_node = plan.build_project_node(aggregate_node, options)
 
-      sink_node_options = Arrow::SinkNodeOptions.new
-      plan.build_sink_node(project_node, sink_node_options)
-      plan.validate
-      plan.start
-      plan.wait
-      reader = sink_node_options.get_reader(project_node.output_schema)
-      group = reader.read_all
-      plan.stop
-      group
+      sink_and_start_plan(plan, project_node)
+    end
+
+    def call_equal_expression(key, value)
+      if value.nil?
+        Arrow::CallExpression.new('is_null', [Arrow::FieldExpression.new(key)])
+      elsif value.is_a?(Float) && value.nan?
+        is_nan =
+          Arrow::CallExpression.new('is_nan', [Arrow::FieldExpression.new(key)])
+        is_null = Arrow::CallExpression.new('is_null', [is_nan])
+        Arrow::CallExpression.new('if_else', [
+                                    is_null, Arrow::BooleanScalar.new(false), is_nan
+                                  ])
+      else
+        datum = Arrow::Datum.try_convert(value)
+        equal =
+          Arrow::CallExpression.new('equal', [
+                                      Arrow::FieldExpression.new(key),
+                                      Arrow::LiteralExpression.new(datum),
+                                    ])
+        is_null = Arrow::CallExpression.new('is_null', [equal])
+        Arrow::CallExpression.new('if_else', [
+                                    is_null, Arrow::BooleanScalar.new(false), equal
+                                  ])
+      end
+    end
+
+    def filter_table
+      # Omit column `group_count` in group_table.
+      keys = group_table.column_names[..-2]
+      group_values = group_table.each_record.map { |record| record.to_a[..-2] }
+
+      plan = Arrow::ExecutePlan.new
+      source_node_options = Arrow::SourceNodeOptions.new(@dataframe.table)
+      source_node = plan.build_source_node(source_node_options)
+
+      expressions = keys.map { |key| Arrow::FieldExpression.new(key) }
+      group_values.each do |values|
+        expressions <<
+          values
+            .map.with_index { |value, i| call_equal_expression(keys[i], value) }
+            .reduce { |r, e| Arrow::CallExpression.new('and_kleene', [r, e]) }
+      end
+
+      group_values.each.with_index { |_, i| keys << "filter#{i}" }
+      options = Arrow::ProjectNodeOptions.new(expressions, keys)
+      project_node = plan.build_project_node(source_node, options)
+
+      sink_and_start_plan(plan, project_node)
     end
 
     def build_aggregation_keys(function_name, summary_keys)
@@ -321,31 +357,6 @@ module RedAmber
       else
         summary_keys.map { |key| "#{function_name}(#{key})" }
       end
-    end
-
-    # @note `@group_counts.sum == @dataframe.size``
-    def group_counts
-      @group_counts ||= filters.map(&:sum)
-    end
-
-    def base_table
-      @base_table ||= begin
-        indexes = filters.map { |filter| filter.index(true) }
-        @dataframe.table[@group_keys].take(indexes)
-      end
-    end
-
-    def add_columns_to_table(table, keys, data_arrays)
-      fields = table.schema.fields
-      arrays = table.columns.map(&:data)
-
-      keys.zip(data_arrays).each do |key, array|
-        data = Arrow::ChunkedArray.new([array])
-        fields << Arrow::Field.new(key, data.value_data_type)
-        arrays << data
-      end
-
-      Arrow::Table.new(Arrow::Schema.new(fields), arrays)
     end
 
     # Call Vector aggregating function and return an array of arrays:

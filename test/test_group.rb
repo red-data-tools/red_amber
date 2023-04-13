@@ -193,21 +193,23 @@ class GroupTest < Test::Unit::TestCase
 
     test 'filters by a key' do
       expect = [
-        [true,  true,  false, false, false, nil],
-        [false, false, true,  false, false, nil],
-        [false, false, false, true,  true,  nil],
+        [true,  false, false, false, false, false],
+        [false, true,  false, false, false, false],
+        [false, false, false, true,  false, false],
+        [false, false, true,  false, false, false],
+        [false, false, false, false, true,  false],
         [false, false, false, false, false, true],
       ]
-      assert_equal expect, @df.group(:i).filters.map(&:to_a)
-      assert_true @df.group(:i).filters.all?(Vector)
+      assert_equal expect, @df.group(:f).filters.map(&:to_a)
+      assert_true @df.group(:f).filters.all?(Vector)
     end
 
     test 'filters by multiple keys' do
       expect = [
-        [true, false, false, false, false, nil],
+        [true, false, false, false, false, false],
         [false, true, false, false, false, false],
         [false, false, true, false, false, false],
-        [false, false, false, true, false, nil],
+        [false, false, false, true, false, false],
         [false, false, false, false, true, false],
         [false, false, false, false, false, true],
       ]
