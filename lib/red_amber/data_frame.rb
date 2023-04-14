@@ -458,6 +458,7 @@ module RedAmber
       SubFrames.new(self, group(keys.flatten).filters)
     end
     alias_method :subframes_by_value, :sub_by_value
+    alias_method :sub_group, :sub_by_value
 
     # Create SubFrames by Windowing with `from`, `size` and `step`.
     #
