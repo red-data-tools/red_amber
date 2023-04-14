@@ -13,18 +13,50 @@ module RedAmber
 
     using RefineArrayLike
 
-    # Quicker constructor of Vector.
+    # Entity of Vector.
     #
-    # @param arrow_array [Arrow::Array]
-    #   Arrow::Array object to have in the Vector.
-    # @return [Vector]
-    #   created Vector.
-    # @note This method doesn't check argment type.
+    # @return [Arrow::Array]
     #
-    def self.create(arrow_array)
-      instance = allocate
-      instance.instance_variable_set(:@data, arrow_array)
-      instance
+    attr_reader :data
+    alias_method :to_arrow_array, :data
+
+    # Associated key name when self is in a DataFrame.
+    #
+    # Default Vector is 'head-less' (key-less).
+    # @return [Symbol]
+    #
+    attr_accessor :key
+
+    class << self
+      # Create a Vector (calling `.new`).
+      #
+      # @param (see #initialize)
+      # @return (see #initialize)
+      # @example Create an empty Vector.
+      #   Vector[]
+      #   # =>
+      #   #<RedAmber::Vector(:string, size=0):0x000000000000e2cc>
+      #   []
+      #
+      # @since 0.5.0
+      #
+      def [](...)
+        new(...)
+      end
+
+      # Quicker constructor of Vector.
+      #
+      # @param arrow_array [Arrow::Array]
+      #   Arrow::Array object to have in the Vector.
+      # @return [Vector]
+      #   created Vector.
+      # @note This method doesn't check argment type.
+      #
+      def create(arrow_array)
+        instance = allocate
+        instance.instance_variable_set(:@data, arrow_array)
+        instance
+      end
     end
 
     # Create a Vector.
@@ -50,20 +82,6 @@ module RedAmber
           Arrow::Array.new(array.flatten)
         end
     end
-
-    # Entity of Vector.
-    #
-    # @return [Arrow::Array]
-    #
-    attr_reader :data
-    alias_method :to_arrow_array, :data
-
-    # Associated key name when self is in a DataFrame.
-    #
-    # Default Vector is 'head-less' (key-less).
-    # @return [Symbol]
-    #
-    attr_accessor :key
 
     # Return other as a Vector which is same data type as self.
     #
