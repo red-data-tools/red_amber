@@ -422,12 +422,12 @@ module RedAmber
     # Create SubFrames by value grouping.
     #
     # [Experimental feature] this method may be removed or be changed in the future.
-    # @param keys [Symbol, String, Array<Symbol, String>]
+    # @param keys [List<Symbol, String>, Array<Symbol, String>]
     #   grouping keys.
     # @return [SubFrames]
     #   a created SubFrames grouped by column values on `keys`.
     # @example
-    #   df.sub_by_value(keys: :y)
+    #   df.sub_by_value(:y)
     #
     #   # =>
     #   #<RedAmber::SubFrames : 0x000000000000fc08>
@@ -454,8 +454,8 @@ module RedAmber
     #
     # @since 0.4.0
     #
-    def sub_by_value(keys: nil)
-      SubFrames.new(self, group(keys).filters)
+    def sub_by_value(*keys)
+      SubFrames.new(self, group(keys.flatten).filters)
     end
     alias_method :subframes_by_value, :sub_by_value
 
