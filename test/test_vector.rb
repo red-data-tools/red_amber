@@ -55,6 +55,28 @@ class VectorTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case 'Vector[]' do
+    test 'Vector[] by empty array' do
+      assert_equal_array [], Vector[[]]
+      assert_equal_array [], Vector[]
+    end
+
+    test 'Vector[] by arrays including nils' do
+      assert_equal_array [nil], Vector[nil]
+      assert_equal_array [nil, nil], Vector[nil, nil]
+    end
+
+    test 'Vector[] by an Array' do
+      array = [1, 2, 3]
+      assert_equal_array array, Vector[array]
+    end
+
+    test 'Vector[] by an expanded Array' do
+      array = [1, 2, 3]
+      assert_equal_array array, Vector[*array]
+    end
+  end
+
   sub_test_case '#resolve' do
     test '#resolve integer upcast' do
       assert_equal :uint16, Vector.new(256).resolve([1]).type
