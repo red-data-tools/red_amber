@@ -267,7 +267,12 @@ module RedAmber
       when DataFrame
         agg
       when Array
-        agg.reduce { |aggregated, df| aggregated.assign(df.to_h) }
+        aggregations =
+          agg.map do |df|
+            v = df.vectors[-1]
+            [v.key, v]
+          end
+        agg[0].assign(aggregations)
       else
         raise GroupArgumentError, "Unknown argument: #{agg}"
       end
