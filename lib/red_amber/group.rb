@@ -115,10 +115,27 @@ module RedAmber
     #
     def filters
       @filters ||= begin
-        df = DataFrame.create(filter_table).pick((@group_keys.size - 1)..)
-        Enumerator.new(df.n_keys) do |yielder|
-          df.vectors.each do |vector|
-            yielder << vector
+        keys = group_table.column_names[..-2]
+        group_values = group_table.each_record.map { |record| record.to_a[..-2] }
+
+        Enumerator.new(group_table.n_rows) do |yielder|
+          group_values.each do |values|
+            booleans =
+              values.map.with_index do |value, i|
+                column = @dataframe[keys[i]].data
+                if value.nil?
+                  Arrow::Function.find('is_null').execute([column])
+                elsif value.is_a?(Float) && value.nan?
+                  Arrow::Function.find('is_nan').execute([column])
+                else
+                  Arrow::Function.find('equal').execute([column, value])
+                end
+              end
+            filter =
+              booleans.reduce do |result, datum|
+                Arrow::Function.find('and_kleene').execute([result, datum])
+              end
+            yielder << Vector.create(filter.value)
           end
         end
       end
@@ -299,54 +316,6 @@ module RedAmber
       end
       options = Arrow::ProjectNodeOptions.new(expressions, keys << 'group_count')
       project_node = plan.build_project_node(aggregate_node, options)
-
-      sink_and_start_plan(plan, project_node)
-    end
-
-    def call_equal_expression(key, value)
-      if value.nil?
-        Arrow::CallExpression.new('is_null', [Arrow::FieldExpression.new(key)])
-      elsif value.is_a?(Float) && value.nan?
-        is_nan =
-          Arrow::CallExpression.new('is_nan', [Arrow::FieldExpression.new(key)])
-        is_null = Arrow::CallExpression.new('is_null', [is_nan])
-        Arrow::CallExpression.new('if_else', [
-                                    is_null, Arrow::BooleanScalar.new(false), is_nan
-                                  ])
-      else
-        datum = Arrow::Datum.try_convert(value)
-        equal =
-          Arrow::CallExpression.new('equal', [
-                                      Arrow::FieldExpression.new(key),
-                                      Arrow::LiteralExpression.new(datum),
-                                    ])
-        is_null = Arrow::CallExpression.new('is_null', [equal])
-        Arrow::CallExpression.new('if_else', [
-                                    is_null, Arrow::BooleanScalar.new(false), equal
-                                  ])
-      end
-    end
-
-    def filter_table
-      # Omit column `group_count` in group_table.
-      keys = group_table.column_names[..-2]
-      group_values = group_table.each_record.map { |record| record.to_a[..-2] }
-
-      plan = Arrow::ExecutePlan.new
-      source_node_options = Arrow::SourceNodeOptions.new(@dataframe.table)
-      source_node = plan.build_source_node(source_node_options)
-
-      expressions = keys.map { |key| Arrow::FieldExpression.new(key) }
-      group_values.each do |values|
-        expressions <<
-          values
-            .map.with_index { |value, i| call_equal_expression(keys[i], value) }
-            .reduce { |r, e| Arrow::CallExpression.new('and_kleene', [r, e]) }
-      end
-
-      group_values.each.with_index { |_, i| keys << "filter#{i}" }
-      options = Arrow::ProjectNodeOptions.new(expressions, keys)
-      project_node = plan.build_project_node(source_node, options)
 
       sink_and_start_plan(plan, project_node)
     end
