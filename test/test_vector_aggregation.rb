@@ -192,6 +192,18 @@ class VectorFunctionTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#one' do
+    test 'one' do
+      vector = Vector.new([nil, 1, 3])
+      assert_equal 1, vector.one
+    end
+
+    test 'one for nils' do
+      vector = Vector.new([nil, nil, nil])
+      assert_nil vector.one
+    end
+  end
+
   sub_test_case 'Quantile' do
     setup do
       @boolean = Vector.new([true, true, nil])
