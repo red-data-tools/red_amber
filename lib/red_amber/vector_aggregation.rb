@@ -241,6 +241,16 @@ module RedAmber
     #     - nearest: returns i or j, whichever is closer.
     #     - midpoint: returns (i + j) / 2.
 
+    # Get a non-nil element in self.
+    #
+    # @return [Object, nil]
+    #   first non-nil value detected. If all elements are nil, return nil.
+    # @since 0.5.0
+    #
+    def one
+      each.find { !_1.nil? }
+    end
+
     # Returns a quantile value.
     # - 0.5 quantile (median) is returned by default.
     # - Or return quantile for specified probability (prob).
