@@ -109,6 +109,13 @@ class VectorTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case('fill_nil') do
+    test 'fill_nil(0)' do
+      vec = Vector.new([1, 2, nil])
+      assert_equal_array [1, 2, 0], vec.fill_nil(0)
+    end
+  end
+
   sub_test_case('Ternary function #if_else') do
     setup do
       @empty = Vector.new([])

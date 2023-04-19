@@ -184,6 +184,8 @@ module RedAmber
     #
     # Propagate next valid value backward to previous nil values.
     # Or nothing if all next values are nil.
+    # @note Use `fill_nil(value)` to replace nil by a value.
+    # @see #fill_nil
     # @return [Vector]
     #   a Vector which filled nil backward.
     # @example
@@ -201,6 +203,8 @@ module RedAmber
     #
     # Propagate last valid value backward to next nil values.
     # Or nothing if all previous values are nil.
+    # @note Use `fill_nil(value)` to replace nil by a value.
+    # @see #fill_nil
     # @return [Vector]
     #   a Vector which filled nil forward.
     # @example

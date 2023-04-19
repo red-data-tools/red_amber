@@ -149,6 +149,22 @@ module RedAmber
       replace_with(booleans.data, replacer_array)
     end
 
+    # Replace nil to value.
+    #
+    # @note Use `fill_nil_backawrd` or `fill_nil_forward` to replace nil
+    #   by adjacent values.
+    # @see #fill_nil_backward
+    # @see #fill_nil_forward
+    # @param value [scalar]
+    #   the value to replace with.
+    # @return [Vector]
+    #   replaced Vector
+    # @since 0.5.0
+    #
+    def fill_nil(value)
+      is_nil.if_else(value, self)
+    end
+
     # Choose values based on self.
     #
     # [Ternary element-wise function] Returns a Vector.
