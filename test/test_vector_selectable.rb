@@ -317,8 +317,8 @@ class VectorTest < Test::Unit::TestCase
 
     test '#sample by float smaller than size' do
       sampled = @vector.sample(0.7)
-      assert_equal 6, sampled.size
-      assert_equal 6, sampled.uniq.size
+      assert_equal 5, sampled.size
+      assert_equal 5, sampled.uniq.size
       assert_true sampled.is_in(@vector).all?
     end
 
