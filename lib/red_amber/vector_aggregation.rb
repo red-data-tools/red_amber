@@ -161,6 +161,22 @@ module RedAmber
     #
     define_unary_aggregation :min_max
 
+    # Compute the 1 most common values and their respective
+    #   occurence counts.
+    #
+    # @note Self must be a numeric or a boolean Vector.
+    # @note ModeOptions are not supported in 0.5.0 .
+    #   Only one mode value is returned.
+    # @api private
+    # @return [Hash{'mode'=>mode, 'count'=>count}]
+    #    mode and count of self in an array.
+    # @since 0.5.0
+    #
+    def mode
+      datum = find(:mode).execute([data])
+      datum.value.to_a.first
+    end
+
     # Compute product value of self.
     #
     # @note Self must be a numeric Vector.

@@ -133,6 +133,14 @@ class VectorFunctionTest < Test::Unit::TestCase
       assert_equal %w[null null], @string2.min_max(skip_nulls: false)
     end
 
+    test '#mode' do
+      assert_equal({ 'mode' => true, 'count' => 2 }, @boolean.mode)
+      assert_equal({ 'mode' => 1, 'count' => 1 }, @integer.mode)
+      assert_equal({ 'mode' => -2.0, 'count' => 1 }, @double.mode)
+      assert_equal({ 'mode' => -Float::INFINITY, 'count' => 1 }, @double2.mode)
+      assert_raise(Arrow::Error::NotImplemented) { @string.mode }
+    end
+
     test '#product' do
       assert_equal 1, @boolean.product
       assert_equal 0, @boolean.product(skip_nulls: false)
