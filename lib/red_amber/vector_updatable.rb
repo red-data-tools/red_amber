@@ -449,6 +449,18 @@ module RedAmber
     end
     alias_method :concat, :concatenate
 
+    # Cast self to `type`.
+    #
+    # @param type [symbol]
+    #   type to cast.
+    # @return [Vector]
+    #   casted Vector.
+    # @since 0.5.0
+    #
+    def cast(type)
+      Vector.create(data.cast(type))
+    end
+
     private
 
     # Replace elements selected with a boolean mask

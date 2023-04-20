@@ -376,4 +376,38 @@ class VectorTest < Test::Unit::TestCase
       assert_equal_array [1, 2, 3, 4], @integer.concatenate(Vector.new([3, 4]))
     end
   end
+
+  sub_test_case '#cast' do
+    setup do
+      @vector = Vector.new(1, 2, nil)
+    end
+
+    test '#cast(:int32)' do
+      vector = @vector.cast(:int32)
+      assert_equal :int32, vector.type
+      assert_equal_array [1, 2, nil], vector
+    end
+
+    test '#cast(:int64)' do
+      vector = @vector.cast(:int64)
+      assert_equal :int64, vector.type
+      assert_equal_array [1, 2, nil], vector
+    end
+
+    test '#cast(:double)' do
+      vector = @vector.cast(:double)
+      assert_equal :double, vector.type
+      assert_equal_array [1.0, 2.0, nil], vector
+    end
+
+    test '#cast(:string)' do
+      vector = @vector.cast(:string)
+      assert_equal :string, vector.type
+      assert_equal_array ['1', '2', nil], vector
+    end
+
+    test '#cast unsupported type' do
+      assert_raise(TypeError) { @vector.cast(:list) }
+    end
+  end
 end
