@@ -355,6 +355,14 @@ module RedAmber
     #     #<RedAmber::Vector(:string, size=16):0x00000000000233e8>
     #     ["H", "B", "C", "B", "C", "A", "F", "A", "E", "C", "H", "F", "F", "A", ... ]
     #
+    #   @example prop less than 1.0
+    #     v.sample(0.7)
+    #
+    #     # =>
+    #     # Take (8 * 0.7).truncate => 5 samples
+    #     #<RedAmber::Vector(:string, size=5):0x000000000001afe0>
+    #     ["C", "A", "E", "H", "D"]
+    #
     # @since 0.4.0
     #
     def sample(n_or_prop = nil)
@@ -367,7 +375,7 @@ module RedAmber
         in Integer
           n_or_prop
         in Float
-          (n_or_prop * size).round
+          (n_or_prop * size).truncate
         in nil
           return to_a.sample
         else

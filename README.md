@@ -24,7 +24,8 @@ Supported Ruby version is >= 3.0 (since RedAmber 0.3.0).
 ```ruby
 gem 'red-arrow',   '~> 11.0.0' # Requires Apache Arrow (see installation below)
 gem 'red-parquet', '~> 11.0.0' # Optional, if you use IO from/to parquet
-gem 'rover-df',    '~> 0.3.0' # Optional, if you use IO from/to Rover::DataFrame
+gem 'red-datasets-arrow'       # Optional, if you use random sampling
+gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFrame
 ```
 
 ## Installation
