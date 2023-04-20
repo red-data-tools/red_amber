@@ -20,6 +20,7 @@ module RedAmber
         @sizes = []
       end
 
+      # Generic iterator method
       def each
         @selectors.each
       end
@@ -27,14 +28,20 @@ module RedAmber
 
     # Boolean selectors of sub-dataframes
     class Filters < Selectors
+      # Return sizes of filter
+      # @return [Array<Integer>]
+      #   sizes of each sub dataframes.
+      #   Counts true for each filter.
       def sizes
-        # count true
         @sizes = @selectors.map { |s| s.to_a.count { _1 } } # rubocop:disable Performance/Size
       end
     end
 
     # Index selectors of sub-dataframes
     class Indices < Selectors
+      # Return sizes of selector indices.
+      # @return [Array<Integer>]
+      #   sizes of each sub dataframes.
       def sizes
         @sizes = @selectors.map(&:size)
       end
