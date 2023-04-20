@@ -211,58 +211,105 @@ module RedAmber
 
     # Summarize Group by aggregation functions from the block.
     #
-    # @yieldparam group [Group]
-    #   passes group object self.
-    # @yieldreturn [DataFrame, Array<DataFrame>]
-    #   an aggregated DataFrame or an array of aggregated DataFrames.
-    # @return [DataFrame]
-    #   summarized DataFrame.
-    # @example Single function and single variable
-    #   group = penguins.group(:species)
-    #   group
+    # @overload summarize
+    #   Summarize by a function.
+    #   @yieldparam group [Group]
+    #     passes group object self.
+    #   @yieldreturn [DataFrame]
+    #   @yieldreturn [DataFrame, Array<DataFrame>, Hash{Symbol, String => DataFrame}]
+    #     an aggregated DataFrame or an array of aggregated DataFrames.
+    #   @return [DataFrame]
+    #     summarized DataFrame.
+    #   @example Single function and single variable
+    #     group = penguins.group(:species)
+    #     group
     #
-    #   # =>
-    #   #<RedAmber::Group : 0x000000000000c314>
-    #     species   group_count
-    #     <string>      <uint8>
-    #   0 Adelie            152
-    #   1 Chinstrap          68
-    #   2 Gentoo            124
+    #     # =>
+    #     #<RedAmber::Group : 0x000000000000c314>
+    #       species   group_count
+    #       <string>      <uint8>
+    #     0 Adelie            152
+    #     1 Chinstrap          68
+    #     2 Gentoo            124
     #
-    #   group.summarize { mean(:bill_length_mm) }
+    #     group.summarize { mean(:bill_length_mm) }
     #
-    #   # =>
-    #   #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000c364>
-    #     species   mean(bill_length_mm)
-    #     <string>              <double>
-    #   0 Adelie                   38.79
-    #   1 Chinstrap                48.83
-    #   2 Gentoo                    47.5
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000c364>
+    #       species   mean(bill_length_mm)
+    #       <string>              <double>
+    #     0 Adelie                   38.79
+    #     1 Chinstrap                48.83
+    #     2 Gentoo                    47.5
     #
-    # @example Single function only
-    #   group.summarize { mean }
+    #   @example Single function only
+    #     group.summarize { mean }
     #
-    #   # =>
-    #   #<RedAmber::DataFrame : 3 x 6 Vectors, 0x000000000000c350>
-    #     species   mean(bill_length_mm) mean(bill_depth_mm) ... mean(year)
-    #     <string>              <double>            <double> ...   <double>
-    #   0 Adelie                   38.79               18.35 ...    2008.01
-    #   1 Chinstrap                48.83               18.42 ...    2007.97
-    #   2 Gentoo                    47.5               14.98 ...    2008.08
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 6 Vectors, 0x000000000000c350>
+    #       species   mean(bill_length_mm) mean(bill_depth_mm) ... mean(year)
+    #       <string>              <double>            <double> ...   <double>
+    #     0 Adelie                   38.79               18.35 ...    2008.01
+    #     1 Chinstrap                48.83               18.42 ...    2007.97
+    #     2 Gentoo                    47.5               14.98 ...    2008.08
     #
-    # @example Multiple functions
-    #   group.summarize { [min(:bill_length_mm), max(:bill_length_mm)] }
+    # @overload summarize
+    #   Summarize by a function.
     #
-    #   # =>
-    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000c378>
-    #     species   min(bill_length_mm) max(bill_length_mm)
-    #     <string>             <double>            <double>
-    #   0 Adelie                   32.1                46.0
-    #   1 Chinstrap                40.9                58.0
-    #   2 Gentoo                   40.9                59.6
+    #   @yieldparam group [Group]
+    #     passes group object self.
+    #   @yieldreturn [Array<DataFrame>]
+    #     an aggregated DataFrame or an array of aggregated DataFrames.
+    #   @return [DataFrame]
+    #     summarized DataFrame.
+    #   @example Multiple functions
+    #     group.summarize { [min(:bill_length_mm), max(:bill_length_mm)] }
     #
-    def summarize(&block)
-      agg = instance_eval(&block)
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000c378>
+    #       species   min(bill_length_mm) max(bill_length_mm)
+    #       <string>             <double>            <double>
+    #     0 Adelie                   32.1                46.0
+    #     1 Chinstrap                40.9                58.0
+    #     2 Gentoo                   40.9                59.6
+    #
+    # @overload summarize
+    #   Summarize by a function.
+    #
+    #   @yieldparam group [Group]
+    #     passes group object self.
+    #   @yieldreturn [Hash{Symbol, String => DataFrame}]
+    #     an aggregated DataFrame or an array of aggregated DataFrames.
+    #     The DataFrame must return only one aggregated column.
+    #   @return [DataFrame]
+    #     summarized DataFrame.
+    #   @example Rename column name by Hash
+    #     group.summarize {
+    #       {
+    #         min_bill_length_mm: min(:bill_length_mm),
+    #         max_bill_length_mm: max(:bill_length_mm),
+    #       }
+    #     }
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000c378>
+    #       species   min_bill_length_mm max_bill_length_mm
+    #       <string>            <double>           <double>
+    #     0 Adelie                  32.1               46.0
+    #     1 Chinstrap               40.9               58.0
+    #     2 Gentoo                  40.9               59.6
+    #
+    def summarize(*args, &block)
+      if block
+        agg = instance_eval(&block)
+        unless args.empty?
+          agg = [agg] if agg.is_a?(DataFrame)
+          agg = args.zip(agg).to_h
+        end
+      else
+        agg = args
+      end
+
       case agg
       when DataFrame
         agg
@@ -273,6 +320,20 @@ module RedAmber
             [v.key, v]
           end
         agg[0].assign(aggregations)
+      when Hash
+        aggregations =
+          agg.map do |key, df|
+            aggregated_keys = df.keys - @group_keys
+            if aggregated_keys.size > 1
+              message =
+                "accept only one column from the Hash: #{aggregated_keys.join(', ')}"
+              raise GroupArgumentError, message
+            end
+
+            v = df.vectors[-1]
+            [key, v]
+          end
+        agg.values[-1].drop(-1).assign(aggregations)
       else
         raise GroupArgumentError, "Unknown argument: #{agg}"
       end

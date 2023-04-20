@@ -161,7 +161,6 @@ class GroupTest < Test::Unit::TestCase
         1 :count int64     3 [2, 1, 2, 0]
       OUTPUT
       assert_equal str, @df.group(:i) { count(:i, :f, :b) }.tdr_str(tally: 0)
-      assert_equal str, @df.group(:i).summarize { count(:i, :f, :b) }.tdr_str(tally: 0)
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 4 x 3 Vectors
@@ -172,7 +171,6 @@ class GroupTest < Test::Unit::TestCase
         2 :"sum(f)" double     4 [1.1, 2.2, NaN, nil], 1 NaN, 1 nil
       OUTPUT
       assert_equal str, @df.group(:i) { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
-      assert_equal str, @df.group(:i).summarize { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
     end
 
     test 'count with not a key of self' do
@@ -287,6 +285,98 @@ class GroupTest < Test::Unit::TestCase
         3   (nil)           1
       STR
       assert_equal str, group.inspect
+    end
+
+    test 'summarize { func(key) }' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 1 numeric, 1 string
+        # key       type   level data_preview
+        0 :s        string     3 ["A", "B", nil], 1 nil
+        1 :"sum(f)" double     3 [3.3, NaN, 2.2], 1 NaN
+      STR
+      assert_equal str, group.summarize { sum(:f) }.tdr_str
+    end
+
+    test 'summarize { Array }' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 3 numeric, 1 string
+        # key       type   level data_preview
+        0 :s        string     3 ["A", "B", nil], 1 nil
+        1 :"sum(i)" uint64     2 [2, 2, 1]
+        2 :"sum(f)" double     3 [3.3, NaN, 2.2], 1 NaN
+        3 :count    uint8      2 [2, 2, 1]
+      STR
+      assert_equal str, group.summarize { [sum, count] }.tdr_str(tally: 0)
+    end
+
+    test 'summarize { Hash }' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 3 numeric, 1 string
+        # key    type   level data_preview
+        0 :s     string     3 ["A", "B", nil], 1 nil
+        1 :sum_i uint8      2 [2, 2, 1]
+        2 :sum_f double     3 [3.3, NaN, 2.2], 1 NaN
+        3 :count uint8      2 [2, 2, 1]
+      STR
+      assert_equal str, group.summarize {
+                          { sum_i: sum(:i), sum_f: sum(:f), count: count }
+                        }.tdr_str(tally: 0)
+    end
+
+    test 'summarize(arg) { arg }' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 1 numeric, 1 string
+        # key    type   level data_preview
+        0 :s     string     3 ["A", "B", nil], 1 nil
+        1 :sum_i uint8      2 [2, 2, 1]
+      STR
+      assert_equal str, group.summarize(:sum_i) {
+                          sum(:i)
+                        }.tdr_str(tally: 0)
+      assert_equal str, group.summarize(:sum_i) {
+                          [sum(:i)]
+                        }.tdr_str(tally: 0)
+    end
+
+    test 'summarize(args) { args }' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 string
+        # key    type   level data_preview
+        0 :s     string     3 ["A", "B", nil], 1 nil
+        1 :sum_i uint8      2 [2, 2, 1]
+        2 :sum_f double     3 [3.3, NaN, 2.2], 1 NaN
+      STR
+      assert_equal str, group.summarize(:sum_i, :sum_f) {
+                          [sum(:i), sum(:f)]
+                        }.tdr_str(tally: 0)
+    end
+
+    test 'summarize(args)' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 string
+        # key       type   level data_preview
+        0 :s        string     3 ["A", "B", nil], 1 nil
+        1 :"sum(i)" uint64     2 [2, 2, 1]
+        2 :"sum(f)" double     3 [3.3, NaN, 2.2], 1 NaN
+      STR
+      assert_equal str, group.summarize(group.sum).tdr_str(tally: 0)
+    end
+
+    test 'summarize { not_one_aggregation_in_Hash }' do
+      group = @df.group(:s)
+      assert_raise(GroupArgumentError) { group.summarize { { sum: sum } } }
     end
   end
 
