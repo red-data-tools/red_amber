@@ -2393,6 +2393,30 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#one-instance_method" title="#one (instance method)">#<strong>one</strong>  &#x21d2; Object<sup>?</sup> </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get a non-nil element in self.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#or_kleene-instance_method" title="#or_kleene (instance method)">#<strong>or_kleene</strong>(other)  &#x21d2; Vector </a>
     
 
@@ -10567,6 +10591,81 @@
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="one-instance_method">
+  
+    #<strong>one</strong>  &#x21d2; <tt>Object</tt><sup>?</sup> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get a non-nil element in self.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Object</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>first non-nil value detected. If all elements are nil, return nil.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.5.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+250
+251
+252</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 250</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_one'>one</span>
+  <span class='id identifier rubyid_each'>each</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>!</span><span class='id identifier rubyid__1'>_1</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="or_kleene-instance_method">
   
     #<strong>or_kleene</strong>(other)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
@@ -11416,22 +11515,22 @@
       <pre class="lines">
 
 
-264
-265
-266
-267
-268
-269
-270
-271
-272
-273
 274
 275
-276</pre>
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 264</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 274</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quantile'>quantile</span><span class='lparen'>(</span><span class='id identifier rubyid_prob'>prob</span> <span class='op'>=</span> <span class='float'>0.5</span><span class='comma'>,</span> <span class='label'>interpolation:</span> <span class='symbol'>:linear</span><span class='comma'>,</span> <span class='label'>skip_nulls:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>min_count:</span> <span class='int'>0</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='lparen'>(</span><span class='int'>0</span><span class='op'>..</span><span class='int'>1</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_cover?'>cover?</span> <span class='id identifier rubyid_prob'>prob</span>
@@ -11597,24 +11696,24 @@
       <pre class="lines">
 
 
-296
-297
-298
-299
-300
-301
-302
-303
-304
-305
 306
 307
 308
 309
-310</pre>
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 296</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 306</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quantiles'>quantiles</span><span class='lparen'>(</span><span class='id identifier rubyid_probs'>probs</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='float'>0.0</span><span class='comma'>,</span> <span class='float'>0.25</span><span class='comma'>,</span> <span class='float'>0.5</span><span class='comma'>,</span> <span class='float'>0.75</span><span class='comma'>,</span> <span class='float'>1.0</span><span class='rbracket'>]</span><span class='comma'>,</span>
               <span class='label'>interpolation:</span> <span class='symbol'>:linear</span><span class='comma'>,</span> <span class='label'>skip_nulls:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>min_count:</span> <span class='int'>0</span><span class='rparen'>)</span>
@@ -14532,7 +14631,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 21 09:43:48 2023 by
+  Generated on Fri Apr 21 23:35:14 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>
