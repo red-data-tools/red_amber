@@ -1448,18 +1448,6 @@
 #&lt;RedAmber::Vector(:string, size=16):0x00000000000233e8&gt;
 [&quot;H&quot;, &quot;B&quot;, &quot;C&quot;, &quot;B&quot;, &quot;C&quot;, &quot;A&quot;, &quot;F&quot;, &quot;A&quot;, &quot;E&quot;, &quot;C&quot;, &quot;H&quot;, &quot;F&quot;, &quot;F&quot;, &quot;A&quot;, ... ]</code></pre>
     
-      
-        <p class="example_title"><div class='inline'>
-<p>prop less than 1.0</p>
-</div></p>
-      
-      <pre class="example code"><code><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='float'>0.7</span><span class='rparen'>)</span>
-
-<span class='comment'># =&gt;
-</span><span class='comment'># Take (8 * 0.7).truncate =&gt; 5 samples
-</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=5):0x000000000001afe0&gt;
-</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
-    
   </div>
 <p class="tag_title">Parameters:</p>
 <ul class="param">
@@ -1529,6 +1517,14 @@
       <pre class="lines">
 
 
+360
+361
+362
+363
+364
+365
+366
+367
 368
 369
 370
@@ -1548,18 +1544,10 @@
 384
 385
 386
-387
-388
-389
-390
-391
-392
-393
-394
-395</pre>
+387</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_selectable.rb', line 368</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_selectable.rb', line 360</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='id identifier rubyid_n_or_prop'>n_or_prop</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>arrow-numo-narray</span><span class='tstring_end'>&#39;</span></span>
@@ -1571,7 +1559,7 @@
     <span class='kw'>in</span> <span class='const'>Integer</span>
       <span class='id identifier rubyid_n_or_prop'>n_or_prop</span>
     <span class='kw'>in</span> <span class='const'>Float</span>
-      <span class='lparen'>(</span><span class='id identifier rubyid_n_or_prop'>n_or_prop</span> <span class='op'>*</span> <span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_truncate'>truncate</span>
+      <span class='lparen'>(</span><span class='id identifier rubyid_n_or_prop'>n_or_prop</span> <span class='op'>*</span> <span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span>
     <span class='kw'>in</span> <span class='kw'>nil</span>
       <span class='kw'>return</span> <span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span>
     <span class='kw'>else</span>
@@ -1896,7 +1884,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Apr 20 23:15:09 2023 by
+  Generated on Fri Apr 21 09:30:53 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>
