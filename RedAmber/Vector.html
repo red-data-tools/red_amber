@@ -2119,6 +2119,30 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#mode-instance_method" title="#mode (instance method)">#<strong>mode</strong>  &#x21d2; Hash{&#39;mode&#39;=&gt;mode, &#39;count&#39;=&gt;count} </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Compute the 1 most common values and their respective   occurence counts.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#modulo-instance_method" title="#modulo (instance method)">#<strong>modulo</strong>(divisor)  &#x21d2; Vector </a>
     
 
@@ -9816,6 +9840,105 @@
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="mode-instance_method">
+  
+    #<strong>mode</strong>  &#x21d2; <tt>Hash{'<span class='object_link'><a href="#mode-instance_method" title="RedAmber::Vector#mode (method)">mode</a></span>'=&gt;<span class='object_link'><a href="#mode-instance_method" title="RedAmber::Vector#mode (method)">mode</a></span>, '<span class='object_link'><a href="#count-instance_method" title="RedAmber::Vector#count (method)">count</a></span>'=&gt;<span class='object_link'><a href="#count-instance_method" title="RedAmber::Vector#count (method)">count</a></span>}</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>Self must be a numeric or a boolean Vector.</p>
+</div>
+  </div>
+
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>ModeOptions are not supported in 0.5.0 . Only one mode value is returned.</p>
+</div>
+  </div>
+
+
+<p>Compute the 1 most common values and their respective</p>
+
+<pre class="code ruby"><code class="ruby">occurence counts.
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash{'<span class='object_link'><a href="#mode-instance_method" title="RedAmber::Vector#mode (method)">mode</a></span>'=&gt;<span class='object_link'><a href="#mode-instance_method" title="RedAmber::Vector#mode (method)">mode</a></span>, '<span class='object_link'><a href="#count-instance_method" title="RedAmber::Vector#count (method)">count</a></span>'=&gt;<span class='object_link'><a href="#count-instance_method" title="RedAmber::Vector#count (method)">count</a></span>}</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>mode and count of self in an array.</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Since:</p>
+<ul class="since">
+  
+    <li>
+      
+      
+      
+      
+        
+        <div class='inline'>
+<p>0.5.0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+175
+176
+177
+178</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 175</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_mode'>mode</span>
+  <span class='id identifier rubyid_datum'>datum</span> <span class='op'>=</span> <span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:mode</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_datum'>datum</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_first'>first</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="modulo-instance_method">
   
     #<strong>modulo</strong>(divisor)  &#x21d2; <tt><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></tt> 
@@ -10650,12 +10773,12 @@
       <pre class="lines">
 
 
-250
-251
-252</pre>
+266
+267
+268</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 250</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 266</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_one'>one</span>
   <span class='id identifier rubyid_each'>each</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>!</span><span class='id identifier rubyid__1'>_1</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='rbrace'>}</span>
@@ -11086,10 +11209,10 @@
       <pre class="lines">
 
 
-172</pre>
+188</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 172</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 188</span>
 
 <span class='id identifier rubyid_define_unary_aggregation'>define_unary_aggregation</span> <span class='symbol'>:product</span></pre>
     </td>
@@ -11515,22 +11638,22 @@
       <pre class="lines">
 
 
-274
-275
-276
-277
-278
-279
-280
-281
-282
-283
-284
-285
-286</pre>
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 274</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 290</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quantile'>quantile</span><span class='lparen'>(</span><span class='id identifier rubyid_prob'>prob</span> <span class='op'>=</span> <span class='float'>0.5</span><span class='comma'>,</span> <span class='label'>interpolation:</span> <span class='symbol'>:linear</span><span class='comma'>,</span> <span class='label'>skip_nulls:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>min_count:</span> <span class='int'>0</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='lparen'>(</span><span class='int'>0</span><span class='op'>..</span><span class='int'>1</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_cover?'>cover?</span> <span class='id identifier rubyid_prob'>prob</span>
@@ -11696,24 +11819,24 @@
       <pre class="lines">
 
 
-306
-307
-308
-309
-310
-311
-312
-313
-314
-315
-316
-317
-318
-319
-320</pre>
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 306</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 322</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_quantiles'>quantiles</span><span class='lparen'>(</span><span class='id identifier rubyid_probs'>probs</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='float'>0.0</span><span class='comma'>,</span> <span class='float'>0.25</span><span class='comma'>,</span> <span class='float'>0.5</span><span class='comma'>,</span> <span class='float'>0.75</span><span class='comma'>,</span> <span class='float'>1.0</span><span class='rbracket'>]</span><span class='comma'>,</span>
               <span class='label'>interpolation:</span> <span class='symbol'>:linear</span><span class='comma'>,</span> <span class='label'>skip_nulls:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>min_count:</span> <span class='int'>0</span><span class='rparen'>)</span>
@@ -12479,12 +12602,12 @@
       <pre class="lines">
 
 
-192
-193
-194</pre>
+208
+209
+210</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 192</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 208</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sd'>sd</span>
   <span class='id identifier rubyid_stddev'>stddev</span><span class='lparen'>(</span><span class='label'>ddof:</span> <span class='int'>1</span><span class='rparen'>)</span>
@@ -13270,10 +13393,10 @@
       <pre class="lines">
 
 
-182</pre>
+198</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 182</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 198</span>
 
 <span class='id identifier rubyid_define_unary_aggregation'>define_unary_aggregation</span> <span class='symbol'>:stddev</span></pre>
     </td>
@@ -13582,10 +13705,10 @@
       <pre class="lines">
 
 
-205</pre>
+221</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 205</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 221</span>
 
 <span class='id identifier rubyid_define_unary_aggregation'>define_unary_aggregation</span> <span class='symbol'>:sum</span></pre>
     </td>
@@ -14275,12 +14398,12 @@
       <pre class="lines">
 
 
-229
-230
-231</pre>
+245
+246
+247</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 229</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 245</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_unbiased_variance'>unbiased_variance</span>
   <span class='id identifier rubyid_variance'>variance</span><span class='lparen'>(</span><span class='label'>ddof:</span> <span class='int'>1</span><span class='rparen'>)</span>
@@ -14530,10 +14653,10 @@
       <pre class="lines">
 
 
-219</pre>
+235</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 219</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector_aggregation.rb', line 235</span>
 
 <span class='id identifier rubyid_define_unary_aggregation'>define_unary_aggregation</span> <span class='symbol'>:variance</span></pre>
     </td>
@@ -14631,7 +14754,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 21 23:35:14 2023 by
+  Generated on Fri Apr 21 23:35:45 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>
