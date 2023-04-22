@@ -380,6 +380,28 @@ class GroupTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#grouped_frame' do
+    setup do
+      @df = DataFrame.new(
+        i: [0, 0, 1, 2, 2, nil],
+        f: [0.0, 1.1, 2.2, 3.3, Float::NAN, nil],
+        s: ['A', 'B', nil, 'A', 'B', 'A'],
+        b: [true, false, true, false, true, nil]
+      )
+    end
+
+    test '#grouped_frame' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 1 Vector
+        Vector : 1 string
+        # key type   level data_preview
+        0 :s  string     3 ["A", "B", nil], 1 nil
+      STR
+      assert_equal str, group.grouped_frame.tdr_str
+    end
+  end
+
   sub_test_case 'call Vector\'s aggregating function' do
     setup do
       @df = DataFrame.new(

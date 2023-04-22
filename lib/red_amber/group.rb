@@ -115,14 +115,13 @@ module RedAmber
     #
     def filters
       @filters ||= begin
-        keys = group_table.column_names[..-2]
-        group_values = group_table.each_record.map { |record| record.to_a[..-2] }
+        group_values = group_table[group_keys].each_record.map(&:to_a)
 
         Enumerator.new(group_table.n_rows) do |yielder|
           group_values.each do |values|
             booleans =
               values.map.with_index do |value, i|
-                column = @dataframe[keys[i]].data
+                column = @dataframe[group_keys[i]].data
                 if value.nil?
                   Arrow::Function.find('is_null').execute([column])
                 elsif value.is_a?(Float) && value.nan?
@@ -339,6 +338,17 @@ module RedAmber
       end
     end
 
+    # Return grouped DataFrame only for group keys.
+    #
+    # @return [DataFrame]
+    #   grouped DataFrame projected only for group_keys.
+    # @since 0.5.0
+    #
+    def grouped_frame
+      DataFrame.create(group_table[group_keys])
+    end
+    alias_method :none, :grouped_frame
+
     # Aggregating summary.
     #
     # @api private
@@ -380,7 +390,7 @@ module RedAmber
                                       is_zero, null_count_scalar, count_field
                                     ])
       end
-      options = Arrow::ProjectNodeOptions.new(expressions, keys << 'group_count')
+      options = Arrow::ProjectNodeOptions.new(expressions, keys + [:group_count])
       project_node = plan.build_project_node(aggregate_node, options)
 
       sink_and_start_plan(plan, project_node)
