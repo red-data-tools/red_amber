@@ -269,12 +269,13 @@ module RedAmber
     end
     alias_method :glimpse, :tdr
 
-    # Shortcut for `tdr(:all)``.
+    # Shortcut for `tdr(:all)`.
     #
+    # @param (see #tdr)
     # @return (see #tdr)
     #
-    def tdra
-      puts tdr_str(:all)
+    def tdra(tally: 5, elements: 5)
+      puts tdr_str(:all, tally: tally, elements: elements)
     end
 
     # rubocop:enable Layout/LineLength
