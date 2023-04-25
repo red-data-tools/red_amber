@@ -505,9 +505,9 @@ module RedAmber
           row.zip(formats).map do |elem, format|
             non_ascii_diff = elem.ascii_only? ? 0 : elem.width - elem.size
             if format.negative?
-              elem.ljust(-format + non_ascii_diff)
+              elem.ljust(-format - non_ascii_diff)
             else
-              elem.rjust(format + non_ascii_diff)
+              elem.rjust(format - non_ascii_diff)
             end
           end
         str.puts a.join(' ').rstrip
