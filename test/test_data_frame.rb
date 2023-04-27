@@ -432,6 +432,25 @@ class DataFrameTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#propagate' do
+    setup do
+      @df = DataFrame.new(x: [1, 2, 3])
+    end
+
+    test '#propagate empty DataFrame' do
+      df = DataFrame.new
+      assert_equal_array [], df.propagate('any_value')
+    end
+
+    test '#propagate scalar' do
+      assert_equal_array %w[A A A], @df.propagate('A')
+    end
+
+    test '#propagate with block' do
+      assert_equal_array([6, 6, 6], @df.propagate { x.sum })
+    end
+  end
+
   sub_test_case 'method_missing' do
     setup do
       @df = DataFrame.new(number: [1, 2, 3], 'string.1': %w[Aa Bb Cc])

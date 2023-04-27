@@ -697,6 +697,79 @@ module RedAmber
       end
     end
 
+    # Returns a Vector such that all elements have value `scalar`
+    #   and have same size as self.
+    #
+    # @overload propagate(scalar)
+    #   Specifies scalar as an agrument.
+    #
+    #   @param scalar [scalar]
+    #     a value to propagate in Vector.
+    #   @return [Vector]
+    #     created Vector.
+    #   @example propagate a value
+    #     df
+    #     # =>
+    #     #<RedAmber::DataFrame : 6 x 3 Vectors, 0x00000000000849a4>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       1 A        false
+    #     1       2 A        true
+    #     2       3 B        false
+    #     3       4 B        (nil)
+    #     4       5 B        true
+    #     5       6 C        false
+    #
+    #     df.assign(:sum_x) { propagate(x.sum) }
+    #     # =>
+    #     #<RedAmber::DataFrame : 6 x 4 Vectors, 0x000000000007bd04>
+    #             x y        z           sum_x
+    #       <uint8> <string> <boolean> <uint8>
+    #     0       1 A        false          21
+    #     1       2 A        true           21
+    #     2       3 B        false          21
+    #     3       4 B        (nil)          21
+    #     4       5 B        true           21
+    #     5       6 C        false          21
+    #
+    #     # Using `Vector#propagate` like below has same result as above.
+    #     df.assign(:sum_x) { x.propagate(:sum) }
+    #
+    #     # Also it is same as creating column from an Array.
+    #     df.assign(:sum_x) { [x.sum] * size }
+    #
+    # @overload propagate
+    #
+    #   @yieldparam self [DataFrame]
+    #     gives self to the block.
+    #   @yieldreturn [scalar]
+    #     a value to propagate in Vector
+    #   @return [Vector]
+    #     created Vector.
+    #   @example propagate the value from the block
+    #     df.assign(:range) { propagate { x.max - x.min } }
+    #     # =>
+    #     #<RedAmber::DataFrame : 6 x 4 Vectors, 0x00000000000e603c>
+    #             x y        z           range
+    #       <uint8> <string> <boolean> <uint8>
+    #     0       1 A        false           5
+    #     1       2 A        true            5
+    #     2       3 B        false           5
+    #     3       4 B        (nil)           5
+    #     4       5 B        true            5
+    #     5       6 C        false           5
+    #
+    # @since 0.5.0
+    #
+    def propagate(scalar = nil, &block)
+      if block
+        raise VectorArgumentError, "can't specify both function and block" if scalar
+
+        scalar = instance_eval(&block)
+      end
+      Vector.new([scalar] * size)
+    end
+
     # Catch variable (column) key as method name.
     def method_missing(name, *args, &block)
       return variables[name] if args.empty? && key?(name)
