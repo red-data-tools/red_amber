@@ -580,7 +580,7 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
   end
 
-  sub_test_case '#sample' do
+  sub_test_case '#sample/#shuffle' do
     setup do
       @df = DataFrame.new(i: [1, 2, 3, 4, 5], s: %w[A B C D E])
     end
@@ -594,6 +594,10 @@ class DataFrameSelectableTest < Test::Unit::TestCase
 
     test '#sample(1.0)' do
       assert_equal @df, @df.sample(1.0).sort('i')
+    end
+
+    test '#shuffle' do
+      assert_equal @df, @df.shuffle.sort('i')
     end
 
     test '#sample(1.5)' do
