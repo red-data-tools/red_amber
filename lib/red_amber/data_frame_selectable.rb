@@ -874,6 +874,17 @@ module RedAmber
       slice { indices.sample(n_or_prop) }
     end
 
+    # Returns a DataFrame with shuffled rows.
+    #
+    # @note This method requires 'arrow-numo-narray' gem.
+    # @note Same behavior as `DataFrame#sample(1.0)`
+    # @return (see #sample)
+    # @since 0.5.0
+    #
+    def shuffle
+      sample(1.0)
+    end
+
     # Select records by index Array to create a DataFrame.
     #
     # - TODO: support for option `boundscheck: true`
