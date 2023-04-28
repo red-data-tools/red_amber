@@ -836,6 +836,44 @@ module RedAmber
       tail(n_obs)
     end
 
+    # Select records randomly to create a DataFrame.
+    #   This method calls `indices.sample`.
+    #   We can use the same arguments in `Vector#sample`.
+    # @note This method requires 'arrow-numo-narray' gem.
+    #
+    # @overload sample()
+    #   Return a DataFrame with a randomly selected record.
+    #
+    #   @return [DataFrame]
+    #     a DataFrame with single record.
+    #
+    # @overload sample(n)
+    #   Return a DataFrame with n records selected at random.
+    #
+    #   @param n [Integer]
+    #     positive number of records to select.
+    #     If n is smaller or equal to size, records are selected by non-repeating.
+    #     If n is greater than `size`, records are selected repeatedly.
+    #   @return [DataFrame]
+    #     a DataFrame with sampled records.
+    #
+    # @overload sample(prop)
+    #   Return a DataFrame with records by proportion `prop` at random.
+    #
+    #   @param prop [Float]
+    #     positive proportion of records to select.
+    #     Absolute number of records to select:`prop*size` is rounded (by `half: :up`).
+    #     If prop is smaller or equal to 1.0, records are selected by non-repeating.
+    #     If prop is greater than 1.0, some records are selected repeatedly.
+    #   @return [Vector]
+    #     a DataFrame with sampled records.
+    #
+    # @since 0.5.0
+    #
+    def sample(n_or_prop = nil)
+      slice { indices.sample(n_or_prop) }
+    end
+
     # Select records by index Array to create a DataFrame.
     #
     # - TODO: support for option `boundscheck: true`
