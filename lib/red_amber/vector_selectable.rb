@@ -278,6 +278,7 @@ module RedAmber
     end
 
     # Pick up elements at random.
+    # @note This method requires 'arrow-numo-narray' gem.
     #
     # @overload sample()
     #   Return a randomly selected element.
@@ -298,12 +299,12 @@ module RedAmber
     #     "C"
     #
     # @overload sample(n)
-    #   Pick up n elements at random.
+    #   Select n elements at random.
     #
     #   @param n [Integer]
-    #     positive number of elements to pick.
-    #     If n is smaller or equal to size, elements are picked by non-repeating.
-    #     If n is greater than `size`, elements are picked repeatedly.
+    #     positive number of elements to select.
+    #     If n is smaller or equal to size, elements are selected by non-repeating.
+    #     If n is greater than `size`, elements are selected repeatedly.
     #   @return [Vector]
     #     sampled elements.
     #     If n == 1 (in case of `sample(1)`), it returns a Vector of size == 1
@@ -315,7 +316,7 @@ module RedAmber
     #     #<RedAmber::Vector(:string, size=1):0x000000000001a3b0>
     #     ["H"]
     #
-    #   @example Sample same size of self: every element is picked in random order
+    #   @example Sample same size of self: every element is selected in random order
     #     v.sample(8)
     #
     #     # =>
@@ -330,18 +331,18 @@ module RedAmber
     #     ["E", "E", "A", "D", "H", "C", "A", "F", "H"]
     #
     # @overload sample(prop)
-    #   Pick up elements by proportion `prop` at random.
+    #   Select elements by proportion `prop` at random.
     #
     #   @param prop [Float]
-    #     positive proportion of elements to pick.
-    #     Absolute number of elements to pick:`prop*size` is rounded (by `half: :up``).
-    #     If prop is smaller or equal to 1.0, elements are picked by non-repeating.
-    #     If prop is greater than 1.0, some elements are picked repeatedly.
+    #     positive proportion of elements to select.
+    #     Absolute number of elements to select:`prop*size` is rounded (by `half: :up`).
+    #     If prop is smaller or equal to 1.0, elements are selected by non-repeating.
+    #     If prop is greater than 1.0, some elements are selected repeatedly.
     #   @return [Vector]
     #     sampled elements.
-    #     If picked element is only one, it returns a Vector of size == 1
+    #     If selected element is only one, it returns a Vector of size == 1
     #     not a scalar.
-    #   @example Sample same size of self: every element is picked in random order
+    #   @example Sample same size of self: every element is selected in random order
     #     v.sample(1.0)
     #
     #     # =>

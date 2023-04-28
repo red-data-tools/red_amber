@@ -580,6 +580,29 @@ class DataFrameSelectableTest < Test::Unit::TestCase
     end
   end
 
+  sub_test_case '#sample' do
+    setup do
+      @df = DataFrame.new(i: [1, 2, 3, 4, 5], s: %w[A B C D E])
+    end
+
+    test '#sample()' do
+      df = @df.sample
+      idx = df.i[0] - 1
+      assert_equal 1, df.size
+      assert_equal @df[idx].tdr_str, df.tdr_str
+    end
+
+    test '#sample(1.0)' do
+      assert_equal @df, @df.sample(1.0).sort('i')
+    end
+
+    test '#sample(1.5)' do
+      df = @df.sample(1.5)
+      assert_equal 7, df.size
+      assert_equal @df.to_a, df.to_a.uniq.sort
+    end
+  end
+
   sub_test_case '#take(indices)' do
     setup do
       @df = RedAmber::DataFrame.new(x: [1, 2, 3, 4, nil], y: %w[A B C D] << nil)
