@@ -1,46 +1,46 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-$stderr.print "starting.\r"
+print "starting.\r"
 
-require 'bundler/setup'
+Dir.chdir(__dir__) { require 'bundler/setup' }
 
-$stderr.print "starting..\r"
+print "starting..\r"
 require 'red_amber'
 include RedAmber
 
-$stderr.print "starting...\r"
+print "starting...\r"
 require 'datasets-arrow'
 
-$stderr.print "reading penguins...\r"
+print "reading penguins...\r"
 penguins = DataFrame.new(Datasets::Penguins.new)
 
-$stderr.print "reading diamonds...\r"
+print "reading diamonds...\r"
 diamonds = DataFrame.new(Datasets::Diamonds.new)
 
-$stderr.print "reading starwars...\r"
+print "reading starwars...\r"
 starwars = DataFrame.new(Datasets::Rdataset.new('dplyr', 'starwars'))
 
-$stderr.print "reading openintro/simpsons_paradox_covid...\r"
+print "reading openintro/simpsons_paradox_covid...\r"
 ds = Datasets::Rdataset.new('openintro', 'simpsons_paradox_covid')
 simpsons_paradox_covid = DataFrame.new(ds.to_arrow)
 
-$stderr.print "reading mtcars...                          \r"
+print "reading mtcars...                          \r"
 mtcars = DataFrame.new(Datasets::Rdatasets.new('datasets', 'mtcars'))
 
-$stderr.print "reading iris...  \r"
+print "reading iris...  \r"
 iris = DataFrame.new(Datasets::Iris.new)
 
-$stderr.print "reading band_members...\r"
+print "reading band_members...\r"
 band_members = DataFrame.new(Datasets::Rdatasets.new('dplyr', 'band_members'))
 
-$stderr.print "reading band_instruments...\r"
+print "reading band_instruments...\r"
 band_instruments = DataFrame.new(Datasets::Rdatasets.new('dplyr', 'band_instruments'))
 
-$stderr.print "reading band_instruments2...\r"
+print "reading band_instruments2...\r"
 band_instruments2 = DataFrame.new(Datasets::Rdatasets.new('dplyr', 'band_instruments2'))
 
-$stderr.print "reading import_cars...      \r"
+print "reading import_cars...      \r"
 import_cars = DataFrame.load(Arrow::Buffer.new(<<~TSV), format: :tsv)
   Year	Audi	BMW	BMW_MINI	Mercedes-Benz	VW
   2017	28336	52527	25427	68221	49040
@@ -50,7 +50,7 @@ import_cars = DataFrame.load(Arrow::Buffer.new(<<~TSV), format: :tsv)
   2021	22535	35905	18211	51722	35215
 TSV
 
-$stderr.print "reading comecome...   \r"
+print "reading comecome...   \r"
 comecome = DataFrame.load(Arrow::Buffer.new(<<~CSV), format: :csv)
   name,age
   Yasuko,68
@@ -58,7 +58,19 @@ comecome = DataFrame.load(Arrow::Buffer.new(<<~CSV), format: :csv)
   Hinata,28
 CSV
 
-$stderr.print "reading general dataframe and subframes...\r"
+print "reading rubykaigi...   \r"
+rubykaigi = DataFrame.load(Arrow::Buffer.new(<<~CSV), format: :csv)
+  year,venue,prefecture,city,venue_en
+  2015,ベルサール汐留,東京都,中央区,"Bellesalle Shiodome"
+  2016,京都国際会議場,京都府,京都市左京区,"Kyoto International Conference Center"
+  2017,広島国際会議場,広島県,広島市中区,"International Conference Center Hiroshima"
+  2018,仙台国際センター,宮城県,仙台市青葉区,"Sendai International Center"
+  2019,福岡国際会議場,福岡県,福岡市博多区,"Fukuoka International Congress Center"
+  2022,三重県総合文化センター,三重県,津市,"Mie Center for the Arts"
+  2023,松本市民芸術館,長野県,松本市,"Matsumoto Performing Arts Centre"
+CSV
+
+print "reading general dataframe and subframes...\r"
 dataframe = DataFrame.new(
   x: [*1..6],
   y: %w[A A B B B C],
@@ -70,5 +82,5 @@ subframes = SubFrames.new(dataframe, [[0, 1], [2, 3, 4], [5]])
 # This environment will offer these pre-loaded datasets:
 #   penguins, diamonds, iris, starwars, simpsons_paradox_covid,
 #   mtcars, band_members, band_instruments, band_instruments2
-#   (original) import_cars, comecome, dataframe, subframes
+#   import_cars, comecome, rubykaigi, dataframe, subframes
 binding.irb
