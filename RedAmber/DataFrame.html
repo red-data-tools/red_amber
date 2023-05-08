@@ -674,11 +674,11 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#sub_by_value-instance_method" title="#sub_by_value (instance method)">#<strong>sub_by_value</strong>(keys: nil)  &#x21d2; SubFrames </a>
+      <a href="#sub_by_value-instance_method" title="#sub_by_value (instance method)">#<strong>sub_by_value</strong>(*keys)  &#x21d2; SubFrames </a>
     
 
     
-      (also: #subframes_by_value)
+      (also: #subframes_by_value, #sub_group)
     
   </span>
   
@@ -1515,14 +1515,14 @@
       <pre class="lines">
 
 
-774
 775
 776
 777
-778</pre>
+778
+779</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 774</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 775</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_method_missing'>method_missing</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_variables'>variables</span><span class='lbracket'>[</span><span class='id identifier rubyid_name'>name</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
@@ -2111,16 +2111,16 @@ end
       <pre class="lines">
 
 
-692
 693
 694
 695
 696
 697
-698</pre>
+698
+699</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 692</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 693</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_build_subframes'>build_subframes</span><span class='lparen'>(</span><span class='id identifier rubyid_subset_specifier'>subset_specifier</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span>
@@ -3125,17 +3125,17 @@ df.assign(:sum_x) { [x.sum] * size }</code></pre>
       <pre class="lines">
 
 
-764
 765
 766
 767
 768
 769
 770
-771</pre>
+771
+772</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 764</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 765</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_propagate'>propagate</span><span class='lparen'>(</span><span class='id identifier rubyid_scalar'>scalar</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_block'>block</span>
@@ -3189,14 +3189,14 @@ df.assign(:sum_x) { [x.sum] * size }</code></pre>
       <pre class="lines">
 
 
-781
 782
 783
 784
-785</pre>
+785
+786</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 781</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 782</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_respond_to_missing?'>respond_to_missing?</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_include_private'>include_private</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
@@ -3571,12 +3571,12 @@ df.assign(:sum_x) { [x.sum] * size }</code></pre>
       <pre class="lines">
 
 
-574
 575
-576</pre>
+576
+577</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 574</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 575</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sub_by_enum'>sub_by_enum</span><span class='lparen'>(</span><span class='id identifier rubyid_enumerator_method'>enumerator_method</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="SubFrames.html" title="RedAmber::SubFrames (class)">SubFrames</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="SubFrames.html#initialize-instance_method" title="RedAmber::SubFrames#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_indices'>indices</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_enumerator_method'>enumerator_method</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='rparen'>)</span>
@@ -3718,7 +3718,6 @@ df.sub_by_kernel(kernel, step: 2)
       <pre class="lines">
 
 
-612
 613
 614
 615
@@ -3726,10 +3725,11 @@ df.sub_by_kernel(kernel, step: 2)
 617
 618
 619
-620</pre>
+620
+621</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 612</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 613</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sub_by_kernel'>sub_by_kernel</span><span class='lparen'>(</span><span class='id identifier rubyid_kernel'>kernel</span><span class='comma'>,</span> <span class='label'>step:</span> <span class='int'>1</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_limit_size'>limit_size</span> <span class='op'>=</span> <span class='id identifier rubyid_size'>size</span> <span class='op'>-</span> <span class='id identifier rubyid_kernel'>kernel</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span>
@@ -3748,12 +3748,12 @@ df.sub_by_kernel(kernel, step: 2)
       <div class="method_details ">
   <h3 class="signature " id="sub_by_value-instance_method">
   
-    #<strong>sub_by_value</strong>(keys: nil)  &#x21d2; <tt><span class='object_link'><a href="SubFrames.html" title="RedAmber::SubFrames (class)">SubFrames</a></span></tt> 
+    #<strong>sub_by_value</strong>(*keys)  &#x21d2; <tt><span class='object_link'><a href="SubFrames.html" title="RedAmber::SubFrames (class)">SubFrames</a></span></tt> 
   
 
   
     <span class="aliases">Also known as:
-    <span class="names"><span id='subframes_by_value-instance_method'>subframes_by_value</span></span>
+    <span class="names"><span id='subframes_by_value-instance_method'>subframes_by_value</span>, <span id='sub_group-instance_method'>sub_group</span></span>
     </span>
   
 
@@ -3776,7 +3776,7 @@ df.sub_by_kernel(kernel, step: 2)
     <p class="tag_title">Examples:</p>
     
       
-      <pre class="example code"><code>df.sub_by_value(keys: :y)
+      <pre class="example code"><code>df.sub_by_value(:y)
 
 # =&gt;
 #&lt;RedAmber::SubFrames : 0x000000000000fc08&gt;
@@ -3810,10 +3810,8 @@ df.sub_by_kernel(kernel, step: 2)
         <span class='name'>keys</span>
       
       
-        <span class='type'>(<tt>Symbol</tt>, <tt>String</tt>, <tt>Array&lt;Symbol, String&gt;</tt>)</span>
+        <span class='type'>(<tt>List&lt;Symbol, String&gt;</tt>, <tt>Array&lt;Symbol, String&gt;</tt>)</span>
       
-      
-        <em class="default">(defaults to: <tt>nil</tt>)</em>
       
       
         &mdash;
@@ -3873,8 +3871,8 @@ df.sub_by_kernel(kernel, step: 2)
     <td>
       <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 457</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_sub_by_value'>sub_by_value</span><span class='lparen'>(</span><span class='label'>keys:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='const'><span class='object_link'><a href="SubFrames.html" title="RedAmber::SubFrames (class)">SubFrames</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="SubFrames.html#initialize-instance_method" title="RedAmber::SubFrames#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_group'>group</span><span class='lparen'>(</span><span class='id identifier rubyid_keys'>keys</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_filters'>filters</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_sub_by_value'>sub_by_value</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_keys'>keys</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="SubFrames.html" title="RedAmber::SubFrames (class)">SubFrames</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="SubFrames.html#initialize-instance_method" title="RedAmber::SubFrames#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='id identifier rubyid_group'>group</span><span class='lparen'>(</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_filters'>filters</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -4036,16 +4034,16 @@ df.sub_by_kernel(kernel, step: 2)
       <pre class="lines">
 
 
-499
 500
 501
 502
 503
 504
-505</pre>
+505
+506</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 499</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame.rb', line 500</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sub_by_window'>sub_by_window</span><span class='lparen'>(</span><span class='label'>from:</span> <span class='int'>0</span><span class='comma'>,</span> <span class='label'>size:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>step:</span> <span class='int'>1</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="SubFrames.html" title="RedAmber::SubFrames (class)">SubFrames</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="SubFrames.html#initialize-instance_method" title="RedAmber::SubFrames#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='kw'>self</span><span class='rparen'>)</span> <span class='kw'>do</span>
@@ -4499,7 +4497,7 @@ df.sub_by_kernel(kernel, step: 2)
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 28 20:58:38 2023 by
+  Generated on Mon May  8 04:15:26 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>
