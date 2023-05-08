@@ -4,6 +4,7 @@ module RedAmber
   # Group class
   class Group
     include Enumerable # This feature is experimental
+    include Helper
 
     using RefineArrowTable
 
@@ -114,15 +115,27 @@ module RedAmber
     #
     def filters
       @filters ||= begin
-        first, *others = @group_keys.map do |key|
-          vector = @dataframe[key]
-          vector.uniq.each.map { |u| u.nil? ? vector.is_nil : vector == u }
-        end
+        group_values = group_table[group_keys].each_record.map(&:to_a)
 
-        if others.empty?
-          first.select(&:any?)
-        else
-          first.product(*others).map { |a| a.reduce(&:&) }.select(&:any?)
+        Enumerator.new(group_table.n_rows) do |yielder|
+          group_values.each do |values|
+            booleans =
+              values.map.with_index do |value, i|
+                column = @dataframe[group_keys[i]].data
+                if value.nil?
+                  Arrow::Function.find('is_null').execute([column])
+                elsif value.is_a?(Float) && value.nan?
+                  Arrow::Function.find('is_nan').execute([column])
+                else
+                  Arrow::Function.find('equal').execute([column, value])
+                end
+              end
+            filter =
+              booleans.reduce do |result, datum|
+                Arrow::Function.find('and_kleene').execute([result, datum])
+              end
+            yielder << Vector.create(filter.value)
+          end
         end
       end
     end
@@ -147,11 +160,10 @@ module RedAmber
     #     group size.
     #
     def each
-      filters
       return enum_for(:each) unless block_given?
 
-      @filters.each do |filter|
-        yield @dataframe[filter]
+      filters.each do |filter|
+        yield @dataframe.filter(filter)
       end
       @filters.size
     end
@@ -174,7 +186,7 @@ module RedAmber
     #   2 Gentoo            124
     #
     def group_count
-      DataFrame.create(add_columns_to_table(base_table, [:group_count], [group_counts]))
+      DataFrame.create(group_table)
     end
 
     # String representation of self.
@@ -186,79 +198,156 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::Group : 0x0000000000003a98>
-    #     species     count
-    #     <string>  <uint8>
-    #   0 Adelie        152
-    #   1 Chinstrap      68
-    #   2 Gentoo        124
+    #     species   group_count
+    #     <string>      <uint8>
+    #   0 Adelie            152
+    #   1 Chinstrap          68
+    #   2 Gentoo            124
     #
     def inspect
-      "#<#{self.class} : #{format('0x%016x', object_id)}>\n#{count(@group_keys)}"
+      "#<#{self.class} : #{format('0x%016x', object_id)}>\n#{group_count}"
     end
 
     # Summarize Group by aggregation functions from the block.
     #
-    # @yieldparam group [Group]
-    #   passes group object self.
-    # @yieldreturn [DataFrame, Array<DataFrame>]
-    #   an aggregated DataFrame or an array of aggregated DataFrames.
-    # @return [DataFrame]
-    #   summarized DataFrame.
-    # @example Single function and single variable
-    #   group = penguins.group(:species)
-    #   group
+    # @overload summarize
+    #   Summarize by a function.
+    #   @yieldparam group [Group]
+    #     passes group object self.
+    #   @yieldreturn [DataFrame]
+    #   @yieldreturn [DataFrame, Array<DataFrame>, Hash{Symbol, String => DataFrame}]
+    #     an aggregated DataFrame or an array of aggregated DataFrames.
+    #   @return [DataFrame]
+    #     summarized DataFrame.
+    #   @example Single function and single variable
+    #     group = penguins.group(:species)
+    #     group
     #
-    #   # =>
-    #   #<RedAmber::Group : 0x000000000000c314>
-    #     species     count
-    #     <string>  <uint8>
-    #   0 Adelie        152
-    #   1 Chinstrap      68
-    #   2 Gentoo        124
+    #     # =>
+    #     #<RedAmber::Group : 0x000000000000c314>
+    #       species   group_count
+    #       <string>      <uint8>
+    #     0 Adelie            152
+    #     1 Chinstrap          68
+    #     2 Gentoo            124
     #
-    #   group.summarize { mean(:bill_length_mm) }
+    #     group.summarize { mean(:bill_length_mm) }
     #
-    #   # =>
-    #   #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000c364>
-    #     species   mean(bill_length_mm)
-    #     <string>              <double>
-    #   0 Adelie                   38.79
-    #   1 Chinstrap                48.83
-    #   2 Gentoo                    47.5
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000c364>
+    #       species   mean(bill_length_mm)
+    #       <string>              <double>
+    #     0 Adelie                   38.79
+    #     1 Chinstrap                48.83
+    #     2 Gentoo                    47.5
     #
-    # @example Single function only
-    #   group.summarize { mean }
+    #   @example Single function only
+    #     group.summarize { mean }
     #
-    #   # =>
-    #   #<RedAmber::DataFrame : 3 x 6 Vectors, 0x000000000000c350>
-    #     species   mean(bill_length_mm) mean(bill_depth_mm) ... mean(year)
-    #     <string>              <double>            <double> ...   <double>
-    #   0 Adelie                   38.79               18.35 ...    2008.01
-    #   1 Chinstrap                48.83               18.42 ...    2007.97
-    #   2 Gentoo                    47.5               14.98 ...    2008.08
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 6 Vectors, 0x000000000000c350>
+    #       species   mean(bill_length_mm) mean(bill_depth_mm) ... mean(year)
+    #       <string>              <double>            <double> ...   <double>
+    #     0 Adelie                   38.79               18.35 ...    2008.01
+    #     1 Chinstrap                48.83               18.42 ...    2007.97
+    #     2 Gentoo                    47.5               14.98 ...    2008.08
     #
-    # @example Multiple functions
-    #   group.summarize { [min(:bill_length_mm), max(:bill_length_mm)] }
+    # @overload summarize
+    #   Summarize by a function.
     #
-    #   # =>
-    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000c378>
-    #     species   min(bill_length_mm) max(bill_length_mm)
-    #     <string>             <double>            <double>
-    #   0 Adelie                   32.1                46.0
-    #   1 Chinstrap                40.9                58.0
-    #   2 Gentoo                   40.9                59.6
+    #   @yieldparam group [Group]
+    #     passes group object self.
+    #   @yieldreturn [Array<DataFrame>]
+    #     an aggregated DataFrame or an array of aggregated DataFrames.
+    #   @return [DataFrame]
+    #     summarized DataFrame.
+    #   @example Multiple functions
+    #     group.summarize { [min(:bill_length_mm), max(:bill_length_mm)] }
     #
-    def summarize(&block)
-      agg = instance_eval(&block)
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000c378>
+    #       species   min(bill_length_mm) max(bill_length_mm)
+    #       <string>             <double>            <double>
+    #     0 Adelie                   32.1                46.0
+    #     1 Chinstrap                40.9                58.0
+    #     2 Gentoo                   40.9                59.6
+    #
+    # @overload summarize
+    #   Summarize by a function.
+    #
+    #   @yieldparam group [Group]
+    #     passes group object self.
+    #   @yieldreturn [Hash{Symbol, String => DataFrame}]
+    #     an aggregated DataFrame or an array of aggregated DataFrames.
+    #     The DataFrame must return only one aggregated column.
+    #   @return [DataFrame]
+    #     summarized DataFrame.
+    #   @example Rename column name by Hash
+    #     group.summarize {
+    #       {
+    #         min_bill_length_mm: min(:bill_length_mm),
+    #         max_bill_length_mm: max(:bill_length_mm),
+    #       }
+    #     }
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000000c378>
+    #       species   min_bill_length_mm max_bill_length_mm
+    #       <string>            <double>           <double>
+    #     0 Adelie                  32.1               46.0
+    #     1 Chinstrap               40.9               58.0
+    #     2 Gentoo                  40.9               59.6
+    #
+    def summarize(*args, &block)
+      if block
+        agg = instance_eval(&block)
+        unless args.empty?
+          agg = [agg] if agg.is_a?(DataFrame)
+          agg = args.zip(agg).to_h
+        end
+      else
+        agg = args
+      end
+
       case agg
       when DataFrame
         agg
       when Array
-        agg.reduce { |aggregated, df| aggregated.assign(df.to_h) }
+        aggregations =
+          agg.map do |df|
+            v = df.vectors[-1]
+            [v.key, v]
+          end
+        agg[0].assign(aggregations)
+      when Hash
+        aggregations =
+          agg.map do |key, df|
+            aggregated_keys = df.keys - @group_keys
+            if aggregated_keys.size > 1
+              message =
+                "accept only one column from the Hash: #{aggregated_keys.join(', ')}"
+              raise GroupArgumentError, message
+            end
+
+            v = df.vectors[-1]
+            [key, v]
+          end
+        agg.values[-1].drop(-1).assign(aggregations)
       else
         raise GroupArgumentError, "Unknown argument: #{agg}"
       end
     end
+
+    # Return grouped DataFrame only for group keys.
+    #
+    # @return [DataFrame]
+    #   grouped DataFrame projected only for group_keys.
+    # @since 0.5.0
+    #
+    def grouped_frame
+      DataFrame.create(group_table[group_keys])
+    end
+    alias_method :none, :grouped_frame
 
     # Aggregating summary.
     #
@@ -270,37 +359,49 @@ module RedAmber
 
     private
 
+    def group_table
+      @group_table ||= build_aggregated_table
+    end
+
+    def build_aggregated_table
+      keys = @group_keys
+      key = keys[0]
+      table = @dataframe.table
+
+      plan = Arrow::ExecutePlan.new
+      source_node = plan.build_source_node(table)
+
+      aggregate_node =
+        plan.build_aggregate_node(source_node, {
+                                    aggregations: [{ function: 'hash_count',
+                                                     input: key }], keys: keys
+                                  })
+      expressions = keys.map { |k| Arrow::FieldExpression.new(k) }
+      null_count = Arrow::Function.find('is_null').execute([table[key]]).value.sum
+      count_field = Arrow::FieldExpression.new("count(#{key})")
+      if null_count.zero?
+        expressions << count_field
+      else
+        is_zero =
+          Arrow::CallExpression.new('equal', [count_field, Arrow::Int64Scalar.new(0)])
+        null_count_scalar = Arrow::Int64Scalar.new(null_count)
+        expressions <<
+          Arrow::CallExpression.new('if_else', [
+                                      is_zero, null_count_scalar, count_field
+                                    ])
+      end
+      options = Arrow::ProjectNodeOptions.new(expressions, keys + [:group_count])
+      project_node = plan.build_project_node(aggregate_node, options)
+
+      sink_and_start_plan(plan, project_node)
+    end
+
     def build_aggregation_keys(function_name, summary_keys)
       if summary_keys.empty?
         [function_name]
       else
         summary_keys.map { |key| "#{function_name}(#{key})" }
       end
-    end
-
-    # @note `@group_counts.sum == @dataframe.size``
-    def group_counts
-      @group_counts ||= filters.map(&:sum)
-    end
-
-    def base_table
-      @base_table ||= begin
-        indexes = filters.map { |filter| filter.index(true) }
-        @dataframe.table[@group_keys].take(indexes)
-      end
-    end
-
-    def add_columns_to_table(table, keys, data_arrays)
-      fields = table.schema.fields
-      arrays = table.columns.map(&:data)
-
-      keys.zip(data_arrays).each do |key, array|
-        data = Arrow::ChunkedArray.new([array])
-        fields << Arrow::Field.new(key, data.value_data_type)
-        arrays << data
-      end
-
-      Arrow::Table.new(Arrow::Schema.new(fields), arrays)
     end
 
     # Call Vector aggregating function and return an array of arrays:

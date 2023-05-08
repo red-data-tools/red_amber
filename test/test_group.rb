@@ -161,18 +161,16 @@ class GroupTest < Test::Unit::TestCase
         1 :count int64     3 [2, 1, 2, 0]
       OUTPUT
       assert_equal str, @df.group(:i) { count(:i, :f, :b) }.tdr_str(tally: 0)
-      assert_equal str, @df.group(:i).summarize { count(:i, :f, :b) }.tdr_str(tally: 0)
 
       str = <<~OUTPUT
         RedAmber::DataFrame : 4 x 3 Vectors
         Vectors : 3 numeric
         # key       type   level data_preview
         0 :i        uint8      4 [0, 1, 2, nil], 1 nil
-        1 :count    int64      3 [2, 1, 2, 0]
+        1 :count    uint8      3 [2, 1, 2, 0]
         2 :"sum(f)" double     4 [1.1, 2.2, NaN, nil], 1 NaN, 1 nil
       OUTPUT
       assert_equal str, @df.group(:i) { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
-      assert_equal str, @df.group(:i).summarize { [count(:i, :f, :b), sum] }.tdr_str(tally: 0)
     end
 
     test 'count with not a key of self' do
@@ -193,13 +191,15 @@ class GroupTest < Test::Unit::TestCase
 
     test 'filters by a key' do
       expect = [
-        [true,  true,  false, false, false, nil],
+        [true,  false, false, false, false, nil],
+        [false, true,  false, false, false, nil],
+        [false, false, false, true,  false, nil],
         [false, false, true,  false, false, nil],
-        [false, false, false, true,  true,  nil],
+        [false, false, false, false, true,  nil],
         [false, false, false, false, false, true],
       ]
-      assert_equal expect, @df.group(:i).filters.map(&:to_a)
-      assert_true @df.group(:i).filters.all?(Vector)
+      assert_equal expect, @df.group(:f).filters.map(&:to_a)
+      assert_true @df.group(:f).filters.all?(Vector)
     end
 
     test 'filters by multiple keys' do
@@ -216,14 +216,25 @@ class GroupTest < Test::Unit::TestCase
     end
 
     test 'group_count' do
-      str = <<~STR
+      assert_equal <<~STR, @df.group(:i).group_count.tdr_str
         RedAmber::DataFrame : 4 x 2 Vectors
         Vectors : 2 numeric
         # key          type  level data_preview
         0 :i           uint8     4 [0, 1, 2, nil], 1 nil
-        1 :group_count uint8     2 {2=>2, 1=>2}
+        1 :group_count int64     2 {2=>2, 1=>2}
       STR
-      assert_equal str, @df.group(:i).group_count.tdr_str
+    end
+
+    test 'group_count w/o nil' do
+      dataframe = DataFrame.new(x: %w[A A B B B C])
+      group = Group.new(dataframe, :x)
+      assert_equal <<~STR, group.group_count.tdr_str
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 1 numeric, 1 string
+        # key          type   level data_preview
+        0 :x           string     3 ["A", "B", "C"]
+        1 :group_count int64      3 [2, 3, 1]
+      STR
     end
 
     test 'each' do
@@ -266,14 +277,128 @@ class GroupTest < Test::Unit::TestCase
       group = @df.group(:i)
       str = <<~STR
         #<RedAmber::Group : #{format('0x%016x', group.object_id)}>
-                i   count
-          <uint8> <int64>
-        0       0       2
-        1       1       1
-        2       2       2
-        3   (nil)       0
+                i group_count
+          <uint8>     <int64>
+        0       0           2
+        1       1           1
+        2       2           2
+        3   (nil)           1
       STR
       assert_equal str, group.inspect
+    end
+
+    test 'summarize { func(key) }' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 1 numeric, 1 string
+        # key       type   level data_preview
+        0 :s        string     3 ["A", "B", nil], 1 nil
+        1 :"sum(f)" double     3 [3.3, NaN, 2.2], 1 NaN
+      STR
+      assert_equal str, group.summarize { sum(:f) }.tdr_str
+    end
+
+    test 'summarize { Array }' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 3 numeric, 1 string
+        # key       type   level data_preview
+        0 :s        string     3 ["A", "B", nil], 1 nil
+        1 :"sum(i)" uint64     2 [2, 2, 1]
+        2 :"sum(f)" double     3 [3.3, NaN, 2.2], 1 NaN
+        3 :count    uint8      2 [2, 2, 1]
+      STR
+      assert_equal str, group.summarize { [sum, count] }.tdr_str(tally: 0)
+    end
+
+    test 'summarize { Hash }' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 4 Vectors
+        Vectors : 3 numeric, 1 string
+        # key    type   level data_preview
+        0 :s     string     3 ["A", "B", nil], 1 nil
+        1 :sum_i uint8      2 [2, 2, 1]
+        2 :sum_f double     3 [3.3, NaN, 2.2], 1 NaN
+        3 :count uint8      2 [2, 2, 1]
+      STR
+      assert_equal str, group.summarize {
+                          { sum_i: sum(:i), sum_f: sum(:f), count: count }
+                        }.tdr_str(tally: 0)
+    end
+
+    test 'summarize(arg) { arg }' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 1 numeric, 1 string
+        # key    type   level data_preview
+        0 :s     string     3 ["A", "B", nil], 1 nil
+        1 :sum_i uint8      2 [2, 2, 1]
+      STR
+      assert_equal str, group.summarize(:sum_i) {
+                          sum(:i)
+                        }.tdr_str(tally: 0)
+      assert_equal str, group.summarize(:sum_i) {
+                          [sum(:i)]
+                        }.tdr_str(tally: 0)
+    end
+
+    test 'summarize(args) { args }' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 string
+        # key    type   level data_preview
+        0 :s     string     3 ["A", "B", nil], 1 nil
+        1 :sum_i uint8      2 [2, 2, 1]
+        2 :sum_f double     3 [3.3, NaN, 2.2], 1 NaN
+      STR
+      assert_equal str, group.summarize(:sum_i, :sum_f) {
+                          [sum(:i), sum(:f)]
+                        }.tdr_str(tally: 0)
+    end
+
+    test 'summarize(args)' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 string
+        # key       type   level data_preview
+        0 :s        string     3 ["A", "B", nil], 1 nil
+        1 :"sum(i)" uint64     2 [2, 2, 1]
+        2 :"sum(f)" double     3 [3.3, NaN, 2.2], 1 NaN
+      STR
+      assert_equal str, group.summarize(group.sum).tdr_str(tally: 0)
+    end
+
+    test 'summarize { not_one_aggregation_in_Hash }' do
+      group = @df.group(:s)
+      assert_raise(GroupArgumentError) { group.summarize { { sum: sum } } }
+    end
+  end
+
+  sub_test_case '#grouped_frame' do
+    setup do
+      @df = DataFrame.new(
+        i: [0, 0, 1, 2, 2, nil],
+        f: [0.0, 1.1, 2.2, 3.3, Float::NAN, nil],
+        s: ['A', 'B', nil, 'A', 'B', 'A'],
+        b: [true, false, true, false, true, nil]
+      )
+    end
+
+    test '#grouped_frame' do
+      group = @df.group(:s)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 1 Vector
+        Vector : 1 string
+        # key type   level data_preview
+        0 :s  string     3 ["A", "B", nil], 1 nil
+      STR
+      assert_equal str, group.grouped_frame.tdr_str
     end
   end
 

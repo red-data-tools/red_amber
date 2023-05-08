@@ -87,6 +87,7 @@ Metrics/AbcSize:
     '[]', # 33.76
     'split', # 37.35
     'aggregate', # 38.13
+    'filters', # 33.91
   ]
 
 # Max: 25
@@ -143,6 +144,7 @@ Metrics/MethodLength:
     'format_table', # 53
     'slice_by', # 38
     'assign_update', # 35
+    'summarize', # 35
     'drop', # 32
     'aggregate', # 31
   ]

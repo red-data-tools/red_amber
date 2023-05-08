@@ -243,7 +243,7 @@ class DataFrameTest < Test::Unit::TestCase
     end
 
     test '#sub_by_value' do
-      sf = @df.sub_by_value(keys: :y)
+      sf = @df.sub_by_value(:y)
       assert_kind_of SubFrames, sf
       assert_equal <<~STR, sf.to_s
                 x y        z
@@ -263,10 +263,8 @@ class DataFrameTest < Test::Unit::TestCase
       STR
     end
 
-    test '#sub_by_value with multiple keys' do
-      sf = @df.sub_by_value(keys: %i[y z])
-      assert_kind_of SubFrames, sf
-      assert_equal <<~STR, sf.to_s
+    setup do
+      @expected = <<~STR
                 x y        z
           <uint8> <string> <boolean>
         0       1 A        false
@@ -281,14 +279,26 @@ class DataFrameTest < Test::Unit::TestCase
         ---
                 x y        z
           <uint8> <string> <boolean>
-        0       5 B        true
+        0       4 B        (nil)
         ---
                 x y        z
           <uint8> <string> <boolean>
-        0       4 B        (nil)
+        0       5 B        true
         ---
         + 1 more DataFrame.
       STR
+    end
+
+    test '#sub_by_value(key1, key2)' do
+      sf = @df.sub_by_value(:y, :z)
+      assert_kind_of SubFrames, sf
+      assert_equal @expected, sf.to_s
+    end
+
+    test '#sub_by_value([key1, key2])' do
+      sf = @df.sub_by_value(%i[y z])
+      assert_kind_of SubFrames, sf
+      assert_equal @expected, sf.to_s
     end
 
     test '#sub_by_window with size and step' do

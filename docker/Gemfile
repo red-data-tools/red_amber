@@ -9,7 +9,7 @@ gem 'red-arrow', '~> 11.0.0'
 gem 'red-arrow-numo-narray'
 gem 'red-parquet', '~> 11.0.0'
 
-gem 'red_amber', '>=0.4.0'
+gem 'red_amber', path: '../'
 gem 'red-amber-view'
 gem 'rover-df'
 
@@ -18,4 +18,9 @@ gem 'red-datasets-arrow'
 
 gem 'benchmark_driver'
 gem 'benchmark-ips'
+
+gem 'charty'
 gem 'faker'
+gem 'matplotlib'
+gem 'pycall'
+gem 'unicode_plot'

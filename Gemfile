@@ -15,14 +15,13 @@ group :test do
   gem 'rubocop-rake'
   gem 'rubocop-rubycw', require: false
 
-  gem 'iruby'
-  gem 'test-unit'
-  gem 'webrick'
-  gem 'yard'
-
   gem 'benchmark_driver'
+  gem 'iruby'
   gem 'red-arrow-numo-narray'
   gem 'red-datasets-arrow'
   gem 'simplecov'
   gem 'simplecov-json'
+  gem 'test-unit'
+  gem 'webrick'
+  gem 'yard'
 end

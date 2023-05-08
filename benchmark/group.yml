@@ -1,18 +1,19 @@
 loop_count: 3
 
 contexts:
-  - name: 0.2.2
-    gems:
-      red_amber: 0.2.2
   - name: 0.3.0
     gems:
       red_amber: 0.3.0
+  - name: 0.4.2
+    gems:
+      red_amber: 0.4.2
   - name: HEAD
     prelude: |
       $LOAD_PATH.unshift(File.expand_path('lib'))
 
 prelude: |
   require 'red_amber'
+  include RedAmber
   require 'datasets-arrow'
 
   ds = Datasets::Rdatasets.new('nycflights13', 'flights')
@@ -32,8 +33,14 @@ benchmark:
   'G03: sum arr_delay, mean distance by flight': |
     df.group(:flight) { [sum(:arr_delay), mean(:distance)] }
 
-  'G04: mean air_time, distance by flight': |
+  'G04:filtersir_time, distance by flight': |
     df.group(:flight).mean(:air_time, :distance)
 
-  'G05: sum dep_delay, arr_delay by carrer': |
+  'G75: sum dep_delay, arr_delay by carrer': |
     df.group(:carrier).sum(:dep_delay, :arr_delay)
+  
+  'G06: filters': |
+    Group.new(df, :dest).filters
+
+  'G07: inspect': |
+    Group.new(df, :dest).inspect

@@ -20,6 +20,7 @@ module RedAmber
         @sizes = []
       end
 
+      # Generic iterator method
       def each
         @selectors.each
       end
@@ -27,14 +28,20 @@ module RedAmber
 
     # Boolean selectors of sub-dataframes
     class Filters < Selectors
+      # Return sizes of filter
+      # @return [Array<Integer>]
+      #   sizes of each sub dataframes.
+      #   Counts true for each filter.
       def sizes
-        # count true
         @sizes = @selectors.map { |s| s.to_a.count { _1 } } # rubocop:disable Performance/Size
       end
     end
 
     # Index selectors of sub-dataframes
     class Indices < Selectors
+      # Return sizes of selector indices.
+      # @return [Array<Integer>]
+      #   sizes of each sub dataframes.
       def sizes
         @sizes = @selectors.map(&:size)
       end
@@ -93,7 +100,7 @@ module RedAmber
       # @since 0.4.0
       #
       def by_group(group)
-        SubFrames.new(group.dataframe, group.filters)
+        SubFrames.by_filters(group.dataframe, group.filters)
       end
 
       # Create a new SubFrames object from a DataFrame and an array of indices.
@@ -291,15 +298,15 @@ module RedAmber
         selectors = yield(dataframe)
       end
 
-      if dataframe.empty? || selectors.nil? || selectors.empty?
+      if dataframe.empty? || selectors.nil? || selectors.size.zero? # rubocop:disable Style/ZeroLengthPredicate
         @baseframe = DataFrame.new
         @selectors = Selectors.new([])
       else
         @baseframe = dataframe
         @selectors =
-          if selectors[0].boolean?
+          if selectors.first.boolean?
             Filters.new(selectors)
-          elsif selectors[0].numeric?
+          elsif selectors.first.numeric?
             Indices.new(selectors)
           else
             raise SubFramesArgumentError, "illegal type: #{selectors}"
