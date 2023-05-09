@@ -18,13 +18,13 @@ A simple dataframe library for Ruby.
 ## Requirements
 ### Ruby
 Supported Ruby version is >= 3.0 (since RedAmber 0.3.0).
-- I decided to remove support for Ruby 2.7 without waiting for its EOL. See [Release note for v0.3.0](https://github.com/red-data-tools/red_amber/discussions/162) for details.
 
-### Libraries
+### Required libraries
 ```ruby
-gem 'red-arrow',   '~> 11.0.0' # Requires Apache Arrow (see installation below)
-gem 'red-parquet', '~> 11.0.0' # Optional, if you use IO from/to parquet
-gem 'red-datasets-arrow'       # Optional, if you use random sampling
+gem 'red-arrow',   '~> 12.0.0' # Requires Apache Arrow (see installation below)
+gem 'red-parquet', '~> 12.0.0' # Optional, if you use IO from/to parquet
+gem 'red-datasets-arrow'       # Optional, if you use Red Datasets or random sampling feature
+gem 'red-arrow-activerecord'   # Optional, if you use Active Record
 gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFrame
 ```
 
@@ -32,9 +32,9 @@ gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFram
 
 Install requirements before you install RedAmber.
 
-- Apache Arrow (~> 11.0.0)
-- Apache Arrow GLib (~> 11.0.0)
-- Apache Parquet GLib (~> 11.0.0)  # If you use IO from/to parquet
+- Apache Arrow (~> 12.0.0)
+- Apache Arrow GLib (~> 12.0.0)
+- Apache Parquet GLib (~> 12.0.0)  # If you use IO from/to parquet
 
 See [Apache Arrow install document](https://arrow.apache.org/install/).
   
@@ -67,9 +67,9 @@ See [Apache Arrow install document](https://arrow.apache.org/install/).
 If you prepared Apache Arrow, add these lines to your Gemfile:
 
 ```ruby
-gem 'red-arrow',   '~> 11.0.0'
+gem 'red-arrow',   '~> 12.0.0'
 gem 'red_amber'
-gem 'red-parquet', '~> 11.0.0' # Optional, if you use IO from/to parquet
+gem 'red-parquet', '~> 12.0.0' # Optional, if you use IO from/to parquet
 gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFrame
 gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
 gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
