@@ -249,14 +249,31 @@ class VectorTest < Test::Unit::TestCase
   end
 
   sub_test_case '#rank' do
-    test '#rank default option' do
-      float = [0.1, nil, Float::NAN, 0.2, 0.1]
-      string = ['A', nil, 'C', 'B', 'A']
-      chunked = Arrow::ChunkedArray.new([float])
+    float = [0.1, nil, Float::NAN, 0.2, 0.1]
+    string = ['A', nil, 'C', 'B', 'A']
+    chunked = Arrow::ChunkedArray.new([float])
+
+    test '#rank default' do
       expect = [0, 4, 3, 2, 1]
       assert_equal_array expect, Vector.new(float).rank
+      assert_equal_array expect, Vector.new(float).rank(tie: :first)
       assert_equal_array expect, Vector.new(string).rank
       assert_equal_array expect, Vector.new(chunked).rank
+    end
+
+    test '#rank tie: :min' do
+      expect = [0, 3, 3, 2, 0]
+      assert_equal_array expect, Vector.new(float).rank(tie: :min)
+    end
+
+    test '#rank tie: :max' do
+      expect = [1, 4, 4, 2, 1]
+      assert_equal_array expect, Vector.new(float).rank(tie: :max)
+    end
+
+    test '#rank tie: :dense' do
+      expect = [0, 2, 2, 1, 0]
+      assert_equal_array expect, Vector.new(float).rank(tie: :dense)
     end
   end
 
