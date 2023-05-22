@@ -221,6 +221,11 @@ module RedAmber
     # - Same as `#join` with `type: :inner`
     # - A kind of mutating join.
     #
+    # @note the order of joined results will be preserved by default.
+    #   This is enabled by appending index column to sort after joining but
+    #   it will cause some performance degradation. If you don't matter
+    #   the order of the result, set `force_order` option to `false`.
+    #
     # @overload inner_join(other, suffix: '.1', force_order: true)
     #   If `join_key` is not specified, common keys in self and other are used
     #   (natural keys). Returns joined dataframe.
@@ -279,6 +284,11 @@ module RedAmber
     # Join another DataFrame or Table, leaving all records.
     # - Same as `#join` with `type: :full_outer`
     # - A kind of mutating join.
+    #
+    # @note the order of joined results will be preserved by default.
+    #   This is enabled by appending index column to sort after joining but
+    #   it will cause some performance degradation. If you don't matter
+    #   the order of the result, set `force_order` option to `false`.
     #
     # @overload full_join(other, suffix: '.1', force_order: true)
     #   If `join_key` is not specified, common keys in self and other are used
@@ -348,6 +358,11 @@ module RedAmber
     # - Same as `#join` with `type: :left_outer`
     # - A kind of mutating join.
     #
+    # @note the order of joined results will be preserved by default.
+    #   This is enabled by appending index column to sort after joining but
+    #   it will cause some performance degradation. If you don't matter
+    #   the order of the result, set `force_order` option to `false`.
+    #
     # @overload left_join(other, suffix: '.1', force_order: true)
     #   If `join_key` is not specified, common keys in self and other are used
     #   (natural keys). Returns joined dataframe.
@@ -410,6 +425,11 @@ module RedAmber
     # - Same as `#join` with `type: :right_outer`
     # - A kind of mutating join.
     #
+    # @note the order of joined results will be preserved by default.
+    #   This is enabled by appending index column to sort after joining but
+    #   it will cause some performance degradation. If you don't matter
+    #   the order of the result, set `force_order` option to `false`.
+    #
     # @overload right_join(other, suffix: '.1', force_order: true)
     #   If `join_key` is not specified, common keys in self and other are used
     #   (natural keys). Returns joined dataframe.
@@ -422,11 +442,11 @@ module RedAmber
     #     df.right_join(other)
     #
     #     # =>
-    #       KEY           X1 X2
-    #       <string> <uint8> <boolean>
-    #     0 A              1 true
-    #     1 B              2 false
-    #     2 D          (nil) (nil)
+    #            X1 KEY      X2
+    #       <uint8> <string> <boolean>
+    #     0       1 A        true
+    #     1       2 B        false
+    #     2   (nil) D        (nil)
     #
     # @overload right_join(other, join_keys, suffix: '.1', force_order: true)
     #
@@ -439,11 +459,11 @@ module RedAmber
     #     df.right_join(other, :KEY)
     #
     #     # =>
-    #       KEY           X1 X2
-    #       <string> <uint8> <boolean>
-    #     0 A              1 true
-    #     1 B              2 false
-    #     2 D          (nil) (nil)
+    #            X1 KEY      X2
+    #       <uint8> <string> <boolean>
+    #     0       1 A        true
+    #     1       2 B        false
+    #     2   (nil) D        (nil)
     #
     # @overload right_join(other, join_key_pairs, suffix: '.1', force_order: true)
     #
@@ -456,11 +476,11 @@ module RedAmber
     #     df2.right_join(other2, { left: :KEY1, right: :KEY2 })
     #
     #     # =>
-    #       KEY1          X1 X2
-    #       <string> <uint8> <boolean>
-    #     0 A              1 true
-    #     1 B              2 false
-    #     2 D          (nil) (nil)
+    #             X1 KEY2     X2
+    #       <uint8> >string> <boolean>
+    #     0        1 A        true
+    #     1        2 B        false
+    #     2    (nil) D        (nil)
     #
     # @since 0.2.3
     #
@@ -479,6 +499,11 @@ module RedAmber
     # Return records of self that have a match in other.
     # - Same as `#join` with `type: :left_semi`
     # - A kind of filtering join.
+    #
+    # @note the order of joined results will be preserved by default.
+    #   This is enabled by appending index column to sort after joining but
+    #   it will cause some performance degradation. If you don't matter
+    #   the order of the result, set `force_order` option to `false`.
     #
     # @overload semi_join(other, suffix: '.1', force_order: true)
     #   If `join_key` is not specified, common keys in self and other are used
@@ -538,6 +563,11 @@ module RedAmber
     # Return records of self that do not have a match in other.
     # - Same as `#join` with `type: :left_anti`
     # - A kind of filtering join.
+    #
+    # @note the order of joined results will be preserved by default.
+    #   This is enabled by appending index column to sort after joining but
+    #   it will cause some performance degradation. If you don't matter
+    #   the order of the result, set `force_order` option to `false`.
     #
     # @overload anti_join(other, suffix: '.1', force_order: true)
     #   If `join_key` is not specified, common keys in self and other are used
@@ -661,7 +691,7 @@ module RedAmber
         raise DataFrameArgumentError, 'keys are not same with self and other'
       end
 
-      join(other, keys, type: :full_outer)
+      join(other, keys, type: :full_outer, force_order: true)
     end
 
     # Select records appearing in self but not in other.
@@ -733,12 +763,12 @@ module RedAmber
     #     1 B        E
     #     2 C        F
 
-    # @note the order of joined results will be preserved by default.
-    #   This is enabled by appending index column to sort after joining but
-    #   it will cause some performance degradation. If you don't matter
-    #   the order of the result, set `force_order` option to `false`.
+    # @note the order of joined results may not be preserved by default.
+    #   if you prefer to preserve the order of the result, set `force_order` option
+    #   to `true`. This is enabled by appending index column to sort after joining
+    #   so it will cause some performance degradation.
     #
-    # @overload join(other, type: :inner, suffix: '.1', force_order: true)
+    # @overload join(other, type: :inner, suffix: '.1', force_order: false)
     #
     #   If `join_key` is not specified, common keys in self and other are used
     #   (natural keys). Returns joined dataframe.
@@ -767,7 +797,7 @@ module RedAmber
     #     2 C              3 (nil)
     #     3 D          (nil) (nil)
     #
-    # @overload join(other, join_keys, type: :inner, suffix: '.1', force_order: true)
+    # @overload join(other, join_keys, type: :inner, suffix: '.1', force_order: false)
     #
     #   @macro join_before
     #   @macro join_key_in_array
@@ -792,7 +822,8 @@ module RedAmber
     #     0 A              1       1
     #     1 B              2       4
     #
-    # @overload join(other, join_key_pairs, type: :inner, suffix: '.1', force_order: true)
+    # @overload join(
+    #   other, join_key_pairs, type: :inner, suffix: '.1', force_order: false)
     #
     #   @macro join_before
     #   @macro join_key_in_hash
@@ -828,7 +859,8 @@ module RedAmber
     #
     # @since 0.2.3
     #
-    def join(other, join_keys = nil, type: :inner, suffix: '.1', force_order: true)
+    def join(other, join_keys = nil, type: :inner, suffix: '.1', force_order: false)
+      left_table = table
       right_table =
         case other
         when DataFrame
@@ -839,24 +871,26 @@ module RedAmber
           raise DataFrameArgumentError, 'other must be a DataFrame or an Arrow::Table'
         end
 
-      type = type.to_sym
-      left_index = :__LEFT_INDEX__
-      right_index = :__RIGHT_INDEX__
       if force_order
+        left_index = :__LEFT_INDEX__
+        right_index = :__RIGHT_INDEX__
         left_table = assign(left_index) { indices }.table
         other = DataFrame.create(other) if other.is_a?(Arrow::Table)
         right_table = other.assign(right_index) { indices }.table
-      else
-        left_table = table
       end
 
-      table_keys = left_table.keys
-      other_keys = right_table.keys
-
+      left_table_keys = ensure_keys(left_table.keys)
+      right_table_keys = ensure_keys(right_table.keys)
       # natural keys (implicit common keys)
-      join_keys ||= table_keys.intersection(other_keys)
+      join_keys ||= left_table_keys.intersection(right_table_keys)
 
-      # This is not necessary if additional procedure is contributed to Red Arrow.
+      type = Arrow::JoinType.try_convert(type) || type
+      type_nick = type.nick
+
+      plan = Arrow::ExecutePlan.new
+      left_node = plan.build_source_node(left_table)
+      right_node = plan.build_source_node(right_table)
+
       if join_keys.is_a?(Hash)
         left_keys = ensure_keys(join_keys[:left])
         right_keys = ensure_keys(join_keys[:right])
@@ -865,95 +899,100 @@ module RedAmber
         right_keys = left_keys
       end
 
-      case type
-      when :full_outer, :left_semi, :left_anti, :right_semi, :right_anti
-        left_outputs = nil
-        right_outputs = nil
-      when :inner, :left_outer
-        left_outputs = table_keys
-        right_outputs = other_keys - right_keys
-      when :right_outer
-        left_outputs = table_keys - left_keys
-        right_outputs = other_keys
+      hash_join_node_options = Arrow::HashJoinNodeOptions.new(type, left_keys, right_keys)
+      case type.nick
+      when 'inner', 'left-outer'
+        hash_join_node_options.left_outputs = left_table_keys
+        hash_join_node_options.right_outputs = right_table_keys - right_keys
+      when 'right-outer'
+        hash_join_node_options.left_outputs = left_table_keys - left_keys
+        hash_join_node_options.right_outputs = right_table_keys
       end
 
-      # Should we rescue errors in Arrow::Table#join for usability ?
-      joined_table =
-        left_table.join(
-          right_table,
-          join_keys,
-          type: type,
-          left_outputs: left_outputs,
-          right_outputs: right_outputs
-        )
-
-      case type
-      when :inner, :left_outer, :left_semi, :left_anti, :right_semi, :right_anti
-        dataframe =
-          if joined_table.keys.uniq!
-            DataFrame.create(rename_table(joined_table, n_keys, suffix))
-          else
-            DataFrame.create(joined_table)
-          end
-        sorter =
-          case type
-          when :inner, :left_outer
-            [left_index, right_index]
-          when :left_semi, :left_anti
-            [left_index]
-          when :right_semi, :right_anti
-            [right_index]
-          end
-      when :full_outer
-        key_index_lr =
-          left_keys.map { left_table.keys.index(_1) }
-            .zip(right_keys.map { left_table.keys.size + right_table.keys.index(_1) })
-        renamed_table = rename_table(joined_table, n_keys, suffix)
-        dropper = []
-        dataframe =
-          DataFrame.create(renamed_table).assign do |df|
-            key_index_lr.map do |l, r|
-              dropper << df.keys[r]
-              [df.keys[l], merge_array(df.vectors[l].data, df.vectors[r].data)]
-            end
-          end
-        dataframe = dataframe.drop(dropper)
-        sorter = [left_index, right_index]
-      when :right_outer
-        dataframe =
-          if joined_table.keys.uniq!
-            DataFrame.create(rename_table(joined_table, left_outputs.size, suffix))
-          else
-            DataFrame.create(joined_table)
-          end
-        dataframe = dataframe.pick(right_keys, dataframe.keys - right_keys)
-        sorter = [left_index, right_index]
+      hash_join_node =
+        plan.build_hash_join_node(left_node, right_node, hash_join_node_options)
+      merge_node =
+        if type_nick == 'full-outer'
+          merge_join_key_node(plan, hash_join_node,
+                              left_table_keys, right_table_keys,
+                              left_keys, right_keys)
+        else
+          hash_join_node
+        end
+      joined_table = sink_and_start_plan(plan, merge_node)
+      if joined_table.keys.uniq!
+        joined_table =
+          rename_table(joined_table, left_table_keys, right_table_keys, type_nick, suffix)
       end
 
+      df = DataFrame.create(joined_table)
       if force_order
-        dataframe
-          .sort(sorter)
+        sorter =
+          case type_nick
+          when 'right-semi', 'right-anti'
+            [right_index]
+          when 'left-semi', 'left-anti'
+            [left_index]
+          else
+            [left_index, right_index]
+          end
+        df.sort(sorter)
           .drop(sorter)
       else
-        dataframe
+        df
       end
     end
 
     private
 
-    # To ensure Array of Symbols
+    # To ensure Array of Strings
     def ensure_keys(keys)
-      Array(keys).map(&:to_sym)
+      Array(keys).map(&:to_s)
     end
 
-    # Rename duplicate keys by suffix
-    def rename_table(joined_table, n_keys, suffix)
-      joined_keys = joined_table.keys
-      other_keys = joined_keys[n_keys..]
+    # Merge key columns and preserve as left and remove right.
+    def merge_join_key_node(plan, input_node,
+                            left_table_keys, right_table_keys,
+                            left_keys, right_keys)
+      left_indices = left_keys.map { left_table_keys.index(_1) }
+      right_offset = left_table_keys.size
+      right_indices = right_keys.map { right_table_keys.index(_1) + right_offset }
+      expressions = []
+      names = []
+      left_table_keys.each_with_index do |key, index|
+        names << key
+        expressions <<
+          if (i = left_indices.index(index))
+            left_field = Arrow::FieldExpression.new("[#{left_indices[i]}]")
+            right_field = Arrow::FieldExpression.new("[#{right_indices[i]}]")
+            is_left_null = Arrow::CallExpression.new('is_null', [left_field])
+            Arrow::CallExpression.new('if_else', [is_left_null, right_field, left_field])
+          else
+            Arrow::FieldExpression.new("[#{index}]")
+          end
+      end
+      right_table_keys.each.with_index(right_offset) do |key, index|
+        unless right_indices.include?(index)
+          names << key
+          expressions << Arrow::FieldExpression.new("[#{index}]")
+        end
+      end
+      project_node_options = Arrow::ProjectNodeOptions.new(expressions, names)
+      plan.build_project_node(input_node, project_node_options)
+    end
 
+    def rename_table(joined_table, left_table_keys, right_table_keys, type_nick, suffix)
+      joined_keys = joined_table.keys
+      pos_rights =
+        if type_nick.start_with?('right')
+          joined_keys.size - right_table_keys.size
+        else
+          left_table_keys.size
+        end
+      rights = joined_keys[pos_rights..]
       dup_keys = joined_keys.tally.select { |_, v| v > 1 }.keys
       renamed_right_keys =
-        other_keys.map do |key|
+        rights.map do |key|
           if dup_keys.include?(key)
             suffixed = "#{key}#{suffix}".to_sym
             # Find a key from suffixed.succ
@@ -962,19 +1001,13 @@ module RedAmber
             key
           end
         end
-      joined_keys[n_keys..] = renamed_right_keys
+      joined_keys[pos_rights..] = renamed_right_keys
 
       fields =
         joined_keys.map.with_index do |k, i|
           Arrow::Field.new(k, joined_table[i].data_type)
         end
       Arrow::Table.new(Arrow::Schema.new(fields), joined_table.columns)
-    end
-
-    # Merge two Arrow::Arrays
-    def merge_array(array1, array2)
-      t = Arrow::Function.find(:is_null).execute([array1])
-      Arrow::Function.find(:if_else).execute([t, array2, array1]).value
     end
   end
 end

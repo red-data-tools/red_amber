@@ -221,8 +221,8 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
 
       test '#right_join with a join_key)' do
         expected = DataFrame.new(
-          KEY: %w[A B D],
           X: [1, 2, nil],
+          KEY: %w[A B D],
           Y: [3, 2, 1]
         )
         assert_equal expected, @df1.right_join(@right1) # natural join
@@ -398,9 +398,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
 
       test '#right_join with join_keys' do
         expected = DataFrame.new(
+          X: [1, nil, nil],
           KEY1: %w[A B D],
           KEY2: %w[s u v],
-          X: [1, nil, nil],
           Y: [3, 2, 1]
         )
         assert_equal expected, @df2.right_join(@right2) # natural join
@@ -419,10 +419,10 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
 
       test '#right_join with join_keys, partial join_key/rename' do
         expected = DataFrame.new(
-          KEY2: %w[s u v],
           KEY1: ['A', 'C', nil],
           X: [1, 3, nil],
           'KEY1.1': %w[A B D],
+          KEY2: %w[s u v],
           Y: [3, 2, 1]
         )
         assert_equal expected, @df2.right_join(@right2, :KEY2)
@@ -527,9 +527,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
 
       test '#right_join with rename and collision by default' do
         expected = DataFrame.new(
-          'KEY.1': %w[A B D],
           KEY: ['s', 't', nil],
           X: [1, 2, nil],
+          'KEY.1': %w[A B D],
           'KEY.2': %w[s u v],
           Y: [3, 2, 1]
         )
@@ -551,22 +551,46 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
 
     sub_test_case 'sort by :force_order' do
-      test '#full_join w/o sort' do
+      test '#full_join w/ sort' do
         sort = @df2.full_join(@right2, :KEY2, force_order: true)
         no_sort = @df2.full_join(@right2, :KEY2, force_order: false)
-        assert_equal_dataframe_by_hash(sort, no_sort)
+        assert_equal_dataframe_non_order(sort, no_sort)
       end
 
-      test '#left_join w/o sort' do
+      test '#left_join w/ sort' do
         sort = @df2.left_join(@right2, :KEY2, force_order: true)
         no_sort = @df2.left_join(@right2, :KEY2, force_order: false)
-        assert_equal_dataframe_by_hash(sort, no_sort)
+        assert_equal_dataframe_non_order(sort, no_sort)
       end
 
-      test '#right_join w/o sort' do
+      test '#right_join w/ sort' do
         sort = @df2.right_join(@right2, :KEY2, force_order: true)
         no_sort = @df2.right_join(@right2, :KEY2, force_order: false)
-        assert_equal_dataframe_by_hash(sort, no_sort)
+        assert_equal_dataframe_non_order(sort, no_sort)
+      end
+
+      test '#left_semi w/ sort' do
+        sort = @df2.join(@right2, :KEY2, type: :left_semi, force_order: true)
+        no_sort = @df2.join(@right2, :KEY2, type: :left_semi, force_order: false)
+        assert_equal_dataframe_non_order(sort, no_sort)
+      end
+
+      test '#left_anti w/ sort' do
+        sort = @df2.join(@right2, :KEY2, type: :left_anti, force_order: true)
+        no_sort = @df2.join(@right2, :KEY2, type: :left_anti, force_order: false)
+        assert_equal_dataframe_non_order(sort, no_sort)
+      end
+
+      test '#right_semi w/ sort' do
+        sort = @df2.join(@right2, :KEY2, type: :right_semi, force_order: true)
+        no_sort = @df2.join(@right2, :KEY2, type: :right_semi, force_order: false)
+        assert_equal_dataframe_non_order(sort, no_sort)
+      end
+
+      test '#right_anti w/ sort' do
+        sort = @df2.join(@right2, :KEY2, type: :right_anti, force_order: true)
+        no_sort = @df2.join(@right2, :KEY2, type: :right_anti, force_order: false)
+        assert_equal_dataframe_non_order(sort, no_sort)
       end
     end
 

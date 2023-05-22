@@ -45,7 +45,7 @@ module TestHelper
     end
   end
 
-  def assert_equal_dataframe_by_hash(expected, actual, message = nil)
+  def assert_equal_dataframe_non_order(expected, actual, message = nil)
     exp = expected.keys.map { |k| { k => expected[k].tally } }
     act = actual.keys.map { |k| { k => actual[k].tally } }
     assert_equal(exp, act, message)
