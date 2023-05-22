@@ -187,10 +187,20 @@ class VectorTest < Test::Unit::TestCase
 
   sub_test_case '#index' do
     vector = Vector.new([1, 2, 3, nil])
+
     test 'find index' do
       assert_equal 1, vector.index(2)
+    end
+
+    test 'find index for nil' do
       assert_equal 3, vector.index(nil)
+    end
+
+    test 'index not found' do
       assert_nil vector.index(0) # out of range
+    end
+
+    test 'find index for casted scalar' do
       assert_equal 1, vector.index(2.0) # types are ignored
     end
   end

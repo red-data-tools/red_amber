@@ -153,10 +153,23 @@ module RedAmber
     # @param element
     #   an element of self.
     # @return [integer, nil]
-    #   founded position of element. If it is not found, returns nil.
+    #   position of element. If it is not found, returns nil.
     #
     def index(element)
-      (0...size).find { |i| self[i] == element }
+      if element.nil?
+        datum = find(:is_null).execute([data])
+        value = Arrow::Scalar.resolve(true, :boolean)
+      else
+        datum = data
+        value = Arrow::Scalar.resolve(element, type)
+      end
+      datum = find(:index).execute([datum], value: value)
+      index = get_scalar(datum)
+      if index.negative?
+        nil
+      else
+        index
+      end
     end
 
     # Returns first element of self.
