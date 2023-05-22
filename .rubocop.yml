@@ -76,6 +76,7 @@ Metrics/AbcSize:
   Max: 30
   CountRepeatedAttributes: false
   AllowedMethods: [
+    'join_merge_keys', # 54.18
     'join', # 51.87
     'dataframe_info', # 46.5
     'format_table', # 84.62
@@ -140,11 +141,12 @@ Metrics/MethodLength:
   Max: 30
   AllowedMethods: [
     'join', # 47
-    'dataframe_info', # 33
+    'join_merge_keys', # 41
     'format_table', # 53
     'slice_by', # 38
     'assign_update', # 35
     'summarize', # 35
+    'dataframe_info', # 33
     'drop', # 32
     'aggregate', # 31
   ]
