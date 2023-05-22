@@ -229,15 +229,23 @@ module RedAmber
       take(sort_indices(order: order))
     end
 
-    # Returns numerical rank of self.
+    # Returns 0-based numerical rank of self.
     # - Nil values are considered greater than any value.
     # - NaN values are considered greater than any value but smaller than nil values.
-    # - Tiebreakers are ranked in order of appearance.
+    # - Tiebreakers are ranked in order of appearance by default or
+    #   with `tie: :first` option.
     # - `RankOptions` in C++ function is not implemented in C GLib yet.
     #   This method is currently fixed to the default behavior.
     #
+    # @param tie [:first, :min, :max, :dense]
+    #   configure how ties between equal values are handled.
+    #   - first: Ranks are assigned in order of when ties appear in the input.
+    #   - min: Ties get the smallest possible rank in the sorted order.
+    #   - max: Ties get the largest possible rank in the sorted order.
+    #   - dense: The ranks span a dense [1, M] interval where M is the number
+    #     of distinct values in the input.
     # @return [Vector]
-    #   0-based rank of self (0...size in range).
+    #   0-based rank in uint64 of self (0...size in range).
     # @example Rank of float Vector
     #   fv = Vector.new(0.1, nil, Float::NAN, 0.2, 0.1); fv
     #
@@ -245,7 +253,7 @@ module RedAmber
     #   #<RedAmber::Vector(:double, size=5):0x000000000000c65c>
     #   [0.1, nil, NaN, 0.2, 0.1]
     #
-    #   fv.rank
+    #   fv.rank # or fv.rank(tie: :first)
     #
     #   # =>
     #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
@@ -264,17 +272,38 @@ module RedAmber
     #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
     #   [0, 2, 4, 1, 3]
     #
+    # @example Rank of Float Vector with tie: :min
+    #   fv.rank(tie: :min)
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=5):0x00000000001593ac>
+    #   [0, 3, 3, 2, 0]
+    #
+    # @example Rank of Float Vector with tie: :max
+    #   fv.rank(tie: :max)
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=5):0x0000000000160d50>
+    #   [1, 4, 4, 2, 1]
+    #
+    # @example Rank of Float Vector with tie: :dense
+    #   fv.rank(tie: :dense)
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=5):0x000000000016993c>
+    #   [0, 2, 2, 1, 0]
+    #
     # @since 0.4.0
     #
-    def rank
+    def rank(tie: :first)
       datum =
         case data
         when Arrow::ChunkedArray
-          Arrow::Function.find(:rank).execute([data.pack])
+          find(:rank).execute([data.pack], tiebreaker: tie)
         else
-          Arrow::Function.find(:rank).execute([data])
+          find(:rank).execute([data], tiebreaker: tie)
         end
-      Vector.create(datum.value) - 1
+      Vector.create(find(:subtract).execute([datum, 1]).value)
     end
 
     # Pick up elements at random.
