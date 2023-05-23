@@ -75,13 +75,14 @@
 
 <h3 id="label-Ruby">Ruby</h3>
 
-<p>Supported Ruby version is &gt;= 3.0 (since RedAmber 0.3.0). - I decided to remove support for Ruby 2.7 without waiting for its EOL. See <a href="https://github.com/red-data-tools/red_amber/discussions/162">Release note for v0.3.0</a> for details.</p>
+<p>Supported Ruby version is &gt;= 3.0 (since RedAmber 0.3.0).</p>
 
-<h3 id="label-Libraries">Libraries</h3>
+<h3 id="label-Required+libraries">Required libraries</h3>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 11.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Requires Apache Arrow (see installation below)
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-parquet</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 11.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to parquet
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-datasets-arrow</span><span class='tstring_end'>&#39;</span></span>       <span class='comment'># Optional, if you use random sampling
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Requires Apache Arrow (see installation below)
+</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-parquet</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to parquet
+</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-datasets-arrow</span><span class='tstring_end'>&#39;</span></span>       <span class='comment'># Optional, if you use Red Datasets or random sampling feature
+</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-activerecord</span><span class='tstring_end'>&#39;</span></span>   <span class='comment'># Optional, if you use Active Record
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rover-df</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 0.3.0</span><span class='tstring_end'>&#39;</span></span>  <span class='comment'># Optional, if you use IO from/to Rover::DataFrame
 </span></code></pre>
 
@@ -89,11 +90,11 @@
 
 <p>Install requirements before you install RedAmber.</p>
 <ul><li>
-<p>Apache Arrow (~&gt; 11.0.0)</p>
+<p>Apache Arrow (~&gt; 12.0.0)</p>
 </li><li>
-<p>Apache Arrow GLib (~&gt; 11.0.0)</p>
+<p>Apache Arrow GLib (~&gt; 12.0.0)</p>
 </li><li>
-<p>Apache Parquet GLib (~&gt; 11.0.0) # If you use IO from/to parquet</p>
+<p>Apache Parquet GLib (~&gt; 12.0.0) # If you use IO from/to parquet</p>
 </li></ul>
 
 <p>See <a href="https://arrow.apache.org/install/">Apache Arrow install document</a>.</p>
@@ -102,7 +103,7 @@
 
 <p> <code>   sudo apt update   sudo apt install -y -V ca-certificates lsb-release wget   wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr &#39;A-Z&#39; &#39;a-z&#39;)/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt update   sudo apt install -y -V libarrow-dev   sudo apt install -y -V libarrow-glib-dev </code></p>
 </li><li>
-<p>On Fedora 38 (Rawhide):</p>
+<p>On Fedora 39 (Rawhide):</p>
 
 <p> <code>   sudo dnf update   sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel </code></p>
 </li><li>
@@ -113,9 +114,9 @@
 
 <p>If you prepared Apache Arrow, add these lines to your Gemfile:</p>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 11.0.0</span><span class='tstring_end'>&#39;</span></span>
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span>
 <span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red_amber</span><span class='tstring_end'>&#39;</span></span>
-<span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-parquet</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 11.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to parquet
+<span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-parquet</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to parquet
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rover-df</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 0.3.0</span><span class='tstring_end'>&#39;</span></span>  <span class='comment'># Optional, if you use IO from/to Rover::DataFrame
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-datasets-arrow</span><span class='tstring_end'>&#39;</span></span>       <span class='comment'># Optional, recommended if you use Red Datasets
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-numo-narray</span><span class='tstring_end'>&#39;</span></span>    <span class='comment'># Optional, recommended if you use inputs from Numo::NArray
@@ -283,7 +284,7 @@ bundle exec rake test
 </div></div>
 
       <div id="footer">
-  Generated on Mon May  8 06:49:52 2023 by
+  Generated on Tue May 23 03:53:05 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>

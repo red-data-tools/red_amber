@@ -267,7 +267,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#join-instance_method" title="#join (instance method)">#<strong>join</strong>(other, join_keys = nil, type: :inner, suffix: &#39;.1&#39;, force_order: true)  &#x21d2; Object </a>
+      <a href="#join-instance_method" title="#join (instance method)">#<strong>join</strong>(other, join_keys = nil, type: :inner, suffix: &#39;.1&#39;, force_order: false)  &#x21d2; Object </a>
     
 
     
@@ -459,6 +459,14 @@
 </h3><div class="docstring">
   <div class="discussion">
     
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>the order of joined results will be preserved by default. This is enabled by appending index column to sort after joining but it will cause some performance degradation. If you don’t matter the order of the result, set ‘force_order` option to `false`.</p>
+</div>
+  </div>
+
+
 <p>Return records of self that do not have a match in other.</p>
 <ul><li>
 <p>Same as ‘#join` with `type: :left_anti`</p>
@@ -968,12 +976,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-590
-591
-592</pre>
+620
+621
+622</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 590</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 620</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_anti_join'>anti_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_anti</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='id identifier rubyid_force_order'>force_order</span><span class='rparen'>)</span>
@@ -1289,16 +1297,16 @@ other.intersect(df)
       <pre class="lines">
 
 
-694
-695
-696
-697
-698
-699
-700</pre>
+724
+725
+726
+727
+728
+729
+730</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 694</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 724</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_difference'>difference</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -1334,6 +1342,14 @@ other.intersect(df)
 </h3><div class="docstring">
   <div class="discussion">
     
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>the order of joined results will be preserved by default. This is enabled by appending index column to sort after joining but it will cause some performance degradation. If you don’t matter the order of the result, set ‘force_order` option to `false`.</p>
+</div>
+  </div>
+
+
 <p>Join another DataFrame or Table, leaving all records.</p>
 <ul><li>
 <p>Same as ‘#join` with `type: :full_outer`</p>
@@ -1852,13 +1868,13 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-340
-341
-342
-343</pre>
+350
+351
+352
+353</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 340</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 350</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_full_join'>full_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span>
@@ -1887,6 +1903,14 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 </h3><div class="docstring">
   <div class="discussion">
     
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>the order of joined results will be preserved by default. This is enabled by appending index column to sort after joining but it will cause some performance degradation. If you don’t matter the order of the result, set ‘force_order` option to `false`.</p>
+</div>
+  </div>
+
+
 <p>Join another DataFrame or Table, leaving only the matching records.</p>
 <ul><li>
 <p>Same as ‘#join` with `type: :inner`</p>
@@ -2399,12 +2423,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-275
-276
-277</pre>
+280
+281
+282</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 275</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 280</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inner_join'>inner_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='id identifier rubyid_force_order'>force_order</span><span class='rparen'>)</span>
@@ -2537,16 +2561,16 @@ other3 = DataFrame.new(
       <pre class="lines">
 
 
-629
-630
-631
-632
-633
-634
-635</pre>
+659
+660
+661
+662
+663
+664
+665</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 629</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 659</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_intersect'>intersect</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -2564,11 +2588,11 @@ other3 = DataFrame.new(
   <h3 class="signature " id="join-instance_method">
   
     
-      <span class="overload">#<strong>join</strong>(other, type: :inner, suffix: &#39;.1&#39;, force_order: true)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+      <span class="overload">#<strong>join</strong>(other, type: :inner, suffix: &#39;.1&#39;, force_order: false)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
     
-      <span class="overload">#<strong>join</strong>(other, join_keys, type: :inner, suffix: &#39;.1&#39;, force_order: true)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+      <span class="overload">#<strong>join</strong>(other, join_keys, type: :inner, suffix: &#39;.1&#39;, force_order: false)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
     
-      <span class="overload">#<strong>join</strong>(other, join_key_pairs, type: :inner, suffix: &#39;.1&#39;, force_order: true)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+      <span class="overload">#<strong>join</strong>  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
     
   
 
@@ -2581,7 +2605,7 @@ other3 = DataFrame.new(
   <div class="note notetag">
     <strong>Note:</strong>
     <div class='inline'>
-<p>the order of joined results will be preserved by default. This is enabled by appending index column to sort after joining but it will cause some performance degradation. If you don’t matter the order of the result, set ‘force_order` option to `false`.</p>
+<p>the order of joined results may not be preserved by default. if you prefer to preserve the order of the result, set ‘force_order` option to `true`. This is enabled by appending index column to sort after joining so it will cause some performance degradation.</p>
 </div>
   </div>
 
@@ -2596,7 +2620,7 @@ other3 = DataFrame.new(
     
       
       <li class="overload_item">
-        <span class="signature">#<strong>join</strong>(other, type: :inner, suffix: &#39;.1&#39;, force_order: true)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <span class="signature">#<strong>join</strong>(other, type: :inner, suffix: &#39;.1&#39;, force_order: false)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
         <div class="docstring">
   <div class="discussion">
     
@@ -2694,7 +2718,7 @@ df.join(other, type: :full_outer)
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>true</tt>)</em>
+        <em class="default">(defaults to: <tt>false</tt>)</em>
       
       
         &mdash;
@@ -2753,7 +2777,7 @@ df.join(other, type: :full_outer)
     
       
       <li class="overload_item">
-        <span class="signature">#<strong>join</strong>(other, join_keys, type: :inner, suffix: &#39;.1&#39;, force_order: true)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <span class="signature">#<strong>join</strong>(other, join_keys, type: :inner, suffix: &#39;.1&#39;, force_order: false)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
         <div class="docstring">
   <div class="discussion">
     
@@ -2879,7 +2903,7 @@ other3 = DataFrame.new(
         <span class='type'>(<tt>Boolean</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>true</tt>)</em>
+        <em class="default">(defaults to: <tt>false</tt>)</em>
       
       
         &mdash;
@@ -2938,11 +2962,11 @@ other3 = DataFrame.new(
     
       
       <li class="overload_item">
-        <span class="signature">#<strong>join</strong>(other, join_key_pairs, type: :inner, suffix: &#39;.1&#39;, force_order: true)  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
+        <span class="signature">#<strong>join</strong>  &#x21d2; <tt><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></tt> </span>
         <div class="docstring">
   <div class="discussion">
     
-<p>Returns joined dataframe.</p>
+<p>other, join_key_pairs, type: :inner, suffix: ‘.1’, force_order: false)</p>
 
 
   </div>
@@ -3059,8 +3083,6 @@ other4 = DataFrame.new(
         <span class='type'>(<tt>:left_semi</tt>, <tt>:right_semi</tt>, <tt>:left_anti</tt>, <tt>:right_anti</tt>, <tt>:inner</tt>, <tt>left_outer</tt>, <tt>:right_outer</tt>, <tt>:full_outer</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>:inner</tt>)</em>
-      
       
         &mdash;
         <div class='inline'>
@@ -3076,8 +3098,6 @@ other4 = DataFrame.new(
       
         <span class='type'>(<tt>Boolean</tt>)</span>
       
-      
-        <em class="default">(defaults to: <tt>true</tt>)</em>
       
       
         &mdash;
@@ -3100,8 +3120,6 @@ other4 = DataFrame.new(
         <span class='type'>(<tt>#succ</tt>)</span>
       
       
-        <em class="default">(defaults to: <tt>&#39;.1&#39;</tt>)</em>
-      
       
         &mdash;
         <div class='inline'>
@@ -3113,47 +3131,6 @@ other4 = DataFrame.new(
 </ul>
 
   
-    
-    
-    
-    
-    <p class="tag_title">Options Hash (<tt>join_key_pairs</tt>):</p>
-    <ul class="option">
-      
-        <li>
-          <span class="name">:left</span>
-          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
-          <span class="default">
-            
-          </span>
-          
-            &mdash; <div class='inline'>
-<p>join keys in ‘self`.</p>
-</div>
-          
-        </li>
-      
-        <li>
-          <span class="name">:right</span>
-          <span class="type">(<tt>String</tt>, <tt>Symbol</tt>, <tt>Array&lt;String, Symbol&gt;</tt>)</span>
-          <span class="default">
-            
-          </span>
-          
-            &mdash; <div class='inline'>
-<p>join keys in ‘other`.</p>
-</div>
-          
-        </li>
-      
-    </ul>
-  
-    
-    
-    
-    
-    
-    
 
 <p class="tag_title">Returns:</p>
 <ul class="return">
@@ -3202,37 +3179,6 @@ other4 = DataFrame.new(
       <pre class="lines">
 
 
-831
-832
-833
-834
-835
-836
-837
-838
-839
-840
-841
-842
-843
-844
-845
-846
-847
-848
-849
-850
-851
-852
-853
-854
-855
-856
-857
-858
-859
-860
-861
 862
 863
 864
@@ -3308,15 +3254,13 @@ other4 = DataFrame.new(
 934
 935
 936
-937
-938
-939
-940</pre>
+937</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 831</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 862</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>false</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_left_table'>left_table</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span>
   <span class='id identifier rubyid_right_table'>right_table</span> <span class='op'>=</span>
     <span class='kw'>case</span> <span class='id identifier rubyid_other'>other</span>
     <span class='kw'>when</span> <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span>
@@ -3327,25 +3271,27 @@ other4 = DataFrame.new(
       <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>other must be a DataFrame or an Arrow::Table</span><span class='tstring_end'>&#39;</span></span>
     <span class='kw'>end</span>
 
-  <span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
-  <span class='id identifier rubyid_left_index'>left_index</span> <span class='op'>=</span> <span class='symbol'>:__LEFT_INDEX__</span>
-  <span class='id identifier rubyid_right_index'>right_index</span> <span class='op'>=</span> <span class='symbol'>:__RIGHT_INDEX__</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_force_order'>force_order</span>
+    <span class='id identifier rubyid_left_index'>left_index</span> <span class='op'>=</span> <span class='symbol'>:__LEFT_INDEX__</span>
+    <span class='id identifier rubyid_right_index'>right_index</span> <span class='op'>=</span> <span class='symbol'>:__RIGHT_INDEX__</span>
     <span class='id identifier rubyid_left_table'>left_table</span> <span class='op'>=</span> <span class='id identifier rubyid_assign'>assign</span><span class='lparen'>(</span><span class='id identifier rubyid_left_index'>left_index</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_indices'>indices</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_table'>table</span>
     <span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Table</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_right_table'>right_table</span> <span class='op'>=</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_assign'>assign</span><span class='lparen'>(</span><span class='id identifier rubyid_right_index'>right_index</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_indices'>indices</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_table'>table</span>
-  <span class='kw'>else</span>
-    <span class='id identifier rubyid_left_table'>left_table</span> <span class='op'>=</span> <span class='id identifier rubyid_table'>table</span>
   <span class='kw'>end</span>
 
-  <span class='id identifier rubyid_table_keys'>table_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_left_table'>left_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
-  <span class='id identifier rubyid_other_keys'>other_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_right_table'>right_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span>
-
+  <span class='id identifier rubyid_left_table_keys'>left_table_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_ensure_keys'>ensure_keys</span><span class='lparen'>(</span><span class='id identifier rubyid_left_table'>left_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_right_table_keys'>right_table_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_ensure_keys'>ensure_keys</span><span class='lparen'>(</span><span class='id identifier rubyid_right_table'>right_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='rparen'>)</span>
   <span class='comment'># natural keys (implicit common keys)
-</span>  <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>||=</span> <span class='id identifier rubyid_table_keys'>table_keys</span><span class='period'>.</span><span class='id identifier rubyid_intersection'>intersection</span><span class='lparen'>(</span><span class='id identifier rubyid_other_keys'>other_keys</span><span class='rparen'>)</span>
+</span>  <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>||=</span> <span class='id identifier rubyid_left_table_keys'>left_table_keys</span><span class='period'>.</span><span class='id identifier rubyid_intersection'>intersection</span><span class='lparen'>(</span><span class='id identifier rubyid_right_table_keys'>right_table_keys</span><span class='rparen'>)</span>
 
-  <span class='comment'># This is not necessary if additional procedure is contributed to Red Arrow.
-</span>  <span class='kw'>if</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>JoinType</span><span class='period'>.</span><span class='id identifier rubyid_try_convert'>try_convert</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='id identifier rubyid_type_nick'>type_nick</span> <span class='op'>=</span> <span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_nick'>nick</span>
+
+  <span class='id identifier rubyid_plan'>plan</span> <span class='op'>=</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>ExecutePlan</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+  <span class='id identifier rubyid_left_node'>left_node</span> <span class='op'>=</span> <span class='id identifier rubyid_plan'>plan</span><span class='period'>.</span><span class='id identifier rubyid_build_source_node'>build_source_node</span><span class='lparen'>(</span><span class='id identifier rubyid_left_table'>left_table</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_right_node'>right_node</span> <span class='op'>=</span> <span class='id identifier rubyid_plan'>plan</span><span class='period'>.</span><span class='id identifier rubyid_build_source_node'>build_source_node</span><span class='lparen'>(</span><span class='id identifier rubyid_right_table'>right_table</span><span class='rparen'>)</span>
+
+  <span class='kw'>if</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Hash</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_left_keys'>left_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_ensure_keys'>ensure_keys</span><span class='lparen'>(</span><span class='id identifier rubyid_join_keys'>join_keys</span><span class='lbracket'>[</span><span class='symbol'>:left</span><span class='rbracket'>]</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_right_keys'>right_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_ensure_keys'>ensure_keys</span><span class='lparen'>(</span><span class='id identifier rubyid_join_keys'>join_keys</span><span class='lbracket'>[</span><span class='symbol'>:right</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='kw'>else</span>
@@ -3353,77 +3299,40 @@ other4 = DataFrame.new(
     <span class='id identifier rubyid_right_keys'>right_keys</span> <span class='op'>=</span> <span class='id identifier rubyid_left_keys'>left_keys</span>
   <span class='kw'>end</span>
 
-  <span class='kw'>case</span> <span class='id identifier rubyid_type'>type</span>
-  <span class='kw'>when</span> <span class='symbol'>:full_outer</span><span class='comma'>,</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='symbol'>:left_anti</span><span class='comma'>,</span> <span class='symbol'>:right_semi</span><span class='comma'>,</span> <span class='symbol'>:right_anti</span>
-    <span class='id identifier rubyid_left_outputs'>left_outputs</span> <span class='op'>=</span> <span class='kw'>nil</span>
-    <span class='id identifier rubyid_right_outputs'>right_outputs</span> <span class='op'>=</span> <span class='kw'>nil</span>
-  <span class='kw'>when</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='symbol'>:left_outer</span>
-    <span class='id identifier rubyid_left_outputs'>left_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_table_keys'>table_keys</span>
-    <span class='id identifier rubyid_right_outputs'>right_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_other_keys'>other_keys</span> <span class='op'>-</span> <span class='id identifier rubyid_right_keys'>right_keys</span>
-  <span class='kw'>when</span> <span class='symbol'>:right_outer</span>
-    <span class='id identifier rubyid_left_outputs'>left_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_table_keys'>table_keys</span> <span class='op'>-</span> <span class='id identifier rubyid_left_keys'>left_keys</span>
-    <span class='id identifier rubyid_right_outputs'>right_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_other_keys'>other_keys</span>
+  <span class='id identifier rubyid_context'>context</span> <span class='op'>=</span>
+    <span class='lbracket'>[</span><span class='id identifier rubyid_type_nick'>type_nick</span><span class='comma'>,</span> <span class='id identifier rubyid_left_table_keys'>left_table_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_right_table_keys'>right_table_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_left_keys'>left_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_right_keys'>right_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rbracket'>]</span>
+
+  <span class='id identifier rubyid_hash_join_node_options'>hash_join_node_options</span> <span class='op'>=</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>HashJoinNodeOptions</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_left_keys'>left_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_right_keys'>right_keys</span><span class='rparen'>)</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_type_nick'>type_nick</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>inner</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>left-outer</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_hash_join_node_options'>hash_join_node_options</span><span class='period'>.</span><span class='id identifier rubyid_left_outputs'>left_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_left_table_keys'>left_table_keys</span>
+    <span class='id identifier rubyid_hash_join_node_options'>hash_join_node_options</span><span class='period'>.</span><span class='id identifier rubyid_right_outputs'>right_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_right_table_keys'>right_table_keys</span> <span class='op'>-</span> <span class='id identifier rubyid_right_keys'>right_keys</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>right-outer</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_hash_join_node_options'>hash_join_node_options</span><span class='period'>.</span><span class='id identifier rubyid_left_outputs'>left_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_left_table_keys'>left_table_keys</span> <span class='op'>-</span> <span class='id identifier rubyid_left_keys'>left_keys</span>
+    <span class='id identifier rubyid_hash_join_node_options'>hash_join_node_options</span><span class='period'>.</span><span class='id identifier rubyid_right_outputs'>right_outputs</span> <span class='op'>=</span> <span class='id identifier rubyid_right_table_keys'>right_table_keys</span>
   <span class='kw'>end</span>
 
-  <span class='comment'># Should we rescue errors in Arrow::Table#join for usability ?
-</span>  <span class='id identifier rubyid_joined_table'>joined_table</span> <span class='op'>=</span>
-    <span class='id identifier rubyid_left_table'>left_table</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span>
-      <span class='id identifier rubyid_right_table'>right_table</span><span class='comma'>,</span>
-      <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span>
-      <span class='label'>type:</span> <span class='id identifier rubyid_type'>type</span><span class='comma'>,</span>
-      <span class='label'>left_outputs:</span> <span class='id identifier rubyid_left_outputs'>left_outputs</span><span class='comma'>,</span>
-      <span class='label'>right_outputs:</span> <span class='id identifier rubyid_right_outputs'>right_outputs</span>
-    <span class='rparen'>)</span>
+  <span class='id identifier rubyid_hash_join_node'>hash_join_node</span> <span class='op'>=</span>
+    <span class='id identifier rubyid_plan'>plan</span><span class='period'>.</span><span class='id identifier rubyid_build_hash_join_node'>build_hash_join_node</span><span class='lparen'>(</span><span class='id identifier rubyid_left_node'>left_node</span><span class='comma'>,</span> <span class='id identifier rubyid_right_node'>right_node</span><span class='comma'>,</span> <span class='id identifier rubyid_hash_join_node_options'>hash_join_node_options</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_merge_node'>merge_node</span> <span class='op'>=</span> <span class='id identifier rubyid_merge_keys'>merge_keys</span><span class='lparen'>(</span><span class='id identifier rubyid_plan'>plan</span><span class='comma'>,</span> <span class='id identifier rubyid_hash_join_node'>hash_join_node</span><span class='comma'>,</span> <span class='id identifier rubyid_context'>context</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_rename_node'>rename_node</span> <span class='op'>=</span> <span class='id identifier rubyid_rename_keys'>rename_keys</span><span class='lparen'>(</span><span class='id identifier rubyid_plan'>plan</span><span class='comma'>,</span> <span class='id identifier rubyid_merge_node'>merge_node</span><span class='comma'>,</span> <span class='id identifier rubyid_context'>context</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_joined_table'>joined_table</span> <span class='op'>=</span> <span class='id identifier rubyid_sink_and_start_plan'>sink_and_start_plan</span><span class='lparen'>(</span><span class='id identifier rubyid_plan'>plan</span><span class='comma'>,</span> <span class='id identifier rubyid_rename_node'>rename_node</span><span class='rparen'>)</span>
 
-  <span class='kw'>case</span> <span class='id identifier rubyid_type'>type</span>
-  <span class='kw'>when</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='symbol'>:left_outer</span><span class='comma'>,</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='symbol'>:left_anti</span><span class='comma'>,</span> <span class='symbol'>:right_semi</span><span class='comma'>,</span> <span class='symbol'>:right_anti</span>
-    <span class='id identifier rubyid_dataframe'>dataframe</span> <span class='op'>=</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_joined_table'>joined_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_uniq!'>uniq!</span>
-        <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_rename_table'>rename_table</span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='comma'>,</span> <span class='id identifier rubyid_n_keys'>n_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span><span class='rparen'>)</span>
-      <span class='kw'>else</span>
-        <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='rparen'>)</span>
-      <span class='kw'>end</span>
-    <span class='id identifier rubyid_sorter'>sorter</span> <span class='op'>=</span>
-      <span class='kw'>case</span> <span class='id identifier rubyid_type'>type</span>
-      <span class='kw'>when</span> <span class='symbol'>:inner</span><span class='comma'>,</span> <span class='symbol'>:left_outer</span>
-        <span class='lbracket'>[</span><span class='id identifier rubyid_left_index'>left_index</span><span class='comma'>,</span> <span class='id identifier rubyid_right_index'>right_index</span><span class='rbracket'>]</span>
-      <span class='kw'>when</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='symbol'>:left_anti</span>
-        <span class='lbracket'>[</span><span class='id identifier rubyid_left_index'>left_index</span><span class='rbracket'>]</span>
-      <span class='kw'>when</span> <span class='symbol'>:right_semi</span><span class='comma'>,</span> <span class='symbol'>:right_anti</span>
-        <span class='lbracket'>[</span><span class='id identifier rubyid_right_index'>right_index</span><span class='rbracket'>]</span>
-      <span class='kw'>end</span>
-  <span class='kw'>when</span> <span class='symbol'>:full_outer</span>
-    <span class='id identifier rubyid_key_index_lr'>key_index_lr</span> <span class='op'>=</span>
-      <span class='id identifier rubyid_left_keys'>left_keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_left_table'>left_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid__1'>_1</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
-        <span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_right_keys'>right_keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_left_table'>left_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span> <span class='op'>+</span> <span class='id identifier rubyid_right_table'>right_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_index'>index</span><span class='lparen'>(</span><span class='id identifier rubyid__1'>_1</span><span class='rparen'>)</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_renamed_table'>renamed_table</span> <span class='op'>=</span> <span class='id identifier rubyid_rename_table'>rename_table</span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='comma'>,</span> <span class='id identifier rubyid_n_keys'>n_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_dropper'>dropper</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
-    <span class='id identifier rubyid_dataframe'>dataframe</span> <span class='op'>=</span>
-      <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_renamed_table'>renamed_table</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_assign'><span class='object_link'><a href="DataFrameVariableOperation.html#assign-instance_method" title="RedAmber::DataFrameVariableOperation#assign (method)">assign</a></span></span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_df'>df</span><span class='op'>|</span>
-        <span class='id identifier rubyid_key_index_lr'>key_index_lr</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_l'>l</span><span class='comma'>,</span> <span class='id identifier rubyid_r'>r</span><span class='op'>|</span>
-          <span class='id identifier rubyid_dropper'>dropper</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_df'>df</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='lbracket'>[</span><span class='id identifier rubyid_r'>r</span><span class='rbracket'>]</span>
-          <span class='lbracket'>[</span><span class='id identifier rubyid_df'>df</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='lbracket'>[</span><span class='id identifier rubyid_l'>l</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_merge_array'>merge_array</span><span class='lparen'>(</span><span class='id identifier rubyid_df'>df</span><span class='period'>.</span><span class='id identifier rubyid_vectors'>vectors</span><span class='lbracket'>[</span><span class='id identifier rubyid_l'>l</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='comma'>,</span> <span class='id identifier rubyid_df'>df</span><span class='period'>.</span><span class='id identifier rubyid_vectors'>vectors</span><span class='lbracket'>[</span><span class='id identifier rubyid_r'>r</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_data'>data</span><span class='rparen'>)</span><span class='rbracket'>]</span>
-        <span class='kw'>end</span>
-      <span class='kw'>end</span>
-    <span class='id identifier rubyid_dataframe'>dataframe</span> <span class='op'>=</span> <span class='id identifier rubyid_dataframe'>dataframe</span><span class='period'>.</span><span class='id identifier rubyid_drop'>drop</span><span class='lparen'>(</span><span class='id identifier rubyid_dropper'>dropper</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_sorter'>sorter</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_left_index'>left_index</span><span class='comma'>,</span> <span class='id identifier rubyid_right_index'>right_index</span><span class='rbracket'>]</span>
-  <span class='kw'>when</span> <span class='symbol'>:right_outer</span>
-    <span class='id identifier rubyid_dataframe'>dataframe</span> <span class='op'>=</span>
-      <span class='kw'>if</span> <span class='id identifier rubyid_joined_table'>joined_table</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_uniq!'>uniq!</span>
-        <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_rename_table'>rename_table</span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='comma'>,</span> <span class='id identifier rubyid_left_outputs'>left_outputs</span><span class='period'>.</span><span class='id identifier rubyid_size'>size</span><span class='comma'>,</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='rparen'>)</span><span class='rparen'>)</span>
-      <span class='kw'>else</span>
-        <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='rparen'>)</span>
-      <span class='kw'>end</span>
-    <span class='id identifier rubyid_dataframe'>dataframe</span> <span class='op'>=</span> <span class='id identifier rubyid_dataframe'>dataframe</span><span class='period'>.</span><span class='id identifier rubyid_pick'>pick</span><span class='lparen'>(</span><span class='id identifier rubyid_right_keys'>right_keys</span><span class='comma'>,</span> <span class='id identifier rubyid_dataframe'>dataframe</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span> <span class='op'>-</span> <span class='id identifier rubyid_right_keys'>right_keys</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_sorter'>sorter</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_left_index'>left_index</span><span class='comma'>,</span> <span class='id identifier rubyid_right_index'>right_index</span><span class='rbracket'>]</span>
-  <span class='kw'>end</span>
-
+  <span class='id identifier rubyid_df'>df</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_create'><span class='object_link'><a href="DataFrame.html#create-class_method" title="RedAmber::DataFrame.create (method)">create</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_joined_table'>joined_table</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_force_order'>force_order</span>
-    <span class='id identifier rubyid_dataframe'>dataframe</span>
-      <span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lparen'>(</span><span class='id identifier rubyid_sorter'>sorter</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_sorter'>sorter</span> <span class='op'>=</span>
+      <span class='kw'>case</span> <span class='id identifier rubyid_type_nick'>type_nick</span>
+      <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>right-semi</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>right-anti</span><span class='tstring_end'>&#39;</span></span>
+        <span class='lbracket'>[</span><span class='id identifier rubyid_right_index'>right_index</span><span class='rbracket'>]</span>
+      <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>left-semi</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>left-anti</span><span class='tstring_end'>&#39;</span></span>
+        <span class='lbracket'>[</span><span class='id identifier rubyid_left_index'>left_index</span><span class='rbracket'>]</span>
+      <span class='kw'>else</span>
+        <span class='lbracket'>[</span><span class='id identifier rubyid_left_index'>left_index</span><span class='comma'>,</span> <span class='id identifier rubyid_right_index'>right_index</span><span class='rbracket'>]</span>
+      <span class='kw'>end</span>
+    <span class='id identifier rubyid_df'>df</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lparen'>(</span><span class='id identifier rubyid_sorter'>sorter</span><span class='rparen'>)</span>
       <span class='period'>.</span><span class='id identifier rubyid_drop'>drop</span><span class='lparen'>(</span><span class='id identifier rubyid_sorter'>sorter</span><span class='rparen'>)</span>
   <span class='kw'>else</span>
-    <span class='id identifier rubyid_dataframe'>dataframe</span>
+    <span class='id identifier rubyid_df'>df</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -3449,6 +3358,14 @@ other4 = DataFrame.new(
 </h3><div class="docstring">
   <div class="discussion">
     
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>the order of joined results will be preserved by default. This is enabled by appending index column to sort after joining but it will cause some performance degradation. If you don’t matter the order of the result, set ‘force_order` option to `false`.</p>
+</div>
+  </div>
+
+
 <p>Join matching values to self from other.</p>
 <ul><li>
 <p>Same as ‘#join` with `type: :left_outer`</p>
@@ -3964,12 +3881,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-405
-406
-407</pre>
+420
+421
+422</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 405</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 420</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_left_join'>left_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_outer</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='id identifier rubyid_force_order'>force_order</span><span class='rparen'>)</span>
@@ -4205,6 +4122,14 @@ df.merge(other)
 </h3><div class="docstring">
   <div class="discussion">
     
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>the order of joined results will be preserved by default. This is enabled by appending index column to sort after joining but it will cause some performance degradation. If you don’t matter the order of the result, set ‘force_order` option to `false`.</p>
+</div>
+  </div>
+
+
 <p>Join matching values from self to other.</p>
 <ul><li>
 <p>Same as ‘#join` with `type: :right_outer`</p>
@@ -4263,11 +4188,11 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       <pre class="example code"><code>df.right_join(other)
 
 # =&gt;
-  KEY           X1 X2
-  &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
-0 A              1 true
-1 B              2 false
-2 D          (nil) (nil)</code></pre>
+       X1 KEY      X2
+  &lt;uint8&gt; &lt;string&gt; &lt;boolean&gt;
+0       1 A        true
+1       2 B        false
+2   (nil) D        (nil)</code></pre>
     
   </div>
 <p class="tag_title">Parameters:</p>
@@ -4397,11 +4322,11 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
       <pre class="example code"><code>df.right_join(other, :KEY)
 
 # =&gt;
-  KEY           X1 X2
-  &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
-0 A              1 true
-1 B              2 false
-2 D          (nil) (nil)</code></pre>
+       X1 KEY      X2
+  &lt;uint8&gt; &lt;string&gt; &lt;boolean&gt;
+0       1 A        true
+1       2 B        false
+2   (nil) D        (nil)</code></pre>
     
   </div>
 <p class="tag_title">Parameters:</p>
@@ -4547,11 +4472,11 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="example code"><code>df2.right_join(other2, { left: :KEY1, right: :KEY2 })
 
 # =&gt;
-  KEY1          X1 X2
-  &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;
-0 A              1 true
-1 B              2 false
-2 D          (nil) (nil)</code></pre>
+        X1 KEY2     X2
+  &lt;uint8&gt; &gt;string&gt; &lt;boolean&gt;
+0        1 A        true
+1        2 B        false
+2    (nil) D        (nil)</code></pre>
     
   </div>
 <p class="tag_title">Parameters:</p>
@@ -4720,18 +4645,18 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-467
-468
-469
-470
-471
-472
-473
-474
-475</pre>
+487
+488
+489
+490
+491
+492
+493
+494
+495</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 467</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 487</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_right_join'>right_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span>
@@ -4765,6 +4690,14 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 </h3><div class="docstring">
   <div class="discussion">
     
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>the order of joined results will be preserved by default. This is enabled by appending index column to sort after joining but it will cause some performance degradation. If you don’t matter the order of the result, set ‘force_order` option to `false`.</p>
+</div>
+  </div>
+
+
 <p>Return records of self that have a match in other.</p>
 <ul><li>
 <p>Same as ‘#join` with `type: :left_semi`</p>
@@ -5277,12 +5210,12 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
       <pre class="lines">
 
 
-534
-535
-536</pre>
+559
+560
+561</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 534</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 559</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_semi_join'>semi_join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>.1</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_join_keys'>join_keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:left_semi</span><span class='comma'>,</span> <span class='label'>suffix:</span> <span class='id identifier rubyid_suffix'>suffix</span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='id identifier rubyid_force_order'>force_order</span><span class='rparen'>)</span>
@@ -5405,12 +5338,12 @@ other3 = DataFrame.new(
       <pre class="lines">
 
 
-607
-608
-609</pre>
+637
+638
+639</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 607</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 637</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set_operable?'>set_operable?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='comment'># rubocop:disable Naming/AccessorMethodName
 </span>  <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
@@ -5547,23 +5480,23 @@ other3 = DataFrame.new(
       <pre class="lines">
 
 
-659
-660
-661
-662
-663
-664
-665</pre>
+689
+690
+691
+692
+693
+694
+695</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 659</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/data_frame_combinable.rb', line 689</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_union'>union</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='id identifier rubyid_keys'>keys</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_sym</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="DataFrameArgumentError.html" title="RedAmber::DataFrameArgumentError (class)">DataFrameArgumentError</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>keys are not same with self and other</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>end</span>
 
-  <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_keys'>keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:full_outer</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='id identifier rubyid_keys'>keys</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:full_outer</span><span class='comma'>,</span> <span class='label'>force_order:</span> <span class='kw'>true</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -5575,7 +5508,7 @@ other3 = DataFrame.new(
 </div>
 
       <div id="footer">
-  Generated on Mon May  8 06:49:53 2023 by
+  Generated on Tue May 23 03:53:05 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>
