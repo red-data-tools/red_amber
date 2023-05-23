@@ -77,7 +77,7 @@ Metrics/AbcSize:
   CountRepeatedAttributes: false
   AllowedMethods: [
     'join_merge_keys', # 54.18
-    'join', # 51.87
+    'join', # 53.1
     'dataframe_info', # 46.5
     'format_table', # 84.62
     'to_long', # 33.66
@@ -89,6 +89,8 @@ Metrics/AbcSize:
     'split', # 37.35
     'aggregate', # 38.13
     'filters', # 33.91
+    'merge_keys', # 32.17
+    'rename_keys', # 31.64
   ]
 
 # Max: 25

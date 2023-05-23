@@ -899,8 +899,11 @@ module RedAmber
         right_keys = left_keys
       end
 
+      context =
+        [type_nick, left_table_keys, right_table_keys, left_keys, right_keys, suffix]
+
       hash_join_node_options = Arrow::HashJoinNodeOptions.new(type, left_keys, right_keys)
-      case type.nick
+      case type_nick
       when 'inner', 'left-outer'
         hash_join_node_options.left_outputs = left_table_keys
         hash_join_node_options.right_outputs = right_table_keys - right_keys
@@ -911,19 +914,9 @@ module RedAmber
 
       hash_join_node =
         plan.build_hash_join_node(left_node, right_node, hash_join_node_options)
-      merge_node =
-        if type_nick == 'full-outer'
-          merge_join_key_node(plan, hash_join_node,
-                              left_table_keys, right_table_keys,
-                              left_keys, right_keys)
-        else
-          hash_join_node
-        end
-      joined_table = sink_and_start_plan(plan, merge_node)
-      if joined_table.keys.uniq!
-        joined_table =
-          rename_table(joined_table, left_table_keys, right_table_keys, type_nick, suffix)
-      end
+      merge_node = merge_keys(plan, hash_join_node, context)
+      rename_node = rename_keys(plan, merge_node, context)
+      joined_table = sink_and_start_plan(plan, rename_node)
 
       df = DataFrame.create(joined_table)
       if force_order
@@ -951,9 +944,10 @@ module RedAmber
     end
 
     # Merge key columns and preserve as left and remove right.
-    def merge_join_key_node(plan, input_node,
-                            left_table_keys, right_table_keys,
-                            left_keys, right_keys)
+    def merge_keys(plan, input_node, context)
+      type_nick, left_table_keys, right_table_keys, left_keys, right_keys, * = context
+      return input_node unless type_nick == 'full-outer'
+
       left_indices = left_keys.map { left_table_keys.index(_1) }
       right_offset = left_table_keys.size
       right_indices = right_keys.map { right_table_keys.index(_1) + right_offset }
@@ -981,33 +975,34 @@ module RedAmber
       plan.build_project_node(input_node, project_node_options)
     end
 
-    def rename_table(joined_table, left_table_keys, right_table_keys, type_nick, suffix)
-      joined_keys = joined_table.keys
+    def rename_keys(plan, input_node, context)
+      type_nick, left_table_keys, right_table_keys, *, suffix = context
+      names = input_node.output_schema.fields.map(&:name)
+      return input_node unless names.dup.uniq!
+
       pos_rights =
         if type_nick.start_with?('right')
-          joined_keys.size - right_table_keys.size
+          names.size - right_table_keys.size
         else
           left_table_keys.size
         end
-      rights = joined_keys[pos_rights..]
-      dup_keys = joined_keys.tally.select { |_, v| v > 1 }.keys
+      rights = names[pos_rights..]
+      dup_keys = names.tally.select { |_, v| v > 1 }.keys
       renamed_right_keys =
         rights.map do |key|
           if dup_keys.include?(key)
-            suffixed = "#{key}#{suffix}".to_sym
+            suffixed = "#{key}#{suffix}".to_s
             # Find a key from suffixed.succ
-            (suffixed..).find { !joined_keys.include?(_1) }
+            (suffixed..).find { !names.include?(_1) }
           else
             key
           end
         end
-      joined_keys[pos_rights..] = renamed_right_keys
+      names[pos_rights..] = renamed_right_keys
 
-      fields =
-        joined_keys.map.with_index do |k, i|
-          Arrow::Field.new(k, joined_table[i].data_type)
-        end
-      Arrow::Table.new(Arrow::Schema.new(fields), joined_table.columns)
+      expressions = names.map.with_index { |_, i| Arrow::FieldExpression.new("[#{i}]") }
+      project_node_options = Arrow::ProjectNodeOptions.new(expressions, names)
+      plan.build_project_node(input_node, project_node_options)
     end
   end
 end
