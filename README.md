@@ -50,7 +50,7 @@ See [Apache Arrow install document](https://arrow.apache.org/install/).
       sudo apt install -y -V libarrow-glib-dev
       ```
 
-  - On Fedora 38 (Rawhide):
+  - On Fedora 39 (Rawhide):
 
       ```
       sudo dnf update
