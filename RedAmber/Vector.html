@@ -89,7 +89,7 @@
   
   <dl>
       <dt>Includes:</dt>
-      <dd>Enumerable, <span class='object_link'><a href="ArrowFunction.html" title="RedAmber::ArrowFunction (module)">ArrowFunction</a></span>, <span class='object_link'><a href="Helper.html" title="RedAmber::Helper (module)">Helper</a></span>, <span class='object_link'><a href="VectorSelectable.html" title="RedAmber::VectorSelectable (module)">VectorSelectable</a></span>, <span class='object_link'><a href="VectorUpdatable.html" title="RedAmber::VectorUpdatable (module)">VectorUpdatable</a></span></dd>
+      <dd>Enumerable, <span class='object_link'><a href="ArrowFunction.html" title="RedAmber::ArrowFunction (module)">ArrowFunction</a></span>, <span class='object_link'><a href="Helper.html" title="RedAmber::Helper (module)">Helper</a></span>, <span class='object_link'><a href="VectorSelectable.html" title="RedAmber::VectorSelectable (module)">VectorSelectable</a></span>, <span class='object_link'><a href="VectorStringFunction.html" title="RedAmber::VectorStringFunction (module)">VectorStringFunction</a></span>, <span class='object_link'><a href="VectorUpdatable.html" title="RedAmber::VectorUpdatable (module)">VectorUpdatable</a></span></dd>
   </dl>
   
   
@@ -3506,6 +3506,17 @@
   
   
   
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="VectorStringFunction.html" title="RedAmber::VectorStringFunction (module)">VectorStringFunction</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="VectorStringFunction.html#count_substring-instance_method" title="RedAmber::VectorStringFunction#count_substring (method)">#count_substring</a></span>, <span class='object_link'><a href="VectorStringFunction.html#end_with%3F-instance_method" title="RedAmber::VectorStringFunction#end_with? (method)">#end_with?</a></span>, <span class='object_link'><a href="VectorStringFunction.html#match_like%3F-instance_method" title="RedAmber::VectorStringFunction#match_like? (method)">#match_like?</a></span>, <span class='object_link'><a href="VectorStringFunction.html#match_substring%3F-instance_method" title="RedAmber::VectorStringFunction#match_substring? (method)">#match_substring?</a></span>, <span class='object_link'><a href="VectorStringFunction.html#start_with%3F-instance_method" title="RedAmber::VectorStringFunction#start_with? (method)">#start_with?</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
   <h3 class="inherited">Methods included from <span class='object_link'><a href="VectorSelectable.html" title="RedAmber::VectorSelectable (module)">VectorSelectable</a></span></h3>
   <p class="inherited"><span class='object_link'><a href="VectorSelectable.html#[]-instance_method" title="RedAmber::VectorSelectable#[] (method)">#[]</a></span>, <span class='object_link'><a href="VectorSelectable.html#drop_nil-instance_method" title="RedAmber::VectorSelectable#drop_nil (method)">#drop_nil</a></span>, <span class='object_link'><a href="VectorSelectable.html#filter-instance_method" title="RedAmber::VectorSelectable#filter (method)">#filter</a></span>, <span class='object_link'><a href="VectorSelectable.html#first-instance_method" title="RedAmber::VectorSelectable#first (method)">#first</a></span>, <span class='object_link'><a href="VectorSelectable.html#index-instance_method" title="RedAmber::VectorSelectable#index (method)">#index</a></span>, <span class='object_link'><a href="VectorSelectable.html#is_in-instance_method" title="RedAmber::VectorSelectable#is_in (method)">#is_in</a></span>, <span class='object_link'><a href="VectorSelectable.html#last-instance_method" title="RedAmber::VectorSelectable#last (method)">#last</a></span>, <span class='object_link'><a href="VectorSelectable.html#rank-instance_method" title="RedAmber::VectorSelectable#rank (method)">#rank</a></span>, <span class='object_link'><a href="VectorSelectable.html#sample-instance_method" title="RedAmber::VectorSelectable#sample (method)">#sample</a></span>, <span class='object_link'><a href="VectorSelectable.html#sort-instance_method" title="RedAmber::VectorSelectable#sort (method)">#sort</a></span>, <span class='object_link'><a href="VectorSelectable.html#take-instance_method" title="RedAmber::VectorSelectable#take (method)">#take</a></span></p>
 
@@ -3594,7 +3605,6 @@
       <pre class="lines">
 
 
-70
 71
 72
 73
@@ -3608,10 +3618,11 @@
 81
 82
 83
-84</pre>
+84
+85</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 71</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_array'>array</span><span class='rparen'>)</span>
   <span class='ivar'>@data</span> <span class='op'>=</span>
@@ -3683,12 +3694,12 @@
       <pre class="lines">
 
 
-20
 21
-22</pre>
+22
+23</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 20</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 21</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_data'>data</span>
   <span class='ivar'>@data</span>
@@ -3741,12 +3752,12 @@
       <pre class="lines">
 
 
-28
 29
-30</pre>
+30
+31</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 28</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 29</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_key'>key</span>
   <span class='ivar'>@key</span>
@@ -3858,12 +3869,12 @@
       <pre class="lines">
 
 
-43
 44
-45</pre>
+45
+46</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 43</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 44</span>
 
 <span class='kw'>def</span> <span class='op'>[]</span><span class='lparen'>(</span><span class='op'>...</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='op'>...</span><span class='rparen'>)</span>
@@ -4054,14 +4065,14 @@
       <pre class="lines">
 
 
-55
 56
 57
 58
-59</pre>
+59
+60</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 55</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 56</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span><span class='lparen'>(</span><span class='id identifier rubyid_arrow_array'>arrow_array</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_instance'>instance</span> <span class='op'>=</span> <span class='id identifier rubyid_allocate'>allocate</span>
@@ -5781,12 +5792,12 @@
       <pre class="lines">
 
 
-255
 256
-257</pre>
+257
+258</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 255</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 256</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_boolean?'>boolean?</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_boolean?'>boolean?</span>
@@ -5918,12 +5929,12 @@
       <pre class="lines">
 
 
-381
 382
-383</pre>
+383
+384</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 381</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 382</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_chunked?'>chunked?</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>ChunkedArray</span>
@@ -5992,12 +6003,12 @@
       <pre class="lines">
 
 
-485
 486
-487</pre>
+487
+488</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 485</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 486</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_coerce'>coerce</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='lbracket'>[</span><span class='const'><span class='object_link'><a href="" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='kw'>self</span><span class='rbracket'>]</span>
@@ -6554,12 +6565,12 @@
       <pre class="lines">
 
 
-300
 301
-302</pre>
+302
+303</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 300</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 301</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_dictionary?'>dictionary?</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_dictionary?'>dictionary?</span>
@@ -6858,17 +6869,17 @@
       <pre class="lines">
 
 
-340
 341
 342
 343
 344
 345
 346
-347</pre>
+347
+348</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 340</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 341</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_each'>each</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:each</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -6927,12 +6938,12 @@
       <pre class="lines">
 
 
-228
 229
-230</pre>
+230
+231</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 228</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 229</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_empty?'>empty?</span>
   <span class='id identifier rubyid_size'>size</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
@@ -7387,12 +7398,12 @@
       <pre class="lines">
 
 
-273
 274
-275</pre>
+275
+276</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 273</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 274</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_float?'>float?</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_float?'>float?</span>
@@ -7690,12 +7701,12 @@
       <pre class="lines">
 
 
-451
 452
-453</pre>
+453
+454</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 451</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 452</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_has_nil?'>has_nil?</span>
   <span class='id identifier rubyid_is_nil'>is_nil</span><span class='period'>.</span><span class='id identifier rubyid_any'>any</span>
@@ -7753,12 +7764,12 @@
       <pre class="lines">
 
 
-204
 205
-206</pre>
+206
+207</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 204</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 205</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_indices'>indices</span>
   <span class='lparen'>(</span><span class='int'>0</span><span class='op'>...</span><span class='id identifier rubyid_size'>size</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span>
@@ -7867,7 +7878,6 @@
       <pre class="lines">
 
 
-165
 166
 167
 168
@@ -7887,10 +7897,11 @@
 182
 183
 184
-185</pre>
+185
+186</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 165</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 166</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_inspect'>inspect</span><span class='lparen'>(</span><span class='label'>limit:</span> <span class='int'>80</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='const'>ENV</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>RED_AMBER_OUTPUT_MODE</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Table</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_casecmp'>casecmp</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>MINIMUM</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
@@ -7962,12 +7973,12 @@
       <pre class="lines">
 
 
-282
 283
-284</pre>
+284
+285</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 282</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 283</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_integer?'>integer?</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_integer?'>integer?</span>
@@ -8632,12 +8643,12 @@
       <pre class="lines">
 
 
-318
 319
-320</pre>
+320
+321</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 318</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 319</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_list?'>list?</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_list?'>list?</span>
@@ -9424,14 +9435,14 @@
       <pre class="lines">
 
 
-368
 369
 370
 371
-372</pre>
+372
+373</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 368</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 369</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_enum_for'>enum_for</span><span class='lparen'>(</span><span class='symbol'>:map</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_block'>block</span>
@@ -10306,12 +10317,12 @@
       <pre class="lines">
 
 
-391
 392
-393</pre>
+393
+394</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 391</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 392</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_n_chunks'>n_chunks</span>
   <span class='id identifier rubyid_chunked?'>chunked?</span> <span class='op'>?</span> <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_n_chunks'>n_chunks</span> <span class='op'>:</span> <span class='int'>0</span>
@@ -10365,12 +10376,12 @@
       <pre class="lines">
 
 
-442
 443
-444</pre>
+444
+445</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 442</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 443</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_n_nans'>n_nans</span>
   <span class='id identifier rubyid_numeric?'>numeric?</span> <span class='op'>?</span> <span class='id identifier rubyid_is_nan'>is_nan</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span><span class='lparen'>(</span><span class='kw'>true</span><span class='rparen'>)</span> <span class='op'>:</span> <span class='int'>0</span>
@@ -10428,12 +10439,12 @@
       <pre class="lines">
 
 
-431
 432
-433</pre>
+433
+434</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 431</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 432</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_n_nulls'>n_nulls</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_n_nulls'>n_nulls</span>
@@ -10698,12 +10709,12 @@
       <pre class="lines">
 
 
-264
 265
-266</pre>
+266
+267</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 264</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 265</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_numeric?'>numeric?</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_numeric?'>numeric?</span>
@@ -11450,7 +11461,6 @@
       <pre class="lines">
 
 
-524
 525
 526
 527
@@ -11462,10 +11472,11 @@
 533
 534
 535
-536</pre>
+536
+537</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 524</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 525</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_propagate'>propagate</span><span class='lparen'>(</span><span class='id identifier rubyid_function'>function</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span>
@@ -12153,7 +12164,6 @@
       <pre class="lines">
 
 
-122
 123
 124
 125
@@ -12162,10 +12172,11 @@
 128
 129
 130
-131</pre>
+131
+132</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 122</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 123</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_resolve'>resolve</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_other'>other</span>
@@ -13140,13 +13151,13 @@
       <pre class="lines">
 
 
-215
 216
 217
-218</pre>
+218
+219</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 215</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 216</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_size'>size</span>
   <span class='comment'># only defined :length in Arrow?
@@ -13448,12 +13459,12 @@
       <pre class="lines">
 
 
-291
 292
-293</pre>
+293
+294</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 291</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 292</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_string?'>string?</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_string?'>string?</span>
@@ -13765,7 +13776,6 @@
       <pre class="lines">
 
 
-404
 405
 406
 407
@@ -13778,10 +13788,11 @@
 414
 415
 416
-417</pre>
+417
+418</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 404</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 405</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_tally'>tally</span>
   <span class='id identifier rubyid_hash'>hash</span> <span class='op'>=</span> <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_tally'>tally</span>
@@ -13968,12 +13979,12 @@
       <pre class="lines">
 
 
-309
 310
-311</pre>
+311
+312</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 309</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 310</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_temporal?'>temporal?</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_temporal?'>temporal?</span>
@@ -14031,12 +14042,12 @@
       <pre class="lines">
 
 
-192
 193
-194</pre>
+194
+195</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 192</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 193</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_ary'>to_ary</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span>
@@ -14090,12 +14101,12 @@
       <pre class="lines">
 
 
-138
 139
-140</pre>
+140
+141</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 138</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 139</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_s'>to_s</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span>
@@ -14210,12 +14221,12 @@
       <pre class="lines">
 
 
-237
 238
-239</pre>
+239
+240</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 237</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 238</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_type'>type</span>
   <span class='id identifier rubyid_list?'>list?</span> <span class='op'>?</span> <span class='symbol'>:list</span> <span class='op'>:</span> <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_value_type'>value_type</span><span class='period'>.</span><span class='id identifier rubyid_nick'>nick</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span>
@@ -14269,12 +14280,12 @@
       <pre class="lines">
 
 
-246
 247
-248</pre>
+248
+249</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 246</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 247</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_type_class'>type_class</span>
   <span class='ivar'>@data</span><span class='period'>.</span><span class='id identifier rubyid_type_class'>type_class</span>
@@ -14508,13 +14519,13 @@
       <pre class="lines">
 
 
-421
 422
 423
-424</pre>
+424
+425</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 421</span>
+      <pre class="code"><span class="info file"># File 'lib/red_amber/vector.rb', line 422</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_value_counts'>value_counts</span>
   <span class='id identifier rubyid_values'>values</span><span class='comma'>,</span> <span class='id identifier rubyid_counts'>counts</span> <span class='op'>=</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Function</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span><span class='lparen'>(</span><span class='symbol'>:value_counts</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_execute'>execute</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_data'>data</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_fields'>fields</span>
@@ -14754,7 +14765,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed May 24 10:32:49 2023 by
+  Generated on Wed May 24 10:35:08 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>
