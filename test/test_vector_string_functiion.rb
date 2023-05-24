@@ -44,5 +44,10 @@ class VectorTest < Test::Unit::TestCase
       expected = [false, false, true, nil, false]
       assert_equal_array expected, @vector.start_with?('ca')
     end
+
+    test '#match_like?(string)' do
+      expected = [true, true, false, nil, false]
+      assert_equal_array expected, @vector.match_like?('_rr%')
+    end
   end
 end

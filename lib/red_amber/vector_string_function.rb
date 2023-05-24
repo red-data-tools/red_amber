@@ -117,5 +117,33 @@ module RedAmber
       datum = find(:starts_with).execute([data], options)
       Vector.create(datum.value)
     end
+
+    # Match elements of self against SQL-style LIKE pattern.
+    #   the pattern matches a given pattern at any position.
+    #   '%' will match any number of characters,
+    #   '_' will match exactly one character,
+    #   and any other character matches itself.
+    #   To match a literal '%', '_', or '\', precede the character with a backslash.
+    #
+    # @param string [String]
+    #   string pattern to match.
+    # @param ignore_case [boolean]
+    #   switch whether to ignore case. Ignore case if true.
+    # @return [Vector]
+    #   boolean Vector to show if elements start with a given pattern.
+    #   nil inputs emit nil.
+    # @example Check with match_like?.
+    #   vector = Vector.new('array', 'Arrow', 'carrot', nil, 'window')
+    #   vector.match_like?('_rr%')
+    #   # =>
+    # @since 0.5.0
+    #
+    def match_like?(string, ignore_case: nil)
+      options = Arrow::MatchSubstringOptions.new
+      options.ignore_case = (ignore_case || false)
+      options.pattern = string
+      datum = find(:match_like).execute([data], options)
+      Vector.create(datum.value)
+    end
   end
 end
