@@ -1,3 +1,60 @@
+## [0.5.0] - 2023/05-24
+
+- Breaking change
+  - Use non keyword argument in #sub_by_value (#219)
+  - Upgrade dependency to Arrow 12.0.0 (#238)
+    - right_join will output columns as same order as Red Arrow.
+    - DataFrame#join will not force ordering of original column by default
+    - Join with type, such as full_join, sort after join by default
+
+- Bug fixes
+  - Use truncate in Vector#sample(float) (#229)
+  - Support options in DataFrame#tdra (#231)
+  - Fix printing table with non-ascii strings (#233)
+  - Fix join for Arrow 12.0.0
+
+- New features and improvements
+  - Add a singleton method Vector.[] (#218)
+  - Add an alias #sub_group (#219)
+  - Accept Group#summarize{Hash} to rename aggregated columns (#219)
+  - Add Group#group_frame (#219)
+  - Add Vector#cast (#224)
+  - Add Vector#fill_nil(value) (#226)
+  - Add Vector#one (#227)
+  - Add Vector#mode (#228)
+  - Add DataFrame#propagate (#235)
+  - Add DataFrame#sample (#237)
+  - Add DataFrame#shuffle (#237)
+  - Support RankOptions in Vector#rank (#239)
+  - Introduce MatchSubstringOptions family in Vector (#241)
+    - Introduce Vector#match_substring?
+    - Add Vector#end_with?, #start_with? method
+    - Add Vector#match_like?
+    - Add Vector#count_substring method
+
+- Refactoring
+  - Refine Group and SubFrames function (#219)
+    - Refine Group#group_count
+    - Use Acero in Group#filters
+    - Refine Group#filters, not using Acero
+    - Refine Group#summarize(array)
+  - Use Acero for renaming columns in join (#238)
+  - Use index kernel with IndexOptions introduced in 12.0.0 (#240)
+
+- Improve in tests/CI
+  - Use Fedra 39 Rawhide in CI (#238)
+
+- Documentation and Example
+  - Add missing yard documents for SubFrames::Selectors (#219)
+  - Update docker/example (#219)
+  - Update Gemfile in docker (#219)
+  - Add README.ja.md (#242)
+
+- GitHub site
+  - Update link of Red Data Tools Chat to matrix (#242)
+
+- Thanks
+
 ## [0.4.2] - 2023-04-02
 
 - Breaking change
