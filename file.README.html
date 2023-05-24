@@ -64,10 +64,12 @@
 
 <p>A simple dataframe library for Ruby.</p>
 <ul><li>
-<p>Powered by <a href="https://github.com/apache/arrow/tree/master/ruby/red-arrow">Red Arrow</a> <a href="https://gitter.im/red-data-tools/en"><img src="https://badges.gitter.im/red-data-tools/en.svg"></a> <a href="https://rubygems.org/gems/red-arrow"><img src="https://img.shields.io/gem/v/red-arrow?color=brightgreen"></a></p>
+<p>Powered by <a href="https://github.com/apache/arrow/tree/master/ruby/red-arrow">Red Arrow</a> <a href="https://app.element.io/#/room/#red-data-tools_en:gitter.im"><img src="https://badges.gitter.im/red-data-tools/en.svg"></a> <a href="https://rubygems.org/gems/red-arrow"><img src="https://img.shields.io/gem/v/red-arrow?color=brightgreen"></a></p>
 </li><li>
 <p>Inspired by the dataframe library <a href="https://github.com/ankane/rover">Rover-df</a></p>
 </li></ul>
+
+<p><a href="README_ja_md.html">日本語のREADME</a></p>
 
 <p><img src="https://raw.githubusercontent.com/red-data-tools/red_amber/main/doc/image/screenshot.png"></p>
 
@@ -82,6 +84,7 @@
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Requires Apache Arrow (see installation below)
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-parquet</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to parquet
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-datasets-arrow</span><span class='tstring_end'>&#39;</span></span>       <span class='comment'># Optional, if you use Red Datasets or random sampling feature
+</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-numo-narray</span><span class='tstring_end'>&#39;</span></span>    <span class='comment'># Optional, recommended if you use inputs from Numo::NArray
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-activerecord</span><span class='tstring_end'>&#39;</span></span>   <span class='comment'># Optional, if you use Active Record
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rover-df</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 0.3.0</span><span class='tstring_end'>&#39;</span></span>  <span class='comment'># Optional, if you use IO from/to Rover::DataFrame
 </span></code></pre>
@@ -117,16 +120,17 @@
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span>
 <span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red_amber</span><span class='tstring_end'>&#39;</span></span>
 <span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-parquet</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to parquet
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rover-df</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 0.3.0</span><span class='tstring_end'>&#39;</span></span>  <span class='comment'># Optional, if you use IO from/to Rover::DataFrame
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-datasets-arrow</span><span class='tstring_end'>&#39;</span></span>       <span class='comment'># Optional, recommended if you use Red Datasets
 </span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-numo-narray</span><span class='tstring_end'>&#39;</span></span>    <span class='comment'># Optional, recommended if you use inputs from Numo::NArray
+</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-activerecord</span><span class='tstring_end'>&#39;</span></span>   <span class='comment'># Optional, if you use Active Record
+</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rover-df</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 0.3.0</span><span class='tstring_end'>&#39;</span></span>  <span class='comment'># Optional, if you use IO from/to Rover::DataFrame
 </span></code></pre>
 
 <p>And then execute <code>bundle install</code> or install them yourself such as <code>gem install red_amber</code>.</p>
 
 <h2 id="label-Docker+image+and+Jupyter+Notebook">Docker image and Jupyter Notebook</h2>
 
-<p>Docker image is available from docker folder. See <a href="docker/readme_md.html">readme</a> for instruction. Integrated Jypyter notebook is in docker/notebook folder.</p>
+<p>Docker image is available from <code>docker</code> folder. See <a href="docker/readme_md.html">readme</a> for instruction. Integrated Jypyter notebook is in docker/notebook folder.</p>
 
 <p>You can try the contents of this README interactively by <a href="https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb">Binder</a>. <a href="https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb"><img src="https://mybinder.org/badge_logo.svg"></a></p>
 
@@ -284,7 +288,7 @@ bundle exec rake test
 </div></div>
 
       <div id="footer">
-  Generated on Wed May 24 10:35:05 2023 by
+  Generated on Wed May 24 12:13:00 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>
