@@ -27,7 +27,7 @@ module RedAmber
     #     [true, false, true, nil, false]
     #
     # @overload match_substring?(regexp, ignore_case: nil)
-    #   Emit true if it contains substring matching with `regexp``.
+    #   Emit true if it contains substring matching with `regexp`.
     #   It calls `match_substring_regex` in Arrow compute function and
     #   uses re2 library.
     #
@@ -143,6 +143,68 @@ module RedAmber
       options.ignore_case = (ignore_case || false)
       options.pattern = string
       datum = find(:match_like).execute([data], options)
+      Vector.create(datum.value)
+    end
+
+    # For each string in self, count occuerences of substring in given pattern.
+    #
+    # @overload count_substring(string, ignore_case: nil)
+    #   Count if it contains `string`.
+    #
+    #   @param string [String]
+    #     string pattern to count.
+    #   @param ignore_case [boolean]
+    #     switch whether to ignore case. Ignore case if true.
+    #   @return [Vector]
+    #     int32 or int64 Vector to show if elements contain a given pattern.
+    #     nil inputs emit nil.
+    #   @example Count with string.
+    #     vector2 = Vector.new('amber', 'Amazon', 'banana', nil)
+    #     vector2.count_substring('an')
+    #     # =>
+    #     #<RedAmber::Vector(:int32, size=4):0x000000000003db30>
+    #     [0, 0, 2, nil]
+    #
+    # @overload count_substring(regexp, ignore_case: nil)
+    #   Count if it contains substring matching with `regexp`.
+    #   It calls `count_substring_regex` in Arrow compute function and
+    #   uses re2 library.
+    #
+    #   @param regexp [Regexp]
+    #     regular expression pattern to count. Ruby's Regexp is given and
+    #     it will passed to Arrow's kernel by its source.
+    #   @param ignore_case [boolean]
+    #     switch whether to ignore case. Ignore case if true.
+    #     When `ignore_case` is false, casefolding option in regexp is priortized.
+    #   @return [Vector]
+    #     int32 or int64 Vector to show the counts in given pattern.
+    #     nil inputs emit nil.
+    #   @example Count with regexp with case ignored.
+    #     vector2.count_substring(/a[mn]/i)
+    #     # =>
+    #     #<RedAmber::Vector(:int32, size=4):0x0000000000051298>
+    #     [1, 1, 2, nil]
+    #     # it is same result as `vector2.count_substring(/a[mn]/, ignore_case: true)`
+    #
+    # @since 0.5.0
+    #
+    def count_substring(pattern, ignore_case: nil)
+      options = Arrow::MatchSubstringOptions.new
+      datum =
+        case pattern
+        when String
+          options.ignore_case = (ignore_case || false)
+          options.pattern = pattern
+          find(:count_substring).execute([data], options)
+        when Regexp
+          options.ignore_case = (pattern.casefold? || ignore_case || false)
+          options.pattern = pattern.source
+          find(:count_substring_regex).execute([data], options)
+        else
+          message =
+            "pattern must be either String or Regexp: #{pattern.inspect}"
+          raise VectorArgumentError, message
+        end
       Vector.create(datum.value)
     end
   end
