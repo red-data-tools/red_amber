@@ -17,7 +17,7 @@ module RedAmber
     #   @param ignore_case [boolean]
     #     switch whether to ignore case. Ignore case if true.
     #   @return [Vector]
-    #     boolean Vector to show wheather contains string pattern in each element.
+    #     boolean Vector to show if elements contain a given pattern.
     #     nil inputs emit nil.
     #   @example Match with string.
     #     vector = Vector.new('array', 'Arrow', 'carrot', nil, 'window')
@@ -38,7 +38,7 @@ module RedAmber
     #     switch whether to ignore case. Ignore case if true.
     #     When `ignore_case` is false, casefolding option in regexp is priortized.
     #   @return [Vector]
-    #     boolean Vector to show wheather contains string pattern in each element.
+    #     boolean Vector to show if elements contain a given pattern.
     #     nil inputs emit nil.
     #   @example Match with regexp.
     #     vector.match_substring?(/arr/)
@@ -65,6 +65,56 @@ module RedAmber
             "pattern must be either String or Regexp: #{pattern.inspect}"
           raise VectorArgumentError, message
         end
+      Vector.create(datum.value)
+    end
+
+    # Check if elements in self end with a literal pattern.
+    #
+    # @param string [String]
+    #   string pattern to match.
+    # @param ignore_case [boolean]
+    #   switch whether to ignore case. Ignore case if true.
+    # @return [Vector]
+    #   boolean Vector to show if elements end with a given pattern.
+    #   nil inputs emit nil.
+    # @example Check if end with?.
+    #   vector = Vector.new('array', 'Arrow', 'carrot', nil, 'window')
+    #   vector.end_with?('ow')
+    #   # =>
+    #   #<RedAmber::Vector(:boolean, size=5):0x00000000000108ec>
+    #   [false, true, false, nil, true]
+    # @since 0.5.0
+    #
+    def end_with?(string, ignore_case: nil)
+      options = Arrow::MatchSubstringOptions.new
+      options.ignore_case = (ignore_case || false)
+      options.pattern = string
+      datum = find(:ends_with).execute([data], options)
+      Vector.create(datum.value)
+    end
+
+    # Check if elements in self start with a literal pattern.
+    #
+    # @param string [String]
+    #   string pattern to match.
+    # @param ignore_case [boolean]
+    #   switch whether to ignore case. Ignore case if true.
+    # @return [Vector]
+    #   boolean Vector to show if elements start with a given pattern.
+    #   nil inputs emit nil.
+    # @example Check if start with?.
+    #   vector = Vector.new('array', 'Arrow', 'carrot', nil, 'window')
+    #   vector.start_with?('ow')
+    #   # =>
+    #   #<RedAmber::Vector(:boolean, size=5):0x00000000000193fc>
+    #   [false, false, true, nil, false]
+    # @since 0.5.0
+    #
+    def start_with?(string, ignore_case: nil)
+      options = Arrow::MatchSubstringOptions.new
+      options.ignore_case = (ignore_case || false)
+      options.pattern = string
+      datum = find(:starts_with).execute([data], options)
       Vector.create(datum.value)
     end
   end

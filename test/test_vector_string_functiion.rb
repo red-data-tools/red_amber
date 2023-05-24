@@ -30,5 +30,19 @@ class VectorTest < Test::Unit::TestCase
       expected = [true, true, true, nil, false]
       assert_equal_array expected, @vector.match_substring?(/arr/, ignore_case: true)
     end
+
+    test '#match_substring? w/ illegal argument' do
+      assert_raise(VectorArgumentError) { @vector.match_substring?(nil) }
+    end
+
+    test '#end_with?(string)' do
+      expected = [false, true, false, nil, true]
+      assert_equal_array expected, @vector.end_with?('ow')
+    end
+
+    test '#start_with?(string)' do
+      expected = [false, false, true, nil, false]
+      assert_equal_array expected, @vector.start_with?('ca')
+    end
   end
 end
