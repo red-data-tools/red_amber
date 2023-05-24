@@ -10,6 +10,7 @@ module RedAmber
     include ArrowFunction
     include VectorUpdatable
     include VectorSelectable
+    include VectorStringFunction
 
     using RefineArrayLike
 
