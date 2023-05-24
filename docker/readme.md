@@ -6,12 +6,12 @@ This is a docker image containing RedAmber created from
 ## Contents
 
 - From jupyter/minimal-notebook:
-  - Based on 2023-03-13 (295612d3ade4)
+  - Based on 2023-05-15 (513d0cb8a67c)
   - x86-64
   - Ubuntu-22.04
-  - python-3.10.9
-  - lab-3.6.1
-  - notebook-6.5.3
+  - python-3.10.11
+  - lab-3.6.3
+  - notebook-6.5.4
 - System ruby-dev:
   - Ruby 3.0.2
 - Arrow 11.0.0 for Ubuntu:
@@ -22,7 +22,7 @@ This is a docker image containing RedAmber created from
 - Locally installed iruby:
   - Using Ruby 3.0.2
 - Locally installed bundler and Gemfile:
-  - RedAmber 0.4.1
+  - RedAmber 0.5.0
   - Others (see Gemfile)
 
 ## Install
