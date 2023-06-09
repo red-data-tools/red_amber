@@ -540,7 +540,7 @@ module RedAmber
             in ''
               '""'
             in String
-              element.sub(/^(\s+)$/, '"\1"') # blank spaces
+              element.sub(/\A(\s+)$/, '"\1"') # blank spaces
             in Float
               format('%g', element)
             in Integer
