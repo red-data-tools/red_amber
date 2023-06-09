@@ -44,7 +44,7 @@ module RedAmber
       #   BUFFER
       #
       # @example Load from a Buffer skipping comment line
-      #   DataFrame.load(Arrow::Buffer.new(<<~BUFFER), format: :csv, skip_lines: /^#/)
+      #   DataFrame.load(Arrow::Buffer.new(<<~BUFFER), format: :csv, skip_lines: /\A#/)
       #     # comment
       #     name,age
       #     Yasuko,68
