@@ -473,6 +473,9 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
     end
 
     test 'type timestamp in tdr' do
+      # Temporarily change time zone to assert timestamp
+      tz_org = ENV.fetch('TZ', nil)
+      ENV.store('TZ', 'Asia/Tokyo')
       df = DataFrame.load('test/entity/timestamp.csv')
       assert_equal <<~STR, df.tdr_str
         RedAmber::DataFrame : 3 x 3 Vectors
@@ -482,6 +485,7 @@ class DataFrameDisplayableTest < Test::Unit::TestCase
         1 :value    double        3 [0.6745854900288456, 0.13221317634640772, 0.21327735697163186]
         2 :datetime timestamp     3 ["2022-06-03 19:11:16 +0900", "2022-06-03 19:15:35 +0900", "2022-06-03 19:18:43 +0900"]
       STR
+      ENV.store('TZ', tz_org)
     end
 
     test '#tdr' do
