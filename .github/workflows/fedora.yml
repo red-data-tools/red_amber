@@ -24,8 +24,6 @@ jobs:
         run: |
           {
               echo 'FROM fedora:39'
-              echo '# set TZ to ensure the test using timestamp'
-              echo 'ENV TZ=Asia/Tokyo'
               echo 'RUN dnf -y update'
               echo 'RUN dnf -y install gcc-c++ git libarrow-devel libarrow-glib-devel ruby-devel'
               echo 'RUN dnf clean all'

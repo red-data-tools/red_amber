@@ -19,9 +19,7 @@ jobs:
           wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
           sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
           sudo apt update
-          sudo apt install -y -V libarrow-dev
-          sudo apt install -y -V gir1.2-arrow-1.0
-          sudo apt install -y -V libarrow-glib-dev
+          sudo apt install -y -V libarrow-dev libarrow-glib-dev gobject-introspection
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -32,8 +30,6 @@ jobs:
 
       - name: Run test
         run: bundle exec rake test
-        env:
-          TZ: Asia/Tokyo
 
       - name: Workaround for coverage report to CodeClimate with jq
         run: |
