@@ -1,0 +1,22 @@
+{
+    "name": "RedAmber Dev Container",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "features": {
+        "ghcr.io/devcontainers/features/python:1": {
+            "installTools": true,
+            "installJupyterlab": true,
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/ruby:1": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    // Use init process to deal with zombie process
+    "init": true,
+    // set TZ from local machine's environment defaulting to 'UTC' if not supplied.
+    "containerEnv": {
+        "TZ": "${localEnv:TZ:UTC}"
+    },
+    "postCreateCommand": ".devcontainer/postCreateCommand.sh"
+}
