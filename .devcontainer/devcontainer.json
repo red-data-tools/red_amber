@@ -18,5 +18,5 @@
     "containerEnv": {
         "TZ": "${localEnv:TZ:UTC}"
     },
-    "postCreateCommand": ".devcontainer/postCreateCommand.sh"
+    "onCreateCommand": ".devcontainer/postCreateCommand.sh"
 }
