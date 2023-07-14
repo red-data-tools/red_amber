@@ -17,5 +17,5 @@ services:
     ports:
       - '8888:8888'
     volumes:
-      - ./notebook:/home/$NB_USER/work
+      - ../doc/notebook:/home/$NB_USER/work
     command: start-notebook.sh --NotebookApp.token=$TOKEN
