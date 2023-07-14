@@ -28,3 +28,5 @@ sudo apt-get install -y \
         libgandiva-glib-dev
 
 bundle install
+
+export RUBYLIB=/workspaces/red_amber/lib

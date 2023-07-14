@@ -1,0 +1,3 @@
+#!/usr/bin/sh
+
+jupyter lab --notebook-dir='/workspaces/red_amber/doc/notebook' --NotebookApp.token=''

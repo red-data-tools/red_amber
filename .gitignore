@@ -8,4 +8,5 @@
 /tmp/
 Gemfile.lock
 !/docker/Gemfile.lock
-/docker/notebook/.ipynb_checkpoints/
+/doc/notebook/.ipynb_checkpoints/
+.DS_Store
