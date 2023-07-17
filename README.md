@@ -7,7 +7,7 @@
 [![Doc](https://img.shields.io/badge/docs-latest-blue)](https://heronshoes.github.io/red_amber/)
 [![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/red-data-tools/red_amber/discussions)
 
-A simple dataframe library for Ruby.
+A dataframe library for Rubyists.
 
 - Powered by [Red Arrow](https://github.com/apache/arrow/tree/master/ruby/red-arrow)
 [![Red Data Tools Chat (en)](https://badges.gitter.im/red-data-tools/en.svg)](https://app.element.io/#/room/#red-data-tools_en:gitter.im) [![Gem Version](https://img.shields.io/gem/v/red-arrow?color=brightgreen)](https://rubygems.org/gems/red-arrow)
@@ -19,16 +19,17 @@ A simple dataframe library for Ruby.
 
 ## Requirements
 ### Ruby
-Supported Ruby version is >= 3.0 (since RedAmber 0.3.0).
+Supported Ruby version is >= 3.0.
 
 ### Required libraries
 ```ruby
-gem 'red-arrow',   '~> 12.0.0' # Requires Apache Arrow (see installation below)
-gem 'red-parquet', '~> 12.0.0' # Optional, if you use IO from/to parquet
-gem 'red-datasets-arrow'       # Optional, if you use Red Datasets or random sampling feature
-gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
-gem 'red-arrow-activerecord'   # Optional, if you use Active Record
-gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFrame
+gem 'red-arrow',   '~> 12.0.0' # Requires Apache Arrow (see installation below).
+gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray,
+                               # or use random sampling feature.
+gem 'red-parquet', '~> 12.0.0' # Optional, if you use IO from/to parquet.
+gem 'red-datasets-arrow'       # Optional, if you use Red Datasets.
+gem 'red-arrow-activerecord'   # Optional, if you use Active Record.
+gem 'rover-df',                # Optional, if you use IO from/to Rover::DataFrame.
 ```
 
 ## Installation
@@ -49,8 +50,7 @@ See [Apache Arrow install document](https://arrow.apache.org/install/).
       wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
       sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
       sudo apt update
-      sudo apt install -y -V libarrow-dev
-      sudo apt install -y -V libarrow-glib-dev
+      sudo apt install -y -V libarrow-dev libarrow-glib-dev
       ```
 
   - On Fedora 39 (Rawhide):
@@ -63,8 +63,7 @@ See [Apache Arrow install document](https://arrow.apache.org/install/).
   - On macOS, using Homebrew:
 
       ```
-      brew install apache-arrow
-      brew install apache-arrow-glib
+      brew install apache-arrow apache-arrow-glib
       ```
 
 If you prepared Apache Arrow, add these lines to your Gemfile:
@@ -72,16 +71,26 @@ If you prepared Apache Arrow, add these lines to your Gemfile:
 ```ruby
 gem 'red-arrow',   '~> 12.0.0'
 gem 'red_amber'
+gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
+                               # or use random sampling feature.
 gem 'red-parquet', '~> 12.0.0' # Optional, if you use IO from/to parquet
 gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
-gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
 gem 'red-arrow-activerecord'   # Optional, if you use Active Record
-gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFrame
+gem 'rover-df',                # Optional, if you use IO from/to Rover::DataFrame.
 ```
 
 And then execute `bundle install` or install them yourself such as `gem install red_amber`.
 
+## Development Containers
+
+This repository supports [Dev Containers](https://containers.dev/). You can create a container as a full-featured development environment for RedAmber. The environment includes Ruby, Apache Arrow, RedAmber with source tree, GitHub CLI, sample datasets and Jupyter Lab with IRuby kernel. And you don't need to worry about the change of your local environment.
+
+`.devcontainer` directory in this repository includes settings of Dev Container for RedAmber.
+Please refer [How to use Dev Containers in RedAmber](doc/Dev_Containers.md) to use it.
+
 ## Docker image and Jupyter Notebook
+
+(Notice: This feature may be removed in the future. Try Dev Container above.)
 
 Docker image is available from `docker` folder. See [readme](docker/readme.md) for instruction. Integrated Jypyter notebook is in docker/notebook folder.
 
@@ -228,12 +237,18 @@ You can try this notebook on [Binder](https://mybinder.org/v2/gh/heronshoes/dock
 
 ## Development
 
+The recommended way to develop RedAmber is to use Dev Container. Please refer [How to use Dev Containers in RedAmber](doc/Dev_Containers.md) to use it.
+
+Otherwise run below commands after install required libraries in your local system.
+
 ```shell
 git clone https://github.com/red-data-tools/red_amber.git
 cd red_amber
 bundle install
 bundle exec rake test
 ```
+
+We need to pass `rake test` in development of RedAmber, but not require to pass `rake rubocop` when you make a contribution. In this project we respect your preferences in code style. However, we may unify the style during merging.
 
 ## Community
 
