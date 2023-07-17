@@ -62,7 +62,7 @@
 
 <p><a href="https://rubygems.org/gems/red_amber"><img src="https://img.shields.io/gem/v/red_amber?color=brightgreen"></a> <a href="https://github.com/red-data-tools/red_amber/actions/workflows/ci.yml"><img src="https://github.com/heronshoes/red_amber/actions/workflows/ci.yml/badge.svg"></a> <a href="https://codeclimate.com/github/heronshoes/red_amber/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/maintainability"></a> <a href="https://codeclimate.com/github/heronshoes/red_amber/test_coverage"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/test_coverage"></a> <a href="https://heronshoes.github.io/red_amber/"><img src="https://img.shields.io/badge/docs-latest-blue"></a> <a href="https://github.com/red-data-tools/red_amber/discussions"><img src="https://img.shields.io/github/discussions/heronshoes/red_amber"></a></p>
 
-<p>A simple dataframe library for Ruby.</p>
+<p>A dataframe library for Rubyists.</p>
 <ul><li>
 <p>Powered by <a href="https://github.com/apache/arrow/tree/master/ruby/red-arrow">Red Arrow</a> <a href="https://app.element.io/#/room/#red-data-tools_en:gitter.im"><img src="https://badges.gitter.im/red-data-tools/en.svg"></a> <a href="https://rubygems.org/gems/red-arrow"><img src="https://img.shields.io/gem/v/red-arrow?color=brightgreen"></a></p>
 </li><li>
@@ -77,17 +77,18 @@
 
 <h3 id="label-Ruby">Ruby</h3>
 
-<p>Supported Ruby version is &gt;= 3.0 (since RedAmber 0.3.0).</p>
+<p>Supported Ruby version is &gt;= 3.0.</p>
 
 <h3 id="label-Required+libraries">Required libraries</h3>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Requires Apache Arrow (see installation below)
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-parquet</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to parquet
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-datasets-arrow</span><span class='tstring_end'>&#39;</span></span>       <span class='comment'># Optional, if you use Red Datasets or random sampling feature
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-numo-narray</span><span class='tstring_end'>&#39;</span></span>    <span class='comment'># Optional, recommended if you use inputs from Numo::NArray
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-activerecord</span><span class='tstring_end'>&#39;</span></span>   <span class='comment'># Optional, if you use Active Record
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rover-df</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 0.3.0</span><span class='tstring_end'>&#39;</span></span>  <span class='comment'># Optional, if you use IO from/to Rover::DataFrame
-</span></code></pre>
+<pre class="code ruby"><code class="ruby">gem &#39;red-arrow&#39;,   &#39;~&gt; 12.0.0&#39; # Requires Apache Arrow (see installation below).
+gem &#39;red-arrow-numo-narray&#39;    # Optional, recommended if you use inputs from Numo::NArray,
+                               # or use random sampling feature.
+gem &#39;red-parquet&#39;, &#39;~&gt; 12.0.0&#39; # Optional, if you use IO from/to parquet.
+gem &#39;red-datasets-arrow&#39;       # Optional, if you use Red Datasets.
+gem &#39;red-arrow-activerecord&#39;   # Optional, if you use Active Record.
+gem &#39;rover-df&#39;,                # Optional, if you use IO from/to Rover::DataFrame.
+</code></pre>
 
 <h2 id="label-Installation">Installation</h2>
 
@@ -104,7 +105,7 @@
 <ul><li>
 <p>Minimum installation example for the latest Ubuntu:</p>
 
-<p> <code>   sudo apt update   sudo apt install -y -V ca-certificates lsb-release wget   wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr &#39;A-Z&#39; &#39;a-z&#39;)/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt update   sudo apt install -y -V libarrow-dev   sudo apt install -y -V libarrow-glib-dev </code></p>
+<p> <code>   sudo apt update   sudo apt install -y -V ca-certificates lsb-release wget   wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr &#39;A-Z&#39; &#39;a-z&#39;)/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt update   sudo apt install -y -V libarrow-dev libarrow-glib-dev </code></p>
 </li><li>
 <p>On Fedora 39 (Rawhide):</p>
 
@@ -112,23 +113,32 @@
 </li><li>
 <p>On macOS, using Homebrew:</p>
 
-<p> <code>   brew install apache-arrow   brew install apache-arrow-glib </code></p>
+<p> <code>   brew install apache-arrow apache-arrow-glib </code></p>
 </li></ul>
 
 <p>If you prepared Apache Arrow, add these lines to your Gemfile:</p>
 
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span>
-<span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red_amber</span><span class='tstring_end'>&#39;</span></span>
-<span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-parquet</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 12.0.0</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Optional, if you use IO from/to parquet
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-datasets-arrow</span><span class='tstring_end'>&#39;</span></span>       <span class='comment'># Optional, recommended if you use Red Datasets
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-numo-narray</span><span class='tstring_end'>&#39;</span></span>    <span class='comment'># Optional, recommended if you use inputs from Numo::NArray
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red-arrow-activerecord</span><span class='tstring_end'>&#39;</span></span>   <span class='comment'># Optional, if you use Active Record
-</span><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rover-df</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>~&gt; 0.3.0</span><span class='tstring_end'>&#39;</span></span>  <span class='comment'># Optional, if you use IO from/to Rover::DataFrame
-</span></code></pre>
+<pre class="code ruby"><code class="ruby">gem &#39;red-arrow&#39;,   &#39;~&gt; 12.0.0&#39;
+gem &#39;red_amber&#39;
+gem &#39;red-arrow-numo-narray&#39;    # Optional, recommended if you use inputs from Numo::NArray
+                               # or use random sampling feature.
+gem &#39;red-parquet&#39;, &#39;~&gt; 12.0.0&#39; # Optional, if you use IO from/to parquet
+gem &#39;red-datasets-arrow&#39;       # Optional, recommended if you use Red Datasets
+gem &#39;red-arrow-activerecord&#39;   # Optional, if you use Active Record
+gem &#39;rover-df&#39;,                # Optional, if you use IO from/to Rover::DataFrame.
+</code></pre>
 
 <p>And then execute <code>bundle install</code> or install them yourself such as <code>gem install red_amber</code>.</p>
 
+<h2 id="label-Development+Containers">Development Containers</h2>
+
+<p>This repository supports <a href="https://containers.dev/">Dev Containers</a>. You can create a container as a full-featured development environment for RedAmber. The environment includes Ruby, Apache Arrow, RedAmber with source tree, GitHub CLI, sample datasets and Jupyter Lab with IRuby kernel. And you don’t need to worry about the change of your local environment.</p>
+
+<p><code>.devcontainer</code> directory in this repository includes settings of Dev Container for RedAmber. Please refer <a href="doc/Dev_Containers_md.html">How to use Dev Containers in RedAmber</a> to use it.</p>
+
 <h2 id="label-Docker+image+and+Jupyter+Notebook">Docker image and Jupyter Notebook</h2>
+
+<p>(Notice: This feature may be removed in the future. Try Dev Container above.)</p>
 
 <p>Docker image is available from <code>docker</code> folder. See <a href="docker/readme_md.html">readme</a> for instruction. Integrated Jypyter notebook is in docker/notebook folder.</p>
 
@@ -257,11 +267,17 @@ starwars
 
 <h2 id="label-Development">Development</h2>
 
+<p>The recommended way to develop RedAmber is to use Dev Container. Please refer <a href="doc/Dev_Containers_md.html">How to use Dev Containers in RedAmber</a> to use it.</p>
+
+<p>Otherwise run below commands after install required libraries in your local system.</p>
+
 <pre class="code ruby"><code class="ruby">git clone https://github.com/red-data-tools/red_amber.git
 cd red_amber
 bundle install
 bundle exec rake test
 </code></pre>
+
+<p>We need to pass <code>rake test</code> in development of RedAmber, but not require to pass <code>rake rubocop</code> when you make a contribution. In this project we respect your preferences in code style. However, we may unify the style during merging.</p>
 
 <h2 id="label-Community">Community</h2>
 
@@ -288,7 +304,7 @@ bundle exec rake test
 </div></div>
 
       <div id="footer">
-  Generated on Sat Jul 15 02:11:37 2023 by
+  Generated on Mon Jul 17 02:37:06 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>
