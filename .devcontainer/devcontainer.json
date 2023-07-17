@@ -5,10 +5,10 @@
         "ghcr.io/devcontainers/features/python:1": {
             "installTools": true,
             "installJupyterlab": true,
-            "version": "latest"
+            "version": "3.11"
         },
         "ghcr.io/devcontainers/features/ruby:1": {
-            "version": "latest"
+            "version": "3.2"
         },
         "ghcr.io/devcontainers/features/github-cli:1": {}
     },
