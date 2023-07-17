@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ['Hirokazu SUZUKI (heronshoes)']
   spec.email = ['heronshoes877@gmail.com']
 
-  spec.summary = 'Simple dataframe library for Ruby'
-  spec.description = 'RedAmber is a simple dataframe library ' \
+  spec.summary = 'A data frame library for Rubyists'
+  spec.description = 'RedAmber is a data frame library ' \
                      'inspired by Rover-df and powered by Red Arrow.'
   spec.homepage = 'https://github.com/red-data-tools/red_amber'
   spec.license = 'MIT'
