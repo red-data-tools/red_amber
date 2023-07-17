@@ -23,11 +23,13 @@ Rubyistのためのデータフレームライブラリ.
 
 ### ライブラリ
 ```ruby
-gem 'red-arrow',   '~> 12.0.0' # お使いの環境に合わせた Apache Arrow が必要です(下記のインストールを参照してください)
-gem 'red-parquet', '~> 12.0.0' # 必要に応じて。Parquetの入出力が必要な場合。
-gem 'red-datasets-arrow'       # 必要に応じて。Red Datasets またはランダムサンプリングが必要な場合。
+gem 'red-arrow',   '~> 12.0.0' # お使いの環境に合わせた Apache Arrow が必要です
+　　　　　　　　　　　　　　　　　# 下記のインストールを参照してください
+gem 'red-arrow-numo-narray'    # 必要に応じて。Numo::NArray との連携またはランダムサンプリングが必要な場合。
+gem 'red-parquet', '~> 12.0.0' # 必要に応じて。Parquet の入出力が必要な場合。
+gem 'red-datasets-arrow'       # 必要に応じて。Red Datasets を利用する場合。 
 gem 'red-arrow-activerecord'   # 必要に応じて。Active Record とのデータ交換が必要な場合。
-gem 'rover-df',    '~> 0.3.0'  # 必要に応じて。Rover::DataFrameに対する入出力が必要な場合。
+gem 'rover-df',                # 必要に応じて。Rover::DataFrame に対する入出力が必要な場合。
 ```
 
 ## インストール
@@ -48,8 +50,7 @@ RedAmberをインストールする前に、下記のライブラリのインス
       wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
       sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
       sudo apt update
-      sudo apt install -y -V libarrow-dev
-      sudo apt install -y -V libarrow-glib-dev
+      sudo apt install -y -V libarrow-dev libarrow-glib-dev
       ```
 
   - Fedora 39 (Rawhide)の場合:
@@ -62,25 +63,34 @@ RedAmberをインストールする前に、下記のライブラリのインス
   - macOS の場合は、Homebrewを使用する:
 
       ```
-      brew install apache-arrow
-      brew install apache-arrow-glib
+      brew install apache-arrow apache-arrow-glib
       ```
 
 Apache Arrowがインストールできたら、下記の行をGemfileに追加してください:
 
 ```ruby
-gem 'red-arrow',   '~> 12.0.0' # お使いの環境に合わせた Apache Arrow が必要です(下記のインストールを参照してください)
+gem 'red-arrow',   '~> 12.0.0'
 gem 'red_amber'
+gem 'red-arrow-numo-narray'    # 必要に応じて。Numo::NArray との連携またはランダムサンプリングが必要な場合。
 gem 'red-parquet', '~> 12.0.0' # 必要に応じて。Parquetの入出力が必要な場合。
-gem 'red-datasets-arrow'       # 必要に応じて。Red Datasets またはランダムサンプリングが必要な場合。
-gem 'red-arrow-numo-narray'    # 必要に応じて。Numo::NArrayとの連携が必要な場合
+gem 'red-datasets-arrow'       # 必要に応じて。Red Datasets を利用する場合。
 gem 'red-arrow-activerecord'   # 必要に応じて。Active Record とのデータ交換が必要な場合。
-gem 'rover-df',    '~> 0.3.0'  # 必要に応じて。Rover::DataFrameに対する入出力が必要な場合。
+gem 'rover-df',                # 必要に応じて。Rover::DataFrameに対する入出力が必要な場合。
 ```
 
 `bundle install`とするか、または `gem install red_amber`としてインストールしてください。
 
+## Development Containersによる開発環境
+
+このリポジトリは [開発コンテナ(Dev Container)](https://containers.dev/)をサポートしています。
+これを使うと、ローカルの環境を変更することなく、RedAmberに必要なツール一式を含んだ環境を準備することができます。この環境には、Ruby、Apache Arrow、RedAmberのソースツリー、GitHub CI、サンプルデータセット、IRubyカーネルを含んだJupyter Labなどが含まれています。
+
+RedAmber用のDev Containerは、`.devcontainer` ディレクトリに必要な設定が書かれています。
+使用例は、[開発コンテナ(Development Containers)の利用](doc/Dev_Containers.ja.md)をご参照ください。
+
 ## Docker イメージと Jupyter Notebook
+
+（注：将来削除される可能性があります。上記のDev Containerをご活用ください。）
 
 このリポジトリの`docker` フォルダーから Docker コンテナ環境を生成できます。リポジトリをクローンしてから、dockerフォルダーにある [readme](docker/readme.md) を参照してください。その環境では `docker/notebook` フォルダーにある Jupyter Notebookイメージを試用できます。
 
@@ -226,6 +236,10 @@ Jupyter Notebook形式の使用例として、[Examples of Red Amber](https://gi
 
 ## 開発
 
+Dev Containersを利用してコンテナ上に開発環境を作成する方法がお勧めです。[開発コンテナ(Development Containers)の利用例](doc/Dev_Containers.ja.md)を参考にしてください。
+
+または、ローカル環境に必要なライブラリをインストールした上で、下記を実行するとテストが走ります。
+
 ```shell
 git clone https://github.com/red-data-tools/red_amber.git
 cd red_amber
@@ -233,7 +247,7 @@ bundle install
 bundle exec rake test
 ```
 
-rake testは必須ですが、rake rubocopをパスすることはコントリビュートの際に必須ではありません。このプロジェクトではコードの書き方の好みを尊重します。ただしマージの際に書き方を統一することがあります。
+RedAmberの開発では、`rake test` は必須ですが、`rake rubocop` をパスすることはコントリビュートの際に必須ではありません。このプロジェクトではコードの書き方の好みを尊重します。ただしマージの際に書き方を統一させていただくことがあります。
 
 ## コミュニティ
 
