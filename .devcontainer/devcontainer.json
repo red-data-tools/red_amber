@@ -1,6 +1,6 @@
 {
     "name": "RedAmber Dev Container",
-    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    "image": "mcr.microsoft.com/devcontainers/base:jammy",
     "features": {
         "ghcr.io/devcontainers/features/python:1": {
             "installTools": true,
@@ -18,5 +18,5 @@
     "containerEnv": {
         "TZ": "${localEnv:TZ:UTC}"
     },
-    "onCreateCommand": ".devcontainer/postCreateCommand.sh"
+    "onCreateCommand": ".devcontainer/onCreateCommand.sh"
 }
