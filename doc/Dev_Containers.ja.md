@@ -3,13 +3,14 @@
 このリポジトリでは [開発コンテナ(Dev Container)](https://containers.dev/)をサポートしています。
 これを使うと、ローカルの環境を汚すことなく、RedAmberに必要なツール一式を含んだ環境を準備することができます。この環境には、Ruby、Apache Arrow、RedAmberのソースツリー、GitHub CI、サンプルデータセット、IRubyカーネルを含んだJupyter Labなどが含まれていて、簡単でメンテナンスしやすく、かつ再利用性が高い構成になっています。
 
-RedAmber用のDev Containerは、`.devcontainer` ディレクトリに必要な設定が書かれています。現在の実装では、Dockerfileを使用せず、Dev Containers用のUbuntuベースイメージに、Dev Container Featuresを使って、Ruby、Python、GitHub CIの環境を加えて作っています。
+RedAmber用のDev Containerは、`.devcontainer` ディレクトリに必要な設定が書かれています。現在の実装では、Dockerfileを使用せず、Dev Containers用のUbuntuベースイメージに、Dev Container Featuresを使って、Python、GitHub CIの環境を加えて作っています。Ruby は Container ができてから走らせるスクリプトでインストールしています。
 
 Dockerfileで作るのと比べて、
 - User周りの設定を自動的にやってくれる
-- 言語をFeatureとして個別に追加することができる
-  - Rubyではrvm、rbenvが含まれており複数のバージョンを後から追加することもできる
+- 言語環境をFeatureとして個別に追加することができる
   - PythonではJupyter Labをオプションとして追加できる
+  - Rubyは`rbenv`をインストールしてあって後から別のバージョンを追加できる
+  - Quartoを動かせる環境を簡単に追加でき、Jupyter notebookのソース管理に利用できる
 
 等の利点があります。
 
@@ -96,13 +97,12 @@ GitHubアカウントにサインインしている必要があります。
 
 ### ターミナルでインストールされているツールを確認する
 
-  ターミナルが開いていない場合は、 `CTRL + ` `  で開いてください。
+  ターミナルが開いていない場合は、 ``CTRL + ` `` で開いてください。
 
   下記のコマンドを実行して、ツールがインストール済みであることを確かめてください。
 
-  ```
-  $ ruby -v
-  $ rvm list
+  ```shell
+  $ ruby -v --jit
   $ rbenv versions
   $ gem -v
   $ gem list
@@ -121,9 +121,15 @@ GitHubアカウントにサインインしている必要があります。
   $ gh --version
   ```
 
+  ユーザーは、`vscode` という名前で、`uid/gid` はローカルのユーザーと同じになっています。
+
+   ```shell
+   $ id
+   ```
+
 ### RedAmberのテストを走らせてみる
 
-  ```
+  ```shell
   $ bundle exec rake
   ```
 
@@ -177,7 +183,7 @@ GitHubアカウントにサインインしている必要があります。
 
   Python と IRuby カーネルを持ったJupyter Labをブラウザで起動することができます。
 
-  ```
+  ```shell
   $ bin/jupyter
   ```
 

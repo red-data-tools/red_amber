@@ -3,14 +3,15 @@
 We support [Development Container](https://containers.dev/) in this repository.
 You can prepare a container as a full-featured development environment for RedAmber. Dev Containers allow you to encapsulate Ruby, Apache Arrow, RedAmber with source tree, GitHub CLI, sample datasets and Jupyter Lab with IRuby kernel. You don't need to worry about the change of your local environment.
 
-`.devcontainer` directory in this repository includes settings of Dev Container for RedAmber. We don't use Dockerfile here, based on Ubuntu image for Dev Container, add Ruby, Python and GitHub CLI tools using Dev Container Features. I think this style has simplicity, maintainability, and reusability.
+`.devcontainer` directory in this repository includes settings of Dev Container for RedAmber. We don't use Dockerfile here, based on Ubuntu image for Dev Container, Python and GitHub CLI tools using Dev Container Features. I think this style has simplicity, maintainability, and reusability. Ruby is added after the container is created by script.
 
 It has some benefits below compared to make dev environment by Dockerfile;
 
 1) It automatically makes user setting with same UID/GID as local user.
 2) Additional tools can be introduced by `Dev Container Features`.
-3) Ruby Feature includes `rvm` and `rbenv` and it is easy to add another version afterwards.
+3) Ruby Feature includes `rbenv` and it is easy to add another version afterwards.
 4) Python Feature includes Jupyter Lab as an option.
+5) Quarto is introduced. It converts Jupyter notebook from/to qmd file and it is useful to manage notebook in the source tree.
 
 We will show 2 examples here.
 
@@ -99,13 +100,12 @@ Please see [(GitHub Docs)Creating a codespace for a repository](https://docs.git
 
 ### Check installed tools by terminal
 
-  If you don't have the terminal open, open it with `CTRL + ` `.
+  If you don't have the terminal open, open it with ``CTRL + ` ``.
 
   Run these command to check these tools are installed.
 
-  ```
-  $ ruby -v
-  $ rvm list
+  ```shell
+  $ ruby -v --jit
   $ rbenv versions
   $ gem -v
   $ gem list
@@ -124,9 +124,15 @@ Please see [(GitHub Docs)Creating a codespace for a repository](https://docs.git
   $ gh --version
   ```
 
+  The user name is `vscode` in this environment. `uid` and `gid` are the same as local user.
+
+  ```shell
+  $ id
+  ```
+
 ### Run tests of RedAmber
 
-  ```
+  ```shell
   $ bundle exec rake
   ```
 
@@ -181,7 +187,7 @@ Please see [(GitHub Docs)Creating a codespace for a repository](https://docs.git
 
   You can try Jupyter Lab with Python and IRuby kernels in your browser.
 
-  ```
+  ```shell
   $ bin/jupyter
   ```
 
