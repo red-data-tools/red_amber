@@ -7,15 +7,24 @@
             "installJupyterlab": true,
             "version": "3.11"
         },
-        "ghcr.io/devcontainers/features/ruby:1": {
-            "version": "3.2"
-        },
+        // We don't use Ruby feature here
+        // "ghcr.io/devcontainers/features/ruby:1": {},
         "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    // VS Code extentions for Ruby
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "rebornix.Ruby",
+                "shopify.ruby-lsp"
+            ]
+        }
     },
     // Use init process to deal with zombie process
     "init": true,
     // set TZ from local machine's environment defaulting to 'UTC' if not supplied.
     "containerEnv": {
+        "RUBYLIB": "/workspaces/red_amber/lib",
         "TZ": "${localEnv:TZ:UTC}"
     },
     "onCreateCommand": ".devcontainer/onCreateCommand.sh"
