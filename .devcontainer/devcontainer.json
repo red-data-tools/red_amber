@@ -9,6 +9,10 @@
         },
         // We don't use Ruby feature here
         // "ghcr.io/devcontainers/features/ruby:1": {},
+        "ghcr.io/rocker-org/devcontainer-features/quarto-cli:1": {
+            "installTinyTex": true,
+            "version": "latest"
+        },
         "ghcr.io/devcontainers/features/github-cli:1": {}
     },
     // VS Code extentions for Ruby
