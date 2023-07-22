@@ -56,6 +56,16 @@ rbenv install --verbose $RBENV_RUBY
 rbenv global $RBENV_RUBY
 bundle install
 
-# # # Install IRuby
+# Install IRuby
 gem install iruby
 iruby register --force
+
+# Install language and set timezone
+# You should change here if you use another
+sudo apt-get update
+sudo apt-get install -y language-pack-ja
+
+echo 'export LANG=ja_JP.UTF-8' >> ~/.bashrc
+echo 'export LANG=ja_JP.UTF-8' >> ~/.profile
+echo 'export TZ=Asia/Tokyo' >> ~/.bashrc
+echo 'export TZ=Asia/Tokyo' >> ~/.profile
