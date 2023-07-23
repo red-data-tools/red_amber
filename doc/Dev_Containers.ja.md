@@ -193,3 +193,83 @@ GitHubアカウントにサインインしている必要があります。
     - `red_amber.ipynb` : `README.md` で紹介している操作例。
     - `examples_of_red_amber.ipynb` : 様々な例を集めたもの。
   - `require 'red_amber'` は `lib` 以下のソースを読み込んでいます。
+
+## Quarto によるドキュメント操作
+
+[Quarto](https://quarto.org/)はオープンソースの科学技術ドキュメントの出版システムです。
+
+この環境では、RedAmber の動作例を活用するために Quarto CLI を使っています。
+
+```mermaid
+---
+title: Quartoを利用したドキュメント管理
+---
+flowchart LR
+    id1["Source management
+        (.qmd)"]
+    id2["Analyze and edit by JupyterLab
+        (.ipynb)"]
+    id3["Publish document
+        (.pdf)"]
+
+    id1 -- convert --> id2 -- convert -->  id1
+    id2 -- render --> id3
+    id1 -- render --> id3
+```
+
+* Quartoのドキュメント `qmd` 形式でソース管理できます。
+* `.qmd`ファイルを Jupyter notebook ファイル(`.ipynb`)に変換して、
+  Jupyter Lab上で編集したりデータ解析ができます。
+* `pdf`形式 に変換することができます。
+
+### Quarto の動作を確認する
+
+Quarto のバージョンと動作環境をチェックするには次のようにします。
+
+```shell
+$ quarto -v
+$ quarto check
+```
+
+ヘルプを表示するには下記のようにします。
+
+```shell
+$ quarto --help
+$ quarto render --help
+```
+
+### ソースからJupyter Notebookを生成する
+`.qmd`ソースファイルから `.ipynb` を生成するには、
+
+```shell
+$ quarto convert ソースファイル.qmd
+$ quarto convert ソースファイル.qmd --output 出力先ノートブック.ipynb
+```
+上の書き方では、出力ファイルはソースファイルの拡張子を `.ipynb`に変えて、ソースファイルと同じディレクトリに保存されます。
+
+下記のコマンドは、`doc/qmd` 以下にあるファイルから`.ipynb` ファイルを生成して `doc/notebook` に保存し、Jupyter Labを開きます。
+
+```shell
+$ bin/jupyter
+```
+
+### Jupyter Notebookファイルを`qmd`形式で保存する
+
+```shell
+$ quarto convert ノートブック.ipynb
+$ quarto convert ノートブック.ipynb --output 出力先ソースファイル.qmd
+```
+
+### その他の活用方法
+
+目次付きでpdf形式で出力するには
+
+```shell
+$ quarto render notebook.ipynb --to pdf --toc
+```
+
+より詳しくは、コマンドラインヘルプ(`quarto --help`)、または[Quarto](https://quarto.org/)公式ページをご覧ください。
+
+### 謝辞
+
+Quarto の利用は、西田孝三さんの2022年度のRubyアソシエーション開発助成事業プロジェクト『RubyDataエコシステムへのQuartoの導入とその利用の促進のためのコミュニティ活動』 がきっかけとなりました。この場をお借りして感謝申し上げます。

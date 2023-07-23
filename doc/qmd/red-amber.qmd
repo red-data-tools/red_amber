@@ -1,0 +1,86 @@
+---
+title: RedAmber Examples
+jupyter: ruby
+---
+
+This notebook walks through the [README of RedAmber](https://github.com/heronshoes/red_amber#readme).
+
+
+## `RedAmber::DataFrame`
+
+```{ruby}
+#| tags: []
+require 'red_amber'
+include RedAmber
+require 'datasets-arrow'
+
+{RedAmber: VERSION, Datasets: Datasets::VERSION}
+```
+
+## Example: diamonds dataset
+
+For the first loading of Datasets::Diamonds, it will take some time to download.
+
+```{ruby}
+#| tags: []
+dataset = Datasets::Diamonds.new
+diamonds = DataFrame.new(dataset)
+```
+
+```{ruby}
+#| tags: []
+df = diamonds
+  .slice { carat > 1 } # or use #filter instead of #slice
+  .group(:cut)
+  .mean(:price) # `pick` prior to `group` is not required if `:price` is specified here.
+  .sort('-mean(price)')
+```
+
+```{ruby}
+#| tags: []
+usdjpy = 110.0 # when the yen was stronger
+
+df.rename('mean(price)': :mean_price_USD)
+  .assign(:mean_price_JPY) { mean_price_USD * usdjpy }
+```
+
+## Example: starwars dataset
+
+```{ruby}
+#| tags: []
+uri = URI('https://vincentarelbundock.github.io/Rdatasets/csv/dplyr/starwars.csv')
+
+starwars = DataFrame.load(uri)
+```
+
+```{ruby}
+#| tags: []
+starwars
+  .drop(0) # delete unnecessary index column
+  .remove { species == "NA" } # delete unnecessary rows
+  .group(:species) { [count(:species), mean(:height, :mass)] }
+  .slice { count > 1 } # or use #filter instead of slice
+```
+
+## `RedAmber::Vector`
+
+```{ruby}
+#| tags: []
+penguins = DataFrame.new(Datasets::Penguins.new)
+```
+
+```{ruby}
+#| tags: []
+penguins[:bill_length_mm]
+```
+
+```{ruby}
+#| tags: []
+penguins[:bill_length_mm] < 40
+```
+
+```{ruby}
+#| tags: []
+penguins[:bill_length_mm].mean
+```
+

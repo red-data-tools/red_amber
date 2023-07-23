@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# Convert qmd -> jupyter notebook
+for filename in doc/qmd/*.qmd
+do
+    quarto convert $filename -o doc/notebook/$(basename $"${filename%.*}").ipynb
+done
