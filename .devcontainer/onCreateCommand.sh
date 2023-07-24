@@ -65,7 +65,11 @@ iruby register --force
 sudo apt-get update
 sudo apt-get install -y language-pack-ja
 
-echo 'export LANG=ja_JP.UTF-8' >> ~/.bashrc
-echo 'export LANG=ja_JP.UTF-8' >> ~/.profile
-echo 'export TZ=Asia/Tokyo' >> ~/.bashrc
-echo 'export TZ=Asia/Tokyo' >> ~/.profile
+echo 'export LANG=ja_JP.UTF-8' >> $HOME/.bashrc
+echo 'export LANG=ja_JP.UTF-8' >> $HOME/.profile
+echo 'export TZ=Asia/Tokyo' >> $HOME/.bashrc
+echo 'export TZ=Asia/Tokyo' >> $HOME/.profile
+
+# Install HaranoAjiFonts
+mkdir -p $HOME/.fonts
+git clone https://github.com/trueroad/HaranoAjiFonts.git $HOME/.fonts/HaranoAjiFonts
