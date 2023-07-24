@@ -1,0 +1,3916 @@
+---
+title: 106 examples of Red Amber
+jupyter: ruby
+---
+
+Last update is on March 20, 2023, for RedAmber Version 0.4.1 and Arrow version 11.0.0 .
+
+## 1. Install
+
+Install requirements before you install RedAmber.
+
+- Ruby (>= 3.0)
+
+- Apache Arrow (~> 11.0.0)
+- Apache Arrow GLib (~> 11.0.0)
+- Apache Parquet GLib (~> 11.0.0)  # if you need IO from/to Parquet resource.
+
+  See [Apache Arrow install document](https://arrow.apache.org/install/).
+  
+  - Minimum installation example for the latest Ubuntu:
+    ```
+      sudo apt update
+      sudo apt install -y -V ca-certificates lsb-release wget
+      wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+      sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+      sudo apt update
+      sudo apt install -y -V libarrow-dev
+      sudo apt install -y -V libarrow-glib-dev
+    ```
+  - On Fedora 38 (Rawhide):
+    ```
+    sudo dnf update
+    sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel
+    
+
+  - On macOS, you can install Apache Arrow C++ library using Homebrew:
+    ```
+      brew install apache-arrow
+    ```
+    and GLib (C) package with:
+
+    ```
+      brew install apache-arrow-glib
+    ```
+
+If you prepared Apache Arrow, add these lines to your Gemfile:
+
+```ruby
+gem 'red-arrow',   '~> 11.0.0'
+gem 'red_amber'
+gem 'red-parquet', '~> 11.0.0' # Optional, if you use IO from/to parquet
+gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFrame
+gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
+gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
+```
+
+And then execute `bundle install` or install it yourself as `gem install red_amber`.
+
+## 2. Require
+
+```{ruby}
+#| tags: []
+require 'red_amber' # require 'red-amber' is also OK
+include RedAmber
+{RedAmber: VERSION, Arrow: Arrow::VERSION}
+```
+
+## 3. Initialize
+
+```{ruby}
+#| tags: []
+# From a Hash
+DataFrame.new(x: [1, 2, 3], y: %w[A B C])
+```
+
+```{ruby}
+#| tags: []
+# From a schema and a row-oriented array
+DataFrame.new({ x: :uint8, y: :string }, [[1, 'A'], [2, 'B'], [3, 'C']])
+```
+
+```{ruby}
+#| tags: []
+# From an Arrow::Table
+table = Arrow::Table.new(x: [1, 2, 3], y: %w[A B C])
+DataFrame.new(table)
+```
+
+```{ruby}
+#| tags: []
+# From a Rover::DataFrame
+require 'rover'
+rover = Rover::DataFrame.new(x: [1, 2, 3], y: %w[A B C])
+DataFrame.new(rover)
+```
+
+```{ruby}
+#| tags: []
+# from a red-datasets
+require 'datasets-arrow'
+dataset = Datasets::Penguins.new
+penguins = DataFrame.new(dataset) # Since 0.2.2 . If it is older, it must be `dataset.to_arrow`.
+```
+
+```{ruby}
+#| tags: []
+dataset = Datasets::Rdatasets.new('datasets', 'mtcars')
+mtcars = DataFrame.new(dataset)
+```
+
+(New from 0.2.3 with Arrow 10.0.0) It is possible to initialize by objects responsible to `to_arrow` since 0.2.3 . Arrays in Numo::NArray is responsible to `to_arrow` with `red-arrow-numo-narray` gem. This feature is proposed by the Red Data Tools member @kojix2 and implemented by @kou in Arrow 10.0.0 and Red Arrow Numo::NArray 0.0.6. Thanks!
+
+```{ruby}
+#| tags: []
+require 'arrow-numo-narray'
+
+DataFrame.new(numo: Numo::DFloat.new(3).rand)
+```
+
+Another example by Numo::NArray is [#73. Introduce columns from numo/narray](#73.-Introduce-columns-from-numo/narray).
+
+## 4. Load
+
+`RedAmber::DataFrame` delegates `#load` to `Arrow::Table#load`. We can load from `[.arrow, .arrows, .csv, .csv.gz, .tsv]` files.
+
+`load` accepts following options:
+
+`load(input, format: nil, compression: nil, schema: nil, skip_lines: nil)`
+
+- `format` [:arrow_file, :batch, :arrows, :arrow_stream, :stream, :csv, :tsv]
+- `compression` [:gzip, nil]
+- `schema` [Arrow::Schema]
+- `skip_lines` [Regexp]
+
+Load from a file 'comecome.csv';
+
+```{ruby}
+#| tags: []
+file = Tempfile.open(['comecome', '.csv']) do |f|
+  f.puts(<<~CSV)
+    name,age
+    Yasuko,68
+    Rui,49
+    Hinata,28
+  CSV
+  f
+end
+
+DataFrame.load(file)
+```
+
+Load from a Buffer;
+
+```{ruby}
+#| tags: []
+DataFrame.load(Arrow::Buffer.new(<<~BUFFER), format: :csv)
+  name,age
+  Yasuko,68
+  Rui,49
+  Hinata,28
+BUFFER
+```
+
+Load from a Buffer skipping comment line;
+
+```{ruby}
+#| tags: []
+DataFrame.load(Arrow::Buffer.new(<<~BUFFER), format: :csv, skip_lines: /^#/)
+  # comment
+  name,age
+  Yasuko,68
+  Rui,49
+  Hinata,28
+BUFFER
+```
+
+## 5. Load from a URI
+
+```{ruby}
+#| tags: []
+uri = URI("https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv")
+DataFrame.load(uri)
+```
+
+## 6. Save
+
+`#save` accepts same options as `#load`. See [#4. Load](#4.-Load).
+
+```{ruby}
+#| tags: []
+penguins.save("penguins.arrow")
+penguins.save("penguins.arrows")
+penguins.save("penguins.csv")
+penguins.save("penguins.csv.gz")
+penguins.save("penguins.tsv")
+penguins.save("penguins.feather")
+```
+
+(Since 0.3.0) `DataFrame#save` returns self.
+
+## 7. to_s/inspect
+
+`to_s` or `inspect` (it uses to_s inside) shows a preview of the dataframe.
+
+It shows first 5 and last 3 rows if it has many rows. Columns are also omitted if line is exceeded 80 letters.
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(
+  x: [1, 2, 3, 4, 5],
+  y: [1, 2, 3, 0/0.0, nil],
+  s: %w[A B C D] << nil,
+  b: [true, false, true, false, nil]
+)
+```
+
+```{ruby}
+#| tags: []
+p penguins; nil
+```
+
+## 8. Show table
+
+`#table` shows Arrow::Table object. The alias is `#to_arrow`.
+
+```{ruby}
+#| tags: []
+df.table
+```
+
+```{ruby}
+#| tags: []
+penguins.to_arrow
+```
+
+```{ruby}
+#| tags: []
+# This is a Red Arrow's feature
+puts df.table.to_s(format: :column)
+```
+
+```{ruby}
+#| tags: []
+# This is also a Red Arrow's feature
+puts df.table.to_s(format: :list)
+```
+
+## 9. TDR
+
+TDR means 'Transposed Dataframe Representation'. It shows columns in lateral just the same shape as initializing by a Hash. TDR has some information which is useful for the exploratory data processing.
+
+- DataFrame shape: n_rows x n_columns
+- Data types
+- Levels: number of unique elements
+- Data preview: same data is aggregated if level is smaller (tally mode)
+- Show counts of abnormal element: NaN and nil
+
+It is similar to dplyr's (or Polars's) `glimpse()` so we have an alias `#glimpse` (since 0.4.0).
+
+```{ruby}
+#| tags: []
+# use the same dataframe as #7
+df.tdr
+```
+
+```{ruby}
+#| tags: []
+penguins.tdr
+```
+
+`#tdr` has some options:
+
+`limit` : to limit a number of variables to show. Default value is `limit=10`.
+
+```{ruby}
+#| tags: []
+penguins.tdr(3)
+```
+
+By default `#tdr` shows 9 variables at maximum. `#tdr(:all)` will show all variables.
+
+```{ruby}
+#| tags: []
+mtcars.tdr(:all)
+```
+
+(Since 0.4.0) `#tdra` method is short cut for `#tdr(:all)`
+
+```{ruby}
+#| tags: []
+mtcars.tdra
+```
+
+`elements` : max number of elements to show in observations. Default value is `elements: 5`.
+
+```{ruby}
+#| tags: []
+penguins.tdr(elements: 3) # Show first 3 items in data
+```
+
+`tally` : max level to use tally mode. Level means size of `tally`ed hash. Default value is `tally: 5`.
+
+```{ruby}
+#| tags: []
+penguins.tdr(tally: 0) # Don't use tally mode
+```
+
+`#tdr_str` returns a String. `#tdr` do the same thing as `puts #tdr_str`
+
+```{ruby}
+#| tags: []
+puts penguins.tdr_str
+```
+
+(Since 0.4.0) `#glimpse` is an alias for `#tdr`.
+
+```{ruby}
+#| tags: []
+mtcars.glimpse(:all, elements: 10)
+```
+
+## 10. Size and shape
+
+```{ruby}
+#| tags: []
+# same as n_rows, n_obs
+df.size
+```
+
+```{ruby}
+#| tags: []
+# same as n_cols, n_vars
+df.n_keys
+```
+
+```{ruby}
+#| tags: []
+# [df.size, df.n_keys], [df.n_rows, df.n_cols]
+df.shape
+```
+
+## 11. Keys
+
+```{ruby}
+#| tags: []
+df.keys
+```
+
+```{ruby}
+#| tags: []
+penguins.keys
+```
+
+## 12. Types
+
+```{ruby}
+#| tags: []
+df.types
+```
+
+```{ruby}
+#| tags: []
+penguins.types
+```
+
+## 13. Data type classes
+
+```{ruby}
+#| tags: []
+df.type_classes
+```
+
+```{ruby}
+#| tags: []
+penguins.type_classes
+```
+
+## 14. Indices
+
+Another example of `indices` is [62. Custom index](#62.-Custom-index).
+
+```{ruby}
+#| tags: []
+df.indexes
+# or
+df.indices
+```
+
+`#indices` returns Vector since 0.2.3 .
+
+## 15. To an Array or a Hash
+
+DataFrame#to_a returns an array of row-oriented data without a header.
+
+```{ruby}
+#| tags: []
+df.to_a
+```
+
+If you need a column-oriented array with keys, use `.to_h.to_a`
+
+```{ruby}
+#| tags: []
+df.to_h
+```
+
+```{ruby}
+#| tags: []
+df.to_h.to_a
+```
+
+## 16. Schema
+
+Schema is keys and value types pairs as a Hash.
+
+```{ruby}
+#| tags: []
+df.schema
+```
+
+## 17. Vector
+
+Each variable (column in the table) is represented by a Vector object.
+
+```{ruby}
+#| tags: []
+df[:x] # This syntax will come later
+```
+
+Or create new Vector by the constructor.
+
+```{ruby}
+#| tags: []
+Vector.new(1, 2, 3, 4, 5)
+```
+
+```{ruby}
+#| tags: []
+Vector.new(1..5)
+```
+
+```{ruby}
+#| tags: []
+Vector.new([1, 2, 3], [4, 5])
+```
+
+```{ruby}
+#| tags: []
+array = Arrow::Array.new([1, 2, 3, 4, 5])
+Vector.new(array)
+```
+
+- TODO: `Vector[1..5]` as a constructor
+
+## 18. Vectors
+
+Returns an Array of Vectors as a DataFrame.
+
+```{ruby}
+#| tags: []
+df.vectors
+```
+
+## 19. Variables
+
+Returns key and Vector pairs as a Hash.
+
+```{ruby}
+#| tags: []
+df.variables
+```
+
+## 20. Select columns by #[ ]
+
+`DataFrame#[]` is overloading column operations and row operations.
+
+- For columns (variables)
+  - Key in a Symbol: `df[:symbol]`
+  - Key in a String: `df["string"]`
+  - Keys in an Array: `df[:symbol1, "string", :symbol2]`
+  - Keys by indeces: `df[df.keys[0]`, `df[df.keys[1,2]]`, `df[df.keys[1..]]`
+
+```{ruby}
+#| tags: []
+# Keys in a Symbol and a String
+df[:x, 'y']
+```
+
+```{ruby}
+#| tags: []
+# Keys in a Range
+df[:x..:y]
+```
+
+```{ruby}
+#| tags: []
+# Keys with a index Range, and a symbol
+df[df.keys[2..], :x]
+```
+
+## 21. Select rows by #[ ]
+`DataFrame#[]` is overloading column operations and row operations.
+
+- For rows (observations)
+  - Select rows by a Index: `df[index]`
+  - Select rows by Indices: `df[indices]` # Array, Arrow::Array, Vectors are acceptable for indices
+  - Select rows by Ranges: `df[range]`
+  - Select rows by Booleans: `df[booleans]` # Array, Arrow::Array, Vectors are acceptable for booleans
+
+```{ruby}
+#| tags: []
+# indices
+df[0, 2, 1]
+```
+
+```{ruby}
+#| tags: []
+# including a Range
+# negative indices are also acceptable
+df[1..2, -1]
+```
+
+```{ruby}
+#| tags: []
+# booleans
+# length of boolean should be the same as self
+df[false, true, true, false, true]
+```
+
+```{ruby}
+#| tags: []
+# Arrow::Array
+indices = Arrow::UInt8Array.new([0,2,4])
+df[indices]
+```
+
+```{ruby}
+#| tags: []
+# By a Vector as indices
+indices = Vector.new(df.indices)
+# indices > 1 returns a boolean Vector
+df[indices > 1]
+```
+
+```{ruby}
+#| tags: []
+# By a Vector as booleans
+booleans = df[:b]
+```
+
+```{ruby}
+#| tags: []
+df[booleans]
+```
+
+## 22. empty?
+
+```{ruby}
+#| tags: []
+df.empty?
+```
+
+```{ruby}
+#| tags: []
+DataFrame.new
+```
+
+```{ruby}
+#| tags: []
+DataFrame.new.empty?
+```
+
+## 23. Select columns by pick
+
+`DataFrame#pick` accepts an Array of keys to pick up columns (variables) and creates a new DataFrame. You can change the order of columns at a same time.
+
+The name `pick` comes from the action to pick variables(columns) according to the label keys.
+
+```{ruby}
+#| tags: []
+df.pick(:s, :y)
+# or
+df.pick([:s, :y]) # OK too.
+```
+
+Or use a boolean Array of lengeh `n_key` to `pick`. This style preserves the order of variables.
+
+```{ruby}
+#| tags: []
+df.pick(false, true, true, false)
+# or
+df.pick([false, true, true, false])
+# or
+df.pick(Vector.new([false, true, true, false]))
+```
+
+`#pick` also accepts a block in the context of self.
+
+Next example is picking up numeric variables.
+
+```{ruby}
+#| tags: []
+# reciever is required with the argument style
+df.pick(df.vectors.map(&:numeric?))
+
+# with a block
+df.pick { vectors.map(&:numeric?) }
+```
+
+`pick` also accepts numeric indexes.
+
+(Since 0.2.1)
+
+```{ruby}
+#| tags: []
+df.pick(0, 3)
+```
+
+## 24. Reject columns by drop
+
+`DataFrame#drop` accepts an Array keys to drop columns (variables) to create a remainer DataFrame.
+
+The name `drop` comes from the pair word of `pick`.
+
+```{ruby}
+#| tags: []
+df.drop(:x, :b)
+# df.drop([:x, :b]) #is OK too.
+```
+
+Or use a boolean Array of lengeh `n_key` to `drop`.
+
+```{ruby}
+#| tags: []
+df.drop(true, false, false, true)
+# df.drop([true, false, false, true]) # is OK too
+```
+
+`#drop` also accepts a block in the context of self.
+
+Next example will drop variables which have nil or NaN values.
+
+```{ruby}
+#| tags: []
+df.drop { vectors.map { |v| v.is_na.any } }
+```
+
+Argument style is also acceptable but it requires the reciever 'df'.
+
+```{ruby}
+#| tags: []
+df.drop(df.vectors.map { |v| v.is_na.any })
+```
+
+`drop` also accepts numeric indexes.
+
+(Since 0.2.1)
+
+```{ruby}
+#| tags: []
+df.drop(0, 3)
+```
+
+## 25. Pick/drop and nil
+
+When `pick` or `drop` is used with booleans, nil in the booleans is treated as false. This behavior is aligned with Ruby's `BasicObject#!`.
+
+```{ruby}
+#| tags: []
+booleans = [true, true, false, nil]
+booleans_invert = booleans.map(&:!) # => [false, false, true, true] because nil.! is true
+df.pick(booleans) == df.drop(booleans_invert)
+```
+
+## 26. Vector#invert, #primitive_invert
+
+For the boolean Vector;
+
+```{ruby}
+#| tags: []
+vector = Vector.new(booleans)
+```
+
+nil is converted to nil by `Vector#invert`.
+
+```{ruby}
+#| tags: []
+vector.invert
+# or
+!vector
+```
+
+So `df.pick(booleans) != df.drop(booleans.invert)` when booleans have any nils.
+
+On the other hand, `Vector#primitive_invert` follows Ruby's `BasicObject#!`'s behavior. Then pick and drop keep 'MECE' behavior.
+
+```{ruby}
+#| tags: []
+vector.primitive_invert
+```
+
+```{ruby}
+#| tags: []
+df.pick(vector) == df.drop(vector.primitive_invert)
+```
+
+## 27. Pick/drop, #[] and #v
+
+When `pick` or `drop` select a single column (variable), it returns a `DataFrame` with one column (variable).
+
+```{ruby}
+#| tags: []
+df.pick(:x) # or
+df.drop(:y, :s, :b)
+```
+
+In contrast, when `[]` selects a single column (variable), it returns a `Vector`.
+
+```{ruby}
+#| tags: []
+df[:x]
+```
+
+This behavior may be useful to use with DataFrame manipulation verbs (like pick, drop, slice, remove, assign, rename).
+
+```{ruby}
+#| tags: []
+df.pick { keys.select { |key| df[key].numeric? } }
+```
+
+`df#v` method is same as `df#[]` to pick a Vector. But a little bit faster and easy to use in the block.
+
+```{ruby}
+#| tags: []
+df.v(:x)
+```
+
+## 28. Slice
+
+Another example of `slice` is [#66. Row index label by slice_by](#66.-Row-index-label-by-slice_by).
+
+`slice` selects rows (records) to create a subset of a DataFrame.
+
+`slice(indeces)` accepts indices as arguments. Indices should be Integers, Floats or Ranges of Integers. Negative index from the tail like Ruby's Array is also acceptable.
+
+```{ruby}
+#| tags: []
+# returns 5 rows from the start and 5 rows from the end
+penguins.slice(0...5, -5..-1)
+```
+
+```{ruby}
+#| tags: []
+# slice accepts Float index
+# 33% of 344 observations in index => 113.52 th data ??
+indexed_penguins = penguins.assign_left { [:index, indexes] } # #assign_left and assigner by Array is 0.2.0 feature
+indexed_penguins.slice(penguins.size * 0.33)
+```
+
+Indices in Vectors or Arrow::Arrays are also acceptable.
+
+Another way to select in `slice` is to use booleans. An alias for this feature is `filter`.
+- Booleans is an Array, Arrow::Array, Vector or their Array.
+- Each data type must be boolean.
+- Size of booleans must be same as the size of self.
+
+```{ruby}
+#| tags: []
+# make boolean Vector to check over 40
+booleans = penguins[:bill_length_mm] > 40
+```
+
+```{ruby}
+#| tags: []
+penguins.slice(booleans)
+```
+
+`slice` accepts a block.
+- We can't use both arguments and a block at a same time.
+- The block should return indeces in any length or a boolean Array with a same length as `size`.
+- Block is called in the context of self. So reciever 'self' can be omitted in the block.
+
+```{ruby}
+#| tags: []
+# return a DataFrame with bill_length_mm is in 2*std range around mean
+penguins.slice do
+  min = bill_length_mm.mean - bill_length_mm.std
+  max = bill_length_mm.mean + bill_length_mm.std
+  bill_length_mm.to_a.map { |e| (min..max).include? e }
+end
+```
+
+## 29. Slice and nil option
+
+`Arrow::Table#slice` uses `#filter` method with a option `Arrow::FilterOptions.null_selection_behavior = :emit_null`. This will propagate nil at the same row.
+
+```{ruby}
+#| tags: []
+hash = { a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3] }
+table = Arrow::Table.new(hash)
+table.slice([true, false, nil])
+```
+
+Whereas in RedAmber, `DataFrame#slice` with booleans containing nil is treated as false. This behavior comes from `Allow::FilterOptions.null_selection_behavior = :drop`. This is a default value for `Arrow::Table.filter` method.
+
+```{ruby}
+#| tags: []
+RedAmber::DataFrame.new(table).slice([true, false, nil]).table
+```
+
+## 30. Remove
+
+Slice and reject rows (observations) to create a remainer DataFrame.
+
+`#remove(indeces)` accepts indeces as arguments. Indeces should be an Integer or a Range of Integer.
+
+```{ruby}
+#| tags: []
+# returns 6th to 339th obs. Remainer of 1st example of #30
+penguins.remove(0...5, -5..-1)
+```
+
+`remove(booleans)` accepts booleans as a argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as `#size`.
+
+```{ruby}
+#| tags: []
+# remove all observation contains nil
+removed = penguins.remove { vectors.map(&:is_nil).reduce(&:|) }
+```
+
+`remove {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as size. Block is called in the context of self.
+
+```{ruby}
+#| tags: []
+# Remove data in 2*std range around mean
+penguins.remove do
+  vector = self[:bill_length_mm]
+  min = vector.mean - vector.std
+  max = vector.mean + vector.std
+  vector.to_a.map { |e| (min..max).include? e }
+end
+```
+
+## 31. Remove and nil
+
+When `remove` used with booleans, nil in booleans is treated as false. This behavior is aligned with Ruby's `nil#!`.
+
+```{ruby}
+#| tags: []
+df = RedAmber::DataFrame.new(a: [1, 2, nil], b: %w[A B C], c: [1.0, 2, 3])
+```
+
+```{ruby}
+#| tags: []
+booleans = df[:a] < 2
+```
+
+```{ruby}
+#| tags: []
+booleans_invert = booleans.to_a.map(&:!)
+```
+
+```{ruby}
+#| tags: []
+df.slice(booleans) == df.remove(booleans_invert)
+```
+
+Whereas `Vector#invert` returns nil for elements nil. This will bring different result. (See #26)
+
+```{ruby}
+#| tags: []
+booleans.invert
+```
+
+```{ruby}
+#| tags: []
+df.remove(booleans.invert)
+```
+
+We have `#primitive_invert` method in Vector. This method returns the same result as `.to_a.map(&:!)` above.
+
+```{ruby}
+#| tags: []
+booleans.primitive_invert
+```
+
+```{ruby}
+#| tags: []
+df.remove(booleans.primitive_invert)
+```
+
+```{ruby}
+#| tags: []
+df.slice(booleans) == df.remove(booleans.primitive_invert)
+```
+
+## 32. Remove nil
+
+Remove any observations containing nil.
+
+```{ruby}
+#| tags: []
+penguins.remove_nil
+```
+
+The roundabout way for this is to use `#remove`.
+
+```{ruby}
+#| tags: []
+penguins.remove { vectors.map(&:is_nil).reduce(&:|) }
+```
+
+## 33. Rename
+
+Rename keys (column names) to create a updated DataFrame.
+
+`#rename(key_pairs)` accepts key_pairs as arguments. key_pairs should be a Hash of `{existing_key => new_key}` or an Array of Array `[[existing_key, new_key], ...]` .
+
+```{ruby}
+#| tags: []
+h = { name: %w[Yasuko Rui Hinata], age: [68, 49, 28] }
+comecome = RedAmber::DataFrame.new(h)
+```
+
+```{ruby}
+#| tags: []
+comecome.rename(age: :age_in_1993)
+# comecome.rename(:age, :age_in_1993) # is also OK
+# comecome.rename([:age, :age_in_1993]) # is also OK
+```
+
+`#rename {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return key_pairs as a Hash of `{existing_key => new_key}` or an Array of Array `[[existing_key, new_key], ...]`. Block is called in the context of self.
+
+Symbol key and String key are distinguished.
+
+## 34. Assign
+
+Another example of `assign` is [64. Assign revised](#64.-Assign-revised), [#65. Variations of assign](#65.-Variations-of-assign) .
+
+Assign new or updated columns (variables) and create a updated DataFrame.
+
+- Columns with new keys will append new variables at right (bottom in TDR).
+- Columns with exisiting keys will update corresponding vectors.
+
+`#assign(key_pairs)` accepts pairs of key and array_like values as arguments. The pairs should be a Hash of `{key => array_like}` or an Array of Array `[[key, array_like], ... ]`. `array_like` is one of `Vector`, `Array` or `Arrow::Array`. 
+
+```{ruby}
+#| tags: []
+comecome = RedAmber::DataFrame.new( name: %w[Yasuko Rui Hinata], age: [68, 49, 28] )
+```
+
+```{ruby}
+#| tags: []
+# update :age and add :brother
+assigner = { age: [97, 78, 57], brother: ['Santa', nil, 'Momotaro'] }
+comecome.assign(assigner)
+```
+
+`#assign {block}` is also acceptable. We can't use both arguments and a block at a same time. The block should return pairs of key and array_like values as a Hash of `{key => array_like}` or an Array of Array `[[key, array_like], ... ]`. `array_like` is one of `Vector`, `Array` or `Arrow::Array`. Block is called in the context of self.
+
+```{ruby}
+#| tags: []
+df = RedAmber::DataFrame.new(
+  index: [0, 1, 2, 3, nil],
+  float: [0.0, 1.1,  2.2, Float::NAN, nil],
+  string: ['A', 'B', 'C', 'D', nil])
+```
+
+```{ruby}
+#| tags: []
+# update numeric variables
+df.assign do
+  vectors.select(&:numeric?).map { |v| [v.key, -v] }
+end
+```
+
+In this example, columns :x and :y are updated. Column :x returns complements for #negate method because :x is :uint8 type.
+
+```{ruby}
+#| tags: []
+df.types
+```
+
+## 35. Coerce (Vector)
+
+Vector has coerce method.
+
+```{ruby}
+#| tags: []
+vector = RedAmber::Vector.new(1,2,3)
+```
+
+```{ruby}
+#| tags: []
+# Vector's `#*` method
+vector * -1
+```
+
+```{ruby}
+#| tags: []
+# coerced calculation
+-1 * vector
+```
+
+```{ruby}
+#| tags: []
+# `@-` operator
+-vector
+```
+
+## 36. to_ary (Vector)
+
+`Vector#to_ary` will enable implicit conversion to an Array.
+
+```{ruby}
+#| tags: []
+Array(Vector.new([3, 4, 5]))
+```
+
+```{ruby}
+#| tags: []
+[1, 2] + Vector.new([3, 4, 5])
+```
+
+```{ruby}
+#| tags: []
+[1, 2, Vector.new([3, 4, 5])].flatten
+```
+
+## 37. Fill nil (Vector)
+
+`Vector#fill_nil_forward` or `Vector#fill_nil_backward` will
+propagate the last valid observation forward (or backward).
+Or preserve nil if all previous values are nil or at the end.
+
+```{ruby}
+#| tags: []
+integer = Vector.new([0, 1, nil, 3, nil])
+integer.fill_nil_forward
+```
+
+```{ruby}
+#| tags: []
+integer.fill_nil_backward
+```
+
+## 38. all?/any? (Vector)
+
+`Vector#all?` returns true if all elements is true.
+
+`Vector#any?` returns true if exists any true.
+
+These are unary aggregation function.
+
+```{ruby}
+#| tags: []
+booleans = Vector.new([true, true, nil])
+booleans.all?
+```
+
+```{ruby}
+#| tags: []
+booleans.any?
+```
+
+If these methods are used with option `skip_nulls: false` nil is considered.
+
+```{ruby}
+#| tags: []
+booleans.all?(skip_nulls: false)
+```
+
+```{ruby}
+#| tags: []
+booleans.any?(skip_nulls: false)
+```
+
+## 39. count/count_uniq (Vector)
+
+`Vector#count` counts element.
+
+`Vector#count_uniq` counts unique element. `#count_distinct` is an alias (Arrow's name).
+
+These are unary aggregation function.
+
+```{ruby}
+#| tags: []
+string = Vector.new(%w[A B A])
+string.count
+```
+
+```{ruby}
+#| tags: []
+string.count_uniq # count_distinct is also OK
+```
+
+## 40. stddev/variance (Vector)
+
+These are unary element-wise function.
+
+```{ruby}
+#| tags: []
+integers = Vector.new([1, 2, 3, nil])
+integers.stddev
+```
+
+```{ruby}
+#| tags: []
+# Unbiased standard deviation
+integers.sd
+```
+
+```{ruby}
+#| tags: []
+integers.variance
+```
+
+```{ruby}
+#| tags: []
+# Unbiased variance
+integers.var
+```
+
+## 41. negate (Vector)
+
+These are unary element-wise function.
+
+```{ruby}
+#| tags: []
+double = Vector.new([1.0, -2, 3])
+double.negate
+```
+
+```{ruby}
+#| tags: []
+# Same as #negate
+-double
+```
+
+## 42. round (Vector)
+
+Otions for `#round`;
+
+- `:n-digits` The number of digits to show.
+- `round_mode` Specify rounding mode.
+
+This is a unary element-wise function.
+
+```{ruby}
+#| tags: []
+double = RedAmber::Vector.new([15.15, 2.5, 3.5, -4.5, -5.5])
+```
+
+```{ruby}
+#| tags: []
+double.round
+```
+
+```{ruby}
+#| tags: []
+double.round(mode: :half_to_even)
+```
+
+```{ruby}
+#| tags: []
+double.round(mode: :towards_infinity)
+```
+
+```{ruby}
+#| tags: []
+double.round(mode: :half_up)
+```
+
+```{ruby}
+#| tags: []
+double.round(mode: :half_towards_zero)
+```
+
+```{ruby}
+#| tags: []
+double.round(mode: :half_towards_infinity)
+```
+
+```{ruby}
+#| tags: []
+double.round(mode: :half_to_odd)
+```
+
+```{ruby}
+#| tags: []
+double.round(n_digits: 0)
+```
+
+```{ruby}
+#| tags: []
+double.round(n_digits: 1)
+```
+
+```{ruby}
+#| tags: []
+double.round(n_digits: -1)
+```
+
+## 43. and/or (Vector)
+
+RedAmber select `and_kleene`/`or_kleene` as default `&`/`|` method.
+
+These are unary element-wise function.
+
+```{ruby}
+#| tags: []
+bool_self  = Vector.new([true, true, true, false, false, false, nil, nil, nil])
+bool_other = Vector.new([true, false, nil, true, false, nil, true, false, nil])
+
+bool_self & bool_other  # same as bool_self.and_kleene(bool_other)
+```
+
+```{ruby}
+#| tags: []
+# Ruby's primitive `&&`
+bool_self && bool_other
+```
+
+```{ruby}
+#| tags: []
+# Arrow's default `and`
+bool_self.and_org(bool_other)
+```
+
+```{ruby}
+#| tags: []
+bool_self | bool_other  # same as bool_self.or_kleene(bool_other)
+```
+
+```{ruby}
+#| tags: []
+# Ruby's primitive `||`
+bool_self || bool_other
+```
+
+```{ruby}
+#| tags: []
+# Arrow's default `or`
+bool_self.or_org(bool_other)
+```
+
+## 44. is_finite/is_nan/is_nil/is_na (Vector)
+
+These are unary element-wise function.
+
+```{ruby}
+#| tags: []
+double = Vector.new([Math::PI, Float::INFINITY, -Float::INFINITY, Float::NAN, nil])
+```
+
+```{ruby}
+#| tags: []
+double.is_finite
+```
+
+```{ruby}
+#| tags: []
+double.is_inf
+```
+
+```{ruby}
+#| tags: []
+double.is_na
+```
+
+```{ruby}
+#| tags: []
+double.is_nil
+```
+
+```{ruby}
+#| tags: []
+double.is_valid
+```
+
+## 45. Prime-th rows
+
+```{ruby}
+#| tags: []
+# prime-th rows ... Don't ask me what it means.
+require 'prime'
+penguins.assign_left(:index, penguins.indices + 1) # since 0.2.0
+        .slice { Vector.new(Prime.each(size).to_a) - 1 }
+```
+
+## 46. Slice by Enumerator
+
+Slice accepts Enumerator.
+
+```{ruby}
+#| tags: []
+# Select every 10 samples
+penguins.assign_left(index: penguins.indices) # 0.2.0 feature
+        .slice(0.step(by: 10, to: 340))
+```
+
+```{ruby}
+#| tags: []
+# Select every 2 samples by step 100
+penguins.assign_left(index: penguins.indices) # 0.2.0 feature
+        .slice { 0.step(by: 100, to: 300).map { |i| i..(i+1) } }
+```
+
+## 47. Output mode
+
+Output mode of `DataFrame#inspect` and `DataFrame#to_iruby` is Table mode by default. If you prefer other mode set the environment variable `RED_AMBER_OUTPUT_MODE` .
+
+```{ruby}
+#| tags: []
+ENV['RED_AMBER_OUTPUT_MODE'] = 'Table' # or nil (default)
+penguins  # Almost same as `puts penguins.to_s` in any mode
+```
+
+```{ruby}
+#| tags: []
+penguins[:species]
+```
+
+```{ruby}
+#| tags: []
+ENV['RED_AMBER_OUTPUT_MODE'] = 'Plain' # Since 0.2.2
+penguins
+```
+
+```{ruby}
+#| tags: []
+penguins[:species]
+```
+
+```{ruby}
+#| tags: []
+ENV['RED_AMBER_OUTPUT_MODE'] = 'Minimum'  # Since 0.2.2
+penguins
+```
+
+```{ruby}
+#| tags: []
+penguins[:species]
+```
+
+```{ruby}
+#| tags: []
+ENV['RED_AMBER_OUTPUT_MODE'] = 'TDR'
+penguins
+```
+
+```{ruby}
+#| tags: []
+penguins[:species]
+```
+
+```{ruby}
+#| tags: []
+ENV['RED_AMBER_OUTPUT_MODE'] = nil
+```
+
+## 48. Empty key
+
+Empty key `:""` will be automatically renamed to `:unnamed1`.
+
+If `:unnamed1` was used, `:unnamed1.succ` will be used.
+
+(Since 0.1.8)
+
+```{ruby}
+#| tags: []
+df = DataFrame.new("": [1, 2], unnamed1: [3, 4])
+```
+
+## 49. Grouping
+
+`DataFrame#group` takes group_key as an argument, and creates `Group` class. 
+
+Group class inspects counts of each unique elements. 
+
+(Since 0.1.7)
+
+```{ruby}
+#| tags: []
+group = penguins.group(:species)
+```
+
+The instance of `Group` class has methods to summary functions.
+
+It returns `function(key)` style summarized columns as a result.
+
+```{ruby}
+#| tags: []
+group.count
+```
+
+If count result is same in multiple columns, count column is aggregated to one column `:count`.
+
+```{ruby}
+#| tags: []
+penguins.pick(:species, :bill_length_mm, :bill_depth_mm).group(:species).count
+```
+
+Grouping key comes first (leftmost) in the columns.
+
+## 50. Grouping with a block
+
+`DataFrame#group` takes a block and we can specify multiple functions.
+
+Inside the block is the context of instance of Group. So we can use summary functions without the reciever.
+
+(Since 0.1.8)
+
+```{ruby}
+#| tags: []
+penguins.group(:species) { [count(:species), mean(:body_mass_g)] }
+```
+
+`Group#summarize` accepts same block as `DataFrame#group`.
+
+```{ruby}
+#| tags: []
+group.summarize { [count(:species), mean] }
+```
+
+## 51. Vector#shift
+
+`Vector#shift(amount = 1, fill: nil)`
+
+Shift vector's values by specified `amount`. Shifted space is filled by value `fill`.
+
+(Since 0.1.8)
+
+```{ruby}
+#| tags: []
+vector = RedAmber::Vector.new([1, 2, 3, 4, 5])
+vector.shift
+```
+
+```{ruby}
+#| tags: []
+vector.shift(-2)
+```
+
+```{ruby}
+#| tags: []
+vector.shift(fill: Float::NAN)
+```
+
+## 52. From the Pandas cookbook (if-then)
+
+https://pandas.pydata.org/docs/user_guide/cookbook.html#if-then
+
+```python
+# by Python Pandas
+df = pd.DataFrame(
+    {"AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]}
+)
+df.loc[df.AAA >= 5, "BBB"] = -1
+
+# returns =>
+   AAA  BBB  CCC
+0    4   10  100
+1    5   -1   50
+2    6   -1  -30
+3    7   -1  -50
+```
+
+```{ruby}
+#| tags: []
+# RedAmber
+df = DataFrame.new(
+  "AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]  # You can omit {}
+)
+
+df.assign(BBB: df[:BBB].replace(df[:AAA] >= 5, -1))
+```
+
+If you want to replace both :BBB and :CCC ;
+
+```{ruby}
+#| tags: []
+df.assign do
+  replacer = v(:AAA) >= 5  # Boolean Vector
+  {
+    BBB: v(:BBB).replace(replacer, -1),
+    CCC: v(:CCC).replace(replacer, -2)
+  }
+end
+```
+
+## 53. From the Pandas cookbook (Splitting)
+Split a frame with a boolean criterion
+
+https://pandas.pydata.org/docs/user_guide/cookbook.html#splitting
+
+```python
+# by Python Pandas
+df = pd.DataFrame(
+    {"AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]}
+)
+df[df.AAA <= 5]
+
+# returns =>
+   AAA  BBB  CCC
+0    4   10  100
+1    5   20   50
+
+df[df.AAA > 5]
+
+# returns =>
+   AAA  BBB  CCC
+2    6   30  -30
+3    7   40  -50
+```
+
+```{ruby}
+#| tags: []
+# RedAmber
+df = DataFrame.new(
+  # You can omit outer {}
+  "AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]
+)
+
+df.slice(df[:AAA] <= 5)
+# df[df[:AAA] <= 5] # is also OK
+```
+
+```{ruby}
+#| tags: []
+df.remove(df[:AAA] <= 5)
+# df.slice(df[:AAA] > 5) # do the same thing
+```
+
+## 54. From the Pandas cookbook (Building criteria)
+Split a frame with a boolean criterion
+
+https://pandas.pydata.org/docs/user_guide/cookbook.html#building-criteria
+
+```python
+# by Python Pandas
+df = pd.DataFrame(
+    {"AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]}
+)
+
+# and
+df.loc[(df["BBB"] < 25) & (df["CCC"] >= -40), "AAA"]
+
+# returns a series =>
+0    4
+1    5
+Name: AAA, dtype: int64
+
+# or
+df.loc[(df["BBB"] > 25) | (df["CCC"] >= -40), "AAA"]
+
+# returns a series =>
+0    4
+1    5
+2    6
+3    7
+Name: AAA, dtype: int64
+```
+
+```{ruby}
+#| tags: []
+# RedAmber
+df = DataFrame.new(
+  # You can omit {}
+  "AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]
+)
+
+df.slice( (df[:BBB] < 25) & (df[:CCC] >= 40) ).pick(:AAA)
+```
+
+```{ruby}
+#| tags: []
+df.slice( (df[:BBB] > 25) | (df[:CCC] >= 40) ).pick(:AAA)
+# df[ (df[:BBB] > 25) | (df[:CCC] >= 40) ][:AAA)] # also OK
+```
+
+```python
+# by Python Pandas
+# or (with assignment)
+df.loc[(df["BBB"] > 25) | (df["CCC"] >= 75), "AAA"] = 0.1
+df
+
+# returns a dataframe =>
+   AAA  BBB  CCC
+0  0.1   10  100
+1  5.0   20   50
+2  0.1   30  -30
+3  0.1   40  -50
+```
+
+```{ruby}
+#| tags: []
+# df.assign(AAA: df[:AAA].replace((df[:BBB] > 25) | (df[:CCC] >= 75), 0.1)) # by one liner
+
+booleans = (df[:BBB] > 25) | (df[:CCC] >= 75)
+replaced = df[:AAA].replace(booleans, 0.1)
+df.assign(AAA: replaced)
+```
+
+```python
+# by Python Pandas
+# Select rows with data closest to certain value using argsort
+df = pd.DataFrame(
+    {"AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]}
+)
+aValue = 43.0
+df.loc[(df.CCC - aValue).abs().argsort()]
+
+# returns a dataframe =>
+   AAA  BBB  CCC
+1    5   20   50
+0    4   10  100
+2    6   30  -30
+3    7   40  -50
+```
+
+```{ruby}
+#| tags: []
+a_value = 43
+df[(df[:CCC] - a_value).abs.sort_indexes]
+# df.slice (df[:CCC] - a_value).abs.sort_indexes # also OK
+```
+
+```python
+# by Python Pandas
+# Dynamically reduce a list of criteria using a binary operators
+df = pd.DataFrame(
+    {"AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]}
+)
+Crit1 = df.AAA <= 5.5
+Crit2 = df.BBB == 10.0
+Crit3 = df.CCC > -40.0
+AllCrit = Crit1 & Crit2 & Crit3
+
+import functools
+
+CritList = [Crit1, Crit2, Crit3]
+AllCrit = functools.reduce(lambda x, y: x & y, CritList)
+df[AllCrit]
+
+# returns a dataframe =>
+   AAA  BBB  CCC
+0    4   10  100
+```
+
+```{ruby}
+#| tags: []
+crit1 = df[:AAA] <= 5.5
+crit2 = df[:BBB] == 10.0
+crit3 = df[:CCC] >= -40.0
+df[crit1 & crit2 & crit3]
+```
+
+## 55. From the Pandas cookbook (Dataframes)
+
+https://pandas.pydata.org/docs/user_guide/cookbook.html#dataframes
+
+```python
+# by Python Pandas
+# Using both row labels and value conditionals
+df = pd.DataFrame(
+    {"AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]}
+)
+df[(df.AAA <= 6) & (df.index.isin([0, 2, 4]))] 
+
+# returns =>
+   AAA  BBB  CCC
+0    4   10  100
+2    6   30  -30
+```
+
+```{ruby}
+#| tags: []
+# RedAmber
+df = DataFrame.new(
+  "AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]
+)
+
+df[(df[:AAA] <= 6) & df.indices.map { |i| [0, 2, 4].include? i }]
+```
+
+```python
+# by Python Pandas
+# Use loc for label-oriented slicing and iloc positional slicing GH2904
+df = pd.DataFrame(
+    {"AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]},
+    index=["foo", "bar", "boo", "kar"],
+)
+
+# There are 2 explicit slicing methods, with a third general case
+# 1. Positional-oriented (Python slicing style : exclusive of end)
+# 2. Label-oriented (Non-Python slicing style : inclusive of end)
+# 3. General (Either slicing style : depends on if the slice contains labels or positions)
+
+df.loc["bar":"kar"]  # Label
+# returns =>
+     AAA  BBB  CCC
+bar    5   20   50
+boo    6   30  -30
+kar    7   40  -50
+
+# Generic
+df[0:3]
+# returns =>
+     AAA  BBB  CCC
+foo    4   10  100
+bar    5   20   50
+boo    6   30  -30
+
+df["bar":"kar"]
+# returns =>
+     AAA  BBB  CCC
+bar    5   20   50
+boo    6   30  -30
+kar    7   40  -50
+```
+
+```{ruby}
+#| tags: []
+# RedAmber does not have row index. Use a new column as indexes.
+labeled = df.assign_left(index: %w[foo bar boo kar])
+# labeled = df.assign(index: %w[foo bar boo kar]).pick { [keys[-1], keys[0...-1]] } # until v0.1.8
+```
+
+```{ruby}
+#| tags: []
+labeled[1..3]
+```
+
+```{ruby}
+#| tags: []
+labeled.slice do
+  v = v(:index)
+  v.index("bar")..v.index("kar")
+end
+```
+
+`slice_by` returns the same result as above.
+
+(Since 0.2.1)
+
+```{ruby}
+#| tags: []
+labeled.slice_by(:index, keep_key: true) { "bar".."kar"}
+```
+
+```python
+# by Python Pandas
+# Ambiguity arises when an index consists of integers with a non-zero start or non-unit increment.
+df2 = pd.DataFrame(data=data, index=[1, 2, 3, 4])  # Note index starts at 1.
+
+df2.iloc[1:3]  # Position-oriented
+# returns =>
+   AAA  BBB  CCC
+2    5   20   50
+3    6   30  -30
+
+df2.loc[1:3]  # Label-oriented
+# returns =>
+   AAA  BBB  CCC
+1    4   10  100
+2    5   20   50
+3    6   30  -30
+```
+
+```{ruby}
+#| tags: []
+# RedAmber only have an implicit integer index 0...size,
+# does not happen any ambiguity unless you create a new column and use it for indexes :-).
+```
+
+```python
+# by Python Pandas
+# Using inverse operator (~) to take the complement of a mask
+df[~((df.AAA <= 6) & (df.index.isin([0, 2, 4])))]
+
+# returns =>
+   AAA  BBB  CCC
+1    5   20   50
+3    7   40  -50
+```
+
+```{ruby}
+#| tags: []
+# RedAmber offers #! method for boolean Vector.
+df[!((df[:AAA] <= 6) & df.indices.map { |i| [0, 2, 4].include? i })]
+
+# or
+# df[((df[:AAA] <= 6) & df.indices.map { |i| [0, 2, 4].include? i }).invert]
+```
+
+If you have `nil` in your data, consider #primitive_invert for consistent result. See example #26.
+
+## 56. From the Pandas cookbook (New columns)
+
+https://pandas.pydata.org/docs/user_guide/cookbook.html#new-columns
+
+```python
+# by Python Pandas
+# Efficiently and dynamically creating new columns using applymap
+df = pd.DataFrame({"AAA": [1, 2, 1, 3], "BBB": [1, 1, 2, 2], "CCC": [2, 1, 3, 1]})
+df
+
+# returns =>
+   AAA  BBB  CCC
+0    1    1    2
+1    2    1    1
+2    1    2    3
+3    3    2    1
+
+source_cols = df.columns  # Or some subset would work too
+new_cols = [str(x) + "_cat" for x in source_cols]
+categories = {1: "Alpha", 2: "Beta", 3: "Charlie"}
+df[new_cols] = df[source_cols].applymap(categories.get)
+df
+
+# returns =>
+   AAA  BBB  CCC  AAA_cat BBB_cat  CCC_cat
+0    1    1    2    Alpha   Alpha     Beta
+1    2    1    1     Beta   Alpha    Alpha
+2    1    2    3    Alpha    Beta  Charlie
+3    3    2    1  Charlie    Beta    Alpha
+```
+
+```{ruby}
+#| tags: []
+# RedAmber
+df = DataFrame.new({"AAA": [1, 2, 1, 3], "BBB": [1, 1, 2, 2], "CCC": [2, 1, 3, 1]})
+```
+
+```{ruby}
+#| tags: []
+categories = {1 => "Alpha", 2 => "Beta", 3 => "Charlie"}
+
+# Creating a Hash from keys
+df.assign do
+  keys.each_with_object({}) do |key, h|
+    h["#{key}_cat"] = v(key).to_a.map { |x| categories[x] }
+  end
+end
+
+# Creating an Array from vectors, from v0.2.0
+df.assign do
+  vectors.map do |v|
+    ["#{v.key}_cat", v.to_a.map { |x| categories[x] } ]
+  end
+end
+```
+
+```python
+# by Python Pandas
+# Keep other columns when using min() with groupby
+df = pd.DataFrame(
+    {"AAA": [1, 1, 1, 2, 2, 2, 3, 3], "BBB": [2, 1, 3, 4, 5, 1, 2, 3]}
+)
+df
+
+# returns =>
+   AAA  BBB
+0    1    2
+1    1    1
+2    1    3
+3    2    4
+4    2    5
+5    2    1
+6    3    2
+7    3    3
+
+# Method 1 : idxmin() to get the index of the minimums
+df.loc[df.groupby("AAA")["BBB"].idxmin()]
+
+# returns =>
+   AAA  BBB
+1    1    1
+5    2    1
+6    3    2
+
+# Method 2 : sort then take first of each
+df.sort_values(by="BBB").groupby("AAA", as_index=False).first()
+
+# returns =>
+   AAA  BBB
+0    1    1
+1    2    1
+2    3    2
+
+# Notice the same results, with the exception of the index.
+```
+
+```{ruby}
+#| tags: []
+# RedAmber
+df = DataFrame.new(AAA: [1, 1, 1, 2, 2, 2, 3, 3], BBB: [2, 1, 3, 4, 5, 1, 2, 3])
+```
+
+```{ruby}
+#| tags: []
+df.group(:AAA).min
+
+# Add `.rename { [keys[-1], :BBB] }` if you want.
+```
+
+## 57. Summary/describe
+
+```{ruby}
+#| tags: []
+penguins.summary
+# or
+penguins.describe
+```
+
+If you need a variables in row, use `transpose`. (Since 0.2.0)
+
+```{ruby}
+#| tags: []
+penguins.summary.transpose(name: :stats)
+```
+
+## 58. Quantile/Quantiles
+
+`Vector#quantile(prob)` returns quantile at probability `prob`.
+
+(Since 0.2.0)
+
+```{ruby}
+#| tags: []
+penguins[:bill_depth_mm].quantile # default　is prob = 0.5
+```
+
+`Vector#quantiles` accepts an Array for multiple quantiles. Returns a DataFrame.
+
+```{ruby}
+#| tags: []
+penguins[:bill_depth_mm].quantiles([0.05, 0.95])
+```
+
+## 59. Transpose
+
+`DataFrame#transpose` creates transposed DataFrame for wide type dataframe.
+
+(Since 0.2.0)
+
+```{ruby}
+#| tags: []
+uri = URI("https://raw.githubusercontent.com/heronshoes/red_amber/master/test/entity/import_cars.tsv")
+import_cars = RedAmber::DataFrame.load(uri)
+```
+
+```{ruby}
+#| tags: []
+import_cars.transpose
+```
+
+Default name of created column is `:NAME`.
+
+We can name the column from the keys in original by the option `name:`.
+
+```{ruby}
+#| tags: []
+import_cars.transpose(key: :Year, name: :Manufacturer)
+```
+
+You can specify index column by option `:key` even if it is in the middle of the original DataFrame.
+
+```{ruby}
+#| tags: []
+# locate `:Year` in the middle
+df = import_cars.pick(1..2, 0, 3..)
+```
+
+```{ruby}
+#| tags: []
+df.transpose(key: :Year)
+```
+
+## 60. To_long
+
+`DataFrame#to_long(*keep_keys)` reshapes wide DataFrame to the long DataFrame.
+
+- Parameter `keep_keys` specifies the key names to keep.
+
+(Since 0.2.0)
+
+```{ruby}
+#| tags: []
+uri = URI("https://raw.githubusercontent.com/heronshoes/red_amber/master/test/entity/import_cars.tsv")
+import_cars = RedAmber::DataFrame.load(uri)
+```
+
+```{ruby}
+#| tags: []
+import_cars.to_long(:Year)
+```
+
+- Option `:name` specify the key of the column which is come **from key names**. Default is `:NAME`.
+- Option `:value` specify the key of the column which is come **from values**. Default is `:VALUE`.
+
+```{ruby}
+#| tags: []
+import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
+```
+
+## 61. To_wide
+
+`DataFrame#to_wide(*keep_keys)` reshapes long DataFrame to a wide DataFrame.
+
+- Option `:name` specify the key of the column which will be expanded **to key name**. Default is `:NAME`.
+- Option `:value` specify the key of the column which will be expanded **to values**. Default is `:VALUE`.
+
+(Since 0.2.0)
+
+```{ruby}
+#| tags: []
+import_cars.to_long(:Year).to_wide
+```
+
+```{ruby}
+#| tags: []
+import_cars.to_long(:Year).to_wide(name: :NAME, value: :VALUE)
+# is also OK
+```
+
+## 62. Custom index
+
+Another example of `indices` is [14. Indices](#14.-Indices).
+
+We can set the start of indices by the option.
+
+(Since 0.2.1)
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(x: [0, 1, 2, 3, 4])
+df.indices
+```
+
+```{ruby}
+#| tags: []
+df.indices(1)
+```
+
+You can put the first value which accepts `#succ` method.
+
+```{ruby}
+#| tags: []
+df.indices("a")
+```
+
+## 63. Method missing
+
+`RedAmber::DataFrame` has `#method_missing` to enable to call key names as methods.
+
+This feature is limited to what can be called as a method (`:key` is OK, not allowed for the keys `:Key`, `:"key.1"`, `:"1key"`, etc. ). But it will be convenient in many cases.
+
+(Since 0.2.1)
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(x: [1, 2, 3])
+df.x.sum
+```
+
+```{ruby}
+#| tags: []
+# Some ways to pull a Vector
+df[:x] # Formal style
+
+df.v(:x) # #v method
+
+df.x # method
+```
+
+```{ruby}
+#| tags: []
+df.x.sum
+```
+
+## 64. Assign revised
+
+Another example of `assign` is [#34. Assign](#34.-Assign), [#65. Variations of assign](#65.-Variations-of-assign) .
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(x: [1, 2, 3])
+
+# Assign by a Hash
+df.assign(y: df.x / 10.0)
+```
+
+```{ruby}
+#| tags: []
+# Assign by separated key and value
+df.assign(:y) { x / 10.0 }
+```
+
+```{ruby}
+#| tags: []
+# Separated keys and values
+df.assign(:y, :z) { [x * 10, x / 10.0] }
+```
+
+## 65. Variations of assign
+
+Another example of `assign` is [#34. Assign](#34.-Assign), [#64. Assign revised](#64.-Assign-revised) .
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(x: [1, 2, 3])
+```
+
+```{ruby}
+#| tags: []
+# Hash args
+df.assign(y: df[:x] * 10, z: df[:x] / 10.0)
+
+# Hash
+hash = {y: df[:x] * 10, z: df[:x] / 10.0}
+df.assign(hash)
+
+# Array
+array = [[:y, df[:x] * 10], [:z, df[:x] / 10.0]]
+df.assign(array)
+
+# Array
+df.assign [
+  [:y, df[:x] * 10],
+  [:z, df[:x] / 10.0]
+]
+
+# Hash
+df.assign({
+  y: df[:x] * 10,
+  z: df[:x] / 10.0
+})
+
+# Block, Hash
+df.assign { {y: df[:x] * 10, z: df[:x] / 10.0} }
+
+# Block, Array
+df.assign { [[:y, df[:x] * 10], [:z, df[:x] / 10.0]] }
+
+# Block, Array, method
+#df.assign { [:y, x * 10], [:z, x / 10.0]] }
+
+# Separated
+#df.assign(:y, :z) { [x * 10, x / 10.0] }
+```
+
+## 66. Row index label by slice_by
+
+Another example of `slice` is [#28. Slice](#28.-Slice).
+
+(Since 0.2.1)
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(num: [1.1, 2.2, 3.3, 4.4, 5.5])
+              .assign_left(:label) { indices("a") }
+```
+
+`slice_by(key) { row_selector }` selects rows in column `key` with `row_selector`.
+
+```{ruby}
+#| tags: []
+df.slice_by(:label) { "b".."d" }
+```
+
+```{ruby}
+#| tags: []
+df.slice_by(:label) { ["c", "b", "e"] }
+```
+
+If the option `keep_key:` set to `true`, index label column is preserved.
+
+```{ruby}
+#| tags: []
+df.slice_by(:label, keep_key: true) { "b".."d" }
+```
+
+## 67. Simpson's paradox in COVID-19 data
+
+https://www.rdocumentation.org/packages/openintro/versions/2.3.0/topics/simpsons_paradox_covid
+
+```{ruby}
+#| tags: []
+require 'datasets-arrow'
+
+ds = Datasets::Rdatasets.new('openintro', 'simpsons_paradox_covid')
+df = RedAmber::DataFrame.new(ds.to_arrow)
+```
+
+Create group and count by vaccine status and outcome.
+
+```{ruby}
+#| tags: []
+count = df.group(:vaccine_status, :outcome).count
+```
+
+Reshape to human readable wide table.
+
+```{ruby}
+#| tags: []
+all_count = count.to_wide(name: :vaccine_status, value: :count)
+```
+
+Compute death or survived ratio for vaccine status.
+
+```{ruby}
+#| tags: []
+all_count.assign do
+  {
+    "vaccinated_%": 100.0 * vaccinated / vaccinated.sum,
+    "unvaccinated_%": 100.0 * unvaccinated / unvaccinated.sum
+  }
+end
+```
+
+Death ratio for vaccinated is higher than unvaccinated. Is it true?
+
+Next, do the same thing above for each age group. Temporally create methods.
+
+```{ruby}
+#| tags: []
+def make_covid_table(df)
+  df.group(:vaccine_status, :outcome)
+    .count
+    .to_wide(name: :vaccine_status, value: :count)
+    .assign do
+      {
+        "vaccinated_%": (100.0 * vaccinated / vaccinated.sum).round(n_digits: 3),
+        "unvaccinated_%": (100.0 * unvaccinated / unvaccinated.sum).round(n_digits: 3)
+      }
+     end
+end
+```
+
+```{ruby}
+#| tags: []
+# under 50
+make_covid_table(df[df[:age_group] == "under 50"])
+```
+
+```{ruby}
+#| tags: []
+# 50 +
+make_covid_table(df[df[:age_group] == "50 +"])
+```
+
+Death ratio for vaccinated is lower than unvaccinated for grouped subset by age. This is an exaple of "Simpson's paradox" .
+
+```{ruby}
+#| tags: []
+# Vaccine status vs age
+# 50+ is highly vaccinated.
+df.group(:vaccine_status, :age_group).count.to_wide(name: :age_group, value: :count)
+```
+
+```{ruby}
+#| tags: []
+# Outcome vs age
+# 50+ also has higher death rate.
+df.group(:outcome, :age_group).count.to_wide(name: :age_group, value: :count)
+```
+
+## 68. Clean up dirty data
+
+```{ruby}
+#| tags: []
+file = Tempfile.open(['dirty_data', '.csv']) do |f|
+  f.puts(<<~CSV)
+    height,weight
+    154.9,52.2
+    156.8cm,51.1kg
+    152,49
+    148.5cm,45.4kg
+    155cm,
+    ,49.9kg
+    1.58m,49.8kg
+    166.8cm,53.6kg
+  CSV
+  f
+end
+
+df = DataFrame.load(file)
+```
+
+It was loaded as String Vectors.
+
+```{ruby}
+#| tags: []
+df.schema
+```
+
+First for the `:weight` column. Replacing "" to NaN causes casting to Float.
+
+```{ruby}
+#| tags: []
+df.assign do
+  {
+    weight: weight.replace(weight == "", Float::NAN)
+  }
+end
+```
+
+Apply same conversion for `:height` followed by unit conversion by `if_else`.
+
+```{ruby}
+#| tags: []
+df = df.assign do
+  {
+    weight: weight.replace(weight == '', Float::NAN),
+    height: height.replace(height == '', Float::NAN)
+                  .then { |h| (h < 10).if_else(h * 100, h) }
+  }
+end
+puts df.schema
+df
+```
+
+We got clean data, then compute BMI as a new column.
+
+```{ruby}
+#| tags: []
+df.assign(:BMI) { (weight / height ** 2 * 10000).round(n_digits: 1) }
+```
+
+## 69. From the Pandas cookbook - Multiindexing
+
+(Updated on v0.3.0)
+https://pandas.pydata.org/docs/user_guide/cookbook.html#multiindexing
+
+```python
+# by Python Pandas
+# Efficiently and dynamically creating new columns using applymap
+
+df = pd.DataFrame(
+    {
+        "row": [0, 1, 2],
+        "One_X": [1.1, 1.1, 1.1],
+        "One_Y": [1.2, 1.2, 1.2],
+        "Two_X": [1.11, 1.11, 1.11],
+        "Two_Y": [1.22, 1.22, 1.22],
+    }
+)
+df
+
+# =>
+   row  One_X  One_Y  Two_X  Two_Y
+0    0    1.1    1.2   1.11   1.22
+1    1    1.1    1.2   1.11   1.22
+2    2    1.1    1.2   1.11   1.22
+
+# As Labelled Index
+df = df.set_index("row")
+df
+
+# =>
+     One_X  One_Y  Two_X  Two_Y
+row                            
+0      1.1    1.2   1.11   1.22
+1      1.1    1.2   1.11   1.22
+2      1.1    1.2   1.11   1.22
+
+# With Hierarchical Columns
+df.columns = pd.MultiIndex.from_tuples([tuple(c.split("_")) for c in df.columns])
+df
+
+# =>
+     One        Two      
+       X    Y     X     Y
+row                      
+0    1.1  1.2  1.11  1.22
+1    1.1  1.2  1.11  1.22
+2    1.1  1.2  1.11  1.22
+
+# Now stack & Reset
+df = df.stack(0).reset_index(1)
+df
+
+# =>
+    level_1     X     Y
+row                    
+0       One  1.10  1.20
+0       Two  1.11  1.22
+1       One  1.10  1.20
+1       Two  1.11  1.22
+2       One  1.10  1.20
+2       Two  1.11  1.22
+
+# And fix the labels (Notice the label 'level_1' got added automatically)
+df.columns = ["Sample", "All_X", "All_Y"]
+df
+
+# =>
+    Sample  All_X  All_Y
+row                     
+0      One   1.10   1.20
+0      Two   1.11   1.22
+1      One   1.10   1.20
+1      Two   1.11   1.22
+2      One   1.10   1.20
+2      Two   1.11   1.22
+```
+
+(Until 0.2.3)
+This is an example before `Vector#split` has introduced. See [84. Vector#split](#84.-Vector#split) .
+
+```{ruby}
+#| tags: []
+df = RedAmber::DataFrame.new(
+        "row": [0, 1, 2],
+        "One_X": [1.1, 1.1, 1.1],
+        "One_Y": [1.2, 1.2, 1.2],
+        "Two_X": [1.11, 1.11, 1.11],
+        "Two_Y": [1.22, 1.22, 1.22],
+)
+```
+
+```{ruby}
+#| tags: []
+x = df.pick(:row, :One_X, :Two_X)
+  .to_long(:row, name: :Sample, value: :All_X)
+```
+
+```{ruby}
+#| tags: []
+y = df.pick(:row, :One_Y, :Two_Y)
+  .to_long(:row, name: :Sample, value: :All_Y)
+```
+
+```{ruby}
+#| tags: []
+x.pick(:row)
+ .assign [
+   [:Sample, x[:Sample].each.map { |x| x.split("_").first }],
+   [:All_X, x[:All_X]],
+   [:All_Y, y[:All_Y]]
+ ]
+```
+
+(Since 0.3.0)
+This example will use `Vector#split_to_columns`.
+
+```{ruby}
+#| tags: []
+df = RedAmber::DataFrame.new(
+        "row": [0, 1, 2],
+        "One_X": [1.1, 1.1, 1.1],
+        "One_Y": [1.2, 1.2, 1.2],
+        "Two_X": [1.11, 1.11, 1.11],
+        "Two_Y": [1.22, 1.22, 1.22],
+)
+```
+
+```{ruby}
+#| tags: []
+df.to_long(:row)
+```
+
+`Vector#split_to_colums` returns two splitted Vectors.
+
+```{ruby}
+#| tags: []
+df.to_long(:row, name: :Sample)
+  .assign(:Sample, :xy) { v(:Sample).split_to_columns('_') }
+```
+
+```{ruby}
+#| tags: []
+df.to_long(:row, name: :Sample)
+  .assign(:Sample, :xy) { v(:Sample).split_to_columns('_') }
+  .to_wide(name: :xy, value: :VALUE)
+```
+
+## 70. From the Pandas cookbook (Arithmetic)
+
+https://pandas.pydata.org/docs/user_guide/cookbook.html#arithmetic
+
+```python
+# by Python Pandas
+cols = pd.MultiIndex.from_tuples(
+    [(x, y) for x in ["A", "B", "C"] for y in ["O", "I"]]
+)
+
+df = pd.DataFrame(np.random.randn(2, 6), index=["n", "m"], columns=cols)
+df
+
+# =>
+          A                   B                   C          
+          O         I         O         I         O         I
+n  0.469112 -0.282863 -1.509059 -1.135632  1.212112 -0.173215
+m  0.119209 -1.044236 -0.861849 -2.104569 -0.494929  1.071804
+
+df = df.div(df["C"], level=1)
+df
+
+# =>
+          A                   B              C     
+          O         I         O         I    O    I
+n  0.387021  1.633022 -1.244983  6.556214  1.0  1.0
+m -0.240860 -0.974279  1.741358 -1.963577  1.0  1.0
+```
+
+This is a tentative example. This work may be refined by the coming feature which treats multiple key header easily.
+
+```{ruby}
+#| tags: []
+require "arrow-numo-narray"
+
+values = Numo::DFloat.new(6, 2).rand_norm
+```
+
+For consistency with the pandas result, we will use same data of them.
+
+```{ruby}
+#| tags: []
+values = [
+  [0.469112, -0.282863, -1.509059, -1.135632,  1.212112, -0.173215],
+  [0.119209, -1.044236, -0.861849, -2.104569, -0.494929,  1.071804]
+].transpose
+```
+
+```{ruby}
+#| tags: []
+keys = %w[A B C].product(%w[O I]).map(&:join)
+```
+
+```{ruby}
+#| tags: []
+df = RedAmber::DataFrame.new(index: %w[n m])
+                        .assign(*keys) { values }
+```
+
+```{ruby}
+#| tags: []
+df.assign do
+  assigner = {}
+  %w[A B C].each do |abc|
+    %w[O I].each do |oi|
+      key = "#{abc}#{oi}".to_sym
+      assigner[key] = v(key) / v("C#{oi}".to_sym)
+    end
+  end
+  assigner
+end
+```
+
+```{ruby}
+#| tags: []
+coords = [["AA", "one"], ["AA", "six"], ["BB", "one"], ["BB", "two"], ["BB", "six"]].transpose
+df = RedAmber::DataFrame.new(MyData: [11, 22, 33, 44, 55])
+                        .assign_left(:label1, :label2) { coords }
+```
+
+## 71. From the Pandas cookbook (Slicing)
+
+https://pandas.pydata.org/docs/user_guide/cookbook.html#slicing
+
+```python
+# by Python Pandas
+coords = [("AA", "one"), ("AA", "six"), ("BB", "one"), ("BB", "two"), ("BB", "six")]
+index = pd.MultiIndex.from_tuples(coords)
+df = pd.DataFrame([11, 22, 33, 44, 55], index, ["MyData"])
+df
+
+# =>
+        MyData
+AA one      11
+   six      22
+BB one      33
+   two      44
+   six      55
+```
+
+To take the cross section of the 1st level and 1st axis the index:
+
+```python
+# by Python Pandas
+# Note : level and axis are optional, and default to zero
+df.xs("BB", level=0, axis=0)
+
+# =>
+     MyData
+one      33
+two      44
+six      55
+```
+
+```{ruby}
+#| tags: []
+df.slice { label1 == "BB" }.drop(:label1)
+```
+
+…and now the 2nd level of the 1st axis.
+
+```python
+# by Python Pandas
+df.xs("six", level=1, axis=0)
+
+# =>
+    MyData
+AA      22
+BB      55
+```
+
+```{ruby}
+#| tags: []
+df.slice { label2 == "six" }.drop(:label2)
+```
+
+```python
+# by Python Pandas
+import itertools
+
+index = list(itertools.product(["Ada", "Quinn", "Violet"], ["Comp", "Math", "Sci"]))
+headr = list(itertools.product(["Exams", "Labs"], ["I", "II"]))
+indx = pd.MultiIndex.from_tuples(index, names=["Student", "Course"])
+cols = pd.MultiIndex.from_tuples(headr)  # Notice these are un-named
+data = [[70 + x + y + (x * y) % 3 for x in range(4)] for y in range(9)]
+df = pd.DataFrame(data, indx, cols)
+df
+
+# =>
+               Exams     Labs    
+                   I  II    I  II
+Student Course                   
+Ada     Comp      70  71   72  73
+        Math      71  73   75  74
+        Sci       72  75   75  75
+Quinn   Comp      73  74   75  76
+        Math      74  76   78  77
+        Sci       75  78   78  78
+Violet  Comp      76  77   78  79
+        Math      77  79   81  80
+        Sci       78  81   81  81
+```
+
+```{ruby}
+#| tags: []
+indexes = %w[Ada Quinn Violet].product(%w[Comp Math Sci]).transpose
+df = RedAmber::DataFrame.new(%w[Student Course].zip(indexes))
+                        .assign do
+                          assigner = {}
+                          keys = %w[Exams Labs].product(%w[I II]).map { |a| a.join("/") } 
+                          keys.each.with_index do |key, x|
+                            assigner[key] = (0...9).map { |y| 70 + x + y + (x * y) % 3 }
+                          end
+                          assigner
+                        end
+```
+
+```python
+# by Python Pandas
+All = slice(None)
+
+df.loc["Violet"]
+
+# =>
+       Exams     Labs    
+           I  II    I  II
+Course                   
+Comp      76  77   78  79
+Math      77  79   81  80
+Sci       78  81   81  81
+```
+
+```{ruby}
+#| tags: []
+df.slice(df[:Student] == "Violet").drop(:Student)
+```
+
+```python
+# by Python Pandas
+df.loc[(All, "Math"), All]
+
+# =>
+               Exams     Labs    
+                   I  II    I  II
+Student Course                   
+Ada     Math      71  73   75  74
+Quinn   Math      74  76   78  77
+Violet  Math      77  79   81  80
+```
+
+```{ruby}
+#| tags: []
+df.slice(df[:Course] == "Math")
+```
+
+```python
+# by Python Pandas
+df.loc[(slice("Ada", "Quinn"), "Math"), All]
+
+# =>
+               Exams     Labs    
+                   I  II    I  II
+Student Course                   
+Ada     Math      71  73   75  74
+Quinn   Math      74  76   78  77
+```
+
+```{ruby}
+#| tags: []
+df.slice(df[:Course] == "Math")
+  .slice { (v(:Student) == "Ada") | (v(:Student) == "Quinn") }
+```
+
+```python
+# by Python Pandas
+df.loc[(All, "Math"), ("Exams")]
+
+# =>
+                 I  II
+Student Course        
+Ada     Math    71  73
+Quinn   Math    74  76
+Violet  Math    77  79
+```
+
+```{ruby}
+#| tags: []
+df.slice(df[:Course] == "Math")
+  .pick {
+    [:Student, :Course].concat keys.select { |key| key.to_s.start_with?("Exams") }
+  }
+```
+
+```python
+# by Python Pandas
+df.loc[(All, "Math"), (All, "II")]
+
+# =>
+               Exams Labs
+                  II   II
+Student Course           
+Ada     Math      73   74
+Quinn   Math      76   77
+Violet  Math      79   80
+```
+
+```{ruby}
+#| tags: []
+df.slice(df[:Course] == "Math")
+  .pick {
+    [:Student, :Course].concat keys.select { |key| key.to_s.end_with?("II") }
+  }
+```
+
+## 72. Vector#map
+
+`Vector#map` method accepts a block and return yielded results from the block in a Vector.
+
+```{ruby}
+#| tags: []
+v = Vector.new(1, 2, 3, 4)
+v.map { |x| x / 100.0 }
+```
+
+If no block is given, return a Enumerator.
+
+```{ruby}
+#| tags: []
+v.map
+```
+
+If you need ruby's map from a Vector, try `.each.map` .
+
+```{ruby}
+#| tags: []
+v.each.map { |x| x / 100.0 }
+```
+
+Alias for `#map` is `#collect`
+
+Similar method is `Vector#filter/#select`.
+
+## 73. Introduce columns from numo/narray
+
+(Until 0.2.2 w/Arrow 9.0.0) We couldn't construct the DataFrame with Numo/NArray in current version. But following trick will enable it.
+
+```{ruby}
+#| tags: []
+DataFrame.new(index: Array(1..10))
+  .assign do
+    {
+      x0: Numo::DFloat.new(size).rand_norm(0, 2),
+      x1: Numo::DFloat.new(size).rand_norm(5, 2),
+      x2: Numo::DFloat.new(size).rand_norm(10, 2),
+      y0: Numo::DFloat.new(size).rand_norm(100, 10),
+      y1: Numo::DFloat.new(size).rand_norm(200, 10),
+      y2: Numo::DFloat.new(size).rand_norm(300, 10)
+    }
+  end
+```
+
+If you do not need the index column, try this.
+
+```{ruby}
+#| tags: []
+DataFrame.new(_: Array(1..10))
+  .assign do
+    {
+      x0: Numo::DFloat.new(size).rand_norm(0, 2),
+      x1: Numo::DFloat.new(size).rand_norm(5, 2),
+      x2: Numo::DFloat.new(size).rand_norm(10, 2),
+      y0: Numo::DFloat.new(size).rand_norm(100, 10),
+      y1: Numo::DFloat.new(size).rand_norm(200, 10),
+      y2: Numo::DFloat.new(size).rand_norm(300, 10)
+    }
+  end
+  .drop(:_)
+```
+
+(New from 0.2.3 with Aroow 10.0.0) It is possible to initialize by objects responsible to `to_arrow` since 0.2.3 . Arrays in Numo::NArray is responsible to `to_arrow` with `red-arrow-numo-narray` gem. This feature is proposed by the Red Data Tools member @kojix2 and implemented by @kou in Arrow 10.0.0 and Red Arrow Numo::NArray 0.0.6. Thanks!
+
+```{ruby}
+#| tags: []
+require 'arrow-numo-narray'
+
+size = 10
+DataFrame.new(
+  x0: Numo::DFloat.new(size).rand_norm(0, 2),
+  x1: Numo::DFloat.new(size).rand_norm(5, 2),
+  x2: Numo::DFloat.new(size).rand_norm(10, 2),
+  y0: Numo::DFloat.new(size).rand_norm(100, 10),
+  y1: Numo::DFloat.new(size).rand_norm(200, 10),
+  y2: Numo::DFloat.new(size).rand_norm(300, 10)
+)
+```
+
+## 74. Join (mutating joins)
+
+(Since 0.2.3)
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(
+  KEY: %w[A B C],
+  X1: [1, 2, 3]
+)
+```
+
+```{ruby}
+#| tags: []
+other = DataFrame.new(
+  KEY: %w[A B D],
+  X2: [true, false, nil]
+)
+```
+
+Inner join will join data leaving only the matching records.
+
+```{ruby}
+#| tags: []
+df.inner_join(other, :KEY)
+```
+
+If we omit join keys, common keys are automatically chosen (natural key).
+
+```{ruby}
+#| tags: []
+df.inner_join(other)
+```
+
+Full join will join data leaving all records.
+
+```{ruby}
+#| tags: []
+df.full_join(other)
+```
+
+Left join will join matching values to self from other (type: left_outer).
+
+```{ruby}
+#| tags: []
+df.left_join(other)
+```
+
+Right join will join matching values from self to other (type: right_outer).
+
+```{ruby}
+#| tags: []
+df.right_join(other)
+```
+
+Left join will join matching values to self from other.
+
+```{ruby}
+#| tags: []
+df.left_join(other)
+```
+
+## 75. Join (filtering joins)
+
+(Since 0.2.3)
+
+Semi join will return records of self that have a match in other.
+
+```{ruby}
+#| tags: []
+df.semi_join(other)
+```
+
+Anti join will return records of self that do not have a match in other.
+
+```{ruby}
+#| tags: []
+df.anti_join(other)
+```
+
+## 76. Partial joins
+
+(Since 0.2.3)
+
+```{ruby}
+#| tags: []
+df2 = DataFrame.new(
+  KEY1: %w[A B C],
+  KEY2: %w[s t u],
+  X: [1, 2, 3]
+)
+```
+
+```{ruby}
+#| tags: []
+other2 = DataFrame.new(
+  KEY1: %w[A B D],
+  KEY2: %w[s u v],
+  Y: [3, 2, 1]
+)
+```
+
+```{ruby}
+#| tags: []
+# natural join
+df2.inner_join(other2)
+# Same as df2.inner_join(other2, [:KEY1, :KEY2])
+```
+
+Partial join enables some part of common keys as join keys.
+
+Common keys of other not used as join keys will renamed as `:suffix`. Default suffix is '.1'.
+
+```{ruby}
+#| tags: []
+# partial join
+df2.inner_join(other2, :KEY1)
+```
+
+```{ruby}
+#| tags: []
+df2.inner_join(other2, :KEY1, suffix: '_')
+```
+
+## 77. Order of record in join
+
+Order of records is not guaranteed to be preserved before or after join. This is a similar property to RDB. Records behave like a set.
+
+If you want to preserve the order of records, it is recommended to add an index or sort.
+
+(Since 0.2.3)
+
+```{ruby}
+#| tags: []
+df2
+```
+
+```{ruby}
+#| tags: []
+other2
+```
+
+```{ruby}
+#| tags: []
+df2.full_join(other2, :KEY2)
+```
+
+## 78. Set operations
+
+Keys in self and other must be same in set operations.
+
+(Since 0.2.3)
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(
+  KEY1: %w[A B C],
+  KEY2: [1, 2, 3]
+)
+```
+
+```{ruby}
+#| tags: []
+other = DataFrame.new(
+  KEY1: %w[A B D],
+  KEY2: [1, 4, 5]
+)
+```
+
+Intersect will select records appearing in both self and other.
+
+```{ruby}
+#| tags: []
+df.intersect(other)
+```
+
+Union will select records appearing in both self or other.
+
+```{ruby}
+#| tags: []
+df.union(other)
+```
+
+Difference will select records appearing in self but not in other.
+
+It has an alias `#setdiff`.
+
+```{ruby}
+#| tags: []
+df.difference(other)
+```
+
+## 79. Join (big method)
+
+Undocumented big method `join` supports all mutating joins, filtering joins and set operations.
+
+|category|method of RedAmber|:type in join method|requirement|
+|-|-|-|-|
+|mutating joins|#inner_join|:inner||
+|mutating joins|#full_join|:full_outer||
+|mutating joins|#left_join|:left_outer||
+|mutating joins|#right_join|:right_outer||
+|-|-|:right_semi||
+|-|-|:right_anti||
+|filtering joins|#semi_join|:left_semi||
+|filtering joins|#anti_join|:left_anti||
+|set operations|#intersect|:inner|must have same keys with self and other|
+|set operations|#union|:full_outer|must have same keys with self and other|
+|set operations|#difference|:left_anti|must have same keys with self and other|
+
+(Since 0.2.3)
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(
+  KEY: %w[A B C],
+  X1: [1, 2, 3]
+)
+```
+
+```{ruby}
+#| tags: []
+other = DataFrame.new(
+  KEY: %w[A B D],
+  X2: [true, false, nil]
+)
+```
+
+```{ruby}
+#| tags: []
+df.join(other, :KEY, type: :inner)
+# Same as df.inner_join(other)
+```
+
+## 80. Force order for #join
+We can use `:force_order` option to ensure unique order for `join` families.
+(`#full_join`, `#right_join` and `#join with :full_outer or :right_outer`)
+
+If this option is true (by default) it will append index to the source and sort after joining. It will cause some degradation in performance.
+
+(Since 0.4.0)
+
+```{ruby}
+#| tags: []
+df2 = DataFrame.new(
+  KEY1: %w[A B C],
+  KEY2: %w[s t u],
+  X: [1, 2, 3]
+)
+```
+
+```{ruby}
+#| tags: []
+right2 = DataFrame.new(
+  KEY1: %w[A B D],
+  KEY2: %w[s u v],
+  Y: [3, 2, 1]
+)
+```
+
+```{ruby}
+#| tags: []
+df2.full_join(right2, :KEY2)
+```
+
+```{ruby}
+#| tags: []
+df2.full_join(right2, :KEY2, force_order: false)
+```
+
+```{ruby}
+#| tags: []
+df2.full_join(right2, { left: :KEY2, right: 'KEY2' })
+```
+
+```{ruby}
+#| tags: []
+df2.full_join(right2, { left: :KEY2, right: 'KEY2' }, force_order: false)
+```
+
+## 81. Binding DataFrames in vertical (concatenate)
+
+Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
+
+The alias is `concat`.
+(Since 0.2.3)
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(x: [1, 2], y: ['A', 'B'])
+```
+
+```{ruby}
+#| tags: []
+other = DataFrame.new(x: [3, 4], y: ['C', 'D'])
+```
+
+```{ruby}
+#| tags: []
+df.concatenate(other)
+```
+
+## 82. Binding DataFrames in lateral (merge)
+
+Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
+
+(Since 0.2.3)
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(x: [1, 2], y: [3, 4])
+```
+
+```{ruby}
+#| tags: []
+other = DataFrame.new(a: ['A', 'B'], b: ['C', 'D'])
+```
+
+```{ruby}
+#| tags: []
+df.merge(other)
+```
+
+## 83. Join - larger example by nycflight13
+
+(Since 0.2.3)
+
+'nycflights13' dataset is a large dataset. It will take a while for the first run to fetch and prepare red-datasets cache.
+
+```{ruby}
+#| tags: []
+require 'datasets-arrow'
+
+package = 'nycflights13'
+
+airlines = DataFrame.new(Datasets::Rdatasets.new(package, 'airlines'))
+airports = DataFrame.new(Datasets::Rdatasets.new(package, 'airports'))
+flights  = DataFrame.new(Datasets::Rdatasets.new(package, 'flights'))
+  .pick(%i[month day carrier flight tailnum origin dest air_time distance])
+planes   = DataFrame.new(Datasets::Rdatasets.new(package, 'planes'))
+weather  = DataFrame.new(Datasets::Rdatasets.new(package, 'weather'))
+
+flights
+```
+
+```{ruby}
+#| tags: []
+airlines
+```
+
+```{ruby}
+# inner join
+flights.inner_join(airlines, :carrier)
+# flights.inner_join(airlines) # natural join (same result)
+```
+
+## 84. Vector#split_to_columns
+
+Another example using in the DataFrame operation is in [## 69. From the Pandas cookbook (Multiindexing)](#69.-From-the-Pandas-cookbook---Multiindexing).
+
+`self` must be a String type Vector.
+
+(Since 0.3.0)
+
+```{ruby}
+#| tags: []
+v = Vector.new(['a b', 'c d', 'e f'])
+```
+
+```{ruby}
+#| tags: []
+v.split_to_columns
+```
+
+`#split` accepts `sep` argument as a separator. `sep` is passed to `String#split(sep)`.
+
+```{ruby}
+#| tags: []
+Vector.new('ab', 'cd', 'ef')
+      .split_to_columns('')
+```
+
+nil will separated as nil.
+
+```{ruby}
+#| tags: []
+Vector.new(nil, 'c d', 'e f')
+      .split_to_columns
+```
+
+## 85. Vector#split_to_rows
+
+`#split_to_rows` will separate strings and flatten into row.
+
+(Since 0.3.0)
+
+```{ruby}
+#| tags: []
+v = Vector.new(['a b', 'c d', 'e f'])
+```
+
+```{ruby}
+#| tags: []
+v.split_to_rows
+```
+
+## 86. Vector#merge
+(Since 0.3.0)
+
+`Vector#merge(other)` merges `self` and `other` if they are String Vector.
+
+```{ruby}
+#| tags: []
+vector = Vector.new(%w[a c e])
+other = Vector.new(%w[b d f])
+vector.merge(other)
+```
+
+If `other` is scalar, it will be appended to each elements of `self`.
+
+```{ruby}
+#| tags: []
+vector.merge('x')
+```
+
+Option `:sep` is used to concatenating elements. Its default value is ' '.
+
+```{ruby}
+#| tags: []
+vector.merge('x', sep: '')
+```
+
+## 87. Separate a variable (column) in a DataFrame
+(Since 0.3.0)
+
+R's separate operation.
+
+https://tidyr.tidyverse.org/reference/separate.html
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(xyz: [nil, 'x.y', 'x.z', 'y.z'])
+```
+
+Instead of `separate(:xyz, [:a, :b])` we will do:
+
+```{ruby}
+#| tags: []
+df.assign(:A, :B) { xyz.split_to_columns('.') }
+  .drop(:xyz)
+```
+
+If you need :B only, instead of `separate(:xyz, [nil, :B])` we will do:
+
+```{ruby}
+#| tags: []
+df.assign(:A, :B) { xyz.split_to_columns('.') }
+  .pick(:B)
+```
+
+When splitted length is not equal, split returns max size of Vector Array filled with nil.
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(xyz: ['x', 'x y', 'x y z', nil])
+df.assign(:x, :y, :z) { xyz.split_to_columns }
+```
+
+Split limiting max 2 elemnts.
+
+```{ruby}
+#| tags: []
+df.assign(:x, :yz) { xyz.split_to_columns(' ', 2) }
+```
+
+Another example:
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(id: 1..3, 'month-year': %w[8-2022 9-2022 10-2022])
+  .assign(:month, :year) { v(:'month-year').split_to_columns('-') }
+```
+
+Split between the letters.
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(id: 1..3, yearmonth: %w[202209 202210 202211])
+  .assign(:year, :month) { yearmonth.split_to_columns(/(?=..$)/) }
+```
+
+## 88. Unite variables (columns) in a DataFrame
+(Since 0.3.0)
+
+R's unite operation.
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(id: 1..3, year: %w[2022 2022 2022], month: %w[09 10 11])
+```
+
+```{ruby}
+#| tags: []
+df.assign(:yearmonth) { year.merge(month, sep: '') }
+  .pick(:id, :yearmonth)
+```
+
+```{ruby}
+#| tags: []
+# Or directly create:
+DataFrame.new(id: 1..3, yearmonth: df.year.merge(df.month, sep: ''))
+```
+
+## 89. Separate variable and lengthen into several rows.
+(Since 0.3.0)
+
+R's separate_rows operation.
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(id: 1..3, yearmonth: %w[202209 202210 202211])
+  .assign(:year, :month) { yearmonth.split_to_columns(/(?=..$)/) }
+  .drop(:yearmonth)
+  .to_long(:id)
+```
+
+Another example with different list size.
+
+```{ruby}
+#| tags: []
+df = DataFrame.new(
+  x: 1..3,
+  y: ['a', 'd,e,f', 'g,h'],
+  z: ['1', '2,3,4', '5,6'],
+)
+```
+
+```{ruby}
+#| tags: []
+sizes = df.y.split(',').list_sizes
+a = sizes.to_a.map.with_index(1) { |n, i| [i] * n }.flatten
+```
+
+```{ruby}
+#| tags: []
+DataFrame.new(
+  x: a,
+  y: df.y.split_to_rows(','),
+  z: df.z.split_to_rows(',')
+)
+```
+
+Another way to use `#split_to_columns`.
+
+```{ruby}
+#| tags: []
+xy = df.pick(:x, :y)
+  .assign(:y, :y1, :y2) { v(:y).split_to_columns(',') }
+  .to_long(:x, value: :y)
+  .remove_nil
+```
+
+```{ruby}
+#| tags: []
+xz = df.pick(:x, :z)
+  .assign(:z, :z1, :z2) { v(:z).split_to_columns(',') }
+  .to_long(:x, value: :z)
+  .remove_nil
+```
+
+```{ruby}
+#| tags: []
+xy.pick(:x, :y).merge(xz.pick(:z))
+```
+
+Get all combinations of :y and :z.
+
+```{ruby}
+#| tags: []
+df.assign(:y, :y1, :y2) { v(:y).split_to_columns(',') }
+  .to_long(:x, :z, value: :y)
+  .drop(:NAME)
+  .assign(:z, :z1, :z2) { v(:z).split_to_columns(',') }
+  .to_long(:x, :y, value: :z)
+  .drop(:NAME)
+  .drop_nil
+```
+
+## 90. Vector#propagate
+
+Spread the return value of an aggregate function as if it is a element-wise function.
+
+It has an alias `#expand`.
+
+(Since 0.4.0)
+
+```{ruby}
+#| tags: []
+vec = Vector.new(1, 2, 3, 4)
+vec.propagate(:mean)
+```
+
+Block is also available.
+
+```{ruby}
+#| tags: []
+vec.propagate { |v| v.mean.round }
+```
+
+## 91. Vector#sort / #sort_indices
+
+`#sort` will arrange values in Vector.
+
+Accepts :sort order option:
+   - `:+`, `:ascending` or without argument will sort in increasing order.
+   - `:-` or `:descending` will sort in decreasing order.
+
+(Since 0.4.0)
+
+```{ruby}
+#| tags: []
+vector = Vector.new(%w[B D A E C])
+vector.sort
+# same as vector.sort(:+)
+# same as vector.sort(:ascending)
+```
+
+Sort in decreasing order;
+
+```{ruby}
+#| tags: []
+vector.sort(:-)
+# same as vector.sort(:descending)
+```
+
+## 93. Vector#rank
+
+Returns numerical rank of self.
+ 
+Note: This method is currently fixed to the default behavior because `RankOptions` in C++ function is not implemented in C GLib yet.
+ - Nil values are considered greater than any value.
+ - NaN values are considered greater than any value but smaller than nil values.
+ - Tiebreakers are ranked in order of appearance.
+
+(Since 0.4.0, Experimental feature)
+
+Rank of float Vector;
+
+```{ruby}
+#| tags: []
+float = Vector.new(0.1, nil, Float::NAN, 0.2, 0.1)
+```
+
+```{ruby}
+#| tags: []
+float.rank
+```
+
+Rank of string Vector;
+
+```{ruby}
+#| tags: []
+string = Vector.new("A", "B", nil, "A", "C")
+```
+
+```{ruby}
+#| tags: []
+string.rank
+```
+
+## 93. Vector#sample
+Pick up elements at random.
+
+(Since 0.4.0)
+
+Return a randomly selected element. This is one of an aggregation function.
+
+```{ruby}
+#| tags: []
+v = Vector.new('A'..'H')
+```
+
+Returns scalar without any arguments.
+
+```{ruby}
+#| tags: []
+v.sample
+```
+
+`sample(n)` will pick up `n` elements at random. `n` is a positive number of elements to pick.
+
+If n is smaller or equal to size, elements are picked by non-repeating.
+
+If n == 1 (in case of `sample(1)`), it returns a Vector of size == 1 not a scalar.
+
+```{ruby}
+#| tags: []
+v.sample(1)
+```
+
+Sample same size of self: every element is picked in random order.
+
+```{ruby}
+#| tags: []
+v.sample(8)
+```
+
+If n is greater than `size`, some elements are picked repeatedly.
+
+```{ruby}
+#| tags: []
+v.sample(9)
+```
+
+`sample(prop)` will pick up elements by proportion `prop` at random. `prop` must be positive float.
+ - Absolute number of elements to pick:`prop*size` is rounded (by `half: :up``)
+ - If prop is smaller or equal to 1.0, elements are picked by non-repeating.
+
+If picked element is only one, it returns a Vector of size == 1 not a scalar.
+
+```{ruby}
+#| tags: []
+v.sample(0.1)
+```
+
+Sample same size of self: every element is picked in random order.
+
+```{ruby}
+#| tags: []
+v.sample(1.0)
+```
+
+If prop is greater than 1.0, some elements are picked repeatedly.
+
+```{ruby}
+#| tags: []
+# 2 times over sampling
+sampled = v.sample(2.0)
+```
+
+```{ruby}
+#| tags: []
+sampled.tally
+```
+
+## 94. Vector#concatenate
+
+Concatenate other array-like to self.
+
+(Since 0.4.0)
+
+Concatenate to string;
+
+```{ruby}
+#| tags: []
+string = Vector.new(%w[A B])
+```
+
+```{ruby}
+#| tags: []
+string.concatenate([1, 2])
+```
+
+Concatenate to integer;
+
+```{ruby}
+#| tags: []
+integer = Vector.new(1, 2)
+```
+
+```{ruby}
+#| tags: []
+integer.concatenate(["A", "B"])
+```
+
+## 95. Vector#resolve
+
+Return other as a Vector which is same data type as self.
+
+(Since 0.4.0)
+
+Integer to String;
+
+```{ruby}
+#| tags: []
+Vector.new('A').resolve([1, 2])
+```
+
+String to Ineger;
+
+```{ruby}
+#| tags: []
+Vector.new(1).resolve(['A'])
+```
+
+Upcast to uint16;
+
+```{ruby}
+#| tags: []
+vector = Vector.new(256)
+```
+
+Not a uint8 Vector;
+
+```{ruby}
+#| tags: []
+vector.resolve([1, 2])
+```
+
+## 96. SubFrames
+
+`SubFrames` is a new concept of DataFrame collection. It represents ordered subsets of a DataFrame collected by some rules. It includes both grouping and windowing concepts in a unified manner, and also covers broader cases more flexibly.
+
+(Since 0.4.0)
+
+```{ruby}
+#| tags: []
+dataframe = DataFrame.new(
+  x: [*1..6],
+  y: %w[A A B B B C],
+  z: [false, true, false, nil, true, false]
+)
+p dataframe; nil
+```
+
+```{ruby}
+#| tags: []
+sf = SubFrames.new(dataframe, [[0, 1], [2, 3, 4], [5]])
+```
+
+Source DataFrame (univarsal set).
+
+```{ruby}
+#| tags: []
+sf.baseframe
+```
+
+Size of subsets.
+
+```{ruby}
+#| tags: []
+sf.size
+```
+
+Sizes of each subsets.
+
+```{ruby}
+#| tags: []
+sf.sizes
+```
+
+`#each` will return an Enumerator or iterates each subset as a DataFrame.
+
+```{ruby}
+#| tags: []
+sf.each
+```
+
+```{ruby}
+#| tags: []
+sf.each.next
+```
+
+`SubFrames.new` also accepts a block.
+
+```{ruby}
+#| tags: []
+usf = SubFrames.new(dataframe) { |df| [df.indices] }
+```
+
+`#universal?` tests if self is an univarsal set.
+
+```{ruby}
+#| tags: []
+usf.universal?
+```
+
+`#empty?` tests if self is an empty set.
+
+```{ruby}
+#| tags: []
+esf = SubFrames.new(dataframe, [])
+```
+
+```{ruby}
+#| tags: []
+esf.empty?
+```
+
+`SubFrames.new` also accepts boolean filters even from the block.
+
+```{ruby}
+#| tags: []
+small = dataframe.x < 4
+large = !small
+small_large = SubFrames.new(dataframe) { [small, large] }
+```
+
+## 97. SubFrames#concatenate
+
+`SubFrames#concatenate` (or alias `#concat`) will concatenate SubFrames to create a DataFrame.
+
+(Since 0.4.0)
+
+```{ruby}
+#| tags: []
+sf.concatenate
+```
+
+## 98. SubFrames.by_group
+
+Create SubFrames by Group object.
+
+(Since 0.4.0)
+
+```{ruby}
+#| tags: []
+p dataframe; nil
+```
+
+```{ruby}
+#| tags: []
+group = Group.new(dataframe, [:y])
+sf = SubFrames.by_group(group)
+```
+
+## 99. DataFrame#sub_by_value
+
+Grouping by value. It is corresponding to Group processing.
+
+Create SubFrames from keys and group by values in columns specified by the key.
+
+(Since 0.4.0)
+
+```{ruby}
+#| tags: []
+dataframe.sub_by_value(keys: :y)
+```
+
+## 100. DataFrame#sub_by_window
+
+Create SubFrames by window in `size` rolling `from` by `step`.
+
+Default values is `from: 0`, `size: nil` and `step: 1`.
+
+(Since 0.4.0)
+
+```{ruby}
+#| tags: []
+dataframe.sub_by_window(size: 4, step: 2)
+```
+
+## 101. DataFrame#sub_by_enum
+
+Create SubFrames by Grouping/Windowing by posion. The position is specified by `Array`'s enumerator method such as `each_slice` or `each_cons`.
+
+(Since 0.4.0)
+
+Create a SubFrames object sliced by 3 rows. This is MECE (Mutually Exclusive and Collectively Exhaustive) SubFrames.
+
+```{ruby}
+#| tags: []
+dataframe.sub_by_enum(:each_slice, 3)
+```
+
+Create a SubFrames object for each consecutive 3 rows.
+
+```{ruby}
+#| tags: []
+dataframe.sub_by_enum(:each_cons, 4)
+```
+
+## 102. DataFrame#sub_by_kernel
+
+Create SubFrames by windowing with a kernel and step.
+Kernel is a boolean Array and it behaves like a masked window.
+
+(Since 0.4.0)
+
+```{ruby}
+#| tags: []
+kernel = [true, false, false, true]
+dataframe.sub_by_kernel(kernel, step: 2)
+```
+
+## 103. DataFrame#build_subframes
+
+Generic builder of sub-dataframe from self.
+
+(Sice 0.4.0)
+
+```{ruby}
+#| tags: []
+dataframe.build_subframes([[0, 2, 4], [1, 3, 5]])
+```
+
+`#build_subframes` also accepts a block.
+
+```{ruby}
+#| tags: []
+dataframe.build_subframes do |df|
+  even = df.indices.map(&:even?)
+  [even, !even]
+end
+```
+
+## 104. SubFrames#aggregate
+- `SubFrames#aggregate(group_keys, aggregations)`
+  Aggregate SubFrames to create a DataFrame.
+
+This API will cahnge in 0.4.1.
+
+(Since 0.4.0)
+
+```{ruby}
+#| tags: []
+sf = dataframe.sub_by_value(keys: :y)
+```
+
+```{ruby}
+#| tags: []
+sf.aggregate(:y, {z: :count})
+```
+
+## 105. Vector#modulo
+
+(Since 0.4.1)
+
+`#%` is an alias of `#modulo`.
+
+```{ruby}
+#| tags: []
+vector = Vector.new(5, -3, 1)
+vector % 3
+```
+
+`#%` and `#modulo` is equivalent to `self-divisor*(self/divisor).floor`.
+
+```{ruby}
+#| tags: []
+vector.modulo(-2)
+```
+
+## 106. Grouped DataFrame as a list
+This API was introduced in 0.2.3, and supply a new DataFrame group (experimental).
+
+This additional API will treat a grouped DataFrame as a list of DataFrames. I think this API has pros such as:
+
+- API is easy to understand and flexible.
+- It has good compatibility with Ruby's primitive Enumerables.
+- We can only use non hash-ed aggregation functions.
+- Do not need grouped DataFrame state, nor `#ungroup` method.
+- May be useful for concurrent operations.
+
+This feature is implemented by Ruby, so it is pretty slow and experimental. Use original Group API for practical purpose.
+
+(Since 0.2.3, experimental feature => This was upgraded to SubFrames feature)
+
+```{ruby}
+enum = penguins.group(:island).each
+```
+
+```{ruby}
+enum.to_a
+```
+
+```{ruby}
+array = enum.map do |df|
+  DataFrame.new(island: [df.island[0]]).assign do
+    df.variables.each_with_object({}) do |(key, vec), hash|
+      next unless vec.numeric?
+      hash["mean(#{key})"] = [vec.mean]
+    end
+  end
+end
+```
+
+```{ruby}
+array.reduce { |a, df| a.concat df }
+```
+

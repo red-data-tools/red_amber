@@ -195,3 +195,83 @@ Please see [(GitHub Docs)Creating a codespace for a repository](https://docs.git
     - `red_amber.ipynb` : Examples in `README.md`.
     - `examples_of_red_amber.ipynb` : Hundreds examples of RedAmber.
   - `require 'red_amber'` will load from source directory `lib`.
+
+## Document authoring by Quarto
+
+[Quarto](https://quarto.org/) is an open-source scientific and technical publishing system.
+We use Quarto CLI to show usage examples of RedAmber.
+
+```mermaid
+---
+title: Document management with Quarto
+---
+flowchart LR
+    id1["Source management
+        (.qmd)"]
+    id2["Analyze and edit by JupyterLab
+        (.ipynb)"]
+    id3["Publish document
+        (.pdf)"]
+
+    id1 -- convert --> id2 -- convert -->  id1
+    id2 -- render --> id3
+    id1 -- render --> id3
+```
+
+* We can manage the source of the Jupyter notebook by Quarto's markdown format `qmd`.
+* We can convert a `.qmd` file to a Jupyter notebook file (`.ipynb`) and will be able to edit it or make analysis on Jupyter Lab.
+* We can render `.qmd` or `.ipynb` files to `.pdf`.
+
+### To show the information of Quarto
+
+Try below to show version and verify correct functioning of Quarto installation. 
+
+```shell
+$ quarto -v
+$ quarto check
+```
+
+To show help,
+
+```shell
+$ quarto --help
+$ quarto render --help
+```
+
+### Convert qmd file to Jupyter Notebook
+
+To convert `.qmd` source file to `.ipynb`,
+
+```shell
+$ quarto convert source_file.qmd
+$ quarto convert source_file.qmd --output Notebook.ipynb
+```
+
+The first one will output `source_file.ipynb` file in the same directory.
+
+Command below will convert qmd_document files in `doc/qmd` to `.ipynb` files and save them to `doc/notebook` . Then open `doc/notebook` with Jupyter Lab.
+
+```shell
+$ bin/jupyter
+```
+
+### Convert Jupyter Notebook to `qmd`
+
+```shell
+$ quarto convert notebook.ipynb
+$ quarto convert notebook.ipynb --output output_source_file.qmd
+```
+
+### Others
+
+To render Notebook file to pdf with table of contents,
+
+```shell
+$ quarto render notebook.ipynb --to pdf --toc
+```
+
+Please see command line help by `quarto --help`, or visit [Quarto](https://quarto.org/) web.
+
+### Thanks
+
+ As for the use of Quarto, I started to try after the Kozo Nishida's work with Ruby Association Grant 2022 "Introducing Quarto into the RubyData ecosystem and promoting the combination to the Ruby community". I would like to take this opportunity to thank him.
