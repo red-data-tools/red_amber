@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 set -e
 
 APACHE_ARROW_VERSION=12.0.1-1

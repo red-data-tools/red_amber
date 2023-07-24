@@ -2,11 +2,11 @@
 /.yardoc/
 /benchmark/cache
 /coverage/
+/doc/notebook/
 /doc/yard/
 /pkg/
 /spec/reports/
 /tmp/
 Gemfile.lock
-!/docker/Gemfile.lock
-/doc/notebook/.ipynb_checkpoints/
 .DS_Store
+.ipynb_checkpoints
