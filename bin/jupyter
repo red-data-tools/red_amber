@@ -12,6 +12,4 @@ do
 done
 
 # Start jupyter lab
-bundle install --gemfile=$(dirname $0)/Gemfile
-
-jupyter lab --notebook-dir='/workspaces/red_amber/doc/notebook' --NotebookApp.token=''
+bundle exec --gemfile=$(dirname $0)/Gemfile jupyter lab --notebook-dir='/workspaces/red_amber/doc/notebook' --NotebookApp.token=''
