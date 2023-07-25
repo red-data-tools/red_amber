@@ -4,29 +4,6 @@ set -e
 APACHE_ARROW_VERSION=12.0.1-1
 RBENV_RUBY=3.2.2
 
-# To install Ruby
-# https://github.com/rbenv/ruby-build/wiki#ubuntudebianmint
-sudo apt-get update
-sudo apt-get install -y --no-install-recommends \
-        autoconf \
-        bison \
-        rustc \
-        libssl-dev \
-        libyaml-dev \
-        libreadline6-dev \
-        zlib1g-dev \
-        libgmp-dev \
-        libncurses5-dev \
-        libffi-dev \
-        libgdbm6 \
-        libgdbm-dev \
-        libdb-dev \
-        uuid-dev
-# For iruby
-sudo apt-get install -y --no-install-recommends \
-        libczmq-dev \
-        libzmq3-dev
-
 # Install Apache Arrow
 arrow_dev_tmp=/tmp/apache-arrow-apt-source.deb
 curl -sfSL -o ${arrow_dev_tmp} https://apache.jfrog.io/artifactory/arrow/ubuntu/pool/jammy/main/a/apache-arrow-apt-source/apache-arrow-apt-source_${APACHE_ARROW_VERSION}_all.deb
