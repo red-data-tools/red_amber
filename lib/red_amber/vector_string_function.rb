@@ -9,7 +9,7 @@ module RedAmber
 
     # For each string in self, emit true if it contains a given pattern.
     #
-    # @overload match_substring?(string, ignore_case: nil)
+    # @overload match_substring(string, ignore_case: nil)
     #   Emit true if it contains `string`.
     #
     #   @param string [String]
@@ -21,12 +21,12 @@ module RedAmber
     #     nil inputs emit nil.
     #   @example Match with string.
     #     vector = Vector.new('array', 'Arrow', 'carrot', nil, 'window')
-    #     vector.match_substring?('arr')
+    #     vector.match_substring('arr')
     #     # =>
     #     #<RedAmber::Vector(:boolean, size=5):0x000000000005a208>
     #     [true, false, true, nil, false]
     #
-    # @overload match_substring?(regexp, ignore_case: nil)
+    # @overload match_substring(regexp, ignore_case: nil)
     #   Emit true if it contains substring matching with `regexp`.
     #   It calls `match_substring_regex` in Arrow compute function and
     #   uses re2 library.
@@ -41,14 +41,14 @@ module RedAmber
     #     boolean Vector to show if elements contain a given pattern.
     #     nil inputs emit nil.
     #   @example Match with regexp.
-    #     vector.match_substring?(/arr/)
+    #     vector.match_substring(/arr/)
     #     # =>
     #     #<RedAmber::Vector(:boolean, size=5):0x0000000000014b68>
     #     [true, false, true, nil, false]
     #
     # @since 0.5.0
     #
-    def match_substring?(pattern, ignore_case: nil)
+    def match_substring(pattern, ignore_case: nil)
       options = Arrow::MatchSubstringOptions.new
       datum =
         case pattern
@@ -67,6 +67,7 @@ module RedAmber
         end
       Vector.create(datum.value)
     end
+    alias_method :match_substring?, :match_substring
 
     # Check if elements in self end with a literal pattern.
     #
@@ -79,19 +80,20 @@ module RedAmber
     #   nil inputs emit nil.
     # @example Check if end with?.
     #   vector = Vector.new('array', 'Arrow', 'carrot', nil, 'window')
-    #   vector.end_with?('ow')
+    #   vector.end_with('ow')
     #   # =>
     #   #<RedAmber::Vector(:boolean, size=5):0x00000000000108ec>
     #   [false, true, false, nil, true]
     # @since 0.5.0
     #
-    def end_with?(string, ignore_case: nil)
+    def end_with(string, ignore_case: nil)
       options = Arrow::MatchSubstringOptions.new
       options.ignore_case = (ignore_case || false)
       options.pattern = string
       datum = find(:ends_with).execute([data], options)
       Vector.create(datum.value)
     end
+    alias_method :end_with?, :end_with
 
     # Check if elements in self start with a literal pattern.
     #
@@ -104,19 +106,20 @@ module RedAmber
     #   nil inputs emit nil.
     # @example Check if start with?.
     #   vector = Vector.new('array', 'Arrow', 'carrot', nil, 'window')
-    #   vector.start_with?('ow')
+    #   vector.start_with('ow')
     #   # =>
     #   #<RedAmber::Vector(:boolean, size=5):0x00000000000193fc>
     #   [false, false, true, nil, false]
     # @since 0.5.0
     #
-    def start_with?(string, ignore_case: nil)
+    def start_with(string, ignore_case: nil)
       options = Arrow::MatchSubstringOptions.new
       options.ignore_case = (ignore_case || false)
       options.pattern = string
       datum = find(:starts_with).execute([data], options)
       Vector.create(datum.value)
     end
+    alias_method :start_with?, :start_with
 
     # Match elements of self against SQL-style LIKE pattern.
     #   the pattern matches a given pattern at any position.
@@ -134,17 +137,18 @@ module RedAmber
     #   nil inputs emit nil.
     # @example Check with match_like?.
     #   vector = Vector.new('array', 'Arrow', 'carrot', nil, 'window')
-    #   vector.match_like?('_rr%')
+    #   vector.match_like('_rr%')
     #   # =>
     # @since 0.5.0
     #
-    def match_like?(string, ignore_case: nil)
+    def match_like(string, ignore_case: nil)
       options = Arrow::MatchSubstringOptions.new
       options.ignore_case = (ignore_case || false)
       options.pattern = string
       datum = find(:match_like).execute([data], options)
       Vector.create(datum.value)
     end
+    alias_method :match_like?, :match_like
 
     # For each string in self, count occuerences of substring in given pattern.
     #
