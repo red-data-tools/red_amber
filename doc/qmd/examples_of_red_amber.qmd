@@ -3,7 +3,7 @@ title: 106 examples of Red Amber
 jupyter: ruby
 ---
 
-Last update is on March 20, 2023, for RedAmber Version 0.4.1 and Arrow version 11.0.0 .
+Last update: 2023/08/02 (for RedAmber Version 0.5.0 and Arrow version 12.0.1)
 
 ## 1. Install
 
@@ -11,9 +11,9 @@ Install requirements before you install RedAmber.
 
 - Ruby (>= 3.0)
 
-- Apache Arrow (~> 11.0.0)
-- Apache Arrow GLib (~> 11.0.0)
-- Apache Parquet GLib (~> 11.0.0)  # if you need IO from/to Parquet resource.
+- Apache Arrow (~> 12.0.0)
+- Apache Arrow GLib (~> 12.0.0)
+- Apache Parquet GLib (~> 12.0.0)  # if you need IO from/to Parquet resource.
 
   See [Apache Arrow install document](https://arrow.apache.org/install/).
   
@@ -46,12 +46,14 @@ Install requirements before you install RedAmber.
 If you prepared Apache Arrow, add these lines to your Gemfile:
 
 ```ruby
-gem 'red-arrow',   '~> 11.0.0'
+gem 'red-arrow',   '~> 12.0.0'
 gem 'red_amber'
-gem 'red-parquet', '~> 11.0.0' # Optional, if you use IO from/to parquet
-gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFrame
-gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
 gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
+                               # or use random sampling feature.
+gem 'red-parquet', '~> 12.0.0' # Optional, if you use IO from/to parquet
+gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
+gem 'red-arrow-activerecord'   # Optional, if you use Active Record
+gem 'rover-df',                # Optional, if you use IO from/to Rover::DataFrame.
 ```
 
 And then execute `bundle install` or install it yourself as `gem install red_amber`.
@@ -66,6 +68,8 @@ include RedAmber
 ```
 
 ## 3. Initialize
+
+There are several ways to initialize a DataFrame.
 
 ```{ruby}
 #| tags: []
