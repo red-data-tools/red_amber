@@ -180,7 +180,8 @@ module RedAmber
         end
         sio << ']'
 
-        format "#<#{self.class}(:#{type}, size=#{size}):0x%016x>\n%s\n",
+        chunked = chunked? ? ', chunked' : ''
+        format "#<#{self.class}(:#{type}, size=#{size}#{chunked}):0x%016x>\n%s\n",
                object_id, sio.string
       end
     end
