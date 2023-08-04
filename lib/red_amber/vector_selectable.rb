@@ -242,14 +242,20 @@ module RedAmber
       take(sort_indices(order: order))
     end
 
-    # Returns 0-based numerical rank of self.
+    # Returns 1-based numerical rank of self.
     # - Nil values are considered greater than any value.
     # - NaN values are considered greater than any value but smaller than nil values.
+    # - Order of each element is considered as ascending by default. It is
+    #   changable by the parameter `order = :descending`.
     # - Tiebreakers are ranked in order of appearance by default or
     #   with `tie: :first` option.
-    # - `RankOptions` in C++ function is not implemented in C GLib yet.
-    #   This method is currently fixed to the default behavior.
+    # - Null values (nil and NaN) are placed at end by default.
+    #   This behavior can be changed by the option `null_placement: :at_start`.
     #
+    # @param order [:ascending, '+', :descending, '-']
+    #   the order of the elements should be ranked in.
+    #   - :ascending or '+' : rank is computed in ascending order.
+    #   - :descending or '-' : rank is computed in descending order.
     # @param tie [:first, :min, :max, :dense]
     #   configure how ties between equal values are handled.
     #   - first: Ranks are assigned in order of when ties appear in the input.
@@ -257,66 +263,93 @@ module RedAmber
     #   - max: Ties get the largest possible rank in the sorted order.
     #   - dense: The ranks span a dense [1, M] interval where M is the number
     #     of distinct values in the input.
+    # @param null_placement [:at_end, :at_start]
+    #   configure the position of nulls to be located.
+    #   Nulls are considered as `NaN < nil`.
     # @return [Vector]
-    #   0-based rank in uint64 of self (0...size in range).
+    #   1-based rank in uint64 of self (1..size in range) at maximum.
     # @example Rank of float Vector
-    #   fv = Vector.new(0.1, nil, Float::NAN, 0.2, 0.1); fv
+    #   float = Vector[1, 0, nil, Float::NAN, Float::INFINITY, -Float::INFINITY, 3, 2]
+    #   float
     #
     #   # =>
-    #   #<RedAmber::Vector(:double, size=5):0x000000000000c65c>
-    #   [0.1, nil, NaN, 0.2, 0.1]
+    #   #<RedAmber::Vector(:double, size=8):0x0000000000036858>
+    #   [1.0, 0.0, nil, NaN, Infinity, -Infinity, 3.0, 2.0]
     #
-    #   fv.rank # or fv.rank(tie: :first)
+    #   float.rank
+    #   # or float.rank(:ascending, tie: :first, null_placement: :at_end)
     #
     #   # =>
-    #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
-    #   [0, 4, 3, 2, 1]
+    #   #<RedAmber::Vector(:uint64, size=8):0x000000000003af84>
+    #   [3, 2, 8, 7, 6, 1, 5, 4]
     #
     # @example Rank of string Vector
-    #   sv = Vector.new("A", "B", nil, "A", "C"); sv
+    #   string = Vector["A", "A", nil, nil, "C", "B"]
+    #   string
     #
     #   # =>
-    #   #<RedAmber::Vector(:string, size=5):0x0000000000003854>
-    #   ["A", "B", nil, "A", "C"]
+    #   #<RedAmber::Vector(:string, size=6):0x000000000003d568>
+    #   ["A", "A", nil, nil, "C", "B"]
     #
-    #   sv.rank
-    #
-    #   # =>
-    #   #<RedAmber::Vector(:uint64, size=5):0x0000000000003868>
-    #   [0, 2, 4, 1, 3]
-    #
-    # @example Rank of Float Vector with tie: :min
-    #   fv.rank(tie: :min)
+    #   string.rank
     #
     #   # =>
-    #   #<RedAmber::Vector(:uint64, size=5):0x00000000001593ac>
-    #   [0, 3, 3, 2, 0]
+    #   #<RedAmber::Vector(:uint64, size=6):0x0000000000049bc4>
+    #   [1, 2, 5, 6, 4, 3]
     #
-    # @example Rank of Float Vector with tie: :max
-    #   fv.rank(tie: :max)
-    #
-    #   # =>
-    #   #<RedAmber::Vector(:uint64, size=5):0x0000000000160d50>
-    #   [1, 4, 4, 2, 1]
-    #
-    # @example Rank of Float Vector with tie: :dense
-    #   fv.rank(tie: :dense)
+    # @example Rank with order = :descending
+    #   float.rank(:descending) # or float.rank('-')
     #
     #   # =>
-    #   #<RedAmber::Vector(:uint64, size=5):0x000000000016993c>
-    #   [0, 2, 2, 1, 0]
+    #   #<RedAmber::Vector(:uint64, size=8):0x000000000006ef00>
+    #   [4, 5, 8, 7, 1, 6, 2, 3]
+    #
+    # @example Rank with tie: :min
+    #   float_vector.rank(tie: :min)
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=6):0x000000000007a1d4>
+    #   [1, 1, 5, 5, 4, 3]
+    #
+    # @example Rank with tie: :max
+    #   float_vector.rank(tie: :max)
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=6):0x000000000007cba0>
+    #   [2, 2, 6, 6, 4, 3]
+    #
+    # @example Rank with tie: :dense
+    #   float_vector.rank(tie: :dense)
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=6):0x0000000000080930>
+    #   [1, 1, 4, 4, 3, 2]
+    #
+    # @example Rank with null_placement: :at_start
+    #   float.rank(null_placement: :at_start)
+    #
+    #   # =>
+    #   #<RedAmber::Vector(:uint64, size=8):0x0000000000082104>
+    #   [5, 4, 1, 2, 8, 3, 7, 6]
     #
     # @since 0.4.0
     #
-    def rank(tie: :first)
-      datum =
-        case data
-        when Arrow::ChunkedArray
-          find(:rank).execute([data.pack], tiebreaker: tie)
+    def rank(order = :ascending, tie: :first, null_placement: :at_end)
+      func = find(:rank)
+      options = func.default_options
+      order =
+        case order.to_sym
+        when :+, :ascending, :increasing
+          :ascending
+        when :-, :descending, :decreasing
+          :descending
         else
-          find(:rank).execute([data], tiebreaker: tie)
+          raise VectorArgumentError, "illegal order option: #{order}"
         end
-      Vector.create(find(:subtract).execute([datum, 1]).value)
+      options.sort_keys = [Arrow::SortKey.resolve('', order)]
+      options.tiebreaker = tie
+      options.null_placement = null_placement
+      Vector.create(func.execute([data], options).value)
     end
 
     # Pick up elements at random.
