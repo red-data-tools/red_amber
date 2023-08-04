@@ -44,7 +44,7 @@ module RedAmber
     #     languages[:Language]
     #
     #     # =>
-    #     #<RedAmber::Vector(:string, size=4):0x000000000010359c>
+    #     #<RedAmber::Vector(:string, size=4, chunked):0x000000000010359c>
     #     ["Ruby", "Python", "R", "Rust"]
     #
     # @overload pick(booleans)

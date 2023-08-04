@@ -39,7 +39,7 @@ module RedAmber
     #     penguins[:bill_length_mm]
     #
     #     # =>
-    #     #<RedAmber::Vector(:double, size=344):0x00000000000104dc>
+    #     #<RedAmber::Vector(:double, size=344, chunked):0x0000000000008f0c>
     #     [39.1, 39.5, 40.3, nil, 36.7, 39.3, 38.9, 39.2, 34.1, 42.0, 37.8, 37.8, 41.1, ... ]
     #
     # @overload [](keys)
@@ -173,7 +173,7 @@ module RedAmber
     #   penguins.v(:bill_length_mm)
     #
     #   # =>
-    #   #<RedAmber::Vector(:double, size=344):0x000000000000f140>
+    #   #<RedAmber::Vector(:double, size=344, chunked):0x0000000000008f0c>
     #   [39.1, 39.5, 40.3, nil, 36.7, 39.3, 38.9, 39.2, 34.1, 42.0, 37.8, 37.8, 41.1, ... ]
     #
     def v(key)
