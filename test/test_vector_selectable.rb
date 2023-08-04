@@ -259,31 +259,42 @@ class VectorTest < Test::Unit::TestCase
   end
 
   sub_test_case '#rank' do
-    float = [0.1, nil, Float::NAN, 0.2, 0.1]
-    string = ['A', nil, 'C', 'B', 'A']
-    chunked = Arrow::ChunkedArray.new([float])
+    float = Vector[1, 0, nil, Float::NAN, 3, 2]
+    string = Vector['A', 'A', nil, nil, 'C', 'B']
+    chunked = Vector.new(Arrow::ChunkedArray.new([float.data]))
 
     test '#rank default' do
-      expect = [0, 4, 3, 2, 1]
-      assert_equal_array expect, Vector.new(float).rank
-      assert_equal_array expect, Vector.new(float).rank(tie: :first)
-      assert_equal_array expect, Vector.new(string).rank
-      assert_equal_array expect, Vector.new(chunked).rank
+      expect = [2, 1, 6, 5, 4, 3]
+      assert_equal_array expect, float.rank
+      assert_equal_array expect, float.rank('+')
+      assert_equal_array expect,
+                         float.rank(:ascending, tie: :first, null_placement: :at_end)
+      assert_equal_array [1, 2, 5, 6, 4, 3], string.rank
+    end
+
+    test '#rank :descending' do
+      assert_equal_array [3, 4, 6, 5, 1, 2], float.rank(:descending)
+      assert_equal_array [3, 4, 6, 5, 1, 2], float.rank('-')
     end
 
     test '#rank tie: :min' do
-      expect = [0, 3, 3, 2, 0]
-      assert_equal_array expect, Vector.new(float).rank(tie: :min)
+      assert_equal_array [1, 1, 5, 5, 4, 3], string.rank(tie: :min)
     end
 
     test '#rank tie: :max' do
-      expect = [1, 4, 4, 2, 1]
-      assert_equal_array expect, Vector.new(float).rank(tie: :max)
+      assert_equal_array [2, 2, 6, 6, 4, 3], string.rank(tie: :max)
     end
 
     test '#rank tie: :dense' do
-      expect = [0, 2, 2, 1, 0]
-      assert_equal_array expect, Vector.new(float).rank(tie: :dense)
+      assert_equal_array [1, 1, 4, 4, 3, 2], string.rank(tie: :dense)
+    end
+
+    test '#rank null_placement: :at_start' do
+      assert_equal_array [4, 3, 1, 2, 6, 5], float.rank(null_placement: :at_start)
+    end
+
+    test '#rank chunkedarray as input' do
+      assert_equal_array [2, 1, 6, 5, 4, 3], chunked.rank
     end
   end
 
