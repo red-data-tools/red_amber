@@ -211,5 +211,69 @@ module RedAmber
         end
       Vector.create(datum.value)
     end
+
+    # Find first occurrence of substring in string Vector.
+    #
+    # @overload find_substring(string, ignore_case: nil)
+    #   Emit the index in bytes of the first occurrence of the given
+    #     literal pattern, or -1 if not found.
+    #
+    #   @param string [String]
+    #     string pattern to match.
+    #   @param ignore_case [boolean]
+    #     switch whether to ignore case. Ignore case if true.
+    #   @return [Vector]
+    #     index Vector of occurences.
+    #     nil inputs emit nil.
+    #   @example Match with string.
+    #     vector = Vector['array', 'Arrow', 'carrot', nil, 'window']
+    #     vector.find_substring('arr')
+    #     # =>
+    #     #<RedAmber::Vector(:boolean, size=5):0x00000000000161e8>
+    #     [0, -1, 1, nil, -1]
+    #
+    # @overload find_substring(regexp, ignore_case: nil)
+    #   Emit the index in bytes of the first occurrence of the given
+    #     regexp pattern, or -1 if not found.
+    #   It calls `find_substring_regex` in Arrow compute function and
+    #   uses re2 library.
+    #
+    #   @param regexp [Regexp]
+    #     regular expression pattern to match. Ruby's Regexp is given and
+    #     it will passed to Arrow's kernel by its source.
+    #   @param ignore_case [boolean]
+    #     switch whether to ignore case. Ignore case if true.
+    #     When `ignore_case` is false, casefolding option in regexp is priortized.
+    #   @return [Vector]
+    #     index Vector of occurences.
+    #     nil inputs emit nil.
+    #   @example Match with regexp.
+    #     vector.find_substring(/arr/i)
+    #     # or vector.find_substring(/arr/, ignore_case: true)
+    #     # =>
+    #     #<RedAmber::Vector(:boolean, size=5):0x000000000001b74c>
+    #     [0, 0, 1, nil, -1]
+    #
+    # @since 0.5.1
+    #
+    def find_substring(pattern, ignore_case: nil)
+      options = Arrow::MatchSubstringOptions.new
+      datum =
+        case pattern
+        when String
+          options.ignore_case = (ignore_case || false)
+          options.pattern = pattern
+          find(:find_substring).execute([data], options)
+        when Regexp
+          options.ignore_case = (pattern.casefold? || ignore_case || false)
+          options.pattern = pattern.source
+          find(:find_substring_regex).execute([data], options)
+        else
+          message =
+            "pattern must be either String or Regexp: #{pattern.inspect}"
+          raise VectorArgumentError, message
+        end
+      Vector.create(datum.value)
+    end
   end
 end
