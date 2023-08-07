@@ -296,6 +296,10 @@ class VectorTest < Test::Unit::TestCase
     test '#rank chunkedarray as input' do
       assert_equal_array [2, 1, 6, 5, 4, 3], chunked.rank
     end
+
+    test '#rank illegal order option' do
+      assert_raise(VectorArgumentError) { float.rank('*') }
+    end
   end
 
   sub_test_case '#sample' do
