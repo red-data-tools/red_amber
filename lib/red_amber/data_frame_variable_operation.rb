@@ -512,8 +512,8 @@ module RedAmber
     #     1 Rui           49          78 (nil)
     #     2 Hinata        28          57 Momotaro
     #
-    def assign(*assigner, &block)
-      assign_update(*assigner, append_to_left: false, &block)
+    def assign(...)
+      assign_update(false, ...)
     end
 
     # Assign new or updated variables (columns) and create an updated DataFrame.
@@ -583,13 +583,13 @@ module RedAmber
     #   @return [DataFrame]
     #     assigned DataFrame.
     #
-    def assign_left(*assigner, &block)
-      assign_update(*assigner, append_to_left: true, &block)
+    def assign_left(...)
+      assign_update(true, ...)
     end
 
     private
 
-    def assign_update(*assigner, append_to_left: false, &block)
+    def assign_update(append_to_left, *assigner, &block)
       if block
         assigner_from_block = instance_eval(&block)
         assigner =
