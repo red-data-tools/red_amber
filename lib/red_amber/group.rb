@@ -203,6 +203,31 @@ module RedAmber
     #
     define_group_aggregation :mean
 
+    # Compute median of values in each group for numeric columns.
+    #
+    # @!method median(*group_keys)
+    #   @macro group_aggregation
+    #   @example
+    #     dataframe.group(:y).median
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000138a8>
+    #       y        median(x)
+    #       <string>  <double>
+    #     0 A              1.5
+    #     1 B              4.0
+    #     2 C              6.0
+    #
+    define_group_aggregation :approximate_median
+    def median(*group_keys)
+      df = approximate_median(*group_keys)
+      df.rename do
+        keys_org = keys.select { _1.start_with?('approximate_') }
+        keys_renamed = keys_org.map { _1.to_s.delete_prefix('approximate_') }
+        keys_org.zip keys_renamed
+      end
+    end
+
     # Compute minimum of values in each group for numeric columns.
     #
     # @!method min(*group_keys)

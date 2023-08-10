@@ -108,6 +108,18 @@ class GroupTest < Test::Unit::TestCase
       assert_equal str, @df.group(:b).mean(%i[i f b]).tdr_str(tally: 0)
     end
 
+    test 'group median' do
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 string
+        # key          type   level data_preview
+        0 :s           string     3 ["A", "B", nil], 1 nil
+        1 :"median(i)" double     2 [0.0, 0.0, 1.0]
+        2 :"median(f)" double     3 [0.0, 1.1, 2.2]
+      STR
+      assert_equal str, @df.group(:s).median.tdr_str(tally: 0)
+    end
+
     test 'group min' do
       str = <<~STR
         RedAmber::DataFrame : 3 x 5 Vectors
