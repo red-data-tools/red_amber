@@ -95,6 +95,17 @@ class GroupTest < Test::Unit::TestCase
       assert_equal str, group.count_all.tdr_str
     end
 
+    test 'group count_uniq' do
+      assert_equal <<~STR, @df.group(:s).count_uniq.tdr_str(tally: 0)
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 string
+        # key              type   level data_preview
+        0 :s               string     3 ["A", "B", nil], 1 nil
+        1 :"count_uniq(i)" int64      2 [2, 2, 1]
+        2 :"count_uniq(f)" int64      2 [2, 2, 1]
+      STR
+    end
+
     test 'group count with multiple keys and aggregation' do
       str = <<~STR
         RedAmber::DataFrame : 6 x 3 Vectors

@@ -191,6 +191,31 @@ module RedAmber
     end
     alias_method :count_all, :group_count
 
+    # Count the unique values in each group.
+    #
+    # @!method count_uniq(*group_keys)
+    # @macro group_aggregation
+    # @example Show counts for each group.
+    #   dataframe.group(:y).count_uniq
+    #
+    #   # =>
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000011ea04>
+    #     y        count_uniq(x) count_uniq(z)
+    #     <string>       <int64>       <int64>
+    #   0 A                    2             2
+    #   1 B                    3             3
+    #   2 C                    1             1
+    #
+    define_group_aggregation :count_distinct
+    def count_uniq(*group_keys)
+      df = count_distinct(*group_keys)
+      df.rename do
+        keys_org = keys.select { _1.start_with?('count_distinct') }
+        keys_renamed = keys_org.map { _1.to_s.gsub('distinct', 'uniq') }
+        keys_org.zip keys_renamed
+      end
+    end
+
     # Compute maximum of values in each group for numeric columns.
     #
     # @!method max(*group_keys)
