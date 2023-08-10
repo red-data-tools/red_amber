@@ -100,6 +100,18 @@ class GroupTest < Test::Unit::TestCase
       assert_equal str, @df.group(:b).min(%i[i f s b]).tdr_str(tally: 0)
     end
 
+    test 'group one' do
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 3 Vectors
+        Vectors : 2 numeric, 1 string
+        # key       type   level data_preview
+        0 :s        string     3 ["A", "B", nil], 1 nil
+        1 :"one(i)" uint8      2 [0, 0, 1]
+        2 :"one(f)" double     3 [0.0, 1.1, 2.2]
+      STR
+      assert_equal str, @df.group(:s).one.tdr_str(tally: 0)
+    end
+
     test 'group product' do
       str = <<~STR
         RedAmber::DataFrame : 3 x 4 Vectors

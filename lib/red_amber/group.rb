@@ -185,6 +185,23 @@ module RedAmber
     #
     define_group_aggregation :min
 
+    # Get one value from each group.
+    #
+    # @!method one(*group_keys)
+    #   @macro group_aggregation
+    #   @example
+    #     dataframe.group(:y).one
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000002885c>
+    #       y         one(x)
+    #       <string> <uint8>
+    #     0 A              1
+    #     1 B              3
+    #     2 C              6
+    #
+    define_group_aggregation :one
+
     # Compute product of values in each group for numeric columns.
     #
     # @!method product(*group_keys)
