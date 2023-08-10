@@ -69,6 +69,32 @@ class GroupTest < Test::Unit::TestCase
       assert_equal str, df.group(:i).count.tdr_str(tally: 0)
     end
 
+    test 'group group_count' do
+      str = <<~STR
+        RedAmber::DataFrame : 4 x 2 Vectors
+        Vectors : 2 numeric
+        # key          type  level data_preview
+        0 :i           uint8     4 [0, 1, 2, nil], 1 nil
+        1 :group_count int64     2 {2=>2, 1=>2}
+      STR
+      assert_equal str, @df.group(:i).group_count.tdr_str
+      assert_equal str, @df.group(:i).count_all.tdr_str
+    end
+
+    test 'group group_count w/o nil' do
+      dataframe = DataFrame.new(x: %w[A A B B B C])
+      group = Group.new(dataframe, :x)
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 1 numeric, 1 string
+        # key          type   level data_preview
+        0 :x           string     3 ["A", "B", "C"]
+        1 :group_count int64      3 [2, 3, 1]
+      STR
+      assert_equal str, group.group_count.tdr_str
+      assert_equal str, group.count_all.tdr_str
+    end
+
     test 'group count with multiple keys and aggregation' do
       str = <<~STR
         RedAmber::DataFrame : 6 x 3 Vectors
@@ -259,28 +285,6 @@ class GroupTest < Test::Unit::TestCase
       ]
       assert_equal expect, @df.group(:i, :s).filters.map(&:to_a)
       assert_true @df.group(:i, :s).filters.all?(Vector)
-    end
-
-    test 'group_count' do
-      assert_equal <<~STR, @df.group(:i).group_count.tdr_str
-        RedAmber::DataFrame : 4 x 2 Vectors
-        Vectors : 2 numeric
-        # key          type  level data_preview
-        0 :i           uint8     4 [0, 1, 2, nil], 1 nil
-        1 :group_count int64     2 {2=>2, 1=>2}
-      STR
-    end
-
-    test 'group_count w/o nil' do
-      dataframe = DataFrame.new(x: %w[A A B B B C])
-      group = Group.new(dataframe, :x)
-      assert_equal <<~STR, group.group_count.tdr_str
-        RedAmber::DataFrame : 3 x 2 Vectors
-        Vectors : 1 numeric, 1 string
-        # key          type   level data_preview
-        0 :x           string     3 ["A", "B", "C"]
-        1 :group_count int64      3 [2, 3, 1]
-      STR
     end
 
     test 'each' do

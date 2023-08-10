@@ -169,6 +169,28 @@ module RedAmber
       end
     end
 
+    # Returns each record group size as a DataFrame.
+    #
+    # @return [DataFrame]
+    #   DataFrame consists of:
+    #   - Group key columns.
+    #   - Result columns by group aggregation.
+    # @example
+    #   penguins.group(:species).group_count
+    #
+    #   # =>
+    #   #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003a70>
+    #     species   group_count
+    #     <string>      <uint8>
+    #   0 Adelie            152
+    #   1 Chinstrap          68
+    #   2 Gentoo            124
+    #
+    def group_count
+      DataFrame.create(group_table)
+    end
+    alias_method :count_all, :group_count
+
     # Compute maximum of values in each group for numeric columns.
     #
     # @!method max(*group_keys)
@@ -389,27 +411,6 @@ module RedAmber
         yield @dataframe.filter(filter)
       end
       @filters.size
-    end
-
-    # Returns each record group size as a DataFrame.
-    #
-    # @return [DataFrame]
-    #   DataFrame consists of:
-    #   - Group key columns.
-    #   - Result columns by group aggregation.
-    # @example
-    #   penguins.group(:species).group_count
-    #
-    #   # =>
-    #   #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003a70>
-    #     species   group_count
-    #     <string>      <uint8>
-    #   0 Adelie            152
-    #   1 Chinstrap          68
-    #   2 Gentoo            124
-    #
-    def group_count
-      DataFrame.create(group_table)
     end
 
     # String representation of self.
