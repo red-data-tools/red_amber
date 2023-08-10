@@ -26,12 +26,7 @@ module RedAmber
       private
 
       # @!macro [attach] define_group_aggregation
-      #   @!method $1(*summary_keys)
-      #     Group aggregation function `$1`.
-      #     @param summary_keys [Array<Symbol, String>]
-      #       summary keys.
-      #     @return [DataFrame]
-      #       aggregated DataFrame
+      #   Returns aggregated DataFrame.
       #
       def define_group_aggregation(function)
         define_method(function) do |*summary_keys|
@@ -55,7 +50,7 @@ module RedAmber
     # @param group_keys [Array<Symbol, String>]
     #   keys for grouping.
     # @return [Group]
-    #   Group object.
+    #   Group object. It inspects grouped columns and its count.
     # @example
     #   Group.new(penguins, :species)
     #
@@ -79,13 +74,59 @@ module RedAmber
       @group = @dataframe.table.group(*@group_keys)
     end
 
-    define_group_aggregation(:count)
+    # @!macro group_aggregation
+    #   @param group_keys [Array<Symbol, String>]
+    #     keys for grouping.
+    #   @return [DataFrame]
+    #     aggregated DataFrame
+
+    # Count the number of non-nil values in each group.
+    #   If counts are the same (and do not include NaN or nil),
+    #   columns for counts are unified.
+    #
+    # @!method max(*group_keys)
+    # @macro group_aggregation
+    # @example Show counts for each group.
+    #   dataframe
+    #
+    #   # =>
+    #   #<RedAmber::DataFrame : 6 x 3 Vectors, 0x00000000000230dc>
+    #           x y        z
+    #     <uint8> <string> <boolean>
+    #   0       1 A        false
+    #   1       2 A        true
+    #   2       3 B        false
+    #   3       4 B        (nil)
+    #   4       5 B        true
+    #   5       6 C        false
+    #
+    #   dataframe.group(:y).count
+    #
+    #   # =>
+    #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000011ea04>
+    #     y        count(x) count(z)
+    #     <string>  <int64>  <int64>
+    #   0 A               2        2
+    #   1 B               3        2
+    #   2 C               1        1
+    #
+    #   dataframe.group(:z).count
+    #   # same as dataframe.group(:z).count(:x, :y)
+    #
+    #   =>
+    #   #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000122834>
+    #     z           count
+    #     <boolean> <int64>
+    #   0 false           3
+    #   1 true            2
+    #   2 (nil)           1
+    #
+    define_group_aggregation :count
     alias_method :__count, :count
     private :__count
 
-    def count(*summary_keys)
-      df = __count(summary_keys)
-      # if counts are the same (and do not include NaN or nil), aggregate count columns.
+    def count(*group_keys)
+      df = __count(group_keys)
       if df.pick(@group_keys.size..).to_h.values.uniq.size == 1
         df.pick(0..@group_keys.size).rename { [keys[-1], :count] }
       else
@@ -93,19 +134,124 @@ module RedAmber
       end
     end
 
-    define_group_aggregation(:sum)
+    # Compute maximum of values in each group for numeric columns.
+    #
+    # @!method max(*group_keys)
+    #   @macro group_aggregation
+    #   @example
+    #     dataframe.group(:y).max
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000014ae74>
+    #       y         max(x)
+    #       <string> <uint8>
+    #     0 A              2
+    #     1 B              5
+    #     2 C              6
+    #
+    define_group_aggregation :max
 
-    define_group_aggregation(:product)
+    # Compute mean of values in each group for numeric columns.
+    #
+    # @!method mean(*group_keys)
+    #   @macro group_aggregation
+    #   @example
+    #     dataframe.group(:y).mean
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000138a8>
+    #       y         mean(x)
+    #       <string> <double>
+    #     0 A             1.5
+    #     1 B             4.0
+    #     2 C             6.0
+    #
+    define_group_aggregation :mean
 
-    define_group_aggregation(:mean)
+    # Compute minimum of values in each group for numeric columns.
+    #
+    # @!method min(*group_keys)
+    #   @macro group_aggregation
+    #   @example
+    #     dataframe.group(:y).min
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000018f38>
+    #       y         min(x)
+    #       <string> <uint8>
+    #     0 A              1
+    #     1 B              3
+    #     2 C              6
+    #
+    define_group_aggregation :min
 
-    define_group_aggregation(:min)
+    # Compute product of values in each group for numeric columns.
+    #
+    # @!method product(*group_keys)
+    #   @macro group_aggregation
+    #   @example
+    #     dataframe.group(:y).product
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000021a84>
+    #       y        product(x)
+    #       <string>   <uint64>
+    #     0 A                 2
+    #     1 B                60
+    #     2 C                 6
+    #
+    define_group_aggregation :product
 
-    define_group_aggregation(:max)
+    # Compute standard deviation of values in each group for numeric columns.
+    #
+    # @!method stddev(*group_keys)
+    #   @macro group_aggregation
+    #   @example
+    #     dataframe.group(:y).stddev
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000002be6c>
+    #       y        stddev(x)
+    #       <string>  <double>
+    #     0 A              0.5
+    #     1 B            0.082
+    #     2 C              0.0
+    #
+    define_group_aggregation :stddev
 
-    define_group_aggregation(:stddev)
+    # Compute sum of values in each group for numeric columns.
+    #
+    # @!method sum(*group_keys)
+    #   @macro group_aggregation
+    #   @example
+    #     dataframe.group(:y).sum
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000032a14>
+    #       y          sum(x)
+    #       <string> <uint64>
+    #     0 A               3
+    #     1 B              12
+    #     2 C               6
+    #
+    define_group_aggregation :sum
 
-    define_group_aggregation(:variance)
+    # Compute variance of values in each group for numeric columns.
+    #
+    # @!method variance(*group_keys)
+    #   @macro group_aggregation
+    #   @example
+    #     dataframe.group(:y).variance
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000003b1dc>
+    #       y        variance(x)
+    #       <string>    <double>
+    #     0 A               0.25
+    #     1 B              0.067
+    #     2 C                0.0
+    #
+    define_group_aggregation :variance
 
     # Returns Array of boolean filters to select each records in the Group.
     #
