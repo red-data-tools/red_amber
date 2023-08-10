@@ -80,6 +80,41 @@ module RedAmber
     #   @return [DataFrame]
     #     aggregated DataFrame
 
+    # Whether all elements in each group evaluate to true.
+    #
+    # @!method all(*group_keys)
+    #   @macro group_aggregation
+    #   @example For boolean columns by default.
+    #
+    #     dataframe.group(:y).all
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000fc08>
+    #       y        all(z)
+    #       <string> <boolean>
+    #     0 A        false
+    #     1 B        false
+    #     2 C        false
+    #
+    define_group_aggregation :all
+
+    # Whether any elements in each group evaluate to true.
+    #
+    # @!method any(*group_keys)
+    #   @macro group_aggregation
+    #   @example For boolean columns by default.
+    #     dataframe.group(:y).any
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x00000000000117ec>
+    #       y        any(z)
+    #       <string> <boolean>
+    #     0 A        true
+    #     1 B        true
+    #     2 C        false
+    #
+    define_group_aggregation :any
+
     # Count the number of non-nil values in each group.
     #   If counts are the same (and do not include NaN or nil),
     #   columns for counts are unified.

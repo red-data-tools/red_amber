@@ -21,6 +21,28 @@ class GroupTest < Test::Unit::TestCase
       )
     end
 
+    test 'group all' do
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 1 string, 1 boolean
+        # key       type    level data_preview
+        0 :s        string      3 ["A", "B", nil], 1 nil
+        1 :"all(b)" boolean     2 [false, false, true]
+      STR
+      assert_equal str, @df.group(:s).all.tdr_str(tally: 0)
+    end
+
+    test 'group any' do
+      str = <<~STR
+        RedAmber::DataFrame : 3 x 2 Vectors
+        Vectors : 1 string, 1 boolean
+        # key       type    level data_preview
+        0 :s        string      3 ["A", "B", nil], 1 nil
+        1 :"any(b)" boolean     1 [true, true, true]
+      STR
+      assert_equal str, @df.group(:s).any.tdr_str(tally: 0)
+    end
+
     test 'group count' do
       str = <<~STR
         RedAmber::DataFrame : 4 x 5 Vectors
@@ -35,7 +57,7 @@ class GroupTest < Test::Unit::TestCase
       assert_equal str, @df.group(:i).count(%i[i f s b]).tdr_str(tally: 0)
     end
 
-    test 'group count (aggregation)' do
+    test 'group count unification' do
       str = <<~STR
         RedAmber::DataFrame : 4 x 2 Vectors
         Vectors : 2 numeric
@@ -47,7 +69,7 @@ class GroupTest < Test::Unit::TestCase
       assert_equal str, df.group(:i).count.tdr_str(tally: 0)
     end
 
-    test 'group with multiple keys and aggregation' do
+    test 'group count with multiple keys and aggregation' do
       str = <<~STR
         RedAmber::DataFrame : 6 x 3 Vectors
         Vectors : 2 numeric, 1 string
