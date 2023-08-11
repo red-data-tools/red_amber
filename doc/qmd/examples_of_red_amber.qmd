@@ -126,7 +126,7 @@ require 'arrow-numo-narray'
 DataFrame.new(numo: Numo::DFloat.new(3).rand)
 ```
 
-Another example by Numo::NArray is [#73. Introduce columns from numo/narray](#73.-Introduce-columns-from-numo/narray).
+Another example by Numo::NArray is [#77. Introduce columns from numo/narray](#77.-Introduce-columns-from-numo/narray).
 
 ## 4. Load
 
@@ -268,7 +268,6 @@ It is similar to dplyr's (or Polars's) `glimpse()` so we have an alias `#glimpse
 
 ```{ruby}
 #| tags: []
-# use the same dataframe as #7
 df.tdr
 ```
 
@@ -386,7 +385,7 @@ penguins.type_classes
 
 ## 14. Indices
 
-Another example of `indices` is in [62. Custom index](#62.-Custom-index).
+Another example of `indices` is in [66. Custom index](#66.-Custom-index).
 
 ```{ruby}
 #| tags: []
@@ -751,7 +750,7 @@ df.v(:x)
 
 ## 28. Slice
 
-Another example of `slice` is [#66. Row index label by slice_by](#66.-Row-index-label-by-slice_by).
+Another example of `slice` is [#70. Row index label by slice_by](#70.-Row-index-label-by-slice_by).
 
 `slice` selects rows (records) to create a subset of a DataFrame.
 
@@ -830,7 +829,7 @@ Slice and reject rows (observations) to create a remainer DataFrame.
 
 ```{ruby}
 #| tags: []
-# returns 6th to 339th obs. Remainer of 1st example of #30
+# returns 6th to 339th obs. Remainer of penguins.slice(0...5, -5..-1)
 penguins.remove(0...5, -5..-1)
 ```
 
@@ -949,7 +948,7 @@ Symbol key and String key are distinguished.
 
 ## 34. Assign
 
-Another example of `assign` is [64. Assign revised](#64.-Assign-revised), [#65. Variations of assign](#65.-Variations-of-assign) .
+Another example of `assign` is [68. Assign revised](#68.-Assign-revised), [#69. Variations of assign](#69.-Variations-of-assign) .
 
 Assign new or updated columns (variables) and create a updated DataFrame.
 
@@ -1410,7 +1409,7 @@ df = DataFrame.new("": [1, 2], unnamed1: [3, 4])
 
 ## 49. Grouping
 
-`DataFrame#group` takes group_key as an argument, and creates `Group` class.
+`DataFrame#group` takes group_keys as arguments, and creates `Group` class.
 
 Group class inspects counts of each unique elements.
 
@@ -1459,7 +1458,121 @@ penguins.group(:species) { [count(:species), mean(:body_mass_g)] }
 group.summarize { [count(:species), mean] }
 ```
 
-## 51. Vector#shift
+## 51. Group#count family
+
+`Group#count` counts the number of non-nil values in each group.
+If counts are the same (and do not include NaN or nil), columns for counts are unified.
+
+```{ruby}
+dataframe = DataFrame.new(
+  x: [1..6],
+  y: %w[A A B B B C],
+  z: [false, true, false, nil, true, false])
+```
+
+Non-nil counts in column y and z are different.
+
+```{ruby}
+dataframe.group(:y).count
+```
+
+Non-nil counts in column x and y are same, so only one column is emitted.
+
+```{ruby}
+dataframe.group(:z).count
+```
+
+`Group#count_all` returns each record group size as a DataFrame. `Group#group_count` is an alias.
+
+```{ruby}
+dataframe.group(:y).count_all
+```
+
+`Group#count_uniq` count the unique values in each group and return as a DataFrame. `Group#count_distinct` is an alias.
+
+```{ruby}
+dataframe.group(:y).count_uniq
+```
+
+## 52. Group#one
+
+`Group#one` gets one value from each group.
+
+```{ruby}
+dataframe.group(:y).one
+```
+
+## 53. Group aggregation functions
+
+`Group#all` emits aggragated booleans Whether all elements in each group evaluate to true.
+
+```{ruby}
+dataframe.group(:y).all
+```
+
+`Group#any` emits aggragated booleans Whether any elements in each group evaluate to true.
+
+```{ruby}
+dataframe.group(:y).any
+```
+
+`Group#max` computes maximum of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).max
+```
+
+`Group#mean` computes mean of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).mean
+```
+
+`Group#median` computes median of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).median
+```
+
+`Group#min` computes minimum of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).min
+```
+
+`Group#product` computes product of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).product
+```
+
+`Group#stddev` computes standrad deviation of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).stddev
+```
+
+`Group#sum` computes sum of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).sum
+```
+
+`Group#variance` computes variance of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).variance
+```
+
+## 54. Group#grouped_frame
+
+`Group#grouped_frame` returns grouped DataFrame only for group keys. The alias is `#none`
+
+```{ruby}
+dataframe.group(:y).grouped_frame
+```
+
+## 55. Vector#shift
 
 `Vector#shift(amount = 1, fill: nil)`
 
@@ -1483,7 +1596,7 @@ vector.shift(-2)
 vector.shift(fill: Float::NAN)
 ```
 
-## 52. From the Pandas cookbook (if-then)
+## 56. From the Pandas cookbook - if-then
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#if-then
 
@@ -1525,7 +1638,7 @@ df.assign do
 end
 ```
 
-## 53. From the Pandas cookbook (Splitting)
+## 57. From the Pandas cookbook - Splitting
 Split a frame with a boolean criterion
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#splitting
@@ -1568,7 +1681,7 @@ df.remove(df[:AAA] <= 5)
 # df.slice(df[:AAA] > 5) # do the same thing
 ```
 
-## 54. From the Pandas cookbook (Building criteria)
+## 58. From the Pandas cookbook - Building criteria
 Split a frame with a boolean criterion
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#building-criteria
@@ -1692,7 +1805,7 @@ crit3 = df[:CCC] >= -40.0
 df[crit1 & crit2 & crit3]
 ```
 
-## 55. From the Pandas cookbook (Dataframes)
+## 59. From the Pandas cookbook - Dataframes
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#dataframes
 
@@ -1832,7 +1945,7 @@ df[!((df[:AAA] <= 6) & df.indices.map { |i| [0, 2, 4].include? i })]
 
 If you have `nil` in your data, consider #primitive_invert for consistent result. See example #26.
 
-## 56. From the Pandas cookbook (New columns)
+## 60. From the Pandas cookbook - New columns
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#new-columns
 
@@ -1941,7 +2054,7 @@ df.group(:AAA).min
 # Add `.rename { [keys[-1], :BBB] }` if you want.
 ```
 
-## 57. Summary/describe
+## 61. Summary/describe
 
 ```{ruby}
 #| tags: []
@@ -1957,7 +2070,7 @@ If you need a variables in row, use `transpose`. (Since 0.2.0)
 penguins.summary.transpose(name: :stats)
 ```
 
-## 58. Quantile/Quantiles
+## 62. Quantile/Quantiles
 
 `Vector#quantile(prob)` returns quantile at probability `prob`.
 
@@ -1975,7 +2088,7 @@ penguins[:bill_depth_mm].quantile # default　is prob = 0.5
 penguins[:bill_depth_mm].quantiles([0.05, 0.95])
 ```
 
-## 59. Transpose
+## 63. Transpose
 
 `DataFrame#transpose` creates transposed DataFrame for wide type dataframe.
 
@@ -2014,7 +2127,7 @@ df = import_cars.pick(1..2, 0, 3..)
 df.transpose(key: :Year)
 ```
 
-## 60. To_long
+## 64. To_long
 
 `DataFrame#to_long(*keep_keys)` reshapes wide DataFrame to the long DataFrame.
 
@@ -2041,7 +2154,7 @@ import_cars.to_long(:Year)
 import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
 ```
 
-## 61. To_wide
+## 65. To_wide
 
 `DataFrame#to_wide(*keep_keys)` reshapes long DataFrame to a wide DataFrame.
 
@@ -2061,7 +2174,7 @@ import_cars.to_long(:Year).to_wide(name: :NAME, value: :VALUE)
 # is also OK
 ```
 
-## 62. Custom index
+## 66. Custom index
 
 Another example of `indices` is [14. Indices](#14.-Indices).
 
@@ -2087,7 +2200,7 @@ You can put the first value which accepts `#succ` method.
 df.indices("a")
 ```
 
-## 63. Method missing
+## 67. Method missing
 
 `RedAmber::DataFrame` has `#method_missing` to enable to call key names as methods.
 
@@ -2116,9 +2229,9 @@ df.x # method
 df.x.sum
 ```
 
-## 64. Assign revised
+## 68. Assign revised
 
-Another example of `assign` is [#34. Assign](#34.-Assign), [#65. Variations of assign](#65.-Variations-of-assign) .
+Another example of `assign` is [#34. Assign](#34.-Assign), [#69. Variations of assign](#69.-Variations-of-assign) .
 
 ```{ruby}
 #| tags: []
@@ -2140,9 +2253,9 @@ df.assign(:y) { x / 10.0 }
 df.assign(:y, :z) { [x * 10, x / 10.0] }
 ```
 
-## 65. Variations of assign
+## 69. Variations of assign
 
-Another example of `assign` is [#34. Assign](#34.-Assign), [#64. Assign revised](#64.-Assign-revised) .
+Another example of `assign` is [#34. Assign](#34.-Assign), [#68. Assign revised](#68.-Assign-revised) .
 
 ```{ruby}
 #| tags: []
@@ -2187,7 +2300,7 @@ df.assign { [[:y, df[:x] * 10], [:z, df[:x] / 10.0]] }
 #df.assign(:y, :z) { [x * 10, x / 10.0] }
 ```
 
-## 66. Row index label by slice_by
+## 70. Row index label by slice_by
 
 Another example of `slice` is [#28. Slice](#28.-Slice).
 
@@ -2218,7 +2331,7 @@ If the option `keep_key:` set to `true`, index label column is preserved.
 df.slice_by(:label, keep_key: true) { "b".."d" }
 ```
 
-## 67. Simpson's paradox in COVID-19 data
+## 71. Simpson's paradox in COVID-19 data
 
 https://www.rdocumentation.org/packages/openintro/versions/2.3.0/topics/simpsons_paradox_covid
 
@@ -2303,7 +2416,7 @@ df.group(:vaccine_status, :age_group).count.to_wide(name: :age_group, value: :co
 df.group(:outcome, :age_group).count.to_wide(name: :age_group, value: :count)
 ```
 
-## 68. Clean up dirty data
+## 72. Clean up dirty data
 
 ```{ruby}
 #| tags: []
@@ -2365,7 +2478,7 @@ We got clean data, then compute BMI as a new column.
 df.assign(:BMI) { (weight / height ** 2 * 10000).round(n_digits: 1) }
 ```
 
-## 69. From the Pandas cookbook - Multiindexing
+## 73. From the Pandas cookbook - Multiindexing
 
 (Updated on v0.3.0)
 https://pandas.pydata.org/docs/user_guide/cookbook.html#multiindexing
@@ -2444,7 +2557,7 @@ row
 ```
 
 (Until 0.2.3)
-This is an example before `Vector#split` has introduced. See [84. Vector#split](#84.-Vector#split) .
+This is an example before `Vector#split_*` has introduced. See [88. Vector#split_columns](#88.-Vector#split_to_columns) .
 
 ```{ruby}
 #| tags: []
@@ -2513,7 +2626,7 @@ df.to_long(:row, name: :Sample)
   .to_wide(name: :xy, value: :VALUE)
 ```
 
-## 70. From the Pandas cookbook (Arithmetic)
+## 74. From the Pandas cookbook - Arithmetic
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#arithmetic
 
@@ -2593,7 +2706,7 @@ df = RedAmber::DataFrame.new(MyData: [11, 22, 33, 44, 55])
                         .assign_left(:label1, :label2) { coords }
 ```
 
-## 71. From the Pandas cookbook (Slicing)
+## 75. From the Pandas cookbook - Slicing
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#slicing
 
@@ -2787,7 +2900,7 @@ df.slice(df[:Course] == "Math")
   }
 ```
 
-## 72. Vector#map
+## 76. Vector#map
 
 `Vector#map` method accepts a block and return yielded results from the block in a Vector.
 
@@ -2815,7 +2928,7 @@ Alias for `#map` is `#collect`
 
 Similar method is `Vector#filter/#select`.
 
-## 73. Introduce columns from numo/narray
+## 77. Introduce columns from numo/narray
 
 (Until 0.2.2 w/Arrow 9.0.0) We couldn't construct the DataFrame directly from Numo/NArray, but following trick enables.
 
@@ -2869,7 +2982,7 @@ DataFrame.new(
 )
 ```
 
-## 74. Join (mutating joins)
+## 78. Join (mutating joins)
 
 (Since 0.2.3)
 
@@ -2931,7 +3044,7 @@ Left join will join matching values to self from other.
 df.left_join(other)
 ```
 
-## 75. Join (filtering joins)
+## 79. Join (filtering joins)
 
 (Since 0.2.3)
 
@@ -2949,7 +3062,7 @@ Anti join will return records of self that do not have a match in other.
 df.anti_join(other)
 ```
 
-## 76. Partial joins
+## 80. Partial joins
 
 (Since 0.2.3)
 
@@ -2993,7 +3106,7 @@ df2.inner_join(other2, :KEY1)
 df2.inner_join(other2, :KEY1, suffix: '_')
 ```
 
-## 77. Order of record in join
+## 81. Order of record in join
 
 Order of records is not guaranteed to be preserved before or after join. This is a similar property to RDB. Records behave like a set.
 
@@ -3016,7 +3129,7 @@ other2
 df2.full_join(other2, :KEY2)
 ```
 
-## 78. Set operations
+## 82. Set operations
 
 Keys in self and other must be same in set operations.
 
@@ -3061,7 +3174,7 @@ It has an alias `#setdiff`.
 df.difference(other)
 ```
 
-## 79. Join (big method)
+## 83. Join (big method)
 
 Undocumented big method `join` supports all mutating joins, filtering joins and set operations.
 
@@ -3105,7 +3218,8 @@ df.join(other, :KEY, type: :inner)
 
 (Since 0.5.0) `#join` will not force ordering of original column by default.
 
-## 80. Force order for #join
+## 84. Force order for #join
+
 We can use `:force_order` option to ensure unique order for `join` families.
 This option is true by default in `#inner_join`, `#full_join`, `#left_join`, `#right_join`, `#semi_join` and `#anti_join`.
 It will append index to the source and sort after joining. It will cause some degradation in performance.
@@ -3151,7 +3265,7 @@ df2.full_join(right2, { left: :KEY2, right: 'KEY2' })
 df2.full_join(right2, { left: :KEY2, right: 'KEY2' }, force_order: false)
 ```
 
-## 81. Binding DataFrames in vertical (concatenate)
+## 85. Binding DataFrames in vertical (concatenate)
 
 Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
 
@@ -3173,7 +3287,7 @@ other = DataFrame.new(x: [3, 4], y: ['C', 'D'])
 df.concatenate(other)
 ```
 
-## 82. Binding DataFrames in lateral (merge)
+## 86. Binding DataFrames in lateral (merge)
 
 Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
 
@@ -3194,7 +3308,7 @@ other = DataFrame.new(a: ['A', 'B'], b: ['C', 'D'])
 df.merge(other)
 ```
 
-## 83. Join - larger example by nycflight13
+## 87. Join - larger example by nycflight13
 
 (Since 0.2.3)
 
@@ -3225,9 +3339,9 @@ flights.inner_join(airlines, :carrier)
 # flights.inner_join(airlines) # natural join (same result)
 ```
 
-## 84. Vector#split_to_columns
+## 88. Vector#split_to_columns
 
-Another example using in the DataFrame operation is in [## 69. From the Pandas cookbook (Multiindexing)](#69.-From-the-Pandas-cookbook---Multiindexing).
+Another example using in the DataFrame operation is in [73. From the Pandas cookbook - Multiindexing](#73.-From-the-Pandas-cookbook---Multiindexing).
 
 `self` must be a String type Vector.
 
@@ -3259,7 +3373,7 @@ Vector.new(nil, 'c d', 'e f')
       .split_to_columns
 ```
 
-## 85. Vector#split_to_rows
+## 89. Vector#split_to_rows
 
 `#split_to_rows` will separate strings and flatten into row.
 
@@ -3275,7 +3389,7 @@ v = Vector.new(['a b', 'c d', 'e f'])
 v.split_to_rows
 ```
 
-## 86. Vector#merge
+## 90. Vector#merge
 (Since 0.3.0)
 
 `Vector#merge(other)` merges `self` and `other` if they are String Vector.
@@ -3301,7 +3415,7 @@ Option `:sep` is used to concatenating elements. Its default value is ' '.
 vector.merge('x', sep: '')
 ```
 
-## 87. Separate a variable (column) in a DataFrame
+## 91. Separate a variable (column) in a DataFrame
 (Since 0.3.0)
 
 R's separate operation.
@@ -3360,7 +3474,7 @@ df = DataFrame.new(id: 1..3, yearmonth: %w[202209 202210 202211])
   .assign(:year, :month) { yearmonth.split_to_columns(/(?=..$)/) }
 ```
 
-## 88. Unite variables (columns) in a DataFrame
+## 92. Unite variables (columns) in a DataFrame
 (Since 0.3.0)
 
 R's unite operation.
@@ -3382,7 +3496,7 @@ df.assign(:yearmonth) { year.merge(month, sep: '') }
 DataFrame.new(id: 1..3, yearmonth: df.year.merge(df.month, sep: ''))
 ```
 
-## 89. Separate variable and lengthen into several rows.
+## 93. Separate variable and lengthen into several rows.
 (Since 0.3.0)
 
 R's separate_rows operation.
@@ -3457,7 +3571,7 @@ df.assign(:y, :y1, :y2) { v(:y).split_to_columns(',') }
   .drop_nil
 ```
 
-## 90. Vector#propagate
+## 94. Vector#propagate
 
 Spread the return value of an aggregate function as if it is a element-wise function.
 
@@ -3478,7 +3592,7 @@ Block is also available.
 vec.propagate { |v| v.mean.round }
 ```
 
-## 91. DataFrame#propagate
+## 95. DataFrame#propagate
 
 Returns a Vector such that all elements have value `scalar` and have same size as self.
 
@@ -3501,7 +3615,7 @@ With a block.
 df.assign(:range) { propagate { x.max - x.min } }
 ```
 
-## 92. Vector#sort / #sort_indices
+## 96. Vector#sort / #sort_indices
 
 `#sort` will arrange values in Vector.
 
@@ -3527,7 +3641,7 @@ vector.sort(:-)
 # same as vector.sort(:descending)
 ```
 
-## 93. Vector#rank
+## 97. Vector#rank
 
 Returns 1-based numerical rank of self.
 
@@ -3601,7 +3715,7 @@ string.rank(tie: :max)
 string.rank(tie: :dense)
 ```
 
-## 94. Vector#sample
+## 98. Vector#sample
 Pick up elements at random.
 
 (Since 0.4.0)
@@ -3681,7 +3795,7 @@ sampled = v.sample(2.0)
 sampled.tally
 ```
 
-## 95. DataFrame#sample/shuffle
+## 99. DataFrame#sample/shuffle
 
 (Since 0.5.0)
 
@@ -3699,7 +3813,7 @@ Returns a DataFrame with shuffled rows.
 penguins.shuffle
 ```
 
-## 96. Vector#concatenate
+## 100. Vector#concatenate
 
 Concatenate other array-like to self.
 
@@ -3729,7 +3843,7 @@ integer = Vector.new(1, 2)
 integer.concatenate(["A", "B"])
 ```
 
-## 97. Vector#resolve
+## 101. Vector#resolve
 
 Return other as a Vector which is same data type as self.
 
@@ -3763,7 +3877,7 @@ Not a uint8 Vector;
 vector.resolve([1, 2])
 ```
 
-## 98. Vector#cast
+## 102. Vector#cast
 
 Cast self to `type`.
 
@@ -3785,7 +3899,7 @@ vector.cast(:double)
 vector.cast(:string)
 ```
 
-## 99. Vector#one
+## 103. Vector#one
 
 Get a non-nil element in self. If all elements are nil, return nil.
 
@@ -3797,7 +3911,7 @@ vector = Vector.new([nil, 1, 3])
 vector.one
 ```
 
-## 100. SubFrames
+## 104. SubFrames
 
 `SubFrames` is a new concept of DataFrame collection. It represents ordered subsets of a DataFrame collected by some rules. It includes both grouping and windowing concepts in a unified manner, and also covers broader cases more flexibly.
 
@@ -3905,7 +4019,7 @@ large = !small
 small_large = SubFrames.new(dataframe) { [small, large] }
 ```
 
-## 101. SubFrames#concatenate
+## 105. SubFrames#concatenate
 
 `SubFrames#concatenate` (or alias `#concat`) will concatenate SubFrames to create a DataFrame.
 
@@ -3916,7 +4030,7 @@ small_large = SubFrames.new(dataframe) { [small, large] }
 sf.concatenate
 ```
 
-## 102. SubFrames.by_group
+## 106. SubFrames.by_group
 
 Create SubFrames by Group object.
 
@@ -3933,7 +4047,7 @@ group = Group.new(dataframe, [:y])
 sf = SubFrames.by_group(group)
 ```
 
-## 103. SubFrames.by_indices/.by_filters
+## 107. SubFrames.by_indices/.by_filters
 
 `SubFrames.by_indices(dataframe, subset_indices)` creates a new SubFrames object from a DataFrame and an array of indices.#
 
@@ -3948,7 +4062,7 @@ SubFrames.by_indices(dataframe, [[0, 2, 4], [1, 3, 5]])
 SubFrames.by_filters(dataframe, [[true, false, true, false, nil, false], [true, true, false, false, nil, false]])
 ```
 
-## 104. SubFrames.by_dataframes
+## 108. SubFrames.by_dataframes
 
 `SubFrames.by_dataframes(dataframes)` creates a new SubFrames from an Array of DataFrames.
 
@@ -3963,7 +4077,7 @@ dataframes = [
 SubFrames.by_dataframes(dataframes)
 ```
 
-## 105. DataFrame#sub_by_value
+## 109. DataFrame#sub_by_value
 
 `sub_by_value(*keys)` make subframes by value. It is corresponding to Group processing.
 
@@ -3976,7 +4090,7 @@ Create SubFrames from keys and group by values in columns specified by the key.
 dataframe.sub_by_value(:y)
 ```
 
-## 106. DataFrame#sub_by_window
+## 110. DataFrame#sub_by_window
 
 Create SubFrames by window in `size` rolling `from` by `step`.
 
@@ -3989,7 +4103,7 @@ Default values is `from: 0`, `size: nil` and `step: 1`.
 dataframe.sub_by_window(size: 4, step: 2)
 ```
 
-## 107. DataFrame#sub_by_enum
+## 111. DataFrame#sub_by_enum
 
 Create SubFrames by Grouping/Windowing by posion. The position is specified by `Array`'s enumerator method such as `each_slice` or `each_cons`.
 
@@ -4009,7 +4123,7 @@ Create a SubFrames object for each consecutive 3 rows.
 dataframe.sub_by_enum(:each_cons, 4)
 ```
 
-## 108. DataFrame#sub_by_kernel
+## 112. DataFrame#sub_by_kernel
 
 Create SubFrames by windowing with a kernel and step.
 Kernel is a boolean Array and it behaves like a masked window.
@@ -4022,7 +4136,7 @@ kernel = [true, false, false, true]
 dataframe.sub_by_kernel(kernel, step: 2)
 ```
 
-## 109. DataFrame#build_subframes
+## 113. DataFrame#build_subframes
 
 Generic builder of sub-dataframe from self.
 
@@ -4043,7 +4157,7 @@ dataframe.build_subframes do |df|
 end
 ```
 
-## 110. SubFrames#aggregate
+## 114. SubFrames#aggregate
 
 Aggregate SubFrames to create a DataFrame. There are 4 APIs in this method.
 
@@ -4093,7 +4207,7 @@ Aggregate SubFrames for first values of the columns of  `group_keys` and the agg
 sf.aggregate(:y, { x: :sum, z: :count })
 ```
 
-## 111. SubFrames#map/#assign
+## 115. SubFrames#map/#assign
 
 `#map` Returns a SubFrames containing DataFrames returned by the block. It has an alias `collect`.
 
@@ -4138,7 +4252,7 @@ If you need an Array of DataFrames (not a SubFrames), use `each.map` instead.
 sf.each.map { |df| df.assign(x_plus1: df[:x] + 1) }
 ```
 
-## 112. SubFrames#select/#reject
+## 116. SubFrames#select/#reject
 
 `#select` returns a SubFrames containing DataFrames selected by the block.#
 
@@ -4154,7 +4268,7 @@ sf.select { |df| df[:z].any? }
 sf.reject { |df| df[:z].any? }
 ```
 
-## 113. SubFrames#filter_map
+## 117. SubFrames#filter_map
 
 It returns a SubFrames containing truthy DataFrames returned by the block.
 
@@ -4168,7 +4282,7 @@ sf.filter_map do |df|
 end
 ```
 
-## 114. Vector#modulo
+## 118. Vector#modulo
 
 (Since 0.4.1)
 
@@ -4187,7 +4301,7 @@ vector % 3
 vector.modulo(-2)
 ```
 
-## 115. Vector#mode
+## 119. Vector#mode
 
 Compute the 1 most common values and their respective occurence counts.
 
@@ -4208,7 +4322,7 @@ Vector[0, 1, 1, 2, nil].mode
 Vector[1, 0/0.0, -1/0.0, 1/0.0, nil].mode
 ```
 
-## 116. Vector#end_with/start_with
+## 120. Vector#end_with/start_with
 
 Check if elements in self ends/starts with a literal pattern.
 
@@ -4231,7 +4345,7 @@ v.end_with('ow')
 v.start_with('arr')
 ```
 
-## 117. Vector#match_substring
+## 121. Vector#match_substring
 
 For each string in self, emit true if it contains a given pattern.
 
@@ -4263,7 +4377,7 @@ You can ignore case if you use regexp with `i` option, or `igfnore_case: true`
 v.match_substring(/arr/i)  # same as v.find_substring(/arr/, ignore_case: true)
 ```
 
-## 118. Vector#match_like
+## 122. Vector#match_like
 
 Match elements of self against SQL-style LIKE pattern. The pattern matches a given pattern at any position.
 
@@ -4292,7 +4406,7 @@ You can ignore case if you use the option `igfnore_case: true`.
 v.match_like('arr%', ignore_case: true)
 ```
 
-## 119. Vector#find_substring
+## 123. Vector#find_substring
 
 Find first occurrence of substring in string Vector.
 
@@ -4324,7 +4438,7 @@ You can ignore case if you use regexp with `i` option, or `igfnore_case: true`
 v.find_substring(/arr/i)  # same as v.find_substring(/arr/, ignore_case: true)
 ```
 
-## 120. Vector#count_substring
+## 124. Vector#count_substring
 
 For each string in self, count occuerences of substring in given pattern.
 
@@ -4356,7 +4470,8 @@ You can ignore case if you use regexp with `i` option, or `igfnore_case: true`
 v.count_substring(/a[mn]/i)  # same as v.find_substring(/arr/, ignore_case: true)
 ```
 
-## 121. Grouped DataFrame as a list
+## 125. Grouped DataFrame as a list
+
 This API was introduced in 0.2.3, and supply a new DataFrame group (experimental).
 
 This additional API will treat a grouped DataFrame as a list of DataFrames. I think this API has pros such as:
