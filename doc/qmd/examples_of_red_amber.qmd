@@ -1,7 +1,7 @@
 ---
-title: 121 examples of Red Amber
+title: 127 examples of Red Amber
 author: heronshoes
-date: 2023-08-08
+date: '2023-08-11'
 format:
   pdf:
     code-fold: false
@@ -1465,7 +1465,7 @@ If counts are the same (and do not include NaN or nil), columns for counts are u
 
 ```{ruby}
 dataframe = DataFrame.new(
-  x: [1..6],
+  x: [*1..6],
   y: %w[A A B B B C],
   z: [false, true, false, nil, true, false])
 ```
@@ -2572,23 +2572,23 @@ df = RedAmber::DataFrame.new(
 
 ```{ruby}
 #| tags: []
-x = df.pick(:row, :One_X, :Two_X)
+df_x = df.pick(:row, :One_X, :Two_X)
   .to_long(:row, name: :Sample, value: :All_X)
 ```
 
 ```{ruby}
 #| tags: []
-y = df.pick(:row, :One_Y, :Two_Y)
+df_y = df.pick(:row, :One_Y, :Two_Y)
   .to_long(:row, name: :Sample, value: :All_Y)
 ```
 
 ```{ruby}
 #| tags: []
-x.pick(:row)
+df_x.pick(:row)
  .assign [
-   [:Sample, x[:Sample].each.map { |x| x.split("_").first }],
-   [:All_X, x[:All_X]],
-   [:All_Y, y[:All_Y]]
+   [:Sample, df_x[:Sample].each.map { |x| x.split("_").first }],
+   [:All_X, df_x[:All_X]],
+   [:All_Y, df_y[:All_Y]]
  ]
 ```
 
@@ -4232,7 +4232,7 @@ We can use `assign(keys) { updated_columns }` for multiple columns.
 ```{ruby}
 sf.assign(:sum_x, :flac_x) do
   group_sum = x.sum
-  [[group_sum] * size, x / group_sum.to_f]
+  [[group_sum] * x.size, x / group_sum.to_f]
 end
 ```
 
@@ -4530,3 +4530,62 @@ ArrowFunction.find(:mean).execute([[1, 2, 3, 4]]).value.value
 ```{ruby}
 puts ArrowFunction.arrow_doc(:mean)
 ```
+
+## 127. DataFrame.auto_cast
+
+A data set for planetary data in https://nssdc.gsfc.nasa.gov/planetary/factsheet/ is used here. Let's manually copy the data in the html table and get the tab separated text values.
+
+```{ruby}
+tsv = ' 	 MERCURY 	 VENUS 	 EARTH 	 MOON 	 MARS 	 JUPITER 	 SATURN 	 URANUS 	 NEPTUNE 	 PLUTO
+Mass (1024kg)	0.330	4.87	5.97	0.073	0.642	1898	568	86.8	102	0.0130
+Diameter (km)	4879	12,104	12,756	3475	6792	142,984	120,536	51,118	49,528	2376
+Density (kg/m3)	5429	5243	5514	3340	3934	1326	687	1270	1638	1850
+Gravity (m/s2)	3.7	8.9	9.8	1.6	3.7	23.1	9.0	8.7	11.0	0.7
+Escape Velocity (km/s)	4.3	10.4	11.2	2.4	5.0	59.5	35.5	21.3	23.5	1.3
+Rotation Period (hours)	1407.6	-5832.5	23.9	655.7	24.6	9.9	10.7	-17.2	16.1	-153.3
+Length of Day (hours)	4222.6	2802.0	24.0	708.7	24.7	9.9	10.7	17.2	16.1	153.3
+Distance from Sun (106 km)	57.9	108.2	149.6	0.384*	228.0	778.5	1432.0	2867.0	4515.0	5906.4
+Perihelion (106 km)	46.0	107.5	147.1	0.363*	206.7	740.6	1357.6	2732.7	4471.1	4436.8
+Aphelion (106 km)	69.8	108.9	152.1	0.406*	249.3	816.4	1506.5	3001.4	4558.9	7375.9
+Orbital Period (days)	88.0	224.7	365.2	27.3*	687.0	4331	10,747	30,589	59,800	90,560
+Orbital Velocity (km/s)	47.4	35.0	29.8	1.0*	24.1	13.1	9.7	6.8	5.4	4.7
+Orbital Inclination (degrees)	7.0	3.4	0.0	5.1	1.8	1.3	2.5	0.8	1.8	17.2
+Orbital Eccentricity	0.206	0.007	0.017	0.055	0.094	0.049	0.052	0.047	0.010	0.244
+Obliquity to Orbit (degrees)	0.034	177.4	23.4	6.7	25.2	3.1	26.7	97.8	28.3	122.5
+Mean Temperature (C)	167	464	15	-20	-65	-110	-140	-195	-200	-225
+Surface Pressure (bars)	0	92	1	0	0.01	Unknown*	Unknown*	Unknown*	Unknown*	0.00001
+Number of Moons	0	0	1	0	2	79	82	27	14	5
+Ring System?	No	No	No	No	No	Yes	Yes	Yes	Yes	No
+Global Magnetic Field?	Yes	No	Yes	No	No	Yes	Yes	Yes	Yes	Unknown
+'
+
+raw_dataframe = DataFrame.load(Arrow::Buffer.new(tsv), format: :tsv)
+
+ENV['RED_AMBER_OUTPUT_MODE'] = 'plain'
+raw_dataframe
+```
+
+This dataframe has row oriented calues. So we must transpose the dataframe.
+
+```{ruby}
+transposed = raw_dataframe.transpose
+```
+
+This dataframe has string columns. We can cast each numeric columns, recommended way is to use `#auto_cast`. `#auto_cast` save it in temporally tsv file and re-open it to get a casted dataframe.
+
+```{ruby}
+transposed.auto_cast
+```
+
+There are still some dirts to be cleaned in this dataframe, we don't touch them here. If you are interested, give it a try!
+
+- Rename a column 'NAME' to 'Planet_name'.
+- Remove preceding/trailing spaces in 'Planet_name' values.
+- Capitalize 'Planet_name' values.
+- Remove data for 'Moon' and 'Pluto' to create the Table for planets.
+- Convert 'Unknown*' to nil.
+- Change 'Yes' / 'No' values to true / false (change column type to boolean).
+- Remove comma in numeric values. They obstruct to be numeric columns.
+- Correct cell values which have '*'. They obstruct to be numeric columns.
+- Add missing '^' to unit in labels.
+
