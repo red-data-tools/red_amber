@@ -4509,3 +4509,24 @@ end
 array.reduce { |a, df| a.concat df }
 ```
 
+## 126. ArrowFunction helpers
+
+`ArrowFunction` module adds two helper method.
+
+`ArrowFunction.find(function_name)` returns Arrow Function object in Arrow C++ Compute Functions.
+
+```{ruby}
+ArrowFunction.find(:mean)
+```
+
+To execute this function,
+
+```{ruby}
+ArrowFunction.find(:mean).execute([[1, 2, 3, 4]]).value.value
+```
+
+`ArrowFunction.arrow_doc(function_name)` returns a document of Arrow C++ Compute Function in a string.
+
+```{ruby}
+puts ArrowFunction.arrow_doc(:mean)
+```
