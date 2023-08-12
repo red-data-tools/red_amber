@@ -85,6 +85,18 @@ module RedAmber
     # @!method all(*group_keys)
     #   @macro group_aggregation
     #   @example For boolean columns by default.
+    #     dataframe
+    #
+    #     # =>
+    #     #<RedAmber::DataFrame : 6 x 3 Vectors, 0x00000000000230dc>
+    #             x y        z
+    #       <uint8> <string> <boolean>
+    #     0       1 A        false
+    #     1       2 A        true
+    #     2       3 B        false
+    #     3       4 B        (nil)
+    #     4       5 B        true
+    #     5       6 C        false
     #
     #     dataframe.group(:y).all
     #
@@ -122,19 +134,6 @@ module RedAmber
     # @!method max(*group_keys)
     # @macro group_aggregation
     # @example Show counts for each group.
-    #   dataframe
-    #
-    #   # =>
-    #   #<RedAmber::DataFrame : 6 x 3 Vectors, 0x00000000000230dc>
-    #           x y        z
-    #     <uint8> <string> <boolean>
-    #   0       1 A        false
-    #   1       2 A        true
-    #   2       3 B        false
-    #   3       4 B        (nil)
-    #   4       5 B        true
-    #   5       6 C        false
-    #
     #   dataframe.group(:y).count
     #
     #   # =>
@@ -200,11 +199,11 @@ module RedAmber
     #
     #   # =>
     #   #<RedAmber::DataFrame : 3 x 3 Vectors, 0x000000000011ea04>
-    #     y        count_uniq(x) count_uniq(z)
-    #     <string>       <int64>       <int64>
-    #   0 A                    2             2
-    #   1 B                    3             3
-    #   2 C                    1             1
+    #     y        count_uniq(x)
+    #     <string>       <int64>
+    #   0 A                    2
+    #   1 B                    3
+    #   2 C                    1
     #
     define_group_aggregation :count_distinct
     def count_uniq(*group_keys)
