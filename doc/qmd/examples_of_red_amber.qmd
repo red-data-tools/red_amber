@@ -6,6 +6,11 @@ format:
   pdf:
     code-fold: false
 jupyter: ruby
+format:
+  pdf:
+    toc: true
+    fontfamily: libertinus
+    colorlinks: true
 ---
 
 For RedAmber Version 0.5.1-HEAD and Arrow version 12.0.1 .
