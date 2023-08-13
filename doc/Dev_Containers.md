@@ -53,11 +53,11 @@ Please see [(GitHub Docs)Creating a codespace for a repository](https://docs.git
 
     In Windows 10 Pro/Enterprise, Docker Desktop 2.0+
     In Windows 10 Home (2004+), Docker Desktop 2.3+ and WSL 2 backend.
-  
+
   - Mac
 
     Docker Desktop 2.0+
-  
+
   - Linux
 
     Docker CE/EE 18.06+ and Docker Compose 1.21+
@@ -87,7 +87,7 @@ Please see [(GitHub Docs)Creating a codespace for a repository](https://docs.git
   ```
 
 - Re-open by container
-  
+
   Re-open current folder by container.
 
   - Click remote host indicator in the left bottom corner, then options to open remote windows will open. Choose 'reopen by container'.
@@ -141,7 +141,7 @@ Please see [(GitHub Docs)Creating a codespace for a repository](https://docs.git
   You can try RedAmber in `irb` using pre loaded datasets. It takes time in the first run to load the datasets from Red Datasets.
 
   ```ruby
-  $ bin/example
+  $ rake example
 
   (snip)
 
@@ -151,15 +151,15 @@ Please see [(GitHub Docs)Creating a codespace for a repository](https://docs.git
       84: #   mtcars, band_members, band_instruments, band_instruments2
       85: #   import_cars, comecome, rubykaigi, dataframe, subframes
    => 86: binding.irb
-  
+
   irb(main):001:0>
   ```
-  
+
   This code stops in the code by `binding.irb`, you have some datasets in local variables.
 
   ```ruby
   irb(main):001:0> import_cars
-  => 
+  =>
   #<RedAmber::DataFrame : 5 x 6 Vectors, 0x0000000000010914>
        Year    Audi     BMW BMW_MINI Mercedes-Benz      VW
     <int64> <int64> <int64>  <int64>       <int64> <int64>
@@ -169,7 +169,7 @@ Please see [(GitHub Docs)Creating a codespace for a repository](https://docs.git
   3    2020   22304   35712    20196         57041   36576
   4    2021   22535   35905    18211         51722   35215
   ```
-  
+
   The namespace `RedAmber` is included.
 
   ```ruby
@@ -188,7 +188,7 @@ Please see [(GitHub Docs)Creating a codespace for a repository](https://docs.git
   You can try Jupyter Lab with Python and IRuby kernels in your browser.
 
   ```shell
-  $ bin/jupyter
+  $ rake jupyter
   ```
 
   - `doc/notebook` is allocated as notebook folder. There are 2 files in it.
@@ -224,7 +224,7 @@ flowchart LR
 
 ### To show the information of Quarto
 
-Try below to show version and verify correct functioning of Quarto installation. 
+Try below to show version and verify correct functioning of Quarto installation.
 
 ```shell
 $ quarto -v
@@ -243,6 +243,14 @@ $ quarto render --help
 To convert `.qmd` source file to `.ipynb`,
 
 ```shell
+$ bundle exec rake quarto:convert
+```
+
+This command will create `ipynb` notebooks from `doc/qmd` and save them to `doc/notebook`.
+
+In more general,
+
+```shell
 $ quarto convert source_file.qmd
 $ quarto convert source_file.qmd --output Notebook.ipynb
 ```
@@ -257,6 +265,8 @@ $ bin/jupyter
 
 ### Convert Jupyter Notebook to `qmd`
 
+You can convert Notebook file to qmd file.
+
 ```shell
 $ quarto convert notebook.ipynb
 $ quarto convert notebook.ipynb --output output_source_file.qmd
@@ -264,13 +274,18 @@ $ quarto convert notebook.ipynb --output output_source_file.qmd
 
 ### Others
 
-To render Notebook file to pdf with table of contents,
+To render Notebook files in `doc/qmd` to pdf,
 
 ```shell
-$ quarto render notebook.ipynb --to pdf --toc
+$ bundle exec rake quarto:test
+```
+To clear `doc/notebook` (and all the generated artifacts by rake),
+
+```shell
+$ rake clean
 ```
 
-Please see command line help by `quarto --help`, or visit [Quarto](https://quarto.org/) web.
+To know more about Quarto, see command line help by `quarto --help`, or visit [Quarto](https://quarto.org/) web.
 
 ### Thanks
 

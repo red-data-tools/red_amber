@@ -17,6 +17,12 @@ RuboCop::RakeTask.new
 
 task default: %i[test rubocop]
 
+# Example
+desc 'Start example environment'
+task :example do
+  sh 'bundle exec --gemfile=bin/Gemfile bin/example'
+end
+
 # Quarto
 namespace :quarto do
   qmd_dir = 'doc/qmd'

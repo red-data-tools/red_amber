@@ -2,18 +2,10 @@
 # frozen_string_literal: true
 
 print "starting.\r"
-
-Dir.chdir(__dir__) do
-  IO.popen('bundle install', 'r+') do |o|
-    o.each { |line| puts line }
-  end
-end
-
-print "starting..\r"
 require 'red_amber'
 include RedAmber
 
-print "starting...\r"
+print "starting..\r"
 require 'datasets-arrow'
 
 print "reading penguins...\r"

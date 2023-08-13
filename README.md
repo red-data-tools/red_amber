@@ -17,6 +17,12 @@ A dataframe library for Rubyists.
 
 ![screenshot from jupyterlab](https://raw.githubusercontent.com/red-data-tools/red_amber/main/doc/image/screenshot.png)
 
+## Overview
+* RedAmber is a dataframe library written in ruby. It uses columnar memory format based on [Apache Arrow](https://arrow.apache.org/).
+* Our goal is to manipulate data frames in a Ruby-like writing style using blocks and collections.
+* You can easily try RedAmber with [Dev Container](https://containers.dev/). See [RedAmber Dev Container](doc/Dev_Containers.md).
+* We have [rich document with many examples](https://red-data-tools.github.io/red_amber/) and Jupyter Notebook with 127 operation examples. See [RedAmber Dev Container](doc/Dev_Containers.md).
+
 ## Requirements
 ### Ruby
 Supported Ruby version is >= 3.0.
@@ -41,7 +47,7 @@ Install requirements before you install RedAmber.
 - Apache Parquet GLib (~> 12.0.0)  # If you use IO from/to parquet
 
 See [Apache Arrow install document](https://arrow.apache.org/install/).
-  
+
   - Minimum installation example for the latest Ubuntu:
 
       ```
@@ -94,14 +100,14 @@ Please refer [How to use Dev Containers in RedAmber](doc/Dev_Containers.md) to u
 
 Docker image is available from `docker` folder. See [readme](docker/readme.md) for instruction. Integrated Jypyter notebook is in docker/notebook folder.
 
-You can try the contents of this README interactively by [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb). 
+You can try the contents of this README interactively by [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb).
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb)
 
 [RubyData Docker Stacks](https://github.com/RubyData/docker-stacks) is available as a ready-to-run Docker image containing Jupyter and useful data tools as well as RedAmber (Thanks to Kenta Murata).
 
 ## Comparison of DataFrames
 
-Comparison of  basic features of RedAmber with Python 
+Comparison of  basic features of RedAmber with Python
 [pandas](https://pandas.pydata.org/),
 R [Tidyverse](https://www.tidyverse.org/) and
 Julia [Dataframes](https://dataframes.juliadata.org/stable/) is in [DataFrame_Comparison.md](doc/DataFrame_Comparison.md) (Thanks to Benson Muite).
@@ -109,7 +115,7 @@ Julia [Dataframes](https://dataframes.juliadata.org/stable/) is in [DataFrame_Co
 ## Data frame in `RedAmber`
 
 Class `RedAmber::DataFrame` represents a set of data in 2D-shape.
-Its entity is a Red Arrow's Table object. 
+Its entity is a Red Arrow's Table object.
 
 ![dataframe model of RedAmber](https://raw.githubusercontent.com/red-data-tools/red_amber/main/doc/image/dataframe_model.png)
 
@@ -228,12 +234,7 @@ See [Vector.md](doc/Vector.md) for details.
 
 ## Jupyter notebook
 
-[Examples of Red Amber](https://github.com/heronshoes/docker-stacks/blob/RedAmber-binder/binder/examples_of_red_amber.ipynb)
-([raw file](https://raw.githubusercontent.com/heronshoes/docker-stacks/RedAmber-binder/binder/examples_of_red_amber.ipynb)) shows more examples in jupyter notebook.
-
-You can try this notebook on [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb). 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb)
-
+We are managing the source of Jupyter Notebook in qmd format by Quarto. You can easily create Notebooks and try it with Jupyter Lab in [Dev Container](doc/Dev_Containers.md).
 
 ## Development
 
