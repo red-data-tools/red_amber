@@ -106,10 +106,10 @@ module RedAmber
     #   nil inputs emit nil.
     # @example Check if start with?.
     #   vector = Vector.new('array', 'Arrow', 'carrot', nil, 'window')
-    #   vector.start_with('ow')
+    #   vector.start_with('arr')
     #   # =>
     #   #<RedAmber::Vector(:boolean, size=5):0x00000000000193fc>
-    #   [false, false, true, nil, false]
+    #   [true, false, false, nil, false]
     # @since 0.5.0
     #
     def start_with(string, ignore_case: nil)
@@ -122,7 +122,7 @@ module RedAmber
     alias_method :start_with?, :start_with
 
     # Match elements of self against SQL-style LIKE pattern.
-    #   the pattern matches a given pattern at any position.
+    #   The pattern matches a given pattern at any position.
     #   '%' will match any number of characters,
     #   '_' will match exactly one character,
     #   and any other character matches itself.

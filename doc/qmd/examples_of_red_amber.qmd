@@ -1,9 +1,19 @@
 ---
-title: 106 examples of Red Amber
+title: 127 examples of Red Amber
+author: heronshoes
+date: '2023-08-11'
+format:
+  pdf:
+    code-fold: false
 jupyter: ruby
+format:
+  pdf:
+    toc: true
+    fontfamily: libertinus
+    colorlinks: true
 ---
 
-Last update is on March 20, 2023, for RedAmber Version 0.4.1 and Arrow version 11.0.0 .
+For RedAmber Version 0.5.1-HEAD and Arrow version 12.0.1 .
 
 ## 1. Install
 
@@ -11,47 +21,49 @@ Install requirements before you install RedAmber.
 
 - Ruby (>= 3.0)
 
-- Apache Arrow (~> 11.0.0)
-- Apache Arrow GLib (~> 11.0.0)
-- Apache Parquet GLib (~> 11.0.0)  # if you need IO from/to Parquet resource.
+- Apache Arrow (~> 12.0.0)
+- Apache Arrow GLib (~> 12.0.0)
+- Apache Parquet GLib (~> 12.0.0)  # if you need IO from/to Parquet resource.
 
   See [Apache Arrow install document](https://arrow.apache.org/install/).
-  
+
   - Minimum installation example for the latest Ubuntu:
-    ```
-      sudo apt update
-      sudo apt install -y -V ca-certificates lsb-release wget
-      wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-      sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-      sudo apt update
-      sudo apt install -y -V libarrow-dev
-      sudo apt install -y -V libarrow-glib-dev
+    ```shell
+    sudo apt update
+    sudo apt install -y -V ca-certificates lsb-release wget
+    wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+    sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+    sudo apt update
+    sudo apt install -y -V libarrow-dev
+    sudo apt install -y -V libarrow-glib-dev
     ```
   - On Fedora 38 (Rawhide):
-    ```
+    ```shell
     sudo dnf update
     sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel
-    
+
 
   - On macOS, you can install Apache Arrow C++ library using Homebrew:
+    ```shell
+    brew install apache-arrow
     ```
-      brew install apache-arrow
-    ```
-    and GLib (C) package with:
 
-    ```
-      brew install apache-arrow-glib
+    and GLib (C) package with:
+    ```shell
+    brew install apache-arrow-glib
     ```
 
 If you prepared Apache Arrow, add these lines to your Gemfile:
 
 ```ruby
-gem 'red-arrow',   '~> 11.0.0'
+gem 'red-arrow',   '~> 12.0.0'
 gem 'red_amber'
-gem 'red-parquet', '~> 11.0.0' # Optional, if you use IO from/to parquet
-gem 'rover-df',    '~> 0.3.0'  # Optional, if you use IO from/to Rover::DataFrame
-gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
 gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
+                               # or use random sampling feature.
+gem 'red-parquet', '~> 12.0.0' # Optional, if you use IO from/to parquet
+gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
+gem 'red-arrow-activerecord'   # Optional, if you use Active Record
+gem 'rover-df',                # Optional, if you use IO from/to Rover::DataFrame.
 ```
 
 And then execute `bundle install` or install it yourself as `gem install red_amber`.
@@ -66,6 +78,8 @@ include RedAmber
 ```
 
 ## 3. Initialize
+
+There are several ways to initialize a DataFrame.
 
 ```{ruby}
 #| tags: []
@@ -96,7 +110,7 @@ DataFrame.new(rover)
 
 ```{ruby}
 #| tags: []
-# from a red-datasets
+# from a datasets in Red Datasets
 require 'datasets-arrow'
 dataset = Datasets::Penguins.new
 penguins = DataFrame.new(dataset) # Since 0.2.2 . If it is older, it must be `dataset.to_arrow`.
@@ -117,7 +131,7 @@ require 'arrow-numo-narray'
 DataFrame.new(numo: Numo::DFloat.new(3).rand)
 ```
 
-Another example by Numo::NArray is [#73. Introduce columns from numo/narray](#73.-Introduce-columns-from-numo/narray).
+Another example by Numo::NArray is [#77. Introduce columns from numo/narray](#77.-Introduce-columns-from-numo/narray).
 
 ## 4. Load
 
@@ -259,7 +273,6 @@ It is similar to dplyr's (or Polars's) `glimpse()` so we have an alias `#glimpse
 
 ```{ruby}
 #| tags: []
-# use the same dataframe as #7
 df.tdr
 ```
 
@@ -377,7 +390,7 @@ penguins.type_classes
 
 ## 14. Indices
 
-Another example of `indices` is [62. Custom index](#62.-Custom-index).
+Another example of `indices` is in [66. Custom index](#66.-Custom-index).
 
 ```{ruby}
 #| tags: []
@@ -386,7 +399,7 @@ df.indexes
 df.indices
 ```
 
-`#indices` returns Vector since 0.2.3 .
+(Since 0.2.3) `#indices` returns Vector.
 
 ## 15. To an Array or a Hash
 
@@ -450,7 +463,12 @@ array = Arrow::Array.new([1, 2, 3, 4, 5])
 Vector.new(array)
 ```
 
-- TODO: `Vector[1..5]` as a constructor
+(Since 0.4.2) New constructor Vector[*array_like] has introduced.
+
+```{ruby}
+#| tags: []
+Vector[1, 2, 3, 4, 5]
+```
 
 ## 18. Vectors
 
@@ -737,7 +755,7 @@ df.v(:x)
 
 ## 28. Slice
 
-Another example of `slice` is [#66. Row index label by slice_by](#66.-Row-index-label-by-slice_by).
+Another example of `slice` is [#70. Row index label by slice_by](#70.-Row-index-label-by-slice_by).
 
 `slice` selects rows (records) to create a subset of a DataFrame.
 
@@ -816,7 +834,7 @@ Slice and reject rows (observations) to create a remainer DataFrame.
 
 ```{ruby}
 #| tags: []
-# returns 6th to 339th obs. Remainer of 1st example of #30
+# returns 6th to 339th obs. Remainer of penguins.slice(0...5, -5..-1)
 penguins.remove(0...5, -5..-1)
 ```
 
@@ -935,14 +953,14 @@ Symbol key and String key are distinguished.
 
 ## 34. Assign
 
-Another example of `assign` is [64. Assign revised](#64.-Assign-revised), [#65. Variations of assign](#65.-Variations-of-assign) .
+Another example of `assign` is [68. Assign revised](#68.-Assign-revised), [#69. Variations of assign](#69.-Variations-of-assign) .
 
 Assign new or updated columns (variables) and create a updated DataFrame.
 
 - Columns with new keys will append new variables at right (bottom in TDR).
 - Columns with exisiting keys will update corresponding vectors.
 
-`#assign(key_pairs)` accepts pairs of key and array_like values as arguments. The pairs should be a Hash of `{key => array_like}` or an Array of Array `[[key, array_like], ... ]`. `array_like` is one of `Vector`, `Array` or `Arrow::Array`. 
+`#assign(key_pairs)` accepts pairs of key and array_like values as arguments. The pairs should be a Hash of `{key => array_like}` or an Array of Array `[[key, array_like], ... ]`. `array_like` is one of `Vector`, `Array` or `Arrow::Array`.
 
 ```{ruby}
 #| tags: []
@@ -981,7 +999,7 @@ In this example, columns :x and :y are updated. Column :x returns complements fo
 df.types
 ```
 
-## 35. Coerce (Vector)
+## 35. Coerce in Vector
 
 Vector has coerce method.
 
@@ -1008,7 +1026,7 @@ vector * -1
 -vector
 ```
 
-## 36. to_ary (Vector)
+## 36. Vector#to_ary
 
 `Vector#to_ary` will enable implicit conversion to an Array.
 
@@ -1027,7 +1045,7 @@ Array(Vector.new([3, 4, 5]))
 [1, 2, Vector.new([3, 4, 5])].flatten
 ```
 
-## 37. Fill nil (Vector)
+## 37. Vector#fill_nil
 
 `Vector#fill_nil_forward` or `Vector#fill_nil_backward` will
 propagate the last valid observation forward (or backward).
@@ -1044,7 +1062,22 @@ integer.fill_nil_forward
 integer.fill_nil_backward
 ```
 
-## 38. all?/any? (Vector)
+(Since 0.4.2) `Vector#fill_nil(value)` will fill `value` to `nil` in self.
+
+```{ruby}
+#| tags: []
+integer.fill_nil(-1)
+```
+
+If value has upper type, self will automatically upcasted.
+Int16 will casted into double in next example.
+
+```{ruby}
+#| tags: []
+integer.fill_nil(0.1)
+```
+
+## 38. Vector#all?/any?
 
 `Vector#all?` returns true if all elements is true.
 
@@ -1075,7 +1108,7 @@ booleans.all?(skip_nulls: false)
 booleans.any?(skip_nulls: false)
 ```
 
-## 39. count/count_uniq (Vector)
+## 39. Vector#count/count_uniq
 
 `Vector#count` counts element.
 
@@ -1094,9 +1127,11 @@ string.count
 string.count_uniq # count_distinct is also OK
 ```
 
-## 40. stddev/variance (Vector)
+## 40. Vector#stddev/variance
 
 These are unary element-wise function.
+
+For biased standard deviation;
 
 ```{ruby}
 #| tags: []
@@ -1104,24 +1139,28 @@ integers = Vector.new([1, 2, 3, nil])
 integers.stddev
 ```
 
+For unbiased standard deviation;
+
 ```{ruby}
 #| tags: []
-# Unbiased standard deviation
 integers.sd
 ```
+
+For biased variance;
 
 ```{ruby}
 #| tags: []
 integers.variance
 ```
 
+For unbiased variance;
+
 ```{ruby}
 #| tags: []
-# Unbiased variance
 integers.var
 ```
 
-## 41. negate (Vector)
+## 41. Vector#negate
 
 These are unary element-wise function.
 
@@ -1131,13 +1170,14 @@ double = Vector.new([1.0, -2, 3])
 double.negate
 ```
 
+Same as #negate;
+
 ```{ruby}
 #| tags: []
-# Same as #negate
 -double
 ```
 
-## 42. round (Vector)
+## 42. Vector#round
 
 Otions for `#round`;
 
@@ -1201,7 +1241,7 @@ double.round(n_digits: 1)
 double.round(n_digits: -1)
 ```
 
-## 43. and/or (Vector)
+## 43. Vector#and/or
 
 RedAmber select `and_kleene`/`or_kleene` as default `&`/`|` method.
 
@@ -1244,7 +1284,7 @@ bool_self || bool_other
 bool_self.or_org(bool_other)
 ```
 
-## 44. is_finite/is_nan/is_nil/is_na (Vector)
+## 44. Vector#is_finite/is_nan/is_nil/is_na
 
 These are unary element-wise function.
 
@@ -1374,9 +1414,9 @@ df = DataFrame.new("": [1, 2], unnamed1: [3, 4])
 
 ## 49. Grouping
 
-`DataFrame#group` takes group_key as an argument, and creates `Group` class. 
+`DataFrame#group` takes group_keys as arguments, and creates `Group` class.
 
-Group class inspects counts of each unique elements. 
+Group class inspects counts of each unique elements.
 
 (Since 0.1.7)
 
@@ -1423,7 +1463,121 @@ penguins.group(:species) { [count(:species), mean(:body_mass_g)] }
 group.summarize { [count(:species), mean] }
 ```
 
-## 51. Vector#shift
+## 51. Group#count family
+
+`Group#count` counts the number of non-nil values in each group.
+If counts are the same (and do not include NaN or nil), columns for counts are unified.
+
+```{ruby}
+dataframe = DataFrame.new(
+  x: [*1..6],
+  y: %w[A A B B B C],
+  z: [false, true, false, nil, true, false])
+```
+
+Non-nil counts in column y and z are different.
+
+```{ruby}
+dataframe.group(:y).count
+```
+
+Non-nil counts in column x and y are same, so only one column is emitted.
+
+```{ruby}
+dataframe.group(:z).count
+```
+
+`Group#count_all` returns each record group size as a DataFrame. `Group#group_count` is an alias.
+
+```{ruby}
+dataframe.group(:y).count_all
+```
+
+`Group#count_uniq` count the unique values in each group and return as a DataFrame. `Group#count_distinct` is an alias.
+
+```{ruby}
+dataframe.group(:y).count_uniq
+```
+
+## 52. Group#one
+
+`Group#one` gets one value from each group.
+
+```{ruby}
+dataframe.group(:y).one
+```
+
+## 53. Group aggregation functions
+
+`Group#all` emits aggragated booleans Whether all elements in each group evaluate to true.
+
+```{ruby}
+dataframe.group(:y).all
+```
+
+`Group#any` emits aggragated booleans Whether any elements in each group evaluate to true.
+
+```{ruby}
+dataframe.group(:y).any
+```
+
+`Group#max` computes maximum of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).max
+```
+
+`Group#mean` computes mean of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).mean
+```
+
+`Group#median` computes median of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).median
+```
+
+`Group#min` computes minimum of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).min
+```
+
+`Group#product` computes product of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).product
+```
+
+`Group#stddev` computes standrad deviation of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).stddev
+```
+
+`Group#sum` computes sum of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).sum
+```
+
+`Group#variance` computes variance of values in each group for numeric columns.
+
+```{ruby}
+dataframe.group(:y).variance
+```
+
+## 54. Group#grouped_frame
+
+`Group#grouped_frame` returns grouped DataFrame only for group keys. The alias is `#none`
+
+```{ruby}
+dataframe.group(:y).grouped_frame
+```
+
+## 55. Vector#shift
 
 `Vector#shift(amount = 1, fill: nil)`
 
@@ -1447,7 +1601,7 @@ vector.shift(-2)
 vector.shift(fill: Float::NAN)
 ```
 
-## 52. From the Pandas cookbook (if-then)
+## 56. From the Pandas cookbook - if-then
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#if-then
 
@@ -1489,7 +1643,7 @@ df.assign do
 end
 ```
 
-## 53. From the Pandas cookbook (Splitting)
+## 57. From the Pandas cookbook - Splitting
 Split a frame with a boolean criterion
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#splitting
@@ -1532,7 +1686,7 @@ df.remove(df[:AAA] <= 5)
 # df.slice(df[:AAA] > 5) # do the same thing
 ```
 
-## 54. From the Pandas cookbook (Building criteria)
+## 58. From the Pandas cookbook - Building criteria
 Split a frame with a boolean criterion
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#building-criteria
@@ -1656,7 +1810,7 @@ crit3 = df[:CCC] >= -40.0
 df[crit1 & crit2 & crit3]
 ```
 
-## 55. From the Pandas cookbook (Dataframes)
+## 59. From the Pandas cookbook - Dataframes
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#dataframes
 
@@ -1666,7 +1820,7 @@ https://pandas.pydata.org/docs/user_guide/cookbook.html#dataframes
 df = pd.DataFrame(
     {"AAA": [4, 5, 6, 7], "BBB": [10, 20, 30, 40], "CCC": [100, 50, -30, -50]}
 )
-df[(df.AAA <= 6) & (df.index.isin([0, 2, 4]))] 
+df[(df.AAA <= 6) & (df.index.isin([0, 2, 4]))]
 
 # returns =>
    AAA  BBB  CCC
@@ -1796,7 +1950,7 @@ df[!((df[:AAA] <= 6) & df.indices.map { |i| [0, 2, 4].include? i })]
 
 If you have `nil` in your data, consider #primitive_invert for consistent result. See example #26.
 
-## 56. From the Pandas cookbook (New columns)
+## 60. From the Pandas cookbook - New columns
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#new-columns
 
@@ -1905,7 +2059,7 @@ df.group(:AAA).min
 # Add `.rename { [keys[-1], :BBB] }` if you want.
 ```
 
-## 57. Summary/describe
+## 61. Summary/describe
 
 ```{ruby}
 #| tags: []
@@ -1921,7 +2075,7 @@ If you need a variables in row, use `transpose`. (Since 0.2.0)
 penguins.summary.transpose(name: :stats)
 ```
 
-## 58. Quantile/Quantiles
+## 62. Quantile/Quantiles
 
 `Vector#quantile(prob)` returns quantile at probability `prob`.
 
@@ -1939,7 +2093,7 @@ penguins[:bill_depth_mm].quantile # default　is prob = 0.5
 penguins[:bill_depth_mm].quantiles([0.05, 0.95])
 ```
 
-## 59. Transpose
+## 63. Transpose
 
 `DataFrame#transpose` creates transposed DataFrame for wide type dataframe.
 
@@ -1978,7 +2132,7 @@ df = import_cars.pick(1..2, 0, 3..)
 df.transpose(key: :Year)
 ```
 
-## 60. To_long
+## 64. To_long
 
 `DataFrame#to_long(*keep_keys)` reshapes wide DataFrame to the long DataFrame.
 
@@ -2005,7 +2159,7 @@ import_cars.to_long(:Year)
 import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
 ```
 
-## 61. To_wide
+## 65. To_wide
 
 `DataFrame#to_wide(*keep_keys)` reshapes long DataFrame to a wide DataFrame.
 
@@ -2025,7 +2179,7 @@ import_cars.to_long(:Year).to_wide(name: :NAME, value: :VALUE)
 # is also OK
 ```
 
-## 62. Custom index
+## 66. Custom index
 
 Another example of `indices` is [14. Indices](#14.-Indices).
 
@@ -2051,7 +2205,7 @@ You can put the first value which accepts `#succ` method.
 df.indices("a")
 ```
 
-## 63. Method missing
+## 67. Method missing
 
 `RedAmber::DataFrame` has `#method_missing` to enable to call key names as methods.
 
@@ -2080,9 +2234,9 @@ df.x # method
 df.x.sum
 ```
 
-## 64. Assign revised
+## 68. Assign revised
 
-Another example of `assign` is [#34. Assign](#34.-Assign), [#65. Variations of assign](#65.-Variations-of-assign) .
+Another example of `assign` is [#34. Assign](#34.-Assign), [#69. Variations of assign](#69.-Variations-of-assign) .
 
 ```{ruby}
 #| tags: []
@@ -2104,9 +2258,9 @@ df.assign(:y) { x / 10.0 }
 df.assign(:y, :z) { [x * 10, x / 10.0] }
 ```
 
-## 65. Variations of assign
+## 69. Variations of assign
 
-Another example of `assign` is [#34. Assign](#34.-Assign), [#64. Assign revised](#64.-Assign-revised) .
+Another example of `assign` is [#34. Assign](#34.-Assign), [#68. Assign revised](#68.-Assign-revised) .
 
 ```{ruby}
 #| tags: []
@@ -2151,7 +2305,7 @@ df.assign { [[:y, df[:x] * 10], [:z, df[:x] / 10.0]] }
 #df.assign(:y, :z) { [x * 10, x / 10.0] }
 ```
 
-## 66. Row index label by slice_by
+## 70. Row index label by slice_by
 
 Another example of `slice` is [#28. Slice](#28.-Slice).
 
@@ -2182,7 +2336,7 @@ If the option `keep_key:` set to `true`, index label column is preserved.
 df.slice_by(:label, keep_key: true) { "b".."d" }
 ```
 
-## 67. Simpson's paradox in COVID-19 data
+## 71. Simpson's paradox in COVID-19 data
 
 https://www.rdocumentation.org/packages/openintro/versions/2.3.0/topics/simpsons_paradox_covid
 
@@ -2267,7 +2421,7 @@ df.group(:vaccine_status, :age_group).count.to_wide(name: :age_group, value: :co
 df.group(:outcome, :age_group).count.to_wide(name: :age_group, value: :count)
 ```
 
-## 68. Clean up dirty data
+## 72. Clean up dirty data
 
 ```{ruby}
 #| tags: []
@@ -2329,7 +2483,7 @@ We got clean data, then compute BMI as a new column.
 df.assign(:BMI) { (weight / height ** 2 * 10000).round(n_digits: 1) }
 ```
 
-## 69. From the Pandas cookbook - Multiindexing
+## 73. From the Pandas cookbook - Multiindexing
 
 (Updated on v0.3.0)
 https://pandas.pydata.org/docs/user_guide/cookbook.html#multiindexing
@@ -2361,7 +2515,7 @@ df
 
 # =>
      One_X  One_Y  Two_X  Two_Y
-row                            
+row
 0      1.1    1.2   1.11   1.22
 1      1.1    1.2   1.11   1.22
 2      1.1    1.2   1.11   1.22
@@ -2371,9 +2525,9 @@ df.columns = pd.MultiIndex.from_tuples([tuple(c.split("_")) for c in df.columns]
 df
 
 # =>
-     One        Two      
+     One        Two
        X    Y     X     Y
-row                      
+row
 0    1.1  1.2  1.11  1.22
 1    1.1  1.2  1.11  1.22
 2    1.1  1.2  1.11  1.22
@@ -2384,7 +2538,7 @@ df
 
 # =>
     level_1     X     Y
-row                    
+row
 0       One  1.10  1.20
 0       Two  1.11  1.22
 1       One  1.10  1.20
@@ -2398,7 +2552,7 @@ df
 
 # =>
     Sample  All_X  All_Y
-row                     
+row
 0      One   1.10   1.20
 0      Two   1.11   1.22
 1      One   1.10   1.20
@@ -2408,7 +2562,7 @@ row
 ```
 
 (Until 0.2.3)
-This is an example before `Vector#split` has introduced. See [84. Vector#split](#84.-Vector#split) .
+This is an example before `Vector#split_*` has introduced. See [88. Vector#split_columns](#88.-Vector#split_to_columns) .
 
 ```{ruby}
 #| tags: []
@@ -2423,23 +2577,23 @@ df = RedAmber::DataFrame.new(
 
 ```{ruby}
 #| tags: []
-x = df.pick(:row, :One_X, :Two_X)
+df_x = df.pick(:row, :One_X, :Two_X)
   .to_long(:row, name: :Sample, value: :All_X)
 ```
 
 ```{ruby}
 #| tags: []
-y = df.pick(:row, :One_Y, :Two_Y)
+df_y = df.pick(:row, :One_Y, :Two_Y)
   .to_long(:row, name: :Sample, value: :All_Y)
 ```
 
 ```{ruby}
 #| tags: []
-x.pick(:row)
+df_x.pick(:row)
  .assign [
-   [:Sample, x[:Sample].each.map { |x| x.split("_").first }],
-   [:All_X, x[:All_X]],
-   [:All_Y, y[:All_Y]]
+   [:Sample, df_x[:Sample].each.map { |x| x.split("_").first }],
+   [:All_X, df_x[:All_X]],
+   [:All_Y, df_y[:All_Y]]
  ]
 ```
 
@@ -2477,7 +2631,7 @@ df.to_long(:row, name: :Sample)
   .to_wide(name: :xy, value: :VALUE)
 ```
 
-## 70. From the Pandas cookbook (Arithmetic)
+## 74. From the Pandas cookbook - Arithmetic
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#arithmetic
 
@@ -2491,7 +2645,7 @@ df = pd.DataFrame(np.random.randn(2, 6), index=["n", "m"], columns=cols)
 df
 
 # =>
-          A                   B                   C          
+          A                   B                   C
           O         I         O         I         O         I
 n  0.469112 -0.282863 -1.509059 -1.135632  1.212112 -0.173215
 m  0.119209 -1.044236 -0.861849 -2.104569 -0.494929  1.071804
@@ -2500,7 +2654,7 @@ df = df.div(df["C"], level=1)
 df
 
 # =>
-          A                   B              C     
+          A                   B              C
           O         I         O         I    O    I
 n  0.387021  1.633022 -1.244983  6.556214  1.0  1.0
 m -0.240860 -0.974279  1.741358 -1.963577  1.0  1.0
@@ -2557,7 +2711,7 @@ df = RedAmber::DataFrame.new(MyData: [11, 22, 33, 44, 55])
                         .assign_left(:label1, :label2) { coords }
 ```
 
-## 71. From the Pandas cookbook (Slicing)
+## 75. From the Pandas cookbook - Slicing
 
 https://pandas.pydata.org/docs/user_guide/cookbook.html#slicing
 
@@ -2626,9 +2780,9 @@ df = pd.DataFrame(data, indx, cols)
 df
 
 # =>
-               Exams     Labs    
+               Exams     Labs
                    I  II    I  II
-Student Course                   
+Student Course
 Ada     Comp      70  71   72  73
         Math      71  73   75  74
         Sci       72  75   75  75
@@ -2646,7 +2800,7 @@ indexes = %w[Ada Quinn Violet].product(%w[Comp Math Sci]).transpose
 df = RedAmber::DataFrame.new(%w[Student Course].zip(indexes))
                         .assign do
                           assigner = {}
-                          keys = %w[Exams Labs].product(%w[I II]).map { |a| a.join("/") } 
+                          keys = %w[Exams Labs].product(%w[I II]).map { |a| a.join("/") }
                           keys.each.with_index do |key, x|
                             assigner[key] = (0...9).map { |y| 70 + x + y + (x * y) % 3 }
                           end
@@ -2661,9 +2815,9 @@ All = slice(None)
 df.loc["Violet"]
 
 # =>
-       Exams     Labs    
+       Exams     Labs
            I  II    I  II
-Course                   
+Course
 Comp      76  77   78  79
 Math      77  79   81  80
 Sci       78  81   81  81
@@ -2679,9 +2833,9 @@ df.slice(df[:Student] == "Violet").drop(:Student)
 df.loc[(All, "Math"), All]
 
 # =>
-               Exams     Labs    
+               Exams     Labs
                    I  II    I  II
-Student Course                   
+Student Course
 Ada     Math      71  73   75  74
 Quinn   Math      74  76   78  77
 Violet  Math      77  79   81  80
@@ -2697,9 +2851,9 @@ df.slice(df[:Course] == "Math")
 df.loc[(slice("Ada", "Quinn"), "Math"), All]
 
 # =>
-               Exams     Labs    
+               Exams     Labs
                    I  II    I  II
-Student Course                   
+Student Course
 Ada     Math      71  73   75  74
 Quinn   Math      74  76   78  77
 ```
@@ -2716,7 +2870,7 @@ df.loc[(All, "Math"), ("Exams")]
 
 # =>
                  I  II
-Student Course        
+Student Course
 Ada     Math    71  73
 Quinn   Math    74  76
 Violet  Math    77  79
@@ -2737,7 +2891,7 @@ df.loc[(All, "Math"), (All, "II")]
 # =>
                Exams Labs
                   II   II
-Student Course           
+Student Course
 Ada     Math      73   74
 Quinn   Math      76   77
 Violet  Math      79   80
@@ -2751,7 +2905,7 @@ df.slice(df[:Course] == "Math")
   }
 ```
 
-## 72. Vector#map
+## 76. Vector#map
 
 `Vector#map` method accepts a block and return yielded results from the block in a Vector.
 
@@ -2779,9 +2933,9 @@ Alias for `#map` is `#collect`
 
 Similar method is `Vector#filter/#select`.
 
-## 73. Introduce columns from numo/narray
+## 77. Introduce columns from numo/narray
 
-(Until 0.2.2 w/Arrow 9.0.0) We couldn't construct the DataFrame with Numo/NArray in current version. But following trick will enable it.
+(Until 0.2.2 w/Arrow 9.0.0) We couldn't construct the DataFrame directly from Numo/NArray, but following trick enables.
 
 ```{ruby}
 #| tags: []
@@ -2833,7 +2987,7 @@ DataFrame.new(
 )
 ```
 
-## 74. Join (mutating joins)
+## 78. Join (mutating joins)
 
 (Since 0.2.3)
 
@@ -2895,7 +3049,7 @@ Left join will join matching values to self from other.
 df.left_join(other)
 ```
 
-## 75. Join (filtering joins)
+## 79. Join (filtering joins)
 
 (Since 0.2.3)
 
@@ -2913,7 +3067,7 @@ Anti join will return records of self that do not have a match in other.
 df.anti_join(other)
 ```
 
-## 76. Partial joins
+## 80. Partial joins
 
 (Since 0.2.3)
 
@@ -2957,7 +3111,7 @@ df2.inner_join(other2, :KEY1)
 df2.inner_join(other2, :KEY1, suffix: '_')
 ```
 
-## 77. Order of record in join
+## 81. Order of record in join
 
 Order of records is not guaranteed to be preserved before or after join. This is a similar property to RDB. Records behave like a set.
 
@@ -2980,7 +3134,7 @@ other2
 df2.full_join(other2, :KEY2)
 ```
 
-## 78. Set operations
+## 82. Set operations
 
 Keys in self and other must be same in set operations.
 
@@ -3025,7 +3179,7 @@ It has an alias `#setdiff`.
 df.difference(other)
 ```
 
-## 79. Join (big method)
+## 83. Join (big method)
 
 Undocumented big method `join` supports all mutating joins, filtering joins and set operations.
 
@@ -3067,13 +3221,16 @@ df.join(other, :KEY, type: :inner)
 # Same as df.inner_join(other)
 ```
 
-## 80. Force order for #join
+(Since 0.5.0) `#join` will not force ordering of original column by default.
+
+## 84. Force order for #join
+
 We can use `:force_order` option to ensure unique order for `join` families.
-(`#full_join`, `#right_join` and `#join with :full_outer or :right_outer`)
-
-If this option is true (by default) it will append index to the source and sort after joining. It will cause some degradation in performance.
-
+This option is true by default in `#inner_join`, `#full_join`, `#left_join`, `#right_join`, `#semi_join` and `#anti_join`.
+It will append index to the source and sort after joining. It will cause some degradation in performance.
 (Since 0.4.0)
+
+(Since 0.5.0) `#join` will not force ordering of original column by default.
 
 ```{ruby}
 #| tags: []
@@ -3113,7 +3270,7 @@ df2.full_join(right2, { left: :KEY2, right: 'KEY2' })
 df2.full_join(right2, { left: :KEY2, right: 'KEY2' }, force_order: false)
 ```
 
-## 81. Binding DataFrames in vertical (concatenate)
+## 85. Binding DataFrames in vertical (concatenate)
 
 Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
 
@@ -3135,7 +3292,7 @@ other = DataFrame.new(x: [3, 4], y: ['C', 'D'])
 df.concatenate(other)
 ```
 
-## 82. Binding DataFrames in lateral (merge)
+## 86. Binding DataFrames in lateral (merge)
 
 Concatenate another DataFrame or Table onto the bottom of self. The shape and data type of other must be the same as self.
 
@@ -3156,7 +3313,7 @@ other = DataFrame.new(a: ['A', 'B'], b: ['C', 'D'])
 df.merge(other)
 ```
 
-## 83. Join - larger example by nycflight13
+## 87. Join - larger example by nycflight13
 
 (Since 0.2.3)
 
@@ -3169,18 +3326,16 @@ require 'datasets-arrow'
 package = 'nycflights13'
 
 airlines = DataFrame.new(Datasets::Rdatasets.new(package, 'airlines'))
-airports = DataFrame.new(Datasets::Rdatasets.new(package, 'airports'))
-flights  = DataFrame.new(Datasets::Rdatasets.new(package, 'flights'))
-  .pick(%i[month day carrier flight tailnum origin dest air_time distance])
-planes   = DataFrame.new(Datasets::Rdatasets.new(package, 'planes'))
-weather  = DataFrame.new(Datasets::Rdatasets.new(package, 'weather'))
-
-flights
+airlines
 ```
 
+Creating `Datasets::Rdatasets.new('flights', 'airlines')` is very slow because Red Datasets uses Ruby's primitive CSV as csv parser. We can parse csv by Arrow's faster parser.
+
 ```{ruby}
-#| tags: []
-airlines
+uri = URI('https://vincentarelbundock.github.io/Rdatasets/csv/nycflights13/flights.csv')
+flights  = DataFrame.load(uri)
+  .pick(%i[month day carrier flight tailnum origin dest air_time distance])
+flights
 ```
 
 ```{ruby}
@@ -3189,9 +3344,9 @@ flights.inner_join(airlines, :carrier)
 # flights.inner_join(airlines) # natural join (same result)
 ```
 
-## 84. Vector#split_to_columns
+## 88. Vector#split_to_columns
 
-Another example using in the DataFrame operation is in [## 69. From the Pandas cookbook (Multiindexing)](#69.-From-the-Pandas-cookbook---Multiindexing).
+Another example using in the DataFrame operation is in [73. From the Pandas cookbook - Multiindexing](#73.-From-the-Pandas-cookbook---Multiindexing).
 
 `self` must be a String type Vector.
 
@@ -3223,7 +3378,7 @@ Vector.new(nil, 'c d', 'e f')
       .split_to_columns
 ```
 
-## 85. Vector#split_to_rows
+## 89. Vector#split_to_rows
 
 `#split_to_rows` will separate strings and flatten into row.
 
@@ -3239,7 +3394,7 @@ v = Vector.new(['a b', 'c d', 'e f'])
 v.split_to_rows
 ```
 
-## 86. Vector#merge
+## 90. Vector#merge
 (Since 0.3.0)
 
 `Vector#merge(other)` merges `self` and `other` if they are String Vector.
@@ -3265,7 +3420,7 @@ Option `:sep` is used to concatenating elements. Its default value is ' '.
 vector.merge('x', sep: '')
 ```
 
-## 87. Separate a variable (column) in a DataFrame
+## 91. Separate a variable (column) in a DataFrame
 (Since 0.3.0)
 
 R's separate operation.
@@ -3324,7 +3479,7 @@ df = DataFrame.new(id: 1..3, yearmonth: %w[202209 202210 202211])
   .assign(:year, :month) { yearmonth.split_to_columns(/(?=..$)/) }
 ```
 
-## 88. Unite variables (columns) in a DataFrame
+## 92. Unite variables (columns) in a DataFrame
 (Since 0.3.0)
 
 R's unite operation.
@@ -3346,7 +3501,7 @@ df.assign(:yearmonth) { year.merge(month, sep: '') }
 DataFrame.new(id: 1..3, yearmonth: df.year.merge(df.month, sep: ''))
 ```
 
-## 89. Separate variable and lengthen into several rows.
+## 93. Separate variable and lengthen into several rows.
 (Since 0.3.0)
 
 R's separate_rows operation.
@@ -3421,7 +3576,7 @@ df.assign(:y, :y1, :y2) { v(:y).split_to_columns(',') }
   .drop_nil
 ```
 
-## 90. Vector#propagate
+## 94. Vector#propagate
 
 Spread the return value of an aggregate function as if it is a element-wise function.
 
@@ -3442,7 +3597,30 @@ Block is also available.
 vec.propagate { |v| v.mean.round }
 ```
 
-## 91. Vector#sort / #sort_indices
+## 95. DataFrame#propagate
+
+Returns a Vector such that all elements have value `scalar` and have same size as self.
+
+(Since 0.5.0)
+
+```{ruby}
+#| tags: []
+df
+```
+
+```{ruby}
+#| tags: []
+df.assign(:sum_x) { propagate(x.sum) }
+```
+
+With a block.
+
+```{ruby}
+#| tags: []
+df.assign(:range) { propagate { x.max - x.min } }
+```
+
+## 96. Vector#sort / #sort_indices
 
 `#sort` will arrange values in Vector.
 
@@ -3468,42 +3646,81 @@ vector.sort(:-)
 # same as vector.sort(:descending)
 ```
 
-## 93. Vector#rank
+## 97. Vector#rank
 
-Returns numerical rank of self.
- 
-Note: This method is currently fixed to the default behavior because `RankOptions` in C++ function is not implemented in C GLib yet.
- - Nil values are considered greater than any value.
- - NaN values are considered greater than any value but smaller than nil values.
- - Tiebreakers are ranked in order of appearance.
+Returns 1-based numerical rank of self.
 
-(Since 0.4.0, Experimental feature)
+- Nil values are considered greater than any value.
+- NaN values are considered greater than any value but smaller than nil values.
+- Sort order can be controlled by the option `order`.
+  * `:ascending` or `+` will compute rank in ascending order (default).
+  * `:descending` or `-` will compute rank in descending order.
+- Tiebreakers will configure how ties between equal values are handled.
+  * `tie: :first` : Ranks are assigned in order of when ties appear in the input (default).
+  * `tie: :min` : Ties get the smallest possible rank in the sorted order.
+  * `tie: :max` : Ties get the largest possible rank in the sorted order.
+  * `tie: :dense` : The ranks span a dense [1, M] interval where M is the number of distinct values in the input.
+- Placement of nil and NaN is controlled by the option `null_placement`.
+  * `null_placement: :at_end` : place nulls at end (default).
+  * `null_placement: :at_start` : place nulls at the top of Vector.
+
+(Since 0.4.0, revised in 0.5.1)
 
 Rank of float Vector;
 
 ```{ruby}
 #| tags: []
-float = Vector.new(0.1, nil, Float::NAN, 0.2, 0.1)
+float = Vector[1, 0, nil, Float::NAN, Float::INFINITY, -Float::INFINITY, 3, 2]
 ```
 
 ```{ruby}
 #| tags: []
+# Same as float.rank(:ascending, tie: :first, null_placement: :at_end)
 float.rank
 ```
 
-Rank of string Vector;
+With sort order;
 
 ```{ruby}
 #| tags: []
-string = Vector.new("A", "B", nil, "A", "C")
+float.rank(:descending) # or float.rank('-')
+```
+
+With null placement;
+
+```{ruby}
+#| tags: []
+float.rank(null_placement: :at_start)
+```
+
+Rank of string Vector with tiebreakers;
+
+```{ruby}
+#| tags: []
+string = Vector['A', 'A', nil, nil, 'C', 'B']
 ```
 
 ```{ruby}
 #| tags: []
-string.rank
+string.rank # same as string.rank(tie: :first)
 ```
 
-## 93. Vector#sample
+```{ruby}
+#| tags: []
+string.rank(tie: :min)
+```
+
+```{ruby}
+#| tags: []
+string.rank(tie: :max)
+```
+
+```{ruby}
+#| tags: []
+string.rank(tie: :dense)
+```
+
+## 98. Vector#sample
 Pick up elements at random.
 
 (Since 0.4.0)
@@ -3548,8 +3765,13 @@ v.sample(9)
 ```
 
 `sample(prop)` will pick up elements by proportion `prop` at random. `prop` must be positive float.
- - Absolute number of elements to pick:`prop*size` is rounded (by `half: :up``)
+ - Absolute number of elements to pick:`prop*size` is truncated.
  - If prop is smaller or equal to 1.0, elements are picked by non-repeating.
+
+```{ruby}
+#| tags: []
+v.sample(0.7)
+```
 
 If picked element is only one, it returns a Vector of size == 1 not a scalar.
 
@@ -3578,7 +3800,25 @@ sampled = v.sample(2.0)
 sampled.tally
 ```
 
-## 94. Vector#concatenate
+## 99. DataFrame#sample/shuffle
+
+(Since 0.5.0)
+
+Select records randomly to create a DataFrame.
+
+```{ruby}
+#| tags: []
+penguins.sample(0.1)
+```
+
+Returns a DataFrame with shuffled rows.
+
+```{ruby}
+#| tags: []
+penguins.shuffle
+```
+
+## 100. Vector#concatenate
 
 Concatenate other array-like to self.
 
@@ -3608,7 +3848,7 @@ integer = Vector.new(1, 2)
 integer.concatenate(["A", "B"])
 ```
 
-## 95. Vector#resolve
+## 101. Vector#resolve
 
 Return other as a Vector which is same data type as self.
 
@@ -3642,7 +3882,41 @@ Not a uint8 Vector;
 vector.resolve([1, 2])
 ```
 
-## 96. SubFrames
+## 102. Vector#cast
+
+Cast self to `type`.
+
+(since 0.4.2)
+
+```{ruby}
+#| tags: []
+vector = Vector.new(1, 2, nil)
+vector.cast(:int16)
+```
+
+```{ruby}
+#| tags: []
+vector.cast(:double)
+```
+
+```{ruby}
+#| tags: []
+vector.cast(:string)
+```
+
+## 103. Vector#one
+
+Get a non-nil element in self. If all elements are nil, return nil.
+
+(since 0.4.2)
+
+```{ruby}
+#| tags: []
+vector = Vector.new([nil, 1, 3])
+vector.one
+```
+
+## 104. SubFrames
 
 `SubFrames` is a new concept of DataFrame collection. It represents ordered subsets of a DataFrame collected by some rules. It includes both grouping and windowing concepts in a unified manner, and also covers broader cases more flexibly.
 
@@ -3718,8 +3992,27 @@ esf = SubFrames.new(dataframe, [])
 ```
 
 ```{ruby}
+#| scrolled: true
 #| tags: []
 esf.empty?
+```
+
+`#take(n)` takes n sub dataframes and return them by SubFrames. If n >= size, it returns self.
+
+```{ruby}
+sf.take(2)
+```
+
+`#offset_indices` returns indices at the top of each sub DataFrames.
+
+```{ruby}
+sf.offset_indices
+```
+
+`#frames` returns an Array of sub DataFrames.
+
+```{ruby}
+sf.frames
 ```
 
 `SubFrames.new` also accepts boolean filters even from the block.
@@ -3731,7 +4024,7 @@ large = !small
 small_large = SubFrames.new(dataframe) { [small, large] }
 ```
 
-## 97. SubFrames#concatenate
+## 105. SubFrames#concatenate
 
 `SubFrames#concatenate` (or alias `#concat`) will concatenate SubFrames to create a DataFrame.
 
@@ -3742,7 +4035,7 @@ small_large = SubFrames.new(dataframe) { [small, large] }
 sf.concatenate
 ```
 
-## 98. SubFrames.by_group
+## 106. SubFrames.by_group
 
 Create SubFrames by Group object.
 
@@ -3759,9 +4052,39 @@ group = Group.new(dataframe, [:y])
 sf = SubFrames.by_group(group)
 ```
 
-## 99. DataFrame#sub_by_value
+## 107. SubFrames.by_indices/.by_filters
 
-Grouping by value. It is corresponding to Group processing.
+`SubFrames.by_indices(dataframe, subset_indices)` creates a new SubFrames object from a DataFrame and an array of indices.#
+
+```{ruby}
+SubFrames.by_indices(dataframe, [[0, 2, 4], [1, 3, 5]])
+```
+
+`SubFrames.by_filters(dataframe, subset_filters)` creates a new SubFrames object from a DataFrame and an array of filters.
+
+```{ruby}
+#| scrolled: true
+SubFrames.by_filters(dataframe, [[true, false, true, false, nil, false], [true, true, false, false, nil, false]])
+```
+
+## 108. SubFrames.by_dataframes
+
+`SubFrames.by_dataframes(dataframes)` creates a new SubFrames from an Array of DataFrames.
+
+```{ruby}
+dataframes = [
+    DataFrame.new(x: [1, 2, 3], y: %w[A A B], z: [false, true, false]),
+    DataFrame.new(x: [4, 5, 6], y: %w[B B C], z: [nil, true, false])
+]
+```
+
+```{ruby}
+SubFrames.by_dataframes(dataframes)
+```
+
+## 109. DataFrame#sub_by_value
+
+`sub_by_value(*keys)` make subframes by value. It is corresponding to Group processing.
 
 Create SubFrames from keys and group by values in columns specified by the key.
 
@@ -3769,10 +4092,10 @@ Create SubFrames from keys and group by values in columns specified by the key.
 
 ```{ruby}
 #| tags: []
-dataframe.sub_by_value(keys: :y)
+dataframe.sub_by_value(:y)
 ```
 
-## 100. DataFrame#sub_by_window
+## 110. DataFrame#sub_by_window
 
 Create SubFrames by window in `size` rolling `from` by `step`.
 
@@ -3785,7 +4108,7 @@ Default values is `from: 0`, `size: nil` and `step: 1`.
 dataframe.sub_by_window(size: 4, step: 2)
 ```
 
-## 101. DataFrame#sub_by_enum
+## 111. DataFrame#sub_by_enum
 
 Create SubFrames by Grouping/Windowing by posion. The position is specified by `Array`'s enumerator method such as `each_slice` or `each_cons`.
 
@@ -3805,7 +4128,7 @@ Create a SubFrames object for each consecutive 3 rows.
 dataframe.sub_by_enum(:each_cons, 4)
 ```
 
-## 102. DataFrame#sub_by_kernel
+## 112. DataFrame#sub_by_kernel
 
 Create SubFrames by windowing with a kernel and step.
 Kernel is a boolean Array and it behaves like a masked window.
@@ -3818,7 +4141,7 @@ kernel = [true, false, false, true]
 dataframe.sub_by_kernel(kernel, step: 2)
 ```
 
-## 103. DataFrame#build_subframes
+## 113. DataFrame#build_subframes
 
 Generic builder of sub-dataframe from self.
 
@@ -3839,25 +4162,132 @@ dataframe.build_subframes do |df|
 end
 ```
 
-## 104. SubFrames#aggregate
-- `SubFrames#aggregate(group_keys, aggregations)`
-  Aggregate SubFrames to create a DataFrame.
+## 114. SubFrames#aggregate
 
-This API will cahnge in 0.4.1.
+Aggregate SubFrames to create a DataFrame. There are 4 APIs in this method.
 
 (Since 0.4.0)
 
-```{ruby}
-#| tags: []
-sf = dataframe.sub_by_value(keys: :y)
-```
+- `#aggregate(keys) { columns }`
+
+Aggregate SubFrames creating DataFrame with label `keys` and  its column values by block.
 
 ```{ruby}
 #| tags: []
-sf.aggregate(:y, {z: :count})
+sf = dataframe.sub_by_value(:y)
 ```
 
-## 105. Vector#modulo
+```{ruby}
+sf.aggregate(:y, :sum_x) { [y.one, x.sum] }  # sf.aggregate([:y, :sum_x]) { [y.one, x.sum] } is also acceptable
+```
+
+- `#aggregate { key_and_aggregated_values }`
+
+Aggregate SubFrames creating DataFrame with pairs of key and aggregated values  in Hash from the block.
+
+```{ruby}
+sf.aggregate do
+  { y: y.one, sum_x: x.sum }
+end
+```
+
+- `#aggregate { [keys, values] }`
+
+Aggregate SubFrames creating DataFrame with an Array of key and aggregated value  from the block.
+
+```{ruby}
+#| tags: []
+sf.aggregate do
+  [[:y, y.one], [:sum_x, x.sum]]
+end
+```
+
+- `#aggregate(group_keys, aggregations)`
+
+Aggregate SubFrames for first values of the columns of  `group_keys` and the aggregated results of key-function pairs.
+( [Experiment)l] This API may be changed in the future.
+
+```{ruby}
+#| tags: []
+sf.aggregate(:y, { x: :sum, z: :count })
+```
+
+## 115. SubFrames#map/#assign
+
+`#map` Returns a SubFrames containing DataFrames returned by the block. It has an alias `collect`.
+
+```{ruby}
+sf
+```
+
+This example assigns a new column.
+
+```{ruby}
+sf.map { |df| df.assign(x_plus1: df[:x] + 1) }
+```
+
+There is a shortcut of `map { assign }`. We can use `assign(key) { updated_column }`.
+
+```{ruby}
+sf.assign(:x_plus1) { x + 1 }
+```
+
+We can use `assign(keys) { updated_columns }` for multiple columns.
+
+```{ruby}
+sf.assign(:sum_x, :flac_x) do
+  group_sum = x.sum
+  [[group_sum] * x.size, x / group_sum.to_f]
+end
+```
+
+Also `assign { keys_and_columns }` is possible.
+
+```{ruby}
+sf.assign do
+  { 'x*z': x * z.if_else(1, 0) }
+end
+```
+
+(Notice) `SubFrames#assign` has a same syntax as `DataFrame#assign`.
+
+If you need an Array of DataFrames (not a SubFrames), use `each.map` instead.
+
+```{ruby}
+sf.each.map { |df| df.assign(x_plus1: df[:x] + 1) }
+```
+
+## 116. SubFrames#select/#reject
+
+`#select` returns a SubFrames containing DataFrames selected by the block.#
+
+```{ruby}
+sf.select { |df| df[:z].any? }
+```
+
+`#select` has aliases `#filter` and `#find_all`.
+
+`#reject` returns a SubFrames containing truthy DataFrames returned by the block.#
+
+```{ruby}
+sf.reject { |df| df[:z].any? }
+```
+
+## 117. SubFrames#filter_map
+
+It returns a SubFrames containing truthy DataFrames returned by the block.
+
+```{ruby}
+sf.filter_map do |df|
+  if df.size > 1
+    df.assign(:y) do
+      y.merge(indices('1'), sep: '')
+    end
+  end
+end
+```
+
+## 118. Vector#modulo
 
 (Since 0.4.1)
 
@@ -3876,7 +4306,177 @@ vector % 3
 vector.modulo(-2)
 ```
 
-## 106. Grouped DataFrame as a list
+## 119. Vector#mode
+
+Compute the 1 most common values and their respective occurence counts.
+
+(since 0.5.0) ModeOptions are not supported in 0.5.0 . Only one mode value is returned.
+
+```{ruby}
+#| tags: []
+Vector[true, true, false, nil].mode
+```
+
+```{ruby}
+#| tags: []
+Vector[0, 1, 1, 2, nil].mode
+```
+
+```{ruby}
+#| tags: []
+Vector[1, 0/0.0, -1/0.0, 1/0.0, nil].mode
+```
+
+## 120. Vector#end_with/start_with
+
+Check if elements in self ends/starts with a literal pattern.
+
+(since 0.5.0)
+
+```{ruby}
+#| tags: []
+v = Vector['array', 'Arrow', 'carrot', nil, 'window']
+```
+
+Emits true if it contains `string`. Emit false if not found. Nil inputs emit nil.
+
+```{ruby}
+#| tags: []
+v.end_with('ow')
+```
+
+```{ruby}
+#| tags: []
+v.start_with('arr')
+```
+
+## 121. Vector#match_substring
+
+For each string in self, emit true if it contains a given pattern.
+
+(since 0.5.0)
+
+```{ruby}
+#| tags: []
+v = Vector['array', 'Arrow', 'carrot', nil, 'window']
+```
+
+Emits true if it contains `string`. Emit false if not found. Nil inputs emit nil.
+
+```{ruby}
+#| tags: []
+v.match_substring('arr')
+```
+
+Otherwise use it with Regexp pattern. It calls `count_substring_regex` in Arrow compute function and uses re2 library.
+
+```{ruby}
+#| tags: []
+v.match_substring(/arr/)
+```
+
+You can ignore case if you use regexp with `i` option, or `igfnore_case: true`
+
+```{ruby}
+#| tags: []
+v.match_substring(/arr/i)  # same as v.find_substring(/arr/, ignore_case: true)
+```
+
+## 122. Vector#match_like
+
+Match elements of self against SQL-style LIKE pattern. The pattern matches a given pattern at any position.
+
+- '%' will match any number of characters,
+- '_' will match exactly one character, and any other character matches itself.
+- To match a literal '%', '_', or '\', precede the character with a backslash.
+
+(since 0.5.0)
+
+```{ruby}
+#| tags: []
+v = Vector['array', 'Arrow', 'carrot', nil, 'window']
+```
+
+You can find indices of a literal string. Emit -1 if not found. Nil inputs emit nil.
+
+```{ruby}
+#| tags: []
+v.match_like('_arr%')
+```
+
+You can ignore case if you use the option `igfnore_case: true`.
+
+```{ruby}
+#| tags: []
+v.match_like('arr%', ignore_case: true)
+```
+
+## 123. Vector#find_substring
+
+Find first occurrence of substring in string Vector.
+
+(since 0.5.1)
+
+```{ruby}
+#| tags: []
+v = Vector['array', 'Arrow', 'carrot', nil, 'window']
+```
+
+You can find indices of a literal string. Emit -1 if not found. Nil inputs emit nil.
+
+```{ruby}
+#| tags: []
+v.find_substring('arr')
+```
+
+Otherwise use it with Regexp pattern. It calls `count_substring_regex` in Arrow compute function and uses re2 library.
+
+```{ruby}
+#| tags: []
+v.find_substring(/arr/)
+```
+
+You can ignore case if you use regexp with `i` option, or `igfnore_case: true`
+
+```{ruby}
+#| tags: []
+v.find_substring(/arr/i)  # same as v.find_substring(/arr/, ignore_case: true)
+```
+
+## 124. Vector#count_substring
+
+For each string in self, count occuerences of substring in given pattern.
+
+(since 0.5.0)
+
+```{ruby}
+#| tags: []
+v = Vector['amber', 'Amazon', 'banana', nil]
+```
+
+You can find indices of a literal string. Emit -1 if not found. Nil inputs emit nil.
+
+```{ruby}
+#| tags: []
+v.count_substring('an')
+```
+
+Otherwise use it with Regexp pattern. It calls `count_substring_regex` in Arrow compute function and uses re2 library.
+
+```{ruby}
+#| tags: []
+v.count_substring(/a[mn]/)
+```
+
+You can ignore case if you use regexp with `i` option, or `igfnore_case: true`
+
+```{ruby}
+#| tags: []
+v.count_substring(/a[mn]/i)  # same as v.find_substring(/arr/, ignore_case: true)
+```
+
+## 125. Grouped DataFrame as a list
+
 This API was introduced in 0.2.3, and supply a new DataFrame group (experimental).
 
 This additional API will treat a grouped DataFrame as a list of DataFrames. I think this API has pros such as:
@@ -3913,4 +4513,84 @@ end
 ```{ruby}
 array.reduce { |a, df| a.concat df }
 ```
+
+## 126. ArrowFunction helpers
+
+`ArrowFunction` module adds two helper method.
+
+`ArrowFunction.find(function_name)` returns Arrow Function object in Arrow C++ Compute Functions.
+
+```{ruby}
+ArrowFunction.find(:mean)
+```
+
+To execute this function,
+
+```{ruby}
+ArrowFunction.find(:mean).execute([[1, 2, 3, 4]]).value.value
+```
+
+`ArrowFunction.arrow_doc(function_name)` returns a document of Arrow C++ Compute Function in a string.
+
+```{ruby}
+puts ArrowFunction.arrow_doc(:mean)
+```
+
+## 127. DataFrame.auto_cast
+
+A data set for planetary data in https://nssdc.gsfc.nasa.gov/planetary/factsheet/ is used here. Let's manually copy the data in the html table and get the tab separated text values.
+
+```{ruby}
+tsv = ' 	 MERCURY 	 VENUS 	 EARTH 	 MOON 	 MARS 	 JUPITER 	 SATURN 	 URANUS 	 NEPTUNE 	 PLUTO
+Mass (1024kg)	0.330	4.87	5.97	0.073	0.642	1898	568	86.8	102	0.0130
+Diameter (km)	4879	12,104	12,756	3475	6792	142,984	120,536	51,118	49,528	2376
+Density (kg/m3)	5429	5243	5514	3340	3934	1326	687	1270	1638	1850
+Gravity (m/s2)	3.7	8.9	9.8	1.6	3.7	23.1	9.0	8.7	11.0	0.7
+Escape Velocity (km/s)	4.3	10.4	11.2	2.4	5.0	59.5	35.5	21.3	23.5	1.3
+Rotation Period (hours)	1407.6	-5832.5	23.9	655.7	24.6	9.9	10.7	-17.2	16.1	-153.3
+Length of Day (hours)	4222.6	2802.0	24.0	708.7	24.7	9.9	10.7	17.2	16.1	153.3
+Distance from Sun (106 km)	57.9	108.2	149.6	0.384*	228.0	778.5	1432.0	2867.0	4515.0	5906.4
+Perihelion (106 km)	46.0	107.5	147.1	0.363*	206.7	740.6	1357.6	2732.7	4471.1	4436.8
+Aphelion (106 km)	69.8	108.9	152.1	0.406*	249.3	816.4	1506.5	3001.4	4558.9	7375.9
+Orbital Period (days)	88.0	224.7	365.2	27.3*	687.0	4331	10,747	30,589	59,800	90,560
+Orbital Velocity (km/s)	47.4	35.0	29.8	1.0*	24.1	13.1	9.7	6.8	5.4	4.7
+Orbital Inclination (degrees)	7.0	3.4	0.0	5.1	1.8	1.3	2.5	0.8	1.8	17.2
+Orbital Eccentricity	0.206	0.007	0.017	0.055	0.094	0.049	0.052	0.047	0.010	0.244
+Obliquity to Orbit (degrees)	0.034	177.4	23.4	6.7	25.2	3.1	26.7	97.8	28.3	122.5
+Mean Temperature (C)	167	464	15	-20	-65	-110	-140	-195	-200	-225
+Surface Pressure (bars)	0	92	1	0	0.01	Unknown*	Unknown*	Unknown*	Unknown*	0.00001
+Number of Moons	0	0	1	0	2	79	82	27	14	5
+Ring System?	No	No	No	No	No	Yes	Yes	Yes	Yes	No
+Global Magnetic Field?	Yes	No	Yes	No	No	Yes	Yes	Yes	Yes	Unknown
+'
+
+raw_dataframe = DataFrame.load(Arrow::Buffer.new(tsv), format: :tsv)
+
+ENV['RED_AMBER_OUTPUT_MODE'] = 'plain'
+raw_dataframe
+```
+
+This dataframe has row oriented calues. So we must transpose the dataframe.
+
+```{ruby}
+transposed = raw_dataframe.transpose
+```
+
+This dataframe has string columns. We can cast each numeric columns, recommended way is to use `#auto_cast`. `#auto_cast` save it in temporally tsv file and re-open it to get a casted dataframe.
+
+```{ruby}
+transposed.auto_cast
+```
+
+There are still some dirts to be cleaned in this dataframe, we don't touch them here. If you are interested, give it a try!
+
+- Rename a column 'NAME' to 'Planet_name'.
+- Remove preceding/trailing spaces in 'Planet_name' values.
+- Capitalize 'Planet_name' values.
+- Remove data for 'Moon' and 'Pluto' to create the Table for planets.
+- Convert 'Unknown*' to nil.
+- Change 'Yes' / 'No' values to true / false (change column type to boolean).
+- Remove comma in numeric values. They obstruct to be numeric columns.
+- Correct cell values which have '*'. They obstruct to be numeric columns.
+- Add missing '^' to unit in labels.
 

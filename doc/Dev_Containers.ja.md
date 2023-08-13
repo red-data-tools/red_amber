@@ -51,11 +51,11 @@ GitHubアカウントにサインインしている必要があります。
 
     Windows 10 Pro/Enterprise では Docker Desktop 2.0 以降。
     Windows 10 Home (2004+) では、Docker Desktop 2.3 以降と WSL 2 バックエンド。
-  
+
   - Mac
 
     Docker Desktop 2.0 以降
-  
+
   - Linux
 
     Docker CE/EE 18.06 以降と Docker Compose 1.21 以降
@@ -83,7 +83,7 @@ GitHubアカウントにサインインしている必要があります。
   ```
 
 - コンテナーで開く
-  
+
   今のフォルダーをコンテナーで再度開きます。
 
   - 左下隅のステータスバーのリモートホスト表示（今はローカルなので「><」の後ろに何もついていない）をクリックするとリモートウィンドウを開くオプションが表示されるので、「コンテナーで再度開く」を選択します。
@@ -138,7 +138,7 @@ GitHubアカウントにサインインしている必要があります。
   プリロードされたデータセットを使って、irbの環境でRedAmberの動作を確認できます。初回はRed Datasetsのデータをロードするため少し時間がかかります。
 
   ```ruby
-  $ bin/example
+  $ rake example
 
   (snip)
 
@@ -148,15 +148,15 @@ GitHubアカウントにサインインしている必要があります。
       84: #   mtcars, band_members, band_instruments, band_instruments2
       85: #   import_cars, comecome, rubykaigi, dataframe, subframes
    => 86: binding.irb
-  
+
   irb(main):001:0>
   ```
-  
+
   irbの動作を途中で止めているので、ここで表示されているデータセットが変数に読み込まれています。
 
   ```ruby
   irb(main):001:0> import_cars
-  => 
+  =>
   #<RedAmber::DataFrame : 5 x 6 Vectors, 0x0000000000010914>
        Year    Audi     BMW BMW_MINI Mercedes-Benz      VW
     <int64> <int64> <int64>  <int64>       <int64> <int64>
@@ -184,7 +184,7 @@ GitHubアカウントにサインインしている必要があります。
   Python と IRuby カーネルを持ったJupyter Labをブラウザで起動することができます。
 
   ```shell
-  $ bin/jupyter
+  $ rake jupyter
   ```
 
   で、ローカルの8888ポートでブラウザが立ち上がります。
@@ -242,18 +242,27 @@ $ quarto render --help
 `.qmd`ソースファイルから `.ipynb` を生成するには、
 
 ```shell
+$ bundle exec rake quarto:convert
+```
+とします。`doc/qmd`フォルダー以下にあるqmdソースファイルから `doc/notebook`フォルダーに`ipynb`ノートブックファイルが作成されます。
+
+より一般的には、
+
+```shell
 $ quarto convert ソースファイル.qmd
 $ quarto convert ソースファイル.qmd --output 出力先ノートブック.ipynb
 ```
 上の書き方では、出力ファイルはソースファイルの拡張子を `.ipynb`に変えて、ソースファイルと同じディレクトリに保存されます。
 
-下記のコマンドは、`doc/qmd` 以下にあるファイルから`.ipynb` ファイルを生成して `doc/notebook` に保存し、Jupyter Labを開きます。
+下記のコマンドは、Notebookを作成後、Jupyter Labを開きます。
 
 ```shell
-$ bin/jupyter
+$ bundle exec rake jupyter
 ```
 
 ### Jupyter Notebookファイルを`qmd`形式で保存する
+
+編集したJupyter Notebookをqmd形式に変換できます。
 
 ```shell
 $ quarto convert ノートブック.ipynb
@@ -262,13 +271,19 @@ $ quarto convert ノートブック.ipynb --output 出力先ソースファイ�
 
 ### その他の活用方法
 
-目次付きでpdf形式で出力するには
+下記のコマンドは`doc/qmd`フォルダー以下にあるqmdソースファイルを`ipynb`に変換し、実行してpdfを作成します。
 
 ```shell
-$ quarto render notebook.ipynb --to pdf --toc
+$ bundle exec rake quarto:test
 ```
 
-より詳しくは、コマンドラインヘルプ(`quarto --help`)、または[Quarto](https://quarto.org/)公式ページをご覧ください。
+下記は`doc/notebook`フォルダーを含めたrakeの生成物を消去します。
+
+```shell
+$ rake clean
+```
+
+Quartoについてより詳しくは、コマンドラインヘルプ(`quarto --help`)、または[Quarto](https://quarto.org/)公式ページをご覧ください。
 
 ### 謝辞
 

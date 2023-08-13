@@ -17,6 +17,12 @@ Rubyistのためのデータフレームライブラリ.
 
 ![screenshot from jupyterlab](https://raw.githubusercontent.com/red-data-tools/red_amber/main/doc/image/screenshot.png)
 
+## 概要
+* RedAmberはRubyで書かれたデータフレームライブラリです。[Apache Arrow](https://arrow.apache.org/)の列指向データフォーマットを扱うことができます。
+* Rubyらしいブロックやコレクションを使って、Rubyらしい書き方でデータフレームの操作ができることを目指しています。
+* このリポジトリは[開発コンテナ(Dev Container)](https://containers.dev/)をサポートしているので、RedAmberの操作が容易に[試せます](doc/Dev_Containers.ja.md)。
+* [使用例が豊富なドキュメント](https://red-data-tools.github.io/red_amber/)と、127項目の主な操作例を記載したJupyter Notebookドキュメントがあります。
+
 ## 必要な環境
 ### Ruby
 - Ruby 3.0 以上.
@@ -27,7 +33,7 @@ gem 'red-arrow',   '~> 12.0.0' # お使いの環境に合わせた Apache Arrow 
 　　　　　　　　　　　　　　　　　# 下記のインストールを参照してください
 gem 'red-arrow-numo-narray'    # 必要に応じて。Numo::NArray との連携またはランダムサンプリングが必要な場合。
 gem 'red-parquet', '~> 12.0.0' # 必要に応じて。Parquet の入出力が必要な場合。
-gem 'red-datasets-arrow'       # 必要に応じて。Red Datasets を利用する場合。 
+gem 'red-datasets-arrow'       # 必要に応じて。Red Datasets を利用する場合。
 gem 'red-arrow-activerecord'   # 必要に応じて。Active Record とのデータ交換が必要な場合。
 gem 'rover-df',                # 必要に応じて。Rover::DataFrame に対する入出力が必要な場合。
 ```
@@ -41,7 +47,7 @@ RedAmberをインストールする前に、下記のライブラリのインス
 - Apache Parquet GLib (~> 12.0.0)  # Parquetの入出力が必要な場合。
 
 環境ごとの詳しいインストール方法は、 [Apache Arrow install document](https://arrow.apache.org/install/) を参照してください。
-  
+
   - Ubuntuの場合の最低限必要なインストール例:
 
       ```
@@ -94,14 +100,14 @@ RedAmber用のDev Containerは、`.devcontainer` ディレクトリに必要な�
 
 このリポジトリの`docker` フォルダーから Docker コンテナ環境を生成できます。リポジトリをクローンしてから、dockerフォルダーにある [readme](docker/readme.md) を参照してください。その環境では `docker/notebook` フォルダーにある Jupyter Notebookイメージを試用できます。
 
-このREADMEの内容をネットワーク上のJupyter Notebookでインタラクティブに試用することも出来ます。 [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb). 
+このREADMEの内容をネットワーク上のJupyter Notebookでインタラクティブに試用することも出来ます。 [Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb).
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb)
 
 Jupyter Notebookの環境を含めた他の多くのデータ処理用のライブラリーとともにRedAmberもパッケージングされたDocker Imageとして、[RubyData Docker Stacks](https://github.com/RubyData/docker-stacks) が利用できます(Thanks to Kenta Murata).
 
 ## 他のデータフレームライブラリとの比較表
 
-RedAmberの基本的な機能をPython 
+RedAmberの基本的な機能をPython
 [pandas](https://pandas.pydata.org/) や
 R [Tidyverse](https://www.tidyverse.org/) や
 Julia [Dataframes](https://dataframes.juliadata.org/stable/) と比較した表は [DataFrame_Comparison.md](doc/DataFrame_Comparison.md) にあります(Thanks to Benson Muite).
@@ -221,18 +227,16 @@ starwars
 より詳しいデータフレームの使用例については、[DataFrame.md](doc/DataFrame.md) をご参照ください。
 
 
-### 1次元のデータを保持する `Vector` 
+### 1次元のデータを保持する `Vector`
 
 クラス`RedAmber::Vector` はデータフレームの中の列方向に格納された１次元のデータ列を保持します.
 
 より詳しい使用例については [Vector.md](doc/Vector.md) をご参照ください。
 
-## Jupyter notebook
 
-Jupyter Notebook形式の使用例として、[Examples of Red Amber](https://github.com/heronshoes/docker-stacks/blob/RedAmber-binder/binder/examples_of_red_amber.ipynb)
-([raw file](https://raw.githubusercontent.com/heronshoes/docker-stacks/RedAmber-binder/binder/examples_of_red_amber.ipynb)) があります。データのロードから各種のデータ処理まで100以上の使用例を集めています。[Binder](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb). 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=examples_of_red_amber.ipynb)で試すこともできます。
+## Jupyter Notebook
 
+このリポジトリでは [Quarto](https://quarto.org/) を使って、操作例を載せたJupyter Notebookのソースはqmd形式で保存し、gitの管理下に置いています。Notebookの生成は開発コンテナを使うと便利です。詳しくは[開発コンテナ(Development Containers)の利用](doc/Dev_Containers.ja.md)を利用して下さい。
 
 ## 開発
 
@@ -253,13 +257,14 @@ RedAmberの開発では、`rake test` は必須ですが、`rake rubocop` をパ
 
 このプロジェクトを支援して頂けると嬉しいです。支援の方法はいくつかあります。
 
-- [discussions](https://github.com/heronshoes/red_amber/discussions)で話をする [![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/red-data-tools/red_amber/discussions)
-  - Q and Aや使用方法、豆知識などを見る。
-  - 疑問に思っていることを質問する。
+- [discussions](https://github.com/heronshoes/red_amber/discussions)でお話ししましょう! [![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/red-data-tools/red_amber/discussions)
+  - Q and Aや使用方法、豆知識などを見流ことができます。
+  - 疑問に思っていることを質問できます。
   - 新しいアイデアを共有する。アイデアはdiscussionからissueに昇格させて育てていくこともあります。漠然としたアイデアでもdiscussionから始めて大きくしていきましょう。
 - [バグ報告や新しい機能の提案](https://github.com/red-data-tools/red_amber/issues)
 - バグの修正や[プルリクエスト](https://github.com/red-data-tools/red_amber/pulls)
-- ドキュメントを修正したり、不明確なところを直したり、新しく追加する
+- ドキュメントを修正したり、不明確なところを直したり、新しく追加しましょう。
+皆さんのご参加をお待ちしています。
 
 ## License
 

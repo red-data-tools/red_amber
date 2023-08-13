@@ -305,21 +305,21 @@ module RedAmber
     #   [4, 5, 8, 7, 1, 6, 2, 3]
     #
     # @example Rank with tie: :min
-    #   float_vector.rank(tie: :min)
+    #   string.rank(tie: :min)
     #
     #   # =>
     #   #<RedAmber::Vector(:uint64, size=6):0x000000000007a1d4>
     #   [1, 1, 5, 5, 4, 3]
     #
     # @example Rank with tie: :max
-    #   float_vector.rank(tie: :max)
+    #   string.rank(tie: :max)
     #
     #   # =>
     #   #<RedAmber::Vector(:uint64, size=6):0x000000000007cba0>
     #   [2, 2, 6, 6, 4, 3]
     #
     # @example Rank with tie: :dense
-    #   float_vector.rank(tie: :dense)
+    #   string.rank(tie: :dense)
     #
     #   # =>
     #   #<RedAmber::Vector(:uint64, size=6):0x0000000000080930>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RedAmber
-  # class SubFrames treats a set of subsets of a DataFrame
+  # class SubFrames treats subsets of a DataFrame
   # [Experimental feature] Class SubFrames may be removed or be changed in the future.
   class SubFrames
     include Enumerable # may change to use Forwardable.
@@ -434,7 +434,7 @@ module RedAmber
     #   @return [DataFrame]
     #     created DataFrame.
     #   @example Aggregate by key labels in arguments and values from block.
-    #     subframes.aggregate(:y, :sum_x) { [y.first, x.sum] }
+    #     subframes.aggregate(:y, :sum_x) { [y.one, x.sum] }
     #
     #     # =>
     #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003b24>
@@ -445,7 +445,7 @@ module RedAmber
     #     2 C              6
     #
     #   @example Aggregate by key labels in an Array and values from block.
-    #     subframes.aggregate([:y, :sum_x]) { [y.first, x.sum] }
+    #     subframes.aggregate([:y, :sum_x]) { [y.one, x.sum] }
     #
     #     # =>
     #     #<RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003b24>
@@ -457,7 +457,7 @@ module RedAmber
     #
     # @overload aggregate
     #
-    #   Aggregate SubFrames creating DataFrame with pairs of key and aggregated value
+    #   Aggregate SubFrames creating DataFrame with pairs of key and aggregated values
     #   in Hash from the block.
     #
     #   @yieldparam dataframe [DataFrame]
@@ -470,7 +470,7 @@ module RedAmber
     #     created DataFrame.
     #   @example Aggregate by key and value pairs from block.
     #     subframes.aggregate do
-    #       { y: y.first, sum_x: x.sum }
+    #       { y: y.one, sum_x: x.sum }
     #     end
     #
     #     # =>
@@ -712,7 +712,7 @@ module RedAmber
     #   @example
     #     subframes.assign(:sum_x, :frac_x) do
     #       group_sum = x.sum
-    #       [[group_sum] * size, x / s.to_f]
+    #       [[group_sum] * size, x / group_sum.to_f]
     #     end
     #
     #     # =>

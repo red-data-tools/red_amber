@@ -1,10 +1,14 @@
 ---
 title: RedAmber Examples
+date: 2023-08-06
+author: heronshoes
 jupyter: ruby
+format:
+  pdf:
+    toc: true
 ---
 
 This notebook walks through the [README of RedAmber](https://github.com/heronshoes/red_amber#readme).
-
 
 ## `RedAmber::DataFrame`
 
