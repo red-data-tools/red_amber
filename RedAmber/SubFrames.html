@@ -107,7 +107,7 @@
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
     
-<p>class SubFrames treats a set of subsets of a DataFrame</p>
+<p>class SubFrames treats subsets of a DataFrame</p>
 <dl class="rdoc-list label-list"><dt>Experimental feature
 <dd>
 <p>Class SubFrames may be removed or be changed in the future.</p>
@@ -1623,7 +1623,7 @@ sf = SubFrames.by_group(group)
 <p>Aggregate by key labels in arguments and values from block.</p>
 </div></p>
       
-      <pre class="example code"><code>subframes.aggregate(:y, :sum_x) { [y.first, x.sum] }
+      <pre class="example code"><code>subframes.aggregate(:y, :sum_x) { [y.one, x.sum] }
 
 # =&gt;
 #&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003b24&gt;
@@ -1638,7 +1638,7 @@ sf = SubFrames.by_group(group)
 <p>Aggregate by key labels in an Array and values from block.</p>
 </div></p>
       
-      <pre class="example code"><code>subframes.aggregate([:y, :sum_x]) { [y.first, x.sum] }
+      <pre class="example code"><code>subframes.aggregate([:y, :sum_x]) { [y.one, x.sum] }
 
 # =&gt;
 #&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000003b24&gt;
@@ -1736,7 +1736,7 @@ sf = SubFrames.by_group(group)
         <div class="docstring">
   <div class="discussion">
     
-<p>Aggregate SubFrames creating DataFrame with pairs of key and aggregated value in Hash from the block.</p>
+<p>Aggregate SubFrames creating DataFrame with pairs of key and aggregated values in Hash from the block.</p>
 
 
   </div>
@@ -1752,7 +1752,7 @@ sf = SubFrames.by_group(group)
 </div></p>
       
       <pre class="example code"><code>subframes.aggregate do
-  { y: y.first, sum_x: x.sum }
+  { y: y.one, sum_x: x.sum }
 end
 
 # =&gt;
@@ -2391,7 +2391,7 @@ end
       
       <pre class="example code"><code>subframes.assign(:sum_x, :frac_x) do
   group_sum = x.sum
-  [[group_sum] * size, x / s.to_f]
+  [[group_sum] * size, x / group_sum.to_f]
 end
 
 # =&gt;
@@ -4717,7 +4717,7 @@ puts SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 </div>
 
       <div id="footer">
-  Generated on Fri Aug 11 08:26:27 2023 by
+  Generated on Sun Aug 13 04:52:15 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>
