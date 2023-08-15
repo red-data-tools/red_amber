@@ -17,9 +17,14 @@ RuboCop::RakeTask.new
 
 task default: %i[test rubocop]
 
+def install_gems_for_examples
+  sh 'cd bin; bundle install; cd -'
+end
+
 # Example
 desc 'Start example environment'
 task :example do
+  install_gems_for_examples
   sh 'bundle exec --gemfile=bin/Gemfile bin/example'
 end
 
@@ -47,6 +52,7 @@ namespace :quarto do
 
   desc 'test to execute notebooks'
   task test: notebooks do
+    install_gems_for_examples
     notebooks.each do |notebook|
       quarto_options = '--execute-daemon-restart --execute'
       sh "bundle exec --gemfile=bin/Gemfile quarto render #{notebook} #{quarto_options}"
@@ -56,8 +62,10 @@ end
 
 desc 'Start jupyter lab'
 task jupyter: 'quarto:convert' do
+  install_gems_for_examples
+
   jupyter_options =
-    "--notebook-dir='/workspaces/red_amber/doc/notebook' --NotebookApp.token=''"
+    "--notebook-dir='doc/notebook' --NotebookApp.token=''"
   sh "bundle exec --gemfile=bin/Gemfile jupyter lab #{jupyter_options}"
 end
 
