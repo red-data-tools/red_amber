@@ -1,9 +1,8 @@
 # Comparison of DataFrames
 
-Compare basic features of RedAmber with Python 
-[pandas](https://pandas.pydata.org/),
-R [Tidyverse](https://www.tidyverse.org/) and
-Julia [Dataframes](https://dataframes.juliadata.org/stable/).
+Compare basic features of RedAmber with [Python pandas](https://pandas.pydata.org/),
+[R Tidyverse](https://www.tidyverse.org/) and
+[Julia DataFrames](https://dataframes.juliadata.org/stable/).
 
 ## Select columns (variables)
 
@@ -51,15 +50,12 @@ Julia [Dataframes](https://dataframes.juliadata.org/stable/).
 |---                                       |---                             |---                 |---      |---            |
 | Combine additional columns               | merge, bind_cols               | dplyr::bind_cols   | concat  | combine       |
 | Combine additional rows 	                | concatenate, concat, bind_rows |	dplyr::bind_rows 	 | concat  | transform     |
-| Join right to left, leaving only the matching rows| join, inner_join      | dplyr::inner_join  | merge   | innerjoin     |
-| Join right to left, leaving all rows     | join, full_join, outer_join 	  | dplyr::full_join   | merge   | outerjoin     |
-| Join matching values to left from right  | join, left_join                |	dplyr::left_join 	 | merge   | leftjoin      |
-| Join matching values from left to right  | join, right_join               |	dplyr::right_join  | merge   | rightjoin     |
-| Return rows of left that have a match in right | join, semi_join 	        | dplyr::semi_join 	 | [isin]  | semijoin      |
-| Return rows of left that do not have a match in right | join, anti_join   |	dplyr::anti_join 	 | [isin]  | antijoin      |
+| Join right to left, leaving only the matching rows| inner_join, join      | dplyr::inner_join  | merge   | innerjoin     |
+| Join right to left, leaving all rows     | full_join, outer_join, join 	  | dplyr::full_join   | merge   | outerjoin     |
+| Join matching values to left from right  | left_join, join                |	dplyr::left_join 	 | merge   | leftjoin      |
+| Join matching values from left to right  | right_join, join               |	dplyr::right_join  | merge   | rightjoin     |
+| Return rows of left that have a match in right | semi_join, join 	        | dplyr::semi_join 	 | [isin]  | semijoin      |
+| Return rows of left that do not have a match in right | anti_join, join   |	dplyr::anti_join 	 | [isin]  | antijoin      |
 | Collect rows that appear in left or right | union 	                       | dplyr::union       | merge   |               |
 | Collect rows that appear in both left and right | intersect 	             | dplyr::intersect 	 | merge   |               |
 | Collect rows that appear in left but not right | difference, setdiff      | dplyr::setdiff 	   | merge   |               |
-
- 
-

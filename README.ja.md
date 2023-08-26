@@ -110,7 +110,7 @@ Jupyter Notebookの環境を含めた他の多くのデータ処理用のライ�
 RedAmberの基本的な機能をPython
 [pandas](https://pandas.pydata.org/) や
 R [Tidyverse](https://www.tidyverse.org/) や
-Julia [Dataframes](https://dataframes.juliadata.org/stable/) と比較した表は [DataFrame_Comparison.md](doc/DataFrame_Comparison.md) にあります(Thanks to Benson Muite).
+Julia [DataFrames](https://dataframes.juliadata.org/stable/) と比較した表は [DataFrame_Comparison_ja.md](doc/DataFrame_Comparison_ja.md) にあります(Thanks to Benson Muite).
 
 ## `RedAmber`のデータフレーム
 
