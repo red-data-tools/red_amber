@@ -29,10 +29,10 @@ Supported Ruby version is >= 3.0.
 
 ### Required libraries
 ```ruby
-gem 'red-arrow',   '~> 12.0.0' # Requires Apache Arrow (see installation below).
+gem 'red-arrow',   '>= 12.0.0' # Requires Apache Arrow (see installation below).
 gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray,
                                # or use random sampling feature.
-gem 'red-parquet', '~> 12.0.0' # Optional, if you use IO from/to parquet.
+gem 'red-parquet', '>= 12.0.0' # Optional, if you use IO from/to parquet.
 gem 'red-datasets-arrow'       # Optional, if you use Red Datasets.
 gem 'red-arrow-activerecord'   # Optional, if you use Active Record.
 gem 'rover-df',                # Optional, if you use IO from/to Rover::DataFrame.
@@ -42,9 +42,9 @@ gem 'rover-df',                # Optional, if you use IO from/to Rover::DataFram
 
 Install requirements before you install RedAmber.
 
-- Apache Arrow (~> 12.0.0)
-- Apache Arrow GLib (~> 12.0.0)
-- Apache Parquet GLib (~> 12.0.0)  # If you use IO from/to parquet
+- Apache Arrow (>= 12.0.0)
+- Apache Arrow GLib (>= 12.0.0)
+- Apache Parquet GLib (>= 12.0.0)  # If you use IO from/to parquet
 
 See [Apache Arrow install document](https://arrow.apache.org/install/).
 
@@ -75,11 +75,11 @@ See [Apache Arrow install document](https://arrow.apache.org/install/).
 If you prepared Apache Arrow, add these lines to your Gemfile:
 
 ```ruby
-gem 'red-arrow',   '~> 12.0.0'
+gem 'red-arrow',   '>= 12.0.0'
 gem 'red_amber'
 gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
                                # or use random sampling feature.
-gem 'red-parquet', '~> 12.0.0' # Optional, if you use IO from/to parquet
+gem 'red-parquet', '>= 12.0.0' # Optional, if you use IO from/to parquet
 gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
 gem 'red-arrow-activerecord'   # Optional, if you use Active Record
 gem 'rover-df',                # Optional, if you use IO from/to Rover::DataFrame.
