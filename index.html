@@ -92,10 +92,10 @@
 
 <h3 id="label-Required+libraries">Required libraries</h3>
 
-<pre class="code ruby"><code class="ruby">gem &#39;red-arrow&#39;,   &#39;~&gt; 12.0.0&#39; # Requires Apache Arrow (see installation below).
+<pre class="code ruby"><code class="ruby">gem &#39;red-arrow&#39;,   &#39;&gt;= 12.0.0&#39; # Requires Apache Arrow (see installation below).
 gem &#39;red-arrow-numo-narray&#39;    # Optional, recommended if you use inputs from Numo::NArray,
                                # or use random sampling feature.
-gem &#39;red-parquet&#39;, &#39;~&gt; 12.0.0&#39; # Optional, if you use IO from/to parquet.
+gem &#39;red-parquet&#39;, &#39;&gt;= 12.0.0&#39; # Optional, if you use IO from/to parquet.
 gem &#39;red-datasets-arrow&#39;       # Optional, if you use Red Datasets.
 gem &#39;red-arrow-activerecord&#39;   # Optional, if you use Active Record.
 gem &#39;rover-df&#39;,                # Optional, if you use IO from/to Rover::DataFrame.
@@ -105,11 +105,11 @@ gem &#39;rover-df&#39;,                # Optional, if you use IO from/to Rover::
 
 <p>Install requirements before you install RedAmber.</p>
 <ul><li>
-<p>Apache Arrow (~&gt; 12.0.0)</p>
+<p>Apache Arrow (&gt;= 12.0.0)</p>
 </li><li>
-<p>Apache Arrow GLib (~&gt; 12.0.0)</p>
+<p>Apache Arrow GLib (&gt;= 12.0.0)</p>
 </li><li>
-<p>Apache Parquet GLib (~&gt; 12.0.0) # If you use IO from/to parquet</p>
+<p>Apache Parquet GLib (&gt;= 12.0.0) # If you use IO from/to parquet</p>
 </li></ul>
 
 <p>See <a href="https://arrow.apache.org/install/">Apache Arrow install document</a>.</p>
@@ -120,7 +120,7 @@ gem &#39;rover-df&#39;,                # Optional, if you use IO from/to Rover::
 </li><li>
 <p>On Fedora 39 (Rawhide):</p>
 
-<p> <code>   sudo dnf update   sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel </code></p>
+<p> <code>   sudo dnf update   sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel libyaml-devel </code></p>
 </li><li>
 <p>On macOS, using Homebrew:</p>
 
@@ -129,11 +129,11 @@ gem &#39;rover-df&#39;,                # Optional, if you use IO from/to Rover::
 
 <p>If you prepared Apache Arrow, add these lines to your Gemfile:</p>
 
-<pre class="code ruby"><code class="ruby">gem &#39;red-arrow&#39;,   &#39;~&gt; 12.0.0&#39;
+<pre class="code ruby"><code class="ruby">gem &#39;red-arrow&#39;,   &#39;&gt;= 12.0.0&#39;
 gem &#39;red_amber&#39;
 gem &#39;red-arrow-numo-narray&#39;    # Optional, recommended if you use inputs from Numo::NArray
                                # or use random sampling feature.
-gem &#39;red-parquet&#39;, &#39;~&gt; 12.0.0&#39; # Optional, if you use IO from/to parquet
+gem &#39;red-parquet&#39;, &#39;&gt;= 12.0.0&#39; # Optional, if you use IO from/to parquet
 gem &#39;red-datasets-arrow&#39;       # Optional, recommended if you use Red Datasets
 gem &#39;red-arrow-activerecord&#39;   # Optional, if you use Active Record
 gem &#39;rover-df&#39;,                # Optional, if you use IO from/to Rover::DataFrame.
@@ -313,7 +313,7 @@ bundle exec rake test
 </div></div>
 
       <div id="footer">
-  Generated on Thu Aug 17 20:51:13 2023 by
+  Generated on Thu Aug 31 21:57:56 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.2.2).
 </div>
