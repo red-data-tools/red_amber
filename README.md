@@ -63,7 +63,7 @@ See [Apache Arrow install document](https://arrow.apache.org/install/).
 
       ```
       sudo dnf update
-      sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel
+      sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel libyaml-devel
       ```
 
   - On macOS, using Homebrew:

@@ -63,7 +63,7 @@ RedAmberをインストールする前に、下記のライブラリのインス
 
       ```
       sudo dnf update
-      sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel
+      sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel libyaml-devel
       ```
 
   - macOS の場合は、Homebrewを使用する:
