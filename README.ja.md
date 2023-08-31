@@ -29,10 +29,10 @@ Rubyistのためのデータフレームライブラリ.
 
 ### ライブラリ
 ```ruby
-gem 'red-arrow',   '~> 12.0.0' # お使いの環境に合わせた Apache Arrow が必要です
-　　　　　　　　　　　　　　　　　# 下記のインストールを参照してください
+gem 'red-arrow',   '>= 12.0.0' # お使いの環境に合わせた Apache Arrow が必要です
+                               # 下記のインストールを参照してください
 gem 'red-arrow-numo-narray'    # 必要に応じて。Numo::NArray との連携またはランダムサンプリングが必要な場合。
-gem 'red-parquet', '~> 12.0.0' # 必要に応じて。Parquet の入出力が必要な場合。
+gem 'red-parquet', '>= 12.0.0' # 必要に応じて。Parquet の入出力が必要な場合。
 gem 'red-datasets-arrow'       # 必要に応じて。Red Datasets を利用する場合。
 gem 'red-arrow-activerecord'   # 必要に応じて。Active Record とのデータ交換が必要な場合。
 gem 'rover-df',                # 必要に応じて。Rover::DataFrame に対する入出力が必要な場合。
@@ -42,9 +42,9 @@ gem 'rover-df',                # 必要に応じて。Rover::DataFrame に対す
 
 RedAmberをインストールする前に、下記のライブラリのインストールが必要です。
 
-- Apache Arrow (~> 12.0.0)
-- Apache Arrow GLib (~> 12.0.0)
-- Apache Parquet GLib (~> 12.0.0)  # Parquetの入出力が必要な場合。
+- Apache Arrow (>= 12.0.0)
+- Apache Arrow GLib (>= 12.0.0)
+- Apache Parquet GLib (>= 12.0.0)  # Parquetの入出力が必要な場合。
 
 環境ごとの詳しいインストール方法は、 [Apache Arrow install document](https://arrow.apache.org/install/) を参照してください。
 
@@ -75,10 +75,10 @@ RedAmberをインストールする前に、下記のライブラリのインス
 Apache Arrowがインストールできたら、下記の行をGemfileに追加してください:
 
 ```ruby
-gem 'red-arrow',   '~> 12.0.0'
+gem 'red-arrow',   '>= 12.0.0'
 gem 'red_amber'
 gem 'red-arrow-numo-narray'    # 必要に応じて。Numo::NArray との連携またはランダムサンプリングが必要な場合。
-gem 'red-parquet', '~> 12.0.0' # 必要に応じて。Parquetの入出力が必要な場合。
+gem 'red-parquet', '>= 12.0.0' # 必要に応じて。Parquetの入出力が必要な場合。
 gem 'red-datasets-arrow'       # 必要に応じて。Red Datasets を利用する場合。
 gem 'red-arrow-activerecord'   # 必要に応じて。Active Record とのデータ交換が必要な場合。
 gem 'rover-df',                # 必要に応じて。Rover::DataFrameに対する入出力が必要な場合。

@@ -7,7 +7,7 @@ gemspec
 group :test do
   gem 'rake'
 
-  gem 'red-parquet', '~> 12.0.0'
+  gem 'red-parquet', '>= 12.0.0'
   gem 'rover-df', '~> 0.3.0'
 
   gem 'rubocop'

@@ -13,7 +13,7 @@ format:
     colorlinks: true
 ---
 
-For RedAmber Version 0.5.1-HEAD and Arrow version 12.0.1 .
+For RedAmber Version 0.5.1, 0.5.2 and Arrow version 12.0.1, 13.0.0 .
 
 ## 1. Install
 
@@ -21,9 +21,9 @@ Install requirements before you install RedAmber.
 
 - Ruby (>= 3.0)
 
-- Apache Arrow (~> 12.0.0)
-- Apache Arrow GLib (~> 12.0.0)
-- Apache Parquet GLib (~> 12.0.0)  # if you need IO from/to Parquet resource.
+- Apache Arrow (>= 12.0.0)
+- Apache Arrow GLib (>= 12.0.0)
+- Apache Parquet GLib (>= 12.0.0)  # if you need IO from/to Parquet resource.
 
   See [Apache Arrow install document](https://arrow.apache.org/install/).
 
@@ -56,11 +56,11 @@ Install requirements before you install RedAmber.
 If you prepared Apache Arrow, add these lines to your Gemfile:
 
 ```ruby
-gem 'red-arrow',   '~> 12.0.0'
+gem 'red-arrow',   '>= 12.0.0'
 gem 'red_amber'
 gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
                                # or use random sampling feature.
-gem 'red-parquet', '~> 12.0.0' # Optional, if you use IO from/to parquet
+gem 'red-parquet', '>= 12.0.0' # Optional, if you use IO from/to parquet
 gem 'red-datasets-arrow'       # Optional, recommended if you use Red Datasets
 gem 'red-arrow-activerecord'   # Optional, if you use Active Record
 gem 'rover-df',                # Optional, if you use IO from/to Rover::DataFrame.
