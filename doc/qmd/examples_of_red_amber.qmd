@@ -40,7 +40,7 @@ Install requirements before you install RedAmber.
   - On Fedora 38 (Rawhide):
     ```shell
     sudo dnf update
-    sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel
+    sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel libyaml-devel
 
 
   - On macOS, you can install Apache Arrow C++ library using Homebrew:

@@ -4,12 +4,11 @@ on:
     branches:
       - main
   pull_request:
-  
+
 jobs:
   test:
     name: fedora
     runs-on: ubuntu-latest
-    
     steps:
       - name: Setup Podman
         run: |
@@ -25,11 +24,11 @@ jobs:
           {
               echo 'FROM fedora:39'
               echo 'RUN dnf -y update'
-              echo 'RUN dnf -y install gcc-c++ git libarrow-devel libarrow-glib-devel ruby-devel'
+              echo 'RUN dnf -y install gcc-c++ git libarrow-devel libarrow-glib-devel ruby-devel libyaml-devel'
               echo 'RUN dnf clean all'
               echo 'COPY red_amber red_amber'
               echo 'WORKDIR /red_amber'
               echo 'RUN bundle install'
           } > podmanfile
           echo 'RUN bundle exec rake test' >> podmanfile
-          podman build --tag fedora38test -f ./podmanfile
+          podman build --tag fedora_test -f ./podmanfile
