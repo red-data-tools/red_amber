@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -e
 
+# Explicitly set ownership of /workspaces to vscode:vscode
+# Because recent runner has uid=1001(runner), gid=999(docker)
+sudo chown -R $(id -un):$(id -un) /workspaces
+
 # Install language and set timezone
 # You should change here if you use another
 sudo apt-get update
