@@ -1,3 +1,20 @@
+## [0.5.2] - 2023-09-01
+
+Support Apache Arrow 13.0.0 .
+This version is compatible with Arrow 12.0.0 .
+
+- Breaking change
+
+- Bug fixes
+  - Fix bundle install issue by install libyaml-devel (#280)
+  - Fix ownership in devcontainer ci (#280)
+
+- New features and improvements
+  - Support Arrow 13.0.0 (#280)
+
+- Documentation and Example
+  - Add dataframe_comparison_ja (#281)
+
 ## [0.5.1] - 2023-08-18
 
 Docker environment is replaced by Dev Container,
