@@ -3,7 +3,7 @@
 このリポジトリでは [開発コンテナ(Dev Container)](https://containers.dev/)をサポートしています。
 これを使うと、ローカルの環境を汚すことなく、RedAmberに必要なツール一式を含んだ環境を準備することができます。この環境には、Ruby、Apache Arrow、RedAmberのソースツリー、GitHub CI、サンプルデータセット、IRubyカーネルを含んだJupyter Labなどが含まれていて、簡単でメンテナンスしやすく、かつ再利用性が高い構成になっています。
 
-RedAmber用のDev Containerは、`.devcontainer` ディレクトリに必要な設定が書かれています。現在の実装では、Dockerfileを使用せず、Dev Containers用のUbuntuベースイメージに、Dev Container Featuresを使って、Python、GitHub CIの環境を加えて作っています。Ruby は Container ができてから走らせるスクリプトでインストールしています。
+RedAmber用のDev Containerは、`.devcontainer` ディレクトリに必要な設定が書かれています。現在の実装では、Dockerfileを使用して、Dev Containers用のUbuntuベースイメージにRubyとApache Arrowの環境をインストールし、さらにDev Container Featuresを使って Python、GitHub CIの環境を加えて作っています。
 
 Dockerfileで作るのと比べて、
 - User周りの設定を自動的にやってくれる

@@ -3,7 +3,7 @@
 We support [Development Container](https://containers.dev/) in this repository.
 You can prepare a container as a full-featured development environment for RedAmber. Dev Containers allow you to encapsulate Ruby, Apache Arrow, RedAmber with source tree, GitHub CLI, sample datasets and Jupyter Lab with IRuby kernel. You don't need to worry about the change of your local environment.
 
-`.devcontainer` directory in this repository includes settings of Dev Container for RedAmber. We don't use Dockerfile here, based on Ubuntu image for Dev Container, Python and GitHub CLI tools using Dev Container Features. I think this style has simplicity, maintainability, and reusability. Ruby is added after the container is created by script.
+`.devcontainer` directory in this repository includes settings of Dev Container for RedAmber. We use Dockerfile to install Ubuntu image for Dev Container and add Ruby and Apache Arrow in Dockerfile, and add Python and GitHub CLI tools using Dev Container Features. I think dev container features offer simplicity, maintainability, and reusability.
 
 It has some benefits below compared to make dev environment by Dockerfile;
 
