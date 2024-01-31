@@ -116,15 +116,15 @@ gem &#39;rover-df&#39;,                # Optional, if you use IO from/to Rover::
 <ul><li>
 <p>Minimum installation example for the latest Ubuntu:</p>
 
-<p> <code>   sudo apt update   sudo apt install -y -V ca-certificates lsb-release wget   wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr &#39;A-Z&#39; &#39;a-z&#39;)/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb   sudo apt update   sudo apt install -y -V libarrow-dev libarrow-glib-dev </code></p>
+<p> <code>  sudo apt update  sudo apt install -y -V ca-certificates lsb-release wget  wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr &#39;A-Z&#39; &#39;a-z&#39;)/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb  sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb  sudo apt update  sudo apt install -y -V libarrow-dev libarrow-glib-dev </code></p>
 </li><li>
 <p>On Fedora 39 (Rawhide):</p>
 
-<p> <code>   sudo dnf update   sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel libyaml-devel </code></p>
+<p> <code>  sudo dnf update  sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel libyaml-devel </code></p>
 </li><li>
 <p>On macOS, using Homebrew:</p>
 
-<p> <code>   brew install apache-arrow apache-arrow-glib </code></p>
+<p> <code>  brew install apache-arrow apache-arrow-glib </code></p>
 </li></ul>
 
 <p>If you prepared Apache Arrow, add these lines to your Gemfile:</p>
@@ -313,9 +313,9 @@ bundle exec rake test
 </div></div>
 
       <div id="footer">
-  Generated on Thu Aug 31 22:18:17 2023 by
+  Generated on Wed Jan 31 08:25:06 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.2.2).
+  0.9.34 (ruby-3.3.0).
 </div>
 
     </div>
