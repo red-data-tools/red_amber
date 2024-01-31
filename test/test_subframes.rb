@@ -378,7 +378,7 @@ class SubFranesTest < Test::Unit::TestCase
     test '#aggregate by block with an Array w/o group key' do
       aggregations =
         %i[sum count].product(%i[x z]).map do |func, key|
-          ["#{func}_#{key}".to_sym, key, func]
+          [:"#{func}_#{key}", key, func]
         end
       aggregated =
         @sf.aggregate do |df|
@@ -399,7 +399,7 @@ class SubFranesTest < Test::Unit::TestCase
     test '#aggregate by block with an Array and group key' do
       aggregations = [%i[y y first]]
       %i[sum count].product(%i[x z]).each do |func, key|
-        aggregations << ["#{func}_#{key}".to_sym, key, func]
+        aggregations << [:"#{func}_#{key}", key, func]
       end
       aggregated =
         @sf.aggregate do |df|

@@ -659,7 +659,7 @@ module RedAmber
       summary_keys.each.with_object([[], []]) do |key, (keys, arrays)|
         vector = @dataframe[key]
         arrays << filters.map { |filter| vector.filter(filter).send(func) }
-        keys << "#{func}(#{key})".to_sym
+        keys << :"#{func}(#{key})"
       rescue Arrow::Error::NotImplemented
         # next
       end
