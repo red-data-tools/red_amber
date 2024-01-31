@@ -29,7 +29,7 @@ RUN set -e; \
     libzmq3-dev
 
 # Install Apache Arrow
-ARG APACHE_ARROW_VERSION=13.0.0-1
+ARG APACHE_ARROW_VERSION=15.0.0-1
 ARG arrow_deb_tmp=/tmp/apache-arrow-apt-source-latest.deb
 ARG arrow_apt_source=https://apache.jfrog.io/artifactory/arrow/ubuntu/pool/jammy/main/a/apache-arrow-apt-source/apache-arrow-apt-source_${APACHE_ARROW_VERSION}_all.deb
 RUN set -e; \
