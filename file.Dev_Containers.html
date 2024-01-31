@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: Dev_Containers
+  
+    &mdash; Documentation by YARD 0.9.34
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "Dev_Containers";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: Dev_Containers</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-How+to+use+Development+Containers+in+RedAmber">How to use Development Containers in RedAmber</h1>
+
+<p>We support <a href="https://containers.dev/">Development Container</a> in this repository. You can prepare a container as a full-featured development environment for RedAmber. Dev Containers allow you to encapsulate Ruby, Apache Arrow, RedAmber with source tree, GitHub CLI, sample datasets and Jupyter Lab with IRuby kernel. You don’t need to worry about the change of your local environment.</p>
+
+<p><code>.devcontainer</code> directory in this repository includes settings of Dev Container for RedAmber. We don’t use Dockerfile here, based on Ubuntu image for Dev Container, Python and GitHub CLI tools using Dev Container Features. I think this style has simplicity, maintainability, and reusability. Ruby is added after the container is created by script.</p>
+
+<p>It has some benefits below compared to make dev environment by Dockerfile;</p>
+
+<p>1) It automatically makes user setting with same UID/GID as local user. 2) Additional tools can be introduced by <code>Dev Container Features</code>. 3) Ruby Feature includes <code>rbenv</code> and it is easy to add another version afterwards. 4) Python Feature includes Jupyter Lab as an option. 5) Quarto is introduced. It converts Jupyter notebook from/to qmd file and it is useful to manage notebook in the source tree.</p>
+
+<p>We will show 2 examples here.</p>
+
+<h2 id="label-1.+GitHub+Codespace+in+cloud+from+browser">1. GitHub Codespace in cloud from browser</h2>
+
+<h3 id="label-Prerequisite">Prerequisite</h3>
+
+<p>You need to sign in GitHub Account.</p>
+
+<h3 id="label-Notice">Notice</h3>
+
+<p>You will consume your Codespace quota of your account in the step below. For GitHub Free, you can use 120 hours per month per core (it means 60 hours per month for 2 cores VM) and have a storage with 15 GB per month for free. You can check your usage from <code>Codespaces</code> section in <a href="https://github.com/settings/billing">Billing and plans</a>.</p>
+
+<h3 id="label-Procedures">Procedures</h3>
+<ul><li>
+<p>Open the <a href="https://github.com/red-data-tools/red_amber">repository of RedAmber</a> in GitHub.</p>
+</li><li>
+<p>If you are going to develop RedAmber, you should fork it and open your forked repository to push PR later.</p>
+</li><li>
+<p>Push <code>&lt;&gt;Code</code> button, select <code>Codespaces</code> tab, push <code>Create codespace on main</code> button to create new Codespace.</p>
+</li><li>
+<p>You can re-connect existing Codespace if you already have there.</p>
+</li><li>
+<p>Creating Codespace takes time. You can click <code>View log</code> to browse log running or have a coffee to wait.</p>
+</li><li>
+<p>I am planning to improve building process to save cache in GitHub Container Registory.</p>
+</li><li>
+<p>VS Code for browser will open the repository in the remote container.</p>
+</li></ul>
+
+<p>Please refer <a href="#operations">Operations</a> to use the environment.</p>
+
+<h3 id="label-Details">Details</h3>
+
+<p>Please see <a href="https://docs.github.com/en/codespaces/developing-in-codespaces/creating-a-codespace-for-a-repository">(GitHub Docs)Creating a codespace for a repository</a> for detail.</p>
+
+<h2 id="label-2.+Start+Dev+Container+from+the+local+repository-2C+and+use+it+from+VS+Code">2. Start Dev Container from the local repository, and use it from VS Code</h2>
+
+<h3 id="label-Prerequisites">Prerequisites</h3>
+<ul><li>
+<p>Visual Studio Code (October 2020 Release 1.51+)</p>
+</li></ul>
+
+<p>You need to install GitHub Codespaces extention, and sign into GitHub Codespaces with your GitHub credentials. Please see <a href="https://docs.github.com/en/codespaces/developing-in-codespaces/using-github-codespaces-in-visual-studio-code#prerequisites">GitHub Docs - GitHub Codespaces - Prerequisites</a> and prepare settings.</p>
+<ul><li>
+<p>Docker</p>
+</li><li>
+<p>Windows</p>
+
+<p>In Windows 10 Pro/Enterprise, Docker Desktop 2.0+ In Windows 10 Home (2004+), Docker Desktop 2.3+ and WSL 2 backend.</p>
+</li><li>
+<p>Mac</p>
+
+<p>Docker Desktop 2.0+</p>
+</li><li>
+<p>Linux</p>
+
+<p>Docker CE/EE 18.06+ and Docker Compose 1.21+</p>
+</li><li>
+<p>Git</p>
+</li></ul>
+
+<h3 id="label-Procedures">Procedures</h3>
+<ul><li>
+<p>Create a local clone of RedAmber repository.</p>
+</li><li>
+<p>If you are going to develop RedAmber, make a fork and clone it.</p>
+</li></ul>
+
+<p><code>  $ git clone https://github.com/(red-data-tools or your account name)/red_amber.git </code></p>
+
+<p>Alternatively using GitHub CLI,</p>
+
+<p><code>  $ gh repo clone (red-data-tools or your account name)/red_amber </code></p>
+<ul><li>
+<p>Open local repo folder by VS Code.</p>
+</li></ul>
+
+<p><code>  $ code red_amber </code></p>
+<ul><li>
+<p>Re-open by container</p>
+</li></ul>
+
+<p>Re-open current folder by container.</p>
+<ul><li>
+<p>Click remote host indicator in the left bottom corner, then options to open remote windows will open. Choose 'reopen by container'.</p>
+</li><li>
+<p>Building of container will start.</p>
+</li></ul>
+
+<p>It takes time for first building. If it is finished, container name will be displayed on the remote host indicator.</p>
+
+<h2 id="label-Operations">Operations</h2>
+
+<h3 id="label-Check+installed+tools+by+terminal">Check installed tools by terminal</h3>
+
+<p>If you don’t have the terminal open, open it with <code>CTRL + `</code>.</p>
+
+<p>Run these command to check these tools are installed.</p>
+
+<p>“‘shell $ ruby -v –jit $ rbenv versions $ gem -v $ gem list $ bundler -v $ iruby -v</p>
+
+<p>$ python –version $ pip –version $ pip list $ pipenv –version $ jupyter –version $ jupyter kenelspec list</p>
+
+<p>$ git -v $ git config user.name $ gh –version “‘</p>
+
+<p>The user name is <code>vscode</code> in this environment. <code>uid</code> and <code>gid</code> are the same as local user.</p>
+
+<p><code>shell  $ id </code></p>
+
+<h3 id="label-Run+tests+of+RedAmber">Run tests of RedAmber</h3>
+
+<p><code>shell  $ bundle exec rake </code></p>
+
+<h3 id="label-Try+RedAmber+in+REPL">Try RedAmber in REPL</h3>
+
+<p>You can try RedAmber in <code>irb</code> using pre loaded datasets. It takes time in the first run to load the datasets from Red Datasets.</p>
+
+<p>“‘ruby $ rake example</p>
+
+<p>(snip)</p>
+
+<pre class="code ruby"><code class="ruby">  81: # Welcome to RedAmber example!
+  82: # This environment will offer these pre-loaded datasets:
+  83: #   penguins, diamonds, iris, starwars, simpsons_paradox_covid,
+  84: #   mtcars, band_members, band_instruments, band_instruments2
+  85: #   import_cars, comecome, rubykaigi, dataframe, subframes
+</code></pre>
+
+<p>=&gt; 86: binding.irb</p>
+
+<p>irb(main):001:0&gt; “‘</p>
+
+<p>This code stops in the code by <code>binding.irb</code>, you have some datasets in local variables.</p>
+
+<p><code>ruby  irb(main):001:0&gt; import_cars  =&gt;  #&lt;RedAmber::DataFrame : 5 x 6 Vectors, 0x0000000000010914&gt;       Year    Audi     BMW BMW_MINI Mercedes-Benz      VW    &lt;int64&gt; &lt;int64&gt; &lt;int64&gt;  &lt;int64&gt;       &lt;int64&gt; &lt;int64&gt;  0    2017   28336   52527    25427         68221   49040  1    2018   26473   50982    25984         67554   51961  2    2019   24222   46814    23813         66553   46794  3    2020   22304   35712    20196         57041   36576  4    2021   22535   35905    18211         51722   35215 </code></p>
+
+<p>The namespace <code>RedAmber</code> is included.</p>
+
+<p><code>ruby  irb(main):002:0&gt; VERSION  =&gt; &quot;0.5.0&quot;  irb(main):003:0&gt; Arrow::VERSION  =&gt; &quot;12.0.1&quot; </code></p>
+
+<p>You can return to the first breakinng point by hitting <code>@</code>.</p>
+
+<p>You can exit irb by <code>exit</code>.</p>
+
+<h3 id="label-Try+RedAmber+in+Jupyter+Lab">Try RedAmber in Jupyter Lab</h3>
+
+<p>You can try Jupyter Lab with Python and IRuby kernels in your browser.</p>
+
+<p><code>shell  $ rake jupyter </code></p>
+<ul><li>
+<p><code>doc/notebook</code> is allocated as notebook folder. There are 2 files in it.</p>
+<ul><li>
+<p><code>red_amber.ipynb</code> : Examples in <code>README.md</code>.</p>
+</li><li>
+<p><code>examples_of_red_amber.ipynb</code> : Hundreds examples of RedAmber.</p>
+</li></ul>
+</li><li>
+<p><code>require &#39;red_amber&#39;</code> will load from source directory <code>lib</code>.</p>
+</li></ul>
+
+<h2 id="label-Document+authoring+by+Quarto">Document authoring by Quarto</h2>
+
+<p><a href="https://quarto.org/">Quarto</a> is an open-source scientific and technical publishing system. We use Quarto CLI to show usage examples of RedAmber.</p>
+
+<pre class="code ruby"><code class="ruby">---
+title: Document management with Quarto
+---
+flowchart LR
+    id1[&quot;Source management
+        (.qmd)&quot;]
+    id2[&quot;Analyze and edit by JupyterLab
+        (.ipynb)&quot;]
+    id3[&quot;Publish document
+        (.pdf)&quot;]
+
+    id1 -- convert --&gt; id2 -- convert --&gt;  id1
+    id2 -- render --&gt; id3
+    id1 -- render --&gt; id3
+</code></pre>
+<ul><li>
+<p>We can manage the source of the Jupyter notebook by Quarto’s markdown format <code>qmd</code>.</p>
+</li><li>
+<p>We can convert a <code>.qmd</code> file to a Jupyter notebook file (<code>.ipynb</code>) and will be able to edit it or make analysis on Jupyter Lab.</p>
+</li><li>
+<p>We can render <code>.qmd</code> or <code>.ipynb</code> files to <code>.pdf</code>.</p>
+</li></ul>
+
+<h3 id="label-To+show+the+information+of+Quarto">To show the information of Quarto</h3>
+
+<p>Try below to show version and verify correct functioning of Quarto installation.</p>
+
+<pre class="code ruby"><code class="ruby">$ quarto -v
+$ quarto check
+</code></pre>
+
+<p>To show help,</p>
+
+<pre class="code ruby"><code class="ruby">$ quarto --help
+$ quarto render --help
+</code></pre>
+
+<h3 id="label-Convert+qmd+file+to+Jupyter+Notebook">Convert qmd file to Jupyter Notebook</h3>
+
+<p>To convert <code>.qmd</code> source file to <code>.ipynb</code>,</p>
+
+<pre class="code ruby"><code class="ruby">$ bundle exec rake quarto:convert
+</code></pre>
+
+<p>This command will create <code>ipynb</code> notebooks from <code>doc/qmd</code> and save them to <code>doc/notebook</code>.</p>
+
+<p>In more general,</p>
+
+<pre class="code ruby"><code class="ruby">$ quarto convert source_file.qmd
+$ quarto convert source_file.qmd --output Notebook.ipynb
+</code></pre>
+
+<p>The first one will output <code>source_file.ipynb</code> file in the same directory.</p>
+
+<p>Command below will convert qmd_document files in <code>doc/qmd</code> to <code>.ipynb</code> files and save them to <code>doc/notebook</code> . Then open <code>doc/notebook</code> with Jupyter Lab.</p>
+
+<pre class="code ruby"><code class="ruby">$ bin/jupyter
+</code></pre>
+
+<h3 id="label-Convert+Jupyter+Notebook+to+qmd">Convert Jupyter Notebook to <code>qmd</code></h3>
+
+<p>You can convert Notebook file to qmd file.</p>
+
+<pre class="code ruby"><code class="ruby">$ quarto convert notebook.ipynb
+$ quarto convert notebook.ipynb --output output_source_file.qmd
+</code></pre>
+
+<h3 id="label-Others">Others</h3>
+
+<p>To render Notebook files in <code>doc/qmd</code> to pdf,</p>
+
+<pre class="code ruby"><code class="ruby">$ bundle exec rake quarto:test
+</code></pre>
+
+<p>To clear <code>doc/notebook</code> (and all the generated artifacts by rake),</p>
+
+<pre class="code ruby"><code class="ruby">$ rake clean
+</code></pre>
+
+<p>To know more about Quarto, see command line help by <code>quarto --help</code>, or visit <a href="https://quarto.org/">Quarto</a> web.</p>
+
+<h3 id="label-Thanks">Thanks</h3>
+
+<p>As for the use of Quarto, I started to try after the Kozo Nishida’s work with Ruby Association Grant 2022 “Introducing Quarto into the RubyData ecosystem and promoting the combination to the Ruby community”. I would like to take this opportunity to thank him.</p>
+</div></div>
+
+      <div id="footer">
+  Generated on Wed Jan 31 23:30:00 2024 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.34 (ruby-3.3.0).
+</div>
+
+    </div>
+  </body>
+</html>

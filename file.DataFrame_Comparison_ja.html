@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: DataFrame_Comparison_ja
+  
+    &mdash; Documentation by YARD 0.9.34
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "DataFrame_Comparison_ja";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: DataFrame_Comparison_ja</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-DataFrames+-E6-93-8D-E4-BD-9C-E3-83-A1-E3-82-BD-E3-83-83-E3-83-89-E3-81-AE-E6-AF-94-E8-BC-83">DataFrames 操作メソッドの比較</h1>
+
+<p>RedAmberの基本的な操作メソッドを <a href="https://pandas.pydata.org/">Python pandas</a>, <a href="https://www.tidyverse.org/">R Tidyverse</a>, <a href="https://dataframes.juliadata.org/stable/">Julia DataFrames</a> と比較します。</p>
+
+<h2 id="label-E5-88-97+-28variables-29+-E3-82-92-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B">列 (variables) を選択する</h2>
+
+<table role="table">
+<thead>
+<tr>
+<th>機能</th>
+<th>RedAmber</th>
+<th>Tidyverse ®</th>
+<th>pandas</th>
+<th>DataFrames.jl</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>列を選択して dataframe で返す</td>
+<td>pick, drop, []</td>
+<td>dplyr::select, dplyr::select_if</td>
+<td>[], loc[], iloc[], drop, select_dtypes</td>
+<td>[], select</td>
+</tr>
+<tr>
+<td>列を選択して vector で返す</td>
+<td>[], v</td>
+<td>dplyr::pull, [, x]</td>
+<td>[], loc[], iloc[]</td>
+<td>[!, :x]</td>
+</tr>
+<tr>
+<td>列の順番を入れ替えた dataframeを返す</td>
+<td>pick, []</td>
+<td>relocate</td>
+<td>[], reindex, loc[], iloc[]</td>
+<td>select,transform</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="label-E8-A1-8C+-28records-2C+observations-29+-E3-82-92-E9-81-B8-E6-8A-9E-E3-81-99-E3-82-8B">行 (records, observations) を選択する</h2>
+
+<table role="table">
+<thead>
+<tr>
+<th>機能</th>
+<th>RedAmber</th>
+<th>Tidyverse ®</th>
+<th>pandas</th>
+<th>DataFrames.jl</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>論理値に従って行を選択して dataframe で返す</td>
+<td>slice, filter, remove, []</td>
+<td>dplyr::filter</td>
+<td>[], filter, query, loc[]</td>
+<td>filter</td>
+</tr>
+<tr>
+<td>インデックスで行を選択して dataframe で返す</td>
+<td>slice, remove, []</td>
+<td>dplyr::slice</td>
+<td>iloc[], drop</td>
+<td>subset</td>
+</tr>
+<tr>
+<td>行の順番を入れ替えた dataframeを返す</td>
+<td>slice, []</td>
+<td>dplyr::filter, dplyr::slice</td>
+<td>reindex, loc[], iloc[]</td>
+<td>permute</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="label-E5-88-97-E3-82-92-E6-9B-B4-E6-96-B0-E3-81-99-E3-82-8B+-2F+-E6-96-B0-E3-81-97-E3-81-84-E5-88-97-E3-82-92-E4-BD-9C-E3-82-8B">列を更新する / 新しい列を作る</h2>
+
+<table role="table">
+<thead>
+<tr>
+<th>機能</th>
+<th>RedAmber</th>
+<th>Tidyverse ®</th>
+<th>pandas</th>
+<th>DataFrames.jl</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>既存の列の内容を変更する</td>
+<td>assign</td>
+<td>dplyr::mutate</td>
+<td>assign, []=</td>
+<td>mapcols</td>
+</tr>
+<tr>
+<td>新しい列を作成する</td>
+<td>assign, assign_left</td>
+<td>dplyr::mutate</td>
+<td>apply</td>
+<td>insertcols,.+</td>
+</tr>
+<tr>
+<td>新しい列を作成し、残りは捨てる</td>
+<td>new</td>
+<td>transmute</td>
+<td>(dfply:)transmute</td>
+<td>transform,insertcols,mapcols</td>
+</tr>
+<tr>
+<td>列の名前を変更する</td>
+<td>rename</td>
+<td>dplyr::rename, dplyr::rename_with, purrr::set_names</td>
+<td>rename, set_axis</td>
+<td>rename</td>
+</tr>
+<tr>
+<td>dataframe をソートする</td>
+<td>sort</td>
+<td>dplyr::arrange</td>
+<td>sort_values</td>
+<td>sort</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="label-dataframe+-E3-82-92-E5-A4-89-E5-BD-A2-E3-81-99-E3-82-8B">dataframe を変形する</h2>
+
+<table role="table">
+<thead>
+<tr>
+<th>機能</th>
+<th>RedAmber</th>
+<th>Tidyverse ®</th>
+<th>pandas</th>
+<th>DataFrames.jl</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>列を行に積む (long dataframe にする)</td>
+<td>to_long</td>
+<td>tidyr::pivot_longer</td>
+<td>melt</td>
+<td>stack</td>
+</tr>
+<tr>
+<td>行を列に集める (wide dataframe にする)</td>
+<td>to_wide</td>
+<td>tidyr::pivot_wider</td>
+<td>pivot</td>
+<td>unstack</td>
+</tr>
+<tr>
+<td>wide dataframe を転置する</td>
+<td>transpose</td>
+<td>transpose, t</td>
+<td>transpose, T</td>
+<td>permutedims</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="label-E3-82-B0-E3-83-AB-E3-83-BC-E3-83-97-E5-8C-96">グループ化</h2>
+
+<table role="table">
+<thead>
+<tr>
+<th>機能</th>
+<th>RedAmber</th>
+<th>Tidyverse</th>
+<th>pandas</th>
+<th>DataFrames.jl</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>グループ化する</td>
+<td>group, group.summarize</td>
+<td>dplyr::group_by %&gt;% dplyr::summarise</td>
+<td>groupby.agg</td>
+<td>combine,groupby</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="label-dataframes+-E3-81-BE-E3-81-9F-E3-81-AF+tables+-E3-82-92-E7-B5-90-E5-90-88-E3-81-99-E3-82-8B">dataframes または tables を結合する</h2>
+
+<table role="table">
+<thead>
+<tr>
+<th>機能</th>
+<th>RedAmber</th>
+<th>Tidyverse</th>
+<th>pandas</th>
+<th>DataFrames.jl</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>列として連結する (横方向に連結する)</td>
+<td>merge, bind_cols</td>
+<td>dplyr::bind_cols</td>
+<td>concat</td>
+<td>combine</td>
+</tr>
+<tr>
+<td>行として連結する (縦方向に連結する)</td>
+<td>concatenate, concat, bind_rows</td>
+<td>dplyr::bind_rows</td>
+<td>concat</td>
+<td>transform</td>
+</tr>
+<tr>
+<td>一致した行だけを連結する (内部結合)</td>
+<td>inner_join, join</td>
+<td>dplyr::inner_join</td>
+<td>merge</td>
+<td>innerjoin</td>
+</tr>
+<tr>
+<td>全ての行を残して連結する (外部結合)</td>
+<td>full_join, outer_join, join</td>
+<td>dplyr::full_join</td>
+<td>merge</td>
+<td>outerjoin</td>
+</tr>
+<tr>
+<td>左の一致した値を残して連結する (左外部結合)</td>
+<td>left_join, join</td>
+<td>dplyr::left_join</td>
+<td>merge</td>
+<td>leftjoin</td>
+</tr>
+<tr>
+<td>右の一致した値を残して連結する (右外部結合)</td>
+<td>right_join, join</td>
+<td>dplyr::right_join</td>
+<td>merge</td>
+<td>rightjoin</td>
+</tr>
+<tr>
+<td>左の行のうち、右と一致したものを返す</td>
+<td>semi_join, join</td>
+<td>dplyr::semi_join</td>
+<td>[isin]</td>
+<td>semijoin</td>
+</tr>
+<tr>
+<td>左の行のうち、右と一致しなかったものを返す</td>
+<td>anti_join, join</td>
+<td>dplyr::anti_join</td>
+<td>[isin]</td>
+<td>antijoin</td>
+</tr>
+<tr>
+<td>左か右のどちらかに現れる行を返す</td>
+<td>union</td>
+<td>dplyr::union</td>
+<td>merge</td>
+<td></td>
+</tr>
+<tr>
+<td>左とみごの両方に現れる行を返す</td>
+<td>intersect</td>
+<td>dplyr::intersect</td>
+<td>merge</td>
+<td></td>
+</tr>
+<tr>
+<td>左にはあるが右にはない行を返す</td>
+<td>difference, setdiff</td>
+<td>dplyr::setdiff</td>
+<td>merge</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div></div>
+
+      <div id="footer">
+  Generated on Wed Jan 31 23:30:00 2024 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.34 (ruby-3.3.0).
+</div>
+
+    </div>
+  </body>
+</html>

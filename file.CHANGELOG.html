@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: CHANGELOG
+  
+    &mdash; Documentation by YARD 0.9.34
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "CHANGELOG";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: CHANGELOG</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h2 id="label-5B0.5.2-5D+-+2023-09-01">[0.5.2] - 2023-09-01</h2>
+
+<p>Support Apache Arrow 13.0.0 . This version is compatible with Arrow 12.0.0 .</p>
+<ul><li>
+<p>Breaking change</p>
+</li><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix bundle install issue by install libyaml-devel (#280)</p>
+</li><li>
+<p>Fix ownership in devcontainer ci (#280)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Support Arrow 13.0.0 (#280)</p>
+</li><li>
+<p>Documentation and Example</p>
+</li><li>
+<p>Add dataframe_comparison_ja (#281)</p>
+</li></ul>
+
+<h2 id="label-5B0.5.1-5D+-+2023-08-18">[0.5.1] - 2023-08-18</h2>
+
+<p>Docker environment is replaced by Dev Container, and Jupyter Notebooks will be created from qmd files.</p>
+<ul><li>
+<p>Breaking change</p>
+</li><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix timestamp test to set TZ locally (#249)</p>
+</li><li>
+<p>Fix regexp for beginning of String (#251)</p>
+</li><li>
+<p>Fix loading bin/Gemfile locally in bin/jupyter script (#261)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Support sort and null_placement options in Vector#rank (#265)</p>
+</li><li>
+<p>Add Vector#find_substring method (#270)</p>
+</li><li>
+<p>Add Group#one method (#274)</p>
+</li><li>
+<p>Add Group#all and #any method (#274)</p>
+</li><li>
+<p>Add Group#median method (#274)</p>
+</li><li>
+<p>Add Group#count_uniq method (#274)</p>
+</li><li>
+<p>Introduce Dev Container environment</p>
+<ul><li>
+<p>Introduce Devcontainer environment (#253)</p>
+</li><li>
+<p>Change lifecycle script from postCreate to onCreate (#253)</p>
+</li><li>
+<p>Move example to bin (#253)</p>
+</li><li>
+<p>Fix Python and Ruby versions in Dev Container (#254)</p>
+</li><li>
+<p>Add locale and timezone settings (#256)</p>
+</li><li>
+<p>Add quarto from devcontainer feature (#259)</p>
+</li><li>
+<p>Install HaranoAjiFonts as default Tex font (#259)</p>
+</li></ul>
+</li><li>
+<p>Refactoring</p>
+</li><li>
+<p>Rename boolean methods in VectorStringFunction (#263)</p>
+</li><li>
+<p>Refine Vector#inspect to show wheather chunked or not (#267)</p>
+</li><li>
+<p>Add an alias Group#count_all for #group_count (#274)</p>
+</li><li>
+<p>Improve in tests/CI</p>
+</li><li>
+<p>Create rake commands for Notebook convert/test (#269)</p>
+</li><li>
+<p>Fix rubocop warning of forwarding arguments in assign_update (#269)</p>
+</li><li>
+<p>Use rake to start example script (#269)</p>
+</li><li>
+<p>Add test in Vector#rank to cover illegal rank option error (#271)</p>
+</li><li>
+<p>Add bundle install to Rakefile (#276)</p>
+</li><li>
+<p>Use Dockerfile to create dev container (#276)</p>
+</li><li>
+<p>Save image to ghcr in ci (#276)</p>
+</li><li>
+<p>Documentation and Example</p>
+</li><li>
+<p>YARD</p>
+<ul><li>
+<p>Update Docker Environment (#245)</p>
+</li><li>
+<p>Refine jupyter notebook environment (#253)</p>
+</li><li>
+<p>Refine yard in Group aggregations (#274)</p>
+</li><li>
+<p>Fix yard of Vector#rank (#269)</p>
+</li><li>
+<p>Fix yard of Group (#269)</p>
+</li></ul>
+</li><li>
+<p>Notebook</p>
+<ul><li>
+<p>Start source management for jupyter notebook by qmd (#259)</p>
+</li><li>
+<p>Don't create ipynb if it exists (#261)</p>
+</li><li>
+<p>Add Group methods (125 in total) (#269)</p>
+</li><li>
+<p>Add ArrowFunction (126 in total) (#269)</p>
+</li><li>
+<p>Add DataFrame#auto_cast (127 in total) (#269)</p>
+</li><li>
+<p>Update required version in examples notebook (#269)</p>
+</li><li>
+<p>Update examples_of_red_amber (#269)</p>
+</li><li>
+<p>Update red-amber.qmd (#269)</p>
+</li></ul>
+</li><li>
+<p>GitHub site</p>
+</li><li>
+<p>Fix broken link in README/README.ja by Viktorius Suwandi (#262)</p>
+</li><li>
+<p>Change description in gemspec (#254)</p>
+</li><li>
+<p>Add documents for Dev Container (#254)</p>
+</li><li>
+<p>Thanks</p>
+</li><li>
+<p>Viktorius Suwandi</p>
+</li></ul>
+
+<h2 id="label-5B0.5.0-5D+-+2023-05-24">[0.5.0] - 2023-05-24</h2>
+<ul><li>
+<p>Breaking change</p>
+</li><li>
+<p>Use non keyword argument in #sub_by_value (#219)</p>
+</li><li>
+<p>Upgrade dependency to Arrow 12.0.0 (#238)</p>
+<ul><li>
+<p>right_join will output columns as same order as Red Arrow.</p>
+</li><li>
+<p>DataFrame#join will not force ordering of original column by default</p>
+</li><li>
+<p>Join with type, such as full_join, sort after join by default</p>
+</li><li>
+<p>right_join will output columns as same order as Red Arrow.</p>
+</li><li>
+<p>DataFrame#join will not force ordering of original column by default</p>
+</li><li>
+<p>Join with type, such as full_join, sort after join by default</p>
+</li></ul>
+</li><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Use truncate in Vector#sample(float) (#229)</p>
+</li><li>
+<p>Support options in DataFrame#tdra (#231)</p>
+</li><li>
+<p>Fix printing table with non-ascii strings (#233)</p>
+</li><li>
+<p>Fix join for Arrow 12.0.0</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Add a singleton method Vector.[] (#218)</p>
+</li><li>
+<p>Add an alias #sub_group (#219)</p>
+</li><li>
+<p>Accept Group#summarizeHash to rename aggregated columns (#219)</p>
+</li><li>
+<p>Add Group#group_frame (#219)</p>
+</li><li>
+<p>Add Vector#cast (#224)</p>
+</li><li>
+<p>Add Vector#fill_nil(value) (#226)</p>
+</li><li>
+<p>Add Vector#one (#227)</p>
+</li><li>
+<p>Add Vector#mode (#228)</p>
+</li><li>
+<p>Add DataFrame#propagate (#235)</p>
+</li><li>
+<p>Add DataFrame#sample (#237)</p>
+</li><li>
+<p>Add DataFrame#shuffle (#237)</p>
+</li><li>
+<p>Support RankOptions in Vector#rank (#239)</p>
+</li><li>
+<p>Introduce MatchSubstringOptions family in Vector (#241)</p>
+<ul><li>
+<p>Introduce Vector#match_substring?</p>
+</li><li>
+<p>Add Vector#end_with?, #start_with? method</p>
+</li><li>
+<p>Add Vector#match_like?</p>
+</li><li>
+<p>Add Vector#count_substring method</p>
+</li></ul>
+</li><li>
+<p>Refactoring</p>
+</li><li>
+<p>Refine Group and SubFrames function (#219)</p>
+<ul><li>
+<p>Refine Group#group_count</p>
+</li><li>
+<p>Use Acero in Group#filters</p>
+</li><li>
+<p>Refine Group#filters, not using Acero</p>
+</li><li>
+<p>Refine Group#summarize(array)</p>
+</li></ul>
+</li><li>
+<p>Use Acero for renaming columns in join (#238)</p>
+</li><li>
+<p>Use index kernel with IndexOptions introduced in 12.0.0 (#240)</p>
+</li><li>
+<p>Improve in tests/CI</p>
+</li><li>
+<p>Use Fedra 39 Rawhide in CI (#238)</p>
+</li><li>
+<p>Documentation and Example</p>
+</li><li>
+<p>Add missing yard documents for SubFrames::Selectors (#219)</p>
+</li><li>
+<p>Update docker/example (#219)</p>
+</li><li>
+<p>Update Gemfile in docker (#219)</p>
+</li><li>
+<p>Add README.ja.md (#242)</p>
+</li><li>
+<p>GitHub site</p>
+</li><li>
+<p>Update link of Red Data Tools Chat to matrix (#242)</p>
+</li><li>
+<p>Thanks</p>
+</li></ul>
+
+<h2 id="label-5B0.4.2-5D+-+2023-04-02">[0.4.2] - 2023-04-02</h2>
+<ul><li>
+<p>Breaking change</p>
+</li><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix Vector#modulo, #fdiv, #remainder (#203)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Update SubFrames#take to return SubFrames (#212)</p>
+</li><li>
+<p>Refactoring</p>
+</li><li>
+<p>Refine SubFrames to support partial retrieval (#207)</p>
+</li><li>
+<p>Upgrade SubFrames#frames and promote to public (#207)</p>
+</li><li>
+<p>Use faster count in Group#inspect (#207)</p>
+</li><li>
+<p>Improve in tests/CI</p>
+</li><li>
+<p>Documentation and Example</p>
+</li><li>
+<p>Introduce minimum docker environment (#205)</p>
+</li><li>
+<p>Move example REPL to docker (#205)</p>
+</li><li>
+<p>Add readme.md in docker (#205)</p>
+</li><li>
+<p>Add example_of_red_amber.ipynb (#205)</p>
+</li><li>
+<p>Use smaller dataset in irb example</p>
+</li><li>
+<p>Fix docker/example</p>
+</li><li>
+<p>Updated link to red-data-tools (#213)</p>
+<ul><li>
+<p>Thanks to Soumya Kushwaha</p>
+</li></ul>
+</li><li>
+<p>GitHub site</p>
+</li><li>
+<p>Migrated to <a href="https://github.com/red-data-tools">Red Data Tools</a></p>
+<ul><li>
+<p>Thanks to Sutou Kouhei</p>
+</li></ul>
+</li><li>
+<p>Thanks</p>
+</li><li>
+<p>Sutou Kouhei</p>
+</li><li>
+<p>Soumya Kushwaha</p>
+</li></ul>
+
+<h2 id="label-5B0.4.1-5D+-+2023-03-11">[0.4.1] - 2023-03-11</h2>
+<ul><li>
+<p>Breaking change</p>
+</li><li>
+<p>Remove Vector.aggregate? method (#200)</p>
+</li><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Return self in DataFrame#drop when dropper is empty (reverts 746ac263) (#193)</p>
+</li><li>
+<p>Return self in DataFrame#rename when renaming to same name (#193)</p>
+</li><li>
+<p>Return self in DataFrame#pick when pick itself (#199)</p>
+</li><li>
+<p>Fix column width for non-ascii elemnts in DataFrame#to_s (#193)</p>
+<ul><li>
+<p>This change uses String#width.</p>
+</li></ul>
+</li><li>
+<p>Fix DataFrame#to_iruby when data is date32 type (#193)</p>
+</li><li>
+<p>Fix DataFrame#shorthand to show temporal type data simply (#193)</p>
+</li><li>
+<p>Fix Vector#rank when data is ChunkedArray (#198)</p>
+</li><li>
+<p>Fix Vector element-wise functions with nil as scalar (#198)</p>
+</li><li>
+<p>Support :force_order for all methods of join family (#199)</p>
+<ul><li>
+<p>Supports :force_order option to force sorting after join for all #join familiy.</p>
+</li><li>
+<p>This will valuable in some cases such as large dataframes.</p>
+</li></ul>
+</li><li>
+<p>Ensure baseframe's schema for SubFrames (#200)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Add Vector#first, #last method (#198)</p>
+<ul><li>
+<p>This method will be used in SubFrames feature.</p>
+</li></ul>
+</li><li>
+<p>Add Vector#modulo method (#198)</p>
+<ul><li>
+<p>The divmod function in Arrow C++ is still in draft state. This method was created by combining existing functions</p>
+</li></ul>
+</li><li>
+<p>Add Vector#quotient method (#198)</p>
+</li><li>
+<p>Add aliases #div, #mod, #mul, #pow, #quo and #sub for Vector (#198)</p>
+</li><li>
+<p>Add Vector#*_checked functions (#198)</p>
+<ul><li>
+<p>This functions will check numeric range overflow.</p>
+</li></ul>
+</li><li>
+<p>Add 'tdra' and 'plain' in display mode (#193)</p>
+<ul><li>
+<p>The plain mode and default inspect will show up to 128 rows and 128 columns.</p>
+</li></ul>
+</li><li>
+<p>Add String#width method in refinements (#193)</p>
+<ul><li>
+<p>This will be used to update DataFrame#to_s.</p>
+</li></ul>
+</li><li>
+<p>Introduce pre-loaded REPL environment (#199)</p>
+<ul><li>
+<p>This commit will add bin/example and it will start irb environment with enabled commonly used datasets such as penguins, diamonds, etc.</p>
+</li></ul>
+</li><li>
+<p>Upgrade SubFrames#aggregate to accept block (#200)</p>
+</li><li>
+<p>Refactoring</p>
+</li><li>
+<p>Use symbolized keys in refinements of Table#keys, #key? (#193)</p>
+<ul><li>
+<p>This can be treat Tables and DataFrames as same manner.</p>
+</li></ul>
+</li><li>
+<p>Use key_name.succ in suffix of DataFrame#join (#193)</p>
+<ul><li>
+<p>This will make simple to get name candidate.</p>
+</li></ul>
+</li><li>
+<p>Use ||= to memorize instance variables (#193)</p>
+</li><li>
+<p>Refine vector projection to use #variables (#193)</p>
+<ul><li>
+<h1 id="label-variables+is+fastest+when+picking+Vectors.">variables is fastest when picking Vectors.</h1>
+</li></ul>
+</li><li>
+<p>Refine Vector#is_in to avoid #pack (#198)</p>
+</li><li>
+<p>Refine Vector#index (#198)</p>
+</li><li>
+<p>Improve in tests/CI</p>
+</li><li>
+<p>Tests</p>
+<ul><li>
+<p>Update benchmarks to test from older version (#193)</p>
+</li><li>
+<p>Refine test of Vector function with scalar (#198)</p>
+</li><li>
+<p>Refine test subframes and test_vector_selectable (#200)</p>
+</li></ul>
+</li><li>
+<p>Cops</p>
+</li><li>
+<p>CI</p>
+</li><li>
+<p>Documentation</p>
+</li><li>
+<p>Update documents(small fix) (#201)</p>
+</li><li>
+<p>GitHub site</p>
+</li><li>
+<p>Thanks</p>
+</li></ul>
+
+<h2 id="label-5B0.4.0-5D+-+2023-02-25">[0.4.0] - 2023-02-25</h2>
+<ul><li>
+<p>Breaking change</p>
+</li><li>
+<p>Upgrade dependency to Arrow 11.0.0 (#188)</p>
+</li><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Add :force_order option for DataFrame#join (#174)</p>
+</li><li>
+<p>Return error for empty DataFrame in DataFrame#filter (#172)</p>
+</li><li>
+<p>Accept ChunkedArray in DataFrame#filter (#172)</p>
+</li><li>
+<p>Fix Vector#replace to accept Arrow::Array as a replacer (#179)</p>
+</li><li>
+<p>Fix Vector#round_to_multiple to accept Float or Integer (#180)</p>
+</li><li>
+<p>Change Vector atan2 to a class method (#180)</p>
+</li><li>
+<p>Fix Vector#shift when boolean Vector (#184)</p>
+</li><li>
+<p>Fix processing empty SubFrames (#183)</p>
+</li><li>
+<p>Do not check object id in DataFrame#rename, #drop for self (#188)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Accept a block in DataFrame#filter (#172)</p>
+</li><li>
+<p>Add Vector.aggregate? method (#175)</p>
+</li><li>
+<p>Introduce Vector#propagate method (#175)</p>
+</li><li>
+<p>Add Vector#rank methods (#176)</p>
+</li><li>
+<p>Add Vector#sample method (#176)</p>
+</li><li>
+<p>Add Vector#sort method (#176)</p>
+</li><li>
+<p>Promote DataFrame#shape_str to public (#184)</p>
+</li><li>
+<p>Introduce Vector#concatenate (#184)</p>
+</li><li>
+<p>Add #numeric? in refinements of Array (#184)</p>
+</li><li>
+<p>Add Vector#cumulative_sum_checked and #cumsum (#184)</p>
+</li><li>
+<p>Add Vector#resolve method (#184)</p>
+</li><li>
+<p>Add DataFrame#tdra method (#184)</p>
+</li><li>
+<p>Add #expand as an alias for Vector#propagate (#184)</p>
+</li><li>
+<p>Add #glimpse as an alias for DataFrame#tdr (#184)</p>
+</li><li>
+<p>New class SubFrames (#183)</p>
+<ul><li>
+<p>Introduce class SubFrames</p>
+</li><li>
+<p>Memorize dataframes in SubFrames</p>
+</li><li>
+<p>Add @frames to memorize sub DataFrames</p>
+</li><li>
+<p>Accept filters in SubFrames.new</p>
+</li><li>
+<p>Accept block in SubFrames.new</p>
+</li><li>
+<p>Add SubFrames.by_filter</p>
+</li><li>
+<p>Introduce methods creating SubFrames from DataFrame</p>
+</li><li>
+<p>Introduce SubFrames#each method</p>
+</li><li>
+<p>Add SubFrames#to_s method</p>
+</li><li>
+<p>Add SubFrames#concatenate method</p>
+</li><li>
+<p>Add SubFrames#offset_indices method</p>
+</li><li>
+<p>SubFrames#aggregate method</p>
+</li><li>
+<p>Redefine SubFrames#map to return SubFrames</p>
+</li><li>
+<p>Define SubFrame#map dynamically</p>
+</li><li>
+<p>Add SubFrames#assign method</p>
+</li><li>
+<p>Redefine SubFrames#select to return SubFrames</p>
+</li><li>
+<p>Add SubFrames#reject method</p>
+</li><li>
+<p>Add SubFrames#filter_map method</p>
+</li><li>
+<p>Refine DataFrame#indices memorizing @indices</p>
+</li><li>
+<p>Rename SubFrames#universal_frame as #baseframe</p>
+</li><li>
+<p>Set Group iteration feature to @api private</p>
+</li></ul>
+</li><li>
+<p>Refactoring</p>
+</li><li>
+<p>Generate Vector functions in class method (#177)</p>
+</li><li>
+<p>Set Constant visibility to private (#179)</p>
+</li><li>
+<p>Separate test_vector_function (#179)</p>
+</li><li>
+<p>Relocate methods in DataFrameIndexable (#179)</p>
+</li><li>
+<p>Rename Array refinements to the same name as Vector (#184)</p>
+</li><li>
+<p>Improve in tests/CI</p>
+</li><li>
+<p>Tests</p>
+<ul><li>
+<p>Update benchmarks to set 0.3.0 as a reference (#167)</p>
+</li><li>
+<p>Move test of Vector#logb to proper location (#180)</p>
+</li></ul>
+</li><li>
+<p>Cops</p>
+<ul><li>
+<p>Update .rubocop.yml to align with latest cops (#174)</p>
+</li><li>
+<p>Unify style of MethodCallIndentation as relative to reciever (#184)</p>
+</li></ul>
+</li><li>
+<p>CI</p>
+<ul><li>
+<p>Fix setting up Arrow by homebrew in CI (#167)</p>
+</li><li>
+<p>Fix CI error on homebrew deleting python link (#167)</p>
+</li><li>
+<p>Set cache-version to get new C extensions in CI (#173)</p>
+</li><li>
+<p>Thanks to @kou for suggestion.</p>
+</li></ul>
+</li><li>
+<p>Documentation</p>
+</li><li>
+<p>Update DataFrame.md about loading csv without headers (#165)</p>
+<ul><li>
+<p>Thanks to kojix2</p>
+</li></ul>
+</li><li>
+<p>Update YARD in DataFrame combinable (#168)</p>
+</li><li>
+<p>Update comment for Ruby 2.7 support in README.md</p>
+</li><li>
+<p>Update license year</p>
+</li><li>
+<p>Update README (#172)</p>
+</li><li>
+<p>Update Vector.md and yardoc in #propagate (#175)</p>
+</li><li>
+<p>Use customized style sheet for YARD (#179)</p>
+</li><li>
+<p>Add examples for the doc of #pick and #drop (#179)</p>
+</li><li>
+<p>Add examples to YARD in DataFrame reshaping methods (#179)</p>
+</li><li>
+<p>Update documents in DataFrameDisplayable (#179)</p>
+</li><li>
+<p>Update documents in DataFrameVariableOperation (#179)</p>
+</li><li>
+<p>Update document for dynamically generated methods (#179)</p>
+</li><li>
+<p>Unify style in document (#179)</p>
+</li><li>
+<p>Update documents in DataFrameSelectable (#179)</p>
+</li><li>
+<p>Update documents of basic Vector methods (#179)</p>
+</li><li>
+<p>Update document in VectorUpdatable (#179)</p>
+</li><li>
+<p>Update document of Group (#179)</p>
+</li><li>
+<p>Update document of DataFrameLoadSave (#180)</p>
+</li><li>
+<p>Add examples for document of ArrowFunction (#180)</p>
+</li><li>
+<p>Update document of Vector_unary_aggregation (#180)</p>
+</li><li>
+<p>Update document of Vector_unary_element_wise (#180)</p>
+</li><li>
+<p>Update document of Vector_biary_element_wise (#180)</p>
+</li><li>
+<p>Add documentation to give comparison of dataframes(#169)</p>
+<ul><li>
+<p>Thanks to Benson Muite</p>
+</li></ul>
+</li><li>
+<p>Update documents for consistency of method indentation (#189)</p>
+</li><li>
+<p>Update CHANGELOG (#189)</p>
+</li><li>
+<p>Update README for 0.4.0 (#189)</p>
+</li><li>
+<p>GitHub site</p>
+</li><li>
+<p>Thanks</p>
+</li><li>
+<p>kojix2</p>
+</li><li>
+<p>Benson Muite</p>
+</li></ul>
+
+<h2 id="label-5B0.3.0-5D+-+2022-12-18">[0.3.0] - 2022-12-18</h2>
+<ul><li>
+<p>Breaking change</p>
+</li><li>
+<p>Supported Ruby version has changed from 2.7 to 3.0</p>
+<ul><li>
+<p>Upgrade minimum supported/required version of Ruby from 2.7 to 3.0 (#159, #160)</p>
+</li><li>
+<p>Upgrade minimum supported/required version of Ruby from 2.7 to 3.0 (#159, #160)</p>
+</li></ul>
+</li><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Add check with #key? in DataFrame#method_missing (#140)</p>
+</li><li>
+<p>Delete unnecessary backslash to supress warning in unary functions (#140)</p>
+</li><li>
+<p>Fix syntax in code_climate.yml (144)</p>
+</li><li>
+<p>Temporary disable simplecov test report (#149)</p>
+</li><li>
+<p>Change Vector#[] to return Array or scalar (#148)</p>
+</li><li>
+<p>Add missing simplecov HTML formatter (#148)</p>
+</li><li>
+<p>Change return value of DataFrame#save to self (#160)</p>
+<ul><li>
+<p>Originally reported by kojix2.</p>
+</li></ul>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Update Vector#take to accept block (#148)</p>
+</li><li>
+<p>Add properties of list Vectors (#148)</p>
+</li><li>
+<p>Add Vector#split, #split_to_column, #split_to_row (#148)</p>
+</li><li>
+<p>Add Vector#merge (#148)</p>
+</li><li>
+<p>Refactoring</p>
+</li><li>
+<p>Refactor code (#140)</p>
+<ul><li>
+<p>Add DataFrame.create as a faster constructor</p>
+</li><li>
+<p>Refactor DataFrame.new using refinements and duck typing</p>
+</li><li>
+<p>Refactor Vector.new using refinements and duck typing</p>
+</li><li>
+<p>Add Vector.create as a faster constructor</p>
+</li><li>
+<p>Refactor Group</p>
+</li><li>
+<p>Refactor DataFrame#pick/#drop by refininig Array</p>
+</li><li>
+<p>Refactor DataFrame#pick/#drop</p>
+</li><li>
+<p>Refactor nil treatment in pick/drop</p>
+</li><li>
+<p>Refactor DataFrame#pick/#drop using new parser</p>
+</li><li>
+<p>Refactor DataFrame#[]</p>
+</li><li>
+<p>Refactor Vector#[], #take, #filter by updating parser</p>
+</li><li>
+<p>Add for_keys option to parse_args</p>
+</li><li>
+<p>Refactor Vector properties by refinements for Arrow::Array</p>
+</li><li>
+<p>Refactor DataFrame selectable using Arrow::Array refinements instead of Vector methods</p>
+</li><li>
+<p>Refactor DataFrame#assign</p>
+</li></ul>
+</li><li>
+<p>Refine error message in DataFrame#to_long/to_wide #143)</p>
+</li><li>
+<p>Refactor Vector#take/filter returns arrow array (#148)</p>
+</li><li>
+<p>Change LineLength in cop from 120 to 90 (#152)</p>
+</li><li>
+<p>Refine DataFrame combinable (join) operations (#159)</p>
+<ul><li>
+<p>Refine DataFrame#join effectively using outputs options</p>
+</li><li>
+<p>Simplify DataFrame set operations</p>
+</li></ul>
+</li><li>
+<p>Improve in tests/CI</p>
+</li><li>
+<p>Tests</p>
+<ul><li>
+<p>Update benchmark using 0.2.3 (#138)</p>
+</li><li>
+<p>Update benchmark basic#02/pick by [] (#140)</p>
+</li><li>
+<p>Update benchmark contexts and loop_count (#140)</p>
+</li><li>
+<p>Add benchmark for vector (#140)</p>
+</li><li>
+<p>Add tests for refinements (#140)</p>
+</li><li>
+<p>Add benchmark for the series of DataFrame operations (#140)</p>
+</li><li>
+<p>Add missing test for tdr and dictionary (#140)</p>
+</li><li>
+<p>Add missing test for group#method with foreign key (#152)</p>
+</li><li>
+<p>Add missing test for set operations and natural join (#152)</p>
+</li><li>
+<p>Add missing test for DataFrame#[] with selecting by Array of illegal type' (#152)</p>
+</li><li>
+<p>Add missing test for DataFrame#assign when assigner size is mismatch (#152)</p>
+</li><li>
+<p>Accept Hash as join keys in DataFrame join methods (#159)</p>
+</li></ul>
+</li><li>
+<p>Cops</p>
+<ul><li>
+<p>Refactor/clean rubocop.yml (#138)</p>
+</li></ul>
+</li><li>
+<p>CI</p>
+<ul><li>
+<p>Support Ruby 3.2 in CI test (#141)</p>
+</li><li>
+<p>Send test coverage report to Code Climate (#144)</p>
+</li><li>
+<p>Add test on Fedora (#151)</p>
+</li><li>
+<p>Thanks to Benson Muite.</p>
+</li><li>
+<p>Add workflow to generate document (#153)</p>
+</li><li>
+<p>Thanks to kojix2.</p>
+</li><li>
+<p>Support Code Climate test coverage report in CI (#155)</p>
+</li></ul>
+</li><li>
+<p>Documentation</p>
+</li><li>
+<p>Add YARD in data_frame.rb (#140)</p>
+</li><li>
+<p>Fix YARD document in the code (#140)</p>
+</li><li>
+<p>Add Code Climate badges of maintainability and coverage (#144)</p>
+</li><li>
+<p>Add installation for Fedora in README (#147)</p>
+<ul><li>
+<p>Thanks to Benson Muite.</p>
+</li></ul>
+</li><li>
+<p>Add Vector#split/merge in Vector.md (#148)</p>
+</li><li>
+<p>Fix codeclimate badges in README (#155)</p>
+</li><li>
+<p>Update YARD in DataFrame join methods (#159)</p>
+</li><li>
+<p>Update jupyter notebook '89 examples of Redamber' (#160)</p>
+</li><li>
+<p>Thanks</p>
+</li><li>
+<p>Benson Muite</p>
+</li><li>
+<p>kojix2</p>
+</li></ul>
+
+<h2 id="label-5B0.2.3-5D+-+2022-11-16">[0.2.3] - 2022-11-16</h2>
+<ul><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix DataFrame#to_s when DataFrame.size == 0 (#125)</p>
+</li><li>
+<p>Remove unused lines in funcs (#128)</p>
+</li><li>
+<p>Remove unused methods in helper (#128)</p>
+</li><li>
+<p>Add test for invalid arg in DataFrame.new (#128)</p>
+</li><li>
+<p>Add test for Vector#shift(0) (#128)</p>
+</li><li>
+<p>Fix bugs for DataFrame#[], #pick and #drop with Range of Symbols and Symbol (#135)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Upgrade dependency to Arrow 10.0.0 (#132)</p>
+
+<p>It is possible to initialize by the objects responsible to <code>to_arrow</code> since 0.2.3 . Arrays in Numo::NArray is responsible to <code>to_arrow</code> with Red Arrow Numo::NArray 0.0.6 . This feature is proposed by the Red Data Tools member @kojix2 and implemented by @kou. I made also Vector to be responsible to <code>to_arrow</code> and <code>to_arrow_array</code>. It becomes a member of ducks ('quack quack'). Thanks!</p>
+<ul><li>
+<p>Change dev dependency to red-dataset-arrow (#117)</p>
+</li><li>
+<p>Add dev dependency for red-arrow-numo-narray (#132)</p>
+</li><li>
+<p>Support Numo::NArray in Vector.new (#132)</p>
+</li><li>
+<p>Support Vector#to_arrow_array (#132)</p>
+</li></ul>
+</li><li>
+<p>Update group (#118)</p>
+<ul><li>
+<p>Introduce new DataFrame group support (experimental)</p>
+</li></ul>
+
+<p>This additional API will treat a grouped DataFrame as a list of DataFrames. I think this API has pros such as: - API is easy to understand and flexible. - It has good compatibility with Ruby's primitive Enumerables. - We can only use non hash-ed aggregation functions. - Do not need grouped DataFrame state, nor <code>#ungroup</code> method. - May be useful for concurrent operations.</p>
+
+<p>This feature is implemented by Ruby, so it is pretty slow and experimental. Use original Group API for practical purpose.</p>
+<ul><li>
+<p><code>include Enumerable</code> to Group (experimental)</p>
+</li><li>
+<p>Add Group#each, #inspect</p>
+</li><li>
+<p>Refactor Group to align with Arrow</p>
+</li></ul>
+</li><li>
+<p>Introduce DataFrame combining methods (#125)</p>
+<ul><li>
+<p>Introduce DataFrame#concatenate method</p>
+</li><li>
+<p>Add DataFrame#merge method</p>
+</li><li>
+<p>Add DataFrame#inner_join method</p>
+</li><li>
+<p>Add DataFrame#full_join method</p>
+</li><li>
+<p>Add DataFrame#left_join method</p>
+</li><li>
+<p>Add DataFrame#right_join method</p>
+</li><li>
+<p>Add DataFrame#semi_join method</p>
+</li><li>
+<p>Add DataFrame#anti_join method</p>
+</li><li>
+<p>Add DataFrame#intersect method</p>
+</li><li>
+<p>Add DataFrame#union method</p>
+</li><li>
+<p>Add DataFrame#setdiff method</p>
+</li><li>
+<p>Rename #setdiff to #difference</p>
+</li><li>
+<p>Support natural join in DataFrame#join</p>
+</li><li>
+<p>Support partial join_key and renaming</p>
+</li><li>
+<p>Fix DataFrame#join to merge key columns</p>
+</li><li>
+<p>Add DataFrame#set_operable? method</p>
+</li><li>
+<p>Add join/set/bind image to DataFrame.md</p>
+</li><li>
+<p>Fix DataFrame#join, #right_semi, #right_anti (#128)</p>
+</li></ul>
+</li><li>
+<p>Miscellaneous</p>
+<ul><li>
+<p>Return Vector in DataFrame#indices (#118)</p>
+</li></ul>
+</li><li>
+<p>Improve tests/ci</p>
+</li><li>
+<p>Improve CI</p>
+<ul><li>
+<p>Add CI test on macOS (#133)</p>
+</li><li>
+<p>Enable bundler-cache on macOS (#128)</p>
+</li><li>
+<p>Add install gobject introspection prior to glib in CI (#133) This will stabilize CI system installation especially with cache.</p>
+</li><li>
+<p>Rename workflows/test.yml to ci.yml (#133)</p>
+</li><li>
+<p>Fix link in CI badge of README.md (#118)</p>
+</li><li>
+<p>Add github action for coverage (#128)</p>
+</li></ul>
+</li><li>
+<p>Add benchmark</p>
+<ul><li>
+<p>Add benchmarks with Rover (#118)</p>
+</li><li>
+<p>Introduce benchmark suite (#134)</p>
+</li><li>
+<p>Add benchmark for combining operations (#134)</p>
+</li></ul>
+</li><li>
+<p>Measuring test coverage</p>
+<ul><li>
+<p>Add test coverage measurement (#128)</p>
+</li></ul>
+</li><li>
+<p>Refactoring</p>
+</li><li>
+<p>Remove redundant string escape in <code>test_vector_function</code> (#132)</p>
+</li><li>
+<p>Refine tests to use <code>assert_equal_array</code> (#128)</p>
+</li><li>
+<p>Rewrite Vector#replace (#128)</p>
+</li><li>
+<p>Documentation</p>
+</li><li>
+<p>Update README.md for installation (#126)</p>
+</li><li>
+<p>Add clause that keys must be unique in doc. (#126)</p>
+</li><li>
+<p>Rows should be called as 'records' (#126)</p>
+</li><li>
+<p>Update Jupyter Notebook <code>83 examples of RedAmber</code> (#135)</p>
+</li><li>
+<p>GitHub site</p>
+<ul><li>
+<p>Update Jupyter notebooks in Binder</p>
+</li><li>
+<p>Change default branch name from 'master' to 'main' (#127)</p>
+</li></ul>
+</li><li>
+<p>Thanks</p>
+</li></ul>
+
+<p>Ruby Association Grant committee It is a great honor for selecting RedAmber as a project of Ruby Association Grant 2022.</p>
+
+<h2 id="label-5B0.2.2-5D+-+2022-10-04">[0.2.2] - 2022-10-04</h2>
+<ul><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Return self when no replacement happen in Vector#replace. (#92)</p>
+</li><li>
+<p>Limit n-digits in to_iruby. (#111)</p>
+</li><li>
+<p>Fix displaying space in to_iruby. (#111)</p>
+</li><li>
+<p>Raise error if key is duplicated. (#113)</p>
+</li><li>
+<p>Fix DataFrame#pick/#drop with endless Range. (#113)</p>
+</li><li>
+<p>Change type from dictionary to string in DataFrame reshaping methods. (#113)</p>
+</li><li>
+<p>Fix arguments parser to accept Enumerator. (#114)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Support to make a data frame from a to_arrow-responsible object. (#106) [Patch by Kenta Murata]</p>
+</li><li>
+<p>Introduce DataFrame#auto_cast (experimental feature) (#105)</p>
+</li><li>
+<p>Change default name in DataFrame#transpose, #to_long, #to_wide. (#110)</p>
+</li><li>
+<p>Add Vector#dictionary? method. (#113)</p>
+</li><li>
+<p>Add display mode 'Plain' and 'Minimum'. (#113)</p>
+</li><li>
+<p>Refactor code</p>
+<ul><li>
+<p>Refine test_vector_selectable. (#92)</p>
+</li><li>
+<p>Refine test_vector_updatable. (#92)</p>
+</li><li>
+<p>Refine Vector.new. (#113)</p>
+</li><li>
+<p>Refine DataFrame#pick, #drop. (#113)</p>
+</li></ul>
+</li><li>
+<p>Documents</p>
+<ul><li>
+<p>Update images. (#90, #105, #113)</p>
+</li><li>
+<p>Update README to use simpler examples. (#112)</p>
+</li><li>
+<p>Update README with a new screenshot example. (#113)</p>
+</li></ul>
+</li><li>
+<p>GitHub site</p>
+<ul><li>
+<p>Update Jupyter notebooks in Binder (#88, #115)</p>
+</li><li>
+<p>Move binder support to heronshoes/docker-stacks repository.</p>
+</li><li>
+<p>Update README notebook on binder.</p>
+</li><li>
+<p>Add examples_of_RedAmber notebook on binder.</p>
+</li><li>
+<p>Start to use discussions.</p>
+</li></ul>
+</li><li>
+<p>Thanks</p>
+</li><li>
+<p>Kenta Murata</p>
+</li></ul>
+
+<h2 id="label-5B0.2.1-5D+-+2022-09-07">[0.2.1] - 2022-09-07</h2>
+<ul><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix <code>Vector#each</code> with block (#66) <code>Vector#each</code> will return value of each element with block.</p>
+</li><li>
+<p>Fix table format at size == 9 (#67)</p>
+</li><li>
+<p>Fix to support Vector in <code>DataFrame#assign</code> (#77)</p>
+</li><li>
+<p>Add <code>assert_delta</code> functionality for <code>assert_with_NaN</code> (#78)</p>
+</li><li>
+<p>Fix Vector#is_in when self is chunked (#79)</p>
+</li><li>
+<p>Fix Array type error (uint/int) (#79)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Refine <code>DataFrame#indices</code> method (#67)</p>
+</li><li>
+<p>Update DataFrame reshaping methods (#73)</p>
+<ul><li>
+<p>Change default option value of DataFrame reshaping</p>
+</li><li>
+<p>Change the order of import_cars example</p>
+</li></ul>
+</li><li>
+<p>Add <code>DataFrame#method_missing</code> to get column vector by method (#75)</p>
+<ul><li>
+<p>Add <code>DataFrame#method_missing</code> to get column (#75)</p>
+</li></ul>
+</li><li>
+<p>Accept both args and block in <code>DataFrame#assign</code> (#75)</p>
+</li><li>
+<p>Accept indices in <code>DataFrame#pick</code> and <code>DataFrame#drop</code> (#76)</p>
+</li><li>
+<p>Add <code>DataFrame#slice_by</code> method (#77)</p>
+</li><li>
+<p>Add new Vector functions (#78)</p>
+<ul><li>
+<p>Add inverse trigonometric function for Vector</p>
+</li><li>
+<p><code>acos</code></p>
+</li><li>
+<p><code>asin</code></p>
+</li><li>
+<p>Add logarithmic function for Vector</p>
+</li><li>
+<p><code>ln</code></p>
+</li><li>
+<p><code>log10</code></p>
+</li><li>
+<p><code>log1p</code></p>
+</li><li>
+<p><code>log2</code></p>
+</li><li>
+<p>Add binary function <code>Vector#logb</code></p>
+</li></ul>
+</li><li>
+<p>Docker image and Jupyter Notebook [Thanks to Kenta Murata]</p>
+<ul><li>
+<p>Add link to RubyData in README</p>
+</li><li>
+<p>Add link to interactive README by Binder</p>
+</li></ul>
+</li><li>
+<p>Update Jupyter Notebook <code>71 examples of RedAmber</code></p>
+</li><li>
+<p>Thanks</p>
+</li><li>
+<p>Kenta Murata</p>
+</li></ul>
+
+<h2 id="label-5B0.2.0-5D+-+2022-08-15">[0.2.0] - 2022-08-15</h2>
+<ul><li>
+<p>Bump version up to 0.2.0</p>
+</li><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix order of multiple group keys (#55) Only 1 group key comes to left. Other keys remain in right.</p>
+</li><li>
+<p>Remove optional <code>require</code> for rover (#55) Fix DataFrame.new for argument with Rover::DataFrame.</p>
+</li><li>
+<p>Fix occasional failure in CI (#59) Sometimes the CI test fails. I added -dev dependency in Arrow install by apt, not doing in bundler.</p>
+</li><li>
+<p>Fix calling :take in V#[] (#56) Fixed to call Arrow function :take instead of :array_take in Vector#take_by_vector. This will prevent the error below when called with Arrow::ChunkedArray.</p>
+</li><li>
+<p>Raise error renaming non existing key (#61) Add error when specified key is not exist.</p>
+</li><li>
+<p>Fix DataFrame#rename #assign by array (#65)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Support Arrow 9.0.0</p>
+<ul><li>
+<p>Upgrade to Arrow 9.0.0 (#59)</p>
+</li><li>
+<p>Add Vector#quantile method (#59) Arrow::QuantileOptions has supported in Arrow GLib 9.0.0 (ARROW-16623, Thanks!)</p>
+</li><li>
+<p>Add Vector#quantiles (#62)</p>
+</li><li>
+<p>Add DataFrame#each_row (#56)</p>
+</li><li>
+<p>Returns Enumerator if block is not given.</p>
+</li><li>
+<p>Change DataFrame#each_row to return a Hash =&gt; row (#63)</p>
+</li></ul>
+</li><li>
+<p>Refactor to use pattern match in overloaded parameter parsing (#61)</p>
+<ul><li>
+<p>Refine DataFrame.new to use pattern match</p>
+</li><li>
+<p>Use pattern match in DataFrame#assign</p>
+</li><li>
+<p>Use pattern match in DataFrame#rename</p>
+</li></ul>
+</li><li>
+<p>Accept Array for renamer/assigner in #rename/#assign (#61)</p>
+<ul><li>
+<p>Accept assigner by Arrays in DataFrame#assign</p>
+</li><li>
+<p>Accept renamer pairs by Arrays in DataFrame#rename</p>
+</li><li>
+<p>Add DataFrame#assign_left method</p>
+</li></ul>
+</li><li>
+<p>Add summary/describe (#62)</p>
+<ul><li>
+<p>Introduce DataFrame#summary(#describe)</p>
+</li></ul>
+</li><li>
+<p>Introduce reshaping methods for DataFrame (#64)</p>
+<ul><li>
+<p>Introduce DataFrame#transpose method</p>
+</li><li>
+<p>Intorduce DataFrame#to_long method</p>
+</li><li>
+<p>Intorduce DataFrame#to_wide method</p>
+</li></ul>
+</li><li>
+<p>Others</p>
+<ul><li>
+<p>Add alias sort_index for array_sort_indices (#59)</p>
+</li><li>
+<p>Enable :width option in DataFrame#to_s (#62)</p>
+</li><li>
+<p>Add options to DataFrame#format_table (#62)</p>
+</li></ul>
+</li><li>
+<p>Update Documents</p>
+<ul><li>
+<p>Add Yard doc for some methods</p>
+</li><li>
+<p>Update Jupyter notebook '61 Examples of Red Amber' (#65)</p>
+</li></ul>
+</li></ul>
+
+<h2 id="label-5B0.1.8-5D+-+2022-08-04+-28experimental-29">[0.1.8] - 2022-08-04 (experimental)</h2>
+<ul><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix unnamed column in table formatter (#52)</p>
+</li><li>
+<p>Fix DataFrame#key?, DataFrame#key_index when @keys.nil? (#52)</p>
+</li><li>
+<p>Align order of replacer in Vector#replace (#53, resolved #38)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Refine DataFrame.new for empty arguments (#50)</p>
+<ul><li>
+<p>Delete .rubocop_todo.yml for not to use yoda condition (#50)</p>
+</li></ul>
+</li><li>
+<p>Refine Group (#52, resolved #28)</p>
+<ul><li>
+<p>Refine Group methods creation</p>
+</li><li>
+<p>Make group key at first(left)</p>
+</li><li>
+<p>Show only one group count when same counts</p>
+</li><li>
+<p>Add block acceptability for group</p>
+</li><li>
+<p>Rename empty key to :unnamed in DataFrame.new</p>
+</li><li>
+<p>Rename Group#aggregated_by to #summarize (#54)</p>
+</li></ul>
+</li><li>
+<p>Add Vector#shift (#51)</p>
+</li><li>
+<p>Vector#[] accepts Range as an argument (#51)</p>
+</li><li>
+<p>Update documents</p>
+</li><li>
+<p>Add support for yard (#54)</p>
+</li><li>
+<p>Renew jupyter notebook '53 examples' (#54)</p>
+</li><li>
+<p>Add more examples and images in README (#52)</p>
+</li><li>
+<p>Add document of group manipulations in README (#52)</p>
+</li><li>
+<p>Renew DF#group document in DataFrame.md (#52)</p>
+</li></ul>
+
+<h2 id="label-5B0.1.7-5D+-+2022-07-15+-28experimental-29">[0.1.7] - 2022-07-15 (experimental)</h2>
+<ul><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Remove development dependency for red-dataset-arrow (#47)</p>
+<ul><li>
+<p>To avoid irregular fails in CI test</p>
+</li><li>
+<p>Add red-datasets to development dependency instead (#49)</p>
+</li></ul>
+</li><li>
+<p>Supress useless log in tests (#46) Suppress log of Webrick and iruby.</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Use Table mode as default preview mode in <code>inspect</code>/<code>to_s</code> (#40)</p>
+<ul><li>
+<p>Show examples in documents in Table</p>
+</li><li>
+<p>Use the word rows/columns</p>
+</li><li>
+<p>Update images of data processing in Table style</p>
+</li></ul>
+</li><li>
+<p>Introduce a new Table formatter (#47)</p>
+<ul><li>
+<p>Migrate from the Arrow's formatter</p>
+</li><li>
+<p>Do not use TAB, format by spaces only.</p>
+</li><li>
+<p>Align column width with head rows and tail rows.</p>
+</li><li>
+<p>Show nils.</p>
+</li><li>
+<p>Show data types.</p>
+</li><li>
+<p>Refine documents to use new formatter output</p>
+</li></ul>
+</li><li>
+<p>Simplify options of Vector functions (#46) Vector functions with options use optional argument opt in previous code.</p>
+</li><li>
+<p>Add <code>#float?</code>, <code>#integer?</code> to Vector (#46)</p>
+</li><li>
+<p>Add <code>#each</code> to Vector (#47)</p>
+</li><li>
+<p>Introduce class <code>Group</code> (#48)</p>
+<ul><li>
+<p>Refine <code>DataFrame#group</code> to use class Group</p>
+</li><li>
+<p>Add methods to Group</p>
+</li></ul>
+</li><li>
+<p>Move parquet and rover to development dependency (#49)</p>
+</li><li>
+<p>Refine text in <code>DataFrame#to_iruby</code> (#40)</p>
+</li><li>
+<p>Add badges in Github site</p>
+<ul><li>
+<p>Gitter badge for Red Data Tools (#42)</p>
+</li><li>
+<p>Gem version and CI status badge (#45)</p>
+</li></ul>
+</li><li>
+<p>Exchange containers in red-amber.rb and red_amber.rb (#47)</p>
+<ul><li>
+<p>Mainly use red_amber by consistency with the folder name</p>
+</li></ul>
+</li><li>
+<p>Add Jupyter notebook '47 Examples of Red Amber' (#49)</p>
+</li></ul>
+
+<h2 id="label-5B0.1.6-5D+-+2022-06-26+-28experimental-29">[0.1.6] - 2022-06-26 (experimental)</h2>
+<ul><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix mime-type of empty DataFrame in <code>#to_iruby</code> (#31)</p>
+</li><li>
+<p>Fix mime setting in <code>DataFrame#to_iruby</code> (#36)</p>
+</li><li>
+<p>Fix unmatched return val in Selectable (#34)</p>
+</li><li>
+<p>Fix to return same error as <code>#[]</code> in <code>DataFrame#slice</code> (#34)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Introduce Jupyter support (#29, #30, #31, #32)</p>
+<ul><li>
+<p>Add 'DataFrame#to_html (changed to use #to_iruby)</p>
+</li><li>
+<p>Add feature to show nil in to_iruby</p>
+</li><li>
+<p>nil is expressed as (nil)</p>
+</li><li>
+<p>empty string(") is ""</p>
+</li><li>
+<p>blank spaces are " "</p>
+</li></ul>
+</li><li>
+<p>Enable to change DataFrame display mode by ENV (#36)</p>
+<ul><li>
+<p>Support <a href="&#39;RED_AMBER_OUTPUT_STYLE&#39;">ENV</a> to change display mode in <code>#inspect</code> and <code>#to_iruby</code></p>
+</li><li>
+<p><a href="&#39;RED_AMBER_OUTPUT_STYLE&#39;">ENV</a> = ‘table’ # =&gt; Table mode</p>
+</li><li>
+<p><a href="&#39;RED_AMBER_OUTPUT_STYLE&#39;">ENV</a> = nil or other than ‘table’ # =&gt; TDR mode</p>
+</li></ul>
+</li><li>
+<p>Support <code>require &#39;red-amber&#39;</code>, as well (#34)</p>
+</li><li>
+<p>Refine Vector slicing methods (#31)</p>
+<ul><li>
+<p>Introduce <code>Vector#take</code> method</p>
+</li><li>
+<p>Introduce <code>Vector#filter</code> method</p>
+</li><li>
+<p>Improve <code>Vector#[]</code> to overload take and filter</p>
+</li><li>
+<p>Introduce <code>Vector#drop_nil</code> method</p>
+</li><li>
+<p>Introduce <code>Vector#if_else</code> method</p>
+</li><li>
+<p>Intorduce <code>Vector#is_in</code> method</p>
+</li><li>
+<p>Add alias <code>Vector#all?</code>, <code>#any?</code> methods (#32)</p>
+</li><li>
+<p>Add <code>Vector#has_nil?</code> method(#32)</p>
+</li><li>
+<p>Add <code>Vector#empty?</code> method</p>
+</li><li>
+<p>Add <code>Vector#primitive_invert</code> method</p>
+</li><li>
+<p>Refactor <code>Vector#take</code>, <code>#filter</code></p>
+</li><li>
+<p>Move <code>Vector#if_else</code> from function to Updatable</p>
+</li><li>
+<p>Move if_else test to updatable</p>
+</li><li>
+<p>Rename updatable in test</p>
+</li><li>
+<p>Remove method <code>Vector#take_out_element_wise</code></p>
+</li><li>
+<p>Rename inner metthod name</p>
+</li></ul>
+</li><li>
+<p>Refine DataFrame slicing methods (#31)</p>
+<ul><li>
+<p>Introduce 'DataFrame#take method</p>
+</li><li>
+<h1 id="label-take+is+implemented+as+vector+calculation+by+-23if_else">take is implemented as vector calculation by #if_else</h1>
+</li><li>
+<p>Introduce 'DataFrame#fliter method</p>
+</li><li>
+<p>Change 'DataFrame#[] to use take and filter</p>
+</li><li>
+<p>Float indices is acceptable (#10)</p>
+</li><li>
+<p>Negative index (like Array) is also acceptable</p>
+</li></ul>
+</li><li>
+<p>Further refinement in DataFrame slicing methods (#34)</p>
+</li><li>
+<p>Improve <code>DataFrame#[]</code>, <code>#slice</code>, <code>#remove</code> by a new engine</p>
+<ul><li>
+<p>It parses arguments to Vector internally.</p>
+</li><li>
+<p>Used Kernel#Array to simplify code (#16) .</p>
+</li><li>
+<p>Move <code>DataFrame#slice</code>, <code>#remove</code> to Selectable</p>
+</li><li>
+<p>Refine <code>DataFrame#take</code>, <code>#filter</code> (undocumented)</p>
+</li></ul>
+</li><li>
+<p>Introduce coerce in Vector (#35)</p>
+<ul><li>
+<p>Introduce <code>Vector#coerce</code></p>
+</li><li>
+<p>Now we can <code>-1 * Vector.new([1, 2, 3])</code></p>
+</li><li>
+<p>Add <code>Vector#to_ary</code> method</p>
+</li><li>
+<p>Now we can <code>[1, 2] + Vector.new([3, 4, 5])</code></p>
+</li></ul>
+</li><li>
+<p>Other new feature or refinements</p>
+<ul><li>
+<p>Common</p>
+</li><li>
+<p>Refactor helper as common for DataFrame and Vector (#35)</p>
+</li><li>
+<p>Change name row/col to obs/var (#34)</p>
+</li><li>
+<p>Rename internal function name (#34)</p>
+</li><li>
+<p>Delete unused methods (#34)</p>
+</li><li>
+<p>DataFrame</p>
+</li><li>
+<p>Change to return instance variable in <code>#to_arrow</code>, <code>#keys</code> and <code>#key_index</code> (#34)</p>
+</li><li>
+<p>Change to return an Array in <code>DataFrame#indices</code> (#35)</p>
+</li><li>
+<p>Vector</p>
+</li><li>
+<p>Introduce <code>Vector#replace</code> method</p>
+</li><li>
+<p>Accept Range and expanded Array in <code>Vector#new</code></p>
+</li><li>
+<p>Add <code>Vector#indices</code> method (#35)</p>
+</li><li>
+<p>Add <code>Vector#index</code> method (#35)</p>
+</li><li>
+<p>Rename VectorCompensable to *Updatable (#33)</p>
+</li></ul>
+</li><li>
+<p>Documentation</p>
+<ul><li>
+<p>Fix typo in DataFrame.md</p>
+</li></ul>
+</li><li>
+<p>Github site</p>
+<ul><li>
+<p>Add gem and status badges in README. (#42) [Patch by kojix2]</p>
+</li></ul>
+</li><li>
+<p>Thanks</p>
+</li><li>
+<p>kojix2</p>
+</li></ul>
+
+<h2 id="label-5B0.1.5-5D+-+2022-06-12+-28experimental-29">[0.1.5] - 2022-06-12 (experimental)</h2>
+<ul><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix DataFrame#tdr to display timestamp type (#19)</p>
+</li><li>
+<p>Add TZ setting in CI test to pass temporal tests (#19)</p>
+</li><li>
+<p>Fix example in document of #load(csv_from_URI) (#23)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Improve usability of DataFrame manipulating block (#19)</p>
+<ul><li>
+<p>Add <code>DataFrame#v</code> to select a Vector</p>
+</li><li>
+<p>Add <code>DataFrame#variables</code> method</p>
+</li><li>
+<p>Add <code>DataFrame#to_arrow</code></p>
+</li><li>
+<p>Add instance variables in DataFrame with lazy initialization</p>
+</li><li>
+<p>Add <code>Vector#key</code> to get key name</p>
+</li><li>
+<p>Add <code>Vector#temporal?</code> to check if temporal type</p>
+</li><li>
+<p>Refine around DataFrame#variables</p>
+</li><li>
+<p>Refine init of instance variables</p>
+</li><li>
+<p>Refine DataFrame#type_classes, Vector#ectortype_class</p>
+</li><li>
+<p>Refine DataFrame#tdr to shorten temporal data</p>
+</li></ul>
+</li><li>
+<p>Add supports to make up for missing values (#20)</p>
+<ul><li>
+<p>Add VectorArgumentError</p>
+</li><li>
+<p>Add <code>Vector#replace_with</code></p>
+</li><li>
+<p>Add helper function to assert with NaN</p>
+</li><li>
+<p>To assert NaN == NaN</p>
+</li><li>
+<p>Add <code>Vector#fill_nil_backward</code>, <code>Vector#forward</code></p>
+</li><li>
+<p>Add <code>DataFrame#remove_nil</code> method</p>
+</li><li>
+<p>Change to accept nil as replacement in Vector#replace_with</p>
+</li></ul>
+</li><li>
+<p>Introduce index related methods (#22)</p>
+<ul><li>
+<p>Add <code>Vector#sort_indexes</code> method</p>
+</li><li>
+<p>Add <code>Vector#uniq</code> method</p>
+</li><li>
+<p>Add <code>Vector#tally</code> and <code>Vectorvalue_counts</code> methods</p>
+</li><li>
+<p>Add <code>DataFrame#sort</code> method</p>
+</li><li>
+<p>Add <code>DataFrame#group</code> method</p>
+</li><li>
+<p>Change to use DataFrame#map_indices in #[]</p>
+</li></ul>
+</li><li>
+<p>Add rounding functions with opts (#21)</p>
+<ul><li>
+<p>With options :mode and :n_digits</p>
+</li><li>
+<p>:n_digits also can be specified with :multiple option in <code>Vector#round_to_multiple</code></p>
+</li><li>
+<p><code>Vector#round</code></p>
+</li><li>
+<p><code>Vector#ceil</code></p>
+</li><li>
+<p><code>Vector#floor</code></p>
+</li><li>
+<p><code>Vector#trunc</code></p>
+</li></ul>
+</li><li>
+<p>Documentation</p>
+<ul><li>
+<p>Update TDR, TDR_ja documents to latest (#18)</p>
+</li><li>
+<p>Refinement and small fix in DataFrame.md (#18)</p>
+</li><li>
+<p>Update README to use more effective example (#18)</p>
+</li><li>
+<p>Delete expired TDR_operations.pdf (#23)</p>
+</li><li>
+<p>Update README and dataframe_model image (#23)</p>
+</li><li>
+<p>Update description about rover-df in README (#23)</p>
+</li><li>
+<p>Add installation of Arrow in README (#23)</p>
+</li></ul>
+</li><li>
+<p>Others</p>
+<ul><li>
+<p>Tried but cannot use bundler cache in ci test (#17)</p>
+</li><li>
+<p>Bump up requirements to Arrow 8.0.0 (#25)</p>
+</li><li>
+<p>Arrow 7.0.0 with Ubuntu 21.04 causes an fatal error in replace_with_mask function.</p>
+</li><li>
+<p>Update the description of gem (#23)</p>
+</li><li>
+<p>Add benchmark tests (#26)</p>
+</li></ul>
+</li></ul>
+
+<h2 id="label-5B0.1.4-5D+-+2022-05-29+-28experimental-29">[0.1.4] - 2022-05-29 (experimental)</h2>
+<ul><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix missing support for scalar argument (#1)</p>
+</li><li>
+<p>Fix type name of boolean in DataFrame#types to be same as Vector#type (#6, #7)</p>
+</li><li>
+<p>Fix zero picking to return empty DataFrame (#8)</p>
+</li><li>
+<p>Fix code at both args and a block given (#8)</p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p><code>DataFrame</code></p>
+<ul><li>
+<p>Refine module name <code>Displayable</code></p>
+</li><li>
+<p>Rename nrow/ncol methods to <code>size</code>/<code>n_keys</code> to align with TDR concept (#4)</p>
+</li><li>
+<p>Remain <code>n_row</code>/<code>n_col</code> for compatibility</p>
+</li><li>
+<p>Rename <code>ls</code> method to <code>tdr</code> (#4)</p>
+</li><li>
+<p>Add limit option to <code>tdr</code></p>
+</li><li>
+<p>Shorten option name (#11)</p>
+</li><li>
+<p>Introduce <code>pick</code> method to create sub DataFrame (#8)</p>
+</li><li>
+<p>Add boolean support (#8)</p>
+</li><li>
+<p>Refactor <code>pick</code> (#9)</p>
+</li><li>
+<p>Introduce <code>drop</code> method to create sub DataFrame (#8)</p>
+</li><li>
+<p>Add boolean support (#8)</p>
+</li><li>
+<p>Refactor <code>drop</code> (#9)</p>
+</li><li>
+<p>Add boolean array support for <code>[]</code> (#9)</p>
+</li><li>
+<p>Add <code>indexes</code>/<code>indices</code> to use with selecting observations (#9)</p>
+</li><li>
+<p>Introduce <code>slice</code> method to create sub DataFrame (#8)</p>
+</li><li>
+<p>Refactor <code>slice</code> (#9)</p>
+</li><li>
+<p>Introduce <code>remove</code> method to create sub DataFrame (#9)</p>
+</li><li>
+<p>Introduce <code>rename</code> method to create sub DataFrame (#14)</p>
+</li><li>
+<p>Introduce <code>assign</code> method to create sub DataFrame (#14)</p>
+</li><li>
+<p>Improve to call block by instance_eval (#13)</p>
+</li></ul>
+</li><li>
+<p><code>Vector</code></p>
+<ul><li>
+<p>Refine <code>find(function)</code></p>
+</li><li>
+<p>Add <code>min_max</code> method (#2)</p>
+</li><li>
+<p>Add <code>std</code>/<code>sd</code> method (ddof=0 version: <code>stddev</code>) (#2)</p>
+</li><li>
+<p>Add <code>var</code> method (ddof=0 version: <code>variance</code>) (#2)</p>
+</li><li>
+<p>Add <code>VectorFunctions.arrow_doc(func_name)</code> (temporally)</p>
+</li></ul>
+</li><li>
+<p>Documentation</p>
+<ul><li>
+<p>Show code in README</p>
+</li><li>
+<p>Change row/column names for <strong>TDR</strong> concept (#4)</p>
+</li><li>
+<p>Add documents about <strong>TDR</strong> concept (#4)</p>
+</li><li>
+<p>Add example about TDR (#4)</p>
+</li><li>
+<p>Separate README to create DataFrame and Vector documents (#12)</p>
+</li><li>
+<p>Add DataFrame model concept image to README (#12)</p>
+</li></ul>
+</li><li>
+<p>GitHub site</p>
+<ul><li>
+<p>Switched to use merge on GitHub (not to push merged master) (#1)</p>
+</li><li>
+<p>Create lifetime issue #3 to show the goal of this project (#3)</p>
+</li></ul>
+</li></ul>
+
+<h2 id="label-5B0.1.3-5D+-+2022-05-15+-28experimental-29">[0.1.3] - 2022-05-15 (experimental)</h2>
+<ul><li>
+<p>Bug fixes</p>
+</li><li>
+<p>Fix boolean functions in <code>Vector</code> to align with Ruby's behavior</p>
+<ul><li>
+<p><code>&amp;</code> == <code>and_kleene</code></p>
+</li><li>
+<p><code>|</code> == <code>or_kleene</code></p>
+</li><li>
+<p><code>&amp;</code> == <code>and_kleene</code></p>
+</li><li>
+<p><code>|</code> == <code>or_kleene</code></p>
+</li></ul>
+</li><li>
+<p>Quote strings of data-preview in <code>DataFrame#inspect</code></p>
+</li><li>
+<p>Quote empty and blank keys in <code>DataFrame#inspect</code></p>
+</li><li>
+<p>Respond to error for a wrong key in <code>DataFrame#[]</code></p>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p><code>DataFrame</code></p>
+<ul><li>
+<p>Display nil elements in <code>inspect</code></p>
+</li><li>
+<p>Show NaN and nil counts in <code>inspect</code></p>
+</li><li>
+<p>Refactor <code>inspect</code></p>
+</li><li>
+<p>Add method <code>key</code> and <code>key_index</code></p>
+</li><li>
+<p>Add how to load/save Parquet to README</p>
+</li></ul>
+</li><li>
+<p><code>Vector</code></p>
+<ul><li>
+<p>Add categorization functions</p>
+</li></ul>
+
+<p> This is an important step to support <code>slice</code> method and NA treatment features. - <code>is_finite</code> - <code>is_inf</code> - <code>is_na</code> (RedAmber original) - <code>is_nan</code> - <code>is_nil</code>, <code>is_null</code> - <code>is_valid</code> - Show in a reduced representation for long array in <code>inspect</code> - Support options in aggregatiton functions - Return values in non-arrow object for scalar aggregation functions</p>
+</li></ul>
+
+<h2 id="label-5B0.1.2-5D+-+2022-05-08+-28experimental-29">[0.1.2] - 2022-05-08 (experimental)</h2>
+<ul><li>
+<p>Bug fixes:</p>
+</li><li>
+<p><code>DataFrame</code></p>
+<ul><li>
+<p>Fix bug in <code>#[]</code> with end-less Range</p>
+</li></ul>
+</li><li>
+<p>New features and improvements</p>
+</li><li>
+<p>Add support for Arrow 8.0.0</p>
+</li><li>
+<p><code>DataFrame</code></p>
+<ul><li>
+<p><code>types</code> and <code>data_types</code></p>
+</li><li>
+<p>Range is usable to specify columns in <code>#[]</code></p>
+</li></ul>
+</li><li>
+<p><code>Vector</code></p>
+<ul><li>
+<p><code>type</code> and <code>data_type</code></p>
+</li></ul>
+</li></ul>
+
+<h2 id="label-5B0.1.1-5D+-+2022-05-06+-28experimental-29">[0.1.1] - 2022-05-06 (experimental)</h2>
+<ul><li>
+<p>Release on rubygems.org</p>
+</li><li>
+<p>Introduce class <code>DataFrame</code></p>
+</li><li>
+<p>New from Hash, schema/rows, <code>Arrow::Table</code>, <code>Rover::DataFrame</code></p>
+</li><li>
+<p>Load from file, string, URI</p>
+</li><li>
+<p>Save to file, string, URI</p>
+</li><li>
+<p>Methods for basic properties</p>
+</li><li>
+<p>Rich inspect method</p>
+</li><li>
+<p>Basic selecting by <code>#[]</code></p>
+</li><li>
+<p>Introduce class <code>Vector</code></p>
+</li><li>
+<p>New from a column in a <code>DataFlame</code></p>
+</li><li>
+<p>New from <code>Arrow::Array</code>, <code>Arrow::ChunkedArray</code>, <code>Array</code></p>
+</li><li>
+<p>Methods for basic properties</p>
+</li><li>
+<p>Function support</p>
+<ul><li>
+<p>Unary aggregations</p>
+</li><li>
+<p>Unary element-wises</p>
+</li><li>
+<p>Binary element-wises</p>
+</li><li>
+<p>Some operators defined</p>
+</li></ul>
+</li></ul>
+
+<h2 id="label-5B0.1.0-5D+-+2022-04-15+-28unreleased-29">[0.1.0] - 2022-04-15 (unreleased)</h2>
+<ul><li>
+<p>Initial version</p>
+</li></ul>
+</div></div>
+
+      <div id="footer">
+  Generated on Wed Jan 31 23:29:56 2024 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.34 (ruby-3.3.0).
+</div>
+
+    </div>
+  </body>
+</html>

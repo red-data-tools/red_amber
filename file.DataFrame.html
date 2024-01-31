@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: DataFrame
+  
+    &mdash; Documentation by YARD 0.9.34
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "DataFrame";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: DataFrame</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-DataFrame">DataFrame</h1>
+
+<p>Class <code>RedAmber::DataFrame</code> represents 2D-data. A <code>DataFrame</code> consists with: - A collection of data which have same data type within. We call it <code>Vector</code>. - A label is attached to <code>Vector</code>. We call it <code>key</code>. - A <code>Vector</code> and associated <code>key</code> is grouped as a <code>variable</code>. - <code>variable</code>s with same vector length are aligned and arranged to be a <code>DataFrame</code>. - Each <code>key</code> in a <code>DataFrame</code> must be unique. - Each <code>Vector</code> in a <code>DataFrame</code> contains a set of relating data at same position. We call it <code>record</code> or <code>observation</code>.</p>
+
+<p><img src="doc/../image/dataframe_model.png"></p>
+
+<h2 id="label-Constructors+and+saving">Constructors and saving</h2>
+
+<h3 id="label-new+from+a+Hash"><code>new</code> from a Hash</h3>
+
+<p><code>ruby  df = RedAmber::DataFrame.new(x: [1, 2, 3], y: %w[A B C]) </code></p>
+
+<h3 id="label-new+from+a+schema+-28by+Hash-29+and+data+-28by+Array-29"><code>new</code> from a schema (by Hash) and data (by Array)</h3>
+
+<p><code>ruby  RedAmber::DataFrame.new({x: :uint8, y: :string}, [[1, &quot;A&quot;], [2, &quot;B&quot;], [3, &quot;C&quot;]]) </code></p>
+
+<h3 id="label-new+from+an+Arrow-3A-3ATable"><code>new</code> from an Arrow::Table</h3>
+
+<p><code>ruby  table = Arrow::Table.new(x: [1, 2, 3], y: %w[A B C])  RedAmber::DataFrame.new(table) </code></p>
+
+<h3 id="label-new+from+an+Object+which+responds+to+to_arrow"><code>new</code> from an Object which responds to <code>to_arrow</code></h3>
+
+<p><code>ruby  require &quot;datasets-arrow&quot;  dataset = Datasets::Penguins.new  RedAmber::DataFrame.new(dataset) </code></p>
+
+<h3 id="label-new+from+a+Rover-3A-3ADataFrame"><code>new</code> from a Rover::DataFrame</h3>
+
+<p>“‘ruby require ’rover’</p>
+
+<p>rover = Rover::DataFrame.new(x: [1, 2, 3], y: %w[A B C]) RedAmber::DataFrame.new(rover) “‘</p>
+
+<h3 id="label-load+-28class+method-29"><code>load</code> (class method)</h3>
+<ul><li>
+<p>from a <code>.arrow</code>, <code>.arrows</code>, <code>.csv</code>, <code>.csv.gz</code> or <code>.tsv</code> file</p>
+</li></ul>
+
+<p><code>ruby  RedAmber::DataFrame.load(&quot;test/entity/with_header.csv&quot;) </code></p>
+
+<p><code>ruby  RedAmber::DataFrame.load(&quot;test/entity/without_header.csv&quot;, headers: [:x, :y, :z]) </code></p>
+<ul><li>
+<p>from a string buffer</p>
+</li><li>
+<p>from a URI</p>
+</li></ul>
+
+<p><code>ruby  uri = URI(&quot;https://raw.githubusercontent.com/mwaskom/seaborn-data/master/penguins.csv&quot;)  RedAmber::DataFrame.load(uri) </code></p>
+<ul><li>
+<p>from a Parquet file</p>
+</li></ul>
+
+<p>“‘ruby require ’parquet’</p>
+
+<p>df = RedAmber::DataFrame.load(“file.parquet”) “‘</p>
+
+<h3 id="label-save+-28instance+method-29"><code>save</code> (instance method)</h3>
+<ul><li>
+<p>to a <code>.arrow</code>, <code>.arrows</code>, <code>.csv</code>, <code>.csv.gz</code> or <code>.tsv</code> file</p>
+</li><li>
+<p>to a string buffer</p>
+</li><li>
+<p>to a URI</p>
+</li><li>
+<p>to a Parquet file</p>
+</li></ul>
+
+<p>“‘ruby require ’parquet’</p>
+
+<p>df.save(“file.parquet”) “‘</p>
+
+<h2 id="label-Properties">Properties</h2>
+
+<h3 id="label-table-2C+to_arrow"><code>table</code>, <code>to_arrow</code></h3>
+<ul><li>
+<p>Returns Arrow::Table object in the DataFrame.</p>
+</li></ul>
+
+<h3 id="label-size-2C+n_records-2C+n_obs-2C+n_rows"><code>size</code>, <code>n_records</code>, <code>n_obs</code>, <code>n_rows</code></h3>
+<ul><li>
+<p>Returns size of Vector (num of records).</p>
+</li></ul>
+
+<h3 id="label-n_keys-2C+n_variables-2C+n_vars-2C+n_cols-2C"><code>n_keys</code>, <code>n_variables</code>, <code>n_vars</code>, <code>n_cols</code>,</h3>
+<ul><li>
+<p>Returns num of keys (num of variables).</p>
+</li></ul>
+
+<h3 id="label-shape"><code>shape</code></h3>
+<ul><li>
+<p>Returns shape in an Array[n_rows, n_cols].</p>
+</li></ul>
+
+<h3 id="label-variables"><code>variables</code></h3>
+<ul><li>
+<p>Returns key names and Vectors pair in a Hash.</p>
+</li></ul>
+
+<p>It is convenient to use in a block when both key and vector required. We will write:</p>
+
+<p><code>ruby    # update numeric variables    df.assign do      variables.select.with_object({}) do |(key, vector), assigner|        assigner[key] = vector * -1 if vector.numeric?      end    end </code></p>
+
+<p>Instead of: <code>ruby    df.assign do      assigner = {}      vectors.each_with_index do |vector, i|        assigner[keys[i]] = vector * -1 if vector.numeric?      end      assigner    end </code></p>
+
+<h3 id="label-keys-2C+var_names-2C+column_names"><code>keys</code>, <code>var_names</code>, <code>column_names</code></h3>
+<ul><li>
+<p>Returns key names in an Array.</p>
+</li></ul>
+
+<p>Each key must be unique in the DataFrame.</p>
+
+<h3 id="label-types"><code>types</code></h3>
+<ul><li>
+<p>Returns types of vectors in an Array of Symbols.</p>
+</li></ul>
+
+<h3 id="label-type_classes"><code>type_classes</code></h3>
+<ul><li>
+<p>Returns types of vector in an Array of <code>Arrow::DataType</code>.</p>
+</li></ul>
+
+<h3 id="label-vectors"><code>vectors</code></h3>
+<ul><li>
+<p>Returns an Array of Vectors.</p>
+</li></ul>
+
+<p>When we use it, Vector#key is useful to get the key in the DataFrame.</p>
+
+<p><code>ruby    # update numeric variables, another solution    df.assign do      vectors.each_with_object({}) do |vector, assigner|        assigner[vector.key] = vector * -1 if vector.numeric?      end    end </code></p>
+
+<h3 id="label-indices-2C+indexes"><code>indices</code>, <code>indexes</code></h3>
+<ul><li>
+<p>Returns indexes in a Vector. Accepts an option <code>start</code> as the first of indexes.</p>
+</li></ul>
+
+<p>“‘ruby df = RedAmber::DataFrame.new(x: [1, 2, 3, 4, 5]) df.indices</p>
+
+<p># =&gt; #&lt;RedAmber::Vector(:uint8, size=5):0x0000000000013ed4&gt; [0, 1, 2, 3, 4]</p>
+
+<p>df.indices(1)</p>
+
+<p># =&gt; #&lt;RedAmber::Vector(:uint8, size=5):0x0000000000018fd8&gt; [1, 2, 3, 4, 5]</p>
+
+<p>df.indices(:a)</p>
+
+<p># =&gt; #&lt;RedAmber::Vector(:dictionary, size=5):0x000000000001bd50&gt; [:a, :b, :c, :d, :e] “‘</p>
+
+<h3 id="label-to_h"><code>to_h</code></h3>
+<ul><li>
+<p>Returns column-oriented data in a Hash.</p>
+</li></ul>
+
+<h3 id="label-to_a-2C+raw_records"><code>to_a</code>, <code>raw_records</code></h3>
+<ul><li>
+<p>Returns an array of row-oriented data without header.</p>
+</li></ul>
+
+<p>If you need a column-oriented full array, use <code>.to_h.to_a</code></p>
+
+<h3 id="label-each_row"><code>each_row</code></h3>
+
+<p>Yield each row in a <code>{ key =&gt; row}</code> Hash. Returns Enumerator if block is not given.</p>
+
+<h3 id="label-schema"><code>schema</code></h3>
+<ul><li>
+<p>Returns column name and data type in a Hash.</p>
+</li></ul>
+
+<h3 id="label-3D-3D"><code>==</code></h3>
+
+<h3 id="label-empty-3F"><code>empty?</code></h3>
+
+<h2 id="label-Output">Output</h2>
+
+<h3 id="label-to_s"><code>to_s</code></h3>
+
+<p><code>to_s</code> returns a preview of the Table.</p>
+
+<pre class="code ruby"><code class="ruby">puts penguins.to_s
+
+# =&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  : :        :                      :             :                 : ...        :
+341 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+342 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+343 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+</code></pre>
+
+<h3 id="label-inspect"><code>inspect</code></h3>
+
+<p><code>inspect</code> uses <code>to_s</code> output and also shows shape and object_id.</p>
+
+<h3 id="label-summary-2C+describe"><code>summary</code>, <code>describe</code></h3>
+
+<p><code>DataFrame#summary</code> or <code>DataFrame#describe</code> shows summary statistics in a DataFrame.</p>
+
+<pre class="code ruby"><code class="ruby">puts penguins.summary.to_s(width: 82) # needs more width to show all stats in this example
+
+# =&gt;
+  variables            count     mean      std      min      25%   median      75%      max
+  &lt;dictionary&gt;      &lt;uint16&gt; &lt;double&gt; &lt;double&gt; &lt;double&gt; &lt;double&gt; &lt;double&gt; &lt;double&gt; &lt;double&gt;
+0 bill_length_mm         342    43.92     5.46     32.1    39.23    44.38     48.5     59.6
+1 bill_depth_mm          342    17.15     1.97     13.1     15.6    17.32     18.7     21.5
+2 flipper_length_mm      342   200.92    14.06    172.0    190.0    197.0    213.0    231.0
+3 body_mass_g            342  4201.75   801.95   2700.0   3550.0   4031.5   4750.0   6300.0
+4 year                   344  2008.03     0.82   2007.0   2007.0   2008.0   2009.0   2009.0
+</code></pre>
+
+<h3 id="label-to_rover"><code>to_rover</code></h3>
+<ul><li>
+<p>Returns a <code>Rover::DataFrame</code>.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>rover</span><span class='tstring_end'>&#39;</span></span>
+
+<span class='id identifier rubyid_penguins'>penguins</span><span class='period'>.</span><span class='id identifier rubyid_to_rover'>to_rover</span>
+</code></pre>
+
+<h3 id="label-to_iruby"><code>to_iruby</code></h3>
+<ul><li>
+<p>Show the DataFrame as a Table in Jupyter Notebook or Jupyter Lab with IRuby.</p>
+</li></ul>
+
+<h3 id="label-tdr-28limit+-3D+10-2C+tally-3A+5-2C+elements-3A+5-29"><code>tdr(limit = 10, tally: 5, elements: 5)</code></h3>
+<ul><li>
+<p>Shows some information about self in a transposed style.</p>
+</li><li>
+<p><code>tdr_str</code> returns same info as a String.</p>
+</li><li>
+<p><code>glimpse</code> is an alias. It is similar to dplyr’s (or Polars’s) <code>glimpse()</code>.</p>
+</li></ul>
+
+<p>“‘ruby require ’red_amber’ require ‘datasets-arrow’</p>
+
+<p>dataset = Datasets::Penguins.new # (From 0.2.2) responsible to the object which has <code>to_arrow</code> method. # If older, it should be <code>dataset.to_arrow</code> in the parentheses. RedAmber::DataFrame.new(dataset).tdr</p>
+
+<p># =&gt; RedAmber::DataFrame : 344 x 8 Vectors Vectors : 5 numeric, 3 strings # key type level data_preview 0 :species string 3 “Chinstrap”=&gt;68, “Gentoo”=&gt;124 1 :island string 3 “Biscoe”=&gt;168, “Dream”=&gt;124 2 :bill_length_mm double 165 [39.1, 39.5, 40.3, nil, 36.7, … ], 2 nils 3 :bill_depth_mm double 81 [18.7, 17.4, 18.0, nil, 19.3, … ], 2 nils 4 :flipper_length_mm uint8 56 [181, 186, 195, nil, 193, … ], 2 nils 5 :body_mass_g uint16 95 [3750, 3800, 3250, nil, 3450, … ], 2 nils 6 :sex string 3 “female”=&gt;165, nil=&gt;11 7 :year uint16 3 2008=&gt;114, 2009=&gt;120 “‘</p>
+
+<p>Options: - limit: limit of variables to show. Default value is 10. - tally: max level to use tally mode. Default value is 5. - elements: max num of element to show values in each records. Default value is 5.</p>
+
+<h2 id="label-Selecting">Selecting</h2>
+
+<h3 id="label-Select+variables+-28columns+in+a+table-29+by+-5B-5D+as+-5Bkey-5D-2C+-5Bkeys-5D-2C+-5Bkeys-5Bindex-5D-5D">Select variables (columns in a table) by <code>[]</code> as <code>[key]</code>, <code>[keys]</code>, <code>[keys[index]]</code></h3>
+<ul><li>
+<p>Key in a Symbol: <code>df[:symbol]</code></p>
+</li><li>
+<p>Key in a String: <code>df[&quot;string&quot;]</code></p>
+</li><li>
+<p>Keys in an Array: <code>df[:symbol1, &quot;string&quot;, :symbol2]</code></p>
+</li><li>
+<p>Keys by indeces: <code>df[df.keys[0]</code>, <code>df[df.keys[1,2]]</code>, <code>df[df.keys[1..]]</code></p>
+</li></ul>
+
+<p>Key indeces should be used via <code>keys[i]</code> because numbers are used to select records (rows). See next section.</p>
+<ul><li>
+<p>Keys by a Range:</p>
+</li></ul>
+
+<p>If keys are able to represent by a Range, it can be included in the arguments. See a example below.</p>
+<ul><li>
+<p>You can also exchange the order of variables (columns).</p>
+</li></ul>
+
+<p>“‘ruby hash = [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3] df = RedAmber::DataFrame.new(hash) df[:b..:c, “a”]</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000328fc&gt; b c a &lt;string&gt; &lt;double&gt; &lt;uint8&gt; 0 A 1.0 1 1 B 2.0 2 2 C 3.0 3 “‘</p>
+
+<p>If <code>#[]</code> represents a single variable (column), it returns a Vector object.</p>
+
+<p>“‘ruby <a href=":a">df</a></p>
+
+<p># =&gt; #&lt;RedAmber::Vector(:uint8, size=3):0x000000000000f140&gt; [1, 2, 3] “‘</p>
+
+<p>Or <code>#v</code> method also returns a Vector for a key.</p>
+
+<p>“‘ruby df.v(:a)</p>
+
+<p># =&gt; #&lt;RedAmber::Vector(:uint8, size=3):0x000000000000f140&gt; [1, 2, 3] “‘</p>
+
+<p>This method may be useful to use in a block of DataFrame manipulation verbs. We can write <code>v(:a)</code> rather than <code>self[:a]</code> or <code>df[:a]</code></p>
+
+<h3 id="label-Select+records+-28rows+in+a+table-29+by+-5B-5D+as+-5Bindex-5D-2C+-5Brange-5D-2C+-5Barray-5D">Select records (rows in a table) by <code>[]</code> as <code>[index]</code>, <code>[range]</code>, <code>[array]</code></h3>
+<ul><li>
+<p>Select a record by index: <code>df[0]</code></p>
+</li><li>
+<p>Select records by indeces in an Array: <code>df[1, 2]</code></p>
+</li><li>
+<p>Select records by indeces in a Range: <code>df[1..2]</code></p>
+</li></ul>
+
+<p>An end-less or a begin-less Range can be used to represent indeces.</p>
+<ul><li>
+<p>You can use indices in Float.</p>
+</li><li>
+<p>Mixed case: <code>df[2, 0..]</code></p>
+</li></ul>
+
+<p>“‘ruby hash = [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3] df = RedAmber::DataFrame.new(hash) df[2, 0..]</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 4 x 3 Vectors, 0x0000000000033270&gt; a b c &lt;uint8&gt; &lt;string&gt; &lt;double&gt; 0 3 C 3.0 1 1 A 1.0 2 2 B 2.0 3 3 C 3.0 “‘</p>
+<ul><li>
+<p>Select records by a boolean Array or a boolean RedAmber::Vector at same size as self.</p>
+</li></ul>
+
+<p>It returns a sub dataframe with records at boolean is true.</p>
+
+<pre class="code ruby"><code class="ruby">```ruby
+# with the same dataframe `df` above
+df[true, false, nil] # or
+df[[true, false, nil]] # or
+df[RedAmber::Vector.new([true, false, nil])]
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 1 x 3 Vectors, 0x00000000000353e0&gt;
+        a b               c
+  &lt;uint8&gt; &lt;string&gt; &lt;double&gt;
+1       1 A             1.0
+```
+</code></pre>
+
+<h3 id="label-Select+records+-28rows-29+from+top+or+from+bottom">Select records (rows) from top or from bottom</h3>
+
+<p><code>head(n=5)</code>, <code>tail(n=5)</code>, <code>first(n=1)</code>, <code>last(n=1)</code></p>
+
+<h2 id="label-Sub+DataFrame+manipulations">Sub DataFrame manipulations</h2>
+
+<h3 id="label-pick+-+pick+up+variables+-"><code>pick</code> - pick up variables -</h3>
+
+<p>Pick up some variables (columns) to create a sub DataFrame.</p>
+
+<p><img src="doc/../image/dataframe/pick.png"></p>
+<ul><li>
+<p>Keys as arguments</p>
+</li></ul>
+
+<p><code>pick(keys)</code> accepts keys as arguments in an Array or a Range.</p>
+
+<pre class="code ruby"><code class="ruby">```ruby
+penguins.pick(:species, :bill_length_mm)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 344 x 2 Vectors, 0x0000000000035ebc&gt;
+    species  bill_length_mm
+    &lt;string&gt;       &lt;double&gt;
+  0 Adelie             39.1
+  1 Adelie             39.5
+  2 Adelie             40.3
+  3 Adelie            (nil)
+  4 Adelie             36.7
+  : :                     :
+341 Gentoo             50.4
+342 Gentoo             45.2
+343 Gentoo             49.9
+```
+</code></pre>
+<ul><li>
+<p>Indices as arguments</p>
+</li></ul>
+
+<p><code>pick(indices)</code> accepts indices as arguments. Indices should be Integers, Floats or Ranges of Integers.</p>
+
+<pre class="code ruby"><code class="ruby">```ruby
+penguins.pick(0..2, -1)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 344 x 4 Vectors, 0x0000000000055ce4&gt;
+    species  island    bill_length_mm     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt; &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1     2007
+  1 Adelie   Torgersen           39.5     2007
+  2 Adelie   Torgersen           40.3     2007
+  3 Adelie   Torgersen          (nil)     2007
+  4 Adelie   Torgersen           36.7     2007
+  : :        :                      :        :
+341 Gentoo   Biscoe              50.4     2009
+342 Gentoo   Biscoe              45.2     2009
+343 Gentoo   Biscoe              49.9     2009
+```
+</code></pre>
+<ul><li>
+<p>Booleans as arguments</p>
+</li></ul>
+
+<p><code>pick(booleans)</code> accepts booleans as arguments in an Array. Booleans must be same length as <code>n_keys</code>.</p>
+
+<pre class="code ruby"><code class="ruby">```ruby
+penguins.pick(penguins.vectors.map(&amp;:string?))
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 344 x 3 Vectors, 0x00000000000387ac&gt;
+    species  island    sex
+    &lt;string&gt; &lt;string&gt;  &lt;string&gt;
+  0 Adelie   Torgersen male
+  1 Adelie   Torgersen female
+  2 Adelie   Torgersen female
+  3 Adelie   Torgersen (nil)
+  4 Adelie   Torgersen female
+  : :        :         :
+341 Gentoo   Biscoe    male
+342 Gentoo   Biscoe    female
+343 Gentoo   Biscoe    male
+```
+</code></pre>
+<ul><li>
+<p>Keys or booleans by a block</p>
+
+<p><code>pick {block}</code> is also acceptable. We can’t use both arguments and a block at a same time. The block should return keys, indices or a boolean Array with a same length as <code>n_keys</code>. Block is called in the context of self.</p>
+
+<pre class="code ruby"><code class="ruby">penguins.pick { keys.map { |key| key.end_with?(&#39;mm&#39;) } }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 344 x 3 Vectors, 0x000000000003dd4c&gt;
+    bill_length_mm bill_depth_mm flipper_length_mm
+          &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt;
+  0           39.1          18.7               181
+  1           39.5          17.4               186
+  2           40.3          18.0               195
+  3          (nil)         (nil)             (nil)
+  4           36.7          19.3               193
+  :              :             :                 :
+341           50.4          15.7               222
+342           45.2          14.8               212
+343           49.9          16.1               213
+</code></pre>
+</li></ul>
+
+<h3 id="label-drop+-+counterpart+of+pick+-"><code>drop</code> - counterpart of pick -</h3>
+
+<p>Drop some variables (columns) to create a remainer DataFrame.</p>
+
+<p><img src="doc/../image/dataframe/drop.png"></p>
+<ul><li>
+<p>Keys as arguments</p>
+</li></ul>
+
+<p><code>drop(keys)</code> accepts keys as arguments in an Array or a Range.</p>
+<ul><li>
+<p>Indices as arguments</p>
+</li></ul>
+
+<p><code>drop(indices)</code> accepts indices as a arguments. Indices should be Integers, Floats or Ranges of Integers.</p>
+<ul><li>
+<p>Booleans as arguments</p>
+</li></ul>
+
+<p><code>drop(booleans)</code> accepts booleans as an argument in an Array. Booleans must be same length as <code>n_keys</code>.</p>
+<ul><li>
+<p>Keys or booleans by a block</p>
+</li></ul>
+
+<p><code>drop {block}</code> is also acceptable. We can’t use both arguments and a block at a same time. The block should return keys, indices or a boolean Array with a same length as <code>n_keys</code>. Block is called in the context of self.</p>
+<ul><li>
+<p>Notice for nil</p>
+</li></ul>
+
+<p>When used with booleans, nil in booleans is treated as a false. This behavior is aligned with Ruby’s <code>nil#!</code>.</p>
+
+<p><code>ruby  booleans = [true, false, nil]  booleans_invert = booleans.map(&amp;:!) # =&gt; [false, true, true]  df.pick(booleans) == df.drop(booleans_invert) # =&gt; true </code> - Difference between <code>pick</code>/<code>drop</code> and <code>[]</code></p>
+
+<p>If <code>pick</code> or <code>drop</code> will select a single variable (column), it returns a <code>DataFrame</code> with one variable. In contrast, <code>[]</code> returns a <code>Vector</code>. This behavior may be useful to use in a block of DataFrame manipulations.</p>
+
+<p>“‘ruby df = RedAmber::DataFrame.new(a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3]) df.pick(:a) # or df.drop(:b, :c)</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 3 x 1 Vector, 0x000000000003f4bc&gt; a &lt;uint8&gt; 0 1 1 2 2 3</p>
+
+<p><a href=":a">df</a></p>
+
+<p># =&gt; #&lt;RedAmber::Vector(:uint8, size=3):0x000000000000f258&gt; [1, 2, 3] “‘</p>
+
+<p>A simple key name is usable as a method of the DataFrame if the key name is acceptable as a method name. It returns a Vector same as <code>[]</code>.</p>
+
+<p>“‘ruby df.a</p>
+
+<p># =&gt; #&lt;RedAmber::Vector(:uint8, size=3):0x000000000000f258&gt; [1, 2, 3] “‘</p>
+
+<h3 id="label-slice+-+cut+into+slices+of+records+-"><code>slice</code> - cut into slices of records -</h3>
+
+<p>Slice and select records (rows) to create a sub DataFrame.</p>
+
+<p><img src="doc/../image/dataframe/slice.png"></p>
+<ul><li>
+<p>Indices as arguments</p>
+
+<p><code>slice(indeces)</code> accepts indices as arguments. Indices should be Integers, Floats or Ranges of Integers.</p>
+
+<p>Negative index from the tail like Ruby's Array is also acceptable.</p>
+
+<pre class="code ruby"><code class="ruby"># returns 5 records at start and 5 records from end
+penguins.slice(0...5, -5..-1)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 10 x 8 Vectors, 0x0000000000042be4&gt;
+  species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+  &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+3 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+4 Adelie   Torgersen           36.7          19.3               193 ...     2007
+: :        :                      :             :                 : ...        :
+7 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+8 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+9 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+</code></pre>
+</li><li>
+<p>Booleans as an argument</p>
+</li></ul>
+
+<p><code>filter(booleans)</code> or <code>slice(booleans)</code> accepts booleans as an argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as <code>size</code>.</p>
+
+<p>note: <code>slice(booleans)</code> is acceptable for orthogonality of <code>slice</code>/<code>remove</code>.</p>
+
+<pre class="code ruby"><code class="ruby">```ruby
+vector = penguins[:bill_length_mm]
+penguins.filter(vector &gt;= 40)
+# penguins.slice(vector &gt;= 40) is also acceptable
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 242 x 8 Vectors, 0x0000000000043d3c&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  1 Adelie   Torgersen           42.0          20.2               190 ...     2007
+  2 Adelie   Torgersen           41.1          17.6               182 ...     2007
+  3 Adelie   Torgersen           42.5          20.7               197 ...     2007
+  4 Adelie   Torgersen           46.0          21.5               194 ...     2007
+  : :        :                      :             :                 : ...        :
+239 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+240 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+241 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+```
+</code></pre>
+<ul><li>
+<p>Indices or booleans by a block</p>
+
+<p><code>slice {block}</code> is also acceptable. We can’t use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as <code>size</code>. Block is called in the context of self.</p>
+
+<pre class="code ruby"><code class="ruby"># return a DataFrame with bill_length_mm is in 2*std range around mean
+penguins.slice do
+  vector = self[:bill_length_mm]
+  min = vector.mean - vector.std
+  max = vector.mean + vector.std
+  vector.to_a.map { |e| (min..max).include? e }
+end
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 204 x 8 Vectors, 0x0000000000047a40&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen           39.3          20.6               190 ...     2007
+  4 Adelie   Torgersen           38.9          17.8               181 ...     2007
+  : :        :                      :             :                 : ...        :
+201 Gentoo   Biscoe              47.2          13.7               214 ...     2009
+202 Gentoo   Biscoe              46.8          14.3               215 ...     2009
+203 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+</code></pre>
+</li><li>
+<p>Notice: nil option</p>
+</li><li>
+<p><code>Arrow::Table#slice</code> uses <code>filter</code> method with a option <code>Arrow::FilterOptions.null_selection_behavior = :emit_null</code>. This will propagate nil at the same row.</p>
+
+<pre class="code ruby"><code class="ruby">hash = { a: [1, 2, 3], b: %w[A B C], c: [1.0, 2, 3] }
+table = Arrow::Table.new(hash)
+table.slice([true, false, nil])
+
+# =&gt;
+#&lt;Arrow::Table:0x7fdfe44b9e18 ptr=0x555e9fe744d0&gt;
+         a	b	            c
+0	     1  A      1.000000
+1	(null)	(null)   (null)
+</code></pre>
+</li><li>
+<p>Whereas in RedAmber, <code>DataFrame#slice</code> with booleans containing nil is treated as false. This behavior comes from <code>Allow::FilterOptions.null_selection_behavior = :drop</code>. This is a default value for <code>Arrow::Table.filter</code> method.</p>
+
+<pre class="code ruby"><code class="ruby">RedAmber::DataFrame.new(table).slice([true, false, nil]).table
+
+# =&gt;
+#&lt;Arrow::Table:0x7fdfe44981c8 ptr=0x555e9febc330&gt;
+    a	b	         c
+0	1	A	  1.000000
+</code></pre>
+</li></ul>
+
+<h3 id="label-remove+-+counterpart+of+slice+-"><code>remove</code> - counterpart of slice -</h3>
+
+<p>Slice and reject records (rows) to create a remainer DataFrame.</p>
+
+<p><img src="doc/../image/dataframe/remove.png"></p>
+<ul><li>
+<p>Indices as arguments</p>
+
+<p><code>remove(indeces)</code> accepts indeces as arguments. Indeces should be an Integer or a Range of Integer.</p>
+
+<pre class="code ruby"><code class="ruby"># returns 6th to 339th records
+penguins.remove(0...5, -5..-1)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 334 x 8 Vectors, 0x00000000000487c4&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.3          20.6               190 ...     2007
+  1 Adelie   Torgersen           38.9          17.8               181 ...     2007
+  2 Adelie   Torgersen           39.2          19.6               195 ...     2007
+  3 Adelie   Torgersen           34.1          18.1               193 ...     2007
+  4 Adelie   Torgersen           42.0          20.2               190 ...     2007
+  : :        :                      :             :                 : ...        :
+331 Gentoo   Biscoe              44.5          15.7               217 ...     2009
+332 Gentoo   Biscoe              48.8          16.2               222 ...     2009
+333 Gentoo   Biscoe              47.2          13.7               214 ...     2009
+</code></pre>
+</li><li>
+<p>Booleans as an argument</p>
+</li></ul>
+
+<p><code>remove(booleans)</code> accepts booleans as an argument in an Array, a Vector or an Arrow::BooleanArray . Booleans must be same length as <code>size</code>.</p>
+
+<pre class="code ruby"><code class="ruby">```ruby
+# remove all records contains nil
+removed = penguins.remove { vectors.map(&amp;:is_nil).reduce(&amp;:|) }
+removed
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 333 x 8 Vectors, 0x0000000000049fac&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen           39.1          18.7               181 ...     2007
+  1 Adelie   Torgersen           39.5          17.4               186 ...     2007
+  2 Adelie   Torgersen           40.3          18.0               195 ...     2007
+  3 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  4 Adelie   Torgersen           39.3          20.6               190 ...     2007
+  : :        :                      :             :                 : ...        :
+330 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+331 Gentoo   Biscoe              45.2          14.8               212 ...     2009
+332 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+```
+</code></pre>
+<ul><li>
+<p>Indices or booleans by a block</p>
+
+<p><code>remove {block}</code> is also acceptable. We can’t use both arguments and a block at a same time. The block should return indeces or a boolean Array with a same length as <code>size</code>. Block is called in the context of self.</p>
+
+<pre class="code ruby"><code class="ruby">penguins.remove do
+  # We will use another style shown in slice
+  # self.bill_length_mm returns Vector
+  mean = bill_length_mm.mean
+  min = mean - bill_length_mm.std
+  max = mean + bill_length_mm.std
+  bill_length_mm.to_a.map { |e| (min..max).include? e }
+end
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 140 x 8 Vectors, 0x000000000004de40&gt;
+    species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     year
+    &lt;string&gt; &lt;string&gt;        &lt;double&gt;      &lt;double&gt;           &lt;uint8&gt; ... &lt;uint16&gt;
+  0 Adelie   Torgersen          (nil)         (nil)             (nil) ...     2007
+  1 Adelie   Torgersen           36.7          19.3               193 ...     2007
+  2 Adelie   Torgersen           34.1          18.1               193 ...     2007
+  3 Adelie   Torgersen           37.8          17.1               186 ...     2007
+  4 Adelie   Torgersen           37.8          17.3               180 ...     2007
+  : :        :                      :             :                 : ...        :
+137 Gentoo   Biscoe             (nil)         (nil)             (nil) ...     2009
+138 Gentoo   Biscoe              50.4          15.7               222 ...     2009
+139 Gentoo   Biscoe              49.9          16.1               213 ...     2009
+</code></pre>
+</li><li>
+<p>Notice for nil</p>
+</li><li>
+<p>When <code>remove</code> used with booleans, nil in booleans is treated as false. This behavior is aligned with Ruby's <code>nil#!</code>.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_df'>df</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="RedAmber.html" title="RedAmber (module)">RedAmber</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="RedAmber/DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="RedAmber/DataFrame.html#initialize-instance_method" title="RedAmber::DataFrame#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>a:</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>b:</span> <span class='qwords_beg'>%w[</span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span><span class='comma'>,</span> <span class='label'>c:</span> <span class='lbracket'>[</span><span class='float'>1.0</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_booleans'>booleans</span> <span class='op'>=</span> <span class='id identifier rubyid_df'>df</span><span class='lbracket'>[</span><span class='symbol'>:a</span><span class='rbracket'>]</span> <span class='op'>&lt;</span> <span class='int'>2</span>
+<span class='id identifier rubyid_booleans'>booleans</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:boolean, size=3):0x000000000000f410&gt;
+</span><span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_booleans_invert'>booleans_invert</span> <span class='op'>=</span> <span class='id identifier rubyid_booleans'>booleans</span><span class='period'>.</span><span class='id identifier rubyid_to_a'>to_a</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:!</span><span class='rparen'>)</span> <span class='comment'># =&gt; [false, true, true]
+</span>
+<span class='id identifier rubyid_df'>df</span><span class='period'>.</span><span class='id identifier rubyid_slice'>slice</span><span class='lparen'>(</span><span class='id identifier rubyid_booleans'>booleans</span><span class='rparen'>)</span> <span class='op'>==</span> <span class='id identifier rubyid_df'>df</span><span class='period'>.</span><span class='id identifier rubyid_remove'>remove</span><span class='lparen'>(</span><span class='id identifier rubyid_booleans_invert'>booleans_invert</span><span class='rparen'>)</span> <span class='comment'># =&gt; true
+</span></code></pre>
+</li><li>
+<p>Whereas <code>Vector#invert</code> returns nil for elements nil. This will bring different result.</p>
+
+<pre class="code ruby"><code class="ruby">booleans.invert
+
+# =&gt;
+#&lt;RedAmber::Vector(:boolean, size=3):0x000000000000f488&gt;
+[false, true, nil]
+
+df.remove(booleans.invert)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000005df98&gt;
+        a b               c
+  &lt;uint8&gt; &lt;string&gt; &lt;double&gt;
+0       1 A             1.0
+1   (nil) C             3.0
+</code></pre>
+</li></ul>
+
+<h3 id="label-rename"><code>rename</code></h3>
+
+<p>Rename keys (variable/column names) to create a updated DataFrame.</p>
+
+<p><img src="doc/../image/dataframe/rename.png"></p>
+<ul><li>
+<p>Key pairs as arguments</p>
+
+<p><code>rename(key_pairs)</code> accepts key_pairs as arguments. key_pairs should be a Hash of <code>{existing_key =&gt; new_key}</code> or an Array of Arrays like <code>[[existing_key, new_key], ... ]</code>.</p>
+
+<pre class="code ruby"><code class="ruby">df = RedAmber::DataFrame.new( &#39;name&#39; =&gt; %w[Yasuko Rui Hinata], &#39;age&#39; =&gt; [68, 49, 28] )
+df.rename(:age =&gt; :age_in_1993)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000060838&gt;
+  name     age_in_1993
+  &lt;string&gt;     &lt;uint8&gt;
+0 Yasuko            68
+1 Rui               49
+2 Hinata            28
+</code></pre>
+</li><li>
+<p>Key pairs by a block</p>
+
+<p><code>rename {block}</code> is also acceptable. We can’t use both arguments and a block at a same time. The block should return key_pairs as a Hash of <code>{existing_key =&gt; new_key}</code> or an Array of Arrays like <code>[[existing_key, new_key], ... ]</code>. Block is called in the context of self.</p>
+</li><li>
+<p>Not existing keys</p>
+
+<p>If specified <code>existing_key</code> is not exist, raise a <code>DataFrameArgumentError</code>.</p>
+</li><li>
+<p>Key type</p>
+</li></ul>
+
+<p>Symbol key and String key are distinguished.</p>
+
+<h3 id="label-assign"><code>assign</code></h3>
+
+<p>Assign new or updated variables (columns) and create an updated DataFrame.</p>
+<ul><li>
+<p>Variables with new keys will append new columns from right.</p>
+</li><li>
+<p>Variables with exisiting keys will update corresponding vectors.</p>
+
+<p><img src="doc/../image/dataframe/assign.png"></p>
+</li><li>
+<p>Variables as arguments</p>
+
+<p><code>assign(key_value_pairs)</code> accepts pairs of key and values as parameters. <code>key_value_pairs</code> should be a Hash of <code>{key =&gt; array_like}</code> or an Array of Arrays like <code>[[key, array_like], ... ]</code>. <code>array_like</code> is ether <code>Vector</code>, <code>Array</code> or <code>Arrow::Array</code>.</p>
+
+<pre class="code ruby"><code class="ruby">df = RedAmber::DataFrame.new(
+  name: %w[Yasuko Rui Hinata],
+  age: [68, 49, 28])
+df
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000062804&gt;
+  name         age
+  &lt;string&gt; &lt;uint8&gt;
+0 Yasuko        68
+1 Rui           49
+2 Hinata        28
+
+# update :age and add :brother
+df.assign(
+  {
+    age: age + 29,
+    brother: [&#39;Santa&#39;, nil, &#39;Momotaro&#39;]
+  }
+)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 3 x 3 Vectors, 0x00000000000658b0&gt;
+  name         age brother
+  &lt;string&gt; &lt;uint8&gt; &lt;string&gt;
+0 Yasuko        97 Santa
+1 Rui           78 (nil)
+2 Hinata        57 Momotaro
+</code></pre>
+</li><li>
+<p>Key pairs by a block</p>
+
+<p><code>assign {block}</code> is also acceptable. We can’t use both arguments and a block at a same time. The block should return pairs of key and values as a Hash of <code>{key =&gt; array_like}</code> or an Array of Arrays like <code>[[key, array_like], ... ]</code>. <code>array_like</code> is ether <code>Vector</code>, <code>Array</code> or <code>Arrow::Array</code>. The block is called in the context of self.</p>
+
+<pre class="code ruby"><code class="ruby">df = RedAmber::DataFrame.new(
+  index: [0, 1, 2, 3, nil],
+  float: [0.0, 1.1,  2.2, Float::NAN, nil],
+  string: [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;, &#39;D&#39;, nil]
+)
+df
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 5 x 3 Vectors, 0x0000000000069e60&gt;
+    index    float string
+  &lt;uint8&gt; &lt;double&gt; &lt;string&gt;
+0       0      0.0 A
+1       1      1.1 B
+2       2      2.2 C
+3       3      NaN D
+4   (nil)    (nil) (nil)
+
+# update :float
+# assigner by an Array
+df.assign do
+  vectors.select(&amp;:float?)
+         .map { |v| [v.key, -v] }
+end
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 5 x 3 Vectors, 0x00000000000dfffc&gt;
+    index    float string
+  &lt;uint8&gt; &lt;double&gt; &lt;string&gt;
+0       0     -0.0 A
+1       1     -1.1 B
+2       2     -2.2 C
+3       3      NaN D
+4   (nil)    (nil) (nil)
+
+# Or we can use assigner by a Hash
+df.assign do
+  vectors.select.with_object({}) do |v, assigner|
+    assigner[v.key] = -v if v.float?
+  end
+end
+
+# =&gt; same as above
+</code></pre>
+</li><li>
+<p>Key type</p>
+</li></ul>
+
+<p>Symbol key and String key are considered as the same key.</p>
+<ul><li>
+<p>Empty assignment</p>
+</li></ul>
+
+<p>If assigner is empty or nil, returns self.</p>
+<ul><li>
+<p>Append from left</p>
+</li></ul>
+
+<p><code>assign_left</code> method accepts the same parameters and block as <code>assign</code>, but append new columns from left.</p>
+
+<p>“‘ruby df.assign_left(new_index: df.indices(1))</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 5 x 4 Vectors, 0x000000000001787c&gt; new_index index float string &lt;uint8&gt; &lt;uint8&gt; &lt;double&gt; &lt;string&gt; 0 1 0 0.0 A 1 2 1 1.1 B 2 3 2 2.2 C 3 4 3 NaN D 4 5 (nil) (nil) (nil) “‘</p>
+
+<h3 id="label-slice_by-28key-2C+keep_key-3A+false-29+-7B+block+-7D"><code>slice_by(key, keep_key: false) { block }</code></h3>
+
+<p><code>slice_by</code> accepts a key and a block to select rows.</p>
+
+<p>(Since 0.2.1)</p>
+
+<p>“‘ruby df = RedAmber::DataFrame.new( index: [0, 1, 2, 3, nil], float: [0.0, 1.1, 2.2, Float::NAN, nil], string: [’A’, ‘B’, ‘C’, ‘D’, nil] ) df</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 5 x 3 Vectors, 0x0000000000069e60&gt; index float string &lt;uint8&gt; &lt;double&gt; &lt;string&gt; 0 0 0.0 A 1 1 1.1 B 2 2 2.2 C 3 3 NaN D 4 (nil) (nil) (nil)</p>
+
+<p>df.slice_by(:string) { [“A”, “C”] }</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 2 x 2 Vectors, 0x000000000001b1ac&gt; index float &lt;uint8&gt; &lt;double&gt; 0 0 0.0 1 2 2.2 “‘</p>
+
+<p>It is the same behavior as;</p>
+
+<p><code>ruby  df.slice { [string.index(&quot;A&quot;), string.index(&quot;C&quot;)] }.drop(:string) </code></p>
+
+<p><code>slice_by</code> also accepts a Range.</p>
+
+<p>“‘ruby df.slice_by(:string) { “A”..“C” }</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000069668&gt; index float &lt;uint8&gt; &lt;double&gt; 0 0 0.0 1 1 1.1 2 2 2.2 “‘</p>
+
+<p>When the option <code>keep_key: true</code> used, the column <code>key</code> will be preserved.</p>
+
+<p>“‘ruby df.slice_by(:string, keep_key: true) { “A”..“C” }</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000073c44&gt; index float string &lt;uint8&gt; &lt;double&gt; &lt;string&gt; 0 0 0.0 A 1 1 1.1 B 2 2 2.2 C “‘</p>
+
+<h2 id="label-Updating">Updating</h2>
+
+<h3 id="label-sort"><code>sort</code></h3>
+
+<p><code>sort</code> accepts parameters as sort_keys thanks to the Red Arrow’s feature。 - :key, “key” or “+key” denotes ascending order - “-key” denotes descending order</p>
+
+<p>“‘ruby df = RedAmber::DataFrame.new( index: [1, 1, 0, nil, 0], string: [’C’, ‘B’, nil, ‘A’, ‘B’], bool: [nil, true, false, true, false], ) df.sort(:index, ‘-bool’)</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 5 x 3 Vectors, 0x000000000009b03c&gt; index string bool &lt;uint8&gt; &lt;string&gt; &lt;boolean&gt; 0 0 (nil) false 1 0 B false 2 1 B true 3 1 C (nil) 4 (nil) A true “‘</p>
+<ul><li>
+<p>[ ] Clamp</p>
+</li><li>
+<p>[ ] Clear data</p>
+</li></ul>
+
+<h2 id="label-Treat+na+data">Treat na data</h2>
+
+<h3 id="label-remove_nil"><code>remove_nil</code></h3>
+
+<p>Remove any records containing nil.</p>
+
+<h2 id="label-Grouping">Grouping</h2>
+
+<h3 id="label-group-28group_keys-29"><code>group(group_keys)</code></h3>
+
+<p><code>group</code> creates a instance of class <code>Group</code>. <code>Group</code> accepts functions below as a method. Method accepts options as <code>group_keys</code>.</p>
+
+<p>Available functions are:</p>
+<ul><li>
+<p>[ ] all</p>
+</li><li>
+<p>[ ] any</p>
+</li><li>
+<p>[ ] approximate_median</p>
+</li><li>
+<p>✓ count</p>
+</li><li>
+<p>[ ] count_distinct</p>
+</li><li>
+<p>[ ] distinct</p>
+</li><li>
+<p>✓ max</p>
+</li><li>
+<p>✓ mean</p>
+</li><li>
+<p>✓ min</p>
+</li><li>
+<p>[ ] min_max</p>
+</li><li>
+<p>✓ product</p>
+</li><li>
+<p>✓ stddev</p>
+</li><li>
+<p>✓ sum</p>
+</li><li>
+<p>[ ] tdigest</p>
+</li><li>
+<p>✓ variance</p>
+</li></ul>
+
+<p>For the each group of <code>group_keys</code>, the aggregation <code>function</code> is applied and returns a new dataframe with aggregated keys according to <code>summary_keys</code>. Summary key names are provided by <code>function(summary_keys)</code> style.</p>
+
+<p>This is an example of grouping of famous STARWARS dataset.</p>
+
+<p>“‘ruby uri = URI(“<a href="https://vincentarelbundock.github.io/Rdatasets/csv/dplyr/starwars.csv">vincentarelbundock.github.io/Rdatasets/csv/dplyr/starwars.csv</a>”) starwars = RedAmber::DataFrame.load(uri)</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 87 x 12 Vectors, 0x0000000000005a50&gt; unnamed1 name height mass hair_color skin_color eye_color … species &lt;int64&gt; &lt;string&gt; &lt;int64&gt; &lt;double&gt; &lt;string&gt; &lt;string&gt; &lt;string&gt; … &lt;string&gt; 0 1 Luke Skywalker 172 77.0 blond fair blue … Human 1 2 C-3PO 167 75.0 NA gold yellow … Droid 2 3 R2-D2 96 32.0 NA white, blue red … Droid 3 4 Darth Vader 202 136.0 none white yellow … Human 4 5 Leia Organa 150 49.0 brown light brown … Human : : : : : : : : … : 84 85 BB8 (nil) (nil) none none black … Droid 85 86 Captain Phasma (nil) (nil) unknown unknown unknown … NA 86 87 Padmé Amidala 165 45.0 brown light brown … Human</p>
+
+<p>starwars.tdr(12)</p>
+
+<p># =&gt; RedAmber::DataFrame : 87 x 12 Vectors Vectors : 4 numeric, 8 strings # key type level data_preview 0 :unnamed1 int64 87 [1, 2, 3, 4, 5, … ] 1 :name string 87 [“Luke Skywalker”, “C-3PO”, “R2-D2”, “Darth Vader”, “Leia Organa”, … ] 2 :height int64 46 [172, 167, 96, 202, 150, … ], 6 nils 3 :mass double 39 [77.0, 75.0, 32.0, 136.0, 49.0, … ], 28 nils 4 :hair_color string 13 [“blond”, “NA”, “NA”, “none”, “brown”, … ] 5 :skin_color string 31 [“fair”, “gold”, “white, blue”, “white”, “light”, … ] 6 :eye_color string 15 [“blue”, “yellow”, “red”, “yellow”, “brown”, … ] 7 :birth_year double 37 [19.0, 112.0, 33.0, 41.9, 19.0, … ], 44 nils 8 :sex string 5 “none”=&gt;6, “female”=&gt;16, “hermaphroditic”=&gt;1, “NA”=&gt;4 9 :gender string 3 “feminine”=&gt;17, “NA”=&gt;4 10 :homeworld string 49 [“Tatooine”, “Tatooine”, “Naboo”, “Tatooine”, “Alderaan”, … ] 11 :species string 38 [“Human”, “Droid”, “Droid”, “Human”, “Human”, … ] “‘</p>
+
+<p>We can group by <code>:species</code> and calculate the count.</p>
+
+<p>“‘ruby starwars.remove { species == “NA” } .group(:species).count(:species)</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 37 x 2 Vectors, 0x000000000000ffa0&gt; species count &lt;string&gt; &lt;int64&gt; 0 Human 35 1 Droid 6 2 Wookiee 2 3 Rodian 1 4 Hutt 1 : : : 34 Kaleesh 1 35 Pau’an 1 36 Kel Dor 1 “‘</p>
+
+<p>We can also calculate the mean of <code>:mass</code> and <code>:height</code> together.</p>
+
+<p>“‘ruby grouped = starwars.remove { species == “NA” } .group(:species) { [count(:species), mean(:height, :mass)] }</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 37 x 4 Vectors, 0x000000000000fff0&gt; species count mean(height) mean(mass) &lt;string&gt; &lt;int64&gt; &lt;double&gt; &lt;double&gt; 0 Human 35 176.65 82.78 1 Droid 6 131.2 69.75 2 Wookiee 2 231.0 124.0 3 Rodian 1 173.0 74.0 4 Hutt 1 175.0 1358.0 : : : : : 34 Kaleesh 1 216.0 159.0 35 Pau’an 1 206.0 80.0 36 Kel Dor 1 188.0 80.0 “‘</p>
+
+<p>Select rows for count &gt; 1.</p>
+
+<p>“‘ruby <a href=":count">grouped.slice(grouped</a> &gt; 1)</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 8 x 4 Vectors, 0x000000000001002c&gt; species count mean(height) mean(mass) &lt;string&gt; &lt;int64&gt; &lt;double&gt; &lt;double&gt; 0 Human 35 176.65 82.78 1 Droid 6 131.2 69.75 2 Wookiee 2 231.0 124.0 3 Gungan 3 208.67 74.0 4 Zabrak 2 173.0 80.0 5 Twi’lek 2 179.0 55.0 6 Mirialan 2 168.0 53.1 7 Kaminoan 2 221.0 88.0 “‘</p>
+
+<h2 id="label-Reshape">Reshape</h2>
+
+<p><img src="doc/../image/reshaping_dataframe.png"></p>
+
+<h3 id="label-transpose"><code>transpose</code></h3>
+
+<p>Creates transposed DataFrame for the wide (messy) dataframe.</p>
+
+<p>“‘ruby import_cars = RedAmber::DataFrame.load(’test/entity/import_cars.tsv’)</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000d520&gt; Year Audi BMW BMW_MINI Mercedes-Benz VW &lt;int64&gt; &lt;int64&gt; &lt;int64&gt; &lt;int64&gt; &lt;int64&gt; &lt;int64&gt; 0 2017 28336 52527 25427 68221 49040 1 2018 26473 50982 25984 67554 51961 2 2019 24222 46814 23813 66553 46794 3 2020 22304 35712 20196 57041 36576 4 2021 22535 35905 18211 51722 35215</p>
+
+<p>import_cars.transpose(name: :Manufacturer)</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 5 x 6 Vectors, 0x0000000000010a2c&gt; Manufacturer 2017 2018 2019 2020 2021 &lt;string&gt; &lt;uint32&gt; &lt;uint32&gt; &lt;uint32&gt; &lt;uint16&gt; &lt;uint16&gt; 0 Audi 28336 26473 24222 22304 22535 1 BMW 52527 50982 46814 35712 35905 2 BMW_MINI 25427 25984 23813 20196 18211 3 Mercedes-Benz 68221 67554 66553 57041 51722 4 VW 49040 51961 46794 36576 35215 “‘</p>
+
+<p>The leftmost column is created by original keys. Key name of the column is named by parameter <code>:name</code>. If <code>:name</code> is not specified, <code>:NAME</code> is used for the key.</p>
+
+<h3 id="label-to_long-28-2Akeep_keys-29"><code>to_long(*keep_keys)</code></h3>
+
+<p>Creates a ‘long’ (may be tidy) DataFrame from a ‘wide’ DataFrame.</p>
+<ul><li>
+<p>Parameter <code>keep_keys</code> specifies the key names to keep.</p>
+</li></ul>
+
+<p>“‘ruby import_cars.to_long(:Year)</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 25 x 3 Vectors, 0x0000000000011864&gt; Year NAME VALUE &lt;uint16&gt; &lt;string&gt; &lt;uint32&gt; 0 2017 Audi 28336 1 2017 BMW 52527 2 2017 BMW_MINI 25427 3 2017 Mercedes-Benz 68221 4 2017 VW 49040 : : : : 22 2021 BMW_MINI 18211 23 2021 Mercedes-Benz 51722 24 2021 VW 35215 “‘</p>
+<ul><li>
+<p>Option <code>:name</code> is the key of the column which came <strong>from key names</strong>. The default value is <code>:NAME</code> if it is not specified.</p>
+</li><li>
+<p>Option <code>:value</code> is the key of the column which came <strong>from values</strong>. The default value is <code>:VALUE</code> if it is not specified.</p>
+</li></ul>
+
+<p>“‘ruby import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 25 x 3 Vectors, 0x000000000001359c&gt; Year Manufacturer Num_of_imported &lt;uint16&gt; &lt;string&gt; &lt;uint32&gt; 0 2017 Audi 28336 1 2017 BMW 52527 2 2017 BMW_MINI 25427 3 2017 Mercedes-Benz 68221 4 2017 VW 49040 : : : : 22 2021 BMW_MINI 18211 23 2021 Mercedes-Benz 51722 24 2021 VW 35215 “‘</p>
+
+<h3 id="label-to_wide"><code>to_wide</code></h3>
+
+<p>Creates a ‘wide’ (may be messy) DataFrame from a ‘long’ DataFrame.</p>
+<ul><li>
+<p>Option <code>:name</code> is the key of the column which will be expanded <strong>to key names</strong>. The default value is <code>:NAME</code> if it is not specified.</p>
+</li><li>
+<p>Option <code>:value</code> is the key of the column which will be expanded <strong>to values</strong>. The default value is <code>:VALUE</code> if it is not specified.</p>
+</li></ul>
+
+<p>“‘ruby import_cars.to_long(:Year).to_wide # import_cars.to_long(:Year).to_wide(name: :N, value: :V) # is also OK</p>
+
+<p># =&gt; #&lt;RedAmber::DataFrame : 5 x 6 Vectors, 0x000000000000f0f0&gt; Year Audi BMW BMW_MINI Mercedes-Benz VW &lt;uint16&gt; &lt;uint16&gt; &lt;uint16&gt; &lt;uint16&gt; &lt;uint32&gt; &lt;uint16&gt; 0 2017 28336 52527 25427 68221 49040 1 2018 26473 50982 25984 67554 51961 2 2019 24222 46814 23813 66553 46794 3 2020 22304 35712 20196 57041 36576 4 2021 22535 35905 18211 51722 35215 “‘</p>
+
+<h2 id="label-Combine">Combine</h2>
+
+<h3 id="label-join"><code>join</code></h3>
+
+<p><img src="doc/../image/dataframe/join.png"></p>
+
+<p>You should use specific <code>*_join</code> methods below.</p>
+<ul><li>
+<p><code>other</code> is a DataFrame or a Arrow::Table.</p>
+</li><li>
+<p><code>join_keys</code> are keys shared by self and other to match with them.</p>
+</li><li>
+<p>If <code>join_keys</code> are empty, common keys in self and other are chosen (natural join).</p>
+</li><li>
+<p>If (common keys) &gt; <code>join_keys</code>, duplicated keys are renamed by <code>suffix</code>.</p>
+</li><li>
+<p>If you want to match the columns with different names, use Hash for <code>join_keys</code> such as <code>{ left: :KEY1, right: KEY2}</code>.</p>
+</li></ul>
+
+<p>These are dataframes to use in the examples of joins. “‘ruby df = DataFrame.new( KEY: %w[A B C], X1: [1, 2, 3] ) #=&gt; #&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000012a70&gt; KEY X1 &lt;string&gt; &lt;uint8&gt; 0 A 1 1 B 2 2 C 3</p>
+
+<p>other = DataFrame.new( KEY: %w[A B D], X2: [true, false, nil] ) #=&gt; #&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000017034&gt; KEY X2 &lt;string&gt; &lt;boolean&gt; 0 A true 1 B false 2 D (nil) “‘</p>
+
+<h4 id="label-Mutating+joins">Mutating joins</h4>
+
+<h5 id="label-inner_join-28other-2C+join_keys+-3D+nil-2C+suffix-3A+-27.1-27-29"><code>inner_join(other, join_keys = nil, suffix: &#39;.1&#39;)</code></h5>
+
+<p>Join data, leaving only the matching records.</p>
+
+<p><code>ruby  df.inner_join(other, :KEY)  #=&gt;  #&lt;RedAmber::DataFrame : 2 x 3 Vectors, 0x000000000001e2bc&gt;         KEY           X1 X2    &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;  0 A              1 true  1 B              2 false </code></p>
+
+<h5 id="label-full_join-28other-2C+join_keys+-3D+nil-2C+suffix-3A+-27.1-27-29"><code>full_join(other, join_keys = nil, suffix: &#39;.1&#39;)</code></h5>
+
+<p>Join data, leaving all records.</p>
+
+<p><code>ruby  df.full_join(other, :KEY)  #=&gt;  #&lt;RedAmber::DataFrame : 4 x 3 Vectors, 0x0000000000029fcc&gt;    KEY           X1 X2    &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;  0 A              1 true  1 B              2 false  2 C              3 (nil)  3 D          (nil) (nil) </code></p>
+
+<h5 id="label-left_join-28other-2C+join_keys+-3D+nil-2C+suffix-3A+-27.1-27-29"><code>left_join(other, join_keys = nil, suffix: &#39;.1&#39;)</code></h5>
+
+<p>Join matching values to self from other.</p>
+
+<p><code>ruby  df.left_join(other, :KEY)  #=&gt;  #&lt;RedAmber::DataFrame : 3 x 3 Vectors, 0x0000000000029fcc&gt;    KEY           X1 X2    &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;  0 A              1 true  1 B              2 false  2 C              3 (nil) </code></p>
+
+<h5 id="label-right_join-28other-2C+join_keys+-3D+nil-2C+suffix-3A+-27.1-27-29"><code>right_join(other, join_keys = nil, suffix: &#39;.1&#39;)</code></h5>
+
+<p>Join matching values from self to other.</p>
+
+<p><code>ruby  df.right_join(other, :KEY)  #=&gt;  #&lt;RedAmber::DataFrame : 2 x 3 Vectors, 0x0000000000029fcc&gt;    KEY           X1 X2    &lt;string&gt; &lt;uint8&gt; &lt;boolean&gt;  0 A              1 true  1 B              2 false  2 D          (nil) (nil) </code></p>
+
+<h4 id="label-Filtering+join">Filtering join</h4>
+
+<h5 id="label-semi_join-28other-2C+join_keys+-3D+nil-2C+suffix-3A+-27.1-27-29"><code>semi_join(other, join_keys = nil, suffix: &#39;.1&#39;)</code></h5>
+
+<p>Return records of self that have a match in other.</p>
+
+<p><code>ruby  df.semi_join(other, :KEY)  #=&gt;  #&lt;RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000029fcc&gt;    KEY           X1    &lt;string&gt; &lt;uint8&gt;  0 A              1  1 B              2 </code></p>
+
+<h5 id="label-anti_join-28other-2C+join_keys+-3D+nil-2C+suffix-3A+-27.1-27-29"><code>anti_join(other, join_keys = nil, suffix: &#39;.1&#39;)</code></h5>
+
+<p>Return records of self that do not have a match in other.</p>
+
+<p><code>ruby  df.anti_join(other, :KEY)  #=&gt;  #&lt;RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc&gt;    KEY           X1    &lt;string&gt; &lt;uint8&gt;  0 C              3 </code></p>
+
+<h2 id="label-Set+operations">Set operations</h2>
+
+<p><img src="doc/../image/dataframe/set_and_bind.png"></p>
+
+<p>Keys in self and other must be same in set operations.</p>
+
+<p>“‘ruby df = DataFrame.new( KEY1: %w[A B C], KEY2: [1, 2, 3] ) #=&gt; #&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000012a70&gt; KEY1 KEY2 &lt;string&gt; &lt;uint8&gt; 0 A 1 1 B 2 2 C 3</p>
+
+<p>other = DataFrame.new( KEY1: %w[A B D], KEY2: [1, 4, 5] ) #=&gt; #&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x0000000000017034&gt; KEY1 KEY2 &lt;string&gt; &lt;uint8&gt; 0 A 1 1 B 4 2 D 5 “<code> #####</code>set_operable?(other)<code>  Check if</code>types` of self and other are same.</p>
+
+<h5 id="label-intersect-28other-29"><code>intersect(other)</code></h5>
+
+<p>Select records appearing in both self and other.</p>
+
+<p><code>ruby  df.intersect(other)  #=&gt;  #&lt;RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc&gt;    KEY1        KEY2    &lt;string&gt; &lt;uint8&gt;  0 A              1 </code></p>
+
+<h5 id="label-union-28other-29"><code>union(other)</code></h5>
+
+<p>Select records appearing in self or other.</p>
+
+<p><code>ruby  df.union(other)  #=&gt;  #&lt;RedAmber::DataFrame : 5 x 2 Vectors, 0x0000000000029fcc&gt;    KEY1        KEY2    &lt;string&gt; &lt;uint8&gt;  0 A              1  1 B              2  2 C              3  3 B              4  4 D              5 </code></p>
+
+<h5 id="label-difference-28other-29"><code>difference(other)</code></h5>
+
+<p>Select records appearing in self but not in other.</p>
+
+<p>It has an alias <code>setdiff</code>.</p>
+
+<p>“‘ruby df.difference(other) #=&gt; #&lt;RedAmber::DataFrame : 1 x 2 Vectors, 0x0000000000029fcc&gt; KEY1 KEY2 &lt;string&gt; &lt;uint8&gt; 1 B 2 2 C 3</p>
+
+<p>other.differencr(df) #=&gt; #&lt;RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000040e0c&gt; KEY1 KEY2<br> &lt;string&gt; &lt;uint8&gt;<br> 0 B 4<br> 1 D 5 “‘</p>
+
+<h2 id="label-Binding">Binding</h2>
+
+<h3 id="label-concatenate-28other-29"><code>concatenate(other)</code></h3>
+
+<p>Concatenate another DataFrame or Table onto the bottom of self. The types of other must be the same as self.</p>
+
+<p>The alias is <code>concat</code> and <code>bind_rows</code>.</p>
+
+<p>An array of DataFrames or Tables is also acceptable as other.</p>
+
+<p>“‘ruby df #=&gt; #&lt;RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000022cb8&gt; x y &lt;uint8&gt; &lt;string&gt; 0 1 A 1 2 B</p>
+
+<p>other #=&gt; #&lt;RedAmber::DataFrame : 2 x 2 Vectors, 0x000000000001f6d0&gt; x y &lt;uint8&gt; &lt;string&gt; 0 3 C 1 4 D</p>
+
+<p>df.concatenate(other) #=&gt; #&lt;RedAmber::DataFrame : 4 x 2 Vectors, 0x0000000000022574&gt; x y &lt;uint8&gt; &lt;string&gt; 0 1 A 1 2 B 2 3 C 3 4 D “‘</p>
+
+<h3 id="label-merge-28-2Aother-29"><code>merge(*other)</code></h3>
+
+<p>Concatenate another DataFrame or Table onto the bottom of self. The size of other must be the same as self. Self and other must not share the same key.</p>
+
+<p>The alias is <code>bind_cols</code>.</p>
+
+<p>“‘ruby df #=&gt; #&lt;RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000009150&gt; x y &lt;uint8&gt; &lt;uint8&gt; 0 1 3 1 2 4</p>
+
+<p>other #=&gt; #&lt;RedAmber::DataFrame : 2 x 2 Vectors, 0x0000000000008a0c&gt; a b &lt;string&gt; &lt;string&gt; 0 A C 1 B D</p>
+
+<p>df.merge(other) #=&gt; #&lt;RedAmber::DataFrame : 2 x 4 Vectors, 0x000000000000cb70&gt; x y a b &lt;uint8&gt; &lt;uint8&gt; &lt;string&gt; &lt;string&gt; 0 1 3 A C 1 2 4 B D “‘</p>
+
+<h2 id="label-Encoding">Encoding</h2>
+<ul><li>
+<p>[ ] One-hot encoding</p>
+</li></ul>
+</div></div>
+
+      <div id="footer">
+  Generated on Wed Jan 31 23:30:00 2024 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.34 (ruby-3.3.0).
+</div>
+
+    </div>
+  </body>
+</html>

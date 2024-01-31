@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README.ja
+  
+    &mdash; Documentation by YARD 0.9.34
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "README.ja";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README.ja</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-RedAmber">RedAmber</h1>
+
+<p><a href="https://rubygems.org/gems/red_amber"><img src="https://img.shields.io/gem/v/red_amber?color=brightgreen"></a> <a href="https://github.com/red-data-tools/red_amber/actions/workflows/ci.yml"><img src="https://github.com/heronshoes/red_amber/actions/workflows/ci.yml/badge.svg"></a> <a href="https://codeclimate.com/github/heronshoes/red_amber/maintainability"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/maintainability"></a> <a href="https://codeclimate.com/github/heronshoes/red_amber/test_coverage"><img src="https://api.codeclimate.com/v1/badges/b8a745047045d2f49daa/test_coverage"></a> <a href="https://red-data-tools.github.io/red_amber/"><img src="https://img.shields.io/badge/docs-latest-blue"></a> <a href="https://github.com/red-data-tools/red_amber/discussions"><img src="https://img.shields.io/github/discussions/heronshoes/red_amber"></a></p>
+
+<p>Rubyistのためのデータフレームライブラリ.</p>
+<ul><li>
+<p>Powered by <a href="https://github.com/apache/arrow/tree/master/ruby/red-arrow">Red Arrow</a> <a href="https://app.element.io/#/room/#red-data-tools_ja:gitter.im"><img src="https://badges.gitter.im/red-data-tools/en.svg"></a> <a href="https://rubygems.org/gems/red-arrow"><img src="https://img.shields.io/gem/v/red-arrow?color=brightgreen"></a></p>
+</li><li>
+<p>Inspired by the dataframe library <a href="https://github.com/ankane/rover">Rover-df</a></p>
+</li></ul>
+
+<p><a href="README_md.html">README in English</a></p>
+
+<p><img src="https://raw.githubusercontent.com/red-data-tools/red_amber/main/doc/image/screenshot.png"></p>
+
+<h2 id="label-E6-A6-82-E8-A6-81">概要</h2>
+<ul><li>
+<p>RedAmberはRubyで書かれたデータフレームライブラリです。<a href="https://arrow.apache.org/">Apache Arrow</a>の列指向データフォーマットを扱うことができます。</p>
+</li><li>
+<p>Rubyらしいブロックやコレクションを使って、Rubyらしい書き方でデータフレームの操作ができることを目指しています。</p>
+</li><li>
+<p>このリポジトリは<a href="https://containers.dev/">開発コンテナ(Dev Container)</a>をサポートしているので、RedAmberの操作が容易に<a href="doc/Dev_Containers_ja_md.html">試せます</a>。</p>
+</li><li>
+<p><a href="https://red-data-tools.github.io/red_amber/">使用例が豊富なドキュメント</a>と、127項目の主な操作例を記載したJupyter Notebookドキュメントがあります。</p>
+</li></ul>
+
+<h2 id="label-E5-BF-85-E8-A6-81-E3-81-AA-E7-92-B0-E5-A2-83">必要な環境</h2>
+
+<h3 id="label-Ruby">Ruby</h3>
+<ul><li>
+<p>Ruby 3.0 以上.</p>
+</li></ul>
+
+<h3 id="label-E3-83-A9-E3-82-A4-E3-83-96-E3-83-A9-E3-83-AA">ライブラリ</h3>
+
+<pre class="code ruby"><code class="ruby">gem &#39;red-arrow&#39;,   &#39;&gt;= 12.0.0&#39; # お使いの環境に合わせた Apache Arrow が必要です
+                               # 下記のインストールを参照してください
+gem &#39;red-arrow-numo-narray&#39;    # 必要に応じて。Numo::NArray との連携またはランダムサンプリングが必要な場合。
+gem &#39;red-parquet&#39;, &#39;&gt;= 12.0.0&#39; # 必要に応じて。Parquet の入出力が必要な場合。
+gem &#39;red-datasets-arrow&#39;       # 必要に応じて。Red Datasets を利用する場合。
+gem &#39;red-arrow-activerecord&#39;   # 必要に応じて。Active Record とのデータ交換が必要な場合。
+gem &#39;rover-df&#39;,                # 必要に応じて。Rover::DataFrame に対する入出力が必要な場合。
+</code></pre>
+
+<h2 id="label-E3-82-A4-E3-83-B3-E3-82-B9-E3-83-88-E3-83-BC-E3-83-AB">インストール</h2>
+
+<p>RedAmberをインストールする前に、下記のライブラリのインストールが必要です。</p>
+<ul><li>
+<p>Apache Arrow (&gt;= 12.0.0)</p>
+</li><li>
+<p>Apache Arrow GLib (&gt;= 12.0.0)</p>
+</li><li>
+<p>Apache Parquet GLib (&gt;= 12.0.0) # Parquetの入出力が必要な場合。</p>
+</li></ul>
+
+<p>環境ごとの詳しいインストール方法は、 <a href="https://arrow.apache.org/install/">Apache Arrow install document</a> を参照してください。</p>
+<ul><li>
+<p>Ubuntuの場合の最低限必要なインストール例:</p>
+
+<p> <code>  sudo apt update  sudo apt install -y -V ca-certificates lsb-release wget  wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr &#39;A-Z&#39; &#39;a-z&#39;)/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb  sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb  sudo apt update  sudo apt install -y -V libarrow-dev libarrow-glib-dev </code></p>
+</li><li>
+<p>Fedora 39 (Rawhide)の場合:</p>
+
+<p> <code>  sudo dnf update  sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel libyaml-devel </code></p>
+</li><li>
+<p>macOS の場合は、Homebrewを使用する:</p>
+
+<p> <code>  brew install apache-arrow apache-arrow-glib </code></p>
+</li></ul>
+
+<p>Apache Arrowがインストールできたら、下記の行をGemfileに追加してください:</p>
+
+<pre class="code ruby"><code class="ruby">gem &#39;red-arrow&#39;,   &#39;&gt;= 12.0.0&#39;
+gem &#39;red_amber&#39;
+gem &#39;red-arrow-numo-narray&#39;    # 必要に応じて。Numo::NArray との連携またはランダムサンプリングが必要な場合。
+gem &#39;red-parquet&#39;, &#39;&gt;= 12.0.0&#39; # 必要に応じて。Parquetの入出力が必要な場合。
+gem &#39;red-datasets-arrow&#39;       # 必要に応じて。Red Datasets を利用する場合。
+gem &#39;red-arrow-activerecord&#39;   # 必要に応じて。Active Record とのデータ交換が必要な場合。
+gem &#39;rover-df&#39;,                # 必要に応じて。Rover::DataFrameに対する入出力が必要な場合。
+</code></pre>
+
+<p><code>bundle install</code>とするか、または <code>gem install red_amber</code>としてインストールしてください。</p>
+
+<h2 id="label-Development+Containers-E3-81-AB-E3-82-88-E3-82-8B-E9-96-8B-E7-99-BA-E7-92-B0-E5-A2-83">Development Containersによる開発環境</h2>
+
+<p>このリポジトリは <a href="https://containers.dev/">開発コンテナ(Dev Container)</a>をサポートしています。これを使うと、ローカルの環境を変更することなく、RedAmberに必要なツール一式を含んだ環境を準備することができます。この環境には、Ruby、Apache Arrow、RedAmberのソースツリー、GitHub CI、サンプルデータセット、IRubyカーネルを含んだJupyter Labなどが含まれています。</p>
+
+<p>RedAmber用のDev Containerは、<code>.devcontainer</code> ディレクトリに必要な設定が書かれています。使用例は、<a href="doc/Dev_Containers_ja_md.html">開発コンテナ(Development Containers)の利用</a>をご参照ください。</p>
+
+<h2 id="label-Docker+-E3-82-A4-E3-83-A1-E3-83-BC-E3-82-B8-E3-81-A8+Jupyter+Notebook">Docker イメージと Jupyter Notebook</h2>
+
+<p>（注：将来削除される可能性があります。上記のDev Containerをご活用ください。）</p>
+
+<p>このリポジトリの<code>docker</code> フォルダーから Docker コンテナ環境を生成できます。リポジトリをクローンしてから、dockerフォルダーにある <a href="docker/readme_md.html">readme</a> を参照してください。その環境では <code>docker/notebook</code> フォルダーにある Jupyter Notebookイメージを試用できます。</p>
+
+<p>このREADMEの内容をネットワーク上のJupyter Notebookでインタラクティブに試用することも出来ます。 <a href="https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb">Binder</a>. <a href="https://mybinder.org/v2/gh/heronshoes/docker-stacks/RedAmber-binder?filepath=red-amber.ipynb"><img src="https://mybinder.org/badge_logo.svg"></a></p>
+
+<p>Jupyter Notebookの環境を含めた他の多くのデータ処理用のライブラリーとともにRedAmberもパッケージングされたDocker Imageとして、<a href="https://github.com/RubyData/docker-stacks">RubyData Docker Stacks</a> が利用できます(Thanks to Kenta Murata).</p>
+
+<h2 id="label-E4-BB-96-E3-81-AE-E3-83-87-E3-83-BC-E3-82-BF-E3-83-95-E3-83-AC-E3-83-BC-E3-83-A0-E3-83-A9-E3-82-A4-E3-83-96-E3-83-A9-E3-83-AA-E3-81-A8-E3-81-AE-E6-AF-94-E8-BC-83-E8-A1-A8">他のデータフレームライブラリとの比較表</h2>
+
+<p>RedAmberの基本的な機能をPython <a href="https://pandas.pydata.org/">pandas</a> やR <a href="https://www.tidyverse.org/">Tidyverse</a> やJulia <a href="https://dataframes.juliadata.org/stable/">DataFrames</a> と比較した表は <a href="doc/DataFrame_Comparison_ja_md.html">DataFrame_Comparison_ja.md</a> にあります(Thanks to Benson Muite).</p>
+
+<h2 id="label-RedAmber-E3-81-AE-E3-83-87-E3-83-BC-E3-82-BF-E3-83-95-E3-83-AC-E3-83-BC-E3-83-A0"><code>RedAmber</code>のデータフレーム</h2>
+
+<p>クラス <code>RedAmber::DataFrame</code> は２次元のデータの集まりを表現します。その実体は Red Arrowの Tableオブジェクトです。</p>
+
+<p><img src="https://raw.githubusercontent.com/red-data-tools/red_amber/main/doc/image/dataframe_model.png"></p>
+
+<p>それではライブラリをロードしていくつかの例を試してみましょう。</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>red_amber</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># require &#39;red-amber&#39; でもOKです.
+</span><span class='id identifier rubyid_include'>include</span> <span class='const'><span class='object_link'><a href="RedAmber.html" title="RedAmber (module)">RedAmber</a></span></span>
+</code></pre>
+
+<h3 id="label-E4-BE-8B-3A+diamonds+-E3-83-87-E3-83-BC-E3-82-BF-E3-82-BB-E3-83-83-E3-83-88">例: diamonds データセット</h3>
+
+<p>もしまだであれば、Red DatasetsのArrow拡張を<code> gem install red-datasets-arrow </code>としてインストールしてから次を実行してください。</p>
+
+<pre class="code ruby"><code class="ruby">require &#39;datasets-arrow&#39; # サンプルデータのロードのため
+
+dataset = Datasets::Diamonds.new
+diamonds = DataFrame.new(dataset) # v0.2.3以前では, `dataset.to_arrow`とする必要があります。
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 53940 x 10 Vectors, 0x000000000000f668&gt;
+         carat cut       color    clarity     depth    table    price        x ...        z
+      &lt;double&gt; &lt;string&gt;  &lt;string&gt; &lt;string&gt; &lt;double&gt; &lt;double&gt; &lt;uint16&gt; &lt;double&gt; ... &lt;double&gt;
+    0     0.23 Ideal     E        SI2          61.5     55.0      326     3.95 ...     2.43
+    1     0.21 Premium   E        SI1          59.8     61.0      326     3.89 ...     2.31
+    2     0.23 Good      E        VS1          56.9     65.0      327     4.05 ...     2.31
+    3     0.29 Premium   I        VS2          62.4     58.0      334      4.2 ...     2.63
+    4     0.31 Good      J        SI2          63.3     58.0      335     4.34 ...     2.75
+    :        : :         :        :               :        :        :        : ...        :
+53937      0.7 Very Good D        SI1          62.8     60.0     2757     5.66 ...     3.56
+53938     0.86 Premium   H        SI2          61.0     58.0     2757     6.15 ...     3.74
+53939     0.75 Ideal     D        SI2          62.2     55.0     2757     5.83 ...     3.64
+</code></pre>
+
+<p>例えば、1カラット以下のレコードに対し、cut毎の平均のpriceを求めるには次のようにします。</p>
+
+<pre class="code ruby"><code class="ruby">df = diamonds
+  .slice { carat &gt; 1 } # #sliceの代わりに#filterでも可
+  .group(:cut)
+  .mean(:price) # ここで:priceを指定する場合はgroupの前のpickは不要
+  .sort(&#39;-mean(price)&#39;)
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 5 x 2 Vectors, 0x000000000000f67c&gt;
+  cut       mean(price)
+  &lt;string&gt;     &lt;double&gt;
+0 Ideal         8674.23
+1 Premium       8487.25
+2 Very Good     8340.55
+3 Good           7753.6
+4 Fair          7177.86
+</code></pre>
+
+<p>Arrowのデータはイミュータブルなので、これらのメソッドは新しいオブジェクトを返します。</p>
+
+<p>次の例は、列をリネームしてから新しい列に簡単な計算の結果を格納します。</p>
+
+<pre class="code ruby"><code class="ruby">usdjpy = 110.0 # 今よりずっと円高の頃
+
+df.rename(&#39;mean(price)&#39;: :mean_price_USD)
+  .assign(:mean_price_JPY) { mean_price_USD * usdjpy }
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 5 x 3 Vectors, 0x000000000000f71c&gt;
+  cut       mean_price_USD mean_price_JPY
+  &lt;string&gt;        &lt;double&gt;       &lt;double&gt;
+0 Ideal            8674.23      954164.93
+1 Premium          8487.25      933597.34
+2 Very Good        8340.55      917460.37
+3 Good              7753.6      852896.11
+4 Fair             7177.86      789564.12
+</code></pre>
+
+<h3 id="label-E4-BE-8B-3A+starwars+-E3-83-87-E3-83-BC-E3-82-BF-E3-82-BB-E3-83-83-E3-83-88">例: starwars データセット</h3>
+
+<p>次の例は、CSVファイルをダウンロードして<code>starwars</code> データセットを読み込みます。その後簡単なデータのクリーニングを行います。</p>
+
+<pre class="code ruby"><code class="ruby">uri = URI(&#39;https://vincentarelbundock.github.io/Rdatasets/csv/dplyr/starwars.csv&#39;)
+
+starwars = DataFrame.load(uri)
+
+starwars
+  .drop(0) # 不要な列を取り除く
+  .remove { species == &quot;NA&quot; } # 不要な行を取り除く
+  .group(:species) { [count(:species), mean(:height, :mass)] }
+  .slice { count &gt; 1 } # #filterでも可
+
+# =&gt;
+#&lt;RedAmber::DataFrame : 8 x 4 Vectors, 0x000000000000f848&gt;
+  species    count mean(height) mean(mass)
+  &lt;string&gt; &lt;int64&gt;     &lt;double&gt;   &lt;double&gt;
+0 Human         35       176.65      82.78
+1 Droid          6        131.2      69.75
+2 Wookiee        2        231.0      124.0
+3 Gungan         3       208.67       74.0
+4 Zabrak         2        173.0       80.0
+5 Twi&#39;lek        2        179.0       55.0
+6 Mirialan       2        168.0       53.1
+7 Kaminoan       2        221.0       88.0
+</code></pre>
+
+<p>より詳しいデータフレームの使用例については、<a href="doc/DataFrame_md.html">DataFrame.md</a> をご参照ください。</p>
+
+<h3 id="label-1-E6-AC-A1-E5-85-83-E3-81-AE-E3-83-87-E3-83-BC-E3-82-BF-E3-82-92-E4-BF-9D-E6-8C-81-E3-81-99-E3-82-8B+Vector">1次元のデータを保持する <code>Vector</code></h3>
+
+<p>クラス<code>RedAmber::Vector</code> はデータフレームの中の列方向に格納された１次元のデータ列を保持します.</p>
+
+<p>より詳しい使用例については <a href="doc/Vector_md.html">Vector.md</a> をご参照ください。</p>
+
+<h2 id="label-Jupyter+Notebook">Jupyter Notebook</h2>
+
+<p>このリポジトリでは <a href="https://quarto.org/">Quarto</a> を使って、操作例を載せたJupyter Notebookのソースはqmd形式で保存し、gitの管理下に置いています。Notebookの生成は開発コンテナを使うと便利です。詳しくは<a href="doc/Dev_Containers_ja_md.html">開発コンテナ(Development Containers)の利用</a>を利用して下さい。</p>
+
+<h2 id="label-E9-96-8B-E7-99-BA">開発</h2>
+
+<p>Dev Containersを利用してコンテナ上に開発環境を作成する方法がお勧めです。<a href="doc/Dev_Containers_ja_md.html">開発コンテナ(Development Containers)の利用例</a>を参考にしてください。</p>
+
+<p>または、ローカル環境に必要なライブラリをインストールした上で、下記を実行するとテストが走ります。</p>
+
+<pre class="code ruby"><code class="ruby">git clone https://github.com/red-data-tools/red_amber.git
+cd red_amber
+bundle install
+bundle exec rake test
+</code></pre>
+
+<p>RedAmberの開発では、<code>rake test</code> は必須ですが、<code>rake rubocop</code> をパスすることはコントリビュートの際に必須ではありません。このプロジェクトではコードの書き方の好みを尊重します。ただしマージの際に書き方を統一させていただくことがあります。</p>
+
+<h2 id="label-E3-82-B3-E3-83-9F-E3-83-A5-E3-83-8B-E3-83-86-E3-82-A3">コミュニティ</h2>
+
+<p>このプロジェクトを支援して頂けると嬉しいです。支援の方法はいくつかあります。</p>
+<ul><li>
+<p><a href="https://github.com/heronshoes/red_amber/discussions">discussions</a>でお話ししましょう! <a href="https://github.com/red-data-tools/red_amber/discussions"><img src="https://img.shields.io/github/discussions/heronshoes/red_amber"></a></p>
+</li><li>
+<p>Q and Aや使用方法、豆知識などを見流ことができます。</p>
+</li><li>
+<p>疑問に思っていることを質問できます。</p>
+</li><li>
+<p>新しいアイデアを共有する。アイデアはdiscussionからissueに昇格させて育てていくこともあります。漠然としたアイデアでもdiscussionから始めて大きくしていきましょう。</p>
+</li><li>
+<p><a href="https://github.com/red-data-tools/red_amber/issues">バグ報告や新しい機能の提案</a></p>
+</li><li>
+<p>バグの修正や<a href="https://github.com/red-data-tools/red_amber/pulls">プルリクエスト</a></p>
+</li><li>
+<p>ドキュメントを修正したり、不明確なところを直したり、新しく追加しましょう。皆さんのご参加をお待ちしています。</p>
+</li></ul>
+
+<h2 id="label-License">License</h2>
+
+<p>The gem is available as open source under the terms of the <a href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
+</div></div>
+
+      <div id="footer">
+  Generated on Wed Jan 31 23:29:55 2024 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.34 (ruby-3.3.0).
+</div>
+
+    </div>
+  </body>
+</html>

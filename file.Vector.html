@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: Vector
+  
+    &mdash; Documentation by YARD 0.9.34
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "Vector";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: Vector</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-Vector">Vector</h1>
+
+<p>Class <code>RedAmber::Vector</code> represents a series of data in the DataFrame.</p>
+
+<h2 id="label-Constructor">Constructor</h2>
+
+<h3 id="label-Create+from+a+column+in+a+DataFrame">Create from a column in a DataFrame</h3>
+
+<p><code>ruby  df = DataFrame.new(x: [1, 2, 3])  df[:x]  # =&gt;  #&lt;RedAmber::Vector(:uint8, size=3):0x000000000000f4ec&gt;  [1, 2, 3] </code></p>
+
+<h3 id="label-New+from+an+Array">New from an Array</h3>
+
+<p>“‘ruby vector = Vector.new([1, 2, 3]) # or vector = Vector.new(1, 2, 3) # or vector = Vector.new(1..3) # or vector = Vector.new(Arrow::Array.new([1, 2, 3]) # or require ’arrow-numo-narray’ vector = Vector.new(Numo::Int8[1, 2, 3])</p>
+
+<p># =&gt; #&lt;RedAmber::Vector(:uint8, size=3):0x000000000000f514&gt; [1, 2, 3] “‘</p>
+
+<h2 id="label-Properties">Properties</h2>
+
+<h3 id="label-to_s"><code>to_s</code></h3>
+
+<h3 id="label-values-2C+to_a-2C+entries"><code>values</code>, <code>to_a</code>, <code>entries</code></h3>
+
+<h3 id="label-indices-2C+indexes-2C+indeces"><code>indices</code>, <code>indexes</code>, <code>indeces</code></h3>
+
+<p>Return indices in an Array.</p>
+
+<h3 id="label-to_ary"><code>to_ary</code></h3>
+
+<p>It implicitly converts a Vector to an Array when required.</p>
+
+<p>“‘ruby [1, 2] + Vector.new([3, 4])</p>
+
+<p># =&gt; [1, 2, 3, 4] “‘</p>
+
+<h3 id="label-size-2C+length-2C+n_rows-2C+nrow"><code>size</code>, <code>length</code>, <code>n_rows</code>, <code>nrow</code></h3>
+
+<h3 id="label-empty-3F"><code>empty?</code></h3>
+
+<h3 id="label-type"><code>type</code></h3>
+
+<h3 id="label-boolean-3F-2C+numeric-3F-2C+string-3F-2C+temporal-3F"><code>boolean?</code>, <code>numeric?</code>, <code>string?</code>, <code>temporal?</code></h3>
+
+<h3 id="label-type_class"><code>type_class</code></h3>
+
+<h3 id="label-each-2C+map-2C+collect"><code>each</code>, <code>map</code>, <code>collect</code></h3>
+
+<p>If block is not given, returns Enumerator.</p>
+
+<h3 id="label-n_nils-2C+n_nans"><code>n_nils</code>, <code>n_nans</code></h3>
+<ul><li>
+<p><code>n_nulls</code> is an alias of <code>n_nils</code></p>
+</li></ul>
+
+<h3 id="label-has_nil-3F"><code>has_nil?</code></h3>
+
+<p>Returns <code>true</code> if self has any <code>nil</code>. Otherwise returns <code>false</code>.</p>
+
+<h3 id="label-inspect-28limit-3A+80-29"><code>inspect(limit: 80)</code></h3>
+<ul><li>
+<p><code>limit</code> sets size limit to display a long array.</p>
+
+<pre class="code ruby"><code class="ruby">vector = Vector.new((1..50).to_a)
+# =&gt;
+#&lt;RedAmber::Vector(:uint8, size=50):0x000000000000f528&gt;
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, ... ]
+</code></pre>
+</li></ul>
+
+<h2 id="label-Selecting+Values">Selecting Values</h2>
+
+<h3 id="label-take-28indices-29-2C+-5B-5D-28indices-29"><code>take(indices)</code>, <code>[](indices)</code></h3>
+<ul><li>
+<p>Acceptable class for indices:</p>
+</li><li>
+<p>Integer, Float</p>
+</li><li>
+<p>Vector of integer or float</p>
+</li><li>
+<p>Arrow::Arry of integer or float</p>
+</li><li>
+<p>Negative index is also OK like the Ruby’s primitive Array.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_array'>array</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='words_sep'> </span><span class='tstring_content'>D</span><span class='words_sep'> </span><span class='tstring_content'>E</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_indices'>indices</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='float'>0.1</span><span class='comma'>,</span> <span class='op'>-</span><span class='float'>0.5</span><span class='comma'>,</span> <span class='op'>-</span><span class='float'>5.1</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_array'>array</span><span class='period'>.</span><span class='id identifier rubyid_take'>take</span><span class='lparen'>(</span><span class='id identifier rubyid_indices'>indices</span><span class='rparen'>)</span>
+<span class='comment'># or
+</span><span class='id identifier rubyid_array'>array</span><span class='lbracket'>[</span><span class='id identifier rubyid_indices'>indices</span><span class='rbracket'>]</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=3):0x000000000000f820&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<h3 id="label-filter-28booleans-29-2C+select-28booleans-29-2C+-5B-5D-28booleans-29"><code>filter(booleans)</code>, <code>select(booleans)</code>, <code>[](booleans)</code></h3>
+<ul><li>
+<p>Acceptable class for booleans:</p>
+</li><li>
+<p>An array of true, false, or nil</p>
+</li><li>
+<p>Boolean Vector</p>
+</li><li>
+<p>Arrow::BooleanArray</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_array'>array</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='words_sep'> </span><span class='tstring_content'>D</span><span class='words_sep'> </span><span class='tstring_content'>E</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_booleans'>booleans</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_array'>array</span><span class='period'>.</span><span class='id identifier rubyid_filter'>filter</span><span class='lparen'>(</span><span class='id identifier rubyid_booleans'>booleans</span><span class='rparen'>)</span>
+<span class='comment'># or
+</span><span class='id identifier rubyid_array'>array</span><span class='lbracket'>[</span><span class='id identifier rubyid_booleans'>booleans</span><span class='rbracket'>]</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=2):0x000000000000f21c&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<p><code>filter</code> and <code>select</code> also accepts a block.</p>
+
+<h2 id="label-Functions">Functions</h2>
+
+<h3 id="label-Unary+aggregations-3A+vector.func+-3D-3E+scalar">Unary aggregations: <code>vector.func =&gt; scalar</code></h3>
+
+<p><img src="doc/image/../../image/vector/unary_aggregation_w_option.png"></p>
+
+<table role="table">
+<thead>
+<tr>
+<th>Method</th>
+<th>Boolean</th>
+<th>Numeric</th>
+<th>String</th>
+<th>Options</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✓ ‘all?`</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>✓ ScalarAggregate</td>
+<td>alias ‘all`</td>
+</tr>
+<tr>
+<td>✓ ‘any?`</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>✓ ScalarAggregate</td>
+<td>alias ‘any`</td>
+</tr>
+<tr>
+<td>✓ ‘approximate_median`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>✓ ScalarAggregate</td>
+<td>alias ‘median`</td>
+</tr>
+<tr>
+<td>✓ ‘count`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓  Count</td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘count_distinct`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓  Count</td>
+<td>alias ‘count_uniq`</td>
+</tr>
+<tr>
+<td>[ ]‘index`</td>
+<td>[ ]</td>
+<td>[ ]</td>
+<td>[ ]</td>
+<td>[ ] Index</td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘max`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓ ScalarAggregate</td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘mean`</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>✓ ScalarAggregate</td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘min`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓ ScalarAggregate</td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘min_max`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓ ScalarAggregate</td>
+<td></td>
+</tr>
+<tr>
+<td>[ ]‘mode`</td>
+<td></td>
+<td>[ ]</td>
+<td></td>
+<td>[ ] Mode</td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘product`</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>✓ ScalarAggregate</td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘quantile`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>✓ Quantile</td>
+<td>Specify probability in (0..1) by a parameter (default=0.5)</td>
+</tr>
+<tr>
+<td>✓ ‘sd    `</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>ddof: 1 at ‘stddev`</td>
+</tr>
+<tr>
+<td>✓ ‘stddev`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>✓ Variance</td>
+<td>ddof: 0 by default</td>
+</tr>
+<tr>
+<td>✓ ‘sum`</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>✓ ScalarAggregate</td>
+<td></td>
+</tr>
+<tr>
+<td>[ ]‘tdigest`</td>
+<td></td>
+<td>[ ]</td>
+<td></td>
+<td>[ ] TDigest</td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘var    `</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>ddof: 1 at ‘variance`<br>alias `unbiased_variance`</td>
+</tr>
+<tr>
+<td>✓ ‘variance`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>✓ Variance</td>
+<td>ddof: 0 by default</td>
+</tr>
+</tbody>
+</table>
+
+<p>Options can be used as follows. See the <a href="https://arrow.apache.org/docs/cpp/compute.html">document of C++ function</a> for detail.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_double'>double</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='op'>/</span><span class='float'>0.0</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='op'>/</span><span class='float'>0.0</span><span class='comma'>,</span> <span class='int'>1</span><span class='op'>/</span><span class='float'>0.0</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='comment'>#=&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:double, size=6):0x000000000000f910&gt;
+</span><span class='lbracket'>[</span><span class='float'>1.0</span><span class='comma'>,</span> <span class='const'>NaN</span><span class='comma'>,</span> <span class='op'>-</span><span class='const'>Infinity</span><span class='comma'>,</span> <span class='const'>Infinity</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='float'>0.0</span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span> <span class='comment'>#=&gt; 5
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span><span class='lparen'>(</span><span class='label'>mode:</span> <span class='symbol'>:only_valid</span><span class='rparen'>)</span> <span class='comment'>#=&gt; 5, default
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span><span class='lparen'>(</span><span class='label'>mode:</span> <span class='symbol'>:only_null</span><span class='rparen'>)</span> <span class='comment'>#=&gt; 1
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_count'>count</span><span class='lparen'>(</span><span class='label'>mode:</span> <span class='symbol'>:all</span><span class='rparen'>)</span> <span class='comment'>#=&gt; 6
+</span>
+<span class='id identifier rubyid_boolean'>boolean</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='comment'>#=&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:boolean, size=3):0x000000000000f924&gt;
+</span><span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_boolean'>boolean</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span> <span class='comment'>#=&gt; true
+</span><span class='id identifier rubyid_boolean'>boolean</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='lparen'>(</span><span class='label'>skip_nulls:</span> <span class='kw'>true</span><span class='rparen'>)</span> <span class='comment'>#=&gt; true
+</span><span class='id identifier rubyid_boolean'>boolean</span><span class='period'>.</span><span class='id identifier rubyid_all'>all</span><span class='lparen'>(</span><span class='label'>skip_nulls:</span> <span class='kw'>false</span><span class='rparen'>)</span> <span class='comment'>#=&gt; false
+</span></code></pre>
+
+<h3 id="label-Check+if+function+is+an+aggregation+function-3A+Vector.aggregate-3F-28function-29">Check if <code>function</code> is an aggregation function: <code>Vector.aggregate?(function)</code></h3>
+
+<p>Return true if <code>function</code> is an unary aggregation function. Otherwise return false.</p>
+
+<h3 id="label-Treat+aggregation+function+as+an+element-wise+function-3A+propagate-28function-29">Treat aggregation function as an element-wise function: <code>propagate(function)</code></h3>
+
+<p>Spread the return value of an aggregate function as if it is a element-wise function.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_vec'>vec</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>4</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_vec'>vec</span><span class='period'>.</span><span class='id identifier rubyid_propagate'>propagate</span><span class='lparen'>(</span><span class='symbol'>:mean</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:double, size=4):0x000000000001985c&gt;
+</span><span class='lbracket'>[</span><span class='float'>2.5</span><span class='comma'>,</span> <span class='float'>2.5</span><span class='comma'>,</span> <span class='float'>2.5</span><span class='comma'>,</span> <span class='float'>2.5</span><span class='rbracket'>]</span>
+</code></pre>
+
+<p><code>#propagate</code> also accepts a block to compute with a customized aggregation function yielding a scalar.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_vec'>vec</span><span class='period'>.</span><span class='id identifier rubyid_propagate'>propagate</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_mean'>mean</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span> <span class='rbrace'>}</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=4):0x000000000000cb98&gt;                     
+</span><span class='lbracket'>[</span><span class='int'>3</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span>
+</code></pre>
+
+<h3 id="label-Unary+element-wise-3A+vector.func+-3D-3E+vector">Unary element-wise: <code>vector.func =&gt; vector</code></h3>
+
+<p><img src="doc/image/../../image/vector/unary_element_wise.png"></p>
+
+<table role="table">
+<thead>
+<tr>
+<th>Method</th>
+<th>Boolean</th>
+<th>Numeric</th>
+<th>String</th>
+<th>Options</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✓ ‘-@`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>as ‘-vector`</td>
+</tr>
+<tr>
+<td>✓ ‘negate`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>‘-@`</td>
+</tr>
+<tr>
+<td>✓ ‘abs`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘acos`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘asin`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘atan`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘bit_wise_not`</td>
+<td></td>
+<td>(✓)</td>
+<td></td>
+<td></td>
+<td>integer only</td>
+</tr>
+<tr>
+<td>✓ ‘ceil`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘cos`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓‘fill_nil_backward`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓‘fill_nil_forward`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘floor`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘invert`</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td>‘!`, alias `not`</td>
+</tr>
+<tr>
+<td>✓ ‘ln`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘log10`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘log1p`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>Compute natural log of (1+x)</td>
+</tr>
+<tr>
+<td>✓ ‘log2`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘round`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>✓ Round (:mode, :n_digits)</td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘round_to_multiple`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td>✓ RoundToMultiple :mode, :multiple</td>
+<td>multiple must be an Arrow::Scalar</td>
+</tr>
+<tr>
+<td>✓ ‘sign`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘sin`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓‘sort_indexes`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>:order</td>
+<td>alias ‘sort_indices`</td>
+</tr>
+<tr>
+<td>✓ ‘tan`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘trunc`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>Examples of options for <code>#round</code>;</p>
+<ul><li>
+<p><code>:n-digits</code> The number of digits to show.</p>
+</li><li>
+<p><code>round_mode</code> Specify rounding mode.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_double'>double</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='float'>15.15</span><span class='comma'>,</span> <span class='float'>2.5</span><span class='comma'>,</span> <span class='float'>3.5</span><span class='comma'>,</span> <span class='op'>-</span><span class='float'>4.5</span><span class='comma'>,</span> <span class='op'>-</span><span class='float'>5.5</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; [15.15, 2.5, 3.5, -4.5, -5.5]
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span>
+<span class='comment'># =&gt; [15.0, 2.0, 4.0, -4.0, -6.0]
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='label'>mode:</span> <span class='symbol'>:half_to_even</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; Default. Same as double.round
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='label'>mode:</span> <span class='symbol'>:towards_infinity</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; [16.0, 3.0, 4.0, -5.0, -6.0]
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='label'>mode:</span> <span class='symbol'>:half_up</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; [15.0, 3.0, 4.0, -4.0, -5.0]
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='label'>mode:</span> <span class='symbol'>:half_towards_zero</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; [15.0, 2.0, 3.0, -4.0, -5.0]
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='label'>mode:</span> <span class='symbol'>:half_towards_infinity</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; [15.0, 3.0, 4.0, -5.0, -6.0]
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='label'>mode:</span> <span class='symbol'>:half_to_odd</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; [15.0, 3.0, 3.0, -5.0, -5.0]
+</span>
+<span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='label'>n_digits:</span> <span class='int'>0</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; Default. Same as double.round
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='label'>n_digits:</span> <span class='int'>1</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; [15.2, 2.5, 3.5, -4.5, -5.5]
+</span><span class='id identifier rubyid_double'>double</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span><span class='lparen'>(</span><span class='label'>n_digits:</span> <span class='op'>-</span><span class='int'>1</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; [20.0, 0.0, 0.0, -0.0, -10.0]
+</span></code></pre>
+
+<h3 id="label-Binary+element-wise-3A+vector.func-28vector-29+-3D-3E+vector">Binary element-wise: <code>vector.func(vector) =&gt; vector</code></h3>
+
+<p><img src="doc/image/../../image/vector/binary_element_wise.png"></p>
+
+<table role="table">
+<thead>
+<tr>
+<th>Method</th>
+<th>Boolean</th>
+<th>Numeric</th>
+<th>String</th>
+<th>Options</th>
+<th>Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>✓ ‘add`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>‘+`</td>
+</tr>
+<tr>
+<td>✓ ‘atan2`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘and_kleene`</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td>‘&amp;`</td>
+</tr>
+<tr>
+<td>✓ ‘and_org   `</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td>‘and` in Red Arrow</td>
+</tr>
+<tr>
+<td>✓ ‘and_not`</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘and_not_kleene`</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘bit_wise_and`</td>
+<td></td>
+<td>(✓)</td>
+<td></td>
+<td></td>
+<td>integer only</td>
+</tr>
+<tr>
+<td>✓ ‘bit_wise_or`</td>
+<td></td>
+<td>(✓)</td>
+<td></td>
+<td></td>
+<td>integer only</td>
+</tr>
+<tr>
+<td>✓ ‘bit_wise_xor`</td>
+<td></td>
+<td>(✓)</td>
+<td></td>
+<td></td>
+<td>integer only</td>
+</tr>
+<tr>
+<td>✓ ‘divide`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>‘/`</td>
+</tr>
+<tr>
+<td>✓ ‘equal`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>‘==`, alias `eq`</td>
+</tr>
+<tr>
+<td>✓ ‘greater`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>‘&gt;`, alias `gt`</td>
+</tr>
+<tr>
+<td>✓ ‘greater_equal`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>‘&gt;=`, alias `ge`</td>
+</tr>
+<tr>
+<td>✓ ‘is_finite`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘is_inf`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘is_na`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘is_nan`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>[ ]‘is_nil`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td>[ ] Null</td>
+<td>alias ‘is_null`</td>
+</tr>
+<tr>
+<td>✓ ‘is_valid`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>✓ ‘less`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>‘&lt;`, alias `lt`</td>
+</tr>
+<tr>
+<td>✓ ‘less_equal`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>‘&lt;=`, alias `le`</td>
+</tr>
+<tr>
+<td>✓ ‘logb`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>logb(b) Compute base ‘b` logarithm</td>
+</tr>
+<tr>
+<td>[ ]‘mod`</td>
+<td></td>
+<td>[ ]</td>
+<td></td>
+<td></td>
+<td>‘%`</td>
+</tr>
+<tr>
+<td>✓ ‘multiply`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>‘*`</td>
+</tr>
+<tr>
+<td>✓ ‘not_equal`</td>
+<td>✓</td>
+<td>✓</td>
+<td>✓</td>
+<td></td>
+<td>‘!=`, alias `ne`</td>
+</tr>
+<tr>
+<td>✓ ‘or_kleene`</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td>‘|`</td>
+</tr>
+<tr>
+<td>✓ ‘or_org`</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td>‘or` in Red Arrow</td>
+</tr>
+<tr>
+<td>✓ ‘power`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>‘**`</td>
+</tr>
+<tr>
+<td>✓ ‘subtract`</td>
+<td></td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td>‘-`</td>
+</tr>
+<tr>
+<td>✓ ‘shift_left`</td>
+<td></td>
+<td>(✓)</td>
+<td></td>
+<td></td>
+<td>‘&lt;&lt;`, integer only</td>
+</tr>
+<tr>
+<td>✓ ‘shift_right`</td>
+<td></td>
+<td>(✓)</td>
+<td></td>
+<td></td>
+<td>‘&gt;&gt;`, integer only</td>
+</tr>
+<tr>
+<td>✓ ‘xor`</td>
+<td>✓</td>
+<td></td>
+<td></td>
+<td></td>
+<td>‘^`</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="label-uniq"><code>uniq</code></h3>
+
+<p>Returns a new array with distinct elements.</p>
+
+<h3 id="label-tally+and+value_counts"><code>tally</code> and <code>value_counts</code></h3>
+
+<p>Compute counts of unique elements and return a Hash.</p>
+
+<p>It returns almost same result as Ruby’s tally. These methods consider NaNs are same.</p>
+
+<p>“‘ruby array = [0.0/0, Float::NAN] array.tally #=&gt; NaN=&gt;1</p>
+
+<p>vector = Vector.new(array) vector.tally #=&gt; NaN=&gt;2 vector.value_counts #=&gt; NaN=&gt;2 “<code> ###</code>index(element)‘</p>
+
+<p>Returns index of specified element.</p>
+
+<h3 id="label-quantiles-28probs+-3D+-5B0.0-2C+0.25-2C+0.5-2C+0.75-2C+1.0-5D-2C+interpolation-3A+-3Alinear-2C+skip_nils-3A+true-2C+min_count-3A+0-29"><code>quantiles(probs = [0.0, 0.25, 0.5, 0.75, 1.0], interpolation: :linear, skip_nils: true, min_count: 0)</code></h3>
+
+<p>Returns quantiles for specified probabilities in a DataFrame.</p>
+
+<h3 id="label-sort_indexes-2C+sort_indices-2C+array_sort_indices"><code>sort_indexes</code>, <code>sort_indices</code>, <code>array_sort_indices</code></h3>
+
+<h2 id="label-Coerce">Coerce</h2>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='int'>1</span><span class='comma'>,</span><span class='int'>2</span><span class='comma'>,</span><span class='int'>3</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; 
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=3):0x00000000000decc4&gt;            
+</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span>                                                         
+
+<span class='comment'># Vector&#39;s `#*` method
+</span><span class='id identifier rubyid_vector'>vector</span> <span class='op'>*</span> <span class='op'>-</span><span class='int'>1</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:int16, size=3):0x00000000000e3698&gt;            
+</span><span class='lbracket'>[</span><span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>2</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>3</span><span class='rbracket'>]</span>                                                      
+
+<span class='comment'># coerced calculation
+</span><span class='op'>-</span><span class='int'>1</span> <span class='op'>*</span> <span class='id identifier rubyid_vector'>vector</span>
+<span class='comment'># =&gt; 
+</span><span class='comment'>#&lt;RedAmber::Vector(:int16, size=3):0x00000000000ea4ac&gt;            
+</span><span class='lbracket'>[</span><span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>2</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>3</span><span class='rbracket'>]</span>
+
+<span class='comment'># `@-` operator
+</span><span class='op'>-</span><span class='id identifier rubyid_vector'>vector</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=3):0x00000000000ee7b4&gt;
+</span><span class='lbracket'>[</span><span class='int'>255</span><span class='comma'>,</span> <span class='int'>254</span><span class='comma'>,</span> <span class='int'>253</span><span class='rbracket'>]</span>
+</code></pre>
+
+<h2 id="label-Update+vector-27s+value">Update vector’s value</h2>
+
+<h3 id="label-replace-28specifier-2C+replacer-29+-3D-3E+vector"><code>replace(specifier, replacer)</code> =&gt; vector</h3>
+<ul><li>
+<p>Accepts Scalar, Range of Integer, Vector, Array, Arrow::Array as a specifier</p>
+</li><li>
+<p>Accepts Scalar, Vector, Array and Arrow::Array as a replacer.</p>
+</li><li>
+<p>Boolean specifiers specify the position of replacer in true.</p>
+</li><li>
+<p>If booleans.any is false, no replacement happen and return self.</p>
+</li><li>
+<p>Index specifiers specify the position of replacer in indices.</p>
+</li><li>
+<p>replacer specifies the values to be replaced.</p>
+</li><li>
+<p>The number of true in booleans must be equal to the length of replacer</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_booleans'>booleans</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_replacer'>replacer</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='id identifier rubyid_booleans'>booleans</span><span class='comma'>,</span> <span class='id identifier rubyid_replacer'>replacer</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; 
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=3):0x000000000001ee10&gt;
+</span><span class='lbracket'>[</span><span class='int'>4</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span>
+</code></pre>
+<ul><li>
+<p>Scalar value in replacer can be broadcasted.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_replacer'>replacer</span> <span class='op'>=</span> <span class='int'>0</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='id identifier rubyid_booleans'>booleans</span><span class='comma'>,</span> <span class='id identifier rubyid_replacer'>replacer</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; 
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=3):0x000000000001ee10&gt;
+</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>0</span><span class='rbracket'>]</span>
+</code></pre>
+<ul><li>
+<p>Returned data type is automatically up-casted by replacer.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_replacer'>replacer</span> <span class='op'>=</span> <span class='float'>1.0</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='id identifier rubyid_booleans'>booleans</span><span class='comma'>,</span> <span class='id identifier rubyid_replacer'>replacer</span><span class='rparen'>)</span>
+<span class='comment'># =&gt; 
+</span><span class='comment'>#&lt;RedAmber::Vector(:double, size=3):0x0000000000025d78&gt;
+</span><span class='lbracket'>[</span><span class='float'>1.0</span><span class='comma'>,</span> <span class='float'>2.0</span><span class='comma'>,</span> <span class='float'>1.0</span><span class='rbracket'>]</span>
+</code></pre>
+<ul><li>
+<p>Position of nil in booleans is replaced with nil.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby">booleans = [true, false, nil]
+replacer = -1
+vector.replace(booleans, replacer)
+=&gt; 
+#&lt;RedAmber::Vector(:int8, size=3):0x00000000000304d0&gt;
+[-1, 2, nil]
+</code></pre>
+<ul><li>
+<p>replacer can have nil in it.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby">booleans = [true, false, true]
+replacer = [nil]
+vector.replace(booleans, replacer)
+=&gt; 
+#&lt;RedAmber::Vector(:int8, size=3):0x00000000000304d0&gt;
+[nil, 2, nil]
+</code></pre>
+<ul><li>
+<p>An example to replace ‘NA’ to nil.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>A</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>B</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>NA</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='id identifier rubyid_vector'>vector</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>NA</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=3):0x000000000000f8ac&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span>
+</code></pre>
+<ul><li>
+<p>Specifier in indices.</p>
+</li></ul>
+
+<p>Specified indices are used ‘as sorted’. Position in indices and replacer may not have correspondence.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_indices'>indices</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>2</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_replacer'>replacer</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_replace'>replace</span><span class='lparen'>(</span><span class='id identifier rubyid_indices'>indices</span><span class='comma'>,</span> <span class='id identifier rubyid_replacer'>replacer</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=3):0x000000000000f244&gt;
+</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span> <span class='comment'># not [1, 5, 4]
+</span></code></pre>
+
+<h3 id="label-fill_nil_forward-2C+fill_nil_backward+-3D-3E+vector"><code>fill_nil_forward</code>, <code>fill_nil_backward</code> =&gt; vector</h3>
+
+<p>Propagate the last valid observation forward (or backward). Or preserve nil if all previous values are nil or at the end.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_integer'>integer</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_integer'>integer</span><span class='period'>.</span><span class='id identifier rubyid_fill_nil_forward'>fill_nil_forward</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=5):0x000000000000f960&gt;
+</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_integer'>integer</span><span class='period'>.</span><span class='id identifier rubyid_fill_nil_backward'>fill_nil_backward</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=5):0x000000000000f974&gt;
+</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span>
+</code></pre>
+
+<h3 id="label-boolean_vector.if_else-28true_choice-2C+false_choice-29+-3D-3E+vector"><code>boolean_vector.if_else(true_choice, false_choice)</code> =&gt; vector</h3>
+
+<p>Choose values based on self. Self must be a boolean Vector.</p>
+
+<p><code>true_choice</code>, <code>false_choice</code> must be of the same type scalar / array / Vector. <code>nil</code> values in <code>cond</code> will be promoted to the output.</p>
+
+<p>This example will normalize negative indices to positive ones.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_indices'>indices</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>4</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_array_size'>array_size</span> <span class='op'>=</span> <span class='int'>10</span>
+<span class='id identifier rubyid_normalized_indices'>normalized_indices</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_indices'>indices</span> <span class='op'>&lt;</span> <span class='int'>0</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_if_else'>if_else</span><span class='lparen'>(</span><span class='id identifier rubyid_indices'>indices</span> <span class='op'>+</span> <span class='id identifier rubyid_array_size'>array_size</span><span class='comma'>,</span> <span class='id identifier rubyid_indices'>indices</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:int16, size=4):0x000000000000f85c&gt;
+</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>9</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>6</span><span class='rbracket'>]</span>
+</code></pre>
+
+<h3 id="label-is_in-28values-29+-3D-3E+boolean+vector"><code>is_in(values)</code> =&gt; boolean vector</h3>
+
+<p>For each element in self, return true if it is found in given <code>values</code>, false otherwise. By default, nulls are matched against the value set. (This will be changed in SetLookupOptions: not impremented.)</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='words_beg'>%W[</span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='words_sep'> </span><span class='tstring_content'>D</span><span class='tstring_end'>]</span></span>
+<span class='id identifier rubyid_values'>values</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>A</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>C</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>X</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_is_in'>is_in</span><span class='lparen'>(</span><span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:boolean, size=4):0x000000000000f2a8&gt;
+</span><span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='rbracket'>]</span>
+</code></pre>
+
+<p><code>values</code> are casted to the same Class of Vector.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>255</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_is_in'>is_in</span><span class='lparen'>(</span><span class='int'>1</span><span class='comma'>,</span> <span class='op'>-</span><span class='int'>1</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:boolean, size=3):0x000000000000f320&gt;
+</span><span class='lbracket'>[</span><span class='kw'>true</span><span class='comma'>,</span> <span class='kw'>false</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rbracket'>]</span>
+</code></pre>
+
+<h3 id="label-shift-28amount+-3D+1-2C+fill-3A+nil-29"><code>shift(amount = 1, fill: nil)</code></h3>
+
+<p>Shift vector’s values by specified <code>amount</code>. Shifted space is filled by value <code>fill</code>.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=5):0x00000000000072d8&gt;  
+</span><span class='lbracket'>[</span><span class='kw'>nil</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>4</span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='lparen'>(</span><span class='op'>-</span><span class='int'>2</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=5):0x0000000000009970&gt;  
+</span><span class='lbracket'>[</span><span class='int'>3</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_shift'>shift</span><span class='lparen'>(</span><span class='label'>fill:</span> <span class='const'>Float</span><span class='op'>::</span><span class='const'>NAN</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:double, size=5):0x0000000000011d3c&gt;                    
+</span><span class='lbracket'>[</span><span class='const'>NaN</span><span class='comma'>,</span> <span class='float'>1.0</span><span class='comma'>,</span> <span class='float'>2.0</span><span class='comma'>,</span> <span class='float'>3.0</span><span class='comma'>,</span> <span class='float'>4.0</span><span class='rbracket'>]</span>
+</code></pre>
+
+<h3 id="label-split_to_columns-28sep+-3D+-27+-27-2C+limit+-3D+0-29"><code>split_to_columns(sep = &#39; &#39;, limit = 0)</code></h3>
+
+<p>Split string type Vector with any ASCII whitespace as separator. Returns an Array of Vectors.</p>
+
+<pre class="code ruby"><code class="ruby">vector = Vector.new([&#39;a b&#39;, &#39;c d&#39;, &#39;e f&#39;])
+vector.split_to_columns
+
+#=&gt; 
+[#&lt;RedAmber::Vector(:string, size=3):0x00000000000363a8&gt;                                
+[&quot;a&quot;, &quot;c&quot;, &quot;e&quot;]                                    
+,                                                  
+ #&lt;RedAmber::Vector(:string, size=3):0x00000000000363bc&gt;
+[&quot;b&quot;, &quot;d&quot;, &quot;f&quot;]                                    
+]
+</code></pre>
+
+<p>It will be used for column splitting in DataFrame.</p>
+
+<pre class="code ruby"><code class="ruby">df = DataFrame.new(year_month: %w[2022-01 2022-02 2022-03])
+  .assign(:year, :month) { year_month.split_to_columns(&#39;-&#39;) }
+  .drop(:year_month)
+
+#=&gt;
+#&lt;RedAmber::DataFrame : 3 x 2 Vectors, 0x000000000000f974&gt;
+  year     month
+  &lt;string&gt; &lt;string&gt;
+0 2022     01
+1 2022     02
+2 2022     03
+</code></pre>
+
+<h3 id="label-split_to_rows-28sep+-3D+-27+-27-2C+limit+-3D+0-29"><code>split_to_rows(sep = &#39; &#39;, limit = 0)</code></h3>
+
+<p>Split string type Vector with any ASCII whitespace as separator. Returns an flattend into rows by Vector.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>a b</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>c d</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>e f</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_split_to_rows'>split_to_rows</span>
+
+<span class='comment'>#=&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=6):0x000000000002ccf4&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>a</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>b</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>c</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>d</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>e</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>f</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<h3 id="label-merge-28other-2C+sep-3A+-27+-27-29"><code>merge(other, sep: &#39; &#39;)</code></h3>
+
+<p>Merge String or other string Vector to self using aseparator. Self must be a string Vector. Returns merged string Vector.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># with vector
+</span><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>a</span><span class='words_sep'> </span><span class='tstring_content'>c</span><span class='words_sep'> </span><span class='tstring_content'>e</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>b</span><span class='words_sep'> </span><span class='tstring_content'>d</span><span class='words_sep'> </span><span class='tstring_content'>f</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+
+<span class='comment'>#=&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=3):0x0000000000038b80&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>a b</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>c d</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>e f</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>If other is a String it will be broadcasted.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># with vector
+</span><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>a</span><span class='words_sep'> </span><span class='tstring_content'>c</span><span class='words_sep'> </span><span class='tstring_content'>e</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span>
+
+<span class='comment'>#=&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=3):0x00000000000446b0&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>a x</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>c x</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>e x</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>You can specify separator string by :sep.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># with vector
+</span><span class='id identifier rubyid_vector'>vector</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>a</span><span class='words_sep'> </span><span class='tstring_content'>c</span><span class='words_sep'> </span><span class='tstring_content'>e</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_other'>other</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>b</span><span class='words_sep'> </span><span class='tstring_content'>d</span><span class='words_sep'> </span><span class='tstring_content'>f</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span>
+<span class='id identifier rubyid_vector'>vector</span><span class='period'>.</span><span class='id identifier rubyid_merge'>merge</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='comma'>,</span> <span class='label'>sep:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+
+<span class='comment'>#=&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=3):0x0000000000038b80&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ab</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>cd</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ef</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<h3 id="label-concatenate-28other-29+or+concat-28other-29"><code>concatenate(other)</code> or <code>concat(other)</code></h3>
+
+<p>Concatenate other array-like to self and return a concatenated Vector. - <code>other</code> is one of <code>Vector</code>, <code>Array</code>, <code>Arrow::Array</code> or <code>Arrow::ChunkedArray</code> - Different type will be ‘resolved’.</p>
+
+<p>Concatenate to string</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_string_vector'>string_vector</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=2):0x00000000000037b4&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_string_vector'>string_vector</span><span class='period'>.</span><span class='id identifier rubyid_concatenate'>concatenate</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=4):0x0000000000003818&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>1</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>2</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>Concatenate to integer</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_integer_vector'>integer_vector</span>
+
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=2):0x000000000000382c&gt;
+</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_nteger_vector'>nteger_vector</span><span class='period'>.</span><span class='id identifier rubyid_concatenate'>concatenate</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint8, size=4):0x0000000000003840&gt;
+</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>65</span><span class='comma'>,</span> <span class='int'>66</span><span class='rbracket'>]</span>
+</code></pre>
+
+<h3 id="label-rank"><code>rank</code></h3>
+
+<p>Returns numerical rank of self. - Nil values are considered greater than any value. - NaN values are considered greater than any value but smaller than nil values. - Tiebreakers are ranked in order of appearance. - <code>RankOptions</code> in C++ function is not implemented in C GLib yet. This method is currently fixed to the default behavior.</p>
+
+<p>Returns 0-based rank of self (0…size in range) as a Vector.</p>
+
+<p>Rank of float Vector</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_fv'>fv</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='float'>0.1</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='const'>Float</span><span class='op'>::</span><span class='const'>NAN</span><span class='comma'>,</span> <span class='float'>0.2</span><span class='comma'>,</span> <span class='float'>0.1</span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='id identifier rubyid_fv'>fv</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:double, size=5):0x000000000000c65c&gt;
+</span><span class='lbracket'>[</span><span class='float'>0.1</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='const'>NaN</span><span class='comma'>,</span> <span class='float'>0.2</span><span class='comma'>,</span> <span class='float'>0.1</span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_fv'>fv</span><span class='period'>.</span><span class='id identifier rubyid_rank'>rank</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint64, size=5):0x0000000000003868&gt;
+</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>1</span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>Rank of string Vector</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_sv'>sv</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='id identifier rubyid_sv'>sv</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=5):0x0000000000003854&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_sv'>sv</span><span class='period'>.</span><span class='id identifier rubyid_rank'>rank</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:uint64, size=5):0x0000000000003868&gt;
+</span><span class='lbracket'>[</span><span class='int'>0</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span>
+</code></pre>
+
+<h3 id="label-sample-28integer_or_proportion-29"><code>sample(integer_or_proportion)</code></h3>
+
+<p>Pick up elements at random.</p>
+
+<h4 id="label-sample+-3A+without+agrument"><code>sample</code> : without agrument</h4>
+
+<p>Return a randomly selected element. This is one of an aggregation function.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_v'>v</span> <span class='op'>=</span> <span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>A</span><span class='tstring_end'>&#39;</span></span><span class='op'>..</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>H</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='id identifier rubyid_v'>v</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=8):0x0000000000011b20&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>F</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>G</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+
+<span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span>
+<span class='comment'># =&gt;
+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span>
+</code></pre>
+
+<h4 id="label-sample-28n-29+-3A+n+as+a+Integer"><code>sample(n)</code> : n as a Integer</h4>
+
+<p>Pick up n elements at random.</p>
+<ul><li>
+<p>Param <code>n</code> is number of elements to pick.</p>
+</li><li>
+<p><code>n</code> is a positive Integer</p>
+</li><li>
+<p>If <code>n</code> is smaller or equal to size, elements are picked by non-repeating.</p>
+</li><li>
+<p>If <code>n</code> is greater than <code>size</code>, elements are picked repeatedly. @return [Vector] sampled elements.</p>
+</li><li>
+<p>If <code>n == 1</code> (in case of <code>sample(1)</code>), it returns a Vector of <code>size == 1</code> not a scalar.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=1):0x000000000001a3b0&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>Sample same size of self: every element is picked in random order.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='int'>8</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=8):0x000000000001bda0&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>F</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>G</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>Over sampling: “E” and “A” are sampled repeatedly.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='int'>9</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=9):0x000000000001d790&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>F</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<h4 id="label-sample-28prop-29+-3A+prop+as+a+Float"><code>sample(prop)</code> : prop as a Float</h4>
+
+<p>Pick up elements by proportion <code>prop</code> at random.</p>
+<ul><li>
+<p><code>prop</code> is proportion of elements to pick.</p>
+</li><li>
+<p><code>prop</code> is a positive Float.</p>
+</li><li>
+<p>Absolute number of elements to pick:<code>prop*size</code> is rounded (by <code>half: :up</code>).</p>
+</li><li>
+<p>If <code>prop</code> is smaller or equal to 1.0, elements are picked by non-repeating.</p>
+</li><li>
+<p>If <code>prop</code> is greater than 1.0, some elements are picked repeatedly.</p>
+</li><li>
+<p>Returns sampled elements by a Vector.</p>
+</li><li>
+<p>If picked element is only one, it returns a Vector of <code>size == 1</code> not a scalar.</p>
+</li></ul>
+
+<p>Sample same size of self: every element is picked in random order.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='float'>1.0</span><span class='rparen'>)</span>
+<span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=8):0x000000000001bda0&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>F</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>G</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+
+<p>2 times over sampling.</p>
+
+<pre class="code ruby"><code class="ruby">v.sample(2.0)
+# =&gt;
+#&lt;RedAmber::Vector(:string, size=16):0x00000000000233e8&gt;
+[&quot;H&quot;, &quot;B&quot;, &quot;C&quot;, &quot;B&quot;, &quot;C&quot;, &quot;A&quot;, &quot;F&quot;, &quot;A&quot;, &quot;E&quot;, &quot;C&quot;, &quot;H&quot;, &quot;F&quot;, &quot;F&quot;, &quot;A&quot;, ... ]
+</code></pre>
+
+<h3 id="label-sort-28integer_or_proportion-29"><code>sort(integer_or_proportion)</code></h3>
+
+<p>Arrange values in Vector.</p>
+<ul><li>
+<p><code>:+</code>, <code>:ascending</code> or without argument will sort in increasing order.</p>
+</li><li>
+<p><code>:-</code> or <code>:descending</code> will sort in decreasing order.</p>
+</li></ul>
+
+<pre class="code ruby"><code class="ruby"><span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>D</span><span class='words_sep'> </span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>E</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
+<span class='comment'># same as #sort(:+)
+</span><span class='comment'># same as #sort(:ascending)
+</span><span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=5):0x000000000000c134&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+
+<span class='const'>Vector</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>D</span><span class='words_sep'> </span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>E</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lparen'>(</span><span class='symbol'>:-</span><span class='rparen'>)</span>
+<span class='comment'># same as #sort(:descending)
+</span><span class='comment'># =&gt;
+</span><span class='comment'>#&lt;RedAmber::Vector(:string, size=5):0x000000000000c148&gt;
+</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+</code></pre>
+</div></div>
+
+      <div id="footer">
+  Generated on Wed Jan 31 23:30:01 2024 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.34 (ruby-3.3.0).
+</div>
+
+    </div>
+  </body>
+</html>
