@@ -14,7 +14,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt-get -y install podman
-          podman pull fedora:39
+          podman pull fedora:rawhide
       - name: Get source
         uses: actions/checkout@v3
         with:
@@ -22,7 +22,7 @@ jobs:
       - name: Create container and run tests
         run: |
           {
-              echo 'FROM fedora:39'
+              echo 'FROM fedora:rawhide'
               echo 'RUN dnf -y update'
               echo 'RUN dnf -y install gcc-c++ git libarrow-devel libarrow-glib-devel ruby-devel libyaml-devel'
               echo 'RUN dnf clean all'
