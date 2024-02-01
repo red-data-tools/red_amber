@@ -128,5 +128,10 @@ class DataFrameReshapingTest < Test::Unit::TestCase
       df = @df.rename(NAME: :key1, VALUE: :key2)
       assert_equal @str, df.to_wide(name: :key1, value: :key2).to_s
     end
+
+    test '#to_wide with unordered DataFrame' do
+      df = @df.shuffle
+      assert_equal @str, df.to_wide.to_s
+    end
   end
 end
