@@ -1,5 +1,5 @@
-# x86-64/Ubuntu-22.04/python-3.10.11/lab-3.6.3/notebook-6.5.4/2023-05-15
-ARG BASE_IMAGE_TAG=513d0cb8a67c
+# x86-64/Ubuntu-22.04/python-3.11.7/lab-4.0.11/notebook-7.0.7/2024-01-29
+ARG BASE_IMAGE_TAG=3692e3a84cd6
 
 FROM jupyter/minimal-notebook:$BASE_IMAGE_TAG
 
