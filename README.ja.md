@@ -258,7 +258,7 @@ RedAmberの開発では、`rake test` は必須ですが、`rake rubocop` をパ
 このプロジェクトを支援して頂けると嬉しいです。支援の方法はいくつかあります。
 
 - [discussions](https://github.com/heronshoes/red_amber/discussions)でお話ししましょう! [![Discussions](https://img.shields.io/github/discussions/heronshoes/red_amber)](https://github.com/red-data-tools/red_amber/discussions)
-  - Q and Aや使用方法、豆知識などを見流ことができます。
+  - Q and Aや使用方法、豆知識などを見ることができます。
   - 疑問に思っていることを質問できます。
   - 新しいアイデアを共有する。アイデアはdiscussionからissueに昇格させて育てていくこともあります。漠然としたアイデアでもdiscussionから始めて大きくしていきましょう。
 - [バグ報告や新しい機能の提案](https://github.com/red-data-tools/red_amber/issues)
