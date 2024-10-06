@@ -6,7 +6,7 @@
 <title>
   Module: RedAmber::DataFrameReshaping
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -215,12 +215,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>‘to_long` without options</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>
 import_cars
@@ -252,9 +252,9 @@ import_cars.to_long(:Year)
 24     2021 VW               35215</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>‘to_long` with options `:name` and `:value`</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>
 import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
@@ -471,12 +471,12 @@ import_cars.to_long(:Year, name: :Manufacturer, value: :Num_of_imported)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>‘to_wide` without options</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>
 import_cars_long = import_cars.to_long(:Year)
@@ -679,12 +679,12 @@ automatically processed and do not need to specify.</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Transpose a DataFrame without options</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>
 import_cars
@@ -715,9 +715,9 @@ The leftmost column is created by original keys and
 `:NAME` is automatically used for the column name.</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Transpose a DataFrame with ‘:name` option</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>
 import_cars.transpose(name: :Manufacturer)
@@ -735,9 +735,9 @@ import_cars.transpose(name: :Manufacturer)
 `:name` option can specify column name.</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Transpose a DataFrame by the :key in the middle of the DataFrame</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>
 import_cars_middle = import_cars.pick(1..2, 0, 3..)
@@ -897,9 +897,9 @@ import_cars_middle.transpose(key: :Year)
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  7 01:31:45 2024 by
+  Generated on Sun Oct  6 06:22:14 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.37 (ruby-3.3.5).
 </div>
 
     </div>

@@ -6,7 +6,7 @@
 <title>
   Class: RedAmber::Group
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -734,7 +734,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>Group.new(penguins, :species)
@@ -1035,12 +1035,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>For boolean columns by default.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>dataframe
 
@@ -1143,12 +1143,12 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>For boolean columns by default.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>dataframe.group(:y).any
 
@@ -1280,12 +1280,12 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Show counts for each group.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>dataframe.group(:y).count_uniq
 
@@ -1660,7 +1660,7 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>penguins.group(:species).group_count
@@ -1819,7 +1819,7 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>puts penguins.group(:species).inspect
@@ -1894,7 +1894,7 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe.group(:y).max
@@ -1985,7 +1985,7 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe.group(:y).mean
@@ -2076,7 +2076,7 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe.group(:y).median
@@ -2167,7 +2167,7 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe.group(:y).min
@@ -2258,7 +2258,7 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe.group(:y).one
@@ -2349,7 +2349,7 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe.group(:y).product
@@ -2440,7 +2440,7 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe.group(:y).stddev
@@ -2531,7 +2531,7 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe.group(:y).sum
@@ -2644,12 +2644,12 @@ dataframe.group(:y).all
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Single function and single variable</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>group = penguins.group(:species)
 group
@@ -2673,9 +2673,9 @@ group.summarize { mean(:bill_length_mm) }
 2 Gentoo                    47.5</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Single function only</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>group.summarize { mean }
 
@@ -2772,12 +2772,12 @@ group.summarize { mean(:bill_length_mm) }
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Multiple functions</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>group.summarize { [min(:bill_length_mm), max(:bill_length_mm)] }
 
@@ -2865,12 +2865,12 @@ group.summarize { mean(:bill_length_mm) }
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rename column name by Hash</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>group.summarize {
   {
@@ -3065,7 +3065,7 @@ group.summarize { mean(:bill_length_mm) }
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe.group(:y).variance
@@ -3141,9 +3141,9 @@ group.summarize { mean(:bill_length_mm) }
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  7 01:31:46 2024 by
+  Generated on Sun Oct  6 06:22:14 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.37 (ruby-3.3.5).
 </div>
 
     </div>

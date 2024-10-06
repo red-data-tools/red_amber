@@ -6,7 +6,7 @@
 <title>
   Module: RedAmber::DataFrameVariableOperation
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -294,12 +294,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Assign a new column</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>comecome
 
@@ -329,9 +329,9 @@ comecome.assign([:brother, brothers])
 2 Hinata        28 Momotaro</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Assign new data for a existing column</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>comecome.assign(age: comecome[:age] + 29)
 
@@ -401,12 +401,12 @@ comecome.assign([:brother, brothers])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Assign new data for a existing column by block</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>comecome.assign { { age: age + 29 } }
 # or
@@ -496,12 +496,12 @@ comecome.assign { [[:age, age + 29]] }
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Assign new data for a existing column by block</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>comecome.assign(:age) { age + 29 }
 
@@ -514,9 +514,9 @@ comecome.assign { [[:age, age + 29]] }
 2 Hinata        57</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Assign multiple data</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>comecome.assign(:age_in_1993, :brother) do
   [
@@ -688,12 +688,12 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Assign a new column from left</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df
 
@@ -1001,12 +1001,12 @@ df.assign_left(new_index: df.indices(1))
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Drop off by a key</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>languages
 
@@ -1088,12 +1088,12 @@ languages.drop(:Language)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Drop off by booleans</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>is_numeric = languages.vectors.map(&amp;:numeric?) # [nil, nil, true]
 languages.drop(is_numeric)
@@ -1165,12 +1165,12 @@ Language Creator
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Drop off by indices</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>languages.drop(2)
 
@@ -1249,12 +1249,12 @@ Language Creator
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Drop off by a block.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code># same as languages.drop { |df| df.vectors.map(&amp;:numeric?) }
 languages.drop { vectors.map(&amp;:numeric?) }
@@ -1476,12 +1476,12 @@ languages.drop { vectors.map(&amp;:numeric?) }
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Pick up by a key</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>languages
 
@@ -1569,12 +1569,12 @@ languages[:Language]
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Pick up by booleans</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>languages.pick(true, true, false)
 
@@ -1650,12 +1650,12 @@ languages.pick(is_string)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Pick up by indices</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>languages.pick(0, 2, 1)
 
@@ -1734,12 +1734,12 @@ languages.pick(is_string)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Pick up by a block.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code># same as languages.pick { |df| df.languages.vectors.map(&amp;:string?) }
 languages.pick { languages.vectors.map(&amp;:string?) }
@@ -1958,12 +1958,12 @@ languages.pick { languages.vectors.map(&amp;:string?) }
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rename by a Hash</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>comecome
 
@@ -2043,12 +2043,12 @@ comecome.rename(:age =&gt; :age_in_1993)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rename by an Array</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>renamer = [[:name, :heroine], [:age, :age_in_1993]]
 comecome.rename(renamer)
@@ -2119,12 +2119,12 @@ comecome.rename(renamer)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rename by block.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df
 
@@ -2277,9 +2277,9 @@ df.rename { [keys, keys.map(&amp;:downcase)].transpose }
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  7 01:31:45 2024 by
+  Generated on Sun Oct  6 06:22:14 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.37 (ruby-3.3.5).
 </div>
 
     </div>

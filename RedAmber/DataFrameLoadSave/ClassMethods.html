@@ -6,7 +6,7 @@
 <title>
   Module: RedAmber::DataFrameLoadSave::ClassMethods
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -164,33 +164,33 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Load a tsv file</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_load'>load</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>file.tsv</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Load a csv.gz file</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_load'>load</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>file.csv.gz</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Load from URI</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_load'>load</span><span class='lparen'>(</span><span class='const'>URI</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>https://some_uri/file.csv</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Load from a Buffer</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_load'>load</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Buffer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='heredoc_beg'>&lt;&lt;~BUFFER</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>format:</span> <span class='symbol'>:csv</span><span class='rparen'>)</span>
 <span class='tstring_content'>  name,age
@@ -200,9 +200,9 @@
 </span><span class='heredoc_end'>BUFFER</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Load from a Buffer skipping comment line</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../DataFrame.html" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_load'>load</span><span class='lparen'>(</span><span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Buffer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='heredoc_beg'>&lt;&lt;~BUFFER</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='label'>format:</span> <span class='symbol'>:csv</span><span class='comma'>,</span> <span class='label'>skip_lines:</span> <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>\A#</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span>
 <span class='tstring_content'>  # comment
@@ -351,9 +351,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  7 01:31:45 2024 by
+  Generated on Sun Oct  6 06:22:14 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.37 (ruby-3.3.5).
 </div>
 
     </div>

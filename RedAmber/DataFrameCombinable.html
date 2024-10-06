@@ -6,7 +6,7 @@
 <title>
   Module: RedAmber::DataFrameCombinable
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -496,7 +496,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -518,9 +518,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>without key (use implicit common key)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.anti_join(other)
 
@@ -628,7 +628,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -650,9 +650,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with a key</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.anti_join(other, :KEY)
 
@@ -776,7 +776,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
@@ -798,9 +798,9 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with key pairs</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df2.anti_join(other2, { left: :KEY1, right: :KEY2 })
 
@@ -1023,7 +1023,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df    = DataFrame.new(x: [1, 2], y: [&#39;A&#39;, &#39;B&#39;])
@@ -1190,7 +1190,7 @@ df.concatenate(other)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df3 = DataFrame.new(
@@ -1379,7 +1379,7 @@ other.intersect(df)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -1401,9 +1401,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>without key (use implicit common key)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.full_join(other)
 
@@ -1514,7 +1514,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -1536,9 +1536,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with a key</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.full_join(other, :KEY)
 
@@ -1665,7 +1665,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
@@ -1687,9 +1687,9 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with key pairs</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df2.full_join(other2, { left: :KEY1, right: :KEY2 })
 
@@ -1940,7 +1940,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -1962,9 +1962,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>without key (use implicit common key)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.inner_join(other)
 
@@ -2073,7 +2073,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -2095,9 +2095,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with a key</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.inner_join(other, :KEY)
 
@@ -2222,7 +2222,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
@@ -2244,9 +2244,9 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with key pairs</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df2.inner_join(other2, { left: :KEY1, right: :KEY2 })
 
@@ -2463,7 +2463,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df3 = DataFrame.new(
@@ -2632,7 +2632,7 @@ other3 = DataFrame.new(
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -2789,7 +2789,7 @@ df.join(other, type: :full_outer)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df3 = DataFrame.new(
@@ -2817,9 +2817,9 @@ other3 = DataFrame.new(
 2 D              5</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>join keys in an Array</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df3.join(other3, [:KEY1, :KEY2])
 
@@ -2829,9 +2829,9 @@ other3 = DataFrame.new(
 0 A              1</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>partial join key and suffix</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df3.join(other3, :KEY1, suffix: &#39;.a&#39;)
 
@@ -2974,7 +2974,7 @@ other3 = DataFrame.new(
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df4 = DataFrame.new(
@@ -3002,9 +3002,9 @@ other4 = DataFrame.new(
 2 C        F</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>without options</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df4.join(other4)
 
@@ -3015,9 +3015,9 @@ other4 = DataFrame.new(
 1 B        E        B</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>join by key pairs</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df4.join(other4, { left: [:X1, :Y], right: [:X2, :Y] })
 
@@ -3027,9 +3027,9 @@ other4 = DataFrame.new(
 0 B        E</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>join by key pairs, using renaming by suffix</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df4.join(other4, { left: :X1, right: :X2 })
 
@@ -3395,7 +3395,7 @@ other4 = DataFrame.new(
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -3417,9 +3417,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>without key (use implicit common key)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.left_join(other)
 
@@ -3529,7 +3529,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -3551,9 +3551,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with a key</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.left_join(other, :KEY)
 
@@ -3679,7 +3679,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
@@ -3701,9 +3701,9 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with key pairs</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df2.left_join(other2, { left: :KEY1, right: :KEY2 })
 
@@ -3935,7 +3935,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df    = DataFrame.new(x: [1, 2], y: [3, 4])
@@ -4159,7 +4159,7 @@ df.merge(other)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -4181,9 +4181,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>without key (use implicit common key)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.right_join(other)
 
@@ -4293,7 +4293,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -4315,9 +4315,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with a key</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.right_join(other, :KEY)
 
@@ -4443,7 +4443,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
@@ -4465,9 +4465,9 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with key pairs</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df2.right_join(other2, { left: :KEY1, right: :KEY2 })
 
@@ -4727,7 +4727,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -4749,9 +4749,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>without key (use implicit common key)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.semi_join(other)
 
@@ -4860,7 +4860,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df = DataFrame.new(KEY: %w[A B C], X1: [1, 2, 3])
@@ -4882,9 +4882,9 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with a key</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.semi_join(other, :KEY)
 
@@ -5009,7 +5009,7 @@ other = DataFrame.new(KEY: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df2 = DataFrame.new(KEY1: %w[A B C], X1: [1, 2, 3])
@@ -5031,9 +5031,9 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 2 D        (nil)</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>with key pairs</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df2.semi_join(other2, { left: :KEY1, right: :KEY2 })
 
@@ -5245,7 +5245,7 @@ other2 = DataFrame.new(KEY2: %w[A B D], X2: [true, false, nil])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df3 = DataFrame.new(
@@ -5378,7 +5378,7 @@ other3 = DataFrame.new(
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df3 = DataFrame.new(
@@ -5508,9 +5508,9 @@ other3 = DataFrame.new(
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  7 01:31:45 2024 by
+  Generated on Sun Oct  6 06:22:14 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.37 (ruby-3.3.5).
 </div>
 
     </div>

@@ -6,7 +6,7 @@
 <title>
   Class: RedAmber::DataFrame
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -1034,27 +1034,27 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Initialize by a Hash</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_hash'>hash</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>x:</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>y:</span> <span class='qwords_beg'>%w[</span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span> <span class='rbrace'>}</span>
 <span class='const'><span class='object_link'><a href="" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_hash'>hash</span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Initialize by a Hash like arguments.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>x:</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>y:</span> <span class='qwords_beg'>%w[</span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Initialize from #to_arrow_array responsibles.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='comment'># #to_arrow_array responsible `array-like` is also available.
 </span><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>arrow-numo-narray</span><span class='tstring_end'>&#39;</span></span>
@@ -1100,12 +1100,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Initialize by a Table</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_table'>table</span> <span class='op'>=</span> <span class='const'>Arrow</span><span class='op'>::</span><span class='const'>Table</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>x:</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>y:</span> <span class='qwords_beg'>%w[</span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span>
 <span class='const'><span class='object_link'><a href="" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_table'>table</span><span class='rparen'>)</span></code></pre>
@@ -1150,12 +1150,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Initialize by a schema and a row_oriented_array.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_schema'>schema</span> <span class='op'>=</span> <span class='lbrace'>{</span> <span class='label'>x:</span> <span class='symbol'>:uint8</span><span class='comma'>,</span> <span class='label'>y:</span> <span class='symbol'>:string</span> <span class='rbrace'>}</span>
 <span class='id identifier rubyid_row_oriented_array'>row_oriented_array</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>A</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>2</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>B</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='int'>3</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>C</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rbracket'>]</span>
@@ -1232,12 +1232,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Initialize by Red Dataset object.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>datasets-arrow</span><span class='tstring_end'>&#39;</span></span>
 <span class='id identifier rubyid_dataset'>dataset</span> <span class='op'>=</span> <span class='const'>Datasets</span><span class='op'>::</span><span class='const'>Penguins</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
@@ -1344,7 +1344,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span></code></pre>
@@ -1369,12 +1369,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Return empty DataFrame.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 <span class='const'><span class='object_link'><a href="" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
@@ -1935,7 +1935,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df.build_subframes([[0, 2, 4], [1, 3, 5]])
@@ -2017,7 +2017,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe.build_subframes do
@@ -2407,12 +2407,12 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Create a Group</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.group(:species)
 
@@ -2482,12 +2482,12 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Create a group and summarize it.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.group(:species)  { mean(:bill_length_mm) }
 
@@ -2924,12 +2924,12 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>propagate a value</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df
 # =&gt;
@@ -3019,12 +3019,12 @@ df.assign(:sum_x) { [x.sum] * size }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>propagate the value from the block</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.assign(:range) { propagate { x.max - x.min } }
 # =&gt;
@@ -3228,7 +3228,7 @@ df.assign(:sum_x) { [x.sum] * size }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="../RedAmber.html" title="RedAmber (module)">RedAmber</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="RedAmber::DataFrame (class)">DataFrame</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="#initialize-instance_method" title="RedAmber::DataFrame#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>x:</span> <span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>y:</span> <span class='qwords_beg'>%w[</span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_schema'>schema</span>
@@ -3428,12 +3428,12 @@ df.assign(:sum_x) { [x.sum] * size }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Create a SubFrames object sliced by 3 rows.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.sub_by_enum(:each_slice, 3)
 
@@ -3457,9 +3457,9 @@ df.assign(:sum_x) { [x.sum] * size }</code></pre>
 2       6 C        false</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Create a SubFrames object for each consecutive 3 rows.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.sub_by_enum(:each_cons, 4)
 
@@ -3614,7 +3614,7 @@ df.assign(:sum_x) { [x.sum] * size }</code></pre>
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>kernel = [true, false, false, true]
@@ -3773,7 +3773,7 @@ df.sub_by_kernel(kernel, step: 2)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df.sub_by_value(:y)
@@ -3907,7 +3907,7 @@ df.sub_by_kernel(kernel, step: 2)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df.sub_by_window(size: 4, step: 2)
@@ -4497,9 +4497,9 @@ df.sub_by_kernel(kernel, step: 2)
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  7 01:31:47 2024 by
+  Generated on Sun Oct  6 06:22:16 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.37 (ruby-3.3.5).
 </div>
 
     </div>

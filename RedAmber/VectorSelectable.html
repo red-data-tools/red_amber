@@ -6,7 +6,7 @@
 <title>
   Module: RedAmber::VectorSelectable
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -1153,12 +1153,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rank of float Vector</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_float'>float</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>0</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='const'>Float</span><span class='op'>::</span><span class='const'>NAN</span><span class='comma'>,</span> <span class='const'>Float</span><span class='op'>::</span><span class='const'>INFINITY</span><span class='comma'>,</span> <span class='op'>-</span><span class='const'>Float</span><span class='op'>::</span><span class='const'>INFINITY</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span>
 <span class='id identifier rubyid_float'>float</span>
@@ -1175,9 +1175,9 @@
 </span><span class='lbracket'>[</span><span class='int'>3</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>8</span><span class='comma'>,</span> <span class='int'>7</span><span class='comma'>,</span> <span class='int'>6</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>5</span><span class='comma'>,</span> <span class='int'>4</span><span class='rbracket'>]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rank of string Vector</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_string'>string</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
 <span class='id identifier rubyid_string'>string</span>
@@ -1193,9 +1193,9 @@
 </span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>5</span><span class='comma'>,</span> <span class='int'>6</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rank with order = :descending</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_float'>float</span><span class='period'>.</span><span class='id identifier rubyid_rank'>rank</span><span class='lparen'>(</span><span class='symbol'>:descending</span><span class='rparen'>)</span> <span class='comment'># or float.rank(&#39;-&#39;)
 </span>
@@ -1204,9 +1204,9 @@
 </span><span class='lbracket'>[</span><span class='int'>4</span><span class='comma'>,</span> <span class='int'>5</span><span class='comma'>,</span> <span class='int'>8</span><span class='comma'>,</span> <span class='int'>7</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>6</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rank with tie: :min</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_rank'>rank</span><span class='lparen'>(</span><span class='label'>tie:</span> <span class='symbol'>:min</span><span class='rparen'>)</span>
 
@@ -1215,9 +1215,9 @@
 </span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>5</span><span class='comma'>,</span> <span class='int'>5</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rank with tie: :max</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_rank'>rank</span><span class='lparen'>(</span><span class='label'>tie:</span> <span class='symbol'>:max</span><span class='rparen'>)</span>
 
@@ -1226,9 +1226,9 @@
 </span><span class='lbracket'>[</span><span class='int'>2</span><span class='comma'>,</span> <span class='int'>2</span><span class='comma'>,</span> <span class='int'>6</span><span class='comma'>,</span> <span class='int'>6</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>3</span><span class='rbracket'>]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rank with tie: :dense</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_rank'>rank</span><span class='lparen'>(</span><span class='label'>tie:</span> <span class='symbol'>:dense</span><span class='rparen'>)</span>
 
@@ -1237,9 +1237,9 @@
 </span><span class='lbracket'>[</span><span class='int'>1</span><span class='comma'>,</span> <span class='int'>1</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>4</span><span class='comma'>,</span> <span class='int'>3</span><span class='comma'>,</span> <span class='int'>2</span><span class='rbracket'>]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Rank with null_placement: :at_start</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_float'>float</span><span class='period'>.</span><span class='id identifier rubyid_rank'>rank</span><span class='lparen'>(</span><span class='label'>null_placement:</span> <span class='symbol'>:at_start</span><span class='rparen'>)</span>
 
@@ -1455,12 +1455,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Sample a element</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_v'>v</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>A</span><span class='tstring_end'>&#39;</span></span><span class='op'>..</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>H</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='semicolon'>;</span> <span class='id identifier rubyid_v'>v</span>
 
@@ -1511,12 +1511,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Sample Vector in size 1</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='int'>1</span><span class='rparen'>)</span>
 
@@ -1525,9 +1525,9 @@
 </span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Sample same size of self: every element is selected in random order</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='int'>8</span><span class='rparen'>)</span>
 
@@ -1536,9 +1536,9 @@
 </span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>F</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>G</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Over sampling: “E” and “A” are sampled repeatedly</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='int'>9</span><span class='rparen'>)</span>
 
@@ -1604,12 +1604,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Sample same size of self: every element is selected in random order</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='float'>1.0</span><span class='rparen'>)</span>
 
@@ -1618,9 +1618,9 @@
 </span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>H</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>F</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>G</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>2 times over sampling</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>v.sample(2.0)
 
@@ -1629,9 +1629,9 @@
 [&quot;H&quot;, &quot;B&quot;, &quot;C&quot;, &quot;B&quot;, &quot;C&quot;, &quot;A&quot;, &quot;F&quot;, &quot;A&quot;, &quot;E&quot;, &quot;C&quot;, &quot;H&quot;, &quot;F&quot;, &quot;F&quot;, &quot;A&quot;, ... ]</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>prop less than 1.0</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_sample'>sample</span><span class='lparen'>(</span><span class='float'>0.7</span><span class='rparen'>)</span>
 
@@ -1794,12 +1794,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Sort in increasing order (default)</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>D</span><span class='words_sep'> </span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>E</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span>
 <span class='comment'># same as #sort(:+)
@@ -1810,9 +1810,9 @@
 </span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>B</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>C</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>D</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>E</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Sort in decreasing order</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='const'><span class='object_link'><a href="Vector.html" title="RedAmber::Vector (class)">Vector</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Vector.html#initialize-instance_method" title="RedAmber::Vector#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='qwords_beg'>%w[</span><span class='tstring_content'>B</span><span class='words_sep'> </span><span class='tstring_content'>D</span><span class='words_sep'> </span><span class='tstring_content'>A</span><span class='words_sep'> </span><span class='tstring_content'>E</span><span class='words_sep'> </span><span class='tstring_content'>C</span><span class='tstring_end'>]</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='lparen'>(</span><span class='symbol'>:-</span><span class='rparen'>)</span>
 <span class='comment'># same as #sort(:descending)
@@ -2076,9 +2076,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  7 01:31:45 2024 by
+  Generated on Sun Oct  6 06:22:14 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.37 (ruby-3.3.5).
 </div>
 
     </div>

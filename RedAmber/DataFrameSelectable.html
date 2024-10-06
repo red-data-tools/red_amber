@@ -6,7 +6,7 @@
 <title>
   Module: RedAmber::DataFrameSelectable
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -515,12 +515,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select a column and return Vector</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins
 
@@ -602,12 +602,12 @@ penguins[:bill_length_mm]
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select columns</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins[:island, :bill_length_mm]
 
@@ -683,12 +683,12 @@ penguins[:bill_length_mm]
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select a row</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins[0]
 
@@ -756,12 +756,12 @@ penguins[:bill_length_mm]
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select rows by indices</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins[0..100]
 
@@ -837,12 +837,12 @@ penguins[:bill_length_mm]
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select rows by booleans</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins[penguins.species == &#39;Adelie&#39;]
 
@@ -1039,12 +1039,12 @@ penguins[:bill_length_mm]
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Filter by boolean Vector</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins
 
@@ -1136,12 +1136,12 @@ penguins.filter(penguins.bill_length_mm &lt; 50)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Filter by boolean Vector</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.filter { bill_length_mm &lt; 50 }
 
@@ -1606,12 +1606,12 @@ penguins.filter(penguins.bill_length_mm &lt; 50)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Remove a row</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.remove(-1)
 
@@ -1692,12 +1692,12 @@ penguins.filter(penguins.bill_length_mm &lt; 50)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Remove rows</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.remove(100..200)
 
@@ -1778,12 +1778,12 @@ penguins.filter(penguins.bill_length_mm &lt; 50)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Remove rows by indices from block</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.remove { 0.step(size, 10) }
 
@@ -1880,12 +1880,12 @@ penguins.filter(penguins.bill_length_mm &lt; 50)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Remove rows by boolean filter</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.remove(penguins.bill_length_mm.is_nil)
 
@@ -1964,12 +1964,12 @@ penguins.filter(penguins.bill_length_mm &lt; 50)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Remove rows by booleans from block</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.remove { (species == &#39;Adelie&#39;) | (year == 2009) }
 
@@ -2178,7 +2178,7 @@ penguins.filter(penguins.bill_length_mm &lt; 50)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>penguins.remove_nil
@@ -2609,12 +2609,12 @@ We can use the same arguments in `Vector#sample`.
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select a row</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code></code></pre>
     
@@ -2681,12 +2681,12 @@ We can use the same arguments in `Vector#sample`.
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select rows</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.slice(300..-1)
 
@@ -2767,12 +2767,12 @@ We can use the same arguments in `Vector#sample`.
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select rows by Enumerator.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.assign_left(index: penguins.indices) # 0.2.0 feature
         .slice(0.step(by: 10, to: 340))
@@ -2854,12 +2854,12 @@ index species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select rows by block</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.assign_left(index: penguins.indices) # 0.2.0 feature
         .slice { 0.step(by: 100, to: 300).map { |i| i..(i+1) } }
@@ -2953,12 +2953,12 @@ index species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select rows by boolean filter</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.slice(penguins[:bill_length_mm] &gt; 50)
 
@@ -3034,12 +3034,12 @@ index species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select rows by booleans from block</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.slice { indices.map(&amp;:even?) }
 
@@ -3258,12 +3258,12 @@ index species  island    bill_length_mm bill_depth_mm flipper_length_mm ...     
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select records by elements</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df
 
@@ -3398,12 +3398,12 @@ df.slice_by(:string) { [&quot;A&quot;, &quot;C&quot;] }
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select records by elements range</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>df.slice_by(:string) { &quot;A&quot;..&quot;C&quot; }
 
@@ -3851,12 +3851,12 @@ df.slice_by(:string) { [&quot;A&quot;, &quot;C&quot;] }
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select a column and return Vector</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>penguins.v(:bill_length_mm)
 
@@ -3948,9 +3948,9 @@ df.slice_by(:string) { [&quot;A&quot;, &quot;C&quot;] }
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  7 01:31:45 2024 by
+  Generated on Sun Oct  6 06:22:14 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.37 (ruby-3.3.5).
 </div>
 
     </div>

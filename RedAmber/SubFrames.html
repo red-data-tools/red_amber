@@ -6,7 +6,7 @@
 <title>
   Class: RedAmber::SubFrames
   
-    &mdash; Documentation by YARD 0.9.34
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -732,7 +732,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe
@@ -830,7 +830,7 @@ subframes = SubFrames.new(dataframe, [[0 ,1], [2, 3, 4], [5]])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>SubFrames.new(dataframe) do |df|
@@ -1303,7 +1303,7 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>dataframe
@@ -1616,12 +1616,12 @@ sf = SubFrames.by_group(group)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Aggregate by key labels in arguments and values from block.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.aggregate(:y, :sum_x) { [y.one, x.sum] }
 
@@ -1634,9 +1634,9 @@ sf = SubFrames.by_group(group)
 2 C              6</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Aggregate by key labels in an Array and values from block.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.aggregate([:y, :sum_x]) { [y.one, x.sum] }
 
@@ -1744,12 +1744,12 @@ sf = SubFrames.by_group(group)
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Aggregate by key and value pairs from block.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.aggregate do
   { y: y.one, sum_x: x.sum }
@@ -1839,12 +1839,12 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Aggregate by key and value arrays from block.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.aggregate do
   [[:y, y.first], [:sum_x, x.sum]]
@@ -1938,12 +1938,12 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Aggregate with a group key and key function pairs by a Hash.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.aggregate(:y, { x: :sum, z: :count })
 
@@ -2033,12 +2033,12 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Aggregate with group keys and keys and functions by an Array.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>sf.aggregate(:y, [[:x, :z], [:count, :sum]])
 
@@ -2262,7 +2262,7 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>subframes.assign(:x_plus1) { x + 1 }
@@ -2386,7 +2386,7 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>subframes.assign(:sum_x, :frac_x) do
@@ -2513,12 +2513,12 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Compute ‘x * z’ when (true, not_true) = (1, 0) in z</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.assign do
   { &#39;x*z&#39;: x * z.if_else(1, 0) }
@@ -2756,12 +2756,12 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Returns Enumerator</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_subframes'>subframes</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span>
 
@@ -2769,9 +2769,9 @@ end
 </span><span class='comment'>#&lt;Enumerator: ...&gt;</span></code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>‘to_a` from Enumerable.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.to_a
 
@@ -2796,9 +2796,9 @@ end
 ]</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Concatenate SubFrames. This example is used in #concatenate.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.reduce(&amp;:concatenate)
 
@@ -3099,12 +3099,12 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Filter for size is larger than 1 and append number to column ‘y’.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.filter_map do |df|
   if df.size &gt; 1
@@ -3412,7 +3412,7 @@ end
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df
@@ -3585,12 +3585,12 @@ SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Map as it is.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.map { _1 }
 
@@ -3620,9 +3620,9 @@ SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 0       6 C        false</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Assign a new column.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.map { |df| df.assign(x_plus1: df[:x] + 1) }
 
@@ -3761,12 +3761,12 @@ SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>When ‘sizes` is [2, 3, 1].</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_subframes'>subframes</span><span class='period'>.</span><span class='id identifier rubyid_offset_indices'>offset_indices</span> <span class='comment'># =&gt; [0, 2, 5]</span></code></pre>
     
@@ -3878,12 +3878,12 @@ SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Reject all.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.reject { true }
 
@@ -3894,9 +3894,9 @@ SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 ---</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Reject nothing.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.reject { false }
 
@@ -3924,9 +3924,9 @@ SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 0       6 C        false</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Reject if Vector ‘:z` has any true.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.reject { |df| df[:z].any? }
 
@@ -4064,12 +4064,12 @@ SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select all.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.select { true }
 
@@ -4097,9 +4097,9 @@ SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 0       6 C        false</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select nothing.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.select { false }
 
@@ -4110,9 +4110,9 @@ SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 ---</code></pre>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Select if Vector ‘:z` has any true.</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code>subframes.select { |df| df[:z].any? }
 
@@ -4523,7 +4523,7 @@ SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code>df
@@ -4717,9 +4717,9 @@ puts SubFrames.new(df, [[0, 1], [2, 3, 4], [5]])
 </div>
 
       <div id="footer">
-  Generated on Wed Feb  7 01:31:47 2024 by
+  Generated on Sun Oct  6 06:22:15 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.34 (ruby-3.3.0).
+  0.9.37 (ruby-3.3.5).
 </div>
 
     </div>
