@@ -35,7 +35,7 @@ gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Nu
 gem 'red-parquet', '>= 12.0.0' # Optional, if you use IO from/to parquet.
 gem 'red-datasets-arrow'       # Optional, if you use Red Datasets.
 gem 'red-arrow-activerecord'   # Optional, if you use Active Record.
-gem 'rover-df',                # Optional, if you use IO from/to Rover::DataFrame.
+gem 'rover-df'                 # Optional, if you use IO from/to Rover::DataFrame.
 ```
 
 ## Installation
