@@ -439,6 +439,14 @@ class DataFrameVariableOperationTest < Test::Unit::TestCase
       assert_equal str2, @df2.assign { assigner2.to_a }.tdr_str
     end
 
+    sub_test_case 'Dataframe with zero n_records' do
+      test 'assign by block preserves types' do
+        assert_equal :double, @df.b.type
+        result_df = @df.filter(@df.a == 10).assign(:b) { b.multiply(1)}
+        assert_equal :double, result_df.b.type
+      end
+    end
+
     test 'assign by both args and block' do
       assert_raise(DataFrameArgumentError) { @df2.assign(:key) {} } # rubocop:disable Lint/EmptyBlock
 
