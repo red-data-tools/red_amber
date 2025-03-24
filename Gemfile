@@ -2,6 +2,8 @@
 
 source 'https://rubygems.org'
 
+plugin "rubygems-requirements-system"
+
 gemspec
 
 group :test do
