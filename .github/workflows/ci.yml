@@ -37,7 +37,10 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
       - name: Install dependencies
         run: |
-          bundle install
+          # TODO: Remove this change after SciRuby/iruby#369 is merged and
+          # released. We disable parallel installation temporarily because
+          # `native-package-installer` isn't safe for it.
+          bundle install --jobs=1
 
       - name: Run test
         run: bundle exec rake test
