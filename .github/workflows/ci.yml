@@ -21,6 +21,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Prepare Apache Arrow on Linux
+        if: runner.os == 'Linux'
+        run: |
+          # TODO: Remove this step once `red-arrow` version 20.0.0 is released,
+          # as explicit repository specification will no longer be necessary.
+          sudo apt update
+          sudo apt install -y -V ca-certificates lsb-release wget
+          wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+          sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
+          sudo apt update
+
       - name: Prepare Apache Arrow on macOS
         if: runner.os == 'macOS'
         shell: bash
