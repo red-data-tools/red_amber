@@ -24,12 +24,13 @@ jobs:
       - name: Prepare Apache Arrow on Linux
         if: runner.os == 'Linux'
         run: |
+          # TODO: Remove this step once `red-arrow` version 20.0.0 is released,
+          # as explicit repository specification will no longer be necessary.
           sudo apt update
           sudo apt install -y -V ca-certificates lsb-release wget
           wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
           sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
           sudo apt update
-          sudo apt install -y -V libarrow-dev libarrow-glib-dev gobject-introspection
 
       - name: Prepare Apache Arrow on macOS
         if: runner.os == 'macOS'
@@ -40,17 +41,17 @@ jobs:
           rm -f /usr/local/bin/pydoc3* || :
           rm -f /usr/local/bin/python3* || :
           rm -f /usr/local/bin/python3-config || :
-          brew update
-          brew install apache-arrow
-          brew install gobject-introspection
-          brew install apache-arrow-glib
 
       - name: Set up Ruby ${{ matrix.ruby }}
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-          cache-version: 1 # ignore contents of the cache and get and build all the gems anew
+      - name: Install dependencies
+        run: |
+          # TODO: Remove this change after SciRuby/iruby#369 is merged and
+          # released. We disable parallel installation temporarily because
+          # `native-package-installer` isn't safe for it.
+          bundle install --jobs=1
 
       - name: Run test
         run: bundle exec rake test
