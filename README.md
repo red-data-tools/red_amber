@@ -44,13 +44,11 @@ gem 'rover-df'                 # Optional, if you use IO from/to Rover::DataFram
 
 You need to install the following libraries. You can automate it by enabling
 `rubygems-requirements-system`. If you want to install these libraries manually,
-see Apache Arrow install document for details.
+see [Apache Arrow install document](https://arrow.apache.org/install/).
 
 - Apache Arrow (>= 12.0.0)
 - Apache Arrow GLib (>= 12.0.0)
 - Apache Parquet GLib (>= 12.0.0)  # If you use IO from/to parquet
-
-See [Apache Arrow install document](https://arrow.apache.org/install/).
 
 If you want to install RedAmber and related gems by Bundler, you can add the
 followings to your Gemfile. And then execute `bundle install`.
