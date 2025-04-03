@@ -29,6 +29,8 @@ Supported Ruby version is >= 3.0.
 
 ### Required libraries
 ```ruby
+plugin "rubygems-requirements-system" # Requires system packages automatically.
+
 gem 'red-arrow',   '>= 12.0.0' # Requires Apache Arrow (see installation below).
 gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray,
                                # or use random sampling feature.
@@ -40,41 +42,20 @@ gem 'rover-df'                 # Optional, if you use IO from/to Rover::DataFram
 
 ## Installation
 
-Install requirements before you install RedAmber.
+You need to install the following libraries. You can automate it by enabling
+`rubygems-requirements-system`. If you want to install these libraries manually,
+see [Apache Arrow install document](https://arrow.apache.org/install/).
 
 - Apache Arrow (>= 12.0.0)
 - Apache Arrow GLib (>= 12.0.0)
 - Apache Parquet GLib (>= 12.0.0)  # If you use IO from/to parquet
 
-See [Apache Arrow install document](https://arrow.apache.org/install/).
-
-  - Minimum installation example for the latest Ubuntu:
-
-      ```
-      sudo apt update
-      sudo apt install -y -V ca-certificates lsb-release wget
-      wget https://apache.jfrog.io/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-      sudo apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb
-      sudo apt update
-      sudo apt install -y -V libarrow-dev libarrow-glib-dev
-      ```
-
-  - On Fedora 39 (Rawhide):
-
-      ```
-      sudo dnf update
-      sudo dnf -y install gcc-c++ libarrow-devel libarrow-glib-devel ruby-devel libyaml-devel
-      ```
-
-  - On macOS, using Homebrew:
-
-      ```
-      brew install apache-arrow apache-arrow-glib
-      ```
-
-If you prepared Apache Arrow, add these lines to your Gemfile:
+If you want to install RedAmber and related gems by Bundler, you can add the
+followings to your Gemfile. And then execute `bundle install`.
 
 ```ruby
+plugin "rubygems-requirements-system"
+
 gem 'red-arrow',   '>= 12.0.0'
 gem 'red_amber'
 gem 'red-arrow-numo-narray'    # Optional, recommended if you use inputs from Numo::NArray
@@ -85,7 +66,12 @@ gem 'red-arrow-activerecord'   # Optional, if you use Active Record
 gem 'rover-df'                 # Optional, if you use IO from/to Rover::DataFrame.
 ```
 
-And then execute `bundle install` or install them yourself such as `gem install red_amber`.
+If you want to install RedAmber by RubyGems, you can use the following command
+line.
+
+```bash
+gem install rubygems-requirements-system red_amber
+```
 
 ## Development Containers
 
