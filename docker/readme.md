@@ -51,7 +51,7 @@ TOKEN='something'
 Then build `red_amber-minimal-notebook` container. It will take a while.
 
 ```
-docker-compose build
+docker compose build
 ```
 
 ## Start Jupyter Lab
@@ -59,7 +59,7 @@ docker-compose build
 After build, start the container. Adding `-d` option will detach it in background.
 
 ```
-docker-compose up
+docker compose up
 ```
 
 You can access Jupyter Lab from `http://localhost:8888/` in your browser.
