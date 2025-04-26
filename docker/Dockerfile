@@ -15,6 +15,7 @@ RUN set -eux; \
         lsb-release \
         \
         # Ruby 3.0.2
+        libyaml-dev \
         ruby-dev \
         \
         # For iruby
