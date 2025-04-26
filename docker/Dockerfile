@@ -61,5 +61,3 @@ ENV BUNDLE_PATH=$HOME/.local/share/gem
 ENV BUNDLE_BIN=$HOME/.local/share/gem/bin
 
 RUN bundle install --jobs=4
-
-COPY --chown=$NB_UID:$NB_GID example $HOME
