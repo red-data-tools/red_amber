@@ -55,7 +55,6 @@ RUN set -eux; \
     iruby register --force
 
 COPY --chown=$NB_UID:$NB_GID Gemfile $HOME
-COPY --chown=$NB_UID:$NB_GID Gemfile.lock $HOME
 
 ENV GEM_HOME=$HOME/.local/share/gem
 ENV BUNDLE_PATH=$HOME/.local/share/gem
