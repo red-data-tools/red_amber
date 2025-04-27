@@ -1,5 +1,5 @@
-# x86-64/Ubuntu-22.04/python-3.11.7/lab-4.0.11/notebook-7.0.7/2024-01-29
-ARG BASE_IMAGE_TAG=3692e3a84cd6
+# x86_64/Ubuntu-24.04/python-3.12.10/lab-4.4.1/notebook-7.4.1/2025-04=26
+ARG BASE_IMAGE_TAG=5b8d531acae5
 
 FROM quay.io/jupyter/minimal-notebook:$BASE_IMAGE_TAG
 
@@ -14,7 +14,7 @@ RUN set -eux; \
         ca-certificates \
         lsb-release \
         \
-        # Ruby 3.0.2
+        # Ruby 3.2
         libyaml-dev \
         ruby-dev \
         \
@@ -45,7 +45,7 @@ USER $NB_UID
 
 WORKDIR $HOME
 
-ENV PATH $HOME/.local/share/gem/bin:$HOME/.local/share/gem/ruby/3.0.0/bin:$PATH
+ENV PATH $HOME/.local/share/gem/bin:$HOME/.local/share/gem/ruby/3.2.0/bin:$PATH
 
 # IRuby
 RUN set -eux; \
