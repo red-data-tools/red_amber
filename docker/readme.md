@@ -29,7 +29,7 @@ This is a docker image containing RedAmber created from
 
 ```
 git clone https://github.com/heronshoes/red_amber.git
-cd  docker
+cd docker
 ```
 
 Edit ENV variable in `.env` as you like.
