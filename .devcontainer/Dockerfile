@@ -68,8 +68,3 @@ RUN set -e; \
 RUN set -e; \
     $HOME/.rbenv/bin/rbenv install --verbose $RBENV_RUBY; \
     $HOME/.rbenv/bin/rbenv global $RBENV_RUBY
-
-# Install IRuby
-RUN set -e; \
-    $HOME/.rbenv/bin/rbenv exec gem install iruby; \
-    $HOME/.rbenv/bin/rbenv exec iruby register --force
