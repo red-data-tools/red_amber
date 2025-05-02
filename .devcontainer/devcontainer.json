@@ -2,7 +2,7 @@
     "name": "RedAmber",
     "build": {
         "dockerfile": "Dockerfile",
-        "cacheFrom": "ghcr.io/red-data-tools/red-amber"
+        "cacheFrom": "ghcr.io/red-data-tools/red_amber"
     },
     "features": {
         "ghcr.io/devcontainers/features/python:1": {
