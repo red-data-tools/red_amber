@@ -28,16 +28,14 @@ RUN set -e; \
     libzmq3-dev
 
 # Install Apache Arrow
-ARG APACHE_ARROW_VERSION=15.0.0-1
-ARG arrow_deb_tmp=/tmp/apache-arrow-apt-source-latest.deb
-ARG arrow_apt_source=https://apache.jfrog.io/artifactory/arrow/ubuntu/pool/noble/main/a/apache-arrow-apt-source/apache-arrow-apt-source_${APACHE_ARROW_VERSION}_all.deb
 RUN set -e; \
-    apt-get update; \
-    curl -sfSL -o ${arrow_deb_tmp} ${arrow_apt_source}; \
-    apt-get install -y --no-install-recommends ${arrow_deb_tmp}; \
-    rm -f ${arrow_deb_tmp}; \
-    apt-get update; \
-    apt-get install -y \
+    apt update; \
+    apt install -y -V ca-certificates lsb-release wget; \
+    wget https://packages.apache.org/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb; \
+    apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb; \
+    rm -f ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb; \
+    apt update; \
+    apt install -y \
     libarrow-dev \
     libarrow-glib-dev \
     libarrow-dataset-dev \
