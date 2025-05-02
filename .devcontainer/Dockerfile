@@ -27,23 +27,14 @@ RUN set -e; \
     libczmq-dev \
     libzmq3-dev
 
-# Install Apache Arrow
+# To install Apache Arrow
 RUN set -e; \
     apt update; \
     apt install -y -V ca-certificates lsb-release wget; \
     wget https://packages.apache.org/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb; \
     apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb; \
     rm -f ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb; \
-    apt update; \
-    apt install -y \
-    libarrow-dev \
-    libarrow-glib-dev \
-    libarrow-dataset-dev \
-    libarrow-flight-dev \
-    libparquet-dev \
-    libparquet-glib-dev \
-    libgandiva-dev \
-    libgandiva-glib-dev
+    apt update
 
 # This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
 ARG USERNAME=vscode
