@@ -1,5 +1,4 @@
-# [Choice] debian-11, debian-10, ubuntu-22.04, ubuntu-20.04, ubuntu-18.04
-ARG VARIANT=ubuntu-22.04
+ARG VARIANT=ubuntu-24.04
 
 FROM mcr.microsoft.com/devcontainers/base:${VARIANT}
 
@@ -31,7 +30,7 @@ RUN set -e; \
 # Install Apache Arrow
 ARG APACHE_ARROW_VERSION=15.0.0-1
 ARG arrow_deb_tmp=/tmp/apache-arrow-apt-source-latest.deb
-ARG arrow_apt_source=https://apache.jfrog.io/artifactory/arrow/ubuntu/pool/jammy/main/a/apache-arrow-apt-source/apache-arrow-apt-source_${APACHE_ARROW_VERSION}_all.deb
+ARG arrow_apt_source=https://apache.jfrog.io/artifactory/arrow/ubuntu/pool/noble/main/a/apache-arrow-apt-source/apache-arrow-apt-source_${APACHE_ARROW_VERSION}_all.deb
 RUN set -e; \
     apt-get update; \
     curl -sfSL -o ${arrow_deb_tmp} ${arrow_apt_source}; \
