@@ -1,5 +1,4 @@
-# [Choice] debian-11, debian-10, ubuntu-22.04, ubuntu-20.04, ubuntu-18.04
-ARG VARIANT=ubuntu-22.04
+ARG VARIANT=ubuntu-24.04
 
 FROM mcr.microsoft.com/devcontainers/base:${VARIANT}
 
@@ -28,25 +27,14 @@ RUN set -e; \
     libczmq-dev \
     libzmq3-dev
 
-# Install Apache Arrow
-ARG APACHE_ARROW_VERSION=15.0.0-1
-ARG arrow_deb_tmp=/tmp/apache-arrow-apt-source-latest.deb
-ARG arrow_apt_source=https://apache.jfrog.io/artifactory/arrow/ubuntu/pool/jammy/main/a/apache-arrow-apt-source/apache-arrow-apt-source_${APACHE_ARROW_VERSION}_all.deb
+# To install Apache Arrow
 RUN set -e; \
-    apt-get update; \
-    curl -sfSL -o ${arrow_deb_tmp} ${arrow_apt_source}; \
-    apt-get install -y --no-install-recommends ${arrow_deb_tmp}; \
-    rm -f ${arrow_deb_tmp}; \
-    apt-get update; \
-    apt-get install -y \
-    libarrow-dev \
-    libarrow-glib-dev \
-    libarrow-dataset-dev \
-    libarrow-flight-dev \
-    libparquet-dev \
-    libparquet-glib-dev \
-    libgandiva-dev \
-    libgandiva-glib-dev
+    apt update; \
+    apt install -y -V ca-certificates lsb-release wget; \
+    wget https://packages.apache.org/artifactory/arrow/$(lsb_release --id --short | tr 'A-Z' 'a-z')/apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb; \
+    apt install -y -V ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb; \
+    rm -f ./apache-arrow-apt-source-latest-$(lsb_release --codename --short).deb; \
+    apt update
 
 # This Dockerfile adds a non-root user with sudo access. Use the "remoteUser"
 ARG USERNAME=vscode
@@ -68,8 +56,3 @@ RUN set -e; \
 RUN set -e; \
     $HOME/.rbenv/bin/rbenv install --verbose $RBENV_RUBY; \
     $HOME/.rbenv/bin/rbenv global $RBENV_RUBY
-
-# Install IRuby
-RUN set -e; \
-    $HOME/.rbenv/bin/rbenv exec gem install iruby; \
-    $HOME/.rbenv/bin/rbenv exec iruby register --force

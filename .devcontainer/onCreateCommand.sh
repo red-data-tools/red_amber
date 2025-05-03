@@ -22,5 +22,8 @@ git clone https://github.com/trueroad/HaranoAjiFonts.git $HOME/.fonts/HaranoAjiF
 # Install gems
 bundle install
 
+# Install IRuby
+iruby register --force --name=ruby
+
 # Create Jupyter Notebooks
 rake quarto:convert
